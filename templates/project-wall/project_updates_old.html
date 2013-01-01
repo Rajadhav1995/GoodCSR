@@ -120,7 +120,8 @@
 </li>
 {% endfor %}
 
-{% for t in task_data %}
+{% for t in main_data %}
+{% if t.update_type == 'tasks_history' %}
 {% if t.comment_text or t.task_progress != None %}
 {% if forloop.counter|divisibleby:2 %}
 <li class="timeline-right">
@@ -137,7 +138,7 @@
               
                 <div class="text">
                     <p>{{t.comment_text}}</p>
-                    <p>Task status changed from {% if t.previous_task_progress == None %}0{% else %}{{t.previous_task_progress}}{% endif %}% to {{t.task_progress}} </p>
+                    <p>Task status changed from {% if t.previous_task_progress == None %}0{% else %}{{t.previous_task_progress}}{% endif %}% to {{t.task_progress}}% </p>
                     <div class="progress_time"><a href="#"><p># Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
                     <div class="progress_time"><a href="#"><p># Delay</p></a></div>
@@ -164,13 +165,59 @@
         </div>
 </li>
 {% endif %}
+
+{% elif t.update_type == 'tasks' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+<p class="date">{{t.date | date:"d M"}}</p>
+    <div class="timeline-badge primary"><p></p></div>
+    <div class="two_letters"><p>AT</p></div>
+        <div class="timeline-panel">
+        
+
+            <div class="timeline-body text-justify">
+              
+                <div class="text">
+                    <p>{{t.comment_text}}</p>
+                    <p>Task created by {{t.created_by}} </p>
+                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
+                </div>
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                <div class="file_name">
+                    <p><b>Task:</b>{{t.task_name}}</p>
+                    <p><b>Activity:</b>{{t.activity_name}}</p>
+                    <p><b>Supercategory:</b>{{t.supercategory}}</p>
+                </div>
+                {% if t.file_name %}
+                <div style=" float: left;text-align: center; width: 100%;">
+                   <img src="/static/img/line-bar-small.png">
+                </div>
+                    <div class="file_name">
+                        <p><b>File:</b>image2.png</p>
+                        <p><b>Description:</b>Field Location1</p>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+</li>
+
+
+{% endif %}
 {% endfor %}
 
 				
 			</ul>
 		</div>
     </div>
-    {{task_data}}
+    {{main_data}}
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     

@@ -30,7 +30,33 @@ def get_project_updates(request):
 	closed_tasks = Task.objects.filter(status=2,activity__project__id=projectobj.id).order_by('-id')
 	remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
 	task_listing = list(chain(tasks_today ,tasks_tomorrow,remain_tasks))
-	task = Task.objects.filter(status=2,activity__project__id=projectobj.id).order_by('-id')
+	plain_task = []
+	history_task_data = []
+	for t in task_listing:
+		data = {'task_name':t.name,'activity_name':t.activity.name,
+				'supercategory':t.activity.super_category,'date':t.created,
+				'created_by':t.created_by,'update_type':'tasks'}
+		plain_task.append(data)
+		history_obj = t.history.filter(created__range=[start_date,end_date])[:10]
+		for k in history_obj:
+			previous_task_progress = k.get_previous_by_created().task_progress
+			history_data = {'task_name':k.name,'activity_name':k.activity.name,
+			'supercategory':k.activity.super_category,'date':k.created,
+			'task_progress':k.task_progress,'previous_task_progress':previous_task_progress,
+			'activity_name':k.activity.name,'supercategory':k.activity.super_category,
+			'update_type':'tasks_history'}
+			history_task_data.append(history_data)
+
+	main_data = history_task_data + plain_task
+
+
+
+
+
+
+
+	# import ipdb; ipdb.set_trace()
+	# task = Task.objects.filter(status=2,activity__project__id=projectobj.id).order_by('-id')
 	task_data = []
 	for i in task_listing:
 		task_history = i.history.all()[:5]
@@ -90,7 +116,7 @@ def get_project_updates(request):
 	# 	for j in file_history:
 	# 		file_data.append({'name':j.name,'created_by':j.history_user,'file_type':j.get_attachment_type_display(),'date':j.created,'update_type':'file'})
 	file_data.sort(key=lambda item:item['date'], reverse=True)
-	task_data.sort(key=lambda item:item['date'], reverse=True)
+	main_data.sort(key=lambda item:item['date'], reverse=True)
 
 	# import ipdb; ipdb.set_trace()
 	return render(request,'project-wall/project_updates_old.html',locals())
