@@ -7,6 +7,7 @@ from projectmanagement.models import *
 from taskmanagement.models import *
 from budgetmanagement.models import *
 import datetime
+from taskamanagement.views import ExpectedDatesCalculator
 
 class LogInTest(TestCase):
     def setUp(self):
@@ -50,8 +51,9 @@ class DelayDrillTest(TestCase):
         task_obj1 = Task.objects.create(activity=act_obj,start_date='2016-02-10',end_date='2018-10-14',
                     name='consrtuction of walls',slug='construct-walls',status=3,task_progress='10')
         self.assertEqual(task_obj.end_date,datetime.datetime.now().strftime('%Y-%m-%d'))
-        task_list = Task.objects.filter(active=2).order_by('end_date')
-        for i in task_list:
+        task_lists = Task.objects.filter(active=2).order_by('end_date')
+        ExpectedDatesCalculator(task_list = task_lists)
+        for i in task_lists:
             self.assertIsNotNone(i.actual_end_date)
         
         self.assertGreater(task_obj.end_date,task_obj1.end_date,'greater')

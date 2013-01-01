@@ -70,6 +70,7 @@ class BaseContent(six.with_metaclass(BaseContentBase, models.Model)):
                                          default=2)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    modified_by = models.CharField(max_length=50,blank=True, null=True)
     Admin = SimpleHistoryAdmin
     objects = ActiveQuerySet.as_manager()
     history = HistoricalRecords()
