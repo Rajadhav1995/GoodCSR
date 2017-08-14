@@ -19,7 +19,6 @@ from projectmanagement.models import BaseContent
 #--------------------ends here--------------------------------------------------#
 
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
-REQUEST_STATUS = ((0,''),(1, 'Requested'), (2, 'Request more information'), (3, 'Reject'), (4,'Approved'), (5, 'ShortList'), (6, 'Decision Pending'))
 STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 
 

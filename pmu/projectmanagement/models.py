@@ -107,11 +107,24 @@ class Boundary(BaseContent):
     slug = models.SlugField('Slug', max_length=255, blank=True, null=True)
     parent = models.ForeignKey('self', blank=True, null=True)
 
+class MasterCategory(BaseContent):
+    name = models.CharField(max_length=200,**OPTIONAL)
+    code = models.CharField(max_length=100,**OPTIONAL)
+    slug = models.SlugField('Slug', max_length=255, blank=True, null=True)
+    parent = models.ForeignKey('self', **OPTIONAL)
+
+class UserProfile(BaseContent):
+    user_reference_id = models.IntegerField(default=0)
+    user = models.ForeignKey("auth.User",**OPTIONAL)
+    email = models.CharField(max_length=500,**OPTIONAL)
+    orgnaization = models.CharField(max_length=800,**OPTIONAL)
+    organization_type = models.IntegerField(default=0)
+
 class Program(BaseContent):
     name = models.CharField(max_length=200,**OPTIONAL)
     start_date = models.DateField(**OPTIONAL)
     end_date = models.DateField(**OPTIONAL)
-    created_by = models.ForeignKey('auth.User',related_name ='program_created_user',**OPTIONAL)
+    created_by = models.ForeignKey(UserProfile,related_name ='program_created_user',**OPTIONAL)
     description = models.TextField('About Project', **OPTIONAL)
 
 REQUEST_STATUS = ((0,''),(1, 'Requested'), (2, 'Request more information'), (3, 'Reject'), (4,'Approved'), (5, 'ShortList'), (6, 'Decision Pending'))
@@ -126,7 +139,7 @@ class Project(BaseContent):
     end_date = models.DateField(**OPTIONAL)
     total_budget = models.IntegerField(default=0)
     budget_type = models.IntegerField(choices=BUDGET_TYPE, default=2)
-    created_by = models.ForeignKey('auth.User',related_name ='created_user',**OPTIONAL)
+    created_by = models.ForeignKey(UserProfile,related_name ='created_user',**OPTIONAL)
     project_status = models.IntegerField(choices=STATUS_CHOICES, default=0)
     duration = models.IntegerField(default=0)
     summary = RichTextField(**OPTIONAL)
@@ -134,23 +147,35 @@ class Project(BaseContent):
     slug = models.SlugField(_("Slug"), blank=True)
     location = models.ManyToManyField(Boundary,related_name ='project_location',blank=True)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
-    object_id = models.TextField(_('object ID'))
+    object_id = models.IntegerField(_('object ID'))
     relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
     history = HistoricalRecords()
 
-class Role(BaseContent):
-    name = models.CharField(max_length=200,**OPTIONAL)
-
-class UserRoleProject(BaseContent):
+class ProjectUserRoleRelationship(BaseContent):
     project = models.ForeignKey(Project,**OPTIONAL)
-    user = models.ManyToManyField('auth.User',blank = True)
-    role = models.ForeignKey(Role,**OPTIONAL)
+    user = models.ForeignKey(UserProfile,**OPTIONAL)
+    role = models.CharField(max_length=300,**OPTIONAL)
     history = HistoricalRecords()
+
+class KeyParameter(BaseContent):
+    name = models.CharField(max_length=300,**OPTIONAL)
+    parameter_type = models.ForeignKey(MasterCategory,**OPTIONAL)
+
+class keyParameterValue(BaseContent):
+    keyparameter = models.ForeignKey(KeyParameter)
+    name = models.CharField(max_length=300,**OPTIONAL)
+    parameter_value = models.CharField(max_length=300,**OPTIONAL)
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
+    object_id = models.IntegerField(_('object ID'))
 
 #--------this will be created in goodcsr platform ------#
 #class ProjectOrganizationRelation(BaseContent):
 #    project_reference_id = models.IntegerField(default = 0)
 #    funder = models.ForeignKey(Organization,related_name="funder")
 #    implementation_partner = models.ForeignKey(Organization,related_name="implementation_partner")
-#    budget = models.IntegerField(default=0)
 
+#class OrganizationUser(BaseContent):
+#    user = models.ForeignKey("auth.User")
+#    email = models.CharField(max_length=300,**OPTIONAL)
+#    designation = models.CharField(max_length=300,**OPTIONAL)
+#    organization = models.ForeignKey("organization.Organization",**OPTIONAL)

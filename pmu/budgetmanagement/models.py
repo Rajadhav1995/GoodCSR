@@ -29,6 +29,8 @@ class SuperCategory(BaseContent):
 class ProjectBudgetPeriodConf(BaseContent):
     name = models.CharField(max_length=300,**OPTIONAL)
     project = models.ForeignKey('projectmanagement.Project')
+    start_date = models.DateField(**OPTIONAL)
+    end_date = models.DateField(**OPTIONAL)
 
 EXPENSES_TYPE = ((1,'Programmatic'),(2,'Non-programmatic'))
 class BudgetCategory(BaseContent):
@@ -39,27 +41,34 @@ class BudgetCategory(BaseContent):
     order = models.IntegerField(**OPTIONAL)
     parent = models.ForeignKey('self', blank=True, null=True)
 
+# Planned amount is ngo expected amount,actual_disbursed_amount is corporate released amount,
+# recommended_amount is amount recommended by samhita,utilized_amount is the actual utilized_amount for one quarter
 class Tranche(BaseContent):
     budget_period = models.ForeignKey(ProjectBudgetPeriodConf,**OPTIONAL)
     name = models.CharField(max_length = 200, **OPTIONAL)
     planned_amount = models.IntegerField(default=0)
     actual_disbursed_amount = models.IntegerField(default=0)
-    recommended_by = models.ForeignKey("auth.User")
-    disbursed_amount = models.IntegerField(default=0)
-    budget = models.ForeignKey(BudgetCategory,**OPTIONAL)
+    recommended_amount = models.IntegerField(default=0)
+    recommended_by = models.ForeignKey("projectmanagement.UserProfile",**OPTIONAL)
+    utilized_amount = models.IntegerField(default=0)
+    due_date = models.DateField(**OPTIONAL)
+    disbursed_date = models.DateField(**OPTIONAL)
     history = HistoricalRecords()
 
 class BudgetPeriodUnit(BaseContent):
 # ----to set budget period
-    created_by = models.ForeignKey("auth.User",**OPTIONAL)
+    created_by = models.ForeignKey("projectmanagement.UserProfile",**OPTIONAL)
     budget_heading = models.ForeignKey(BudgetCategory,**OPTIONAL)
     budget_period = models.ForeignKey(ProjectBudgetPeriodConf,**OPTIONAL)
     subheading = models.CharField(max_length=200,**OPTIONAL)
     unit = models.CharField(max_length=200,**OPTIONAL)
+    unit_type = models.CharField(max_length=200,**OPTIONAL)
+    rate = models.CharField(max_length=200,**OPTIONAL)
     planned_unit_cost = models.CharField(max_length=200,**OPTIONAL)
     utilized_unit_cost = models.CharField(max_length=200,**OPTIONAL)
-    start_date = models.DateTimeField(blank=True,null=True)
-    end_date = models.DateTimeField(blank=True,null=True)
+    start_date = models.DateTimeField(**OPTIONAL)
+    end_date = models.DateTimeField(**OPTIONAL)
+    remarks = models.TextField()
     order = models.IntegerField(default=0)
     history = HistoricalRecords()
 
