@@ -19,7 +19,7 @@ from projectmanagement.models import BaseContent
 #--------------------ends here--------------------------------------------------#
 
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
-STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
+STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 
 
 class Activity(BaseContent):
