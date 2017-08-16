@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>GoodCSR Admin Dashboard</title>
+  <title>PMU Admin Dashboard</title>
   <link rel="shortcut icon" href="/static/img/favicon.ico">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -91,7 +91,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <p>
                   {{user}}
                 </p>
-                <a href="/masterdata/admin-logout/" class="btn btn-default btn-flat">Sign out</a>
+                <a href="/admin-logout/" class="btn btn-default btn-flat">Sign out</a>
               </li>
               <!-- Menu Body -->
 
@@ -130,174 +130,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        {% if key == 'users' %}
-        <li class="active"><a href="/masterdata/admin/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
-        {% endif %}
-
-        {% if key == 'ngo' %}
-        <li class="active"><a href="/masterdata/admin/ngo"><i class="fa fa-bank"></i> <span>NGO</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/ngo"><i class="fa fa-bank"></i> <span>NGO</span></a></li>
-        {% endif %}
-
-        {% if key == 'company' %}
-        <li class="active"><a href="/masterdata/admin/company"><i class="fa fa-building"></i> <span>Company</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/company"><i class="fa fa-building"></i> <span>Company</span></a></li>
-        {% endif %}
-
-        {% if key == 'program' %}
-        <li class="active"><a href="/masterdata/admin/program"><i class="fa fa-calendar"></i> <span>Program</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/program"><i class="fa fa-calendar"></i> <span>Program</span></a></li>
-        {% endif %}
-
-        {% if key == 'notification' %}
-        <li class="active"><a href="/masterdata/admin/notification"><i class="fa fa-bell-o"></i> <span>Notification</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/notification"><i class="fa fa-bell-o"></i> <span>Notification</span></a></li>
-        {% endif %}
-        {% if key == 'event' %}
-        <li class="active"><a href="/masterdata/admin/event"><i class="fa fa-calendar-check-o"></i> <span>Event</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/event"><i class="fa fa-calendar-check-o"></i> <span>Event</span></a></li>
-        {% endif %}
-
-        {% if key == 'notifications' %}
-        <li class="active"><a href="/masterdata/admin/notifications"><i class="fa fa-bell-o"></i> <span>Notifications</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/notifications"><i class="fa fa-bell-o"></i> <span>Notifications</span></a></li>
-        {% endif %}
-
-        <li class="treeview">
-        <a href="/masterdata/admin/about">
-        <i class="fa fa-cog fa-spin fa-1.5x fa-fw"></i><span>Analytcs</span>
-        <i class="fa fa-angle-left pull-right"></i>
-        </a>
-          <ul class="treeview-menu">
-        {% if key == 'analytics' %}
-        <li class="active"><a href="/masterdata/admin/analytics"><i class="fa fa-cog fa-spin fa-1.5x fa-fw"></i> <span>Analytics</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/analytics"><i class="fa fa-cog fa-spin fa-1.5x fa-fw"></i> <span>Analytics</span></a></li>
-        {% endif %}
-
-        {% if key == 'hits' %}
-        <li class="active"><a href="/masterdata/admin/hits"><i class="fa fa-cog fa-spin fa-1.5x fa-fw"></i> <span>Hits</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/hits"><i class="fa fa-cog fa-spin fa-1.5x fa-fw"></i> <span>Hits</span></a></li>
-        {% endif %}
-      </ul>
-    </li>
-
-        {% if key == 'rfp' %}
-        <li class="active"><a href="/masterdata/admin/rfp"><i class="fa fa-building-o"></i> <span>SmartRFP</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/rfp"><i class="fa fa-building-o"></i> <span>SmartRFP</span></a></li>
-        {% endif %}
-        {% if key == 'rfp-response' %}
-        <li class="active"><a href="/masterdata/admin/rfp-response"><i class="fa fa-building-o"></i> <span>SmartRFP Response</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/rfp-response"><i class="fa fa-building-o"></i> <span>SmartRFP Response</span></a></li>
-        {% endif %}
-
-        {% if key == 'faq-list' %}
-        <li class="active"><a href="/masterdata/admin/faq-list"><i class="fa fa-comments-o"></i> <span>FAQ</span></a></li>
-        {% else %}
-        <li><a href="/masterdata/admin/faq-list"><i class="fa fa-comments-o"></i> <span>FAQ</span></a></li>
-        {% endif %}
-        <li class="treeview">
-          <a href="/masterdata/admin/about">
-            <i class="fa  fa-sort-down"></i><span>Content Management</span>
-            <i class="fa fa-angle-left pull-right"></i>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/masterdata/admin/article"><i class="fa fa-circle-o"></i> Article</a></li>
-
-            <li><a href="/masterdata/admin/section"><i class="fa fa-circle-o"></i> Section</a></li>
-
-            <li><a href="/masterdata/admin/ngo-opportunities"><i class="fa fa-circle-o"></i> External Opportunities</a></li>
-<!--            <li><a href="/masterdata/admin/incubator-banner"><i class="fa fa-circle-o"></i>Incubator Banner</a></li>-->
-<!--            <li><a href="/masterdata/admin/incubator-content"><i class="fa fa-circle-o"></i>Incubator Content-->
-            <li><a href="/masterdata/admin/subscribers-email"><i class="fa fa-circle-o"></i> Subscribers Email </a></li>
-          </ul>
-        </li>
-
-        <li class="treeview">
-          <a href="/masterdata/admin/about">
-            <i class="fa  fa-sort-down"></i><span>Masterdata</span>
-            <i class="fa fa-angle-left pull-right"></i>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/masterdata/admin/beneficiaries-list"><i class="fa fa-circle-o"></i> Beneficiaries</a></li>
-            
-            <li><a href="/masterdata/admin/areafocus-list"><i class="fa fa-circle-o"></i> Area of Focus</a></li>
-
-            <li><a href="/masterdata/admin/interventions"><i class="fa fa-circle-o"></i> Interventions</a></li>
-
-            <li><a href="/masterdata/admin/interventions-channels"><i class="fa fa-circle-o"></i> Intervention Channel </a></li>
-            <li><a href="/masterdata/indicators/list/"><i class="fa fa-circle-o"></i> Indicators </a></li>
-
-          </ul>
-        </li>
-
-        <li class="treeview">
-          <a href="/masterdata/admin/about">
-            <i class="fa  fa-sort-down"></i><span>Impact Portfolio</span>
-            <i class="fa fa-angle-left pull-right"></i>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/masterdata/admin/Portfolio"><i class="fa fa-circle-o"></i>  Portfolio</a></li>
-            
-            <li><a href="/masterdata/admin/Testimonial"><i class="fa fa-circle-o"></i> Testimonials</a></li>
-
-            <li><a href="/masterdata/admin/Intervention"><i class="fa fa-circle-o"></i> Intervention </a></li>
-
-            <li><a href="/masterdata/admin/PortfolioIntervention"><i class="fa fa-circle-o"></i> Intervention Programs</a></li>
-
-          </ul>
-        </li>
-
-        <li class="treeview">
-          <a href="/masterdata/admin/about">
-            <i class="fa  fa-sort-down"></i><span>Incubators</span>
-            <i class="fa fa-angle-left pull-right"></i>
-          </a>
-          <ul class="treeview-menu">
-<!--            <li><a href="/masterdata/admin/IncubatorCompanyTagging"><i class="fa fa-circle-o"></i>Incubator Company Tagging</a></li>-->
-            <li><a href="/masterdata/admin/incubator-banner"><i class="fa fa-circle-o"></i>Incubator Banner</a></li>
-            <li><a href="/masterdata/admin/incubator-content"><i class="fa fa-circle-o"></i>Incubator Content
-
-            <li><a href="/masterdata/admin/incubator-program"><i class="fa fa-calendar"></i> <span>Incubator Program</span></a></li>
-
-            <li><a href="/masterdata/admin/startup-program"><i class="fa fa-circle-o"></i> Startup Programs</a></li>
-
-          </ul>
-        </li>
-
-        <li class="treeview">
-          <a href="/masterdata/admin/about">
-
-
-            <i class="fa  fa-sort-down"></i><span>Survey</span>
-            <i class="fa fa-angle-left pull-right"></i>
-          </a>
-          <ul class="treeview-menu">
-
-            <li><a href="/masterdata/admin/survey"><i class="fa fa-circle-o"></i> Survey</a></li>
-            
-<!--            <li><a href="/masterdata/admin/block"><i class="fa fa-circle-o"></i> Block</a></li>-->
-
-<!--            <li><a href="/masterdata/admin/question"><i class="fa fa-circle-o"></i> Question</a></li>-->
-
-<!--            <li><a href="/masterdata/admin/choices"><i class="fa fa-circle-o"></i> Choices </a></li>-->
-            <li><a href="/masterdata/program-mapping-location/list/"><i class="fa fa-circle-o"></i> Program Mapping Relation</a></li>
-            <li><a href="/masterdata/indicator_mapping/list/"><i class="fa fa-circle-o"></i> Indicator Mapping Relation</a></li>
-
-          </ul>
-        </li>
-
+        <li class="active"><a href="#"><i class="fa fa-users"></i> <span>Users</span></a></li>
+       
       </ul>
       <!-- /.sidebar-menu -->
     </section>
