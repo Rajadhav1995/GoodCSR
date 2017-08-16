@@ -4,8 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse,HttpResponseRedirect
-from pmu.settings import HOST_URL, PHOTO_URL
-
+from pmu.settings import BASE_DIR
 # Create your views here.
 
 def listing(request,model_name):
