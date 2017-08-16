@@ -19,4 +19,5 @@ from views import dashboard
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^dashboard/$',dashboard.admin_dashboard),
+    
 ]
