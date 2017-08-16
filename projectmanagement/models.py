@@ -209,8 +209,4 @@ class ProjectUserRoleRelationship(BaseContent):
     user = models.ForeignKey(UserProfile,**OPTIONAL)
     role = models.CharField(max_length=300,**OPTIONAL)
     history = HistoricalRecords()
-#class OrganizationUser(BaseContent):
-#    user = models.ForeignKey("auth.User")
-#    email = models.CharField(max_length=300,**OPTIONAL)
-#    designation = models.CharField(max_length=300,**OPTIONAL)
-#    organization = models.ForeignKey("organization.Organization",**OPTIONAL)
+
