@@ -18,6 +18,7 @@ from views import dashboard
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^dashboard/$',dashboard.admin_dashboard),
     
 ]
