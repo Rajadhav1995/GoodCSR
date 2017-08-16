@@ -107,11 +107,17 @@ class Boundary(BaseContent):
     slug = models.SlugField('Slug', max_length=255, blank=True, null=True)
     parent = models.ForeignKey('self', blank=True, null=True)
 
+    def __str__(self):
+        return str(self.id)
+
 class MasterCategory(BaseContent):
     name = models.CharField(max_length=200,**OPTIONAL)
     code = models.CharField(max_length=100,**OPTIONAL)
     slug = models.SlugField('Slug', max_length=255, blank=True, null=True)
     parent = models.ForeignKey('self', **OPTIONAL)
+
+    def __str__(self):
+        return str(self.id)
 
 class UserProfile(BaseContent):
     user_reference_id = models.IntegerField(default=0)
@@ -119,6 +125,11 @@ class UserProfile(BaseContent):
     email = models.CharField(max_length=500,**OPTIONAL)
     orgnaization = models.CharField(max_length=800,**OPTIONAL)
     organization_type = models.IntegerField(default=0)
+    owner = models.BooleanField(default=False)
+    is_admin_user = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.id)
 
 class Program(BaseContent):
     name = models.CharField(max_length=200,**OPTIONAL)
@@ -126,6 +137,9 @@ class Program(BaseContent):
     end_date = models.DateField(**OPTIONAL)
     created_by = models.ForeignKey(UserProfile,related_name ='program_created_user',**OPTIONAL)
     description = models.TextField('About Project', **OPTIONAL)
+
+    def __str__(self):
+        return str(self.id)
 
 REQUEST_STATUS = ((0,''),(1, 'Requested'), (2, 'Request more information'), (3, 'Reject'), (4,'Approved'), (5, 'ShortList'), (6, 'Decision Pending'))
 STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
@@ -143,7 +157,9 @@ class Project(BaseContent):
     project_status = models.IntegerField(choices=STATUS_CHOICES, default=0)
     duration = models.IntegerField(default=0)
     summary = RichTextField(**OPTIONAL)
-    tagline = RichTextField(**OPTIONAL)
+    no_of_beneficiaries = models.IntegerField(default=0)
+    cause_area = models.ManyToManyField(MasterCategory,blank=True,related_name="area_category")
+    target_beneficiaries = models.ManyToManyField(MasterCategory,blank=True,related_name="target_beneficiaries")
     slug = models.SlugField(_("Slug"), blank=True)
     location = models.ManyToManyField(Boundary,related_name ='project_location',blank=True)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
@@ -151,29 +167,48 @@ class Project(BaseContent):
     relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
     history = HistoricalRecords()
 
+    def __str__(self):
+        return str(self.id)
+
+ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
+
+class PrimaryWork(BaseContent):
+    types = models.IntegerField(choices=ACTIVITY_CHOICES, **OPTIONAL)
+    name = models.TextField(blank=True, null=True)
+    number = models.IntegerField(default=0)
+    activity_duration = models.IntegerField(default=0)
+    content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
+    object_id = models.IntegerField(_('object ID'),null=True,blank=True)
+    relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
+
+    def __str__(self):
+        return str(self.id)
+
+class ProjectFunderRelation(BaseContent):
+    project = models.ForeignKey(Project,**OPTIONAL)
+    funder = models.ForeignKey(UserProfile,related_name="funder")
+    implementation_partner = models.ForeignKey(UserProfile,related_name="implementation_partner")
+    total_budget = models.IntegerField(default=0)
+
+
+class KeyParameter(BaseContent):
+    name = models.CharField(max_length=300,**OPTIONAL)
+    parameter_type = models.ForeignKey(MasterCategory,**OPTIONAL)
+    project = models.ForeignKey(Project,**OPTIONAL)
+
+class keyParameterValue(BaseContent):
+    keyparameter = models.ForeignKey(KeyParameter)
+    name = models.CharField(max_length=300,**OPTIONAL)
+    date = models.DateField(**OPTIONAL)
+    parameter_value = models.CharField(max_length=300,**OPTIONAL)
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
+    object_id = models.IntegerField(_('object ID'))
+
 class ProjectUserRoleRelationship(BaseContent):
     project = models.ForeignKey(Project,**OPTIONAL)
     user = models.ForeignKey(UserProfile,**OPTIONAL)
     role = models.CharField(max_length=300,**OPTIONAL)
     history = HistoricalRecords()
-
-class KeyParameter(BaseContent):
-    name = models.CharField(max_length=300,**OPTIONAL)
-    parameter_type = models.ForeignKey(MasterCategory,**OPTIONAL)
-
-class keyParameterValue(BaseContent):
-    keyparameter = models.ForeignKey(KeyParameter)
-    name = models.CharField(max_length=300,**OPTIONAL)
-    parameter_value = models.CharField(max_length=300,**OPTIONAL)
-    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
-    object_id = models.IntegerField(_('object ID'))
-
-#--------this will be created in goodcsr platform ------#
-#class ProjectOrganizationRelation(BaseContent):
-#    project_reference_id = models.IntegerField(default = 0)
-#    funder = models.ForeignKey(Organization,related_name="funder")
-#    implementation_partner = models.ForeignKey(Organization,related_name="implementation_partner")
-
 #class OrganizationUser(BaseContent):
 #    user = models.ForeignKey("auth.User")
 #    email = models.CharField(max_length=300,**OPTIONAL)

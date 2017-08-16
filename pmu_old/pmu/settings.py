@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'projectmanagement',
     'taskmanagement',
     'budgetmanagement',
+    'media',
 )
 
 MIDDLEWARE_CLASSES = (
