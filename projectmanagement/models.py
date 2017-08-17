@@ -4,9 +4,10 @@ from django.template.defaultfilters import slugify
 from constants import levels, OPTIONAL
 import six
 from django.contrib import admin
+from django.views import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from simple_history.models import HistoricalRecords
 from thumbs import ImageWithThumbsField
 from simple_history.admin import SimpleHistoryAdmin
@@ -164,7 +165,7 @@ class Project(BaseContent):
     location = models.ManyToManyField(Boundary,related_name ='project_location',blank=True)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'))
-    relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
     history = HistoricalRecords()
 
     def __str__(self):
@@ -179,7 +180,7 @@ class PrimaryWork(BaseContent):
     activity_duration = models.IntegerField(default=0)
     content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'),null=True,blank=True)
-    relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
 
     def __str__(self):
         return str(self.id)
