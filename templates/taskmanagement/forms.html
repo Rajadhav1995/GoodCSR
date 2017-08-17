@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block midpart %}
+<!--<link href="static/css/multiselect.css" media="screen" rel="stylesheet" type="text/css">-->
+    <!-- Content Header (Page header) -->
+<style>
+    .error,.errorlist { color :red;}
+    #date_error,#min_max {color : red;}
+</style>
+
+    <!-- Main content -->
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+                {% if slug %}
+              <h3 class="box-title">Edit {{model_name}}</h3>
+              {% else %}
+                <h3 class="box-title">Add {{model_name}}</h3>
+              {% endif %}
+            </div>
+            
+            <!-- /.box-header -->
+            <div class="box-body">
+            
+            <form action="." method='POST' enctype="multipart/form-data">{% csrf_token %}
+    
+                {{form.non_fields_errors}}
+        
+                    {{form.media}}
+        
+                <div class="box-content">
+                    <form role="form">
+                        {% for field in form %}
+                            <div class="row">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
+                                    {{field.label_tag}}
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{field}}
+                                    {{field.errors}}
+                                        
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        <input id = "save"class="btn btn-primary" type="submit" value="Save"/>
+                        <a class="btn btn-success" href="/manage-task/{{model_name}}">Back</button></a>
+                            </div>
+                    </form>
+                    
+                </div>
+            </form>
+                        
+     </div>
+
+  </div>
+  {% block script %}
+ <script src="/static/js/jquery.quicksearch.js"></script>
+<script>
+</script>
+{% endblock %}
+{% endblock %}
