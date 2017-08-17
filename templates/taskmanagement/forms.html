@@ -46,7 +46,7 @@
                         {% endfor %}
                         
                         <input id = "save"class="btn btn-primary" type="submit" value="Save"/>
-                        <a class="btn btn-success" href="/manage-task/{{model_name}}">Back</button></a>
+                        <a class="btn btn-success" href="/manage-task/{{model_name}}/listing/">Back</button></a>
                             </div>
                     </form>
                     
@@ -57,8 +57,31 @@
 
   </div>
   {% block script %}
- <script src="/static/js/jquery.quicksearch.js"></script>
+<script src="/static/js/jquery.quicksearch.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_actual_start_date" ).datepicker({ minDate: new Date(),dateFormat: 'yy-mm-dd' });
+        $( "#id_actual_end_date" ).datepicker({ minDate: new Date(),dateFormat: 'yy-mm-dd' });
+        $('#id_start_date').datepicker({ dateFormat: 'yy-mm-dd',
+        onSelect: function(dateText,inst){
+            var start = new Date($('#id_start_date').val());
+            var end = new Date($('#id_end_date').val());
+            var month = Math.abs(end.getMonth() - start.getMonth());
+            var year  = Math.abs(end.getYear() - start.getYear());
+            var diff = year*12 + month
+            if (end){
+                if (start <= end){
+                    alert('End date is less than start date');
+                }
+            }
+        });
+    
+    });
 </script>
+
 {% endblock %}
 {% endblock %}

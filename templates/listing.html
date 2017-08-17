@@ -19,44 +19,21 @@ alert("Sorry, You cant Select more than 3 featured RFP")
 </script>
 <!-- </div> -->
 {% endif %}
-    {% if model_name = 'activity' %}
+    {% if model_name == 'Activity' %}
     <h3 class="box-title">Activity List</h3>
     {% endif %}
-    {% if model_name = 'task' %}
+    {% if model_name == 'Task' %}
     <h3 class="box-title">Task List</h3>
     {% endif %}
     
 
 </div>
-<script>
-function deleteoject(id) {
-    var status = confirm("Are you sure to Delete notification permanently");
-    console.log(key);
-    if(status == true){
-        window.location.href="/masterdata/status-change/?id="+id"/&key="+key
-        //"/masterdata/status-change/?id="+id"/&key="+key
-        alert("Notification Deleted Successfully")
 
-    }
-}
-</script>
-<script>
-function regFunction(id,key) {
-    var status = confirm("Are you sure to Delete");
-    console.log(key);
-    if(status == true){
-        window.location.href="/masterdata/status-change/?id="+id+"&key="+key
-        alert(" Deleted Successfully")
-
-    }
-}
-
-</script>
 <!-- /.box-header -->
 <div class="box-body table-responsive">
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
-            {% if model_name == 'activity' %}
+            {% if model_name == 'Activity' %}
             <tr>
                 <th>Activity Name</th>
                 <th>Super category</th>
@@ -68,7 +45,7 @@ function regFunction(id,key) {
             </tr>
             {% endif %}
             
-            {% if model_name == 'task' %}
+            {% if model_name == 'Task' %}
             <tr>
                 <th>Task Name</th>
                 <th>User</th>
@@ -98,7 +75,8 @@ function regFunction(id,key) {
             
         </thead>
 
-        {% if model_name == 'activity'%}
+        {% if model_name == 'Activity'%}
+            <div align = "right">
             <a class="btn btn-primary" href="/manage-task/Activity/ActivityForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
         {% for i in obj_list %}
         <tr>
@@ -107,17 +85,17 @@ function regFunction(id,key) {
             <td>{{i.get_activity_type_display}}</td>
             <td>{{i.get_status_display}}</td>
             <td>{{i.description|safe}}</td>
-            <td><a class="btn btn-primary" href=""><i class="fa fa-edit"></i> Edit</button> </a></td>
+            <td><a class="btn btn-primary" href="/manage-task/Activity/ActivityForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button> </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/manage-task/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/manage-task/activity/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
         {% endif %}
         
-        {% if model_name == 'task'%}
+        {% if model_name == 'Task'%}
             <a class="btn btn-primary" href="/manage-task/Task/TaskForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
         {% for i in obj_list %}
         <tr>
@@ -130,11 +108,11 @@ function regFunction(id,key) {
             <td>{{i.actual_start_date}}</td>
             <td>{{i.actual_end_date}}</td>
             <td>{{i.get_status_display}}</td>
-            <td><a class="btn btn-primary" href="/manage-task/Task/TaskForm/edit/{{obj_list.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            <td><a class="btn btn-primary" href="/manage-task/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/masterdata/ngo-status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/manage-task/task/status//?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/masterdata/ngo-status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/manage-task/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
