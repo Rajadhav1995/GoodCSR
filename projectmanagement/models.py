@@ -191,6 +191,8 @@ class ProjectFunderRelation(BaseContent):
     implementation_partner = models.ForeignKey(UserProfile,related_name="implementation_partner")
     total_budget = models.IntegerField(default=0)
 
+    def __str__(self):
+        return str(self.id)
 
 class KeyParameter(BaseContent):
     name = models.CharField(max_length=300,**OPTIONAL)
