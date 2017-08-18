@@ -11,7 +11,7 @@ from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
 from projectmanagement.models import Project
 # Create your views here.
 
-@login_required(login_url='/')
+#@login_required(login_url='/')
 def listing(request,model_name):
 #    model = ContentType.objects.get(model__iexact = model_name)
     obj_list = eval(model_name).objects.all().order_by('-id')
