@@ -17,7 +17,7 @@ def listing(request,model_name):
     obj_list = eval(model_name).objects.all().order_by('-id')
     return render(request,'listing.html',locals())
     
-@login_required(login_url='/')
+#@login_required(login_url='/')
 def add_taskmanagement(request,model_name,m_form):
     user = request.user
     form=eval(m_form)

@@ -8,7 +8,7 @@ from pmu.settings import (SAMITHA_URL,)
 
 def signin(request):
     next = request.GET.get('next')
-#    if request.session.get('user_id') != '':
+#    if request.session.get('user_id') or request.session.get('user_id') != '':
 #        if next:
 #            return HttpResponseRedirect(next)
 #        else:
