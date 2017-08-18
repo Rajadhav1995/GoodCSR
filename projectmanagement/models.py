@@ -124,7 +124,7 @@ class UserProfile(BaseContent):
     user_reference_id = models.IntegerField(default=0)
     user = models.ForeignKey("auth.User",**OPTIONAL)
     email = models.CharField(max_length=500,**OPTIONAL)
-    orgnaization = models.CharField(max_length=800,**OPTIONAL)
+    organization = models.CharField(max_length=800,**OPTIONAL)
     organization_type = models.IntegerField(default=0)
     owner = models.BooleanField(default=False)
     is_admin_user = models.BooleanField(default=False)
