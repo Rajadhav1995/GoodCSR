@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.admin import widgets
-from ckeditor.widgets import CKEditorWidget
+# from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
 
