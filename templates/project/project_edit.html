@@ -1,0 +1,442 @@
+{% extends 'base.html' %}
+{% block midpart %}
+    <!-- Content Header (Page header) -->
+<!--<style>
+form { 
+margin: 0 auto; 
+width:450px;
+}
+</style>-->
+    <!-- Main content -->
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Add Project</h3>
+              <div align="right">
+             <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+         </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            
+            <form autocomplete="off" id="prog_edit" action="/project/add/?id={{ids}}" method="POST" enctype="multipart/form-data">
+            
+            {% csrf_token %}
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.program.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.program}}
+                                    {{ form.program.errors }}
+                                </div>
+                            </div>
+                        <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    Project Name <font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.name}}
+                                    {{ form.name.errors }}
+                                </div>
+                        </div>
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.total_budget.label_tag}}<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.total_budget}}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.no_of_beneficiaries.label_tag}}
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.no_of_beneficiaries}}
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.summary.label_tag}}
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.summary}}
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.target_beneficiaries.label_tag}}<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.target_beneficiaries}}
+                                {% if form.target_beneficiaries.errors %}
+                                <p style="color: red;">
+                                    Please Select.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.cause_area.label_tag}}<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.cause_area}}
+                                {% if form.cause_area.errors %}
+                                <p style="color: red;">
+                                    Please Select.
+                                </p>
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Budget Type:
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.budget_type}}
+                                {% if form.budget_type.errors %}
+                                <p style="color: red;">
+                                    Please enter Budget Type.
+                                </p>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Created By<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.created_by}}
+                                {% if form.created_by.errors %}
+                                <p style="color: red;">
+                                    Please enter Partners Names.
+                                </p>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.project_status.label_tag}}<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.project_status}}
+                                {{ form.project_status.errors }}
+                            </div>
+                        </div>
+                        
+
+                        {% if obj.program_hosting == 5 %}
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Expected Outcomes and Impact<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.rfp_objective}}
+                                {% if form.rfp_objective.errors %}
+                                <p style="color: red;">
+                                    Please enter Expected Outcomes and Impact.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.front_image.label_tag}}
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.front_image}}
+                            </div>
+                        </div>
+
+                        {% if obj.program_hosting == 0 %}
+                          <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
+                                BUDGET
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <input type="number" name="total_budget" value="{{budget.total_budget}}" class="form-control" >
+                                {% if budgetform.total_budget.errors %}
+                                <p style="color: red;">
+                                    Please enter Budget.
+                                </p>
+                                {% endif %}
+                            </div>
+                          </div>
+                        {% endif %}
+                        <!-- <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
+                                Add LOcation
+                            </label>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                        <div class="input_fields_wrap">
+                            <button class="add_field_button">Add More Location</button>
+                            <div><input type="text" name="location[1]"><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select></div>
+                        </div>
+                        </div>
+                    </div> -->
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
+                            Activities
+                            </label>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                        <div class="input_fields_wrap">
+                            <button class="add_field_button">Add More Activity</button>
+                            {% if ids %}
+                            {% for i in activity_view %}
+                            <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"><!-- <select name="activity_type[1]" id="id_activity_type"><option value="1" selected="">Core</option><option value="2">Non-core</option></select> --></div>
+                            {% endfor %}
+                            {% else %}
+                            <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"></div>
+                            {% endif %}
+                        </div>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.start_date.label_tag}}
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.start_date}}
+                                <font color=#fc282f><b><span id="dateError1"></span></b></font>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.end_date.label_tag}}
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.end_date}}
+                                <font color=#fc282f><b><span id="dateError"></span></b></font>
+
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" for="first-name">
+                                Duration:
+                            </label>
+                            <div class="control-label col-md-1 col-sm-1 col-xs-12">
+                                {{form.duration}}
+                                {% if form.duration.errors %}
+                                <p style="color: red;">
+                                    Please enter Solution.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <input style="width: 0px;" name="activity_count" id="activity_count" type="text"/>
+
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                    </form>
+  </div>
+
+<input type="hidden" name="key_list" id="key_list" value="{{key_list}}">
+<input type="hidden" name="keyss" id="keyss" value="{{keyss}}">
+  </div>
+  </div>
+{% endblock %}
+{% block script %}
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input type="text" name="activity['+x+']"/><input type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
+
+            // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        }
+        document.getElementById("activity_count").value = x;
+
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('select[multiple=multiple]').multiSelect()
+        $( function() {
+            $('#id_start_date').datepicker({ dateFormat: 'yy-mm-dd',
+            onSelect: function(dateText, inst) {
+        var start = new Date($('#id_start_date').val());
+        var end = new Date($('#id_end_date').val());
+        var today = new Date();
+
+        if (end <= start) {
+            document.getElementById('dateError1').innerHTML="Start date should be less than End date"
+        };
+        if (end > start) {
+            document.getElementById('dateError1').innerHTML=""
+        };
+        if (start <= today) {
+          document.getElementById('dateError1').innerHTML="Start date must be greater than today's date"
+        }
+        var months = (end.getFullYear() - start.getFullYear()) * 12;
+        months += end.getMonth() - start.getMonth();
+        document.getElementById("id_duration").value = months;
+    } });
+            });
+
+        $("#prog_edit").validate({
+            rules :
+            {
+                name : {required:true},
+                program : {required:true},
+                total_budget : {required:true},
+                no_of_beneficiaries : {required:true},
+                target_beneficiaries : {required:true},
+                cause_area : {required:true},
+                created_by : {required:true},
+                project_status : {required:true},
+                id_end_date: { greaterThan: "#id_start_date" },
+            },
+            messages:
+            {
+                name : {required : "<font color=#fc282f>Please enter the name</font>"},
+                program:{required:"<font color=#fc282f>Please select the program</font>"},
+                total_budget:{required:"<font color=#fc282f>Please enter total budget</font>"},
+                created_by:{required:"<font color=#fc282f>Please created by user</font>"},
+                project_status:{required:"<font color=#fc282f>Please select project status</font>"},
+                no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
+                target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
+                cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
+                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+        });
+        });
+</script>
+<style>
+.error{color:red; min-width: 200px;}
+</style>
+  <div class="control-sidebar-bg"></div>
+
+<script>
+  $("#id_end_date").datepicker({
+    dateFormat: 'yy-mm-dd',
+    onSelect: function(dateText, inst) {
+        var start = new Date($('#id_start_date').val());
+        var end = new Date($('#id_end_date').val());
+        if (end <= start) {
+            alert("'End date' should be greater than 'Start date'")
+            document.getElementById('dateError').innerHTML="End date should be greater than Start date"
+        };
+        if (end > start) {
+            document.getElementById('dateError').innerHTML=""
+            document.getElementById('dateError1').innerHTML=""
+        };
+
+        var months = (end.getFullYear() - start.getFullYear()) * 12;
+        months += end.getMonth() - start.getMonth();
+        document.getElementById("id_duration").value = months;
+    }
+
+});
+</script>
+<script>
+function RemoveProduct() {
+    if ($('#id_start_date').val()>$('#id_end_date').val()){
+        alert("'End date' should be greater than 'Start date'");
+        return false;
+        } else {
+            return true;
+        }
+    }
+</script>
+
+
+<script type="text/javascript">
+$(function () {
+    //var dddd = new $('#keyss').val().split(', ');
+    $('#hero-demo').tagEditor({
+        delimiter: ',',
+        //initialTags: ['Hello', 'World', 'Example', 'Tags'],
+        initialTags: new $('#keyss').val().split(', '),
+        placeholder: 'Enter tags ...',
+        autocomplete: {
+            delay: 0,
+            position: {
+                collision: 'flip'
+            },
+            source: new $('#key_list').val().split(', ')
+        },
+        clickDelete : false,
+        beforeTagSave : beforeTagSavecb,
+        beforeTagDelete : beforeTagDeletecb,
+        onChange: onChangecb
+       /* autocomplete: {
+            source: googleSuggest,
+            minLength: 3,
+            delay: 250,
+            html: true,
+            position: {
+                collision: 'flip'
+            }
+        }*/
+    });
+    
+    function onChangecb(field, editor, tags) {
+        debugger;
+    }
+    
+    function beforeTagSavecb(field, editor, tags, tag, val) {
+        debugger;
+    }
+    
+    function beforeTagDeletecb(field, editor, tags, val) {
+        debugger;
+        return true;
+    }
+
+/*
+    $('#remove_all_tags').click(function () {
+        var tags = $('#demo3').tagEditor('getTags')[0].tags;
+        for (i = 0; i < tags.length; i++) {
+            $('#demo3').tagEditor('removeTag', tags[i]);
+        }
+    });*/
+});
+</script>
+{% endblock %}

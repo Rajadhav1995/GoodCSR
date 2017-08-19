@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block midpart %}
+<section class="content">
+<div class="row">
+<div class="col-xs-12">
+<div class="box">
+
+<div class="box-header">
+{% if messages %}
+<!-- <div class="span12">
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        <b>{{ message|safe }}</b>
+    </div>
+{% endfor %} -->
+<script type="text/javascript">
+alert("Sorry, You cant Select more than 3 featured RFP")
+</script>
+<!-- </div> -->
+{% endif %}
+    <h3 class="box-title">Project List</h3>
+
+    
+
+</div>
+<script>
+function deleteoject(id) {
+    var status = confirm("Are you sure to Delete notification permanently");
+    console.log(key);
+    if(status == true){
+        window.location.href="/masterdata/status-change/?id="+id"/&key="+key
+        //"/masterdata/status-change/?id="+id"/&key="+key
+        alert("Notification Deleted Successfully")
+        
+    }
+}
+</script>
+<script>
+function regFunction(id,key) {
+    var status = confirm("Are you sure to Delete");
+    console.log(key);
+    if(status == true){
+        window.location.href="/masterdata/status-change/?id="+id+"&key="+key
+        alert(" Deleted Successfully")
+        
+    }
+}
+
+</script>
+<!-- /.box-header -->
+<div class="box-body table-responsive">
+    <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>User</th>
+                <th>Program Name</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>            
+        </thead>
+        
+        {% for i in obj_list %}
+        <tr>
+            <td><a href="/masterdata/ngo-detail/?id={{i.id}}">{{i.name}}</a></td>
+            <td>{{i.created_by.user.username}}</td>
+            <td>{{i.created | date:'Y-m-d'}}</td>
+            <td>{{i.terms_conditions}}</td>
+            {% if key == 'company'%}
+                {% if i.incubator_marketplace == True %}
+                <td><a class="btn btn-primary" href="/masterdata/company/incubator-marketplace/?id={{i.id}}&key_status=False"><i class="glyphicon glyphicon-ok"></i></button></a></td>
+
+                {% else %}
+                <td><a title="Incubator Marketplace" class="btn btn-default" href="/masterdata/company/incubator-marketplace/?id={{i.id}}&key_status=True"><i class="glyphicon glyphicon-oka"></i><b>Select</b></button></a></td>
+                <!-- <td><input type="button" id="r-{{i.id}}" class="btn btn-default" value="Select" name=2 statuss=2 ids="{{i.id}}" ></td> -->
+                {% endif %}
+            {% endif %}
+            <td>{{i.get_active_display}}</td>
+            <!-- {% ifequal i.active 2 %}
+            <td><a class="btn btn-default" href="/masterdata/ngo-status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            {% else %}
+            <td><a class="btn btn-success" href="/masterdata/ngo-status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            {% endifequal %} -->
+            <td><a class="btn btn-primary" href="/project/add/?id={{i.id}}">Edit</button></a></td>
+            
+        </tr>
+        {% endfor %}
+        
+        
+    <!-- /.content -->
+<!-- 
+<script>
+$(function(){
+    $('#search_name2').click(function(event){
+       //var status = $('#status').val();
+       var id = this.id;
+       var name = this.status;
+       alert(id);
+       //var cm_coaching_request = $('#cm_request').val();
+
+        $.ajax({
+            url : "/masterdata/rfp-status/",
+            type : 'GET',
+            //dataType: "json",
+            data : {'status':status,'id':id},
+            
+            success:function(data){
+                $('#l').html(data);
+            }
+        });
+        
+    });
+});
+</script>
+
+ -->
+<!-- <input type="button" id="search_name2" class="button_reset" value="Go" style="margin-left:15px;" status=14 > -->
+</div>
+
+<!-- /.content-wrapper -->
+
+</body>
+{% endblock %}
+{% block script %}
+<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<!-- Main content -->
+
+<script language="javascript" type="text/javascript">
+    <!--
+    function approve(url) {
+        alert("{{obj_list.name}} Approved");
+        
+    }
+    function reject(url) {
+        alert("{{obj_list.name}} Rejected");
+        
+    }
+    function activate(url) {
+        alert("{{obj_list.name}} Activated");
+        
+    }
+    function deactivate(url) {
+        alert("{{obj_list.name}} Deactivated");
+        
+    }
+    // -->
+</script>
+<script type="text/javascript">
+    $(function () {
+      $("#example1").DataTable({
+        "order":[[2, 'desc']],
+        "stateSave": true,
+        "columnDefs": [
+    { "width": "17%", "targets": [4,5] }
+  ]
+  });
+    });
+</script>
+
+{% endblock %}

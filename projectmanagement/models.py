@@ -4,9 +4,10 @@ from django.template.defaultfilters import slugify
 from constants import levels, OPTIONAL
 import six
 from django.contrib import admin
+from django.views import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from simple_history.models import HistoricalRecords
 from thumbs import ImageWithThumbsField
 from simple_history.admin import SimpleHistoryAdmin
@@ -123,7 +124,7 @@ class UserProfile(BaseContent):
     user_reference_id = models.IntegerField(default=0)
     user = models.ForeignKey("auth.User",**OPTIONAL)
     email = models.CharField(max_length=500,**OPTIONAL)
-    orgnaization = models.CharField(max_length=800,**OPTIONAL)
+    organization = models.CharField(max_length=800,**OPTIONAL)
     organization_type = models.IntegerField(default=0)
     owner = models.BooleanField(default=False)
     is_admin_user = models.BooleanField(default=False)
@@ -164,7 +165,7 @@ class Project(BaseContent):
     location = models.ManyToManyField(Boundary,related_name ='project_location',blank=True)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'))
-    relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
     history = HistoricalRecords()
 
     def __str__(self):
@@ -179,7 +180,7 @@ class PrimaryWork(BaseContent):
     activity_duration = models.IntegerField(default=0)
     content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'),null=True,blank=True)
-    relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
 
     def __str__(self):
         return str(self.id)
@@ -190,6 +191,8 @@ class ProjectFunderRelation(BaseContent):
     implementation_partner = models.ForeignKey(UserProfile,related_name="implementation_partner")
     total_budget = models.IntegerField(default=0)
 
+    def __str__(self):
+        return str(self.id)
 
 class KeyParameter(BaseContent):
     name = models.CharField(max_length=300,**OPTIONAL)

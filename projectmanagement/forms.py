@@ -1,4 +1,4 @@
-from projectmanagement.models import Project,MasterCategory,UserProfile,Program
+from projectmanagement.models import Project,MasterCategory,UserProfile,Program,ProjectFunderRelation
 from collections import OrderedDict
 from django import forms
 from django.contrib.auth.models import User
@@ -29,5 +29,9 @@ class ProjectForm(forms.ModelForm):
 	class Meta:
 		model = Project
 		fields  = ('program','name','start_date','end_date','total_budget','budget_type','created_by',\
-        			'project_status','duration','summary','no_of_beneficiaries','cause_area','target_beneficiaries',\
-        			'location')
+        			'project_status','duration','summary','no_of_beneficiaries','cause_area','target_beneficiaries')
+
+class ProjectMappingForm(forms.ModelForm):
+	class Meta:
+		model = ProjectFunderRelation
+		fields  = ('project','funder','implementation_partner','total_budget')

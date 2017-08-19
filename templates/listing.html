@@ -19,6 +19,7 @@ alert("Sorry, You cant Select more than 3 featured RFP")
 </script>
 <!-- </div> -->
 {% endif %}
+<<<<<<< HEAD
     <h3 class="box-title">Project List</h3>
 
     
@@ -48,10 +49,26 @@ function regFunction(id,key) {
 }
 
 </script>
+=======
+    {% if model_name == 'Activity' %}
+    <h3 class="box-title">Activity List</h3>
+    {% endif %}
+    {% if model_name == 'Task' %}
+    <h3 class="box-title">Task List</h3>
+    {% endif %}
+    {% if model_name == 'Milestone' %}
+    <h3 class="box-title">Milestone List</h3>
+    {% endif %}
+    
+
+</div>
+
+>>>>>>> 0c353ff2536ae1638571dd850d7c9ee2a9b79318
 <!-- /.box-header -->
 <div class="box-body table-responsive">
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
+<<<<<<< HEAD
             <tr>
                 <th>Project Name</th>
                 <th>User</th>
@@ -66,11 +83,77 @@ function regFunction(id,key) {
             <a class="btn btn-primary" href="/masterdata/ngo/get/excel/">Download</button></a>
         </div><br>
         
+=======
+            {% if model_name == 'Activity' %}
+            <tr>
+                <th>Activity Name</th>
+                <th>Super category</th>
+                <th>Activity type</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Update</th>
+                <th>Action</th>
+            </tr>
+            {% endif %}
+            
+            {% if model_name == 'Task' %}
+            <tr>
+                <th>Task Name</th>
+                <th>User</th>
+                <th>Created on</th>
+                <th>Activity</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Update</th>
+                <th>Action</th>
+            </tr>
+            {% endif %}
+            
+            {% if model_name == 'Milestones' %}
+            <tr>
+                <th>Milestone Name</th>
+                <th>Task</th>
+                <th>Over due date</th>
+                <th>Update</th>
+                <th>Action</th>
+            </tr>
+            {% endif %}
+            
+        </thead>
+
+        {% if model_name == 'Activity'%}
+            <div align = "right">
+                <a class="btn btn-primary" href="/manage-task/Activity/ActivityForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
+            </div>
+        {% for i in obj_list %}
+        <tr>
+            <td>{{i.name}}</a></td>
+            <td>{{i.super_category}}</td>
+            <td>{{i.get_activity_type_display}}</td>
+            <td>{{i.get_status_display}}</td>
+            <td>{{i.description|safe}}</td>
+            <td><a class="btn btn-primary" href="/manage-task/Activity/ActivityForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button> </a></td>
+            {% ifequal i.active 2 %}
+            <td><a class="btn btn-default" href="/manage-task/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            {% else %}
+            <td><a class="btn btn-success" href="/manage-task/activity/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            {% endifequal %}
+        </tr>
+        {% endfor %}
+        {% endif %}
+        
+        {% if model_name == 'Task'%}
+            <div align = "right">
+                <a class="btn btn-primary" href="/manage-task/Task/TaskForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
+            </div>
+>>>>>>> 0c353ff2536ae1638571dd850d7c9ee2a9b79318
         {% for i in obj_list %}
         <tr>
             <td><a href="/masterdata/ngo-detail/?id={{i.id}}">{{i.name}}</a></td>
             <td>{{i.user}}</td>
             <td>{{i.created | date:'Y-m-d'}}</td>
+<<<<<<< HEAD
             <td>{{i.terms_conditions}}</td>
             {% if key == 'company'%}
                 {% if i.incubator_marketplace == True %}
@@ -121,6 +204,64 @@ $(function(){
 
  -->
 <!-- <input type="button" id="search_name2" class="button_reset" value="Go" style="margin-left:15px;" status=14 > -->
+=======
+            <td>{{i.activity}}</td>
+            <td>{{i.start_data}}</td>
+            <td>{{i.end_date}}</td>
+            <td>{{i.get_status_display}}</td>
+            <td><a class="btn btn-primary" href="/manage-task/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            {% ifequal i.active 2 %}
+            <td><a class="btn btn-default" href="/manage-task/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            {% else %}
+            <td><a class="btn btn-success" href="/manage-task/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            {% endifequal %}
+        </tr>
+        {% endfor %}
+        {% endif %}
+        
+        {% if model_name == 'Milestone'%}
+            <div align = "right">
+                <a class="btn btn-primary" href="/manage-task/Milestone/MilestoneForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
+            </div>
+        {% for i in obj_list %}
+        <tr>
+            <td><a href="/masterdata/ngo-detail/?id={{i.id}}">{{i.name}}</a></td>
+            <td>{{i.task.all}}</td>
+            <td>{{i.overdue}}</td>
+            <td><a class="btn btn-primary" href="/manage-task/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            {% ifequal i.active 2 %}
+            <td><a class="btn btn-default" href="/manage-task/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            {% else %}
+            <td><a class="btn btn-success" href="/manage-task/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            {% endifequal %}
+        </tr>
+        {% endfor %}
+        {% endif %}
+        
+    </table>
+    {% if obj_list.has_other_pages %}
+    <ul class="pagination">
+        {% if obj_list.has_previous %}
+        <li><a href="?page={{ obj_list.previous_page_number }}">Previous</a></li>
+        {% else %}
+        <li class="disabled"><span>Previous</span></li>
+        {% endif %}
+        {% for i in obj_list.paginator.page_range %}
+        {% if obj_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if obj_list.has_next %}
+        <li><a href="?page={{ obj_list.next_page_number }}">Next</a></li>
+        {% else %}
+        <li class="disabled"><span>Next</span></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+    <!-- /.content -->
+>>>>>>> 0c353ff2536ae1638571dd850d7c9ee2a9b79318
 </div>
 
 <!-- /.content-wrapper -->
@@ -138,6 +279,7 @@ $(function(){
     <!--
     function approve(url) {
         alert("{{obj_list.name}} Approved");
+<<<<<<< HEAD
         
     }
     function reject(url) {
@@ -151,6 +293,21 @@ $(function(){
     function deactivate(url) {
         alert("{{obj_list.name}} Deactivated");
         
+=======
+
+    }
+    function reject(url) {
+        alert("{{obj_list.name}} Rejected");
+
+    }
+    function activate(url) {
+        alert("{{obj_list.name}} Activated");
+
+    }
+    function deactivate(url) {
+        alert("{{obj_list.name}} Deactivated");
+
+>>>>>>> 0c353ff2536ae1638571dd850d7c9ee2a9b79318
     }
     // -->
 </script>

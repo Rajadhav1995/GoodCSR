@@ -4,9 +4,10 @@ from django.template.defaultfilters import slugify
 from constants import  OPTIONAL
 import six
 from django.contrib import admin
+from django.views import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from simple_history.models import HistoricalRecords
 from thumbs import ImageWithThumbsField
 from simple_history.admin import SimpleHistoryAdmin

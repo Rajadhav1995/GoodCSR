@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+{% block midpart %}
+<script language="javascript" type="text/javascript">
+<!--
+function approve(url) {
+    alert(" '{{obj.name}}' Approved");
+    
+}
+function reject(url) {
+    alert(" '{{obj.name}}' Rejected");
+    
+}
+// -->
+</script>
+  <!-- Content Wrapper. Contains page content -->
+    <!-- Content Header (Page header) -->
+
+    <!-- Main content -->
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>Project Detail
+        <small>View</small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- SELECT2 EXAMPLE -->
+      <div class="box box-default">
+        
+        <div class="box-header with-border">
+
+        
+
+        
+        
+        <!-- <a class="btn btn-primary" href="/masterdata/admin/startup-program">Back</button></a>
+        <a class="btn btn-primary" href="/masterdata/program-edit/?id={{obj.id}}&key=1">Edit</button></a> -->
+
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row program-form-details">
+
+            <div class="col-md-6">
+              <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Project Name:</label>
+                <span class="col-md-7">{{obj.name}}</span>
+              </div>
+          </div>
+          <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Program Name :</label>
+                {% if obj.project %}
+                <span class="col-md-7">{{obj.project}}</span><br>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+          </div>
+          <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Project Budget:</label>
+                {% if obj.total_budget %}
+                <span class="col-md-7">{{obj.total_budget}}</span><br>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+          </div>
+
+          <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">No of beneficiaries:</label>
+                {% if obj.no_of_beneficiaries %}
+                <span class="col-md-7">{{obj.no_of_beneficiaries}}</span><br>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+          </div>
+
+          <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Summary:</label>
+                {% if obj.summary %}
+                <span class="col-md-7">{{obj.summary | safe}}</span><br>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+          </div>
+              <!-- /.form-group -->
+          
+           <!--<div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Created By:</label>
+                <span class="col-md-7">{{obj.created_by.first_name}} {{obj.created_by.last_name}}</span>
+              </div>
+          </div>-->
+          <div class="col-md-20">
+          <div class="col-md-12">
+              <div class="form-group">
+                {% ifequal obj.program_hosting 5 %}
+                <label class="col-md-5">Primary area of focus:</label>
+                {% else %}
+                <label class="col-md-5">Cause areas :</label>
+                {% endifequal %}
+                {% if obj.cause_area.all %}
+                <span class="col-md-7">{% for i in obj.cause_area.all %}{{i}} {% if not forloop.last %}{{", "}}{% endif %}{% endfor %}</span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+          </div>
+           <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Target beneficiaries :</label>
+                {% if obj.target_beneficiaries.all %}
+                <span class="col-md-7">{% for i in obj.target_beneficiaries.all %}{{i}} {% if not forloop.last %}{{", "}}{% endif %}{% endfor %}</span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+          </div>
+         
+            </div>
+          
+              <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Program Timeline:</label>
+                <span class="col-md-7"> 
+                                <div>
+                                <b>Duration(Months) : </b>{{obj.duration}}<br>
+                                </div>
+                                <div>
+                                <b>From Date: </b>{{obj.start_date|date:"Y-m-d"}}<br>
+                                </div>
+                                <div>
+                                <b>To Date: </b>{{obj.end_date|date:"Y-m-d"}}<br>
+                                </div>
+                    </span>
+              </div>
+              </div>
+          {% ifequal obj.program_hosting 5 %}
+          <div>
+           <div class="col-md-12 form-group"><br>
+              <label class="col-md-5">Problem Statement:</label>
+              <span class="col-md-7">{{obj.rfp_implement_partner | safe}}</span>
+          </div>
+      </div>
+      <div>
+           <div class="col-md-12 form-group"><br>
+              <label class="col-md-5">Solution:</label>
+              <span class="col-md-7">{{obj.rfp_target_audience | safe}}</span>
+          </div>
+      </div>
+      {% endifequal %}
+           
+          
+      {% if obj.program_hosting == 0 or obj.program_hosting == 1 %}
+      <div class="col-md-12">
+              <div class="form-group">
+                  <label class="col-md-5">Program summary:</label>
+                  {% if obj.description %}
+                <span class="col-md-7">{{obj.description | safe}}</span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+          </div>
+          {% endif %}
+              <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-6 ">
+
+          {% if obj.program_hosting == 0 or obj.program_hosting == 1 %}
+               <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Program Budget:</label>
+                {% if budget.total_budget %}
+                <span class="col-md-7">Rs.(₹). {{budget.total_budget | floatformat}}</span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+              </div>
+          {% endif %}
+
+              {% ifequal obj.program_hosting 5 %}
+              <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Program expenses:</label>
+                {% if obj.amount_requested %}
+                <span class="col-md-7">Rs.(₹). {{obj.amount_requested | floatformat}}</span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+              </div>
+
+              <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Program expenses:</label>
+                {% if obj.allocated_amount %}
+                <span class="col-md-7">Rs.(₹). {{obj.allocated_amount | floatformat}}</span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+              </div>
+              {% endifequal %}
+
+          {% ifequal obj.program_hosting 5 %}
+          <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Incubatos Activity:</label>
+          <div class="box-body">
+              <table class="table table-bordered">
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>Name</th>
+                  <th>Duration</th>
+                  
+                </tr>
+                {% for i in activities %}
+                <tr>
+                  <td>{{i.number}}</td>
+                  <td>{{i.name}}</td>
+                  <td>{{i.activity_duration}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+            </div>
+
+          {% endifequal %}
+
+
+          
+          {% if obj.program_hosting == 0 or obj.program_hosting == 1 or obj.program_hosting == 5 %}
+          <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Is there any documented evidence of success of the proposed program concept?:</label>
+                {% if doc.attachment_file %}
+                <br><br><span class="col-md-7"><a href="{{doc_url}} "target="_blank">{{doc_name}}</button></a></span>
+                {% else %}
+                <br><br><br><span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+              </div>
+
+               <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Is it a New Program or an Ongoing Program? :</label>
+                {% if obj.status == 0 or obj.status == 1 or obj.status == 2 %}
+                <br><span class="col-md-7">{{obj.get_status_display}}
+                    {% ifequal obj.status 2 %}
+                    <br><b>Since: </b>{{obj.since}}
+                    {% endifequal %}
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                      {% endif %}
+
+                </span>
+              </div>
+              </div>
+               <div class="col-md-12">
+              <!-- /.form-group -->
+              
+              </div>
+               {% endif %}
+               <div class="col-md-12">
+              <label class="col-md-5">Location coverage :</label>
+              {% if lobj %}
+              <span class="col-md-7">
+                {% for i in lobj %}
+
+                                <div>
+                                <b>Category: </b>{{i.get_program_type_display}}<br>
+                                </div>
+                                <div>
+                                <b>State: </b>{{i.location.parent.name}}<br>
+                                </div>
+                                <div>
+                                <b>City: </b>{{i.location.name}}<br>
+                                </div><br>
+                {% endfor %}
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </span>
+
+          <div class="col-md-12">
+                <br><label class="col-md-5">Project Status:</label>
+                {% if obj.project_status %}
+                <span class="col-md-7">{{obj.get_project_status_display}}</span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+               
+              <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-5">Program cover image:</label>
+                {% if image %}
+                <span class="col-md-7"><img src="{{image}}" style="width:100%"></span>
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}
+              </div>
+              </div>
+              
+              </div>
+              <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+
+         </div>
+          <!-- /.row -->
+        
+        
+        <a class="btn btn-primary" href="/masterdata/admin/program">Back</button></a>
+
+        <a class="btn btn-primary" href="/masterdata/program-edit/?id={{obj.id}}">Edit</button></a>
+        </div>
+        <!-- /.box-body -->
+       </div>
+      </div>
+      <!-- /.box -->
+      <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+{% endblock %}

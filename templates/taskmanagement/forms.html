@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block midpart %}
+<!--<link href="static/css/multiselect.css" media="screen" rel="stylesheet" type="text/css">-->
+    <!-- Content Header (Page header) -->
+<style>
+    .error,.errorlist { color :red;}
+    #date_error,#min_max {color : red;}
+</style>
+
+    <!-- Main content -->
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+                {% if slug %}
+              <h3 class="box-title">Edit {{model_name}}</h3>
+              {% else %}
+                <h3 class="box-title">Add {{model_name}}</h3>
+              {% endif %}
+            </div>
+            
+            <!-- /.box-header -->
+            <div class="box-body">
+            <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+    
+                {{form.non_fields_errors}}
+        
+                    {{form.media}}
+        
+                <div class="box-content">
+                    <form role="form">
+                        {% for field in form %}
+                            <div class="row">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
+                                    {{field.label_tag}}
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{field}}
+                                    {{field.errors}}
+                                        
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
+                        <a class="btn btn-success" href="/manage-task/{{model_name}}/listing/">Back</button></a>
+                            </div>
+                    </form>
+                    
+                </div>
+            </form>
+     </div>
+
+  </div>
+  {% block script %}
+<script src="/static/js/jquery.quicksearch.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('#id_activity').on('change',function(e){
+        
+        var select_id = $('#id_activity').val();
+        $.ajax({
+            url:'/manage-task/task/start-date/',
+            type:'GET',
+            data:{id:select_id},
+            dataType:"json",
+            success:function(data){
+            alert(data.project_start_date);
+            if (data.project_start_date != ""){
+                document.getElementById("id_start_date").value = data.project_start_date;
+             }
+            else{
+                $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                }
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    });
+</script>
+
+
+{% endblock %}
+{% endblock %}

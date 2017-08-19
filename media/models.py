@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib import admin
 from constants import OPTIONAL
-from projectmanagement.models import BaseContent
 from thumbs import ImageWithThumbsField
+from django.views import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
+from projectmanagement.models import BaseContent
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
@@ -21,7 +22,7 @@ class Attachment(BaseContent):
     date = models.DateTimeField(**OPTIONAL)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
     object_id = models.IntegerField(_('object ID'),**OPTIONAL)
-    relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
     URL = models.URLField("Link url", max_length=200, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True)
 
@@ -48,7 +49,7 @@ class ProjectLocation(BaseContent):
     program_type = models.IntegerField(choices = LOCATION_TYPE, default=0)
     content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'),null=True,blank=True)
-    relatedTo = generic.GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
 
     def __unicode__(self):
         return str(self.id)

@@ -14,11 +14,21 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from views import dashboard
+from views import (dashboard,user_information)
+from views.user_information import (UserInformationStorage,)
+from views.login import (signin,signout)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^dashboard/$',dashboard.admin_dashboard),
     url(r'^project/',include('projectmanagement.urls')),
+
+    url(r'^$',signin),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^dashboard/$',dashboard.admin_dashboard),
+    url(r'^manage-task/',include('taskmanagement.urls')),
+    url(r'^manage/user-access/$',UserInformationStorage.as_view()),
+    url(r'^logout/$',signout),
 ]

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block midpart %}
+    <!-- Content Header (Page header) -->
+<!--<style>
+form { 
+margin: 0 auto; 
+width:450px;
+}
+</style>-->
+    <!-- Main content -->
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Project Mapping</h3>
+              <div align="right">
+             <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+         </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            
+            <form autocomplete="off" id="prog_edit" action="/project/mapping/" method="POST" enctype="multipart/form-data">
+            
+            {% csrf_token %}
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.project.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.project}}
+                                    {{ form.project.errors }}
+                                </div>
+                            </div>
+                        <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    Funder <font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.funder}}
+                                    {{ form.funder.errors }}
+                                </div>
+                        </div>
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.implementation_partner.label_tag}}<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.implementation_partner}}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.total_budget.label_tag}}
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.total_budget}}
+                            </div>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                    </form>
+  </div>
+  </div>
+  </div>
+{% endblock %}
+{% block script %}
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#prog_edit").validate({
+            rules :
+            {
+                name : {required:true},
+                program : {required:true},
+                total_budget : {required:true},
+                no_of_beneficiaries : {required:true},
+                target_beneficiaries : {required:true},
+                cause_area : {required:true},
+                created_by : {required:true},
+                project_status : {required:true},
+                id_end_date: { greaterThan: "#id_start_date" },
+            },
+            messages:
+            {
+                name : {required : "<font color=#fc282f>Please enter the name</font>"},
+                program:{required:"<font color=#fc282f>Please select the program</font>"},
+                total_budget:{required:"<font color=#fc282f>Please enter total budget</font>"},
+                created_by:{required:"<font color=#fc282f>Please created by user</font>"},
+                project_status:{required:"<font color=#fc282f>Please select project status</font>"},
+                no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
+                target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
+                cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
+                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+        });
+        });
+</script>
+<style>
+.error{color:red; min-width: 200px;}
+</style>
+  <div class="control-sidebar-bg"></div>
+{% endblock %}
