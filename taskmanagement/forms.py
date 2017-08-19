@@ -52,7 +52,7 @@ class TaskForm(forms.ModelForm):
 
 class MilestoneForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
-    task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
+#    task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
     overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
     class Meta:
         model = Milestone   
