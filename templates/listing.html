@@ -62,7 +62,7 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             </tr>
             {% endif %}
             
-            {% if model_name == 'Milestones' %}
+            {% if model_name == 'Milestone' %}
             <tr>
                 <th>Milestone Name</th>
                 <th>Task</th>
@@ -101,7 +101,7 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             </div>
         {% for i in obj_list %}
         <tr>
-            <td><a href="/masterdata/ngo-detail/?id={{i.id}}">{{i.name}}</a></td>
+            <td>{{i.name}}</a></td>
             <td>{{i.user}}</td>
             <td>{{i.created | date:'Y-m-d'}}</td>
             <td>{{i.activity}}</td>
@@ -124,7 +124,7 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             </div>
         {% for i in obj_list %}
         <tr>
-            <td><a href="/masterdata/ngo-detail/?id={{i.id}}">{{i.name}}</a></td>
+            <td>{{i.name}}</a></td>
             <td>{{i.task.all}}</td>
             <td>{{i.overdue}}</td>
             <td><a class="btn btn-primary" href="/manage-task/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>

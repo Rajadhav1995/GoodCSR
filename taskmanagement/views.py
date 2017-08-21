@@ -34,7 +34,7 @@ def add_taskmanagement(request,model_name,m_form):
         form=form()
     return render(request,'taskmanagement/forms.html',locals())
     
-@login_required(login_url='/')
+#@login_required(login_url='/')
 def edit_taskmanagement(request,model_name,m_form,slug):
     form=eval(m_form)
     m=eval(model_name).objects.get(slug = slug)
@@ -50,7 +50,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         form=form(instance=m)
     return render(request,'taskmanagement/forms.html',locals())
 
-@login_required(login_url='/')
+#@login_required(login_url='/')
 def active_change(request,model_name):
     ids = request.GET.get('id')
     status = request.GET.get('status')
