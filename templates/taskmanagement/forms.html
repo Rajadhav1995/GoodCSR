@@ -59,6 +59,48 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="/static/js/jquery.quicksearch.js"></script>
+<script src = "/static/js/jquery.multi-select.js"></script>
+<script>
+      
+$(document).ready(function() {
+
+    $('#id_task').multiSelect({
+      selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Search for tasks to select'>",
+      selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Search for tasks which are selected'>",
+      afterInit: function(ms){
+        var that = this,
+            $selectableSearchselect = that.$selectableUl.prev(),
+            $selectionSearch = that.$selectionUl.prev(),
+            selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+            selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+        that.qs1 = $selectableSearchselect.quicksearch(selectableSearchString)
+        .on('keydown', function(e){
+          if (e.which === 40){
+            that.$selectableUl.focus();
+            return false;
+          }
+        });
+
+        that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+        .on('keydown', function(e){
+          if (e.which == 40){
+            that.$selectionUl.focus();
+            return false;
+          }
+        });
+      },
+      afterSelect: function(){
+        this.qs1.cache();
+        this.qs2.cache();
+      },
+      afterDeselect: function(){
+        this.qs1.cache();
+        this.qs2.cache();
+      }
+    });
+});
+</script>
 <script>
     $(document).ready(function() {
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });

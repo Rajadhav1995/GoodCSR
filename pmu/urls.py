@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^manage-task/',include('taskmanagement.urls')),
     url(r'^manage/user-access/$',UserInformationStorage.as_view()),
     url(r'^logout/$',signout),
+
 ]
