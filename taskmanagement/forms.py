@@ -10,18 +10,23 @@ from django.core.exceptions import ValidationError
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from taskmanagement.models import *
 from budgetmanagement.models import *
+from projectmanagement.models import UserProfile,Project
+
 
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
 STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 
 class ActivityForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     activity_type = forms.ChoiceField(choices = ACTIVITY_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=False)
-    super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
+    super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
+    assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
+    subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.all(),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
     class Meta:
         model = Activity
-        fields  = ('name','super_category','activity_type','description','status')
+        fields  = ('name','project','super_category','activity_type','description','status','assigned_to','subscribers')
         
     def __init__(self, *args, **kwargs):
         super(ActivityForm, self).__init__(*args, **kwargs)
@@ -29,7 +34,9 @@ class ActivityForm(forms.ModelForm):
         self.fields['name'].required = True
         self.fields['activity_type'].required = True
         self.fields['status'].required = True
-
+        self.fields['assigned_to'].required = True
+        self.fields['subscribers'].required = True
+        self.fields['project'].required = True
 
 class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
