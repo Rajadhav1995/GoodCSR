@@ -209,9 +209,3 @@ class ProjectParameterValue(BaseContent):
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'))
 
-class ProjectUserRoleRelationship(BaseContent):
-    project = models.ForeignKey(Project,**OPTIONAL)
-    user = models.ForeignKey(UserProfile,**OPTIONAL)
-    role = models.CharField(max_length=300,**OPTIONAL)
-    history = HistoricalRecords()
-
