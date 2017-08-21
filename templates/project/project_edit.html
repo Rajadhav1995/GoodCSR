@@ -167,21 +167,6 @@ width:450px;
                             </div>
                         </div>
 
-                        {% if obj.program_hosting == 0 %}
-                          <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
-                                BUDGET
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <input type="number" name="total_budget" value="{{budget.total_budget}}" class="form-control" >
-                                {% if budgetform.total_budget.errors %}
-                                <p style="color: red;">
-                                    Please enter Budget.
-                                </p>
-                                {% endif %}
-                            </div>
-                          </div>
-                        {% endif %}
                         <!-- <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
                                 Add LOcation
@@ -241,6 +226,34 @@ width:450px;
                                 {% endif %}
                             </div>
                         </div>
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
+                                Funder
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                
+                                <select class="form-control" name="funder" id="funder"><option>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.user.username}}</option>{% endfor %}</select>
+                                {% if budgetform.total_budget.errors %}
+                                <p style="color: red;">
+                                    Please select Funder.
+                                </p>
+                                {% endif %}
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
+                                Implementation partner:
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <select class="form-control" name="implementation_partner" id="implementation_partner"><option>Select Implementation Partner</option>{% for i in funder_user %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.user.username}}</option>{% endfor %}</select>
+                                {% if budgetform.total_budget.errors %}
+                                <p style="color: red;">
+                                    Please select Implementation partner.
+                                </p>
+                                {% endif %}
+                            </div>
+                          </div>
                         <input style="width: 0px;" name="activity_count" id="activity_count" type="text"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
