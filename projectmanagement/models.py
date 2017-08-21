@@ -194,13 +194,15 @@ class ProjectFunderRelation(BaseContent):
     def __str__(self):
         return str(self.id)
 
-class KeyParameter(BaseContent):
-    name = models.CharField(max_length=300,**OPTIONAL)
+class ProjectParameter(BaseContent):
     parameter_type = models.ForeignKey(MasterCategory,**OPTIONAL)
     project = models.ForeignKey(Project,**OPTIONAL)
+    name = models.CharField(max_length=300,**OPTIONAL)
+    aggregation_function = models.TextField(**OPTIONAL)
+    parent = models.ForeignKey('self',**OPTIONAL)
 
-class keyParameterValue(BaseContent):
-    keyparameter = models.ForeignKey(KeyParameter)
+class ProjectParameterValue(BaseContent):
+    keyparameter = models.ForeignKey(ProjectParameter)
     name = models.CharField(max_length=300,**OPTIONAL)
     date = models.DateField(**OPTIONAL)
     parameter_value = models.CharField(max_length=300,**OPTIONAL)
