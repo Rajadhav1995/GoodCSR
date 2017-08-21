@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from projectmanagement.models import *
 from projectmanagement.forms import *
+from media.forms import AttachmentForm,ImageUpload
+from media.models import Attachment
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
@@ -18,7 +20,7 @@ def create_project(request):
         form = ProjectForm()
     funder_user = UserProfile.objects.filter(active=2)
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         try:
             instance = get_object_or_404(Project, id=ids)
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
@@ -66,16 +68,57 @@ def project_detail(request):
 def project_mapping(request):
     form = ProjectMappingForm()
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/dashboard/')
     return render(request,'project/project_mapping.html',locals())
 
-def upload_attachment(model,obj_id,desc,attach_file):
-    attach = Attachment.objects.create(attachment_file=attach_file,name=desc,\
-                    content_type=ContentType.objects.get(model=model),object_id=obj_id)
+def upload_attachment(request):
+    obj_id =  request.GET.get('obj_id')
+    model =  request.GET.get('model')
+    key = int(request.GET.get('key'))
+    if key==1:
+        #key 1 for Document upload
+        form = AttachmentForm()
+    else:
+        form = ImageUpload()
+    if request.method == 'POST':
+        # import ipdb;ipdb.set_trace()
+        if key==1:
+            form = AttachmentForm(request.POST, request.FILES)
+        else:
+            form = ImageUpload(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.content_type=ContentType.objects.get(model=model)
+            obj.object_id=obj_id
+            if key==1:
+                obj.attachment_type=2
+            else:
+                obj.attachment_type=1
+            obj.save()
+    return render(request,'attachment/doc_upload.html',locals())
 
-# def upload_attachment_type(model,obj_id,desc,attach_file,attach_type):
-#     attach = Attachment.objects.create(attachment_file=attach_file,name=desc,\
-#                     content_type=ContentType.objects.get(model=model),object_id=obj_id,attachment_type=attach_type)
+def edit_attachment(request):
+    ids = request.GET.get('id')
+    obj_id =  request.GET.get('obj_id')
+    model =  request.GET.get('model')
+    obj = Attachment.objects.get(id=ids)
+    if obj.attachment_type==2:
+        #key 1 for Document upload
+        form = AttachmentForm(instance = obj)
+        key=1
+    else:
+        form = ImageUpload(instance = obj)
+        key=2
+    if request.method == 'POST':
+        import ipdb; ipdb.set_trace()
+        instance = get_object_or_404(Attachment, id=ids)
+        if key==1:
+            form = AttachmentForm(request.POST, request.FILES or None, instance=instance)
+        else:
+            form = ImageUpload(request.POST, request.FILES or None, instance=instance)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+    return render(request,'attachment/doc_upload.html',locals())
