@@ -10,7 +10,6 @@ from django.contrib.contenttypes.models import ContentType
 # Create your views here.
 
 def create_project(request):
-    # import ipdb; ipdb.set_trace()
     try:
         ids =  request.GET.get('id')
         obj = Project.objects.get(id=ids)
@@ -21,7 +20,6 @@ def create_project(request):
         form = ProjectForm()
     funder_user = UserProfile.objects.filter(active=2)
     if request.method == 'POST':
-        # import ipdb; ipdb.set_trace()
         try:
             instance = get_object_or_404(Project, id=ids)
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
@@ -84,7 +82,6 @@ def upload_attachment(request):
     else:
         form = ImageUpload()
     if request.method == 'POST':
-        # import ipdb;ipdb.set_trace()
         if key==1:
             form = AttachmentForm(request.POST, request.FILES)
         else:
@@ -119,7 +116,6 @@ def edit_attachment(request):
         form = ImageUpload(instance = obj)
         key=2
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
         instance = get_object_or_404(Attachment, id=ids)
         if key==1:
             form = AttachmentForm(request.POST, request.FILES or None, instance=instance)
