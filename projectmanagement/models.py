@@ -13,6 +13,8 @@ from thumbs import ImageWithThumbsField
 from simple_history.admin import SimpleHistoryAdmin
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+import datetime
 
 #----------------------introduction------------------------------------------#
 # Project Management is the application where database tables are related to project
@@ -172,6 +174,14 @@ class Project(BaseContent):
 
     def __str__(self):
         return self.name
+
+    def save(self):
+        super(Project, self).save()
+        date = datetime.date.today()
+        self.slug = '%i-%s' % (
+            date.day, slugify(self.name)
+        )
+        super(Project, self).save()
 
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 

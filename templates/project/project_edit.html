@@ -22,11 +22,11 @@ width:450px;
             <!-- /.box-header -->
             <div class="box-body">
             
-            <form autocomplete="off" id="prog_edit" action="/project/add/?id={{ids}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/project/add/?slug={{slug}}" method="POST" enctype="multipart/form-data">
             
             {% csrf_token %}
 
-                            <div class="row">
+                            <!-- <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     {{form.program.label_tag}}<font color="red">*</font>
                                 </label>
@@ -34,7 +34,7 @@ width:450px;
                                     {{form.program}}
                                     {{ form.program.errors }}
                                 </div>
-                            </div>
+                            </div> -->
                         <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     Project Name <font color="red">*</font>
@@ -113,7 +113,7 @@ width:450px;
                             </div>
                         </div>
                         
-                        <div class="row">
+<!--                         <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 Created By<font color="red">*</font>
                             </label>
@@ -126,7 +126,7 @@ width:450px;
                                 {% endif %}
 
                             </div>
-                        </div>
+                        </div> -->
                         
 
                         <div class="row">
@@ -185,7 +185,7 @@ width:450px;
                         <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More Activity</button>
-                            {% if ids %}
+                            {% if slug %}
                             {% for i in activity_view %}
                             <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"><!-- <select name="activity_type[1]" id="id_activity_type"><option value="1" selected="">Core</option><option value="2">Non-core</option></select> --></div>
                             {% endfor %}
@@ -317,9 +317,6 @@ $(document).ready(function() {
         if (end > start) {
             document.getElementById('dateError1').innerHTML=""
         };
-        if (start <= today) {
-          document.getElementById('dateError1').innerHTML="Start date must be greater than today's date"
-        }
         var months = (end.getFullYear() - start.getFullYear()) * 12;
         months += end.getMonth() - start.getMonth();
         document.getElementById("id_duration").value = months;
@@ -330,21 +327,19 @@ $(document).ready(function() {
             rules :
             {
                 name : {required:true},
-                program : {required:true},
+                //program : {required:true},
                 total_budget : {required:true},
                 no_of_beneficiaries : {required:true},
                 target_beneficiaries : {required:true},
                 cause_area : {required:true},
-                created_by : {required:true},
                 project_status : {required:true},
                 id_end_date: { greaterThan: "#id_start_date" },
             },
             messages:
             {
                 name : {required : "<font color=#fc282f>Please enter the name</font>"},
-                program:{required:"<font color=#fc282f>Please select the program</font>"},
+                //program:{required:"<font color=#fc282f>Please select the program</font>"},
                 total_budget:{required:"<font color=#fc282f>Please enter total budget</font>"},
-                created_by:{required:"<font color=#fc282f>Please created by user</font>"},
                 project_status:{required:"<font color=#fc282f>Please select project status</font>"},
                 no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
                 target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},

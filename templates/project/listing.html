@@ -24,28 +24,7 @@ alert("Sorry, You cant Select more than 3 featured RFP")
     
 
 </div>
-<script>
-function deleteoject(id) {
-    var status = confirm("Are you sure to Delete notification permanently");
-    console.log(key);
-    if(status == true){
-        window.location.href="/masterdata/status-change/?id="+id"/&key="+key
-        //"/masterdata/status-change/?id="+id"/&key="+key
-        alert("Notification Deleted Successfully")
-        
-    }
-}
-</script>
-<script>
-function regFunction(id,key) {
-    var status = confirm("Are you sure to Delete");
-    console.log(key);
-    if(status == true){
-        window.location.href="/masterdata/status-change/?id="+id+"&key="+key
-        alert(" Deleted Successfully")
-        
-    }
-}
+
 
 </script>
 <!-- /.box-header -->
@@ -63,26 +42,13 @@ function regFunction(id,key) {
         
         {% for i in obj_list %}
         <tr>
-            <td><a href="/masterdata/ngo-detail/?id={{i.id}}">{{i.name}}</a></td>
+            <td><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></td>
             <td>{{i.created_by.user.username}}</td>
-            <td>{{i.created | date:'Y-m-d'}}</td>
-            <td>{{i.terms_conditions}}</td>
-            {% if key == 'company'%}
-                {% if i.incubator_marketplace == True %}
-                <td><a class="btn btn-primary" href="/masterdata/company/incubator-marketplace/?id={{i.id}}&key_status=False"><i class="glyphicon glyphicon-ok"></i></button></a></td>
-
-                {% else %}
-                <td><a title="Incubator Marketplace" class="btn btn-default" href="/masterdata/company/incubator-marketplace/?id={{i.id}}&key_status=True"><i class="glyphicon glyphicon-oka"></i><b>Select</b></button></a></td>
-                <!-- <td><input type="button" id="r-{{i.id}}" class="btn btn-default" value="Select" name=2 statuss=2 ids="{{i.id}}" ></td> -->
-                {% endif %}
-            {% endif %}
+            <td>{{i.program.name}}</td>
+            <!-- <td>{{i.terms_conditions}}</td> -->
             <td>{{i.get_active_display}}</td>
-            <!-- {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/masterdata/ngo-status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
-            {% else %}
-            <td><a class="btn btn-success" href="/masterdata/ngo-status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
-            {% endifequal %} -->
-            <td><a class="btn btn-primary" href="/project/add/?id={{i.id}}">Edit</button></a></td>
+            <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
+            <td></td>
             
         </tr>
         {% endfor %}
