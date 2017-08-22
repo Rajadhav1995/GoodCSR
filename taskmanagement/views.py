@@ -18,10 +18,12 @@ def listing(request,model_name):
     
 def add_taskmanagement(request,model_name,m_form):
     user_id = request.session.get('_auth_user_id')
-    user = UserProfile.objects.get(id = request.user.id)
+    user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
-        form=form(request.POST,request.FILES)
+        form=form(user_id,request.POST,request.FILES)
+        if model_name == 'Activity' or model_name == 'Task':
+            form.assigned_to = UserProfile.objects.get(user_reference_id = request.POST['assigned_to'])
         if form.is_valid():
             f=form.save() 
             if model_name == 'Activity' or model_name == 'Task':
@@ -30,22 +32,27 @@ def add_taskmanagement(request,model_name,m_form):
                 f.save()
                 return HttpResponseRedirect('/manage-task/'+model_name+'/listing/')
     else:
-        form=form()
+        form=form(user_id)
     return render(request,'taskmanagement/forms.html',locals())
     
 def edit_taskmanagement(request,model_name,m_form,slug):
+    user_id = request.session.get('_auth_user_id')
+    user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     m=eval(model_name).objects.get(slug = slug)
     if request.method == 'POST':
-        form=form(request.POST,request.FILES,instance=m)
+        form=form(user_id,request.POST,request.FILES,instance=m)
+        if model_name == 'Activity' or model_name == 'Task':
+            form.assigned_to = UserProfile.objects.get(user_reference_id = request.POST['assigned_to'])
         if form.is_valid():
             f=form.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
+                f.created_by = user
                 f.save()
                 return HttpResponseRedirect('/manage-task/'+model_name+'/listing/')
     else:
-        form=form(instance=m)
+        form=form(user_id,instance=m)
     return render(request,'taskmanagement/forms.html',locals())
 
 def active_change(request,model_name):
