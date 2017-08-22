@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block midpart %}
+{% block content %}
 <section class="content">
 <div class="row">
 <div class="col-xs-12">
@@ -37,6 +37,8 @@ alert("Sorry, You cant Select more than 3 featured RFP")
                 <th>Program Name</th>
                 <th>Status</th>
                 <th>Action</th>
+                <th></th>
+                <th>Manage Activites </th>
             </tr>            
         </thead>
         
@@ -47,8 +49,13 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td>{{i.program.name}}</td>
             <!-- <td>{{i.terms_conditions}}</td> -->
             <td>{{i.get_active_display}}</td>
-
+            <!-- {% ifequal i.active 2 %}
+            <td><a class="btn btn-default" href="/masterdata/ngo-status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            {% else %}
+            <td><a class="btn btn-success" href="/masterdata/ngo-status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            {% endifequal %} -->
             <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
+            <td><a class = "btn btn-primary" href = "/manage/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
             <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
         </tr>
         {% endfor %}
