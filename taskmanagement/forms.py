@@ -54,9 +54,9 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ('name','activity','start_date','end_date','actual_start_date','actual_end_date','task_dependency','assigned_to','subscribers','status')
         
-    def __init__(self,user_id ,project_obj,*args, **kwargs):
+    def __init__(self,user_id ,project_id,*args, **kwargs):
         self.user = user_id
-        self.project = project_obj
+        self.project = project_id
         super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['activity'].required = True
         self.fields['name'].required = True
@@ -77,9 +77,9 @@ class MilestoneForm(forms.ModelForm):
         fields = ('name','task','overdue','subscribers','status')
         
         
-    def __init__(self,user_id,project_obj, *args, **kwargs):
+    def __init__(self,user_id,project_id, *args, **kwargs):
         self.user = user_id
-        self.project = project_obj
+        self.project = project_id
         super(MilestoneForm, self).__init__(*args, **kwargs)
         self.fields['name'].required = True
         self.fields['overdue'].required = True

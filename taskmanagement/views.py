@@ -46,7 +46,10 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('_auth_user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
-    m=eval(model_name).objects.get(slug = slug)
+    if model_name == 'Milestone':
+        m = eval(model_name).objects.get(id = int(slug))
+    else :
+        m=eval(model_name).objects.get(slug = slug)
     project_id = m.project.id if model_name == 'Activity' else None
     if request.method == 'POST':
         form=form(user_id,project_id,request.POST,request.FILES,instance=m)

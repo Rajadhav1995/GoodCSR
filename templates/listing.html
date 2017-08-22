@@ -123,7 +123,7 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td>{{i.name}}</a></td>
             <td>{% for tasks in i.task.all %}<br>{{forloop.counter}}. {{tasks}}</br>{% endfor %}</td>
             <td>{{i.overdue}}</td>
-            <td><a class="btn btn-primary" href="/manage/Milestone/MilestoneForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            <td><a class="btn btn-primary" href="/manage/Milestone/MilestoneForm/edit/{{i.id}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
             <td><a class="btn btn-default" href="/manage/milestone/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
