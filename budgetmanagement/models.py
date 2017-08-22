@@ -52,6 +52,7 @@ class ProjectBudgetPeriodConf(BaseContent):
 # recommended_amount is amount recommended by samhita,utilized_amount is the actual utilized_amount for one quarter
 class Tranche(BaseContent):
     budget_period = models.ForeignKey(ProjectBudgetPeriodConf,**OPTIONAL)
+    project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
     name = models.CharField(max_length = 200, **OPTIONAL)
     planned_amount = models.IntegerField(default=0)
     actual_disbursed_amount = models.IntegerField(default=0)
