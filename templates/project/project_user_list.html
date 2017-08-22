@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-
-{% block midpart %}
+{% block section %}
+{% endblock %}
+{% block content %}
 
 </br>
 <a class="btn btn-primary" href="/manage/project/role/add/?slug={{project_slug}}"> Add User</a>
@@ -28,6 +29,7 @@
             <td><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>
         </tr>
         {% endfor %}
+    </table>
 </div>
 
 {% endblock %}
