@@ -19,7 +19,7 @@ def listing(request,model_name):
 def add_taskmanagement(request,model_name,m_form):
     if model_name == 'Activity':
         try:
-            project_id = Project.objects.get(id = request.GET.get('id')).id
+            project_id = Project.objects.get(slug = request.GET.get('slug')).id
         except:
             project_id = Project.objects.get(id = request.POST.get('project')).id
     else :
@@ -96,3 +96,10 @@ def task_start_date(request):
         obj = None
     return JsonResponse({"project_start_date":start_date})
     
+    
+#def milestone_overdue(request):
+#    task_ids = request.GET.get('tasks_ids')
+#    url=request.META.get('HTTP_REFERER')
+#    tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
+#    milestone_overdue =
+#    
