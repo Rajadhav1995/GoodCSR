@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^$',signin),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^dashboard/$',dashboard.admin_dashboard),
-    url(r'^manage-task/',include('taskmanagement.urls')),
+    url(r'^manage/',include('taskmanagement.urls')),
     url(r'^manage/user-access/$',UserInformationStorage.as_view()),
     url(r'^logout/$',signout),
 
