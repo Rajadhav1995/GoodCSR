@@ -20,16 +20,14 @@ class ProjectForm(forms.ModelForm):
                         widget = forms.SelectMultiple(attrs = {'class': 'form-control'}))
 	total_budget = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	no_of_beneficiaries = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
-	budget_type = forms.ChoiceField(choices = BUDGET_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))
-	created_by = forms.ModelChoiceField(queryset=UserProfile.objects.filter(),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
-	program = forms.ModelChoiceField(queryset=Program.objects.filter(),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
+	budget_type = forms.ChoiceField(choices = BUDGET_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))	
 	project_status = forms.ChoiceField(choices = STATUS_CHOICES,required=True,widget = forms.Select(attrs={'class': 'form-control'}))
 	start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	duration = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control','readonly':'true'}), required=True)
 	class Meta:
 		model = Project
-		fields  = ('program','name','start_date','end_date','total_budget','budget_type','created_by',\
+		fields  = ('name','start_date','end_date','total_budget','budget_type',\
         			'project_status','duration','summary','no_of_beneficiaries','cause_area','target_beneficiaries')
 
 class ProjectMappingForm(forms.ModelForm):

@@ -7,12 +7,14 @@ from media.models import Attachment,Keywords,FileKeywords
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
 # Create your views here.
 
 def create_project(request):
+    user_id = request.session.get('user_id')
     try:
-        ids =  request.GET.get('id')
-        obj = Project.objects.get(id=ids)
+        slug =  request.GET.get('slug')
+        obj = Project.objects.get(slug=slug)
         form = ProjectForm(instance = obj)
         activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
@@ -20,16 +22,20 @@ def create_project(request):
         form = ProjectForm()
     funder_user = UserProfile.objects.filter(active=2)
     if request.method == 'POST':
+        import ipdb; ipdb.set_trace()
         try:
-            instance = get_object_or_404(Project, id=ids)
+            instance = get_object_or_404(Project, slug=slug)
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
         except:
             form = ProjectForm(request.POST,request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
-            # form.save_m2m()
             obj.content_type = ContentType.objects.get(model="Program")
-            obj.object_id = 23
+            obj.object_id = 0
+            try:
+                obj.created_by = UserProfile.objects.get(id=user_id)
+            except:
+                pass
             obj.save()
             form.save_m2m()
             activity_del = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project")).delete()
@@ -62,8 +68,8 @@ def project_list(request):
     return render(request,'project/listing.html',locals())
 
 def project_detail(request):
-    ids =  request.GET.get('id')
-    obj = Project.objects.get(id=ids)
+    slug =  request.GET.get('slug')
+    obj = Project.objects.get_or_none(slug=slug)
     return render(request,'project/project_details.html',locals())
 
 def project_mapping(request):
