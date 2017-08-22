@@ -1,99 +1,446 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<link rel="icon" type="image/x-icon" href="images/favicon.ico">
-<title> ~~ Samhita goodcsr ~~ </title>
+<link rel="icon" type="image/png" href="/static/img/favicon.ico">
+<title>Samhita GoodCSR</title>
+
+<!--CSS Srat-->
+<link rel="stylesheet" href="/static/css/style.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.css">
+<link rel="stylesheet" href="/static/css/ddsmoothmenu.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.mmenu.all.css" />
+<link rel="stylesheet" href="/static/css/jquery.selectbox.css" type="text/css" />
+
+
 <!--Common Script-->
 <script type="text/javascript" src="/static/js/respond.js"></script>
 <script type="text/javascript" src="/static/js/html5.js"></script>
-<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
-<!--<script type="text/javascript" src="js/jquery.sticky.js"></script>-->
-<!--CSS Start-->
-<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/static/css/style.css" />
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
 
+<!-- IE less than 9 -->
+<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
+
+<!--  Responsive CSS  -->
+<link rel="stylesheet" href="/static/css/media.css" />
+</head>
 <body>
-<!-- header starts -->
+<!-- Mobile Navigation -->
+<div id="mobNav" class="mobNav">
+    <figure class="mobi-logo"><a href="/dashboard/" title=""><img src="/static/img/logo.png" alt=""></a>
+    </figure>
+    <ul>
+        <li><a href="/dashboard/">Dashboard</a></li>
+        <li><a href="products.html">Projects</a>
+            
+        	<ul>
+        	{% for i in obj_list %}
+            	<li><a href="/project/list/?slug={{i.slug}}">{{i.name}}</a></li>
+        	{% endfor %}
+            </ul>
+        </li>
+        <li><a href="products.html">Task Management</a>
+            
+        	<ul>
+            	<li><a href="/manage/Task/listing/">Tasks</a></li>
+            	<li><a href="/manage/Milestone/listing/">Milestone</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<!-- /Mobile Navigation -->
+
+<div id="page">
+<!--Header Starts-->
+{% block header %}
 <header>
-  <div class="row">
-      <a href="base.html" class="logo"><img src="/static/img/logo.png" alt="Samhita goodcsr" title="Samhita GoodCSR"></a>      
-      <div class="hdr-rht">
-          <div class="user-wrap">
+    <div class="row">
+        <div id="menu">
+        	<div class="logo"><a href="index.html"><img src="/static/img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
+           <div class="m-menu"><a href="#mobNav"><span></span><span></span><span></span></a></div>       
+           <nav id="smoothmenu" class="ddsmoothmenu">
             <ul>
-              <li class="mail-icon"><a href="javascript:void(0);"><img src="/static/img/mail-ico.png"><span></span></a></li>
-              <li class="alert-icon"><a href="javascript:void(0);"><img src="/static/img/alert-ico.png" align="absmiddle"><span class="alert"></span></a></li>
-              <li class="user-pad">
-                  <a href="javascript:void(0);"><img src="/static/img/user-ico.png" border="0"> 
-                    <div class="name-txt"> {{user_obj.email}}<br><span></span></div>
-                  </a>                  
-                <div class="details">   
-                   <div class="user-arrow"></div>                         
-                    <ul>
-                        <li><a href="javascript:void(0);">My Profile</a></li>
-                        <li><a href="javascript:void(0);">Change Password</a></li>
-<!--                        Please fix the conflicts properly, if u don''t undersatnd ask meghana'-->
-                        <li><a href="/logout/">Logout</a></li>
-                    </ul> 
+              <li><a href="javascript:void(0);" class="active">Dashboard</a></li>
+              <li class="user-wrap"><a href="/project/list/">
+                Projects
+                <i class="fa fa-angle-down"></i></a>
+                <!--<div class="details" id="marketPlace">-->
+                  <ul>
+                    	{% for i in obj_list %}
+            	            <li><a href="/project/list/?slug={{i.slug}}">{{i.name}}</a></li>
+        	            {% endfor %}
+                  </ul>
+                <!--</div>-->
+              </li>
+              <li class="user-wrap">Task Management</a>
+              <i class="fa fa-angle-down"></i></a>
+        	    <ul>
+                	<li><a href="/manage/Task/listing/">Tasks</a></li>
+                	<li><a href="/manage/Milestone/listing/">Milestone</a></li>
+                </ul>
+        </li>
+            </ul>
+          </nav>
+            <div class="menu-rgt">
+    
+      <ul>
+        <li id="search_ico">
+           <!-- <form id="demo-2">
+           	  <input type="search" placeholder="Search">              
+            </form>-->
+            <div id="nav_search_id" class="search-form">
+                <div class="search-ico">&nbsp;</div>
+                <div class="search-frm-feild">
+                    <form>
+                        <input type="text" placeholder="Search...">
+                        <input type="submit" value="" name="" >
+                    </form>
+                </div>
+            </div>
+        <!--<a href="javascript:void(0);"><span class="search-ico"></span></a>-->
+        </li>
+        <li><a href="javascript:void(0);">
+          <p class="fav">0</p>
+          <span class="mail"></span></a></li>
+        <li><a href="javascript:void(0);">
+          <p class="fav">3</p>
+          <span class="bell"></span></a>
+        </li>
+        <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src="/static/img/user-img.png" class="user-image" alt="User Image">
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu" style="display:none;">
+              <!-- User image -->
+              <li class="user-header">
+                <img src="/static/img/user-img.png" class="img-circle" alt="User Image">
+
+                <h3>Admin Name</h3>
+                <h4>Admin</h4>
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a href="javascript:void(0);" class="btn btn-default btn-flat">Profile</a>
+                </div>
+                <div class="pull-right">
+                  <a href="/logout/" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
-          </div>
-      </div>
-  </div>
-</header>
-<aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-      <!-- Sidebar user panel (optional) -->
-      
-      <!-- search form (Optional) -->
-      <!-- /.search form -->
-
-      <!-- Sidebar Menu -->
-      <ul class="sidebar-menu">
-        <!-- Optionally, you can add icons to the links -->
-        <li class='active'><a href="/manage/Task/listing/"><i class="fa fa-building"></i> <span>Task</span></a></li>
-        <li class='active'><a href="/manage/Milestone/listing/"><i class="fa fa-building"></i> <span>Milestones</span></a></li>
-       <ul class="treeview-menu">
-            <li><a href="/project/list/"><i class="fa fa-circle-o"></i> Project Listing</a></li>
-            <li><a href="/project/add/"><i class="fa fa-circle-o"></i> Add Project</a></li>
-          </ul>
-        </li>
-       <li class='active'><a href="/upload/doc/"><i class="fa fa-building"></i> <span>Attachment (Document & Image)</span></a></li>
+          </li>
       </ul>
-      <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-  </aside>
+      
+    </div>
+        </div>
+    </div>
+</header><!--Header Ends-->
+{% endblock %}
+<div class="clear"></div>
+{% block section %}
+<!--Green pad starts-->
+<section class="green-pad">
+	<div class="row">
+	<div class="image-pad logo-shadow">
+    	<a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
+    </div>    
+    <h3>OPV Venture Capital</h3>
+    <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>
+    </div>
+</section>
+{% endblock %}
+<!--Green pad Ends-->
+<!--Content part starts-->
+{% block content %}
+<section class="content-part">
+	<div class="row">
+	<div class="content-top">
+      <div class="select-area">
+      	<label>See Data as </label>
+        <select name="lang" class="select_box ">
+            <option>Quarter1</option>
+            <option>Quarter2</option>
+            <option>Quarter3</option>
+        </select>
+        <div class="small-select">
+        <select name="lang" class="select_box ">
+            <option>2016</option>
+            <option>2017</option>
+        </select>
+        <!--<div class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src="/static/img/user-img.png" class="user-image" alt="User Image">
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu" style="display:none;">
+              <li class="user-header">
+                <img src="/static/img/user-img.png" class="img-circle" alt="User Image">
 
-{% block midpart %}
+                <h3>Admin Name</h3>
+                <h4>Admin</h4>
+              </div>-->
+        <select multiple="multiple" name="lang" class="select_box ">
+            <option>Sep-Dec</option>
+            <option>Jan-Mar</option>
+            <option>Apr-Jul</option>
+            <option>Aug-Sep</option>
+            <option>Oct-Dec</option>
+        </select>
+        </div>
+         </div>
+        <!--<form>
+          <div class="multiselect">
+            <div class="selectBox" onclick="showCheckboxes()">
+              <select class="select_box">
+                <option>Sep-Dec</option>
+              </select>
+              <div class="overSelect"></div>
+            </div>
+            <div id="checkboxes">
+              <label for="one">
+                <input type="checkbox" id="one" />Jan-Mar</label>
+              <label for="two">
+                <input type="checkbox" id="two" />Apr-Jul</label>
+              <label for="three">
+                <input type="checkbox" id="three" />Aug-Sep</label>
+              <label for="three">
+                <input type="checkbox" id="three" />Oct-Dec</label>  
+            </div>
+          </div>
+        </form>-->
+       
+    </div>
+    <div class="white-box white-pad">
+    	<h2>Key Program Info</h2>
+        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
+        <ul>
+        	<li>
+            	<h3>No. of Programs</h3>
+                 <img class="key-image" src="/static/img/key-icon1.png" alt="">
+                <h4 class="title-pad">3</h4> 
+            </li>
+            <li>
+            	<h3>No. of Beneficiaries</h3>
+                 <img class="key-image" src="/static/img/key-icon2.png" alt="">
+                <h4 class="title-pad">7.148</h4> 
+            </li>
+            <li>
+            	<h3>% Total budget disbursed<span>April 2017 - March 2018</span></h3>
+                 <img src="/static/img/key-icon3.png" alt="">
+                <div class="budget-pad">
+                	<p><span class="green-circle"></span> Disbuirsed</p>
+                    <div class="budget-value">
+                    	<div class="budget-left">7.8cr</div>
+                        <div class="budget-right">65%</div>
+                    </div>
+                    <p><span class="yellow-circle"></span> Total</p>
+                    <div class="budget-value budget-border">
+                    	<div class="budget-left">10.5cr</div>
+                        <div class="budget-right">100%</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+            	<h3>Active Programs Districts</h3>
+                 <img src="/static/img/map.png" alt="">
+            </li>
+        </ul>
+    </div>
+    <div class="white-box">
+    	<div class="left-white">
+        	<h2>Task and Progress Completion</h2>
+            <img src="/static/img/task-chart.jpg" alt="">
+        </div>
+        <div class="right-white">
+        	<h2>Total Budget</h2>
+            <img src="/static/img/budget-chart.jpg" alt="">
+        </div>
+        <div class="hide-cont">
+        	<div class="left-white">
+        	<h2>Task and Progress Completion</h2>
+            <img src="/static/img/task-chart.jpg" alt="">
+        </div>
+        <div class="right-white">
+        	<h2>Total Budget</h2>
+            <img src="/static/img/budget-chart.jpg" alt="">
+        </div>                    
+        </div>
+        <div class="read-script deli">
+           <a href="javascript:void(0);" class="view-cont">See more <i class="fa fa-angle-down"></i></a> 
+           <a href="javascript:void(0);" class="close-cont">See less <i class="fa fa-angle-up"></i></a> 					                            
+        </div>
+        
+    </div>   
+    <div class="white-box-left">
+    <div class="table-responsive">
+    <table class="table-resp" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th style="width:28%;">Users</th>
+        <th style="width:19%;">Organization</th>
+        <th style="width:26%;">Designation</th>
+        <th style="width:19%;">PMU Role</th>
+        <th style="width:10%;">&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <span>Ramesh Tawde</span></td>
+        <td style="width:19%;">OVP Venture</td>
+        <td style="width:26%;">CSR Head</td>
+        <td style="width:19%;">Super Admin</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Anil Sharma</span></td>
+        <td style="width:19%;">OVP Venture</td>
+        <td style="width:26%;">CSR Program Accountant</td>
+        <td style="width:19%;">Admin</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Priya Dutta</span></td>
+        <td style="width:19%;">OVP Venture</td>
+        <td style="width:26%;">Human Resource</td>
+        <td style="width:19%;">Account Manager</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <span>Shakeel Ahmed</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Program Manager</td>
+        <td style="width:19%;">Program Manager</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img4.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Volunteer</td>
+        <td style="width:19%;">Volunteer</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Volunteer</td>
+        <td style="width:19%;">Volunteer</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Volunteer</td>
+        <td style="width:19%;">Volunteer</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      </tbody>
+	</table>  
+    </div>
+    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+    </div>
+    <div class="white-box-right">
+    	<h2>Recent Updates</h2>
+        <div id="boxscroll" class="updates-scroll ">
+        <p><span>Today</span> - 10 August</p>
+        <ul>
+        	<li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school <u>construction pictures</u> in <u>Nabarangpur School Project</u> <span>3:15 pm</span></div></li>
+            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Ramesh completed <u>Planning task under construction - Nabarangpur School Project</u><span>12:07 pm</span></div></li>
+        </ul>   
+        <p><span>Today</span> - 10 August</p>
+        <ul>
+        	<li><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <div class="update-pad">Shakeel updated <u>budget</u> in 
+<u>Nabarangpur School Project</u> <span>10:10 am</span></div></li>
+            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school construction pictures in Nabarangpur School Project <span>3:15 pm</span></div></li>
+        </ul>    
+        </div>
+    </div> 
+    </div>
+</section>
+{% endblock %}
+<!--Content part Ends-->
 
+<!--Footer starts-->
+{% block footer %}
+<footer>
+    <div class="row">
+        <div class="f-left">
+        	<ul>
+            	<li><a href="javascript:void(0);">Privacy Policy</a></li>
+                <li><a href="javascript:void(0);">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="f-right">&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</div>
+    </div>
+</footer>
+<!--Footer Ends-->
 {% endblock %}
 
-<!-- container ends -->
-<!--Select Box-->
-{% load static %}
-<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
-<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
-<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+</div>
+
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<!--<script type="text/javascript" src="/static/js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
 <script>
- //User Profile
-    $('.user-pad').click(function(){
-		$(".details").slideToggle(600);
-	})
+//Toggle
+		
+		 $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+		 $(document).ready(function(e) {	
+	/*Content Show/Hide */
+	$('.hide-cont').hide();
+	$('.close-cont').hide();
+	$('.view-cont').click(function(){
+		$('.hide-cont').slideDown(350);
+		$('.close-cont').show();
+		$('.view-cont').hide();
+	});
+	$('.close-cont').click(function(){
+		$('.hide-cont').slideUp(350);
+		$('.close-cont').hide();
+		$('.view-cont').show();
+	});	
+ });
+	
 </script>
 
+    <script type="text/javascript">
+   
+	
+	var expanded = false;
 
-{% block script %}
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+    <script>
+  $(document).ready(function() {
+  
+	var nice = $("html").niceScroll();  // The document page (body)
+	
+	$("#div1").html($("#div1").html()+' '+nice.version);
+    
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
 
-{% endblock %}
-
+    
+  });
+</script>
 </body>
 </html>
 
