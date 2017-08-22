@@ -56,7 +56,9 @@ def create_project(request):
     return render(request,'project/project_edit.html',locals())
 
 def project_list(request):
-    obj_list = Project.objects.all()
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get(user_reference_id = user_id )
+    obj_list = Project.objects.filter(created_by = user_obj)
     return render(request,'project/listing.html',locals())
 
 def project_detail(request):

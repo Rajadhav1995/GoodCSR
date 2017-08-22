@@ -17,10 +17,19 @@ from django.contrib import admin
 from views import (dashboard,user_information)
 from views.user_information import (UserInformationStorage,)
 from views.login import (signin,signout)
+from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
+                                            projectuseredit,)
+admin.autodiscover()
+
+roles_patterns = ([
+    url(r'^project/role/list/$',projectuserslist),
+    url(r'^project/role/add/$',projectuseradd),
+    url(r'^project/role/edit/$',projectuseredit),
+])
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^dashboard/$',dashboard.admin_dashboard),
     url(r'^project/',include('projectmanagement.urls')),
@@ -31,5 +40,7 @@ urlpatterns = [
     url(r'^manage-task/',include('taskmanagement.urls')),
     url(r'^manage/user-access/$',UserInformationStorage.as_view()),
     url(r'^logout/$',signout),
+    url(r'^manage/', include(roles_patterns)),
 
 ]
+
