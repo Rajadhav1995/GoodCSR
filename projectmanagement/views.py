@@ -69,7 +69,7 @@ def project_list(request):
 
 def project_detail(request):
     slug =  request.GET.get('slug')
-    obj = Project.objects.get(slug=slug)
+    obj = Project.objects.get_or_none(slug=slug)
     return render(request,'project/project_details.html',locals())
 
 def project_mapping(request):

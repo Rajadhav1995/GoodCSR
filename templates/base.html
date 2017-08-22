@@ -39,7 +39,7 @@
             
         	<ul>
         	{% for i in obj_list %}
-            	<li><a href="/project/list/?slug={{i.slug}}">{{i.name}}</a></li>
+            	<li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
         	{% endfor %}
             </ul>
         </li>
@@ -54,18 +54,18 @@
 <header>
     <div class="row">
         <div id="menu">
-        	<div class="logo"><a href="index.html"><img src="/static/img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
+        	<div class="logo"><a href="/dashboard/"><img src="/static/img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
            <div class="m-menu"><a href="#mobNav"><span></span><span></span><span></span></a></div>       
            <nav id="smoothmenu" class="ddsmoothmenu">
             <ul>
-              <li><a href="javascript:void(0);" class="active">Dashboard</a></li>
+              <li><a href="/dashboard/" class="active">Dashboard</a></li>
               <li class="user-wrap"><a href="javascript:void(0);">
                 Projects
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
                   <ul>
                     	{% for i in obj_list %}
-            	            <li><a href="/project/list/?slug={{i.slug}}">{{i.name}}</a></li>
+            	            <li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
         	            {% endfor %}
                   </ul>
                 <!--</div>-->
@@ -136,7 +136,7 @@
 	<div class="image-pad logo-shadow">
     	<a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
     </div>    
-    <h3>OPV Venture Capital</h3>
+    <h3>{{user_obj.organization|title}}</h3>
     <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>
     </div>
 </section>

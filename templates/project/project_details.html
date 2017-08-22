@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-{% block midpart %}
+{% block section %}
+{% endblock %}
+{% block content %}
 <script language="javascript" type="text/javascript">
 <!--
 function approve(url) {
@@ -324,9 +326,11 @@ function reject(url) {
           <!-- /.row -->
         
         
-        <a class="btn btn-primary" href="/project/list/">Back</button></a>
+        <a class="btn btn-primary" href="/project/list/">Back</a>
 
-        <a class="btn btn-primary" href="/project/add/?slug={{obj.slug}}">Edit</button></a>
+        <a class="btn btn-primary" href="/project/add/?slug={{obj.slug}}">Edit</a>
+        
+        <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{obj.slug}}"> Manage Roles</a></td>
         </div>
         <!-- /.box-body -->
        </div>
