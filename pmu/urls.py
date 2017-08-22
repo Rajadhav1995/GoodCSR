@@ -20,6 +20,11 @@ from views.login import (signin,signout)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^dashboard/$',dashboard.admin_dashboard),
+    url(r'^project/',include('projectmanagement.urls')),
+    url(r'^upload/',include('media.urls')),
     url(r'^$',signin),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^dashboard/$',dashboard.admin_dashboard),

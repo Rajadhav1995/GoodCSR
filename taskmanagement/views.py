@@ -17,11 +17,18 @@ def listing(request,model_name):
     return render(request,'listing.html',locals())
     
 def add_taskmanagement(request,model_name,m_form):
+    if model_name == 'Activity':
+        try:
+            project_id = Project.objects.get(id = request.GET.get('id')).id
+        except:
+            project_id = Project.objects.get(id = request.POST.get('project')).id
+    else :
+        project_id = None 
     user_id = request.session.get('_auth_user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
-        form=form(user_id,request.POST,request.FILES)
+        form=form(user_id,project_id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save() 
             if model_name == 'Activity' or model_name == 'Task':
@@ -29,8 +36,10 @@ def add_taskmanagement(request,model_name,m_form):
                 f.created_by = user
                 f.save()
                 return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+            else :
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
     else:
-        form=form(user_id)
+        form=form(user_id,project_id)
     return render(request,'taskmanagement/forms.html',locals())
     
 def edit_taskmanagement(request,model_name,m_form,slug):
@@ -38,8 +47,9 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     m=eval(model_name).objects.get(slug = slug)
+    project_id = m.project.id if model_name == 'Activity' else None
     if request.method == 'POST':
-        form=form(user_id,request.POST,request.FILES,instance=m)
+        form=form(user_id,project_id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
             if model_name == 'Activity' or model_name == 'Task':
@@ -47,8 +57,10 @@ def edit_taskmanagement(request,model_name,m_form,slug):
                 f.created_by = user
                 f.save()
                 return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+            else:
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
     else:
-        form=form(user_id,instance=m)
+        form=form(user_id,project_id,instance=m)
     return render(request,'taskmanagement/forms.html',locals())
 
 def active_change(request,model_name):
@@ -75,7 +87,7 @@ def task_start_date(request):
     obj = None
     try:
         obj = Activity.objects.get(active=2,id= int(ids),activity_type = 1)
-        project = Project.objects.get(id = obj.object_id)
+        project = Project.objects.get(id = obj.project.id)
         start_date = project.start_date.strftime('%Y-%m-%d')
     except:
         obj = None
