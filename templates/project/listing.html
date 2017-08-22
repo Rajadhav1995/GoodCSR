@@ -85,7 +85,11 @@ function regFunction(id,key) {
             <td><a class="btn btn-success" href="/masterdata/ngo-status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %} -->
             <td><a class="btn btn-primary" href="/project/add/?id={{i.id}}">Edit</button></a></td>
+<<<<<<< HEAD
             <td><a class = "btn btn-primary" href = "/manage/Activity/ActivityForm/add/?id={{i.id}}">Activity</button></a></td>
+=======
+            <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
+>>>>>>> cc2ab40ad3178d1315fdef829eeed4ae80ee86c5
         </tr>
         {% endfor %}
         

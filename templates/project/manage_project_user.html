@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block midpart %}
+<div class="">
+    <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+				<ul class="nav navbar-right panel_toolbox">
+				<div class="fa-hover col-md-3 col-sm-4 col-xs-12">
+										
+				</div>
+				</ul>
+                    <div class="x_title">
+                        <h2 ><a href="/manage/project/role/list/?slug={{project_slug}}"> Manage Users List</a> -> {% if key == "add" %} Add {% else %} Edit {% endif %} User Role </h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    {% if key == 'edit' %}
+                        
+                        <form id="ic_form" action="/manage/project/role/edit/?objid={{objid}}" method = "post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                        <input type="hidden" name="slug" value="{{project_slug}}">
+                    {% else %}
+                        <form id="ic_form" action="." method = "post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                        <input type="hidden" name="slug" value="{{project_slug}}">
+                    {% endif %}
+                    {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
+                    <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                User <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{ form.user }}
+								{{ form.user.errors }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Role <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{ form.role }}
+								{{ form.role.errors }}
+                            </div>
+                        </div>
+
+                        <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    {% if key == "add" %}
+                                        <input type="submit" class="btn btn-success" value="Save">
+                                    {% else %}
+                                        <input type="submit" value="Update" class="btn btn-success">
+                                    {% endif %}
+                                        <input class="btn btn-primary" type="button" value="Cancel" onClick="parent.location='/manage/project/role/list/?slug={{project_slug}}'">
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script type="text/javascript" src="/static/js/jquery.validate.js"></script>
+
+<script type="text/javascript">
+        
+    $(document).ready(function(){
+                $('select[multiple=multiple]').multiSelect()
+        $("#ic_form").validate({
+            rules :
+            {
+                user : {required:true},
+                role : {required:true},
+            },
+            messages:
+            {
+                user : {required : "Please Choose the User"},
+                role : {required : "Please Choose the Role"},
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+        });
+        });
+        
+</script>
+
+<style>
+.error{color:red; min-width: 200px;}
+</style>
+
+{% endblock %}
+

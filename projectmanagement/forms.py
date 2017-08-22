@@ -6,6 +6,7 @@ from django.contrib.admin import widgets
 # from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
+from userprofile.models import (ProjectUserRoleRelationship,RoleTypes)
 
 BUDGET_TYPE = ((1,'Yearly'),(2,'Quarterly'),(3,'Half Yearly'))
 STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
@@ -35,3 +36,12 @@ class ProjectMappingForm(forms.ModelForm):
 	class Meta:
 		model = ProjectFunderRelation
 		fields  = ('project','funder','implementation_partner','total_budget')
+
+class ProjectUserRoleRelationshipForm(forms.ModelForm):
+
+    user = forms.ModelChoiceField(queryset=UserProfile.objects.filter(is_admin_user=False),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
+    role = forms.ModelChoiceField(queryset=RoleTypes.objects.filter(active=2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = ProjectUserRoleRelationship
+        fields = ('user','role')
