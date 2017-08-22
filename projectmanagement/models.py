@@ -130,7 +130,7 @@ class UserProfile(BaseContent):
     is_admin_user = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.id)
+        return self.email
 
 class Program(BaseContent):
     name = models.CharField(max_length=200,**OPTIONAL)
@@ -169,7 +169,7 @@ class Project(BaseContent):
     history = HistoricalRecords()
 
     def __str__(self):
-        return str(self.id)
+        return self.name
 
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 
