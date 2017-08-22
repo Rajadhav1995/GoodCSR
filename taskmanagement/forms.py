@@ -44,6 +44,8 @@ class TaskForm(forms.ModelForm):
     activity = forms.ModelChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
     start_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
     end_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
+    actual_start_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
+    actual_end_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
@@ -64,10 +66,12 @@ class TaskForm(forms.ModelForm):
 class MilestoneForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
+    status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
+    subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'})) 
 #    overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
     class Meta:
         model = Milestone   
-        fields = ('name','task','overdue')
+        fields = ('name','task','overdue','subscribers','status')
         
         
     def __init__(self,user_id, *args, **kwargs):

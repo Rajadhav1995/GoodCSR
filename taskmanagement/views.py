@@ -22,15 +22,13 @@ def add_taskmanagement(request,model_name,m_form):
     form=eval(m_form)
     if request.method=='POST':
         form=form(user_id,request.POST,request.FILES)
-        if model_name == 'Activity' or model_name == 'Task':
-            form.assigned_to = UserProfile.objects.get(user_reference_id = request.POST['assigned_to'])
         if form.is_valid():
             f=form.save() 
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/manage-task/'+model_name+'/listing/')
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
     else:
         form=form(user_id)
     return render(request,'taskmanagement/forms.html',locals())
@@ -42,15 +40,13 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     m=eval(model_name).objects.get(slug = slug)
     if request.method == 'POST':
         form=form(user_id,request.POST,request.FILES,instance=m)
-        if model_name == 'Activity' or model_name == 'Task':
-            form.assigned_to = UserProfile.objects.get(user_reference_id = request.POST['assigned_to'])
         if form.is_valid():
             f=form.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/manage-task/'+model_name+'/listing/')
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
     else:
         form=form(user_id,instance=m)
     return render(request,'taskmanagement/forms.html',locals())
