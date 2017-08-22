@@ -147,4 +147,10 @@ def add_keywords(keys,obj,model,edit):
 
 def budget_tranche(request):
     form = TrancheForm()
+    if request.method == 'POST':
+        form = TrancheForm(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return HttpResponseRedirect('/dashboard/')
     return render(request,'budget/tranche.html',locals())

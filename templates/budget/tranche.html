@@ -14,31 +14,102 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Add Budget Tranche</h3>
+              <h3 class="box-title">Add Budget Tranch</h3>
             </div>
             
             <!-- /.box-header -->
             <div class="box-body">
             <form action="/project/budget/tranche/" method='POST' enctype="multipart/form-data">{% csrf_token %}
     
-                {{form.non_fields_errors}}
-        
-                    {{form.media}}
-        
-                <div class="box-content">
-                    <form role="form">
-                        {% for field in form %}
                             <div class="row">
-                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
-                                    {{field.label_tag}}
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.project.label_tag}}<font color="red">*</font>
                                 </label>
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{field}}
-                                    {{field.errors}}
-                                        
+                                    {{form.project}}
+                                    {{ form.project.errors }}
                                 </div>
                             </div>
-                        {% endfor %}
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.name.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.name}}
+                                    {{ form.name.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.planned_amount.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.planned_amount}}
+                                    {{ form.planned_amount.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.actual_disbursed_amount.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.actual_disbursed_amount}}
+                                    {{ form.actual_disbursed_amount.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.recommended_amount.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.recommended_amount}}
+                                    {{ form.recommended_amount.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.recommended_by.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.recommended_by}}
+                                    {{ form.recommended_by.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.utilized_amount.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.utilized_amount}}
+                                    {{ form.utilized_amount.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.due_date.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.due_date}}
+                                    {{ form.due_date.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{form.disbursed_date.label_tag}}<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.disbursed_date}}
+                                    {{ form.disbursed_date.errors }}
+                                </div>
+                            </div>
                         
                         <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
                         <a class="btn btn-success" href="/manage-task/{{model_name}}/listing/">Back</button></a>

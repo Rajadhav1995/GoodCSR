@@ -10,5 +10,5 @@ class TrancheForm(forms.ModelForm):
 	
 	class Meta:
 		model = Tranche
-		fields  = ('budget_period','name','planned_amount','actual_disbursed_amount','recommended_amount',\
+		fields  = ('project','name','planned_amount','actual_disbursed_amount','recommended_amount',\
 					'recommended_by','utilized_amount','due_date','disbursed_date')
