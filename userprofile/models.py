@@ -84,6 +84,9 @@ class ProjectUserRoleRelationship(BaseContent):
     role = models.ForeignKey(RoleTypes, **OPTIONAL)
     history = HistoricalRecords()
 
+    def __str__(self):
+        return self.project.name
+
 class RoleConfig(BaseContent):
     #-----------------------#
     # role config model

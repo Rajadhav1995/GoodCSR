@@ -47,9 +47,9 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td>{{i.program.name}}</td>
             <!-- <td>{{i.terms_conditions}}</td> -->
             <td>{{i.get_active_display}}</td>
+
             <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
-            <td></td>
-            
+            <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
         </tr>
         {% endfor %}
         
