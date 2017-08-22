@@ -51,8 +51,6 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             {% if model_name == 'Task' %}
             <tr>
                 <th>Task Name</th>
-                <th>User</th>
-                <th>Created on</th>
                 <th>Activity</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -102,10 +100,8 @@ alert("Sorry, You cant Select more than 3 featured RFP")
         {% for i in obj_list %}
         <tr>
             <td>{{i.name}}</a></td>
-            <td>{{i.user}}</td>
-            <td>{{i.created | date:'Y-m-d'}}</td>
             <td>{{i.activity}}</td>
-            <td>{{i.start_data}}</td>
+            <td>{{i.start_date}}</td>
             <td>{{i.end_date}}</td>
             <td>{{i.get_status_display}}</td>
             <td><a class="btn btn-primary" href="/manage/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
@@ -125,13 +121,13 @@ alert("Sorry, You cant Select more than 3 featured RFP")
         {% for i in obj_list %}
         <tr>
             <td>{{i.name}}</a></td>
-            <td>{{i.task.all}}</td>
+            <td>{% for tasks in i.task.all %}<br>{{forloop.counter}}. {{tasks}}</br>{% endfor %}</td>
             <td>{{i.overdue}}</td>
-            <td><a class="btn btn-primary" href="/manage/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            <td><a class="btn btn-primary" href="/manage/Milestone/MilestoneForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/manage/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/manage/milestone/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/manage/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/manage/milestone/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
