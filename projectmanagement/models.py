@@ -123,6 +123,8 @@ class MasterCategory(BaseContent):
 class UserProfile(BaseContent):
     user_reference_id = models.IntegerField(default=0)
     user = models.ForeignKey("auth.User",**OPTIONAL)
+    name = models.CharField(max_length=500,**OPTIONAL)
+    designation = models.CharField(max_length=200,**OPTIONAL)
     email = models.CharField(max_length=500,**OPTIONAL)
     organization = models.CharField(max_length=800,**OPTIONAL)
     organization_type = models.IntegerField(default=0)
