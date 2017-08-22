@@ -72,13 +72,13 @@
 
 <script>
     $(document).ready(function() {
-    if ({{model_name}} == 'Milestone'){
-    $('#id_task').on('change',function(e){
+    if ('{{model_name}}' == 'Milestone'){
+    $('#id_task').on('click',function(e){
         var tasks_ids = $('#id_task').val();
         $.ajax({
             url:'/manage/milestone/overdue/',
             type:'GET',
-            data:{'tasks_ids':tasks_ids},
+            data:{'id':tasks_ids},
             dataType:"json",
             success:function(data){
             if (data.milestone_overdue_date != ""){
@@ -93,6 +93,7 @@
         e.stopImmediatePropagation();
         return false;
       });
+    }
     });
 </script>
 

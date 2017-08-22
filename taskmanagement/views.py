@@ -97,9 +97,11 @@ def task_start_date(request):
     return JsonResponse({"project_start_date":start_date})
     
     
-#def milestone_overdue(request):
-#    task_ids = request.GET.get('tasks_ids')
-#    url=request.META.get('HTTP_REFERER')
-#    tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
-#    milestone_overdue =
-#    
+def milestone_overdue(request):
+    task_ids = request.GET.get('id[]')
+    print type(task_ids)
+    url=request.META.get('HTTP_REFERER')
+    tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
+    milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
+    return JsonResponse({"milestone_overdue_date":milestone_overdue})
+    
