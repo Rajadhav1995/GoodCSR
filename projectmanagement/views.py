@@ -10,6 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 # Create your views here.
 
 def create_project(request):
+    # import ipdb; ipdb.set_trace()
     try:
         ids =  request.GET.get('id')
         obj = Project.objects.get(id=ids)
