@@ -28,6 +28,8 @@
 <link rel="stylesheet" href="/static/css/media.css" />
 </head>
 <body>
+{% block header %}
+{% load urs_tags %}
 <!-- Mobile Navigation -->
 <div id="mobNav" class="mobNav">
     <figure class="mobi-logo"><a href="/dashboard/" title=""><img src="/static/img/logo.png" alt=""></a>
@@ -37,6 +39,7 @@
         <li><a href="products.html">Projects</a>
             
         	<ul>
+        	{% get_user_project request as obj_list %}
         	{% for i in obj_list %}
             	<li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
         	{% endfor %}
@@ -48,7 +51,6 @@
 
 <div id="page">
 <!--Header Starts-->
-{% block header %}
 <header>
     <div class="row">
         <div id="menu">
@@ -62,6 +64,7 @@
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
                   <ul>
+                  {% get_user_project request as obj_list %}
                     	{% for i in obj_list %}
             	            <li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
         	            {% endfor %}
@@ -146,17 +149,17 @@
 	<div class="row">
 	<div class="content-top">
       <div class="select-area">
-      	<label>See Data as </label>
-        <select name="lang" class="select_box ">
-            <option>Quarter1</option>
-            <option>Quarter2</option>
-            <option>Quarter3</option>
-        </select>
-        <div class="small-select">
-        <select name="lang" class="select_box ">
-            <option>2016</option>
-            <option>2017</option>
-        </select>
+<!--      	<label>See Data as </label>-->
+<!--        <select name="lang" class="select_box ">-->
+<!--            <option>Quarter1</option>-->
+<!--            <option>Quarter2</option>-->
+<!--            <option>Quarter3</option>-->
+<!--        </select>-->
+<!--        <div class="small-select">-->
+<!--        <select name="lang" class="select_box ">-->
+<!--            <option>2016</option>-->
+<!--            <option>2017</option>-->
+<!--        </select>-->
         <!--<div class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="/static/img/user-img.png" class="user-image" alt="User Image">
@@ -169,15 +172,15 @@
                 <h3>Admin Name</h3>
                 <h4>Admin</h4>
               </div>-->
-        <select multiple="multiple" name="lang" class="select_box ">
-            <option>Sep-Dec</option>
-            <option>Jan-Mar</option>
-            <option>Apr-Jul</option>
-            <option>Aug-Sep</option>
-            <option>Oct-Dec</option>
-        </select>
-        </div>
-         </div>
+<!--        <select multiple="multiple" name="lang" class="select_box ">-->
+<!--            <option>Sep-Dec</option>-->
+<!--            <option>Jan-Mar</option>-->
+<!--            <option>Apr-Jul</option>-->
+<!--            <option>Aug-Sep</option>-->
+<!--            <option>Oct-Dec</option>-->
+<!--        </select>-->
+<!--        </div>-->
+<!--         </div>-->
         <!--<form>
           <div class="multiselect">
             <div class="selectBox" onclick="showCheckboxes()">
@@ -205,20 +208,20 @@
         <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
         <ul>
         	<li>
-            	<h3>No. of Programs</h3>
+            	<h3>No. of Projects </h3>
                  <img class="key-image" src="/static/img/key-icon1.png" alt="">
-                <h4 class="title-pad">3</h4> 
+                <h4 class="title-pad">{{project_count}}</h4> 
             </li>
             <li>
             	<h3>No. of Beneficiaries</h3>
                  <img class="key-image" src="/static/img/key-icon2.png" alt="">
-                <h4 class="title-pad">7.148</h4> 
+                <h4 class="title-pad">{{total_beneficiaries}}</h4> 
             </li>
             <li>
-            	<h3>% Total budget disbursed<span>April 2017 - March 2018</span></h3>
+            	<h3>% Total budget disbursed<span></span></h3>
                  <img src="/static/img/key-icon3.png" alt="">
                 <div class="budget-pad">
-                	<p><span class="green-circle"></span> Disbuirsed</p>
+                	<p><span class="green-circle"></span> Disbursed</p>
                     <div class="budget-value">
                     	<div class="budget-left">7.8cr</div>
                         <div class="budget-right">65%</div>
@@ -274,55 +277,16 @@
       </tr>
       </thead>
       <tbody>
+      {% for i in projectuserlist %}
       <tr>
-        <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <span>Ramesh Tawde</span></td>
-        <td style="width:19%;">OVP Venture</td>
-        <td style="width:26%;">CSR Head</td>
-        <td style="width:19%;">Super Admin</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+            <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
+            <td style="width:19%;">{{i.user.organization}}</td>
+            <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
+            <td style="width:19%;">{{i.role.name}}
+            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>
       </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Anil Sharma</span></td>
-        <td style="width:19%;">OVP Venture</td>
-        <td style="width:26%;">CSR Program Accountant</td>
-        <td style="width:19%;">Admin</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Priya Dutta</span></td>
-        <td style="width:19%;">OVP Venture</td>
-        <td style="width:26%;">Human Resource</td>
-        <td style="width:19%;">Account Manager</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <span>Shakeel Ahmed</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Program Manager</td>
-        <td style="width:19%;">Program Manager</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img4.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Volunteer</td>
-        <td style="width:19%;">Volunteer</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Volunteer</td>
-        <td style="width:19%;">Volunteer</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Volunteer</td>
-        <td style="width:19%;">Volunteer</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
+      {% endfor %}
+
       </tbody>
 	</table>  
     </div>
