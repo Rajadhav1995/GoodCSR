@@ -130,7 +130,7 @@ class UserProfile(BaseContent):
     is_admin_user = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.id)
+        return self.email
 
 class Program(BaseContent):
     name = models.CharField(max_length=200,**OPTIONAL)
@@ -169,7 +169,7 @@ class Project(BaseContent):
     history = HistoricalRecords()
 
     def __str__(self):
-        return str(self.id)
+        return self.name
 
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 
@@ -208,10 +208,4 @@ class ProjectParameterValue(BaseContent):
     parameter_value = models.CharField(max_length=300,**OPTIONAL)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'))
-
-class ProjectUserRoleRelationship(BaseContent):
-    project = models.ForeignKey(Project,**OPTIONAL)
-    user = models.ForeignKey(UserProfile,**OPTIONAL)
-    role = models.CharField(max_length=300,**OPTIONAL)
-    history = HistoricalRecords()
 

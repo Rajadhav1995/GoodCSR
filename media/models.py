@@ -6,7 +6,7 @@ from django.views import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.fields import GenericForeignKey
-from projectmanagement.models import BaseContent
+from projectmanagement.models import (BaseContent,UserProfile)
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
@@ -14,6 +14,8 @@ DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
 class Attachment(BaseContent):
     # model to attach files.
     #content_type is a foriegn key, verbose_name- is a function differing with _"
+    created_by = models.ForeignKey(
+        UserProfile, related_name='document_created_user', **OPTIONAL)
     attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
     name = models.CharField("Description", max_length=300, **OPTIONAL)
     description = models.CharField("Description", max_length=600, **OPTIONAL)
@@ -36,6 +38,21 @@ class Attachment(BaseContent):
         except:
             documents = []
         return documents
+
+class Keywords(BaseContent):
+    name = models.CharField(max_length=100, **OPTIONAL)
+
+    def __unicode__(self):
+        return self.name or ''
+
+class FileKeywords(BaseContent):
+    key = models.ForeignKey(Keywords, **OPTIONAL)
+    order_no = models.IntegerField(default=0)
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
+    object_id = models.IntegerField(**OPTIONAL)
+
+    def __unicode__(self):
+        return self.key.name or ''
 
 LOCATION_TYPE = ((0, 'Urban'), (1, 'Semi-urban'), (2, 'Rural'))
 
