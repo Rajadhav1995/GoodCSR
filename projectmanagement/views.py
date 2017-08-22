@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from projectmanagement.models import *
 from projectmanagement.forms import *
+from budgetmanagement.forms import TrancheForm
 from media.forms import AttachmentForm,ImageUpload
-from media.models import Attachment
+from media.models import Attachment,Keywords,FileKeywords
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
@@ -97,6 +98,12 @@ def upload_attachment(request):
             else:
                 obj.attachment_type=1
             obj.save()
+        try:
+            keys = request.POST.get('keywords').split(',')
+            model = 'Attachment'
+            keywords = add_keywords(keys,obj,model,0)
+        except:
+            pass
     return render(request,'attachment/doc_upload.html',locals())
 
 def edit_attachment(request):
@@ -121,4 +128,27 @@ def edit_attachment(request):
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()
+        try:
+            keys = request.POST.get('keywords').split(',')
+            model = 'Attachment'
+            keywords = add_keywords(keys,obj,model,1)
+        except:
+            pass
     return render(request,'attachment/doc_upload.html',locals())
+
+def add_keywords(keys,obj,model,edit):
+    if edit==1:
+        delete = FileKeywords.objects.filter(content_type=ContentType.objects.get(model=model),object_id=obj.id)
+    key_list = Keywords.objects.filter(active=2)
+    for i in keys:
+        key_obj = Keywords.objects.get_or_none(name__iexact=i.strip())
+        if key_obj:
+            if not key_obj.id in key_list.values_list('name',flat=True):
+                obj = FileKeywords.objects.create(key=key_obj,content_type=ContentType.objects.get(model=model),object_id=obj.id)
+        else:
+            key_object = Keywords.objects.create(name=i.strip())
+            obj = FileKeywords.objects.create(key=key_object,content_type=ContentType.objects.get(model=model),object_id=obj.id )
+
+def budget_tranche(request):
+    form = TrancheForm()
+    return render(request,'budget/tranche.html',locals())

@@ -81,11 +81,25 @@ width:450px;
                             </div>
                         </div>
                         {% endif %}
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
+                                Keywords:
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
+                                <p style="color:grey ;">
+                                    (Please press Enter or TAB or ',' after typing each keyword)
+                            </div>
+                        </div>
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
   </div>
-
+<div style="padding :0 7px 0 5px;max-width:900px;margin:auto">
+    <textarea id="hero-demo" class="tag-editor-hidden-src"></textarea>
+    <ul class="tag-editor ui-sortable" style="display:none;">
+    </ul>
+</div>
 <input type="hidden" name="key_list" id="key_list" value="{{key_list}}">
 <input type="hidden" name="keyss" id="keyss" value="{{keyss}}">
   </div>
@@ -139,66 +153,7 @@ $(document).ready(function() {
 });
 </script>
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('select[multiple=multiple]').multiSelect()
-        $( function() {
-            $('#id_start_date').datepicker({ dateFormat: 'yy-mm-dd',
-            onSelect: function(dateText, inst) {
-        var start = new Date($('#id_start_date').val());
-        var end = new Date($('#id_end_date').val());
-        var today = new Date();
 
-        if (end <= start) {
-            document.getElementById('dateError1').innerHTML="Start date should be less than End date"
-        };
-        if (end > start) {
-            document.getElementById('dateError1').innerHTML=""
-        };
-        if (start <= today) {
-          document.getElementById('dateError1').innerHTML="Start date must be greater than today's date"
-        }
-        var months = (end.getFullYear() - start.getFullYear()) * 12;
-        months += end.getMonth() - start.getMonth();
-        document.getElementById("id_duration").value = months;
-    } });
-            });
-
-        $("#prog_edit").validate({
-            rules :
-            {
-                name : {required:true},
-                program : {required:true},
-                total_budget : {required:true},
-                no_of_beneficiaries : {required:true},
-                target_beneficiaries : {required:true},
-                cause_area : {required:true},
-                created_by : {required:true},
-                project_status : {required:true},
-                id_end_date: { greaterThan: "#id_start_date" },
-            },
-            messages:
-            {
-                name : {required : "<font color=#fc282f>Please enter the name</font>"},
-                program:{required:"<font color=#fc282f>Please select the program</font>"},
-                total_budget:{required:"<font color=#fc282f>Please enter total budget</font>"},
-                created_by:{required:"<font color=#fc282f>Please created by user</font>"},
-                project_status:{required:"<font color=#fc282f>Please select project status</font>"},
-                no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
-                target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
-                cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
-                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
-
-            },
-            highlight: function (element) {
-                $(element).parent().addClass('error')
-            },
-            unhighlight: function (element) {
-                $(element).parent().removeClass('error')
-            },
-        });
-        });
-</script>
 <style>
 .error{color:red; min-width: 200px;}
 </style>
@@ -226,16 +181,7 @@ $(document).ready(function() {
 
 });
 </script>
-<script>
-function RemoveProduct() {
-    if ($('#id_start_date').val()>$('#id_end_date').val()){
-        alert("'End date' should be greater than 'Start date'");
-        return false;
-        } else {
-            return true;
-        }
-    }
-</script>
+
 
 
 <script type="text/javascript">
