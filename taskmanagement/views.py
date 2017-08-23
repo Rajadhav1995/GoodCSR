@@ -17,35 +17,53 @@ def listing(request,model_name):
     return render(request,'listing.html',locals())
     
 def add_taskmanagement(request,model_name,m_form):
+    if model_name == 'Activity':
+        try:
+            project_id = Project.objects.get(slug = request.GET.get('slug')).id
+        except:
+            project_id = Project.objects.get(id = request.POST.get('project')).id
+    else :
+        project_id = None 
     user_id = request.session.get('_auth_user_id')
-    user = UserProfile.objects.get(id = request.user.id)
+    user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
-        form=form(request.POST,request.FILES)
+        form=form(user_id,project_id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save() 
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/manage-task/'+model_name+'/listing/')
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+            else :
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
     else:
-        form=form()
+        form=form(user_id,project_id)
     return render(request,'taskmanagement/forms.html',locals())
     
 def edit_taskmanagement(request,model_name,m_form,slug):
+    user_id = request.session.get('_auth_user_id')
+    user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
-    m=eval(model_name).objects.get(slug = slug)
+    if model_name == 'Milestone':
+        m = eval(model_name).objects.get(id = int(slug))
+    else :
+        m=eval(model_name).objects.get(slug = slug)
+    project_id = m.project.id if model_name == 'Activity' else None
     if request.method == 'POST':
-        form=form(request.POST,request.FILES,instance=m)
+        form=form(user_id,project_id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
+                f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/manage-task/'+model_name+'/listing/')
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+            else:
+                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
     else:
-        form=form(instance=m)
+        form=form(user_id,project_id,instance=m)
     return render(request,'taskmanagement/forms.html',locals())
 
 def active_change(request,model_name):
@@ -72,9 +90,18 @@ def task_start_date(request):
     obj = None
     try:
         obj = Activity.objects.get(active=2,id= int(ids),activity_type = 1)
-        project = Project.objects.get(id = obj.object_id)
+        project = Project.objects.get(id = obj.project.id)
         start_date = project.start_date.strftime('%Y-%m-%d')
     except:
         obj = None
     return JsonResponse({"project_start_date":start_date})
+    
+    
+def milestone_overdue(request):
+    task_ids = request.GET.get('id[]')
+    print type(task_ids)
+    url=request.META.get('HTTP_REFERER')
+    tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
+    milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
+    return JsonResponse({"milestone_overdue_date":milestone_overdue})
     

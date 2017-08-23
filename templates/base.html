@@ -7,12 +7,17 @@
 <title>Samhita GoodCSR</title>
 
 <!--CSS Srat-->
+<link rel="stylesheet" href="/static/css/bootstrap.css" />
 <link rel="stylesheet" href="/static/css/style.css" />
 <link rel="stylesheet" href="/static/css/font-awesome.css">
 <link rel="stylesheet" href="/static/css/ddsmoothmenu.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/jquery.mmenu.all.css" />
+<link rel="stylesheet" href="/static/css/style-new.css" />
+<link href="/static/css/icon.css" rel="stylesheet">
+<link href="/static/css/materialize.min.css" rel="stylesheet" >
+<link rel="stylesheet" href="/static/css/fm.tagator.jquery.css"/>
 <link rel="stylesheet" href="/static/css/jquery.selectbox.css" type="text/css" />
-
+<link rel="stylesheet" href="/static/css/fSelect.css" />
 
 <!--Common Script-->
 <script type="text/javascript" src="/static/js/respond.js"></script>
@@ -36,18 +41,16 @@
     </figure>
     <ul>
         <li><a href="/dashboard/">Dashboard</a></li>
-        <li><a href="products.html">Projects1</a>
-
+        <li><a href="products.html">Projects</a>
             
-        	<ul>
-        	{% get_user_project request as obj_list %}
-        	{% for i in obj_list %}
-            	<li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
-        	{% endfor %}
+          <ul>
+          {% get_user_project request as obj_list %}
+          {% for i in obj_list %}
+              <li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
+          {% endfor %}
             </ul>
         </li>
     </ul>
-    <!-- <li><a href="/dashboard/">Settings</a></li> -->
 </div>
 <!-- /Mobile Navigation -->
 
@@ -56,7 +59,7 @@
 <header>
     <div class="row">
         <div id="menu">
-        	<div class="logo"><a href="/dashboard/"><img src="/static/img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
+          <div class="logo"><a href="/dashboard/"><img src="/static/img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
            <div class="m-menu"><a href="#mobNav"><span></span><span></span><span></span></a></div>       
            <nav id="smoothmenu" class="ddsmoothmenu">
             <ul>
@@ -67,12 +70,20 @@
                 <!--<div class="details" id="marketPlace">-->
                   <ul>
                   {% get_user_project request as obj_list %}
-                    	{% for i in obj_list %}
-            	            <li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
-        	            {% endfor %}
+                      {% for i in obj_list %}
+                          <li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
+                      {% endfor %}
                   </ul>
                 <!--</div>-->
               </li>
+                            <li class="user-wrap">Task Management</a>
+              <i class="fa fa-angle-down"></i></a>
+              <ul>
+                  <li><a href="/manage/Task/listing/">Tasks</a></li>
+                  <li><a href="/manage/Milestone/listing/">Milestone</a></li>
+                </ul>
+        </li>
+        <li><a href="/project/list/" class="active">Settings</a></li>
             </ul>
           </nav>
             <div class="menu-rgt">
@@ -80,7 +91,7 @@
       <ul>
         <li id="search_ico">
            <!-- <form id="demo-2">
-           	  <input type="search" placeholder="Search">              
+              <input type="search" placeholder="Search">              
             </form>-->
             <div id="nav_search_id" class="search-form">
                 <div class="search-ico">&nbsp;</div>
@@ -135,9 +146,9 @@
 {% block section %}
 <!--Green pad starts-->
 <section class="green-pad">
-	<div class="row">
-	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
+  <div class="row">
+  <div class="image-pad logo-shadow">
+      <a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
     </div>    
     <h3>{{user_obj.organization|title}}</h3>
     <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>
@@ -148,10 +159,10 @@
 <!--Content part starts-->
 {% block content %}
 <section class="content-part">
-	<div class="row">
-	<div class="content-top">
+  <div class="row">
+  <div class="content-top">
       <div class="select-area">
-<!--      	<label>See Data as </label>-->
+<!--        <label>See Data as </label>-->
 <!--        <select name="lang" class="select_box ">-->
 <!--            <option>Quarter1</option>-->
 <!--            <option>Quarter2</option>-->
@@ -206,63 +217,63 @@
        
     </div>
     <div class="white-box white-pad">
-    	<h2>Key Program Info</h2>
+      <h2>Key Program Info</h2>
         <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
         <ul>
-        	<li>
-            	<h3>No. of Projects </h3>
+          <li>
+              <h3>No. of Projects </h3>
                  <img class="key-image" src="/static/img/key-icon1.png" alt="">
                 <h4 class="title-pad">{{project_count}}</h4> 
             </li>
             <li>
-            	<h3>No. of Beneficiaries</h3>
+              <h3>No. of Beneficiaries</h3>
                  <img class="key-image" src="/static/img/key-icon2.png" alt="">
                 <h4 class="title-pad">{{total_beneficiaries}}</h4> 
             </li>
             <li>
-            	<h3>% Total budget disbursed<span></span></h3>
+              <h3>% Total budget disbursed<span></span></h3>
                  <img src="/static/img/key-icon3.png" alt="">
                 <div class="budget-pad">
-                	<p><span class="green-circle"></span> Disbursed</p>
+                  <p><span class="green-circle"></span> Disbursed</p>
                     <div class="budget-value">
-                    	<div class="budget-left">7.8cr</div>
+                      <div class="budget-left">7.8cr</div>
                         <div class="budget-right">65%</div>
                     </div>
                     <p><span class="yellow-circle"></span> Total</p>
                     <div class="budget-value budget-border">
-                    	<div class="budget-left">10.5cr</div>
+                      <div class="budget-left">10.5cr</div>
                         <div class="budget-right">100%</div>
                     </div>
                 </div>
             </li>
             <li>
-            	<h3>Active Programs Districts</h3>
+              <h3>Active Programs Districts</h3>
                  <img src="/static/img/map.png" alt="">
             </li>
         </ul>
     </div>
     <div class="white-box">
-    	<div class="left-white">
-        	<h2>Task and Progress Completion</h2>
+      <div class="left-white">
+          <h2>Task and Progress Completion</h2>
             <img src="/static/img/task-chart.jpg" alt="">
         </div>
         <div class="right-white">
-        	<h2>Total Budget</h2>
+          <h2>Total Budget</h2>
             <img src="/static/img/budget-chart.jpg" alt="">
         </div>
         <div class="hide-cont">
-        	<div class="left-white">
-        	<h2>Task and Progress Completion</h2>
+          <div class="left-white">
+          <h2>Task and Progress Completion</h2>
             <img src="/static/img/task-chart.jpg" alt="">
         </div>
         <div class="right-white">
-        	<h2>Total Budget</h2>
+          <h2>Total Budget</h2>
             <img src="/static/img/budget-chart.jpg" alt="">
         </div>                    
         </div>
         <div class="read-script deli">
-           <a href="javascript:void(0);" class="view-cont">See more <i class="fa fa-angle-down"></i></a> 
-           <a href="javascript:void(0);" class="close-cont">See less <i class="fa fa-angle-up"></i></a> 					                            
+<!--           <a href="javascript:void(0);" class="view-cont">See more <i class="fa fa-angle-down"></i></a> -->
+<!--           <a href="javascript:void(0);" class="close-cont">See less <i class="fa fa-angle-up"></i></a>                                       -->
         </div>
         
     </div>   
@@ -290,21 +301,21 @@
       {% endfor %}
 
       </tbody>
-	</table>  
+  </table>  
     </div>
-    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+<!--    <a href="javascript:void(0);" class="link-pad">Add User</a>       -->
     </div>
     <div class="white-box-right">
-    	<h2>Recent Updates</h2>
+      <h2>Recent Updates</h2>
         <div id="boxscroll" class="updates-scroll ">
         <p><span>Today</span> - 10 August</p>
         <ul>
-        	<li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school <u>construction pictures</u> in <u>Nabarangpur School Project</u> <span>3:15 pm</span></div></li>
+          <li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school <u>construction pictures</u> in <u>Nabarangpur School Project</u> <span>3:15 pm</span></div></li>
             <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Ramesh completed <u>Planning task under construction - Nabarangpur School Project</u><span>12:07 pm</span></div></li>
         </ul>   
         <p><span>Today</span> - 10 August</p>
         <ul>
-        	<li><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <div class="update-pad">Shakeel updated <u>budget</u> in 
+          <li><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <div class="update-pad">Shakeel updated <u>budget</u> in 
 <u>Nabarangpur School Project</u> <span>10:10 am</span></div></li>
             <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school construction pictures in Nabarangpur School Project <span>3:15 pm</span></div></li>
         </ul>    
@@ -320,8 +331,8 @@
 <footer>
     <div class="row">
         <div class="f-left">
-        	<ul>
-            	<li><a href="javascript:void(0);">Privacy Policy</a></li>
+          <ul>
+              <li><a href="javascript:void(0);">Privacy Policy</a></li>
                 <li><a href="javascript:void(0);">Terms of Service</a></li>
             </ul>
         </div>
@@ -339,36 +350,36 @@
 <script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
 <script type="text/javascript" src="/static/js/common.js" /></script>
 <!--<script type="text/javascript" src="/static/js/jquery.scrollbox.js"></script>-->
-<script src="/static/js/jquery.nicescroll.min.js"></script>
+<!-- <script src="/static/js/jquery.nicescroll.min.js"></script> -->
 <script>
 //Toggle
-		
-		 $('.user-menu').on('click',function(){
+    
+     $('.user-menu').on('click',function(){
           $('.dropdown-menu').slideToggle();
           
         });
-		 $(document).ready(function(e) {	
-	/*Content Show/Hide */
-	$('.hide-cont').hide();
-	$('.close-cont').hide();
-	$('.view-cont').click(function(){
-		$('.hide-cont').slideDown(350);
-		$('.close-cont').show();
-		$('.view-cont').hide();
-	});
-	$('.close-cont').click(function(){
-		$('.hide-cont').slideUp(350);
-		$('.close-cont').hide();
-		$('.view-cont').show();
-	});	
+     $(document).ready(function(e) {  
+  /*Content Show/Hide */
+  $('.hide-cont').hide();
+  $('.close-cont').hide();
+  $('.view-cont').click(function(){
+    $('.hide-cont').slideDown(350);
+    $('.close-cont').show();
+    $('.view-cont').hide();
+  });
+  $('.close-cont').click(function(){
+    $('.hide-cont').slideUp(350);
+    $('.close-cont').hide();
+    $('.view-cont').show();
+  }); 
  });
-	
+  
 </script>
 
     <script type="text/javascript">
    
-	
-	var expanded = false;
+  
+  var expanded = false;
 
 function showCheckboxes() {
   var checkboxes = document.getElementById("checkboxes");
@@ -384,9 +395,9 @@ function showCheckboxes() {
     <script>
   $(document).ready(function() {
   
-	var nice = $("html").niceScroll();  // The document page (body)
-	
-	$("#div1").html($("#div1").html()+' '+nice.version);
+  var nice = $("html").niceScroll();  // The document page (body)
+  
+  $("#div1").html($("#div1").html()+' '+nice.version);
     
     $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
 
@@ -395,4 +406,3 @@ function showCheckboxes() {
 </script>
 </body>
 </html>
-

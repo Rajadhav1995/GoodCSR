@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block midpart %}
+{% block content %}
 <section class="content">
 <div class="row">
 <div class="col-xs-12">
@@ -51,8 +51,6 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             {% if model_name == 'Task' %}
             <tr>
                 <th>Task Name</th>
-                <th>User</th>
-                <th>Created on</th>
                 <th>Activity</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -75,9 +73,9 @@ alert("Sorry, You cant Select more than 3 featured RFP")
         </thead>
 
         {% if model_name == 'Activity'%}
-            <div align = "right">
-                <a class="btn btn-primary" href="/manage-task/Activity/ActivityForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
-            </div>
+<!--            <div align = "right">-->
+<!--                <a class="btn btn-primary" href="/manage/Activity/ActivityForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>-->
+<!--            </div>-->
         {% for i in obj_list %}
         <tr>
             <td>{{i.name}}</a></td>
@@ -85,11 +83,11 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td>{{i.get_activity_type_display}}</td>
             <td>{{i.get_status_display}}</td>
             <td>{{i.description|safe}}</td>
-            <td><a class="btn btn-primary" href="/manage-task/Activity/ActivityForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button> </a></td>
+            <td><a class="btn btn-primary" href="/manage/Activity/ActivityForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button> </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/manage-task/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/manage/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/manage-task/activity/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/manage/activity/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
@@ -97,22 +95,20 @@ alert("Sorry, You cant Select more than 3 featured RFP")
         
         {% if model_name == 'Task'%}
             <div align = "right">
-                <a class="btn btn-primary" href="/manage-task/Task/TaskForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
+                <a class="btn btn-primary" href="/manage/Task/TaskForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
             </div>
         {% for i in obj_list %}
         <tr>
             <td>{{i.name}}</a></td>
-            <td>{{i.user}}</td>
-            <td>{{i.created | date:'Y-m-d'}}</td>
             <td>{{i.activity}}</td>
-            <td>{{i.start_data}}</td>
+            <td>{{i.start_date}}</td>
             <td>{{i.end_date}}</td>
             <td>{{i.get_status_display}}</td>
-            <td><a class="btn btn-primary" href="/manage-task/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            <td><a class="btn btn-primary" href="/manage/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/manage-task/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/manage/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/manage-task/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/manage/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
@@ -120,18 +116,18 @@ alert("Sorry, You cant Select more than 3 featured RFP")
         
         {% if model_name == 'Milestone'%}
             <div align = "right">
-                <a class="btn btn-primary" href="/manage-task/Milestone/MilestoneForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
+                <a class="btn btn-primary" href="/manage/Milestone/MilestoneForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
             </div>
         {% for i in obj_list %}
         <tr>
             <td>{{i.name}}</a></td>
-            <td>{{i.task.all}}</td>
+            <td>{% for tasks in i.task.all %}<br>{{forloop.counter}}. {{tasks}}</br>{% endfor %}</td>
             <td>{{i.overdue}}</td>
-            <td><a class="btn btn-primary" href="/manage-task/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            <td><a class="btn btn-primary" href="/manage/Milestone/MilestoneForm/edit/{{i.id}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/manage-task/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/manage/milestone/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/manage-task/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/manage/milestone/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}

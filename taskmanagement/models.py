@@ -38,6 +38,10 @@ class Activity(BaseContent):
     object_id = models.IntegerField(_('object ID'),**OPTIONAL)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
     history = HistoricalRecords()
+    
+    def __str__(self):
+        return str(self.name)
+
 
 class Task(BaseContent):
     name = models.CharField(max_length=600,**OPTIONAL)
@@ -53,6 +57,10 @@ class Task(BaseContent):
     assigned_to = models.ForeignKey("projectmanagement.UserProfile",related_name ='task_assigned_user',blank=True,null=True)
     subscribers = models.ManyToManyField("projectmanagement.UserProfile",related_name = 'task_subscriber_user',blank=True )
     history = HistoricalRecords()
+    
+    def __str__(self):
+        return str(self.name)
+
 
 class Milestone(BaseContent):
     name = models.CharField(max_length=300,**OPTIONAL)
@@ -61,3 +69,6 @@ class Milestone(BaseContent):
     status = models.IntegerField(choices = STATUS_CHOICES,default=0)
     subscribers = models.ManyToManyField("projectmanagement.UserProfile",related_name = 'milestone_subscriber_user',blank=True )
     history = HistoricalRecords()
+    def __str__(self):
+        return str(self.name)
+
