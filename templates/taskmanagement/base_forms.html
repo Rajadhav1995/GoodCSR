@@ -56,6 +56,7 @@ width:450px;
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        
        // $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
     });
 </script>
@@ -89,8 +90,8 @@ width:450px;
 
 <script>
     $(document).ready(function() {
+    
     $('#id_activity').on('change',function(e){
-        
         var select_id = $('#id_activity').val();
         $.ajax({
             url:'/managing/task/dependencies/',
@@ -118,13 +119,14 @@ width:450px;
         e.stopImmediatePropagation();
         return false;
       });
+      $("#id_activity").trigger("change");
     });
 </script>
 
 <script>
     $(document).ready(function() {
     if ('{{model_name}}' == 'Task'){
-    $('#id_task_dependency').on('click',function(e){
+    $('#id_task_dependency').on('change',function(e){
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({
             url:'/managing/tasks/auto-computation/date',

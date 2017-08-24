@@ -39,6 +39,8 @@ class ActivityForm(forms.ModelForm):
         self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = User.objects.filter(is_active=True).exclude(id = user_id).values_list('id',flat="True"))
         self.fields['subscribers'].required = True
         self.fields['project'].initial = Project.objects.get(id = project_id)
+        
+    
 
 class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
@@ -50,6 +52,7 @@ class TaskForm(forms.ModelForm):
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
+    task_dependency = forms.ModelChoiceField(queryset = Task.objects.filter(active=2),required=False,widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = Task
         fields = ('name','activity','task_dependency','start_date','end_date','actual_start_date','actual_end_date','assigned_to','subscribers','status')
@@ -63,7 +66,20 @@ class TaskForm(forms.ModelForm):
         self.fields['start_date'].required = True
         self.fields['end_date'].required = True
         self.fields['status'].required = True
+    
+    def clean(self):
+        cleaned_data = super(TaskForm,self).clean()
+        start_date = cleaned_data.get("start_date")
+        end_date = cleaned_data.get("end_date")
+        actual_start_date = cleaned_data.get("actual_start_date")
+        actual_end_date = cleaned_data.get("actual_end_date")
+        if end_date < start_date:
+            msg = u"End date should be greater than start date."
+            self._errors["end_date"] = self.error_class([msg])
         
+        if actual_end_date < actual_start_date:
+            msg = u"Actual End date should be greater than Actual start date."
+            self._errors["actual_end_date"] = self.error_class([msg])
 
 class MilestoneForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
