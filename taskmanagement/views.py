@@ -123,7 +123,7 @@ def milestone_overdue(request):
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
     
 from datetime import datetime
-#slug = Project slug
+#slug = Project slug and this is to display in project summary dashboard
 def total_tasks_completed(slug):
     total_tasks = completed_tasks=total_milestones = 0
     milestones = []
@@ -148,11 +148,19 @@ def total_tasks_completed(slug):
     return project,total_tasks,completed_tasks,milestones,total_milestones,percent
     
 
-def task_updates(task_id):
-    try:
-        task = Task.objects.get(id = int(task_id))
-        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('-id')
-    except:
-        attachment = []
+def task_updates(obj_list):
+#updates of the task 
+    for i in obj_list:
+        try:
+            project = Project.objects.get(id = i.id)
+            activity = Activity.objects.filter(project=project)
+            for t in tasks:
+                try:
+                    task = Task.objects.get(id = int(task_id))
+                    attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('-id')
+                except:
+                    attachment = []
+        except:
+            attachment=[]
     return attachment
     
