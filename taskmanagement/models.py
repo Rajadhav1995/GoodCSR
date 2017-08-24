@@ -61,6 +61,13 @@ class Task(BaseContent):
     def __str__(self):
         return str(self.name)
 
+    def is_dependent(self):
+        task = Task.objects.filter(task_dependency = self.id)
+        if task:
+            return True
+        else :
+            return False
+            
 
 class Milestone(BaseContent):
     name = models.CharField(max_length=300,**OPTIONAL)

@@ -99,12 +99,12 @@ def task_dependencies(request):
     if not tasks:
         tasks = []
     else:
-        tasks = [{'id':i.id,'name':i.name} for i in tasks]
+        tasks = [{'id':i.id,'name':i.name} for i in tasks if i.is_dependent() != True]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
     
-
+# to compute start date of the tasks dependent
 def task_auto_computation_date(request):
-    ids = request.GET.get('id[]')
+    ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
@@ -116,7 +116,7 @@ def task_auto_computation_date(request):
     return JsonResponse({"computation_date":end_date})
 
 def milestone_overdue(request):
-    task_ids = request.GET.get('id[]')
+    task_ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
     milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
