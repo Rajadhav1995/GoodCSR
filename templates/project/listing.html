@@ -37,8 +37,9 @@ alert("Sorry, You cant Select more than 3 featured RFP")
                 <th>Program Name</th>
                 <th>Status</th>
                 <th>Action</th>
-                <th></th>
-                <th>Manage Activites </th>
+                <th>Manage Activites</th>
+                <th> </th>
+                </th> Tasks completed </th>
             </tr>            
         </thead>
         
@@ -55,8 +56,13 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td><a class="btn btn-success" href="/masterdata/ngo-status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %} -->
             <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
-            <td><a class = "btn btn-primary" href = "/manage/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
+            {% if i.request_status == 4 %}
+                <td><a class = "btn btn-primary" href = "/managing/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
+            {% else %}
+                <td> </td>
+            {% endif %}
             <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
+            <td><a class="btn btn-primary" href="/managing/total/tasks/completed/?slug={{i.slug}}"> Tasks completed</a></td>
         </tr>
         {% endfor %}
         

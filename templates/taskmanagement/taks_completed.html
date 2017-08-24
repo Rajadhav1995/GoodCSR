@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="white-box">
+    	<div class="left-white">
+        	<h2>Task and Progress Completion</h2><br>
+        	<div>
+            <h3 color ='green'>completed {{completed_tasks}} tasks</h2><br>
+            <h3 color = 'blue'> of {{total_tasks}} </h3><br>
+            <h2 color = 'orange'> under {{total_milestones}} Milestones</h2><br>
+            <h1> percentage = {{percent}} %</h1>
+        </div>
+        </div>
+    </div>   
+{% endblock %}

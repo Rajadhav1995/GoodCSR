@@ -1,25 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="content">
-<div class="row">
-<div class="col-xs-12">
-<div class="box">
-
-<div class="box-header">
-{% if messages %}
-<!-- <div class="span12">
-{% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        <b>{{ message|safe }}</b>
-    </div>
-{% endfor %} -->
-<script type="text/javascript">
-alert("Sorry, You cant Select more than 3 featured RFP")
-</script>
-<!-- </div> -->
-{% endif %}
-    {% if model_name == 'Activity' %}
+<!--Green pad Ends-->
+<!--Content part starts-->
+<section class="content-part">
+	<div class="row">
+	<div class="content-top">
+	<div class = "header">
+	    {% if model_name == 'Activity' %}
     <h3 class="box-title">Activity List</h3>
     {% endif %}
     {% if model_name == 'Task' %}
@@ -28,15 +16,19 @@ alert("Sorry, You cant Select more than 3 featured RFP")
     {% if model_name == 'Milestone' %}
     <h3 class="box-title">Milestone List</h3>
     {% endif %}
-    
-
-</div>
-
-<!-- /.box-header -->
-<div class="box-body table-responsive">
-    <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-        <thead>
-            {% if model_name == 'Activity' %}
+	</div>
+<!--      <div class="select-area search_area">-->
+<!--      	<label>Search</label>-->
+<!--   -->
+<!--		<input id="activate_tagator2" type="text" class="tagator" placeholder="Name or Type" data-tagator-show-all-options-on-focus="true" data-tagator-autocomplete="['Budget', 'Report', 'Document', 'Files', 'Budget', 'Report', 'Document', 'Task', 'Worksheet']">-->
+<!--        <img src="/static/img/search-icon.png">-->
+<!--         </div>-->
+    </div>
+    <div class="white-box white-pad">
+    <div class="table-responsive">
+    	<table class="table table-striped table-bordered sort_table" id="dest">
+  <thead>
+    {% if model_name == 'Activity' %}
             <tr>
                 <th>Activity Name</th>
                 <th>Super category</th>
@@ -71,8 +63,9 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             {% endif %}
             
         </thead>
-
-        {% if model_name == 'Activity'%}
+  </thead>
+  <tbody>
+    {% if model_name == 'Activity'%}
 <!--            <div align = "right">-->
 <!--                <a class="btn btn-primary" href="/manage/Activity/ActivityForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>-->
 <!--            </div>-->
@@ -83,11 +76,11 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td>{{i.get_activity_type_display}}</td>
             <td>{{i.get_status_display}}</td>
             <td>{{i.description|safe}}</td>
-            <td><a class="btn btn-primary" href="/manage/Activity/ActivityForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button> </a></td>
+            <td><a class="btn btn-primary" href="/managing/Activity/ActivityForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button> </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/manage/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/managing/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/manage/activity/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/managing/activity/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
@@ -95,7 +88,7 @@ alert("Sorry, You cant Select more than 3 featured RFP")
         
         {% if model_name == 'Task'%}
             <div align = "right">
-                <a class="btn btn-primary" href="/manage/Task/TaskForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
+                <a class="btn btn-primary" href="/managing/Task/TaskForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
             </div>
         {% for i in obj_list %}
         <tr>
@@ -104,11 +97,11 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td>{{i.start_date}}</td>
             <td>{{i.end_date}}</td>
             <td>{{i.get_status_display}}</td>
-            <td><a class="btn btn-primary" href="/manage/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            <td><a class="btn btn-primary" href="/managing/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/manage/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/managing/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/manage/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/managing/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
@@ -116,89 +109,35 @@ alert("Sorry, You cant Select more than 3 featured RFP")
         
         {% if model_name == 'Milestone'%}
             <div align = "right">
-                <a class="btn btn-primary" href="/manage/Milestone/MilestoneForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
+                <a class="btn btn-primary" href="/managing/Milestone/MilestoneForm/add/"><i class="fa fa-edit"></i> Add</button>  </a>
             </div>
         {% for i in obj_list %}
         <tr>
             <td>{{i.name}}</a></td>
             <td>{% for tasks in i.task.all %}<br>{{forloop.counter}}. {{tasks}}</br>{% endfor %}</td>
             <td>{{i.overdue}}</td>
-            <td><a class="btn btn-primary" href="/manage/Milestone/MilestoneForm/edit/{{i.id}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
+            <td><a class="btn btn-primary" href="/managing/Milestone/MilestoneForm/edit/{{i.id}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/manage/milestone/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-default" href="/managing/milestone/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
-            <td><a class="btn btn-success" href="/manage/milestone/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
+            <td><a class="btn btn-success" href="/managing/milestone/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
         </tr>
         {% endfor %}
         {% endif %}
-        
-    </table>
-    {% if obj_list.has_other_pages %}
-    <ul class="pagination">
-        {% if obj_list.has_previous %}
-        <li><a href="?page={{ obj_list.previous_page_number }}">Previous</a></li>
-        {% else %}
-        <li class="disabled"><span>Previous</span></li>
-        {% endif %}
-        {% for i in obj_list.paginator.page_range %}
-        {% if obj_list.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-        {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %}
-        {% endfor %}
-        {% if obj_list.has_next %}
-        <li><a href="?page={{ obj_list.next_page_number }}">Next</a></li>
-        {% else %}
-        <li class="disabled"><span>Next</span></li>
-        {% endif %}
-    </ul>
-    {% endif %}
-    <!-- /.content -->
-</div>
-
-<!-- /.content-wrapper -->
-
-</body>
+  </tbody>
+</table>
+        </div>
+          <div class="pagination_no">
+        <div id="pagination-long"></div>
+    </div>
+    </div>
+    
+    
+    
+    </div>
+</section>
+<!--Content part Ends-->
 {% endblock %}
-{% block script %}
-<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
-<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
-<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
-<!-- Main content -->
 
-<script language="javascript" type="text/javascript">
-    <!--
-    function approve(url) {
-        alert("{{obj_list.name}} Approved");
 
-    }
-    function reject(url) {
-        alert("{{obj_list.name}} Rejected");
-
-    }
-    function activate(url) {
-        alert("{{obj_list.name}} Activated");
-
-    }
-    function deactivate(url) {
-        alert("{{obj_list.name}} Deactivated");
-
-    }
-    // -->
-</script>
-<script type="text/javascript">
-    $(function () {
-      $("#example1").DataTable({
-        "order":[[2, 'desc']],
-        "stateSave": true,
-        "columnDefs": [
-    { "width": "17%", "targets": [4,5] }
-  ]
-  });
-    });
-</script>
-
-{% endblock %}

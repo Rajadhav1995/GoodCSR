@@ -24,7 +24,7 @@ def add_taskmanagement(request,model_name,m_form):
             project_id = Project.objects.get(id = request.POST.get('project')).id
     else :
         project_id = None 
-    user_id = request.session.get('_auth_user_id')
+    user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
@@ -35,15 +35,15 @@ def add_taskmanagement(request,model_name,m_form):
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
             else :
-                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
     else:
         form=form(user_id,project_id)
     return render(request,'taskmanagement/forms.html',locals())
     
 def edit_taskmanagement(request,model_name,m_form,slug):
-    user_id = request.session.get('_auth_user_id')
+    user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if model_name == 'Milestone':
@@ -59,9 +59,9 @@ def edit_taskmanagement(request,model_name,m_form,slug):
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
             else:
-                return HttpResponseRedirect('/manage/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
     else:
         form=form(user_id,project_id,instance=m)
     return render(request,'taskmanagement/forms.html',locals())
@@ -83,25 +83,72 @@ def active_change(request,model_name):
     return HttpResponseRedirect(url)
     
 from django.http import JsonResponse
-def task_start_date(request):
+def task_dependencies(request):
     start_date = ''
+    tasks = None
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
+        tasks = Task.objects.filter(active=2,activity = int(ids))
         obj = Activity.objects.get(active=2,id= int(ids),activity_type = 1)
         project = Project.objects.get(id = obj.project.id)
         start_date = project.start_date.strftime('%Y-%m-%d')
     except:
         obj = None
-    return JsonResponse({"project_start_date":start_date})
+    if not tasks:
+        tasks = []
+    else:
+        tasks = [{'id':i.id,'name':i.name} for i in tasks]
+    return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
     
-    
+
+def task_auto_computation_date(request):
+    ids = request.GET.get('id[]')
+    url=request.META.get('HTTP_REFERER')
+    obj = None
+    try:
+        task = Task.objects.get(active=2,id= int(ids))
+        end_date = task.end_date.strftime('%Y-%m-%d')
+    except:
+        obj = None
+        end_date = ''
+    return JsonResponse({"computation_date":end_date})
+
 def milestone_overdue(request):
     task_ids = request.GET.get('id[]')
-    print type(task_ids)
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
     milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
+    
+from datetime import datetime
+def total_tasks_completed(request):
+    slug = request.GET.get('slug')
+    total_tasks = completed_tasks=total_milestones = 0
+    milestones = []
+    project = Project.objects.get(slug = slug)
+    activity = Activity.objects.filter(project=project)
+    for act in activity:
+        tasks = Task.objects.filter(activity = act)
+        total_tasks = len(tasks) + total_tasks
+        for t in tasks:
+            if t.end_date.strftime('%Y-%m-%d') <= datetime.now().strftime('%Y-%m-%d'):
+                completed_tasks = completed_tasks + 1
+            miles_obj = Milestone.objects.get_or_none(task = t)
+            if miles_obj not in milestones:
+                milestones.append(miles_obj)
+    if completed_tasks != 0:
+        percent =int((float(completed_tasks) / float(total_tasks))*100)
+    else:
+        percent = 0
+    print milestones
+    if milestones:
+        total_milestones = len(milestones)
+    return render(request,'taskmanagement/taks_completed.html',locals())
+    
+
+
+def task_updates(request):
+    attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get(model = ('task')).order_by('-id')
     

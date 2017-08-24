@@ -44,7 +44,7 @@
                         {% endfor %}
                         
                         <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
-                        <a class="btn btn-success" href="/manage/{{model_name}}/listing/">Back</button></a>
+                        <a class="btn btn-success" href="/managing/{{model_name}}/listing/">Back</button></a>
                             </div>
                     </form>
                     
@@ -76,7 +76,7 @@
     $('#id_task').on('click',function(e){
         var tasks_ids = $('#id_task').val();
         $.ajax({
-            url:'/manage/milestone/overdue/',
+            url:'/managing/milestone/overdue/',
             type:'GET',
             data:{'id':tasks_ids},
             dataType:"json",
@@ -103,17 +103,25 @@
         
         var select_id = $('#id_activity').val();
         $.ajax({
-            url:'/manage/task/start-date/',
+            url:'/managing/task/dependencies/',
             type:'GET',
             data:{id:select_id},
             dataType:"json",
             success:function(data){
-            if (data.project_start_date != ""){
-                document.getElementById("id_start_date").value = data.project_start_date;
-             }
-            else{
-                $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-                }
+                if (data.project_start_date != ""){
+                    document.getElementById("id_start_date").value = data.project_start_date;
+                 }
+                else{
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                    }
+                //document.getElementById("id_task_dependency").value = data.tasks_dependency;
+                $('#id_task_dependency')
+                    .find('option')
+                    .remove()
+                    for(var i=0;i<data.tasks_dependency.length;i++){
+                        
+                        $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
+                        }
             },
             error : function(){}
         });
@@ -123,6 +131,29 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+    if ('{{model_name}}' == 'Task'){
+    $('#id_task_dependency').on('click',function(e){
+        var dependency_id = $('#id_task_dependency').val();
+        $.ajax({
+            url:'/managing/tasks/auto-computation/date',
+            type:'GET',
+            data:{'id':dependency_id},
+            dataType:"json",
+            success:function(data){
+            if (data.computation_date != ""){
+                document.getElementById("id_start_date").value = data.computation_date;
+             }
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    }
+    });
+</script>
 
 {% endblock %}
 {% endblock %}
