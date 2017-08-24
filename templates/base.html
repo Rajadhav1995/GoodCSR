@@ -59,7 +59,7 @@
            <nav id="smoothmenu" class="ddsmoothmenu">
             <ul>
               <li><a href="/dashboard/" class="active">Dashboard</a></li>
-              <li class="user-wrap"><a href="/project/list/">
+              <li class="user-wrap"><a href="javascript:void(0);">
                 Projects
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
@@ -71,7 +71,7 @@
                   </ul>
                 <!--</div>-->
               </li>
-              <li class="user-wrap">Task Management</a>
+                            <li class="user-wrap">Task Management</a>
               <i class="fa fa-angle-down"></i></a>
         	    <ul>
                 	<li><a href="/managing/Task/listing/">Tasks</a></li>
@@ -222,7 +222,7 @@
             <li>
             	<h3>No. of Beneficiaries</h3>
                  <img class="key-image" src="/static/img/key-icon2.png" alt="">
-                <h4 class="title-pad">{{total_beneficiaries}}</h4> 
+                <h4 class="title-pad">{% if total_beneficiaries %}{{total_beneficiaries}} {% endif %}</h4> 
             </li>
             <li>
             	<h3>% Total budget disbursed<span></span></h3>
@@ -266,8 +266,8 @@
         </div>                    
         </div>
         <div class="read-script deli">
-           <a href="javascript:void(0);" class="view-cont">See more <i class="fa fa-angle-down"></i></a> 
-           <a href="javascript:void(0);" class="close-cont">See less <i class="fa fa-angle-up"></i></a> 					                            
+<!--           <a href="javascript:void(0);" class="view-cont">See more <i class="fa fa-angle-down"></i></a> -->
+<!--           <a href="javascript:void(0);" class="close-cont">See less <i class="fa fa-angle-up"></i></a> 					                            -->
         </div>
         
     </div>   
@@ -297,7 +297,7 @@
       </tbody>
 	</table>  
     </div>
-    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+<!--    <a href="javascript:void(0);" class="link-pad">Add User</a>       -->
     </div>
     <div class="white-box-right">
     	<h2>Recent Updates</h2>
