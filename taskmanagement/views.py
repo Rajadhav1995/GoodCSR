@@ -123,8 +123,8 @@ def milestone_overdue(request):
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
     
 from datetime import datetime
-def total_tasks_completed(request):
-    slug = request.GET.get('slug')
+#slug = Project slug
+def total_tasks_completed(slug):
     total_tasks = completed_tasks=total_milestones = 0
     milestones = []
     project = Project.objects.get(slug = slug)
@@ -145,10 +145,14 @@ def total_tasks_completed(request):
     print milestones
     if milestones:
         total_milestones = len(milestones)
-    return render(request,'taskmanagement/taks_completed.html',locals())
+    return project,total_tasks,completed_tasks,milestones,total_milestones,percent
     
 
-
-#def task_updates(request):
-#    attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get(model = ('task')).order_by('-id')
-#    return render(request,'base.html')
+def task_updates(task_id):
+    try:
+        task = Task.objects.get(id = int(task_id))
+        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('-id')
+    except:
+        attachment = []
+    return attachment
+    

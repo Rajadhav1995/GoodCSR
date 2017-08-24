@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+<!--<style>
+form { 
+margin: 0 auto; 
+width:450px;
+}
+</style>-->
+    <!-- Main content -->
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+                    {% if slug %}
+                  <h3 class="box-title">Edit {{model_name}}</h3>
+                  {% else %}
+                    <h3 class="box-title">Add {{model_name}}</h3>
+                  {% endif %}
+              <div align="right">
+             <a class="btn btn-success" href="/managing/{{model_name}}/listing/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+         </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            
+            <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+                    {% for field in form %}
+                        <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    {{field.label_tag}}
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{field}}
+                                    {{field.errors}}
+                                </div>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                    {% endfor %}
+                    </form>
+  </div>
+
+<script src="/static/js/jquery.quicksearch.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="/static/js/jquery.quicksearch.js"></script>
+<script src = "/static/js/jquery.multi-select.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+       // $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+    if ('{{model_name}}' == 'Milestone'){
+    $('#id_task').on('click',function(e){
+        var tasks_ids = $('#id_task').val();
+        $.ajax({
+            url:'/managing/milestone/overdue/',
+            type:'GET',
+            data:{'id':tasks_ids},
+            dataType:"json",
+            success:function(data){
+            if (data.milestone_overdue_date != ""){
+                document.getElementById("id_overdue").value = data.milestone_overdue_date;
+             }
+            else{
+                $( "#id_overdue_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                }
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('#id_activity').on('change',function(e){
+        
+        var select_id = $('#id_activity').val();
+        $.ajax({
+            url:'/managing/task/dependencies/',
+            type:'GET',
+            data:{id:select_id},
+            dataType:"json",
+            success:function(data){
+                if (data.project_start_date != ""){
+                    document.getElementById("id_start_date").value = data.project_start_date;
+                 }
+                else{
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                    }
+                //document.getElementById("id_task_dependency").value = data.tasks_dependency;
+                $('#id_task_dependency')
+                    .find('option')
+                    .remove()
+                    for(var i=0;i<data.tasks_dependency.length;i++){
+                        
+                        $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
+                        }
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+    if ('{{model_name}}' == 'Task'){
+    $('#id_task_dependency').on('click',function(e){
+        var dependency_id = $('#id_task_dependency').val();
+        $.ajax({
+            url:'/managing/tasks/auto-computation/date',
+            type:'GET',
+            data:{'id':dependency_id},
+            dataType:"json",
+            success:function(data){
+            if (data.computation_date != ""){
+                document.getElementById("id_start_date").value = data.computation_date;
+             }
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    }
+    });
+</script>
+
+
+
+{% endblock %}
