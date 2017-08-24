@@ -150,17 +150,10 @@ def total_tasks_completed(slug):
 
 def task_updates(obj_list):
 #updates of the task 
-    for i in obj_list:
-        try:
-            project = Project.objects.get(id = i.id)
-            activity = Activity.objects.filter(project=project)
-            for t in tasks:
-                try:
-                    task = Task.objects.get(id = int(task_id))
-                    attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('-id')
-                except:
-                    attachment = []
-        except:
-            attachment=[]
+    try:
+        task_obj = Task.objects.get(id = int(task_id))
+        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('-id')
+    except:
+        attachment = []
     return attachment
     
