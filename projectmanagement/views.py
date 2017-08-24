@@ -21,6 +21,7 @@ def create_project(request):
     except:
         form = ProjectForm()
     funder_user = UserProfile.objects.filter(active=2,organization_type=2)
+    partner = UserProfile.objects.filter(active=2,organization_type=1)
 
     if request.method == 'POST':
         try:
