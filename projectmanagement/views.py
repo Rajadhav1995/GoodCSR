@@ -67,7 +67,6 @@ def create_project(request):
 
 def project_list(request):
     user_id = request.session.get('user_id')
-    print user_id
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = Project.objects.filter(created_by = user_obj)
     return render(request,'project/listing.html',locals())
@@ -162,7 +161,8 @@ def add_keywords(keys,obj,model,edit):
 def budget_tranche(request):
     form = TrancheForm()
     user_id = request.session.get('user_id')
-    form.fields["project"].queryset = Project.objects.filter(created_by__user=2)
+    form.fields["project"].queryset = Project.objects.filter(created_by__id=user_id)
+    form.fields["recommended_by"].queryset = UserProfile.objects.filter(is_admin_user=True)
     if request.method == 'POST':
         form = TrancheForm(request.POST, request.FILES)
         if form.is_valid():
