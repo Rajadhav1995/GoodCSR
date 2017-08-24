@@ -36,7 +36,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['name'].required = True
         self.fields['activity_type'].required = True
         self.fields['status'].required = True
-        self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = User.objects.filter(is_active=True).exclude(id = user_id).values_list('id',flat="True"))
+#        self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2).values_list('id',flat="True")
         self.fields['subscribers'].required = True
         self.fields['project'].initial = Project.objects.get(id = project_id)
         
@@ -86,7 +86,7 @@ class MilestoneForm(forms.ModelForm):
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs={'class' :'form-control'})) 
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'})) 
-    overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
+    overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
     class Meta:
         model = Milestone   
         fields = ('name','task','overdue','subscribers','status')
@@ -100,7 +100,7 @@ class MilestoneForm(forms.ModelForm):
         obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
         tasks = obj2 - obj1
         self.fields['name'].required = True
-        self.fields['overdue'].required = True
+        self.fields['overdue'].required = False
         self.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
         self.fields['subscribers'].required = True
         self.fields['status'].required = True

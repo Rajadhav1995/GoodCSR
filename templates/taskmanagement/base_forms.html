@@ -61,32 +61,6 @@ width:450px;
     });
 </script>
 
-<script>
-    $(document).ready(function() {
-    if ('{{model_name}}' == 'Milestone'){
-    $('#id_task').on('click',function(e){
-        var tasks_ids = $('#id_task').val();
-        $.ajax({
-            url:'/managing/milestone/overdue/',
-            type:'GET',
-            data:{'id':tasks_ids},
-            dataType:"json",
-            success:function(data){
-            if (data.milestone_overdue_date != ""){
-                document.getElementById("id_overdue").value = data.milestone_overdue_date;
-             }
-            else{
-                $( "#id_overdue_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-                }
-            },
-            error : function(){}
-        });
-        e.stopImmediatePropagation();
-        return false;
-      });
-    }
-    });
-</script>
 
 <script>
     $(document).ready(function() {
