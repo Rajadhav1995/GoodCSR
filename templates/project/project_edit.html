@@ -27,15 +27,6 @@ width:450px;
             
             {% csrf_token %}
 
-                            <!-- <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.program.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.program}}
-                                    {{ form.program.errors }}
-                                </div>
-                            </div> -->
                         <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     Project Name <font color="red">*</font>
@@ -188,10 +179,10 @@ width:450px;
                             <button class="add_field_button">Add More Activity</button>
                             {% if slug %}
                             {% for i in activity_view %}
-                            <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"><!-- <select name="activity_type[1]" id="id_activity_type"><option value="1" selected="">Core</option><option value="2">Non-core</option></select> --></div>
+                            <div><input class="form-control" value="{{i.name}}" type="text" name="activity[{{ forloop.counter }}]"><input class="form-control" type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"><!-- <select name="activity_type[1]" id="id_activity_type"><option value="1" selected="">Core</option><option value="2">Non-core</option></select> --></div>
                             {% endfor %}
                             {% else %}
-                            <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"></div>
+                            <div><input class="form-control" placeholder="Enter Activity Name" value="{{i.name}}" type="text" name="activity[1]"><input class="form-control" type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Enter Duration" id="id_number"></div>
                             {% endif %}
                         </div>
                         </div>
@@ -233,7 +224,7 @@ width:450px;
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 
-                                <select class="form-control" name="funder" id="funder"><option>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.user.username}}</option>{% endfor %}</select>
+                                <select class="form-control" name="funder" id="funder"><option>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
                                 {% if budgetform.total_budget.errors %}
                                 <p style="color: red;">
                                     Please select Funder.
@@ -247,7 +238,7 @@ width:450px;
                                 Implementation partner:
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <select class="form-control" name="implementation_partner" id="implementation_partner"><option>Select Implementation Partner</option>{% for i in funder_user %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.user.username}}</option>{% endfor %}</select>
+                                <select class="form-control" name="implementation_partner" id="implementation_partner"><option>Select Implementation Partner</option>{% for i in funder_user %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
                                 {% if budgetform.total_budget.errors %}
                                 <p style="color: red;">
                                     Please select Implementation partner.
@@ -262,12 +253,10 @@ width:450px;
                     </form>
   </div>
 
-<input type="hidden" name="key_list" id="key_list" value="{{key_list}}">
-<input type="hidden" name="keyss" id="keyss" value="{{keyss}}">
+<input type="hidden" name="loop_count" id="loop_count" value="{{activity_view.count}}">
   </div>
   </div>
-{% endblock %}
-{% block script %}
+
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -276,19 +265,28 @@ width:450px;
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 
+<script>
+  $( function() {
+    $( "#id_start_date").datepicker();
+    $( "#id_end_date").datepicker();
+  } );
+  </script>
+
 <script type="text/javascript">
 $(document).ready(function() {
+    //var loop_count = $('#loop_count').val()
     var max_fields      = 10; //maximum input boxes allowed
     var wrapper         = $(".input_fields_wrap"); //Fields wrapper
     var add_button      = $(".add_field_button"); //Add button ID
     
-    var x = 1; //initlal text box count
+    var loop_count = $('#loop_count').val()
+    var x =Number(loop_count)+1;
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            $(wrapper).append('<div><input type="text" name="activity['+x+']"/><input type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input class="form-control" placeholder="Enter Activity Name" type="text" name="activity['+x+']"/><input class="form-control" type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
 
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
@@ -302,61 +300,7 @@ $(document).ready(function() {
 });
 </script>
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        //$('select[multiple=multiple]').multiSelect()
-        $( function() {
-            $('#id_start_date').datepicker({ dateFormat: 'yy-mm-dd',
-            onSelect: function(dateText, inst) {
-        var start = new Date($('#id_start_date').val());
-        var end = new Date($('#id_end_date').val());
-        var today = new Date();
 
-        if (end <= start) {
-            document.getElementById('dateError1').innerHTML="Start date should be less than End date"
-        };
-        if (end > start) {
-            document.getElementById('dateError1').innerHTML=""
-        };
-        var months = (end.getFullYear() - start.getFullYear()) * 12;
-        months += end.getMonth() - start.getMonth();
-        document.getElementById("id_duration").value = months;
-    } });
-            });
-
-        $("#prog_edit").validate({
-            rules :
-            {
-                name : {required:true},
-                //program : {required:true},
-                total_budget : {required:true},
-                no_of_beneficiaries : {required:true},
-                target_beneficiaries : {required:true},
-                cause_area : {required:true},
-                project_status : {required:true},
-                id_end_date: { greaterThan: "#id_start_date" },
-            },
-            messages:
-            {
-                name : {required : "<font color=#fc282f>Please enter the name</font>"},
-                //program:{required:"<font color=#fc282f>Please select the program</font>"},
-                total_budget:{required:"<font color=#fc282f>Please enter total budget</font>"},
-                project_status:{required:"<font color=#fc282f>Please select project status</font>"},
-                no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
-                target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
-                cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
-                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
-
-            },
-            highlight: function (element) {
-                $(element).parent().addClass('error')
-            },
-            unhighlight: function (element) {
-                $(element).parent().removeClass('error')
-            },
-        });
-        });
-</script>
 <style>
 .error{color:red; min-width: 200px;}
 </style>
@@ -393,59 +337,5 @@ function RemoveProduct() {
             return true;
         }
     }
-</script>
-
-
-<script type="text/javascript">
-$(function () {
-    //var dddd = new $('#keyss').val().split(', ');
-    $('#hero-demo').tagEditor({
-        delimiter: ',',
-        //initialTags: ['Hello', 'World', 'Example', 'Tags'],
-        initialTags: new $('#keyss').val().split(', '),
-        placeholder: 'Enter tags ...',
-        autocomplete: {
-            delay: 0,
-            position: {
-                collision: 'flip'
-            },
-            source: new $('#key_list').val().split(', ')
-        },
-        clickDelete : false,
-        beforeTagSave : beforeTagSavecb,
-        beforeTagDelete : beforeTagDeletecb,
-        onChange: onChangecb
-       /* autocomplete: {
-            source: googleSuggest,
-            minLength: 3,
-            delay: 250,
-            html: true,
-            position: {
-                collision: 'flip'
-            }
-        }*/
-    });
-    
-    function onChangecb(field, editor, tags) {
-        debugger;
-    }
-    
-    function beforeTagSavecb(field, editor, tags, tag, val) {
-        debugger;
-    }
-    
-    function beforeTagDeletecb(field, editor, tags, val) {
-        debugger;
-        return true;
-    }
-
-/*
-    $('#remove_all_tags').click(function () {
-        var tags = $('#demo3').tagEditor('getTags')[0].tags;
-        for (i = 0; i < tags.length; i++) {
-            $('#demo3').tagEditor('removeTag', tags[i]);
-        }
-    });*/
-});
 </script>
 {% endblock %}

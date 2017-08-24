@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block midpart %}
+
+{% block content %}
 <!--<link href="static/css/multiselect.css" media="screen" rel="stylesheet" type="text/css">-->
     <!-- Content Header (Page header) -->
 <style>
@@ -121,7 +122,6 @@
      </div>
 
   </div>
-  {% block script %}
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -170,8 +170,8 @@ $(document).ready(function() {
 </script>
 <script>
     $(document).ready(function() {
-        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_due_date" ).datepicker();
+        $( "#id_disbursed_date" ).datepicker();
     });
 </script>
 
@@ -203,5 +203,4 @@ $(document).ready(function() {
 </script>
 
 
-{% endblock %}
 {% endblock %}

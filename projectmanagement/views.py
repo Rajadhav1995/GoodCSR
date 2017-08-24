@@ -20,9 +20,9 @@ def create_project(request):
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
     except:
         form = ProjectForm()
-    funder_user = UserProfile.objects.filter(active=2)
+    funder_user = UserProfile.objects.filter(active=2,organization_type=2)
+
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
         try:
             instance = get_object_or_404(Project, slug=slug)
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
@@ -34,8 +34,11 @@ def create_project(request):
             obj.object_id = 0
             try:
                 obj.created_by = UserProfile.objects.get(id=user_id)
+                print "user id saved"
+                print user_id
             except:
                 pass
+
             obj.save()
             form.save_m2m()
             activity_del = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project")).delete()
@@ -63,6 +66,7 @@ def create_project(request):
 
 def project_list(request):
     user_id = request.session.get('user_id')
+    print user_id
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = Project.objects.filter(created_by = user_obj)
     return render(request,'project/listing.html',locals())
@@ -70,7 +74,8 @@ def project_list(request):
 def project_detail(request):
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
-    return render(request,'project/project_details.html',locals())
+    activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
+    return render(request,'project/comany-profile.html',locals())
 
 def project_mapping(request):
     form = ProjectMappingForm()
@@ -155,6 +160,8 @@ def add_keywords(keys,obj,model,edit):
 
 def budget_tranche(request):
     form = TrancheForm()
+    user_id = request.session.get('user_id')
+    form.fields["project"].queryset = Project.objects.filter(created_by__user=2)
     if request.method == 'POST':
         form = TrancheForm(request.POST, request.FILES)
         if form.is_valid():

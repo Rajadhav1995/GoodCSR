@@ -83,7 +83,16 @@
                   <li><a href="/manage/Milestone/listing/">Milestone</a></li>
                 </ul>
         </li>
-        <li><a href="/project/list/" class="active">Settings</a></li>
+        <li class="user-wrap"><a href="javascript:void(0);">
+                Settings
+                <i class="fa fa-angle-down"></i></a>
+                <!--<div class="details" id="marketPlace">-->
+                  <ul>
+                        <li><a href="/project/add/">Add Project</a></li>
+                        <li><a href="/project/budget/tranche/">Add Budget Tranche</a></li>
+                  </ul>
+                <!--</div>-->
+              </li>
             </ul>
           </nav>
             <div class="menu-rgt">
@@ -392,17 +401,5 @@ function showCheckboxes() {
   }
 }
     </script>
-    <script>
-  $(document).ready(function() {
-  
-  var nice = $("html").niceScroll();  // The document page (body)
-  
-  $("#div1").html($("#div1").html()+' '+nice.version);
-    
-    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
-
-    
-  });
-</script>
 </body>
 </html>
