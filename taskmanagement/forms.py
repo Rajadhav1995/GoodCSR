@@ -73,7 +73,6 @@ class TaskForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
         actual_start_date = cleaned_data.get("actual_start_date")
         actual_end_date = cleaned_data.get("actual_end_date")
-        
         if end_date < start_date:
             msg = u"End date should be greater than start date."
             self._errors["end_date"] = self.error_class([msg])
