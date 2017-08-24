@@ -4,7 +4,6 @@ from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from pmu.settings import (PMU_URL,)
 from projectmanagement.models import (UserProfile,)
 
 class UserInformationStorage(APIView):
