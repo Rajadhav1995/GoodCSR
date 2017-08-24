@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
-{% block content %}
-<!--<link href="static/css/multiselect.css" media="screen" rel="stylesheet" type="text/css">-->
-    <!-- Content Header (Page header) -->
-<style>
-    .error,.errorlist { color :red;}
-    #date_error,#min_max {color : red;}
-</style>
 
+{% block content %}
+    <!-- Content Header (Page header) -->
+<!--<style>
+form { 
+margin: 0 auto; 
+width:450px;
+}
+</style>-->
     <!-- Main content -->
 
     <section class="content">
@@ -14,46 +15,35 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-                {% if slug %}
-              <h3 class="box-title">Edit {{model_name}}</h3>
-              {% else %}
-                <h3 class="box-title">Add {{model_name}}</h3>
-              {% endif %}
+                    {% if slug %}
+                  <h3 class="box-title">Edit {{model_name}}</h3>
+                  {% else %}
+                    <h3 class="box-title">Add {{model_name}}</h3>
+                  {% endif %}
+              <div align="right">
+             <a class="btn btn-success" href="/managing/{{model_name}}/listing/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+         </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            
             <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
-    
-                {{form.non_fields_errors}}
-        
-                    {{form.media}}
-        
-                <div class="box-content">
-                    <form role="form">
-                        {% for field in form %}
-                            <div class="row">
-                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
+                    {% for field in form %}
+                        <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     {{field.label_tag}}
                                 </label>
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                     {{field}}
                                     {{field.errors}}
-                                        
                                 </div>
-                            </div>
-                        {% endfor %}
-                        
-                        <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
-                        <a class="btn btn-success" href="/managing/{{model_name}}/listing/">Back</button></a>
-                            </div>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                    {% endfor %}
                     </form>
-                    
-                </div>
-            </form>
-     </div>
-
   </div>
-  {% block script %}
+
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -155,5 +145,6 @@
     });
 </script>
 
-{% endblock %}
+
+
 {% endblock %}

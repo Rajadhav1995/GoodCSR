@@ -41,6 +41,9 @@
                 <th>Program Name</th>
                 <th>Status</th>
                 <th>Action</th>
+                <th>Manage Activites</th>
+                <th> </th>
+                </th> Tasks completed </th>
                 <th></th>
                 <th>Manage </th>
             </tr>            
@@ -53,9 +56,15 @@
             <td>{{i.program.name}}</td>
             <td>{{i.get_active_display}}</td>
             <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
+            {% if i.request_status == 4 %}
+                <td><a class = "btn btn-primary" href = "/managing/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
+            {% else %}
+                <td> </td>
+            {% endif %}
             <td><a class = "btn btn-primary" href = "/manage/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
-            <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>
-                <a class="btn btn-primary" href="/upload/list/?slug={{i.slug}}&model=Project">| Manage Files</a>
+            <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
+            <td><a class="btn btn-primary" href="/managing/total/tasks/completed/?slug={{i.slug}}"> Tasks completed</a></td>
+            <td><a class="btn btn-primary" href="/upload/list/?slug={{i.slug}}&model=Project">| Manage Files</a>
             </td>
         </tr>
         {% endfor %}

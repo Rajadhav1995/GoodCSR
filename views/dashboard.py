@@ -13,5 +13,6 @@ def admin_dashboard(request):
     project_count = obj_list.count()
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj)
     total_beneficiaries = obj_list.aggregate(Sum('no_of_beneficiaries')).values()[0]
+#    update = task_updates(obj_list)
     return render(request,'base.html',locals())
 

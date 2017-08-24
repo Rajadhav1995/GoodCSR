@@ -52,7 +52,7 @@ class TaskForm(forms.ModelForm):
     subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
     class Meta:
         model = Task
-        fields = ('name','activity','start_date','end_date','actual_start_date','actual_end_date','task_dependency','assigned_to','subscribers','status')
+        fields = ('name','activity','task_dependency','start_date','end_date','actual_start_date','actual_end_date','assigned_to','subscribers','status')
         
     def __init__(self,user_id ,project_id,*args, **kwargs):
         self.user = user_id
@@ -63,7 +63,6 @@ class TaskForm(forms.ModelForm):
         self.fields['start_date'].required = True
         self.fields['end_date'].required = True
         self.fields['status'].required = True
-        self.fields['task_dependency'].required = True
         
 
 class MilestoneForm(forms.ModelForm):
