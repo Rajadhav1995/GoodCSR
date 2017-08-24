@@ -78,7 +78,7 @@
             <td>{{i.description|safe}}</td>
             <td><a class="btn btn-primary" href="/managing/Activity/ActivityForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button> </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/managing/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-primary" href="/managing/activity/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
             <td><a class="btn btn-success" href="/managing/activity/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
@@ -99,7 +99,7 @@
             <td>{{i.get_status_display}}</td>
             <td><a class="btn btn-primary" href="/managing/Task/TaskForm/edit/{{i.slug}}"><i class="fa fa-edit"></i> Edit</button>  </a></td>
             {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/managing/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
+            <td><a class="btn btn-primary" href="/managing/task/status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
             {% else %}
             <td><a class="btn btn-success" href="/managing/task/status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
             {% endifequal %}
