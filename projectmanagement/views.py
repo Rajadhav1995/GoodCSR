@@ -162,3 +162,19 @@ def budget_tranche(request):
             obj.save()
             return HttpResponseRedirect('/dashboard/')
     return render(request,'budget/tranche.html',locals())
+
+def key_parameter(request):
+    user_id = request.session.get('user_id')
+    proj_obj = Project.objects.filter(created_by=UserProfile.objects.get(id=3))
+    if request.method == 'POST':
+        import ipdb; ipdb.set_trace()
+        project = int(request.POST.get('project'))
+        parameter_type = request.POST.get('para_type')
+        value = request.POST.get('value')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        attachment = request.POST.get('attachment')
+        parameter_obj = ProjectParameter.objects.create(parameter_type=str(parameter_type),project=Project.objects.get(id=project),name=request.POST.get('name'))
+        parameter_value = ProjectParameterValue.objects.create(keyparameter=parameter_obj,\
+                    parameter_value=value,start_date=start_date,end_date=end_date)
+    return render(request,'project/key_parameter.html',locals())

@@ -149,6 +149,6 @@ def total_tasks_completed(request):
     
 
 
-def task_updates(request):
-    attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get(model = ('task')).order_by('-id')
-    
+#def task_updates(request):
+#    attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get(model = ('task')).order_by('-id')
+#    return render(request,'base.html')

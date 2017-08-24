@@ -39,6 +39,11 @@ class Attachment(BaseContent):
             documents = []
         return documents
 
+    def get_file_keywords(self):
+        keywords = FileKeywords.objects.filter(object_id=self.id,content_type=ContentType.objects.get(model='Attachment')).values_list('key',flat=True)
+        key_list = Keywords.objects.filter(id__in=keywords).values_list('name',flat=True)
+        return list(key_list)
+
 class Keywords(BaseContent):
     name = models.CharField(max_length=100, **OPTIONAL)
 

@@ -1,34 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="content">
-<div class="row">
-<div class="col-xs-12">
-<div class="box">
-
-<div class="box-header">
-{% if messages %}
-<!-- <div class="span12">
-{% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        <b>{{ message|safe }}</b>
+<!--Green pad Ends-->
+<!--Content part starts-->
+<section class="content-part">
+    <div class="row">
+    <div class="content-top">
+      
+        <!--<form>
+          <div class="multiselect">
+            <div class="selectBox" onclick="showCheckboxes()">
+              <select class="select_box">
+                <option>Sep-Dec</option>
+              </select>
+              <div class="overSelect"></div>
+            </div>
+            <div id="checkboxes">
+              <label for="one">
+                <input type="checkbox" id="one" />Jan-Mar</label>
+              <label for="two">
+                <input type="checkbox" id="two" />Apr-Jul</label>
+              <label for="three">
+                <input type="checkbox" id="three" />Aug-Sep</label>
+              <label for="three">
+                <input type="checkbox" id="three" />Oct-Dec</label>  
+            </div>
+          </div>
+        </form>-->
+       
     </div>
-{% endfor %} -->
-<script type="text/javascript">
-alert("Sorry, You cant Select more than 3 featured RFP")
-</script>
-<!-- </div> -->
-{% endif %}
-    <h3 class="box-title">Project List</h3>
-
-    
-
-</div>
-
-
-</script>
-<!-- /.box-header -->
-<div class="box-body table-responsive">
+    <div class="white-box white-pad">
+    <div class="box-body table-responsive">
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -40,6 +42,8 @@ alert("Sorry, You cant Select more than 3 featured RFP")
                 <th>Manage Activites</th>
                 <th> </th>
                 </th> Tasks completed </th>
+                <th></th>
+                <th>Manage </th>
             </tr>            
         </thead>
         
@@ -48,96 +52,147 @@ alert("Sorry, You cant Select more than 3 featured RFP")
             <td><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></td>
             <td>{{i.created_by.user.username}}</td>
             <td>{{i.program.name}}</td>
-            <!-- <td>{{i.terms_conditions}}</td> -->
             <td>{{i.get_active_display}}</td>
-            <!-- {% ifequal i.active 2 %}
-            <td><a class="btn btn-default" href="/masterdata/ngo-status/?id={{i.id}}&status=2" onclick="return deactivate()">Deactivate</button></a></td>
-            {% else %}
-            <td><a class="btn btn-success" href="/masterdata/ngo-status/?id={{i.id}}&status=3" onclick="return activate()">Activate</button></a></td>
-            {% endifequal %} -->
             <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
             {% if i.request_status == 4 %}
                 <td><a class = "btn btn-primary" href = "/managing/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
             {% else %}
                 <td> </td>
             {% endif %}
+            <td><a class = "btn btn-primary" href = "/manage/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
             <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
             <td><a class="btn btn-primary" href="/managing/total/tasks/completed/?slug={{i.slug}}"> Tasks completed</a></td>
+            <td><a class="btn btn-primary" href="/upload/list/?slug={{i.slug}}&model=Project">| Manage Files</a>
+            </td>
         </tr>
         {% endfor %}
+
+  </tbody>
+</table>
+        </div>
+          <div class="pagination_no">
+        <div id="pagination-long"></div>
+    </div>
+    </div>
+    
+    
+    
+    </div>
+</section>
+<!--Content part Ends-->
+{% endblock %}
+
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="js/jquery.selectbox-0.2.js"></script>
+
+
+    
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+
+<script>
+//Toggle
         
-        
-    <!-- /.content -->
-<!-- 
+         $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+         $(document).ready(function(e) {    
+    /*Content Show/Hide */
+    $('.hide-cont').hide();
+    $('.close-cont').hide();
+    $('.view-cont').click(function(){
+        $('.hide-cont').slideDown(350);
+        $('.close-cont').show();
+        $('.view-cont').hide();
+    });
+    $('.close-cont').click(function(){
+        $('.hide-cont').slideUp(350);
+        $('.close-cont').hide();
+        $('.view-cont').show();
+    }); 
+ });
+    
+</script>
+
+    <script type="text/javascript">
+   
+    
+    var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+    <script>
+  $(document).ready(function() {
+  
+    var nice = $("html").niceScroll();  // The document page (body)
+    
+    $("#div1").html($("#div1").html()+' '+nice.version);
+    
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+    
+  });
+</script>
+<!--  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>-->
+<script src="/static/js/materialize-pagination.js"></script>
+    <script>
+    $(function() {
+        $(function() {
+            $('#pagination-long').materializePagination({
+                align: 'center',
+                lastPage: 10,
+                firstPage: 1,
+                useUrlParameter: false,
+                onClickCallback: function(requestedPage) {
+                    console.log('Requested page from #pagination-long: ' + requestedPage);
+                }
+            });
+        });
+    });
+    </script>
+<script src="js/sorttable.js"></script>
+
 <script>
 $(function(){
-    $('#search_name2').click(function(event){
-       //var status = $('#status').val();
-       var id = this.id;
-       var name = this.status;
-       alert(id);
-       //var cm_coaching_request = $('#cm_request').val();
-
-        $.ajax({
-            url : "/masterdata/rfp-status/",
-            type : 'GET',
-            //dataType: "json",
-            data : {'status':status,'id':id},
-            
-            success:function(data){
-                $('#l').html(data);
-            }
-        });
-        
-    });
+    $("#dest").addSortWidget();
 });
 </script>
 
- -->
-<!-- <input type="button" id="search_name2" class="button_reset" value="Go" style="margin-left:15px;" status=14 > -->
-</div>
-
-<!-- /.content-wrapper -->
-
+    
+    <script src="/static/js/fm.tagator.jquery.js"></script>
+    <script>
+        $(function () {
+            var $input_tagator1 = $('#input_tagator1');
+            var $activate_tagator1 = $('#activate_tagator1');
+            $activate_tagator1.click(function () {
+                if ($input_tagator1.data('tagator') === undefined) {
+                    $input_tagator1.tagator({
+                        autocomplete: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'],
+                        useDimmer: true
+                    });
+                    $activate_tagator1.val('destroy tagator');
+                } else {
+                    $input_tagator1.tagator('destroy');
+                    $activate_tagator1.val('activate tagator');
+                }
+            });
+            $activate_tagator1.trigger('click');
+        });
+    </script>
 </body>
-{% endblock %}
-{% block script %}
-<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
-<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
-<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
-<!-- Main content -->
+</html>
 
-<script language="javascript" type="text/javascript">
-    <!--
-    function approve(url) {
-        alert("{{obj_list.name}} Approved");
-        
-    }
-    function reject(url) {
-        alert("{{obj_list.name}} Rejected");
-        
-    }
-    function activate(url) {
-        alert("{{obj_list.name}} Activated");
-        
-    }
-    function deactivate(url) {
-        alert("{{obj_list.name}} Deactivated");
-        
-    }
-    // -->
-</script>
-<script type="text/javascript">
-    $(function () {
-      $("#example1").DataTable({
-        "order":[[2, 'desc']],
-        "stateSave": true,
-        "columnDefs": [
-    { "width": "17%", "targets": [4,5] }
-  ]
-  });
-    });
-</script>
-
-{% endblock %}
