@@ -2,6 +2,7 @@ from django.shortcuts import render
 from projectmanagement.models import *
 from projectmanagement.forms import *
 from budgetmanagement.forms import TrancheForm
+from budgetmanagement.models import Tranche
 from media.forms import AttachmentForm,ImageUpload
 from media.models import Attachment,Keywords,FileKeywords
 from django.http import HttpResponseRedirect
@@ -170,6 +171,12 @@ def budget_tranche(request):
             obj.save()
             return HttpResponseRedirect('/dashboard/')
     return render(request,'budget/tranche.html',locals())
+
+def tranche_list(request):
+    user_id = request.session.get('user_id')
+    tranche_list = Tranche.objects.filter()
+    return render(request,'budget/listing.html',locals())
+
 
 def key_parameter(request):
     user_id = request.session.get('user_id')
