@@ -32,6 +32,9 @@ class Budget(BaseContent):
     financial_type = models.IntegerField(choices=BUDGET_TYPE, default=2)
     history = HistoricalRecords()
 
+    def __str__(self):
+        return self.project.name
+
 class SuperCategory(BaseContent):
     name = models.CharField(max_length=200,**OPTIONAL)
     slug = models.SlugField(_("Slug"), blank=True)
@@ -40,6 +43,9 @@ class SuperCategory(BaseContent):
     project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
     history = HistoricalRecords()
 
+    def __str__(self):
+        return str(self.id)
+
 class ProjectBudgetPeriodConf(BaseContent):
     budget = models.ForeignKey(Budget,**OPTIONAL)
     name = models.CharField(max_length=300,**OPTIONAL)
@@ -47,6 +53,9 @@ class ProjectBudgetPeriodConf(BaseContent):
     start_date = models.DateField(**OPTIONAL)
     end_date = models.DateField(**OPTIONAL)
     history = HistoricalRecords()
+
+    def __str__(self):
+        return str(self.id)
 
 # Planned amount is ngo expected amount,actual_disbursed_amount is corporate released amount,
 # recommended_amount is amount recommended by samhita,utilized_amount is the actual utilized_amount for one quarter

@@ -18,13 +18,20 @@ from views import (dashboard,user_information)
 from views.user_information import (UserInformationStorage,)
 from views.login import (signin,signout)
 from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
-                                            projectuseredit,)
+                                            projectuseredit)
+from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
+                                            projectbudgetcategoryadd,projectlinetemadd)
 admin.autodiscover()
 
 roles_patterns = ([
     url(r'^project/role/list/$',projectuserslist),
     url(r'^project/role/add/$',projectuseradd),
     url(r'^project/role/edit/$',projectuseredit),
+    url(r'^project/budget/list/$',projectbudgetlist),
+    url(r'^project/budget/create/$',projectbudgetadd),
+    url(r'^project/budget/category/add/$',projectbudgetcategoryadd),
+    url(r'^project/budget/lineitem/add/$',projectlinetemadd),
+
 ])
 
 
