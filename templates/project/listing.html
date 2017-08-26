@@ -44,8 +44,7 @@
                 <th>Manage Activites</th>
                 <th> </th>
                 <th></th>
-                <th>Manage </th>
-            </tr>            
+            </tr>
         </thead>
         
         {% for i in obj_list %}
@@ -55,13 +54,9 @@
             <td>{{i.program.name}}</td>
             <td>{{i.get_active_display}}</td>
             <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
-            {% if i.request_status == 4 %}
-                <td><a class = "btn btn-primary" href = "/managing/Activity/ActivityForm/add/?slug={{i.slug}}">Activity</button></a></td>
-            {% else %}
-                <td> </td>
-            {% endif %}
             <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
-            <td><a class="btn btn-primary" href="/upload/list/?slug={{i.slug}}&model=Project">| Manage Files</a>
+            <td><a class="btn btn-primary" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a>
+            <td><a class="btn btn-primary" href="/project/upload/key-parameter/?slug={{i.slug}}"> Add Parameteres</a></td>
             </td>
         </tr>
         {% endfor %}

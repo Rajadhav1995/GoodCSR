@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+<!--<style>
+form { 
+margin: 0 auto; 
+width:450px;
+}
+</style>-->
+    <!-- Main content -->
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Add Key Parameter</h3>
+              <div align="right">
+             <a class="btn btn-success" href="#" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+         </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            
+            <form autocomplete="off" id="prog_edit" action="/project/add/parameter/?slug={{slug}}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+                            <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Parameter Type<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <select class="form-control" name="para_type" id="para_type">
+                                    <option selected>Select</option>
+                                    <option value="PIN" >Pie chart Numbers</option>
+                                     <option value="PIP">Pie Chart Percent</option>
+                                    <option value="NUM">Number</option>
+                                    <option value="PER">Percent</option>
+                                    <option value="CUR">Currency</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="name" class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name">
+                            </div>
+                        </div>
+                        <div id="pie" class="row">
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                        <div class="input_fields_wrap">
+                            <button class="add_field_button">Add More</button>
+                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name"></div>
+                        </div>
+                        </div>
+                    </div>
+                    <input style="width: 0px;" name="name_count" id="activity_count" type="text"/>
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                    </form>
+  </div>
+
+<input type="hidden" name="loop_count" id="loop_count" value="{{activity_view.count}}">
+
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    //var loop_count = $('#loop_count').val()
+    var max_fields      = 6; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    var loop_count = $('#loop_count').val()
+    var x =Number(loop_count)+1;
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        }
+        document.getElementById("activity_count").value = x;
+
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+</script>
+
+<script type="text/javascript">
+$('#pie').hide();
+$("#para_type").change(function () {
+  if($(this).val() == "PIN" || $(this).val() == "PIP")
+    $('#pie').show();
+    $('#name').hide();
+    else{
+    $('#name').show();
+    }
+    //$("#inputArea").append('<input name="inputs[]" />');
+});
+</script>
+
+
+
+  <div class="control-sidebar-bg"></div>
+
+
+
+{% endblock %}

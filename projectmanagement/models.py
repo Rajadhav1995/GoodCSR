@@ -206,6 +206,8 @@ class ProjectFunderRelation(BaseContent):
     def __str__(self):
         return str(self.id)
 
+
+
 class ProjectParameter(BaseContent):
     parameter_type = models.ForeignKey(MasterCategory,**OPTIONAL)
     project = models.ForeignKey(Project,**OPTIONAL)

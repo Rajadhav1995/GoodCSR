@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from projectmanagement.views import (create_project,project_list,project_detail,project_mapping,
-									budget_tranche,key_parameter,tranche_list)
+									budget_tranche,key_parameter,tranche_list,add_parameter)
 
 urlpatterns = [
     url(r'^add/$',create_project),
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^budget/tranche/$',budget_tranche),
     url(r'^upload/key-parameter/$',key_parameter),
     url(r'^tranche/list/$',tranche_list),
+    url(r'^add/parameter/$',add_parameter),
 ]

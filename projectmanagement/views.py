@@ -177,9 +177,9 @@ def tranche_list(request):
 
 def key_parameter(request):
     user_id = request.session.get('user_id')
+    slug =  request.GET.get('slug')
     proj_obj = Project.objects.filter(created_by=UserProfile.objects.get(id=3))
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
         project = int(request.POST.get('project'))
         parameter_type = request.POST.get('para_type')
         value = request.POST.get('value')
@@ -190,3 +190,8 @@ def key_parameter(request):
         parameter_value = ProjectParameterValue.objects.create(keyparameter=parameter_obj,\
                     parameter_value=value,start_date=start_date,end_date=end_date)
     return render(request,'project/key_parameter.html',locals())
+
+def add_parameter(request):
+    form = ProjectParameterForm()
+    import ipdb;ipdb.set_trace()
+    return render(request,'project/add_key_parameter.html',locals())
