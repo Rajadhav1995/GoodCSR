@@ -177,7 +177,6 @@ def tranche_list(request):
     tranche_list = Tranche.objects.filter()
     return render(request,'budget/listing.html',locals())
 
-
 def key_parameter(request):
     user_id = request.session.get('user_id')
     proj_obj = Project.objects.filter(created_by=UserProfile.objects.get(id=3))
