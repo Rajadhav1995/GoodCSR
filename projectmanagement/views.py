@@ -36,8 +36,6 @@ def create_project(request):
             obj.object_id = 0
             try:
                 obj.created_by = UserProfile.objects.get(id=user_id)
-                print "user id saved"
-                print user_id
             except:
                 pass
 
