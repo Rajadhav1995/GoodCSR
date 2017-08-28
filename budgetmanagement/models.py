@@ -33,9 +33,10 @@ class Budget(BaseContent):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.project.name
+        return str(self.id) if self.id else str(0)
 
 class SuperCategory(BaseContent):
+    budget = models.ForeignKey(Budget,**OPTIONAL)
     name = models.CharField(max_length=200,**OPTIONAL)
     slug = models.SlugField(_("Slug"), blank=True)
     description = models.TextField(**OPTIONAL)
@@ -44,7 +45,7 @@ class SuperCategory(BaseContent):
     history = HistoricalRecords()
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id) if self.id else str(0)
 
 class ProjectBudgetPeriodConf(BaseContent):
     budget = models.ForeignKey(Budget,**OPTIONAL)
