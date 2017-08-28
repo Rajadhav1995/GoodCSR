@@ -206,18 +206,39 @@ class ProjectFunderRelation(BaseContent):
     def __str__(self):
         return str(self.id)
 
+''' Jagpreet Made these changes for Project parameters, Start:
+'''
+
+AGGREGATION_FUNCTION_CHOICES=(('ADD', 'ADDITION'), # Simple Addition 
+    ('AVG', 'AVERAGE'), # Average over the time period
+    ('WAV', 'Weighted Average'), # Weighted average along with another field 
+     ('WAP', 'Weighted average over peers')) # Weighted average for all sections of a pie chart
+
+PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
+                          ('PIP', 'Pie Chart Percent'),
+                          ('NUM','Number'),
+                          ('PER','Percent'),
+                          ('CUR','Currency'))
+
+
 class ProjectParameter(BaseContent):
-    parameter_type = models.ForeignKey(MasterCategory,**OPTIONAL)
-    project = models.ForeignKey(Project,**OPTIONAL)
-    name = models.CharField(max_length=300,**OPTIONAL)
-    aggregation_function = models.TextField(**OPTIONAL)
-    parent = models.ForeignKey('self',**OPTIONAL)
+    parameter_type = models.TextField(choices=PARAMETER_TYPE_CHOICES,default='NUM',)
+    project = models.ForeignKey(Project, **OPTIONAL)
+    name = models.CharField(max_length=300, **OPTIONAL)
+    aggregation_function = models.TextField(choices=AGGREGATION_FUNCTION_CHOICES, default='ADD')
+    parent = models.ForeignKey('self', **OPTIONAL)
+    instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
+
+
 
 class ProjectParameterValue(BaseContent):
     keyparameter = models.ForeignKey(ProjectParameter)
-    name = models.CharField(max_length=300,**OPTIONAL)
-    date = models.DateField(**OPTIONAL)
-    parameter_value = models.CharField(max_length=300,**OPTIONAL)
-    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
-    object_id = models.IntegerField(_('object ID'))
+    submit_date = models.DateField(**OPTIONAL)
+    parameter_value = models.CharField(max_length=300)
+    start_date = models.DateField(**OPTIONAL) # Period for paramter, typically month start
+    end_date = models.DateField(**OPTIONAL)  # Period  for paramter, typically month end
+    comment = models.CharField(max_length=300, **OPTIONAL)
+    has_attachment = models.BooleanField(default=False) # True if the parameter has a supporting attachment
 
+'''Jagpreet Made these changes for Project parameters, END;
+'''

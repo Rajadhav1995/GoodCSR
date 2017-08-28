@@ -238,7 +238,7 @@ width:450px;
                                 Implementation partner:
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <select class="form-control" name="implementation_partner" id="implementation_partner"><option>Select Implementation Partner</option>{% for i in funder_user %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                                <select class="form-control" name="implementation_partner" id="implementation_partner"><option>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
                                 {% if budgetform.total_budget.errors %}
                                 <p style="color: red;">
                                     Please select Implementation partner.
