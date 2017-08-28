@@ -63,13 +63,17 @@ width:450px;
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name">
+
+                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
                             </div>
                         </div>
                         <div id="pie" class="row">
                         <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More</button>
-                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name"></div>
+                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name">
+                                <b><input class="form-control" type="text" name="instruction[1]" id="name" placeholder="Instruction"></b>
+                            </div>
                         </div>
                         </div>
                     </div>
@@ -102,7 +106,7 @@ $(document).ready(function() {
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            $(wrapper).append('<div><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/><b><input class="form-control" type="text" name="instruction['+x+']" id="name" placeholder="Instruction"></b><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
         document.getElementById("activity_count").value = x;
 

@@ -31,23 +31,25 @@
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
-        <h3>Parameter List</h3>
-        <div style="float: right;"><a class="btn btn-primary" href="/project/parameter/add/?slug={{slug}}">Add Parameter</a></div>
+        <h3>Parameter Uploaded Values</h3>
+        <div style="float: right;"><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Add Parameter</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Parameter Name</th>
-                <th>Project Name</th>
-                <th>Status</th>
+                {% for i in parameter %}
+                <th>{{i.keyparameter.name}}</th>
+                {% endfor %}
                 <th>Action</th>
             </tr>
         </thead>
         
-        {% for i in parameter %}
+        <!-- {% for i in parameter %} -->
         <tr>
-            <td>{{i.name}}</td>
-            <td>{{i.project.name}}</td>
-            <td>{{i.get_active_display}}</td>
+            <td>{{parent_obj.name}}</td>
+            {% for i in parameter %}
+            <td>{{i.parameter_value}}</td>
+            {% endfor %}
             <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a></td>
            
             </td>

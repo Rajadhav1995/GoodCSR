@@ -232,7 +232,6 @@ def upload_parameter(request):
         days = monthrange(now.year, month)[1]
         end_date = str(now.year)+'-'+str(month)+'-'+str(days)
         submit_date = str(now.year)+'-'+str(now.month)+'-'+str(now.day)
-        # import ipdb; ipdb.set_trace()
         if key_parameter.exists():
             for i in key_parameter:
                 value = 'value['+str(i.id)+']'
@@ -248,3 +247,11 @@ def manage_parameter(request):
     slug =  request.GET.get('slug')
     parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     return render(request,'project/parameter_list.html',locals())
+
+
+def manage_parameter_values(request):
+    ids =  request.GET.get('id')
+    parent_obj = ProjectParameter.objects.get(id=ids)
+    obj = ProjectParameter.objects.get(parent=parent_obj)
+    parameter = ProjectParameterValue.objects.filter(keyparameter=obj)
+    return render(request,'project/parameter_value_list.html',locals())
