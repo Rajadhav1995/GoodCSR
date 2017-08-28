@@ -228,7 +228,9 @@ class ProjectParameter(BaseContent):
     aggregation_function = models.TextField(choices=AGGREGATION_FUNCTION_CHOICES, default='ADD')
     parent = models.ForeignKey('self', **OPTIONAL)
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
-
+    
+    def __str__(self):
+        return str(self.id)
 
 
 class ProjectParameterValue(BaseContent):
@@ -239,6 +241,9 @@ class ProjectParameterValue(BaseContent):
     end_date = models.DateField(**OPTIONAL)  # Period  for paramter, typically month end
     comment = models.CharField(max_length=300, **OPTIONAL)
     has_attachment = models.BooleanField(default=False) # True if the parameter has a supporting attachment
+
+    def __str__(self):
+        return str(self.id)
 
 '''Jagpreet Made these changes for Project parameters, END;
 '''

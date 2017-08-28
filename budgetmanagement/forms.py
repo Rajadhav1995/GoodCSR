@@ -24,6 +24,8 @@ class TrancheForm(forms.ModelForm):
 
 
 class ProjectBudgetForm(forms.ModelForm):
-    class Meta:
-        model = Budget
-        fields = ('actual_start_date','end_date',)
+	actual_start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
+	end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
+	class Meta:
+		model = Budget
+		fields = ('actual_start_date','end_date',)

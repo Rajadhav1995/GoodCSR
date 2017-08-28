@@ -1,4 +1,6 @@
 from django.shortcuts import render
+import datetime
+from calendar import monthrange
 from projectmanagement.models import *
 from projectmanagement.forms import *
 from budgetmanagement.forms import TrancheForm
@@ -18,9 +20,9 @@ def create_project(request):
         obj = Project.objects.get(slug=slug)
         form = ProjectForm(instance = obj)
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
+        activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
-    activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     funder_user = UserProfile.objects.filter(active=2,organization_type=2)
     partner = UserProfile.objects.filter(active=2,organization_type=1)
 
@@ -87,9 +89,10 @@ def project_mapping(request):
     return render(request,'project/project_mapping.html',locals())
 
 def upload_attachment(request):
-    obj_id =  request.GET.get('obj_id')
+    slug =  request.GET.get('slug')
     model =  request.GET.get('model')
     key = int(request.GET.get('key'))
+    project_obj = Project.objects.get(slug=slug)
     if key==1:
         #key 1 for Document upload
         form = AttachmentForm()
@@ -103,7 +106,7 @@ def upload_attachment(request):
         if form.is_valid():
             obj = form.save(commit=False)
             obj.content_type=ContentType.objects.get(model=model)
-            obj.object_id=obj_id
+            obj.object_id=project_obj.id
             if key==1:
                 obj.attachment_type=2
             else:
@@ -115,6 +118,9 @@ def upload_attachment(request):
             keywords = add_keywords(keys,obj,model,0)
         except:
             pass
+        # url = 'upload/list/?slug=%s&model=Project' %slug
+        return HttpResponseRedirect('/project/list/')
+
     return render(request,'attachment/doc_upload.html',locals())
 
 def edit_attachment(request):
@@ -154,10 +160,10 @@ def add_keywords(keys,obj,model,edit):
         key_obj = Keywords.objects.get_or_none(name__iexact=i.strip())
         if key_obj:
             if not key_obj.id in key_list.values_list('name',flat=True):
-                obj = FileKeywords.objects.create(key=key_obj,content_type=ContentType.objects.get(model=model),object_id=obj.id)
+                key_obj = FileKeywords.objects.create(key=key_obj,content_type=ContentType.objects.get(model=model),object_id=obj.id)
         else:
             key_object = Keywords.objects.create(name=i.strip())
-            obj = FileKeywords.objects.create(key=key_object,content_type=ContentType.objects.get(model=model),object_id=obj.id )
+            key_obj = FileKeywords.objects.create(key=key_object,content_type=ContentType.objects.get(model=model),object_id=obj.id )
 
 def budget_tranche(request):
     form = TrancheForm()
@@ -203,14 +209,14 @@ def add_parameter(request):
         name = request.POST.get('name')
         instruction = request.POST.get('instruction')
         name_count = int(request.POST.get('name_count'))
+        agg_type = request.POST.get('agg_type')
         parent_obj = ProjectParameter.objects.create(parameter_type=parameter_type,\
-                                project=project,aggregation_function='ADD',name = name)
-
+                                project=project,aggregation_function=agg_type,name = name)
         if name_count != 0:
             for i in range(name_count):
                 name = 'name['+str(i+1)+']'
                 obj = ProjectParameter.objects.create(parameter_type=parameter_type,project=project,\
-                        name=request.POST.get(name),parent=parent_obj)
+                        name=request.POST.get(name),parent=parent_obj,aggregation_function=request.POST.get('agg_type'))
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %slug)
         # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
     return render(request,'project/add_key_parameter.html',locals())
@@ -220,9 +226,21 @@ def upload_parameter(request):
     parameter = ProjectParameter.objects.get(id=ids)
     key_parameter = ProjectParameter.objects.filter(parent=parameter)
     if request.method == 'POST':
-        for i in key_parameter:
-            value = 'value['+str(i.id)+']'
-            obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value))
+        month = int(request.POST.get('month'))
+        now = datetime.datetime.now()
+        date = str(now.year)+'-'+str(month)+'-'+'1'
+        days = monthrange(now.year, month)[1]
+        end_date = str(now.year)+'-'+str(month)+'-'+str(days)
+        submit_date = str(now.year)+'-'+str(now.month)+'-'+str(now.day)
+        # import ipdb; ipdb.set_trace()
+        if key_parameter.exists():
+            for i in key_parameter:
+                value = 'value['+str(i.id)+']'
+                obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value),\
+                                start_date=date,end_date=end_date,submit_date=submit_date)
+        else:
+            obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
+                                start_date=date,end_date=end_date,submit_date=submit_date)
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parameter.project.slug)
     return render(request,'project/key_parameter.html',locals())
 

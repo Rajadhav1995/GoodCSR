@@ -41,6 +41,22 @@ width:450px;
                                 </select>
                             </div>
                         </div>
+
+                        <div class="row" id='agg_div'>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Aggregation Type<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <select class="form-control" name="agg_type" id="agg_type">
+                                    <option selected>Select</option>
+                                    <option value="ADD" >ADDITION</option>
+                                     <option value="AVG">Average</option>
+                                    <option value="WAV">Weighted Average</option>
+                                    <option value="WAP">Weighted average over peers</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div id="name" class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 Name
@@ -100,13 +116,23 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 $('#pie').hide();
+$('#agg_div').hide();
 $("#para_type").change(function () {
   if($(this).val() == "PIN" || $(this).val() == "PIP")
     $('#pie').show();
+    $('#agg_div').show();
     //$('#name').hide();
 });
 </script>
 
+<script type="text/javascript">
+$('#pie').hide();
+$("#para_type").change(function () {
+  if($(this).val() == "NUM" || $(this).val() == "PER" || $(this).val() == "CUR")
+    $('#agg_div').hide();
+    //$('#name').hide();
+});
+</script>
 
 
   <div class="control-sidebar-bg"></div>
