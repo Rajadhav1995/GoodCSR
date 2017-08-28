@@ -31,6 +31,7 @@ def signin(request):
                 return HttpResponseRedirect('/dashboard/')
         else:
             message = validation_data.get('msg')
+    
     return render(request, 'login.html', locals())
 
 

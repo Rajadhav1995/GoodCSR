@@ -15,7 +15,7 @@ def listing(request,model_name):
 #    model = ContentType.objects.get(model__iexact = model_name)
     obj_list = eval(model_name).objects.all().order_by('-id')
     return render(request,'listing.html',locals())
-    
+
 def add_taskmanagement(request,model_name,m_form):
     if model_name == 'Activity':
         try:
@@ -23,14 +23,14 @@ def add_taskmanagement(request,model_name,m_form):
         except:
             project_id = Project.objects.get(id = request.POST.get('project')).id
     else :
-        project_id = None 
+        project_id = None
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
         form=form(user_id,project_id,request.POST,request.FILES)
         if form.is_valid():
-            f=form.save() 
+            f=form.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
@@ -41,7 +41,7 @@ def add_taskmanagement(request,model_name,m_form):
     else:
         form=form(user_id,project_id)
     return render(request,'taskmanagement/forms.html',locals())
-    
+
 def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
@@ -81,7 +81,7 @@ def active_change(request,model_name):
         obj.save()
         msg ='active'
     return HttpResponseRedirect(url)
-    
+
 from django.http import JsonResponse
 def task_dependencies(request):
     start_date = ''
@@ -101,7 +101,7 @@ def task_dependencies(request):
     else:
         tasks = [{'id':i.id,'name':i.name} for i in tasks if i.is_dependent() != True]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
-    
+
 # to compute start date of the tasks dependent
 def task_auto_computation_date(request):
     ids = request.GET.get('id')
@@ -116,12 +116,12 @@ def task_auto_computation_date(request):
     return JsonResponse({"computation_date":end_date})
 
 def milestone_overdue(request):
-    task_ids = request.GET.get('id')
+    task_ids = request.GET.get('id[]')
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
     milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
-    
+
 from datetime import datetime
 #slug = Project slug and this is to display in project summary dashboard
 def total_tasks_completed(slug):
@@ -146,14 +146,13 @@ def total_tasks_completed(slug):
     if milestones:
         total_milestones = len(milestones)
     return project,total_tasks,completed_tasks,milestones,total_milestones,percent
-    
+
 
 def task_updates(obj_list):
-#updates of the task 
+#updates of the task
     try:
         task_obj = Task.objects.get(id = int(task_id))
         attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('-id')
     except:
         attachment = []
     return attachment
-    

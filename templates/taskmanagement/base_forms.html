@@ -3,8 +3,8 @@
 {% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
-form { 
-margin: 0 auto; 
+form {
+margin: 0 auto;
 width:450px;
 }
 </style>-->
@@ -26,7 +26,7 @@ width:450px;
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            
+
             <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
                     {% for field in form %}
                         <div class="row">
@@ -53,11 +53,12 @@ width:450px;
 
 <script>
     $(document).ready(function() {
+        $("#id_project").hide();
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        
-       // $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
+
+        //$( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
     });
 </script>
 
@@ -90,7 +91,7 @@ width:450px;
 
 <script>
     $(document).ready(function() {
-    
+
     $('#id_activity').on('change',function(e){
         var select_id = $('#id_activity').val();
         $.ajax({
@@ -110,7 +111,7 @@ width:450px;
                     .find('option')
                     .remove()
                     for(var i=0;i<data.tasks_dependency.length;i++){
-                        
+
                         $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
                         }
             },
