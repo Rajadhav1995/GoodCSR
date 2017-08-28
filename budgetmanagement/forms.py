@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from django import forms
-from budgetmanagement.models import Tranche
+from budgetmanagement.models import Tranche,Budget
 from projectmanagement.models import Project,UserProfile
 from django.contrib.admin import widgets
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -21,3 +21,9 @@ class TrancheForm(forms.ModelForm):
 		model = Tranche
 		fields  = ('project','name','planned_amount','actual_disbursed_amount','recommended_amount',\
 					'recommended_by','utilized_amount','due_date','disbursed_date')
+
+
+class ProjectBudgetForm(forms.ModelForm):
+    class Meta:
+        model = Budget
+        fields = ('actual_start_date','end_date',)

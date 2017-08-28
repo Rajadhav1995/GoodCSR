@@ -23,7 +23,7 @@ width:450px;
             <!-- /.box-header -->
             <div class="box-body">
             
-            <form autocomplete="off" id="prog_edit" action="/project/add/parameter/?slug={{slug}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/project/parameter/add/?slug={{slug}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
                             <div class="row">
@@ -57,7 +57,7 @@ width:450px;
                         </div>
                         </div>
                     </div>
-                    <input style="width: 0px;" name="name_count" id="activity_count" type="text"/>
+                    <input style="width: 0px;" value=0 name="name_count" id="activity_count" type="text"/>
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
@@ -103,11 +103,7 @@ $('#pie').hide();
 $("#para_type").change(function () {
   if($(this).val() == "PIN" || $(this).val() == "PIP")
     $('#pie').show();
-    $('#name').hide();
-    else{
-    $('#name').show();
-    }
-    //$("#inputArea").append('<input name="inputs[]" />');
+    //$('#name').hide();
 });
 </script>
 

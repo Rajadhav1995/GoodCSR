@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block section %}
+{% endblock %}
+{% block content %}
+
+</br>
+<a class="btn btn-primary" href="/manage/project/budget/create/?slug={{project_slug}}"> Add Budget</a>
+</br>
+<div class="box-body table-responsive">
+    <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="80%">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Action</th>
+            </tr>            
+        </thead>
+        
+    {% for i in budgetlist %}
+        <tr>
+            <td>{{i.project}}</a></td>
+            <td><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

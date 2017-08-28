@@ -17,10 +17,10 @@ def create_project(request):
         slug =  request.GET.get('slug')
         obj = Project.objects.get(slug=slug)
         form = ProjectForm(instance = obj)
-        activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
     except:
         form = ProjectForm()
+    activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     funder_user = UserProfile.objects.filter(active=2,organization_type=2)
     partner = UserProfile.objects.filter(active=2,organization_type=1)
 
@@ -30,6 +30,7 @@ def create_project(request):
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
         except:
             form = ProjectForm(request.POST,request.FILES)
+            instance = ''
         if form.is_valid():
             obj = form.save(commit=False)
             obj.content_type = ContentType.objects.get(model="Program")
@@ -38,7 +39,8 @@ def create_project(request):
                 obj.created_by = UserProfile.objects.get(id=user_id)
             except:
                 pass
-
+            if not instance:
+                obj.slug = obj.name.replace(' ','-')
             obj.save()
             form.save_m2m()
             activity_del = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project")).delete()
@@ -193,5 +195,38 @@ def key_parameter(request):
 
 def add_parameter(request):
     form = ProjectParameterForm()
-    import ipdb;ipdb.set_trace()
+    slug =  request.GET.get('slug')
+    if request.method == 'POST':
+        slug =  request.GET.get('slug')
+        project = Project.objects.get(slug=slug)
+        parameter_type = request.POST.get('para_type')
+        name = request.POST.get('name')
+        instruction = request.POST.get('instruction')
+        name_count = int(request.POST.get('name_count'))
+        parent_obj = ProjectParameter.objects.create(parameter_type=parameter_type,\
+                                project=project,aggregation_function='ADD',name = name)
+
+        if name_count != 0:
+            for i in range(name_count):
+                name = 'name['+str(i+1)+']'
+                obj = ProjectParameter.objects.create(parameter_type=parameter_type,project=project,\
+                        name=request.POST.get(name),parent=parent_obj)
+        return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %slug)
+        # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
     return render(request,'project/add_key_parameter.html',locals())
+
+def upload_parameter(request):
+    ids =  request.GET.get('id')
+    parameter = ProjectParameter.objects.get(id=ids)
+    key_parameter = ProjectParameter.objects.filter(parent=parameter)
+    if request.method == 'POST':
+        for i in key_parameter:
+            value = 'value['+str(i.id)+']'
+            obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value))
+        return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parameter.project.slug)
+    return render(request,'project/key_parameter.html',locals())
+
+def manage_parameter(request):
+    slug =  request.GET.get('slug')
+    parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
+    return render(request,'project/parameter_list.html',locals())
