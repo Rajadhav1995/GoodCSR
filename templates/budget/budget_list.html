@@ -17,7 +17,7 @@
         
     {% for i in budgetlist %}
         <tr>
-            <td>{{i.project}}</a></td>
+            <td><a href ="/manage/project/budget/detail/?budget_id={{i.id}}&slug={{project_slug}}">{{i.project}}</a></td>
             <td><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>
         </tr>
         {% endfor %}
