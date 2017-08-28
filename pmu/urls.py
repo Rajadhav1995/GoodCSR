@@ -20,7 +20,8 @@ from views.login import (signin,signout)
 from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
                                             projectuseredit)
 from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
-                                            projectbudgetcategoryadd,projectlinetemadd)
+                                            projectbudgetcategoryadd,projectlinetemadd,
+                                            projectbudgetdetail,)
 admin.autodiscover()
 
 roles_patterns = ([
@@ -31,6 +32,7 @@ roles_patterns = ([
     url(r'^project/budget/create/$',projectbudgetadd),
     url(r'^project/budget/category/add/$',projectbudgetcategoryadd),
     url(r'^project/budget/lineitem/add/$',projectlinetemadd),
+    url(r'^project/budget/detail/$',projectbudgetdetail),
 
 ])
 
