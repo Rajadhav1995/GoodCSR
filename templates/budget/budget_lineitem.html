@@ -51,12 +51,12 @@
                 {% endfor %}
                 </select></td>
             <td> <input type="text" name="subheading_{{j}}"> </td>
-             <td> <input type="text" name = "linetotal_{{j}}"> </td>
+             <td> <input type="text" name = "linetotal_{{j}}" id="linetotal_{{j}}"> </td>
               <td> <input type="text" name = "unit-type_{{j}}"> </td>
             {% for i,v in quarter_list.items %}
-               <td> <input type="text" name = "unit_{{i}}_{{j}}"> </td>
-                <td> <input type="text" name = "rate_{{i}}_{{j}}"> </td>
-                 <td> <input type="text" name = "planned-cost_{{i}}_{{j}}"> </td>
+               <td> <input type="text" name = "unit_{{i}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" > </td>
+                <td> <input type="text" name = "rate_{{i}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}"> </td>
+                 <td> <input type="text" name = "planned-cost_{{i}}_{{j}}" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value = "" /> </td>
                  <td> <input type="text" name = "utilized-cost_{{i}}_{{j}}"> </td>
                  {% endfor %}
         </tr>
@@ -64,6 +64,39 @@
     </table>
 </div>
 </form>
+
+<script>
+$(document).ready(function()
+{
+    function updatePrice()
+    {
+        nam = $(this).context.name.split('_')
+        i = nam[1]
+        j = nam[2]
+        
+        var rate = parseFloat($("#rate_"+i+"_"+j).val());
+        var unit = parseFloat($("#unit_"+i+"_"+j).val());
+        var total = (rate) * (unit);
+        //var total = total.toFixed(2);
+        if (total.toString() == 'NaN'){
+            $("#planned-cost_"+i+"_"+j).val('');
+        }
+        else{
+            $("#planned-cost_"+i+"_"+j).val(parseInt(total));
+        }
+        
+        debugger
+        var linetotal = 0
+        $("[id^=planned-cost_"+parseInt(i)+"_]").each(function(){
+            linetotal += $(this).val()
+        })
+        var linetotal = parseFloat($("#planned-cost_"+i+"_"+j).val());
+    }
+    $(document).on("change, keyup", ".rate", updatePrice);
+    $(document).on("change, keyup", ".unit", updatePrice);
+});
+
+</script>
 
 
 {% endblock %}
