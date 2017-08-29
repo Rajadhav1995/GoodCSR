@@ -16,7 +16,6 @@ def get_user_project(request):
 @register.assignment_tag
 def get_budget_lineitem(row):
     budget_periodobj = ProjectBudgetPeriodConf.objects.filter(row_order = int(row))[0]
-    print row, budget_periodobj
     try:
         lineitem = BudgetPeriodUnit.objects.get(budget_period = budget_periodobj)
     except:
@@ -25,6 +24,8 @@ def get_budget_lineitem(row):
 
 @register.assignment_tag
 def get_quarter_details(row,quarter):
-    print quarter
-    line_itemobj = BudgetPeriodUnit.objects.get_or_none(row_order = int(row),quarter_order=int(quarter))
+    try:
+        line_itemobj = BudgetPeriodUnit.objects.get_or_none(row_order = int(row),quarter_order=int(quarter))
+    except:
+        line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter))[0]
     return line_itemobj
