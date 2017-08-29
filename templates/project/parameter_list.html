@@ -48,7 +48,11 @@
             <td>{{i.name}}</td>
             <td>{{i.project.name}}</td>
             <td>{{i.get_active_display}}</td>
-            <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a></td>
+            <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a>
+                <a class="btn btn-primary" href="/project/parameter/values/manage/?id={{i.id}}">Manage Values</button></a>
+            </td>
+
+            
            
             </td>
         </tr>

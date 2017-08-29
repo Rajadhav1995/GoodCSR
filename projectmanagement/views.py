@@ -251,7 +251,10 @@ def manage_parameter(request):
 
 def manage_parameter_values(request):
     ids =  request.GET.get('id')
-    parent_obj = ProjectParameter.objects.get(id=ids)
-    obj = ProjectParameter.objects.get(parent=parent_obj)
-    parameter = ProjectParameterValue.objects.filter(keyparameter=obj)
+    parameter1 = ProjectParameter.objects.get(id=ids)
+    # key_parameter = ProjectParameter.objects.filter(parent=parameter)
+
+    parameter = ProjectParameterValue.objects.get_or_none(keyparameter__id=ids)
+    import ipdb;ipdb.set_trace()
+    key_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter1)
     return render(request,'project/parameter_value_list.html',locals())

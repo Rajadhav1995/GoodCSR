@@ -36,25 +36,25 @@
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Parameter Name</th>
-                {% for i in parameter %}
-                <th>{{i.keyparameter.name}}</th>
+                <th>{{parameter.name}}</th>
+                {% for i in key_parameter %}
+                <th>{{i.name}}</th>
                 {% endfor %}
+                
                 <th>Action</th>
             </tr>
         </thead>
         
-        <!-- {% for i in parameter %} -->
+        
         <tr>
-            <td>{{parent_obj.name}}</td>
-            {% for i in parameter %}
-            <td>{{i.parameter_value}}</td>
-            {% endfor %}
+            <td>{{i.name}}</td>
+            <td>{{i.project.name}}</td>
+            <td>{{i.get_active_display}}</td>
             <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a></td>
            
             </td>
         </tr>
-        {% endfor %}
+        
 
   </tbody>
 </table>
