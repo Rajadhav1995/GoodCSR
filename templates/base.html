@@ -8,11 +8,18 @@
 <title>Samhita GoodCSR</title>
 
 <!--CSS Srat-->
+<link rel="stylesheet" href="/static/css/bootstrap.css" />
 <link rel="stylesheet" href="/static/css/style.css" />
 <link rel="stylesheet" href="/static/css/font-awesome.css">
 <link rel="stylesheet" href="/static/css/ddsmoothmenu.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery.mmenu.all.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.mmenu.all.css" />
+<link rel="stylesheet" href="/static/css/style-new.css" />
+<link href="/static/css/icon.css" rel="stylesheet">
+<link href="/static/css/materialize.min.css" rel="stylesheet" >
+<link rel="stylesheet" href="/static/css/fm.tagator.jquery.css"/>
 <link rel="stylesheet" href="/static/css/jquery.selectbox.css" type="text/css" />
+<link rel="stylesheet" href="/static/css/fSelect.css" />
+<link rel="stylesheet" href="/static/css/bootstrap-multiselect.css" type="text/css"/>
 
 
 <!--Common Script-->
@@ -20,6 +27,7 @@
 <script type="text/javascript" src="/static/js/html5.js"></script>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-multiselect.js"></script>
 
 <!-- IE less than 9 -->
 <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -70,7 +78,7 @@
 <header>
     <div class="row">
         <div id="menu">
-        	<div class="logo"><a href="index.html"><img src="img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
+        	<div class="logo"><a href="index.html"><img src="/static/img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
            <div class="m-menu"><a href="#mobNav"><span></span><span></span><span></span></a></div>       
            <nav id="smoothmenu" class="ddsmoothmenu">
             <ul>
@@ -133,13 +141,13 @@
         </li>
         <li class="dropdown user user-menu">
             <a href="javascript:void(0);" class="dropdown-toggle" >
-              <img src="img/user-img.png" class="user-image" alt="User Image">
+              <img src="/static/img/user-img.png" class="user-image" alt="User Image">
               <i class="fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu" style="display:none;">
               <!-- User image -->
               <li class="user-header">
-                <img src="img/user-img.png" class="img-circle" alt="User Image">
+                <img src="/static/img/user-img.png" class="img-circle" alt="User Image">
 
                 <h3>Admin Name</h3>
                 <h4>Admin</h4>
@@ -150,7 +158,7 @@
                   <a href="javascript:void(0);" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="javascript:void(0);" class="btn btn-default btn-flat">Sign out</a>
+<!--<!--                  <a href="/logout/" class="btn btn-default btn-flat">Sign out</a>-->-->
                 </div>
               </li>
             </ul>
@@ -181,52 +189,52 @@
 <section class="content-part">
 	<div class="row">
 	<div class="content-top">
-      <div class="select-area">
-      	<label>See Data as </label>
-        <select name="lang" class="select_box ">
-            <option>Quarter1</option>
-            <option>Quarter2</option>
-            <option>Quarter3</option>
-        </select>
-        <div class="small-select">
-        <select name="lang" class="select_box ">
-            <option>2016</option>
-            <option>2017</option>
-        </select>
-        <div class="dropdown user select-down select-width1">
-            <a href="javascript:void(0);" class="dropdown-toggle">
-              <p>Sep-Dec</p>
-              <i class="fa fa-angle-down"></i>
-            </a>
-            <ul class="dropdown-menu1" style="display:none;">
-            
-              <li class="user-header">
-                <input class="check-box" type="checkbox" id="one" />
-                <label for="one"><span><span></span></span> Jan-Mar</label>
-              </li>
-              <li>
-                <input class="check-box" type="checkbox" id="two" />
-                <label for="two"><span><span></span></span> Apr-Jul</label>
-              </li>
-              <li>  
-                <input class="check-box" type="checkbox" id="three" />
-                <label for="three"><span><span></span></span> Aug-Sep</label>
-              </li>
-              <li>  
-                <input class="check-box" type="checkbox" id="four" />
-                <label for="four"><span><span></span></span> Oct-Dec</label>  
-              </li>
-              
-            </ul>
-          </div>
-        <!--<select multiple="multiple" name="lang" class="select_box">
-            <option>Sep-Dec</option>
-            <option>Jan-Mar</option>
-            <option>Apr-Jul</option>
-            <option>Aug-Sep</option>
-            <option>Oct-Dec</option>
-        </select>-->
-        </div>
+<!--      <div class="select-area">-->
+<!--      	<label>See Data as </label>-->
+<!--        <select name="lang" class="select_box ">-->
+<!--            <option>Quarter1</option>-->
+<!--            <option>Quarter2</option>-->
+<!--            <option>Quarter3</option>-->
+<!--        </select>-->
+<!--        <div class="small-select">-->
+<!--        <select name="lang" class="select_box ">-->
+<!--            <option>2016</option>-->
+<!--            <option>2017</option>-->
+<!--        </select>-->
+<!--        <div class="dropdown user select-down select-width1">-->
+<!--            <a href="javascript:void(0);" class="dropdown-toggle">-->
+<!--              <p>Sep-Dec</p>-->
+<!--              <i class="fa fa-angle-down"></i>-->
+<!--            </a>-->
+<!--            <ul class="dropdown-menu1" style="display:none;">-->
+<!--            -->
+<!--              <li class="user-header">-->
+<!--                <input class="check-box" type="checkbox" id="one" />-->
+<!--                <label for="one"><span><span></span></span> Jan-Mar</label>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <input class="check-box" type="checkbox" id="two" />-->
+<!--                <label for="two"><span><span></span></span> Apr-Jul</label>-->
+<!--              </li>-->
+<!--              <li>  -->
+<!--                <input class="check-box" type="checkbox" id="three" />-->
+<!--                <label for="three"><span><span></span></span> Aug-Sep</label>-->
+<!--              </li>-->
+<!--              <li>  -->
+<!--                <input class="check-box" type="checkbox" id="four" />-->
+<!--                <label for="four"><span><span></span></span> Oct-Dec</label>  -->
+<!--              </li>-->
+<!--              -->
+<!--            </ul>-->
+<!--          </div>-->
+<!--        <!--<select multiple="multiple" name="lang" class="select_box">-->
+<!--            <option>Sep-Dec</option>-->
+<!--            <option>Jan-Mar</option>-->
+<!--            <option>Apr-Jul</option>-->
+<!--            <option>Aug-Sep</option>-->
+<!--            <option>Oct-Dec</option>-->
+<!--        </select>-->
+<!--        </div>-->
          </div>
         <!--<form>
           <div class="multiselect">
@@ -252,7 +260,7 @@
     </div>
     <div class="white-box white-pad">
       <h2>Key Program Info</h2>
-        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
+<!--<!--        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>-->
         <ul>
           <li>
               <h3>No. of Projects </h3>
