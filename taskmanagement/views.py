@@ -194,9 +194,12 @@ def updates(obj_list):
     return uploads
         
 def corp_task_completion_chart(obj_list):
-#    progress={}
+    data={}
+    task_completion={}
+    complete_status = []
     task_progress =[] 
-    total_percent=[]  
+    total_percent=[] 
+    remaining =[] 
     if obj_list:
         for project in obj_list:
             total_tasks = project.total_tasks()
@@ -204,6 +207,12 @@ def corp_task_completion_chart(obj_list):
             percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
             remaining_percent = 100 - percentage
             total_percent.append(str(percentage))
-            progress = project.name+ ' ' + str(percentage)+'%'
-            task_progress.append(progress)
-    return task_progress
+            progress = str(project.name)+ ' ' + str(percentage)+'%'
+            task_progress.append(str(progress))
+            remaining.append(int(remaining_percent))
+            data = int(percentage)
+            complete_status.append(data)
+        task_completion = {'x_axis': task_progress,'remaining':remaining,'data':complete_status}
+    return task_completion
+    
+

@@ -274,7 +274,7 @@
             </li>
             <li>
               <h3>% Total budget disbursed<span></span></h3>
-                 <img src="/static/img/key-icon3.png" alt="">
+                 <div id="total_budget" ></div>
                 <div class="budget-pad">
                   <p><span class="green-circle"></span> Disbursed</p>
                     <div class="budget-value">
@@ -482,10 +482,10 @@
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-    <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>
+<!--    <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>-->
 <script src="/static/code/highcharts.js"></script>
 <script src="/static/code/highcharts-more.js"></script>
-<script src="/static/code/modules/exporting.js"></script>
+<!-- <script src="code/modules/exporting.js"></script> -->
 <script src="/static/code/modules/solid-gauge.js"></script>
 
 <script>
@@ -512,8 +512,7 @@
  });
 	
 </script>
-    
-<script>
+ <script>
 $(document).ready(function() {
 console.log('HI');
 
@@ -537,8 +536,7 @@ console.log(map_data[0]);
         });
 		
 		});
-</script> 
-
+</script>    
 <script type='text/javascript'>//<![CDATA[
 $(function(){
         //-------------------------------------------------------
@@ -546,14 +544,15 @@ $(function(){
             return ['M', x, y + width / 2, 'L', x + height, y + width / 2];
         };
         //-------------------------------------------------------
-        var chart = new Highcharts.Chart({
+        var bwContainer = new Highcharts.Chart({
             chart: {
                 renderTo: 'bwContainer',
                 type: 'bar',
                 borderWidth: 1,
                 borderColor: 'rgba(0,0,0,0)',
                 margin: [30, 10, 50, 100],
-                backgroundColor: '#F1F3E8'
+                backgroundColor: '#F1F3E8',
+                height:320
             },
             credits: {
                 enabled: false
@@ -750,14 +749,23 @@ function showCheckboxes() {
         
 </script>
 <script>
-{{tasks_progress}}
 
-console.log({{tasks_progress}})
+
+var tasks = {{tasks_progress| safe}} ;
+var category = tasks.x_axis;
+console.log("hello");
+var remaining = tasks.remaining;
+var completed_status = tasks.data;
+var progress = []
+for (i=0;i<completed_status.length;i++){
+       progress.push( { 'y': completed_status[i], 'color': '#2E9776' })
+} 
+console.log(progress);
 Highcharts.chart('Progress_Completion',{
         chart: {
             type: 'bar',
             backgroundColor: null,
-             height: 300
+            height: 320
         },
         credits: {
          enabled: false
@@ -767,7 +775,7 @@ Highcharts.chart('Progress_Completion',{
         },
         xAxis: {
 
-        categories: ['School1 100%', 'School2 70%', 'School3 55%', 'School4 80%', 'School5 40%'],
+        categories: category ,
         
         },
         yAxis: {
@@ -795,22 +803,15 @@ Highcharts.chart('Progress_Completion',{
         series: [ {
             name: 'Remaining',
 
-            data: [0, 30, 45, 20, 60],
+            data: remaining,
             borderWidth: 0,
             color: "#D0D0D0"
         }, {
         name: 'Completed',
-        data: [
-        { y: 100, color: '#2E9776' }, 
-        { y: 70, color: '#2E9776' },
-        { y: 55, color: '#2E9776' }, 
-        { y: 80, color: '#2E9776' }, 
-        { y: 40, color: '#2E9776' }
-        ]
+        data: progress
     }]
         
     });
-
 
 Highcharts.chart('planned_utilized', {
     chart: {
@@ -1009,6 +1010,8 @@ Highcharts.chart('planned_utilized', {
 var gaugeOptions = {
 
     chart: {
+      height:250,
+      backgroundColor: null,
          plotBackgroundColor: null,
             plotBackgroundImage: null,
             plotBorderWidth: 0,
@@ -1025,10 +1028,10 @@ var gaugeOptions = {
             endAngle: 90,
             background: {
                 borderWidth: 0,
-                backgroundColor: 'none',
+                backgroundColor:null,
                 innerRadius: '60%',
                 outerRadius: '100%',
-                shape: 'arc'
+                shape: 'arc',
             }
         },
 
@@ -1049,7 +1052,7 @@ var gaugeOptions = {
         minorTickInterval: null,
         tickAmount: 0,
         title: {
-            y: -70
+            y: 0
         },
         labels: {
             enabled: false
@@ -1096,8 +1099,8 @@ var gaugeOptions = {
                 dial: {
                     backgroundColor:'#7A4F59',
                     borderColor: "#DAC7CC",
-                    radius: '100%',
-                    baseWidth: 2,
+                    radius: '105%',
+                    baseWidth: 5,
                        baseLength: '100%',
                         baseWidth: 2,
                         rearLength: '0%',
@@ -1129,8 +1132,8 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
             innerSize: '70%',
             data: [
 
-                    {y:40,name:'Disbursed',color:'#2E9874'},
-                    {y:20,name:'Total',color:'#D0C173'}
+                    {y:60,name:'Disbursed',color:'#2E9874'},
+                    {y:40,name:'Total',color:'#D0C173'}
              
               
             ]
@@ -1138,20 +1141,22 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
 
       {
             type: 'gauge',
-            innerSize: '100%',
+            // innerSize: '100%',
             data: [0],
             
         }
     ],
         dataLabels: {
            enabled: true
-        },
-        tooltip: {
-            valueSuffix: ' km/h'
         }
+        // ,
+        // tooltip: {
+        //     valueSuffix: ' km/h'
+        // }
    
 
 }));
+
 // Bring life to the dials
 setInterval(function () {
     // Speed
@@ -1169,7 +1174,7 @@ setInterval(function () {
 
          $.each(chartSpeed.series, function(i, item){
             if(item.type == 'gauge'){
-               item.setData([["none",chartSpeed.yAxis[0].max-((point.y+point1.y)/2)]], true);
+                item.setData([["none",point.y]], true);
                
             }
         });
@@ -1263,9 +1268,9 @@ Highcharts.chart('Beneficiary_Distribution', {
 
 
         <style type="text/css">
-    #container-speed .highcharts-container {
-        border-bottom: 1px solid;
-        height: 110px !important;
+    #total_budget .highcharts-container {
+    
+        
     }
 </style>
 </body>
