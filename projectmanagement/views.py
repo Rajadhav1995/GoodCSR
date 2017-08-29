@@ -211,11 +211,13 @@ def add_parameter(request):
         name_count = int(request.POST.get('name_count'))
         agg_type = request.POST.get('agg_type')
         parent_obj = ProjectParameter.objects.create(parameter_type=parameter_type,\
-                                project=project,aggregation_function=agg_type,name = name)
+                                project=project,aggregation_function=agg_type,name = name,\
+                                instructions=instruction)
         if name_count != 0:
             for i in range(name_count):
                 name = 'name['+str(i+1)+']'
-                obj = ProjectParameter.objects.create(parameter_type=parameter_type,project=project,\
+                instruction = 'instruction['+str(i+1)+']'
+                obj = ProjectParameter.objects.create(parameter_type=parameter_type,project=project,instructions=request.POST.get(instruction),\
                         name=request.POST.get(name),parent=parent_obj,aggregation_function=request.POST.get('agg_type'))
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %slug)
         # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
@@ -233,6 +235,7 @@ def upload_parameter(request):
         end_date = str(now.year)+'-'+str(month)+'-'+str(days)
         submit_date = str(now.year)+'-'+str(now.month)+'-'+str(now.day)
         if key_parameter.exists():
+            total_count = []
             for i in key_parameter:
                 value = 'value['+str(i.id)+']'
                 obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value),\
@@ -249,11 +252,36 @@ def manage_parameter(request):
     return render(request,'project/parameter_list.html',locals())
 
 
+# def manage_parameter_values(request):
+#     ids =  request.GET.get('id')
+#     parameter1 = ProjectParameter.objects.get(id=ids)
+#     # key_parameter = ProjectParameter.objects.filter(parent=parameter)
+
+#     parameter = ProjectParameterValue.objects.filter(keyparameter__id=ids)
+#     import ipdb;ipdb.set_trace()
+#     coloumn = []
+#     coloumn.append('Month')
+
+#     for i in parameter:
+#         para_type = i.keyparameter.parameter_type
+#         if para_type == 'PIN' or para_type == 'PIP':
+#             key_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter1)
+#             coloumn.append(i.keyparameter.name)
+#         else:
+#             coloumn.append(i.keyparameter.name)
+#             key_parameter=''
+#     import ipdb;ipdb.set_trace()
+#     return render(request,'project/parameter_value_list.html',locals())
+
 def manage_parameter_values(request):
     ids =  request.GET.get('id')
-    parameter1 = ProjectParameter.objects.get(id=ids)
-    # key_parameter = ProjectParameter.objects.filter(parent=parameter)
-
-    parameter = ProjectParameterValue.objects.get_or_none(keyparameter__id=ids)
-    key_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter1)
+    parameter = ProjectParameter.objects.get(id=ids)
+    parameter_count = ProjectParameter.objects.filter(parent=parameter).count() + 1
+    if parameter.parameter_type == 'NUM' or parameter.parameter_type == 'CUR' or parameter.parameter_type == 'PER':
+        ff = ProjectParameterValue.objects.filter(keyparameter=parameter)
+    else:
+        child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter).order_by('-submit_date')
+        # child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=para)
+    # import ipdb; ipdb.set_trace()
+    name_range = range(1,parameter_count)
     return render(request,'project/parameter_value_list.html',locals())
