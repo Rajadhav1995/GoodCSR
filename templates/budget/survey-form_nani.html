@@ -1,0 +1,479 @@
+{% extends "manage/base.html" %}
+
+{% block rightcontent %}
+<div id="content" class="col-lg-10 col-sm-10" style="width:100%">
+    <div class="row">
+        <div class="box col-md-12 lightyellow">
+            <div class="box-inner">
+                <div class="box-header well" data-original-title="">
+                    <h2><i class="glyphicon"></i>{% if survey_obj %}{{survey_obj.name}}{% if village_obj %} - {{village_obj.name}}{% endif %}{% if beneficiary_obj %} - {{beneficiary_obj.name}}{% endif %}{% else %}Add Form{% endif %}</h2>
+                </div>
+                {% if not key %}
+                <form action="." method="POST" id="survey_form">{% csrf_token %}
+                    <input type="hidden" name="key" value="search">
+                    <ul class="list-yq allcenter">
+                        <li>
+                            <div class="select-outer">
+                                <select id="id_survey" class="partnerdd partnerdd-filters select-input project-filter" name="form" required>
+                                    <option value="">Select Form</option>
+                                    {% for survey in survey_list %}
+                                        <option value="{{ survey.id }}">{{ survey.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+                {% endif %}
+                {% if key == 'search' %}
+                    <form action="." method="POST" id="survey_form">{% csrf_token %}
+                        <input type="hidden" name="key" value="level">
+                        <input type="hidden" name="form" value="{{survey_id}}">
+                        <ul class="list-yq allcenter">
+                            {% if not survey_obj.data_entry_level.name == "Beneficiary" %}
+                                <li>
+                                    <div class="select-outer">
+                                        <select id="id_survey" class="partnerdd partnerdd-filters select-input project-filter" name="level" required>
+                                            <option value="">Select {{level}}</option>
+                                            {% for c in cobjects %}
+                                                <option value="{{ c.id }}">{{ c.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <div class="select-outer">
+                                        <select id="id_level" class="partnerdd partnerdd-filters select-input project-filter" name="level" required>
+                                            <option value="">Select {{level}}</option>
+                                            {% for c in cobjects %}
+                                                <option value="{{ c.id }}">{{ c.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="select-outer">
+                                        <select id="id_survey" class="partnerdd partnerdd-filters select-input project-filter" name="beneficiary" required>
+                                            <option value="">Select Beneficiary</option>
+                                        </select>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <div class="select-outer">
+                                    <select id="id_language" class="partnerdd partnerdd-filters select-input project-filter" name="language" required>
+                                        <option value="">Select Language</option>
+                                        {% for lang in languages %}
+                                            <option value="{{ lang.id }}">{{ lang.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </li>
+                        </ul>
+                        <input type="submit" value="Submit" class="submit_forms subcl">
+                    </form>
+                {% endif %}
+                {% if key == 'level' or key == 'form'%}
+                {% if blk %}
+                <form id="form_{{blk.order}}" method="POST" action=".">{% csrf_token %}
+                <input type="hidden" name="block" value="{% if next_block_order %}{{next_block_order}}{% else %}{{blk.order}}{% endif %}">
+                <input type="hidden" name="key" value="form">
+                <input type="hidden" name="form" value="{{survey_id}}">
+                <input type="hidden" name="last_order" value="{{last_question_order}}">
+                <input type="hidden" name="has_next" value="{{has_next}}">
+                <div class="box-content form_add" id="block_{{forloop.counter}}">
+                    <div class="form_bottom_line">
+                        {% get_block_lang_name request blk request.session.language as block_name %}
+                        <h3>{{block_name|title}}</h3>
+                        <div class="col-md-12">
+                            <form action="." method="POST" id="survey_form">{% csrf_token %}
+                            {% for i in display_questions %}
+                            {% get_question_lang_name request i request.session.language as question_name %}
+                            {% if i.qtype == 'T' %}
+                            <div class="col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="col-sm-5 col-xs-12">{{question_name}}{% if i.mandatory %}<span class="star">*</span>{% endif %}{% if i.help_text %}{{i.help_text}}{% endif %}{% if i.help_text %}<a href="#" title="{{i.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</label>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control{% if i.mandatory %} mandatory{% endif %}{% if i.validation == 1 %} digits{% endif %}{% if i.validation == 0 %} number{% endif %}{% if i.validation == 2 %} lettersonly{% endif %}{% if i.validation == 3 %} alphanumeric{% endif %}{% if i.get_validation.min_value %}{% if i.validation == 2 or i.validation == 3 %} minlength{% else %} min{% endif %}{% endif %}{% if i.get_validation.max_value %} max{% endif %}" name="q_{{i.id}}" {% if i.get_validation.min_value %}{% if i.validation == 2 or i.validation == 3 %}minlength{% else %}min{% endif %}={{i.get_validation.min_value}}{% endif %}{% if i.get_validation.max_value %} {% if i.validation == 2 or i.validation == 3 %}maxlength{% else %}max{% endif %}={{i.get_validation.max_value}}{% endif %}>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if i.qtype == 'D' %}
+                            <div class="col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="col-sm-5 col-xs-12">{{question_name}}{% if i.mandatory %}<span class="star">*</span>{% endif %}{% if i.help_text %}<a href="#" title="{{i.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</label>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control {% if i.mandatory %}mandatory{% endif %} datepick" name="q_{{i.id}}">
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if i.qtype == 'R' %}
+                            <div class="col-md-6 col-xs-12 radio">
+                                <div class="form-group">
+                                    <label class="col-sm-5 col-xs-12">{{question_name}}{% if i.mandatory %}<span class="star">*</span>{% endif %}{% if i.help_text %}<a href="#" title="{{i.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</label>
+                                    <div class="col-sm-7 col-xs-12">
+                                        {% for options in i.get_choices %}
+                                        {% get_choice_lang_name request options request.session.language as choice_name %}
+                                        <div>
+                                            <input type="radio" name="q_{{i.id}}" value="{{options.id}}" class="form-group {% if i.mandatory %}mandatory{% endif %}"><label>{{choice_name}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if i.qtype == 'S' %}
+                            <div class="col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="col-sm-5 col-xs-12">{{question_name}}{% if i.mandatory %}<span class="star">*</span>{% endif %}{% if i.help_text %}<a href="#" title="{{i.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</label>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <select class="form-group form-control {% if i.mandatory %}mandatory{% endif %}" name="q_{{i.id}}">
+                                            <option value="">Select</option>
+                                            {% for options in i.get_choices %}
+                                                {% get_choice_lang_name request options request.session.language as choice_name %}
+                                                <option value="{{options.id}}" {% if options.skip_question %}id="skip_{{options.skip_question.id}}{% endif %}">{{choice_name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if i.qtype == 'C' %}
+                            <div class="col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="col-sm-5 col-xs-12">{{question_name}}{% if i.mandatory %}<span class="star">*</span>{% endif %}{% if i.help_text %}<a href="#" title="{{i.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</label>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <select class="form-group form-control {% if i.mandatory %}mandatory{% endif %}" name="q_{{i.id}}" multiple="multiple">
+                                            {% for options in i.get_choices %}
+                                                {% get_choice_lang_name request options request.session.language as choice_name %}
+                                                <option value="{{options.id}}" {% if options.skip_question %}id="skip_{{options.skip_question.id}}{% endif %}">{{choice_name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if i.qtype == 'In' %}
+                            <div class="inline" id="inline_{{i.id}}">
+                                <input type="hidden" name="count_{{i.id}}" value= "1" />
+                                <div class="form-group">
+                                    <label class="col-sm-5 col-xs-12">{{question_name}}{% if i.mandatory %} *{% endif %}{% if i.help_text %}<a href="#" title="{{i.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</label>
+                                    <div class="col-sm-12 col-xs-12">
+                                        <input type="button" class="clone_{{i.id}}" value="Add"/>
+                                        <input type="button" class="remove_{{i.id}}" value="Remove"/>
+                                        <table class="table-responsive">
+                                        <tr>
+                                            <th></th>
+                                            {% for options in i.get_assessments %}
+                                                {% get_question_lang_name request options request.session.language as question_name %}
+                                                <th>{% if options.qtype == 'C' %}<div style="width:200px !important">{% endif %}{{question_name}}{% if options.qtype == 'C' %}</div>{% endif %}{% if options.mandatory %}<span class="star">*</span>{% endif %}{% if options.help_text %}<a href="#" title="{{options.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        <tbody>
+                                            <tr class="data_row_{{i.id}}" id="tr_1">
+                                            <td><span class="init_{{i.id}}">1</span></td>
+                                            {% for options in i.get_assessments %}
+                                                {% get_question_lang_name request options request.session.language as question_name %}
+                                                <td>
+                                                {% if options.qtype == 'T' %}
+                                                <input type="text" name="inline_{{options.id}}_1" class="form-group {% if options.mandatory %}mandatory required{% endif %}{% if options.validation == 1 %} digits{% endif %}{% if options.validation == 0 %} number{% endif %}{% if options.validation == 2 %} lettersonly{% endif %}{% if options.validation == 3 %} alphanumeric{% endif %}{% if options.get_validation.min_value %} min{% endif %}{% if options.get_validation.max_value %} max{% endif %}" {% if options.get_validation.min_value %}{% if options.validation == 2 or options.validation == 3 %}minlength{% else %}min{% endif %}={{options.get_validation.min_value}}{% endif %}{% if options.get_validation.max_value %} {% if options.validation == 2 or options.validation == 3 %}maxlength{% else %}max{% endif %}={{options.get_validation.max_value}}{% endif %}>
+                                                {% elif options.qtype == 'R' %}
+                                                    {% for choice in options.get_choices %}
+                                                        {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                        <div><input type="radio" name="inline_{{options.id}}_1" value="{{choice.id}}" class="form-group {% if options.mandatory %}mandatory required{% endif %}"><label>{{choice_name}}</label></div>
+                                                    {% endfor %}
+                                                {% elif options.qtype == 'S' %}
+                                                    <select class="form-group form-control {% if options.mandatory %}mandatory required{% endif %}" name="inline_{{options.id}}_1">
+                                                        <option value="">Select</option>
+                                                        {% for choice in options.get_choices %}
+                                                            {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                            <option value="{{choice.id}}" {% if choice.skip_question %}id="skip_{{choice.skip_question.id}}{% endif %}">{{choice_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                {% elif options.qtype == 'C' %}
+                                                    <div>
+                                                        {% for choice in options.get_choices %}
+                                                            {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                            <input class="chk" type="checkbox" value="{{choice.id}}" {% if choice.skip_question %}id="skip_{{choice.skip_question.id}}"{% endif %} name="inline_{{options.id}}_1">{{choice_name}}<br/>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% elif options.qtype == 'D' %}
+                                                    <input type="text" name="inline_{{options.id}}_1" class="form-group {% if options.mandatory %}mandatory required{% endif %} datepick">
+                                                {% endif %}
+                                                </td>
+                                            {% endfor %}
+                                             </tr>
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if i.qtype == 'GD' %}
+                            <div class="grid" id="grid_{{i.id}}">
+                                <div class="form-group">
+                                    <label class="col-sm-5 col-xs-12">{{question_name}}{% if i.help_text %}<a href="#" title="{{i.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</label>
+                                    <div class="col-sm-12 col-xs-12">
+                                        <table class="table-responsive">
+                                        <tr>
+                                            <th></th>
+                                            {% for options in i.get_assessments %}
+                                                {% get_question_lang_name request options request.session.language as question_name %}
+                                                <th>{{question_name}}{% if options.mandatory %}<span class="star">*</span>{% endif %}{% if options.help_text %}<a href="#" title="{{options.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        <tbody>
+                                            {% for options in i.get_subquestions %}
+                                                {% get_question_lang_name request options request.session.language as question_name %}
+                                                <tr>
+                                                    <td>{{question_name}}{% if options.mandatory %}<span class="star">*</span>{% endif %}{% if options.help_text %}<a href="#" title="{{options.help_text}}"><span class="glyphicon glyphicon-info-sign" style="margin-left:8px;" aria-hidden="true"></span></a>{% endif %}</td>
+                                                    {% for assess in i.get_assessments %}
+                                                        <td>
+                                                        {% if assess.qtype == 'C' %}
+                                                                <select class="form-group form-control {% if assess.mandatory %}mandatory{% endif %}" name="grid_{{assess.id}}_{{options.id}}" multiple="multiple">
+                                                                    {% for choice in assess.get_choices %}
+                                                                        {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                                        <option value="{{choice.id}}" {% if choice.skip_question %}id="skip_{{choice.skip_question.id}}{% endif %}">{{choice_name}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                        {% elif assess.qtype == 'T' %}
+                                                        <input type="text" name="grid_{{assess.id}}_{{options.id}}" class="form-group {% if assess.mandatory %}mandatory{% endif %}{% if assess.validation == 1 %} digits{% endif %}{% if assess.validation == 0 %} number{% endif %}{% if assess.validation == 2 %} lettersonly{% endif %}{% if assess.validation == 3 %} alphanumeric{% endif %}{% if assess.get_validation.min_value %} min{% endif %}{% if assess.get_validation.max_value %} max{% endif %}" {% if assess.get_validation.min_value %}{% if assess.validation == 2 or assess.validation == 3 %}minlength{% else %}min{% endif %}={{assess.get_validation.min_value}}{% endif %}{% if assess.get_validation.max_value %} {% if assess.validation == 2 or assess.validation == 3 %}maxlength{% else %}max{% endif %}={{assess.get_validation.max_value}}{% endif %}>
+                                                        {% elif assess.qtype == 'S' %}
+                                                            <select class="form-group form-control {% if assess.mandatory %}mandatory{% endif %}" name="grid_{{assess.id}}_{{options.id}}">
+                                                                <option value="">Select</option>
+                                                                {% for choice in assess.get_choices %}
+                                                                    {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                                    <option value="{{choice.id}}" {% if choice.skip_question %}id="skip_{{choice.skip_question.id}}{% endif %}">{{choice_name}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        {% elif assess.qtype == 'R' %}
+                                                            {% for choice in assess.get_choices %}
+                                                            {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                            <div><input type="radio" name="grid_{{assess.id}}_{{options.id}}" value="{{choice.id}}" class="form-group {% if assess.mandatory %}mandatory{% endif %}"><label>{{choice_name}}</label></div>
+                                                            {% endfor %}
+                                                        {% elif assess.qtype == 'D' %}
+                                                            <input type="text" name="grid_{{assess.id}}_{{options.id}}" class="form-group {% if assess.mandatory %}mandatory required{% endif %} datepick">
+                                                        {% elif assess.qtype == 'N' %}
+                                                            {% if options.qtype == 'C' %}
+                                                                <select class="form-group form-control {% if options.mandatory %}mandatory{% endif %}" name="grid_{{assess.id}}_{{options.id}}" multiple="multiple">
+                                                                    {% for choice in options.get_choices %}
+                                                                        {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                                        <option value="{{choice.id}}" {% if choice.skip_question %}id="skip_{{choice.skip_question.id}}{% endif %}">{{choice_name}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            {% elif options.qtype == 'T' %}
+                                                            <input type="text" name="grid_{{assess.id}}_{{options.id}}" class="form-group {% if options.mandatory %}mandatory{% endif %} {% if options.validation == 1 %}digits{% endif %} {% if options.validation == 0 %}number{% endif %} {% if options.validation == 2 %}lettersonly{% endif %} {% if options.validation == 3 %}alphanumeric{% endif %}{% if assess.get_validation.min_value %} min{% endif %}{% if assess.get_validation.max_value %} max{% endif %}" {% if assess.get_validation.min_value %}{% if assess.validation == 2 or assess.validation == 3 %}minlength{% else %}min{% endif %}={{assess.get_validation.min_value}}{% endif %}{% if assess.get_validation.max_value %} {% if assess.validation == 2 or assess.validation == 3 %}maxlength{% else %}max{% endif %}={{assess.get_validation.max_value}}{% endif %}>
+                                                            {% elif options.qtype == 'S' %}
+                                                                <select class="form-group form-control {% if options.mandatory %}mandatory{% endif %}" name="grid_{{assess.id}}_{{options.id}}">
+                                                                    <option value="">Select</option>
+                                                                    {% for choice in options.get_choices %}
+                                                                        {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                                        <option value="{{choice.id}}" {% if choice.skip_question %}id="skip_{{choice.skip_question.id}}{% endif %}">{{choice_name}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            {% elif options.qtype == 'R' %}
+                                                                {% for choice in options.get_choices %}
+                                                                {% get_choice_lang_name request choice request.session.language as choice_name %}
+                                                                <div><input type="radio" name="grid_{{assess.id}}_{{options.id}}" value="{{choice.id}}" class="form-group {% if options.mandatory %}mandatory{% endif %}"><label>{{choice_name}}</label></div>
+                                                                {% endfor %}
+                                                            {% elif options.qtype == 'D' %}
+                                                            <input type="text" name="grid_{{assess.id}}_{{options.id}}" class="form-group {% if options.mandatory %}mandatory required{% endif %} datepick">
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        </td>
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" value="{% if not survey_obj.get_final_block == blk.order %}Continue{% else %}Submit{% endif %}" class="submit_forms">
+                </form>
+                {% elif key == 'form' and not blk %}
+                    survey response successfully taken
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/static/manage/js/jquery.validate.js"></script>
+<script type="text/javascript" src="/static/js/select2.full.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/select2.css">
+<script type="text/javascript" src="/static/js/jquery.datepick.js"> </script>
+<link href="/static/css/jquery.datepick.css" rel="stylesheet" type="text/css" />
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+         $(".datepick" ).datepick({dateFormat: 'yyyy-mm-dd'});
+        $.validator.addMethod("lettersonly", function(value, element)
+            {
+            return this.optional(element) || /^[a-z," "]+$/i.test(value);
+            }, "Letters and spaces only please");
+        $.validator.addMethod("alphanumeric",function(a,b)
+            {
+            return this.optional(b)||/^[a-zA-Z0-9\_\s]+$/i.test(a)},
+            "Letters, numbers, and underscores only please"
+            )
+
+
+        if ('{{success}}' == 'True'){
+            alert("Data added successfully")
+            window.location.href = "/form/report-form-list/?form={{survey_id}}"
+        }
+        $('select[multiple=multiple]').select2();
+        /*$("div[id^='block_']").hide();
+        $("input[id^='submit_']").hide();
+        $("#block_1").show();
+        $("#submit_1").show();
+        $("form[id^='form_']").validate({
+            submitHandler : function (){
+                    return validate_form_submit();
+              },
+        });*/
+        $("#form_{{blk.order}}").validate();
+        $('.mandatory').each(function() {
+            $(this).rules('add', {
+                required: true,
+            })
+        });
+       $('.max').each(function() {
+            conte = $(this).context.className
+            var dval = ''
+            var mval = ''
+            if (conte.search('digits') == 23 || conte.search('number') == 23){
+                dval = $(this).context.max
+                mval = $(this).context.min
+                $(this).rules('add', {
+                    max: function () {
+                        return parseInt(dval);
+                    },
+                    min: function () {
+                        return parseInt(mval);
+                    }
+                })
+            }
+            else if(conte.search('alphanumeric') == 23 || conte.search('lettersonly') == 23){
+                dval = $(this).context.maxLength
+                mval = $(this).context.minLength
+                $(this).rules('add', {
+                    maxlength: function () {
+                        return parseInt(dval);
+                    },
+                    minlength: function () {
+                        return parseInt(mval);
+                    }
+                })
+            }
+        });
+        /*$("#id_survey").change(function(){
+            $("#survey_form").submit();
+        });*/
+        {% if beneficiary_type %}
+        $("#id_level").change(function(){
+            var id=$(this).val();
+               $.ajax({
+               url : "/beneficiary/villagebased/" ,
+               type : "POST",
+               data: {'village_id':id, 'btypeid':{{beneficiary_type.id}}, 'user_id':{{request.user.id}}, 'survey_id':{{survey_id}}},
+               success: function(d) {
+                   if (d.data) {
+                           var res = d.data;
+                           $('#id_survey').find('option').remove().end();
+                           $('<option>', {value : "" }).html("Select Beneficiary").appendTo('#id_survey');
+                           for (i=0;i<res.length;i++) {
+                               $('<option>', {value : res[i].id }).html(res[i].name).appendTo('#id_survey');
+                       }
+                   }
+               }
+           });
+        });
+        {% endif %}
+        /*var sts = "{{ survey_id }}";
+        if (sts != "None"){
+            $("#id_survey").val(sts);
+        }
+        function validate_form_submit(){
+            lo = $("input[name='hidden']").val();
+            $("#block_"+lo).hide();
+            lol = parseInt(lo) + parseInt(1);
+            $("input[name='hidden']").val(lol);
+            $("#block_"+lol).show();
+            $("#submit_"+lo).hide();
+            $("#submit_"+lol).show();
+            return mandatory()
+        };
+        function mandatory(){
+            $('.mandatory').rules('add', {required: true,});
+        }*/
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#id_level").val("");
+        $('#id_survey').val("")
+        $('#id_language').val("")
+        function mandatory(){
+            $('.mandatory').rules('add', {required: true,});
+        }
+        {% for i in blk.get_parentnone_questions %}
+            {% if i.qtype == 'In' %}
+                function clone_{{i.id}}(){
+                    var count = $('input[name=count_{{i.id}}]').val();
+                    var c = count;
+                    var tR = $('.data_row_{{i.id}}:last').clone();
+                    count++;
+                    $(tR).find('td input, td select').each(function(){
+                      if ($(this).attr('name')){
+                          var name = $(this).attr('name').split('_');
+                          $(this).attr('name', name[0]+"_"+name[1]+"_"+count);
+                          $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                          if ($(this).hasClass('datepick hasDatepick') == true){
+                                $(this).removeClass('datepick hasDatepick')
+                                $(this).datepick({dateFormat: 'yyyy-mm-dd'});
+                          }
+                          if ($(this).attr('type') != 'radio'){
+                            if($(this).attr('type') == 'checkbox'){$(this).attr('checked', false);}
+                            else{
+                            $(this).val('');
+                            }
+                            }
+                            else{
+                                $(this).attr('checked', false);
+                            }
+                      }
+                    });
+                    $('input[name=count_{{i.id}}]').val(count)
+                    $(tR).find('td span.init_{{i.id}}').text(count);
+                    $(tR).insertAfter('.data_row_{{i.id}}:last');
+                    $('.mandatory').rules('add', {required: true,});
+                    }
+                function remove_{{i.id}}(){
+                    var count = $('input[name=count_{{i.id}}').val();
+                      if (count > 1) {
+                            $('tr.data_row_{{i.id}}:last').remove();
+                            count  = $('tr.data_row_{{i.id}}').length;
+                            $('input[name=count_{{i.id}}]').val(count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            $("input[class='clone_{{i.id}}']").on("click", clone_{{i.id}});
+            $("input[class='remove_{{i.id}}']").on("click", remove_{{i.id}});
+            {% endif %}
+        {% endfor %}
+
+    });
+</script>
+{% endblock %}
