@@ -7,6 +7,8 @@
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
 <input type="submit" value="Save Budget Lineitems" class="btn btn-success">
 <input type="hidden" name="count" value="6">
+<input type="hidden" name="slug" value="{{project_slug}}">
+<input type="hidden" name="budget_id" value="{{budget_id}}">
 <div class="box-body table-responsive">
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="80%">
         <thead>
@@ -17,7 +19,7 @@
                 <th></th>
                 <th></th>
                 {% for i,j in quarter_list.items %}
-                <th colspan="3">{{j}}</th>
+                <th colspan="4">{{j}}</th>
                 {% endfor %}
             </tr>
             <tr>
@@ -29,7 +31,8 @@
                 {% for i,j in quarter_list.items %}
                 <th> No. of unit </th>
                 <th> Rate </th>
-                <th> Total </th>
+                <th> Total Planned </th>
+                <th> Total Utilized </th>
                 {% endfor %}
             </tr>
         </thead>
@@ -48,18 +51,52 @@
                 {% endfor %}
                 </select></td>
             <td> <input type="text" name="subheading_{{j}}"> </td>
-             <td> <input type="text" name = "linetotal_{{j}}"> </td>
-              <td> <input type="text" name = "unit_type_{{j}}"> </td>
+             <td> <input type="text" name = "linetotal_{{j}}" id="linetotal_{{j}}"> </td>
+              <td> <input type="text" name = "unit-type_{{j}}"> </td>
             {% for i,v in quarter_list.items %}
-               <td> <input type="text" name = "no_of_unit_{{i}}_{{j}}"> </td>
-                <td> <input type="text" name = "rate_{{i}}_{{j}}"> </td>
-                 <td> <input type="text" name = "total_{{i}}_{{j}}"> </td>
+               <td> <input type="text" name = "unit_{{i}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" > </td>
+                <td> <input type="text" name = "rate_{{i}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}"> </td>
+                 <td> <input type="text" name = "planned-cost_{{i}}_{{j}}" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value = "" /> </td>
+                 <td> <input type="text" name = "utilized-cost_{{i}}_{{j}}"> </td>
                  {% endfor %}
         </tr>
         {% endfor %}
     </table>
 </div>
 </form>
+
+<script>
+$(document).ready(function()
+{
+    function updatePrice()
+    {
+        nam = $(this).context.name.split('_')
+        i = nam[1]
+        j = nam[2]
+        
+        var rate = parseFloat($("#rate_"+i+"_"+j).val());
+        var unit = parseFloat($("#unit_"+i+"_"+j).val());
+        var total = (rate) * (unit);
+        //var total = total.toFixed(2);
+        if (total.toString() == 'NaN'){
+            $("#planned-cost_"+i+"_"+j).val('');
+        }
+        else{
+            $("#planned-cost_"+i+"_"+j).val(parseInt(total));
+        }
+        
+        debugger
+        var linetotal = 0
+        $("[id^=planned-cost_"+parseInt(i)+"_]").each(function(){
+            linetotal += $(this).val()
+        })
+        var linetotal = parseFloat($("#planned-cost_"+i+"_"+j).val());
+    }
+    $(document).on("change, keyup", ".rate", updatePrice);
+    $(document).on("change, keyup", ".unit", updatePrice);
+});
+
+</script>
 
 
 {% endblock %}

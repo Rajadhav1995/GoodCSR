@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load urs_tags %}
+{% block section %}
+{% endblock %}
+{% block content %}
+
+</br>
+<div class="box-body table-responsive">
+    <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="80%">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                {% for i,j in quarter_list.items %}
+                <th colspan="3">{{j}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th> Location </th>
+                <th> Heading </th>
+                <th> Subheading </th>
+                <th> Unit Type </th>
+                {% for i,j in quarter_list.items %}
+                <th> No. of unit </th>
+                <th> Rate </th>
+                <th> Total Planned </th>
+                <th> Total Utilized </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for j in budget_period %}
+        
+        <tr>
+            {% get_budget_lineitem j as lineitemobj %}
+            <td> {{lineitemobj.category.name}}</td>
+            <td> {{lineitemobj.heading.name}} </td>
+            <td> {{lineitemobj.subheading}} </td>
+             <td> {{lineitemobj.unit_type}}  </td>
+            {% for i,v in quarter_list.items %}
+            {% get_quarter_details j i as line_itemobj %}
+               <td> {{line_itemobj.unit}} </td>
+                <td> {{line_itemobj.rate}} </td>
+                 <td> {{line_itemobj.planned_unit_cost}} </td>
+                 <td> {{line_itemobj.utilized_unit_cost}} </td>
+                 {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

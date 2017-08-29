@@ -53,6 +53,7 @@ class ProjectBudgetPeriodConf(BaseContent):
     project = models.ForeignKey('projectmanagement.Project')
     start_date = models.DateField(**OPTIONAL)
     end_date = models.DateField(**OPTIONAL)
+    row_order = models.IntegerField(default=0)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -90,6 +91,9 @@ class BudgetPeriodUnit(BaseContent):
     start_date = models.DateTimeField(**OPTIONAL)
     end_date = models.DateTimeField(**OPTIONAL)
     remarks = models.TextField()
-    order = models.IntegerField(default=0)
+    row_order = models.IntegerField(default=0)
+    quarter_order = models.IntegerField(default=0)
     history = HistoricalRecords()
 
+    def __str__(self):
+        return str(self.id)
