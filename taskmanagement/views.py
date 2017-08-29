@@ -9,6 +9,7 @@ from pmu.settings import BASE_DIR
 from taskmanagement.models import *
 from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
 from projectmanagement.models import Project,UserProfile
+from media.models import Attachment
 # Create your views here.
 
 def listing(request,model_name):
@@ -148,11 +149,60 @@ def total_tasks_completed(slug):
     return project,total_tasks,completed_tasks,milestones,total_milestones,percent
 
 
-def task_updates(obj_list):
+def my_task_updates(obj_list):
 #updates of the task
     try:
         task_obj = Task.objects.get(id = int(task_id))
-        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('-id')
+        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('created_by')
     except:
         attachment = []
     return attachment
+
+def my_task_details(task_id):
+    try:
+        task = Task.objects.get(id = int(task_id))
+    except:
+        task = []
+    return task
+   
+def my_tasks_listing():
+    tasks = Task.objects.filter(active=2).order_by('-createdby')
+    return tasks
+    
+def updates(obj_list):
+    formats = '%H:%M %p'
+    uploads = []
+    task_completed = {}
+    completed_tasks = []
+    task_uploads = {}
+    for project in obj_list:
+        project = Project.objects.get(id = int(project.id))
+        activity = Activity.objects.filter(project=project)
+        for act in activity:
+            task_list = Task.objects.filter(activity = act)
+            for task in task_list:
+                attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
+                if task.status == 2 and task.history.latest():
+                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
+                        'user_name':attach.created_by.email,'time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
+                    uploads.append(task_uploads)
+                if attach_list:
+                    for attach in attach_list:
+                        task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
+                        'user_name':attach.created_by.email,'time':attach.created.time(),'date':attach.created.date()}
+                        uploads.append(task_uploads)
+    return uploads
+        
+def corp_task_completion_chart(obj_list):
+    progress={}
+    task_progress =[] 
+    total_percent=[]  
+    if obj_list:
+        for project in obj_list:
+            total_tasks = project.total_tasks()
+            tasks_completed_count = project.tasks_completed()
+            percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
+            project = project.name
+            task_progress.append(progress)
+            total_percent.append(str(percentage))
+    return task_progress

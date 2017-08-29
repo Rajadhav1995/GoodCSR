@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+{% load common_tags %}
 <html>
 <head>
 <meta charset="utf-8" />
@@ -318,17 +319,22 @@
     <div class="white-box-right">
       <h2>Recent Updates</h2>
         <div id="boxscroll" class="updates-scroll ">
-        <p><span>Today</span> - 10 August</p>
-        <ul>
-          <li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school <u>construction pictures</u> in <u>Nabarangpur School Project</u> <span>3:15 pm</span></div></li>
-            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Ramesh completed <u>Planning task under construction - Nabarangpur School Project</u><span>12:07 pm</span></div></li>
+        <p><span>Today</span> - 28 August</p>
+            <ul>
+         {% if updates_list %}
+             {% for obj in updates_list %}
+                    {% get_details obj as update %}
+                    
+                      <li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">{{update | safe}}</div></li>
+                {% endfor %}
+            {% endif %}
+<!--           {% if completed_list %}-->
+<!--                {% for obj in completed_list %}-->
+<!--                    {% get_tasks_details obj as tasks}-->
+<!--                    <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">{{tasks | safe}}</div></li>-->
+<!--                {% endfor %}-->
+<!--           {% endif %}-->
         </ul>   
-        <p><span>Today</span> - 10 August</p>
-        <ul>
-          <li><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <div class="update-pad">Shakeel updated <u>budget</u> in 
-<u>Nabarangpur School Project</u> <span>10:10 am</span></div></li>
-            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school construction pictures in Nabarangpur School Project <span>3:15 pm</span></div></li>
-        </ul>    
         </div>
     </div> 
     </div>

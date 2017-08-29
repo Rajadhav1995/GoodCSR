@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+{% load common_tags %}
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="icon" type="image/png" href="static/img/favicon.ico">
+<title>Samhita GoodCSR</title>
+
+<!--CSS Srat-->
+<link rel="stylesheet" href="/static/css/style.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.css">
+<link rel="stylesheet" href="/static/css/ddsmoothmenu.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.mmenu.all.css" />
+<link rel="stylesheet" href="/static/css/jquery.selectbox.css" type="text/css" />
+
+
+<!--Common Script-->
+<script type="text/javascript" src="/static/js/respond.js"></script>
+<script type="text/javascript" src="/static/js/html5.js"></script>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+
+<!-- IE less than 9 -->
+<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
+
+<!--  Responsive CSS  -->
+<link rel="stylesheet" href="/static/css/media.css" />
+ <style type="text/css">
+    body {
+    font-family:helvetica, sans-serif;
+    font-size:.7em;
+}
+/*=================== Budget Widget ===============*/
+.highcharts-tick:nth-last-child(-n+2) {
+    transform: translate(0, 1px);
+  }
+  .highcharts-tick:nth-last-child(-n+3) {
+    stroke: lightgrey;
+  }
+  .tip{
+      font-weight: bold;
+  }
+/*=================== Budget Widget ===============*/
+  </style>
+
+</head>
+<body>
+{% block header %}
+{% load urs_tags %}
+<!-- Mobile Navigation -->
+<div id="mobNav" class="mobNav">
+    <figure class="mobi-logo"><a href="index.html" title=""><img src="/static/img/logo.png" alt=""></a>
+    </figure>
+    <ul>
+  <li><a href="index.html">Dashboard</a></li>
+        <li><a href="products.html">Projects</a>
+        	<ul>
+            	<li><a href="javascript:void(0);">Projects</a></li>
+                <li><a href="javascript:void(0);">Projects</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<!-- /Mobile Navigation -->
+
+<div id="page">
+<!--Header Starts-->
+<header>
+    <div class="row">
+        <div id="menu">
+        	<div class="logo"><a href="index.html"><img src="img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
+           <div class="m-menu"><a href="#mobNav"><span></span><span></span><span></span></a></div>       
+           <nav id="smoothmenu" class="ddsmoothmenu">
+            <ul>
+              <li><a href="/dashboard/" class="active">Dashboard</a></li>
+              <li class="user-wrap"><a href="javascript:void(0);">
+                Projects
+                <i class="fa fa-angle-down"></i></a>
+                <!--<div class="details" id="marketPlace">-->
+                  <ul>
+                  {% get_user_project request as obj_list %}
+                      {% for i in obj_list %}
+                          <li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
+                      {% endfor %}
+                  </ul>
+                <!--</div>-->
+              </li>
+              
+              
+        <li class="user-wrap"><a href="javascript:void(0);">
+                Settings
+                <i class="fa fa-angle-down"></i></a>
+                <!--<div class="details" id="marketPlace">-->
+                  <ul>
+                        <li><a href="/project/add/">Add Project</a></li>
+                        <li><a href="/project/list/">Project List</a></li>
+                        <li><a href="/project/budget/tranche/">Add Budget Tranche</a></li>
+                        <li><a href="/managing/Task/listing/">Tasks</a></li>
+                    	<li><a href="/managing/Milestone/listing/">Milestone</a></li>
+
+                  </ul>
+                <!--</div>-->
+              </li>
+
+            </ul>
+          </nav>
+            <div class="menu-rgt">
+    
+      <ul>
+        <li id="search_ico">
+           <!-- <form id="demo-2">
+           	  <input type="search" placeholder="Search">              
+            </form>-->
+            <div id="nav_search_id" class="search-form">
+                <div class="search-ico">&nbsp;</div>
+                <div class="search-frm-feild">
+                    <form>
+                        <input type="text" placeholder="Search...">
+                        <input type="submit" value="" name="" >
+                    </form>
+                </div>
+            </div>
+        <!--<a href="javascript:void(0);"><span class="search-ico"></span></a>-->
+        </li>
+        <li><a href="javascript:void(0);">
+          <p class="fav">0</p>
+          <span class="mail"></span></a></li>
+        <li><a href="javascript:void(0);">
+          <p class="fav">3</p>
+          <span class="bell"></span></a>
+        </li>
+        <li class="dropdown user user-menu">
+            <a href="javascript:void(0);" class="dropdown-toggle" >
+              <img src="img/user-img.png" class="user-image" alt="User Image">
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu" style="display:none;">
+              <!-- User image -->
+              <li class="user-header">
+                <img src="img/user-img.png" class="img-circle" alt="User Image">
+
+                <h3>Admin Name</h3>
+                <h4>Admin</h4>
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a href="javascript:void(0);" class="btn btn-default btn-flat">Profile</a>
+                </div>
+                <div class="pull-right">
+                  <a href="javascript:void(0);" class="btn btn-default btn-flat">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+      </ul>
+      
+    </div>
+        </div>
+    </div>
+</header><!--Header Ends-->
+{% endblock %}
+<div class="clear"></div>
+{% block section %}
+<!--Green pad starts-->
+<section class="green-pad">
+	<div class="row">
+	<div class="image-pad logo-shadow">
+    	<a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
+    </div>    
+    <h3>{{user_obj.organization|title}}</h3>
+    <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>
+    </div>
+</section>
+{% endblock %}
+<!--Green pad Ends-->
+<!--Content part starts-->
+{% block content %}
+<section class="content-part">
+	<div class="row">
+	<div class="content-top">
+      <div class="select-area">
+      	<label>See Data as </label>
+        <select name="lang" class="select_box ">
+            <option>Quarter1</option>
+            <option>Quarter2</option>
+            <option>Quarter3</option>
+        </select>
+        <div class="small-select">
+        <select name="lang" class="select_box ">
+            <option>2016</option>
+            <option>2017</option>
+        </select>
+        <div class="dropdown user select-down select-width1">
+            <a href="javascript:void(0);" class="dropdown-toggle">
+              <p>Sep-Dec</p>
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu1" style="display:none;">
+            
+              <li class="user-header">
+                <input class="check-box" type="checkbox" id="one" />
+                <label for="one"><span><span></span></span> Jan-Mar</label>
+              </li>
+              <li>
+                <input class="check-box" type="checkbox" id="two" />
+                <label for="two"><span><span></span></span> Apr-Jul</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="three" />
+                <label for="three"><span><span></span></span> Aug-Sep</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="four" />
+                <label for="four"><span><span></span></span> Oct-Dec</label>  
+              </li>
+              
+            </ul>
+          </div>
+        <!--<select multiple="multiple" name="lang" class="select_box">
+            <option>Sep-Dec</option>
+            <option>Jan-Mar</option>
+            <option>Apr-Jul</option>
+            <option>Aug-Sep</option>
+            <option>Oct-Dec</option>
+        </select>-->
+        </div>
+         </div>
+        <!--<form>
+          <div class="multiselect">
+            <div class="selectBox" onclick="showCheckboxes()">
+              <select class="select_box">
+                <option>Sep-Dec</option>
+              </select>
+              <div class="overSelect"></div>
+            </div>
+            <div id="checkboxes">
+              <label for="one">
+                <input type="checkbox" id="one" />Jan-Mar</label>
+              <label for="two">
+                <input type="checkbox" id="two" />Apr-Jul</label>
+              <label for="three">
+                <input type="checkbox" id="three" />Aug-Sep</label>
+              <label for="three">
+                <input type="checkbox" id="three" />Oct-Dec</label>  
+            </div>
+          </div>
+        </form>-->
+       
+    </div>
+    <div class="white-box white-pad">
+      <h2>Key Program Info</h2>
+        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
+        <ul>
+          <li>
+              <h3>No. of Projects </h3>
+                 <img class="key-image" src="/static/img/key-icon1.png" alt="">
+                <h4 class="title-pad">{{project_count}}</h4> 
+            </li>
+            <li>
+              <h3>No. of Beneficiaries</h3>
+                 <img class="key-image" src="/static/img/key-icon2.png" alt="">
+                <h4 class="title-pad">{% if total_beneficiaries %}{{total_beneficiaries}} {% endif %}</h4> 
+            </li>
+            <li>
+              <h3>% Total budget disbursed<span></span></h3>
+                 <img src="/static/img/key-icon3.png" alt="">
+                <div class="budget-pad">
+                  <p><span class="green-circle"></span> Disbursed</p>
+                    <div class="budget-value">
+                      <div class="budget-left">7.8cr</div>
+                        <div class="budget-right">65%</div>
+                    </div>
+                    <p><span class="yellow-circle"></span> Total</p>
+                    <div class="budget-value budget-border">
+                      <div class="budget-left">10.5cr</div>
+                        <div class="budget-right">100%</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+              <h3>Active Programs Districts</h3>
+                 <img src="/static/img/map.png" alt="">
+            </li>
+        </ul>
+    </div>
+    <div class="white-box">
+    	<div class="left-white">
+        	<h2>Task and Progress Completion</h2>{{tasks_progress}}
+            <div class="progress_bar" > 
+                <div id="Progress_Completion" style="width: 100%;float: left;"></div>
+            </div>
+        </div>
+        <div class="right-white">
+        	<h2>Total Budget</h2>
+            <div id="bwContainer" style="height:300px;width:500px;"></div> 
+        </div>
+        <div class="hide-cont">
+        	<div class="left-white">
+        	<h2>Task and Progress Completion</h2>
+            <img src="/static/img/task-chart.jpg" alt="">
+        </div>
+        <div class="right-white">
+        	<h2>Total Budget</h2>
+            <img src="/static/img/budget-chart.jpg" alt="">
+        </div>                    
+        </div>
+        <div class="read-script deli">
+           <a href="javascript:void(0);" class="view-cont">See more <i class="fa fa-angle-down"></i></a> 
+           <a href="javascript:void(0);" class="close-cont">See less <i class="fa fa-angle-up"></i></a> 					                            
+        </div>
+        
+    </div>   
+    <div class="white-box-left">
+    <div class="table-responsive">
+    <table class="table-resp" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th style="width:28%;">Users</th>
+        <th style="width:19%;">Organization</th>
+        <th style="width:26%;">Designation</th>
+        <th style="width:19%;">PMU Role</th>
+        <th style="width:10%;">&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in projectuserlist %}
+      <tr>
+            <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
+            <td style="width:19%;">{{i.user.organization}}</td>
+            <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
+            <td style="width:19%;">{{i.role.name}}
+            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>
+      </tr>
+      {% endfor %}
+
+      </tbody>
+  </table>  
+    </div>
+    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+    </div>
+    <div class="white-box-right">
+      <h2>Recent Updates</h2>
+        <div id="boxscroll" class="updates-scroll ">
+        <p><span>Today</span> - 28 August</p>
+            <ul>
+         {% if updates_list %}
+             {% for obj in updates_list %}
+                    {% get_details obj as update %}
+                    
+                      <li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">{{update | safe}}</div></li>
+                {% endfor %}
+         {% else %}
+            <li><span>No updates </span></li>
+         {% endif %}
+        </ul>   
+        </div>
+    </div> 
+    </div>
+</section>
+<!--Content part Ends-->
+{% endblock %}
+<!--Footer starts-->
+{% block footer %}
+<footer>
+    <div class="row">
+        <div class="f-left">
+        	<ul>
+            	<li><a href="javascript:void(0);">Privacy Policy</a></li>
+                <li><a href="javascript:void(0);">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="f-right">&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</div>
+    </div>
+</footer>
+<!--Footer Ends-->
+{% endblock %}
+</div>
+
+
+
+
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+<!--
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+    <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>
+<script src="/static/code/highcharts.js"></script>
+<script src="/static/code/highcharts-more.js"></script>
+<script src="/static/code/modules/exporting.js"></script>
+<script src="/static/code/modules/solid-gauge.js"></script>
+
+<script>
+//Toggle
+		
+		 $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+		 $(document).ready(function(e) {	
+	/*Content Show/Hide */
+	$('.hide-cont').hide();
+	$('.close-cont').hide();
+	$('.view-cont').click(function(){
+		$('.hide-cont').slideDown(350);
+		$('.close-cont').show();
+		$('.view-cont').hide();
+	});
+	$('.close-cont').click(function(){
+		$('.hide-cont').slideUp(350);
+		$('.close-cont').hide();
+		$('.view-cont').show();
+	});	
+ });
+	
+</script>
+    
+<script type='text/javascript'>//<![CDATA[
+$(function(){
+        //-------------------------------------------------------
+        Highcharts.Renderer.prototype.symbols.line = function (x, y, width, height) {
+            return ['M', x, y + width / 2, 'L', x + height, y + width / 2];
+        };
+        //-------------------------------------------------------
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'bwContainer',
+                type: 'bar',
+                borderWidth: 1,
+                borderColor: 'rgba(0,0,0,0)',
+                margin: [30, 10, 50, 100],
+                backgroundColor: '#F1F3E8'
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            title: {
+                text: 'Projects',
+                align: 'left',
+                x: 23,
+                padding: '50',
+                style: {
+                    fontSize: '1.2em',
+                    fontWeight: 'bold'
+                }
+            },
+            legend: {
+                enabled: true,
+                verticalAlign: 'top',
+                align: 'right',
+                floating: false,
+                itemDistance: 5,
+                y: -7.5,
+                itemStyle: {
+                    fontSize: '1em',
+                    fontWeight: 'normal',
+                    textOverflow: 'ellipsis',
+                }
+            },
+            xAxis: {
+                tickLength: 100,
+                tickColor: 'rgba(0,0,0,0)',
+                gridLineWidth: 0,
+                gridLineColor: 'lightgrey',
+                labels: {
+                    style: {
+                        fontWeight: '600',
+                        fontSize: '1em',
+                        whiteSpace: 'normal',
+                        textOverflow: 'ellipsis'
+                    }
+                },
+                plotLines: [{
+                    value: -0.5,
+                    width: 1,
+                    color: 'lightgrey'
+                }],
+                lineColor: 'lightgrey',
+                lineWidth: 0,
+                categories: ['Project 1', 'Project 2', 'Project 3', 'Project 4', 'Project 5']
+            },
+            yAxis: {
+                tickInterval: 1,
+                allowDecimals: false,
+                tickColor: 'lightgrey',
+                tickWidth: 1,
+                tickLength: 3,
+                lineColor: 'lightgrey',
+                title: {
+                    text: 'crores',
+                    offset: 20
+                },
+                lineWidth: 1,
+                gridLineWidth: 1,
+                gridLineColor: 'lightgrey',
+                min: -0.5,
+                max: 11.75,
+                endOnTick: false,
+                startOnTick: false,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: 'red'
+                }],
+                labels: {
+                    style: {
+                        fontSize: '0.9em',
+                    }
+                }
+            },
+            plotOptions: {
+                bar: {
+                    grouping: false,
+                    shadow: false,
+                    borderWidth: 0,
+                    pointPadding: .25,
+                    groupPadding: 0
+                },
+                scatter: {
+                    marker: {
+                        symbol: 'line',
+                        lineWidth: 3,
+                        radius: 9,
+                        lineColor: 'rgba(0,0,0,0)'
+                    }
+                }
+            },
+            tooltip: {
+                positioner: function (w, h, p) {
+                    return {
+                        x: p.plotX + this.chart.hoverSeries.xAxis.left - w / 2,
+                        y: p.plotY
+                    }
+                },
+                formatter: function () {
+                    var s = [];
+                    $.each(this.points, function (i, point) {
+                        if (point.series.name != 'Total Budget') {
+                            s.push('<div><span class="tip" style="color:' + point.color + '">' + point.y + ' cr <br> ' +
+                                point.series.name + '<span></div>');
+                        }
+                    });
+                    return s.join(' <br> ');
+                },
+                shared: true
+            },
+            series: [{
+                name: 'Total Budget',
+                borderWidth: 0,
+                borderRadius: 0,
+                stacking: 'normal',
+                grouping: true,
+                dataLabels: {
+                    enabled: true,
+                    inside: false,
+                    format: '{y} cr',
+                    style: {
+                        fontSize: '0.8em',
+                        fontWeight: 'normal'
+                    }
+                },
+                color: '#D5BE72',
+                tooltip: {
+                    valueSuffix: ' cr'
+                },
+                data: [6, 5, 10, 7, 9]
+            }, {
+                name: 'Disbursed',
+                color: '#00998b',
+                tooltip: {
+                    valueSuffix: ' cr'
+                },
+                pointRange: .7,
+                zIndex: 8,
+                data: [1, 4, 9.5, 4, 8]
+            }, {
+                name: 'Utilized',
+                color: '#0b6861',
+                tooltip: {
+                    valueSuffix: ' cr'
+                },
+                pointRange: .7,
+                zIndex: 10,
+                data: [0.5, 3, 9, 3, 6]
+            }]
+        });
+
+});//]]> 
+
+</script>    
+
+    <script type="text/javascript">
+   
+	
+	var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+    <script>
+  $(document).ready(function() {
+  
+	var nice = $("html").niceScroll();  // The document page (body)
+	
+	$("#div1").html($("#div1").html()+' '+nice.version);
+    
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+    
+  });
+        
+        
+        
+        
+        
+</script>
+<script>
+{{tasks_progress}}
+
+console.log({{tasks_progress}})
+Highcharts.chart('Progress_Completion',{
+        chart: {
+            type: 'bar',
+            backgroundColor: null,
+             height: 300
+        },
+        credits: {
+         enabled: false
+        },
+        title: {
+            text: null,
+        },
+        xAxis: {
+
+        categories: {{tasks_progress}},
+        
+        },
+        yAxis: {
+            visible: false,
+        min: 0,
+       
+        },
+        plotOptions: {
+            series: {
+                stacking: 'normal',
+
+                 pointWidth: 15
+            },
+            bar: {
+                grouping: false,
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+        legend: {
+            enabled: false
+           
+        },
+        series: [ {
+            name: 'Remaining',
+
+            data: [0, 30, 45, 20, 60],
+            borderWidth: 0,
+            color: "#D0D0D0"
+        }, {
+        name: 'Completed',
+        data: [
+        { y: 100, color: '#2E9776' }, 
+        { y: 70, color: '#2E9776' },
+        { y: 55, color: '#2E9776' }, 
+        { y: 80, color: '#2E9776' }, 
+        { y: 40, color: '#2E9776' }
+        ]
+    }]
+        
+    });
+
+
+Highcharts.chart('planned_utilized', {
+    chart: {
+        type: 'column'
+
+    },
+    credits: {
+        enabled: false
+    },
+    title: {
+        text: 'Planned and Utilized'
+    },
+    xAxis: {
+        categories: [
+            'Jan-Mar',
+            'Apr-Jun',
+            'Jul-Sep',
+            'Oct-Dec'           
+        ]
+    },
+    yAxis: [{
+        min: 0,
+
+        title: {
+            text: ''
+        }
+    }, {
+        title: {
+            text: '2016-2017',
+            align: "middle",
+            rotation: 360
+        },
+        opposite: true
+    }],
+    legend: {
+        shadow: false
+    },
+    tooltip: {
+        shared: true
+    },
+    plotOptions: {
+        column: {
+            grouping: false,
+            shadow: false,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Planned',
+        color: '#D0C173',
+        data: [150, 73, 20,150],
+        pointPadding: 0.3,
+        pointPlacement: -0.2
+    }, {
+        name: 'Utilized',
+        color: '#2C788E',
+        data: [140, 90, 40,100],
+        pointPadding: 0.4,
+        pointPlacement: -0.2
+    }]
+});
+
+
+        </script>
+<script type="text/javascript">
+
+//         var today = new Date(),
+//     day = 1000 * 60 * 60 * 24;
+
+// // Set to 00:00:00:000 today
+// today.setUTCHours(0);
+// today.setUTCMinutes(0);
+// today.setUTCSeconds(0);
+// today.setUTCMilliseconds(0);
+// today = today.getTime();
+
+// // THE CHART
+// Highcharts.ganttChart('gannt', {
+//     title: {
+//         text: 'Gantt Chart Test'
+//     },
+//     xAxis: {
+//         currentDateIndicator: true,
+//         min: today - 3 * day,
+//         max: today + 18 * day
+//     },
+
+//     /*
+//     plotOptions: {
+//         gantt: {
+//             pathfinder: {
+//                 type: 'simpleConnect'
+//             }
+//         }
+//     },
+//     */
+
+//     series: [{
+//         name: 'Offices',
+//         data: [{
+//             taskName: 'New offices',
+//             id: 'new_offices',
+//             start: today - 2 * day,
+//             end: today + 14 * day
+//         }, {
+//             taskName: 'Prepare office building',
+//             id: 'prepare_building',
+//             parent: 'new_offices',
+//             start: today - (2 * day),
+//             end: today + (6 * day),
+//             completed: {
+//                 amount: 0.2
+//             }
+//         }, {
+//             taskName: 'Inspect building',
+//             id: 'inspect_building',
+//             dependency: 'prepare_building',
+//             parent: 'new_offices',
+//             start: today + 6 * day,
+//             end: today + 8 * day
+//         }, {
+//             taskName: 'Passed inspection',
+//             id: 'passed_inspection',
+//             dependency: 'inspect_building',
+//             parent: 'new_offices',
+//             start: today + 9.5 * day,
+//             milestone: true
+//         }, {
+//             taskName: 'Relocate',
+//             id: 'relocate',
+//             dependency: 'passed_inspection',
+//             parent: 'new_offices',
+//             start: today + 10 * day,
+//             end: today + 14 * day
+//         }, {
+//             taskName: 'Relocate staff',
+//             id: 'relocate_staff',
+//             parent: 'relocate',
+//             start: today + 10 * day,
+//             end: today + 11 * day
+//         }, {
+//             taskName: 'Relocate test facility',
+//             dependency: 'relocate_staff',
+//             parent: 'relocate',
+//             start: today + 11 * day,
+//             end: today + 13 * day
+//         }, {
+//             taskName: 'Relocate cantina',
+//             dependency: 'relocate_staff',
+//             parent: 'relocate',
+//             start: today + 11 * day,
+//             end: today + 14 * day
+//         }]
+//     }, {
+//         name: 'Product',
+//         data: [{
+//             taskName: 'New product launch',
+//             id: 'new_product',
+//             start: today - day,
+//             end: today + 18 * day
+//         }, {
+//             taskName: 'Development',
+//             id: 'development',
+//             parent: 'new_product',
+//             start: today - day,
+//             end: today + (11 * day),
+//             completed: {
+//                 amount: 0.6,
+//                 fill: '#e80'
+//             }
+//         }, {
+//             taskName: 'Beta',
+//             id: 'beta',
+//             dependency: 'development',
+//             parent: 'new_product',
+//             start: today + 12.5 * day,
+//             milestone: true
+//         }, {
+//             taskName: 'Final development',
+//             id: 'finalize',
+//             dependency: 'beta',
+//             parent: 'new_product',
+//             start: today + 13 * day,
+//             end: today + 17 * day
+//         }, {
+//             taskName: 'Launch',
+//             dependency: 'finalize',
+//             parent: 'new_product',
+//             start: today + 17.5 * day,
+//             milestone: true
+//         }]
+//     }]
+// });
+
+
+var gaugeOptions = {
+
+    chart: {
+         plotBackgroundColor: null,
+            plotBackgroundImage: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+
+    },
+
+    title: null,
+
+      pane: {
+            center: ['50%', '75%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                borderWidth: 0,
+                backgroundColor: 'none',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+            stops: [
+            [0.1, '#D0C173'], // green
+            [0.5, '#34837C'] // yellow
+            
+           
+        ],
+        lineWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 0,
+        title: {
+            y: -70
+        },
+        labels: {
+            enabled: false
+        },
+       
+   },
+
+
+    // plotOptions: {
+    //    gauge: {
+    //             pivot: {
+    //                 radius: 0
+        
+    //             }, dial: {
+    //                 backgroundColor:'#7A4F59',
+    //                 borderColor: "#DAC7CC",
+    //                 radius: '100%',
+    //                 baseWidth: 2,
+    //                    baseLength: '100%',
+    //                     baseWidth: 2,
+    //                     rearLength: '0%',
+    //                     borderWidth: 0
+    //             }
+    //         }
+    // } 
+
+     plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: false
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '80%']
+            },
+            gauge: {
+                dataLabels: {
+                    enabled: false
+                },
+                pivot: {
+                    radius: 0
+        
+                },
+                dial: {
+                    backgroundColor:'#7A4F59',
+                    borderColor: "#DAC7CC",
+                    radius: '100%',
+                    baseWidth: 2,
+                       baseLength: '100%',
+                        baseWidth: 2,
+                        rearLength: '0%',
+                        borderWidth: 0
+                }
+            }
+        },
+     
+};
+
+// The speed gauge
+var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
+  
+    yAxis: {
+        min: 0,
+        max: 100,
+        title: {
+            text: ''
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+      series: [
+      {
+            type: 'pie',
+       
+            innerSize: '70%',
+            data: [
+
+                    {y:40,name:'Disbursed',color:'#2E9874'},
+                    {y:20,name:'Total',color:'#D0C173'}
+             
+              
+            ]
+        },
+
+      {
+            type: 'gauge',
+            innerSize: '100%',
+            data: [0],
+            
+        }
+    ],
+        dataLabels: {
+           enabled: true
+        },
+        tooltip: {
+            valueSuffix: ' km/h'
+        }
+   
+
+}));
+
+// Bring life to the dials
+setInterval(function () {
+    // Speed
+    var point,
+        newVal,
+        inc;
+
+    if (chartSpeed) {
+        point = chartSpeed.series[0].points[0];
+       
+        point1 = chartSpeed.series[0].points[1]; 
+   
+
+    
+
+         $.each(chartSpeed.series, function(i, item){
+            if(item.type == 'gauge'){
+               item.setData([["none",chartSpeed.yAxis[0].max-((point.y+point1.y)/2)]], true);
+               
+            }
+        });
+
+      
+        // chartSpeed.yAxis[0].removePlotBand('plot-band-1');
+        //     chartSpeed.yAxis[0].addPlotBand({
+        //         from: 0,
+        //         to: point.y,
+        //         color: '#2F9974',
+        //         thickness: '40%',
+        //         id: 'plot-band-1'
+        //     });
+
+   
+
+        point.update(newVal);
+    }
+   
+}, 800);
+
+    </script>
+    <script>
+
+Highcharts.chart('Beneficiary_Distribution', {
+   chart:{type:'pie'},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: null},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,                        
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }                                   
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+              
+                margin: 12
+            
+               
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+                
+                },
+                data: [{
+            name: 'Women',
+            y: 56.33,
+            color:'#C7B55E'
+        }, {
+            name: 'Men',
+            y: 24.03,
+            color:'#1B6A63'
+        }, {
+            name: 'Children',
+            y: 10.38,
+            color:'#27988B'
+        }, {
+            name: 'Senior Citizens',
+            y: 4.77,
+            color:'#A53F5C'
+        }]
+
+            }]
+        });
+
+
+</script>
+
+
+        <style type="text/css">
+    #container-speed .highcharts-container {
+        border-bottom: 1px solid;
+        height: 110px !important;
+    }
+</style>
+</body>
+</html>
+

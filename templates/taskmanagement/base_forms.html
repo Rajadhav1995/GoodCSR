@@ -53,7 +53,7 @@ width:450px;
 
 <script>
     $(document).ready(function() {
-        $("#id_project").hide();
+        
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -65,7 +65,7 @@ width:450px;
 
 <script>
     $(document).ready(function() {
-
+    $("#id_project").hide();
     $('#id_activity').on('change',function(e){
         var select_id = $('#id_activity').val();
         $.ajax({

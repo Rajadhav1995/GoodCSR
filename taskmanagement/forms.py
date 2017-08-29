@@ -74,6 +74,7 @@ class TaskForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
         actual_start_date = cleaned_data.get("actual_start_date")
         actual_end_date = cleaned_data.get("actual_end_date")
+
         if end_date < start_date:
             msg = u"End date should be greater than start date."
             self._errors["end_date"] = self.error_class([msg])
@@ -87,7 +88,7 @@ class MilestoneForm(forms.ModelForm):
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs={'class' :'form-control'}))
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
-    overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False) 
+    overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
     class Meta:
         model = Milestone
         fields = ('name','task','overdue','subscribers','status')
