@@ -175,15 +175,6 @@ class Project(BaseContent):
     def __str__(self):
         return self.name
 
-    def save(self):
-        super(Project, self).save()
-        date = datetime.date.today()
-        self.slug = '%i-%s' % (
-            date.day, slugify(self.name)
-        )
-        super(Project, self).save()
-        
-    
     def total_tasks(self):
         from taskmanagement.models import Activity,Task
         count = 0
@@ -206,6 +197,14 @@ class Project(BaseContent):
                 if task.actual_end_date.strftime('%Y-%m-%d') <= datetime.now().strftime('%Y-%m-%d'):
                     completed_tasks = completed_tasks + 1
         return completed_tasks
+
+    # def save(self):
+    #     super(Project, self).save()
+    #     date = datetime.date.today()
+    #     self.slug = '%i-%s' % (
+    #         date.day, slugify(self.name)
+    #     )
+    #     super(Project, self).save()
 
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 
@@ -230,6 +229,7 @@ class ProjectFunderRelation(BaseContent):
     def __str__(self):
         return str(self.id)
 
+
 ''' Jagpreet Made these changes for Project parameters, Start:
 '''
 
@@ -244,7 +244,6 @@ PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
                           ('PER','Percent'),
                           ('CUR','Currency'))
 
-
 class ProjectParameter(BaseContent):
     parameter_type = models.TextField(choices=PARAMETER_TYPE_CHOICES,default='NUM',)
     project = models.ForeignKey(Project, **OPTIONAL)
@@ -252,7 +251,9 @@ class ProjectParameter(BaseContent):
     aggregation_function = models.TextField(choices=AGGREGATION_FUNCTION_CHOICES, default='ADD')
     parent = models.ForeignKey('self', **OPTIONAL)
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
-
+    
+    def __str__(self):
+        return str(self.id)
 
 
 class ProjectParameterValue(BaseContent):
@@ -263,6 +264,9 @@ class ProjectParameterValue(BaseContent):
     end_date = models.DateField(**OPTIONAL)  # Period  for paramter, typically month end
     comment = models.CharField(max_length=300, **OPTIONAL)
     has_attachment = models.BooleanField(default=False) # True if the parameter has a supporting attachment
+
+    def __str__(self):
+        return str(self.id)
 
 '''Jagpreet Made these changes for Project parameters, END;
 '''

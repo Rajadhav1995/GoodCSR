@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block midpart %}
+
+{% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
 form { 
@@ -22,14 +23,14 @@ width:450px;
               <div align="right">
              <!-- <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" /> -->
          </div>
-         {{obj_id}}djskhajksf{{model}}key{{key}}onbj{{obj}}
+         {{obj_id}}{{model}}key{{key}}onbj{{obj}}
             </div>
             <!-- /.box-header -->
             <div class="box-body">
             {% if obj %}
-            <form autocomplete="off" id="prog_edit" action="/upload/edit/?model={{model}}&obj_id={{obj_id}}&id={{ids}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/upload/edit/?model={{model}}&slug={{slug}}&id={{ids}}" method="POST" enctype="multipart/form-data">
             {% else %}
-            <form autocomplete="off" id="prog_edit" action="/upload/doc/?model={{model}}&obj_id={{obj_id}}&key={{key}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/upload/doc/?model={{model}}&slug={{slug}}&key={{key}}" method="POST" enctype="multipart/form-data">
             {% endif %}
             {% csrf_token %}
 
@@ -104,8 +105,6 @@ width:450px;
 <input type="hidden" name="keyss" id="keyss" value="{{keyss}}">
   </div>
   </div>
-{% endblock %}
-{% block script %}
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

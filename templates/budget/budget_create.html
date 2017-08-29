@@ -30,7 +30,7 @@
                                 Project <span class="required" style="color:red">*</span>
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                            <input type="text" name="project" value="{{projectobj.name}}" readonly />
+                            <input class="form-control" type="text" name="project" value="{{projectobj.name}}" readonly />
                             </div>
                         </div>
                         <div class="row">
@@ -40,6 +40,7 @@
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 {{ form.actual_start_date }}
 								{{ form.actual_start_date.errors }}
+                                <font color=#fc282f><b><span id="dateError1"></span></b></font>
                             </div>
                         </div>
 
@@ -50,6 +51,7 @@
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 {{ form.end_date }}
 								{{ form.end_date.errors }}
+                                <font color=#fc282f><b><span id="dateError"></span></b></font>
                             </div>
                         </div>
 
@@ -58,7 +60,7 @@
                                 Budget Duration <span class="required" style="color:red">*</span>
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <input type="text" /> 
+                                <input class="form-control" type="text" id="id_duration"  readonly /> 
                             </div>
                         </div>
 
@@ -152,17 +154,27 @@
         </div>
     </div>
 </div>
-
-{% endblock %}
-{% block script %}
-
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
-<script type="text/javascript" src="/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="/static/js/jquery.datepick.js"> </script>
-<link href="/static/css/jquery.datepick.css" rel="stylesheet" type="text/css" />
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+
+<script>
+  $( function() {
+    $( "#id_actual_start_date" ).datepicker({
+        format: 'yyyy-mm'
+    });
+    $( "#id_end_date" ).datepicker({
+        format: 'yyyy-mm-dd'
+    });
+  } );
+</script>
 
 <script type="text/javascript">
-        
     $(document).ready(function(){
 
         $.validator.addMethod("endDate", function(value, element) {
@@ -187,10 +199,6 @@
                 actual_start_date : {required : "Please Choose the Start Date"},
                 end_date : {required:"Please Choose the End Date"},
             },
-
-        $('#id_actual_start_date,#id_end_date').datepick({dateFormat: 'dd-mm-yyyy', changeMonth: true, changeYear: true});
-        $("#id_actual_start_date").attr('readonly','true');
-    $("#id_end_date").attr('readonly','true');
     });
             highlight: function (element) {
                 $(element).parent().addClass('error')
@@ -209,5 +217,31 @@
 .error{color:red; min-width: 200px;}
 </style>
 
+
+<script>
+  $("#id_end_date").datepicker({
+    dateFormat: 'yy-mm-dd',
+    onSelect: function(dateText, inst) {
+        var start = new Date($('#id_actual_start_date').val());
+        var end = new Date($('#id_end_date').val());
+        if (end <= start) {
+            alert("'End date' should be greater than 'Start date'")
+            document.getElementById('dateError').innerHTML="End date should be greater than Start date"
+        };
+        if (end > start) {
+            document.getElementById('dateError').innerHTML=""
+            document.getElementById('dateError1').innerHTML=""
+        };
+
+        var months = (end.getFullYear() - start.getFullYear()) * 12;
+        months += end.getMonth() - start.getMonth();
+        document.getElementById("id_duration").value = months;
+    }
+
+});
+  $("#id_actual_start_date").datepicker({
+    dateFormat: 'yy-mm-dd',
+  });
+</script>
 {% endblock %}
 

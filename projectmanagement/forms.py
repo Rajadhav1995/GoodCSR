@@ -1,4 +1,4 @@
-from projectmanagement.models import Project,MasterCategory,UserProfile,Program,ProjectFunderRelation
+from projectmanagement.models import Project,MasterCategory,UserProfile,Program,ProjectFunderRelation,ProjectParameter
 from collections import OrderedDict
 from django import forms
 from django.contrib.auth.models import User
@@ -20,7 +20,7 @@ class ProjectForm(forms.ModelForm):
                         widget = forms.SelectMultiple(attrs = {'class': 'form-control'}))
 	total_budget = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	no_of_beneficiaries = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
-	budget_type = forms.ChoiceField(choices = BUDGET_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))	
+	budget_type = forms.ChoiceField(choices = BUDGET_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))
 	project_status = forms.ChoiceField(choices = STATUS_CHOICES,required=True,widget = forms.Select(attrs={'class': 'form-control'}))
 	start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
@@ -43,3 +43,16 @@ class ProjectUserRoleRelationshipForm(forms.ModelForm):
     class Meta:
         model = ProjectUserRoleRelationship
         fields = ('user','role')
+
+
+PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
+                          ('PIP', 'Pie Chart Percent'),
+                          ('NUM','Number'),
+                          ('PER','Percent'),
+                          ('CUR','Currency'))
+class ProjectParameterForm(forms.ModelForm):
+	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
+	budget_type = forms.ChoiceField(choices = PARAMETER_TYPE_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}))
+	class Meta:
+		model = ProjectParameter
+		fields  = ('parameter_type','name')

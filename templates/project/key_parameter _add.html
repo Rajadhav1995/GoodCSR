@@ -15,7 +15,7 @@ width:450px;
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Upload Key Parameter Value for {{parameter.name}}</h3>
+              <h3 class="box-title">Add Parameter</h3>
               <div align="right">
              <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
          </div>
@@ -23,63 +23,39 @@ width:450px;
             <!-- /.box-header -->
             <div class="box-body">
             
-            <form autocomplete="off" id="prog_edit" action="/project/upload/parameter/value/?id={{ids}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/project/upload/key-parameter/" method="POST" enctype="multipart/form-data">
             
             {% csrf_token %}
 
+                        <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    Select Project <font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    <select class="form-control" name="project" id="mylist">
+                                        <option selected></option>
+                                        {% for i in proj_obj %}
+                                        <option value="{{i.id}}" >{{i.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
                         <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 Parameter Type<font color="red">*</font>
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <div>
-                                <select class='form-control' id='gMonth' name='month'>
-                                <option value=''>--Select Month--</option>
-                                <option value='1'>Janaury</option>
-                                <option value='2'>February</option>
-                                <option value='3'>March</option>
-                                <option value='4'>April</option>
-                                <option value='5'>May</option>
-                                <option value='6'>June</option>
-                                <option value='7'>July</option>
-                                <option value='8'>August</option>
-                                <option value='9'>September</option>
-                                <option value='10'>October</option>
-                                <option value='11'>November</option>
-                                <option value='12'>December</option>
+                                <select class="form-control" name="para_type" id="para_type">
+                                    <option selected>Select</option>
+                                    <option value="PIN" >Pie chart Numbers</option>
+                                     <option value="PIP">Pie Chart Percent</option>
+                                    <option value="NUM">Number</option>
+                                    <option value="PER">Percent</option>
+                                    <option value="CUR">Currency</option>
                                 </select>
-                                </div>
-
-                        </div>
+                            </div>
                         </div>
 
-                        <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{parameter.name}} <font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}
-                                    <input class="form-control" type="number" name="value" id="value{{parameter.id}}">
-                                </div>
-                        </div>
-
-                        {% for i in key_parameter %}
-                        <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{i.name}} <font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}">{% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
-                                    value[{{i.id}}]
-                                </div>
-                        </div>
-                        
-                        {% endfor %}
-
-
-
-                        
-<!-- 
                         <div id="name" class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 Name
@@ -106,7 +82,7 @@ width:450px;
                             <button class="add_field_button">Add More</button>
                             {% if slug %}
                             {% for i in activity_view %}
-                            <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"><select name="activity_type[1]" id="id_activity_type"><option value="1" selected="">Core</option><option value="2">Non-core</option></select></div>
+                            <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"><!-- <select name="activity_type[1]" id="id_activity_type"><option value="1" selected="">Core</option><option value="2">Non-core</option></select> --></div>
                             {% endfor %}
                             {% else %}
                             <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]"><input class="form-control" type="number" value="{{i.activity_duration}}" name="value[1]" placeholder="Value" id="id_number"></div>
@@ -136,7 +112,7 @@ width:450px;
                             
                         </div>
 
-                        <input style="width: 0px;" name="name_count" id="activity_count" type="text"/> -->
+                        <input style="width: 0px;" name="name_count" id="activity_count" type="text"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
