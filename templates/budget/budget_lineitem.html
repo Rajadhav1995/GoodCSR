@@ -74,31 +74,14 @@ $(document).ready(function ()
 {
     function mandatory_input()
     {
-            nam = $(this).context.name.split('_')
-            i = nam[1]
-            j = nam[2]
-            
-            $("[id$=_"+parseInt(j)+"]").each(function(){
-            /*
-                if ($(this).val() == " ") 
-                {
-                    $('.req label').append('<span class="cf-required">*</span>');
-                    $('.req input').attr('required', 'True');
-                }
-                else{
-                    $('.req span.cf-required').remove();
-                    $('.req input').removeClass('required').removeAttr('required');
-                }
-                */
-            })
-            
-
-            
-            
+        sname = $(this).context.name.split('_');
+        if (sname.length == 2){
+            console.log(sname[1])
+            $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
         }
-        $(document).on("change, keyup", ".rate", mandatory_input);
-        $(document).on("change, keyup", ".unit", mandatory_input);
-        $(document).on("change, keyup", ".subheading", mandatory_input);
+        }
+        $(document).on("change, keyup", "#example1 tbody tr td input", mandatory_input);
+        $(document).on("change, keyup", "#example1 tbody tr td select", mandatory_input);
 });
 
 </script>
