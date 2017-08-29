@@ -255,6 +255,5 @@ def manage_parameter_values(request):
     # key_parameter = ProjectParameter.objects.filter(parent=parameter)
 
     parameter = ProjectParameterValue.objects.get_or_none(keyparameter__id=ids)
-    import ipdb;ipdb.set_trace()
     key_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter1)
     return render(request,'project/parameter_value_list.html',locals())
