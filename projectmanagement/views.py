@@ -282,6 +282,46 @@ def manage_parameter_values(request):
     else:
         child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter).order_by('-submit_date')
         # child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=para)
-    # import ipdb; ipdb.set_trace()
+    
     name_range = range(1,parameter_count)
+    values_list = child_parameter.values_list('parameter_value',flat=True)
+    values = aggregate_project_parameters(parameter,child_parameter)
+    print values
     return render(request,'project/parameter_value_list.html',locals())
+
+
+def aggregate_project_parameters(param, values):
+    ret={}
+    aggr=0
+    if param.aggregation_function=='ADD':
+        for val in values:
+            aggr+= int(val.parameter_value)
+    elif param.aggregation_function=='AVG' :
+        cnt=0
+        for val in values:
+            cnt+=1
+            aggr += int(val.parameter_value)
+        aggr=aggr/cnt
+    elif param.aggregation_function == "WAV":
+        paggr=0
+        for val in values:
+            
+            parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
+            aggr+=int(val.parameter_value)*int(parent.parameter_value)
+            paggr+=int(parent.parameter_value)
+        aggr=aggr/paggr
+    elif param.aggregation_function == "WAP":
+        paggr=0
+        for val in values:
+            
+            parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
+            aggr+=int(val.parameter_value)*int(parent.parameter_value)
+            paggr+=int(parent.parameter_value)
+        aggr=aggr/paggr  
+             
+    ret['name']=param.name
+    ret['parameter_type']= param.parameter_type
+    ret['instructions'] = param.instructions
+    ret['aggregate_value'] = aggr
+    ret['parent_name'] = None if param.parent is None else param.parent.name
+    return ret

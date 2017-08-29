@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from media.models import *
 from media.forms import *
+from budgetmanagement.models import Tranche
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
@@ -18,7 +19,11 @@ from pmu.settings import PMU_URL
 def list_document(request):
 	slug =  request.GET.get('slug')
 	model = eval(request.GET.get('model'))
-	obj = model.objects.get(slug=slug)
+	try:
+		obj = model.objects.get(slug=slug)
+	except:
+		ids = request.GET.get('id')
+		obj = model.objects.get(id=ids)
 	attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model')))
 	image = PMU_URL
 	return render(request,'attachment/listing.html',locals())
