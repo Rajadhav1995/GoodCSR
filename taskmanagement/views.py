@@ -182,19 +182,19 @@ def updates(obj_list):
             task_list = Task.objects.filter(activity = act)
             for task in task_list:
                 attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
-                if task.status == 2 and task.history.latest():
-                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                        'user_name':attach.created_by.email,'time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
-                    uploads.append(task_uploads)
                 if attach_list:
                     for attach in attach_list:
                         task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                        'user_name':attach.created_by.email,'time':attach.created.time(),'date':attach.created.date()}
+                        'user_name':attach.created_by.email,'time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
                         uploads.append(task_uploads)
+                if task.status == 2 and task.history.latest():
+                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
+                        'user_name':task.created_by.email,'time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                    uploads.append(task_uploads)
     return uploads
         
 def corp_task_completion_chart(obj_list):
-    progress={}
+#    progress={}
     task_progress =[] 
     total_percent=[]  
     if obj_list:
@@ -202,7 +202,8 @@ def corp_task_completion_chart(obj_list):
             total_tasks = project.total_tasks()
             tasks_completed_count = project.tasks_completed()
             percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
-            project = project.name
-            task_progress.append(progress)
+            remaining_percent = 100 - percentage
             total_percent.append(str(percentage))
+            progress = project.name+ ' ' + str(percentage)+'%'
+            task_progress.append(progress)
     return task_progress

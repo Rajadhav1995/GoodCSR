@@ -1,20 +1,21 @@
 from django import template
 register = template.Library()
+from datetime import datetime
 
 @register.assignment_tag
 def get_details(obj):
-    closed_task = update = ''
+    closed_tasks = update = ''
     formats = '%H:%M %p'
     user = obj.get('user_name')
     task_name = obj.get('task_name')
     project = obj.get('project_name')
     time= obj.get('time').strftime(formats)
-    date = obj.get('date')
+    date = obj.get('date').strftime('%d %B %Y')
     description = obj.get('attach')
     task_status = obj.get('task_status')
-    if task_status.status == 2:
-        closed_task = user + ''' completed <u>'''+ task_name + project + '''</u> <span>'''+ str(time) + '''</span>'''
-    update = user + ''' uploaded <u>'''+ description +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(time) + '''</span>'''
-    return update 
+    if task_status and task_status.status == 2:
+        closed_tasks = '''<li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
+    update = '''<li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' uploaded <u>'''+ description +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
+    return update,closed_tasks 
     
     
