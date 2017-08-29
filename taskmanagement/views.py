@@ -204,7 +204,10 @@ def corp_task_completion_chart(obj_list):
         for project in obj_list:
             total_tasks = project.total_tasks()
             tasks_completed_count = project.tasks_completed()
-            percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
+            try:
+                percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
+            except:
+                percentage = 0
             remaining_percent = 100 - percentage
             total_percent.append(str(percentage))
             progress = str(project.name)+ ' ' + str(percentage)+'%'
