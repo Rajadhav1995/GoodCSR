@@ -100,13 +100,15 @@ $(document).ready(function()
 
 </script>
 
+<!--/*script for add more functionality-->
 <script type="text/javascript">
     $(document).ready(function(){
                 function clone(){
                     var count = $('input[name=count]').val();
                     var c = count;
                     var tR = $('.data_row:last').clone();
-                    count++;
+                    count++; /* To increase the count */
+                    /* further functionalitie to split the name and append row number to each input type */
                     $(tR).find('td input, td select').each(function(){
                       if ($(this).attr('name')){
                            if ($(this).attr('name').split('_').length == 3){
