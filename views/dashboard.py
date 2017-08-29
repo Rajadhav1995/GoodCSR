@@ -16,5 +16,5 @@ def admin_dashboard(request):
     total_beneficiaries = obj_list.aggregate(Sum('no_of_beneficiaries')).values()[0]
     updates_list = updates(obj_list)
     tasks_progress = corp_task_completion_chart(obj_list)
-    return render(request,'base.html',locals())
+    return render(request,'corporate_dashboard.html',locals())
 

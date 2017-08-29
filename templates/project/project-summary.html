@@ -1,0 +1,1085 @@
+{% extends 'base.html' %}
+
+{% block section %}
+<div class="clear"></div>
+<!--Green pad starts-->
+<section class="green-pad green-height">
+	<div class="row">
+	<div class="image-pad logo-shadow">
+    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
+    </div>    
+    <div class="title-left">
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</h4>
+    <ul>
+    	<li><a href="">by OVP venture partners</a> </li>
+        <li><a href="">NGO Partner: Akanksha</a></li>
+    </ul>    
+    </div>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+     <div class="menu-bottom">
+        <ul>
+          <li><a class="active" href="javascript:void(0);">Summary</a></li>
+          <li><a href="javascript:void(0);">Task & Milestone</a></li>
+          <li><a href="javascript:void(0);">Budget</a></li>
+          <li><a href="javascript:void(0);">Files</a></li>
+        </ul>
+     </div>         
+    </div>
+</section>
+<!--Green pad Ends-->
+<!--Content part starts-->
+{% endblock %}
+
+{% block content %}
+<section class="content-part">
+	<div class="row">
+    <div class="white-box timeline-white">
+    	<h2>Timeline Progress</h2>
+        <div class="clear"></div>
+        <div id="scrollbar1">            
+                <div class="viewport">
+                     <div class="overview">
+                       <div id="time-line-pad">
+            <div class="time-line">
+                <div class="time-line-bdr"></div>
+                <ul>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img1.jpg" alt="">
+                        <p>School Construction Star...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">20 <span>May</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>50 Admission Done</p>
+                        <img src="/static/img/timeline-img2.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">04 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img3.jpg" alt="">
+                        <p>Teacher hired fot I to IV...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">19 <span>Jun</span></div>
+                </li>
+                <li class="event-down red-down current-event">
+                 &nbsp;
+                    <a href="javascript:void(0);" id="myBtn">
+                    <div class="event-img">
+                        <h3>Milestone Achieved</h3>
+                        <img src="/static/img/milestone-icon.png" alt="">
+                        <p>Nabarangpur school project</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">27 <span>Jun</span></div></a>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img4.jpg" alt="">
+                        <p>School Inaguration</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">30 <span>Jul</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>New Benches</p>
+                        <img src="/static/img/timeline-img5.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">05 <span>Aug</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img1.jpg" alt="">
+                        <p>School Construction Star...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">20 <span>May</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>50 Admission Done</p>
+                        <img src="/static/img/timeline-img2.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">04 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img3.jpg" alt="">
+                        <p>Teacher hired fot I to IV...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">19 <span>Jun</span></div>
+                </li>
+                <li class="event-down red-down current-event">
+                 &nbsp;
+                    <div class="event-img">
+                        <h3>Milestone Achieved</h3>
+                        <img src="/static/img/milestone-icon.png" alt="">
+                        <p>Nabarangpur school project</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">27 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img4.jpg" alt="">
+                        <p>School Inaguration</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">30 <span>Jul</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>New Benches</p>
+                        <img src="/static/img/timeline-img5.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">05 <span>Aug</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img1.jpg" alt="">
+                        <p>School Construction Star...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">20 <span>May</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>50 Admission Done</p>
+                        <img src="/static/img/timeline-img2.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">04 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img3.jpg" alt="">
+                        <p>Teacher hired fot I to IV...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">19 <span>Jun</span></div>
+                </li>
+                <li class="event-down red-down current-event">
+                 &nbsp;
+                    <div class="event-img">
+                        <h3>Milestone Achieved</h3>
+                        <img src="/static/img/milestone-icon.png" alt="">
+                        <p>Nabarangpur school project</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">27 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img4.jpg" alt="">
+                        <p>School Inaguration</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">30 <span>Jul</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>New Benches</p>
+                        <img src="/static/img/timeline-img5.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">05 <span>Aug</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img1.jpg" alt="">
+                        <p>School Construction Star...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">20 <span>May</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>50 Admission Done</p>
+                        <img src="/static/img/timeline-img2.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">04 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img3.jpg" alt="">
+                        <p>Teacher hired fot I to IV...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">19 <span>Jun</span></div>
+                </li>
+                <li class="event-down red-down current-event">
+                 &nbsp;
+                    <div class="event-img">
+                        <h3>Milestone Achieved</h3>
+                        <img src="/static/img/milestone-icon.png" alt="">
+                        <p>Nabarangpur school project</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">27 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img4.jpg" alt="">
+                        <p>School Inaguration</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">30 <span>Jul</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>New Benches</p>
+                        <img src="/static/img/timeline-img5.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">05 <span>Aug</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img1.jpg" alt="">
+                        <p>School Construction Star...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">20 <span>May</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>50 Admission Done</p>
+                        <img src="/static/img/timeline-img2.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">04 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img3.jpg" alt="">
+                        <p>Teacher hired fot I to IV...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">19 <span>Jun</span></div>
+                </li>
+                <li class="event-down red-down current-event">
+                 &nbsp;
+                    <div class="event-img">
+                        <h3>Milestone Achieved</h3>
+                        <img src="/static/img/milestone-icon.png" alt="">
+                        <p>Nabarangpur school project</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">27 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img4.jpg" alt="">
+                        <p>School Inaguration</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">30 <span>Jul</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>New Benches</p>
+                        <img src="/static/img/timeline-img5.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">05 <span>Aug</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img1.jpg" alt="">
+                        <p>School Construction Star...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">20 <span>May</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>50 Admission Done</p>
+                        <img src="/static/img/timeline-img2.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">04 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img3.jpg" alt="">
+                        <p>Teacher hired fot I to IV...</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">19 <span>Jun</span></div>
+                </li>
+                <li class="event-down red-down current-event">
+                 &nbsp;
+                    <div class="event-img">
+                        <h3>Milestone Achieved</h3>
+                        <img src="/static/img/milestone-icon.png" alt="">
+                        <p>Nabarangpur school project</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">27 <span>Jun</span></div>
+                </li>
+                <li class="event-up">
+                    &nbsp;
+                    <div class="event-img">
+                        <img src="/static/img/timeline-img4.jpg" alt="">
+                        <p>School Inaguration</p>
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">30 <span>Jul</span></div>
+                </li>
+                <li class="event-down">
+                 &nbsp;
+                    <div class="event-img">
+                        <p>New Benches</p>
+                        <img src="/static/img/timeline-img5.jpg" alt="">
+                    </div>
+                    <div class="event-circle"></div>
+                    <div class="event-date">05 <span>Aug</span></div>
+                </li>
+                </ul>
+                
+            </div>
+           </div> 
+                    </div>
+                </div>
+                <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+       </div> 
+    </div>
+    <div class="clear"></div>
+	<div class="content-top margin-top">
+      <div class="select-area">
+      	<label>See Data as </label>
+        
+        <div class="dropdown user select-down select-width">
+            <a href="javascript:void(0);" class="dropdown-toggle" >
+              <p>By Year</p>
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu1" style="display:none;">
+            
+              <li class="user-header">
+                <input class="check-box" type="checkbox" id="one" />
+                <label for="one"><span><span></span></span> 2015</label>
+              </li>
+              <li>
+                <input class="check-box" type="checkbox" id="two" />
+                <label for="two"><span><span></span></span> 2016</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="three" />
+                <label for="three"><span><span></span></span> 2017</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="four" />
+                <label for="four"><span><span></span></span> 2017</label>  
+              </li>
+              
+            </ul>
+          </div>
+          <div class="small-select">
+        <select name="lang" class="select_box ">
+            <option>2016</option>
+            <option>2017</option>
+        </select>
+        </div>
+        <!--<select name="lang" class="select_box ">
+            <option>Select Quarters</option>
+            <option>Quarter1</option>
+            <option>Quarter2</option>
+        </select>-->
+         </div>
+    </div>
+    <div class="clear"></div>
+    <div class="white-box white-pad">
+    	<div class="key-program">
+        <h2>Key Program Info</h2>
+        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
+        </div>
+        <ul>
+        	<li>
+            	<h3>No. of Beneficiaries</h3>
+                 <img class="key-image" src="/static/img/key-icon2.png" alt="">
+                <h4 class="title-pad">7.148</h4> 
+            </li>
+            <li>
+            	<h3>Beneficiaries distribution</h3>
+                <div class="right-budget beni-dist">
+                 <div id="Beneficary_distribution" style="width: 100%;float: left;"></div>
+                
+            </div>
+            </li>
+            <li>
+            	<h3>Total Budget</h3>
+                 <img class="key-image" src="/static/img/budget-icon.png" alt="">
+                <h4 class="title-pad">2.3cr</h4> 
+            </li>
+             <li>
+            	<h3>Batch Size</h3>
+                <div class="right-budget beni-dist beni-dist1">
+                <div id="Batch_size" style="width: 100%;float: left;"></div>
+            </div>
+            </li>
+        </ul>
+    </div>
+    <div class="white-box">
+    	<div class="left-white-pad">
+        	<h3>Total Task Completed</h3>
+            <div class="img-left">
+            <img src="/static/img/board-img.png" alt="">
+            </div>
+            <div class="budget-value-right">
+            <div class="budget-value">
+                  <div class="budget-left">16 tasks</div>
+                  <div class="budget-right">33%</div>
+              </div>
+              <h5>of 50 tasks <br>
+under 7 Milestones</h5>
+		</div>
+        </div>
+        <div class="right-white-pad">
+        	<h3>Total Budget</h3>
+            <div class="budget-pad">
+              <p><span class="green-d-circle"></span> utilized</p>
+              <div class="budget-value">
+                  <div class="budget-left">5.3cr</div>
+                  <div class="budget-right">57%</div>
+              </div>
+              <p><span class="green-circle"></span> Disbuirsed</p>
+              <div class="budget-value">
+                  <div class="budget-left">7.8cr</div>
+                  <div class="budget-right">65%</div>
+              </div>
+              <p><span class="yellow-circle"></span> Total</p>
+              <div class="budget-value budget-border">
+                  <div class="budget-left">10.5cr</div>
+                  <div class="budget-right">100%</div>
+              </div>
+          </div>
+          <div class="img-right">
+            <img src="/static/img/budget-chart-b.png" alt="">
+          </div>  
+        </div>
+    </div>
+    <div class="wip-image">
+    	<img src="/static/img/wip-img.jpg" alt="">
+    </div>
+    <div class="white-box-left">
+    <div class="table-responsive">
+    <table class="table-resp" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th style="width:28%;">Users</th>
+        <th style="width:19%;">Organization</th>
+        <th style="width:26%;">Designation</th>
+        <th style="width:19%;">PMU Role</th>
+        <th style="width:10%;">&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <span>Ramesh Tawde</span></td>
+        <td style="width:19%;">OVP Venture</td>
+        <td style="width:26%;">CSR Head</td>
+        <td style="width:19%;">Super Admin</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Anil Sharma</span></td>
+        <td style="width:19%;">OVP Venture</td>
+        <td style="width:26%;">CSR Program Accountant</td>
+        <td style="width:19%;">Admin</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Priya Dutta</span></td>
+        <td style="width:19%;">OVP Venture</td>
+        <td style="width:26%;">Human Resource</td>
+        <td style="width:19%;">Account Manager</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <span>Shakeel Ahmed</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Program Manager</td>
+        <td style="width:19%;">Program Manager</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img4.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Volunteer</td>
+        <td style="width:19%;">Volunteer</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Volunteer</td>
+        <td style="width:19%;">Volunteer</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      <tr>
+        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
+        <td style="width:19%;">Akanksha</td>
+        <td style="width:26%;">Volunteer</td>
+        <td style="width:19%;">Volunteer</td>
+        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+      </tr>
+      </tbody>
+	</table>  
+    </div>
+    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+    </div>
+    <div class="white-box-right">
+    	<h2>Recent Updates</h2>
+        <div id="boxscroll" class="updates-scroll ">
+        <p><span>Today</span> - 10 August</p>
+        <ul>
+        	<li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school <u>construction pictures</u> in <u>Nabarangpur School Project</u> <span>3:15 pm</span></div></li>
+            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Ramesh completed <u>Planning task under construction - Nabarangpur School Project</u><span>12:07 pm</span></div></li>
+        </ul>   
+        <p><span>Today</span> - 10 August</p>
+        <ul>
+        	<li><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <div class="update-pad">Shakeel updated <u>budget</u> in 
+<u>Nabarangpur School Project</u> <span>10:10 am</span></div></li>
+            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school construction pictures in Nabarangpur School Project <span>3:15 pm</span></div></li>
+        </ul>    
+        </div>
+    </div>
+    </div>
+</section>
+<!--Content part Ends-->
+
+</div>
+<div id="pop1" class="simplePopup">
+   <div class="pop-content">
+      <div class="img"> <img src="/static/img/pop-up/side-girl.jpg" alt="girl"> </div>
+      <div class="course-dtl">
+        <h1>Nabarangpur school project <sup>PGR</sup></h1>
+        <ul class="pop-list">
+          <li> <img src="/static/img/pop-up/users.jpg">
+            <p> No. of beneficiaries <span>2000</span> </p>
+          </li>
+          <li> <img src="/static/img/pop-up/dureation.jpg">
+            <p> Program duration <span>12 months </span> </p>
+          </li>
+          <li> <img src="/static/img/pop-up/dureation.jpg">
+            <p> Total Budget <span>25Lac</span> </p>
+          </li>
+        </ul>
+       
+        <div class="rht-content">
+         <ul>
+         <li class="fst">
+            <h2>Target beneficiaries</h2>
+            <p>Sex workers, woman<br> and girls, youth adults,<br> children: 6-18 years</p>
+         </li>
+         <li class="snd">
+       
+            <h2>Cause area</h2>
+            <p>Education, skill development and Livelihood, Women Empowerment and Gender equality, Skills Development, Empowerment, or Livelihood, Education, literacy, and empowerment.</p>
+            </li>
+            </ul>
+       
+        </div>
+      </div>
+      
+      <div class="cont-det">
+         <h2>Location coverage</h2>
+         <p>Semi-urban, West Bengal, North 24 Parganas Rural, West Bengal, East Midnapore Urban,   West Bengal, Kolkata Semi-urban, West Bengal, Hooghly</p>
+         <h2>About the Program</h2>
+<p>Our mission is to spread education among the underprivileged women / girls / children / youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time  to make them self employed we have introduced  the skill development training session so that they acquire the required skills set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs form the underprivileged women and youth.</p>
+<p>Our volunteers will give free tuition 5days a week and Saturday and Sunday will be holidays. <br>
+Skill development program will be held also 5days a week with different timings so that one person can get enrolled in both educational program classes and skill development program too.<br>
+Will be given certificates from our ngo after successfully completing of the skill development course and will also guide them in placememnts.</p>
+
+       <h2>Primary Activities </h2>
+<ul class="act-list"><li>Free tuition  classes</li>
+<li>Free livelihood skill development program </li>
+<li>Free career counseling and placement </li>
+</ul>
+  
+   <div class="concepto-carousel">
+         <h1>Pictures and files</h1>
+            <!-- carousel starts -->
+              <div id="con-carousel" class="owl-carousel">      
+                <div class="item"> 
+                    <img src="/static/img/pop-up/word-icon.jpg" alt=""> 
+                    <h2>Activities </h2>                          
+                </div>       
+                <div class="item"> 
+                    <img src="/static/img/pop-up/word-icon.jpg" alt="">  
+                    <h2>Activities </h2>                          
+                </div>
+                <div class="item"> 
+                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">                          
+                    <h2>Project Details</h2> 
+                </div> 
+                <div class="item"> 
+                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">                           
+                    <h2>Project Details</h2> 
+                </div>       
+                <div class="item"> 
+                    <img src="/static/img/pop-up/excel-incon.jpg" alt="">                           
+                    <h2>Project Details</h2> 
+                </div>
+                <div class="item"> 
+                    <img src="/static/img/pop-up/ppt-icon.jpg" alt="">                          
+                    <h2>Project Details</h2> 
+                </div> 
+                <div class="item"> 
+                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">                           
+                    <h2>Project Details</h2> 
+                </div>       
+                <div class="item"> 
+                    <img src="/static/img/pop-up/excel-incon.jpg" alt="">                           
+                    <h2>Project Details</h2> 
+                </div>
+                <div class="item"> 
+                    <img src="/static/img/pop-up/ppt-icon.jpg" alt="">                          
+                    <h2>Project Details</h2> 
+                </div>                    
+             </div>
+            <!-- carousel ends -->
+            
+            <!-- carousel starts -->
+              <div id="img-carousel" class="owl-carousel">      
+                <div class="item"> 
+                    <img src="/static/img/pop-up/student.jpg" alt=""> 
+                    <h2>Student</h2>                          
+                </div>       
+                <div class="item"> 
+                    <img src="/static/img/pop-up/class-room.jpg" alt="">  
+                    <h2>Class Image</h2>                          
+                </div>
+                <div class="item"> 
+                    <img src="/static/img/pop-up/student.jpg" alt="">                          
+                    <h2>Student</h2> 
+                </div> 
+                <div class="item"> 
+                    <img src="/static/img/pop-up/class-room.jpg" alt="">                           
+                    <h2>Class Image</h2> 
+                </div>       
+                <div class="item"> 
+                    <img src="/static/img/pop-up/student.jpg" alt=""> 
+                    <h2>Student</h2>                          
+                </div>       
+                <div class="item"> 
+                    <img src="/static/img/pop-up/class-room.jpg" alt="">  
+                    <h2>Class Image</h2>                          
+                </div>
+                <div class="item"> 
+                    <img src="/static/img/pop-up/student.jpg" alt="">                          
+                    <h2>Student</h2> 
+                </div> 
+                <div class="item"> 
+                    <img src="/static/img/pop-up/class-room.jpg" alt="">                           
+                    <h2>Class Image</h2> 
+                </div>  
+                                   
+             </div>
+            <!-- carousel ends -->
+      </div>
+
+      </div>
+    </div>
+</div>
+<div id="pop3" class="simplePopup">
+   <div class="pop-content">
+      <div class="cont-det">
+         <h2>Create Budget</h2>
+         <div class="form-pad">
+			<h3>Budget Info</h3>
+            <div class="form-label">
+              <label>Project</label>
+              <input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="" type="text">		
+            </div>
+            <div class="form-label-left">
+            	<label>Start Date</label>
+             	 <input type="text" name="" placeholder="DD/MM/YY" class="datepicker">
+            </div>
+            <div class="form-label-right">
+            	<label>End Date</label>
+              	<input type="text" name="" placeholder="DD/MM/YY" class="datepicker">
+            </div>
+            <div class="form-label">
+              <label>Budget Duration</label>
+              <input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="" type="text">		
+            </div>
+            <div class="form-label-left">
+            	<label>Fin. Reporting Period</label>
+             	 <select name="lang" class="select_box ">
+                    <option>select</option>
+                    <option>select1</option>
+                </select>
+            </div>
+            <div class="form-label-right">
+            	<label>Super Category Label</label>
+              	<input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="Enter Location" type="text">	
+            </div>
+            <div class="form-label-pad form-link">
+            	<a href="javascript:void(0);">Save and Add Super Categories</a>
+            </div>
+         </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- jQuery (necessary for JavaScript plugins) -->
+<!--<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>-->
+<!--<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>-->
+<!--<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>-->
+<!--<script type="text/javascript" src="/static/js/common.js" /></script>-->
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/owl.carousel.js"></script>
+<script type="text/javascript" src="/static/js/jquery.tinyscrollbar.js"></script>
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+<script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+ 
+
+
+        
+<script>
+//Toggle
+		
+	$('.user-menu').on('click',function(){
+		$('.dropdown-menu').slideDown(350);
+	
+	});
+	$('.select-down').on('click',function(){
+        $('.dropdown-menu1').slideDown(350);
+          
+    });
+	
+	$(document).ready(function(e) {	
+		/*Content Show/Hide */
+		$('.hide-cont').hide();
+		$('.close-cont').hide();
+		$('.view-cont').click(function(){
+			$('.hide-cont').slideDown(350);
+			$('.close-cont').show();
+			$('.view-cont').hide();
+		});
+		$('.close-cont').click(function(){
+			$('.hide-cont').slideUp(350);
+			$('.close-cont').hide();
+			$('.view-cont').show();
+		});	
+		$(document).trigger( "click" );
+	});
+	
+	$(document).click(function(){
+	
+		$('.user-menu, .select-down').click(function(event){
+			event.stopPropagation();
+		});
+	
+		$('.dropdown-menu, .dropdown-menu1').slideUp(350);	 
+	
+	});		 
+</script>
+
+
+    <script>
+  $(document).ready(function() {    
+    $("#boxscroll1").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV    
+  });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#horizontalTab').easyResponsiveTabs({
+            type: 'default', //Types: default, vertical, accordion           
+            width: 'auto', //auto or any width like 600px
+            fit: true,   // 100% fit in a container
+            closed: 'accordion', // Start closed if in accordion view
+            activate: function(event) { // Callback function if tab is switched
+                var $tab = $(this);
+                var $info = $('#tabInfo');
+                var $name = $('span', $info);
+
+                $name.text($tab.text());
+
+                $info.show();
+            }
+        });
+		});
+</script>
+<script>
+  $(document).ready(function() {
+  
+    
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+	
+	var li_Count = $('.time-line li').length;
+	$(".time-line").css('width', 200*li_Count);
+  });
+
+	$(document).ready(function()
+	{
+		  $("#scrollbar1").tinyscrollbar({ axis: "x"});
+		
+	});
+</script>
+<script>
+$(document).ready(function(){ 
+	var owl = $('#img-carousel');
+	owl.owlCarousel({
+		goToFirstSpeed :1500,
+		items:4,
+		margin:25,			
+		loop:true,
+		autoplay:true,
+		singleItem: true,
+		autoplayTimeout:4000,
+		autoplayHoverPause:true,
+		responsive: {
+			0:{ items:1 },
+			479:{ items:2 },
+			639:{ items:2 },
+			768:{ items:4 },
+			1024:{ items:4 },
+			1280:{ items:4 }
+		},
+		nav : true,
+		dots : false		  
+	  });
+	var owl = $('#con-carousel');
+	owl.owlCarousel({
+		goToFirstSpeed :1000,
+		items:6,
+		margin:25,			
+		loop:true,
+		autoplay:true,
+		autoplayTimeout:4000,
+		autoplayHoverPause:true,
+		responsive: {
+			0:{ items:3 },
+			639:{ items:4 },
+			768:{ items:5 },
+			1024:{ items:5 },
+			1280:{ items:6 }
+		},
+		nav : true,
+		dots : false		  
+	  });
+	
+	
+	});
+</script>
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#myBtn').click(function(){
+	$('#pop1').simplePopup();
+    });
+});
+
+	$(document).ready(function(){
+    $('#myBtn1').click(function(){
+	$('#pop3').simplePopup();
+    });
+});
+
+</script>
+
+<!---datepicker script-->
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script>
+	$(function() {
+	$( ".datepicker" ).datepicker({
+	showOn: "button",
+	buttonImage: "/static/img/calender-icon.png", 
+	buttonImageOnly: true
+	});
+	});
+</script>
+
+<script src="/static/code/highcharts.js"></script>
+<script src="/static/code/highcharts-more.js"></script>
+
+<script src="/static/code/modules/solid-gauge.js"></script>
+
+<script type="text/javascript">
+
+Highcharts.chart('Batch_size', {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: null},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,                        
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }                                   
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+              
+                margin: 12
+            
+               
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+                
+                },
+                data: [{
+            name: 'Nabarangpur',
+            y: 56.33,
+            color:'#D0C173'
+        }, {
+            name: 'Kasturbadham',
+            y: 24.03,
+            color:'#27988A'
+        }, {
+            name: 'Narauli Dang',
+            y: 10.38,
+            color:'#31798F'
+        }, {
+            name: 'Mallian Khurd',
+            y: 4.77,
+            color:'#1C6A66'
+        }, {
+            name: 'Gokarna village',
+            y: 4.77,
+            color:'#A13F5D'
+        }
+
+
+        ]
+
+            }]
+        });
+
+</script>
+<script type="text/javascript">
+Highcharts.chart('Beneficary_distribution', {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: null},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,                        
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }                                   
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+              
+                margin: 12
+            
+               
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+                
+                },
+                data: [{
+            name: 'Nabarangpur',
+            y: 56.33,
+            color:'#D0C173'
+        }, {
+            name: 'Kasturbadham',
+            y: 24.03,
+            color:'#27988A'
+        }, {
+            name: 'Narauli Dang',
+            y: 10.38,
+            color:'#31798F'
+        }, {
+            name: 'Mallian Khurd',
+            y: 4.77,
+            color:'#1C6A66'
+        }, {
+            name: 'Gokarna village',
+            y: 4.77,
+            color:'#A13F5D'
+        }
+
+
+        ]
+
+            }]
+        });
+    
+
+
+</script>
+{% endblock %}
