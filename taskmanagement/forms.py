@@ -27,7 +27,7 @@ class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
         fields  = ('name','project','super_category','activity_type','description','status','assigned_to','subscribers')
-        
+
     def __init__(self,user_id,project_id,*args, **kwargs):
         self.user = user_id
         self.project = project_id
@@ -39,8 +39,9 @@ class ActivityForm(forms.ModelForm):
 #        self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2).values_list('id',flat="True")
         self.fields['subscribers'].required = True
         self.fields['project'].initial = Project.objects.get(id = project_id)
-        
-    
+        self.fields['project'].widget.attrs['readonly'] = True
+
+
 
 class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
@@ -56,7 +57,7 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ('name','activity','task_dependency','start_date','end_date','actual_start_date','actual_end_date','assigned_to','subscribers','status')
-        
+
     def __init__(self,user_id ,project_id,*args, **kwargs):
         self.user = user_id
         self.project = project_id
@@ -66,32 +67,33 @@ class TaskForm(forms.ModelForm):
         self.fields['start_date'].required = True
         self.fields['end_date'].required = True
         self.fields['status'].required = True
-    
+
     def clean(self):
         cleaned_data = super(TaskForm,self).clean()
         start_date = cleaned_data.get("start_date")
         end_date = cleaned_data.get("end_date")
         actual_start_date = cleaned_data.get("actual_start_date")
         actual_end_date = cleaned_data.get("actual_end_date")
+
         if end_date < start_date:
             msg = u"End date should be greater than start date."
             self._errors["end_date"] = self.error_class([msg])
-        
+
         if actual_end_date < actual_start_date:
             msg = u"Actual End date should be greater than Actual start date."
             self._errors["actual_end_date"] = self.error_class([msg])
 
 class MilestoneForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
-    task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs={'class' :'form-control'})) 
+    task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs={'class' :'form-control'}))
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
-    subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'})) 
+    subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
     overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
     class Meta:
-        model = Milestone   
+        model = Milestone
         fields = ('name','task','overdue','subscribers','status')
-        
-        
+
+
     def __init__(self,user_id,project_id, *args, **kwargs):
         self.user = user_id
         self.project = project_id

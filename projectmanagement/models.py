@@ -175,6 +175,29 @@ class Project(BaseContent):
     def __str__(self):
         return self.name
 
+    def total_tasks(self):
+        from taskmanagement.models import Activity,Task
+        count = 0
+        project = Project.objects.get(id= self.id)
+        activity = Activity.objects.filter(project = project)
+        for act in activity:
+            task = Task.objects.filter(activity= act).count()
+            count = count + task 
+        return count
+        
+    def tasks_completed(self):
+        from taskmanagement.models import Activity,Task
+        from datetime import datetime
+        completed_tasks = 0
+        project = Project.objects.get(id= self.id)
+        activity = Activity.objects.filter(project = project)
+        for act in activity:
+            task_list = Task.objects.filter(activity= act)
+            for task in task_list:
+                if task.actual_end_date.strftime('%Y-%m-%d') <= datetime.now().strftime('%Y-%m-%d'):
+                    completed_tasks = completed_tasks + 1
+        return completed_tasks
+
     # def save(self):
     #     super(Project, self).save()
     #     date = datetime.date.today()

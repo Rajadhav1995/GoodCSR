@@ -9,13 +9,14 @@ from pmu.settings import BASE_DIR
 from taskmanagement.models import *
 from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
 from projectmanagement.models import Project,UserProfile
+from media.models import Attachment
 # Create your views here.
 
 def listing(request,model_name):
 #    model = ContentType.objects.get(model__iexact = model_name)
     obj_list = eval(model_name).objects.all().order_by('-id')
     return render(request,'listing.html',locals())
-    
+
 def add_taskmanagement(request,model_name,m_form):
     if model_name == 'Activity':
         try:
@@ -23,14 +24,14 @@ def add_taskmanagement(request,model_name,m_form):
         except:
             project_id = Project.objects.get(id = request.POST.get('project')).id
     else :
-        project_id = None 
+        project_id = None
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
         form=form(user_id,project_id,request.POST,request.FILES)
         if form.is_valid():
-            f=form.save() 
+            f=form.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
@@ -41,7 +42,7 @@ def add_taskmanagement(request,model_name,m_form):
     else:
         form=form(user_id,project_id)
     return render(request,'taskmanagement/forms.html',locals())
-    
+
 def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
@@ -81,7 +82,7 @@ def active_change(request,model_name):
         obj.save()
         msg ='active'
     return HttpResponseRedirect(url)
-    
+
 from django.http import JsonResponse
 def task_dependencies(request):
     start_date = ''
@@ -101,7 +102,7 @@ def task_dependencies(request):
     else:
         tasks = [{'id':i.id,'name':i.name} for i in tasks if i.is_dependent() != True]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
-    
+
 # to compute start date of the tasks dependent
 def task_auto_computation_date(request):
     ids = request.GET.get('id')
@@ -116,12 +117,12 @@ def task_auto_computation_date(request):
     return JsonResponse({"computation_date":end_date})
 
 def milestone_overdue(request):
-    task_ids = request.GET.get('id')
+    task_ids = request.GET.get('id[]')
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
     milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
-    
+
 from datetime import datetime
 #slug = Project slug and this is to display in project summary dashboard
 def total_tasks_completed(slug):
@@ -146,14 +147,70 @@ def total_tasks_completed(slug):
     if milestones:
         total_milestones = len(milestones)
     return project,total_tasks,completed_tasks,milestones,total_milestones,percent
-    
 
-def task_updates(obj_list):
-#updates of the task 
+
+def my_task_updates(obj_list):
+#updates of the task
     try:
         task_obj = Task.objects.get(id = int(task_id))
-        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('-id')
+        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('created_by')
     except:
         attachment = []
     return attachment
+
+def my_task_details(task_id):
+    try:
+        task = Task.objects.get(id = int(task_id))
+    except:
+        task = []
+    return task
+   
+def my_tasks_listing():
+    tasks = Task.objects.filter(active=2).order_by('-createdby')
+    return tasks
     
+def updates(obj_list):
+    formats = '%H:%M %p'
+    uploads = []
+    task_completed = {}
+    completed_tasks = []
+    task_uploads = {}
+    for project in obj_list:
+        project = Project.objects.get(id = int(project.id))
+        activity = Activity.objects.filter(project=project)
+        for act in activity:
+            task_list = Task.objects.filter(activity = act)
+            for task in task_list:
+                attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
+                if attach_list:
+                    for attach in attach_list:
+                        task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
+                        'user_name':attach.created_by.email,'time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
+                        uploads.append(task_uploads)
+                if task.status == 2 and task.history.latest():
+                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
+                        'user_name':task.created_by.email,'time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                    uploads.append(task_uploads)
+    return uploads
+        
+def corp_task_completion_chart(obj_list):
+    data={}
+    task_completion={}
+    complete_status = []
+    task_progress =[] 
+    total_percent=[] 
+    remaining =[] 
+    if obj_list:
+        for project in obj_list:
+            total_tasks = project.total_tasks()
+            tasks_completed_count = project.tasks_completed()
+            percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
+            remaining_percent = 100 - percentage
+            total_percent.append(str(percentage))
+            progress = str(project.name)+ ' ' + str(percentage)+'%'
+            task_progress.append(str(progress))
+            remaining.append(int(remaining_percent))
+            data = int(percentage)
+            complete_status.append(data)
+        task_completion = {'x_axis': task_progress,'remaining':remaining,'data':complete_status}
+    return task_completion

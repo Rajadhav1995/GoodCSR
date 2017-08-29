@@ -19,7 +19,7 @@
                 <th></th>
                 <th></th>
                 {% for i,j in quarter_list.items %}
-                <th colspan="4">{{j}}</th>
+                <th colspan="3">{{j}}</th>
                 {% endfor %}
             </tr>
             <tr>
@@ -32,32 +32,32 @@
                 <th> No. of unit </th>
                 <th> Rate </th>
                 <th> Total Planned </th>
-                <th> Total Utilized </th>
+<!--                <th> Total Utilized </th>-->
                 {% endfor %}
             </tr>
         </thead>
         {% for j in "123456"%}
         <tr class="data_row">
-            <td><select name="location_{{j}}">
+            <td><select name="location_{{j}}" id="location_{{j}}" class="location">
                 <option value = "">Select option </option>
                 {% for i in supercategory_list %}
                 <option value="{{i.id}}">{{i.name}}</option>
                 {% endfor %}
                 </select></td>
-            <td><select name="heading_{{j}}">
+            <td><select name="heading_{{j}}" id="heading_{{j}}" class="heading">
             <option value = "">Select Heading </option>
             {% for i in heading_list %}
                 <option value="{{i.id}}">{{i.name}}</option>
                 {% endfor %}
                 </select></td>
-            <td> <input type="text" name="subheading_{{j}}"> </td>
-             <td> <input type="number" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"> </td>
-              <td> <input type="text" name = "unit-type_{{j}}"> </td>
+            <td> <input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}"> </td>
+             <td> <input type="number" class = "linetotal" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"> </td>
+              <td> <input type="text" class="unit-type" name = "unit-type_{{j}}"> </td>
             {% for i,v in quarter_list.items %}
                <td> <input type="number" name = "unit_{{i}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" > </td>
                 <td> <input type="number" name = "rate_{{i}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}"> </td>
-                 <td> <input type="number" name = "planned-cost_{{i}}_{{j}}" id="planned-cost_{{i}}_{{j}}" readonly="readonly" > </td>
-                 <td> <input type="number" name = "utilized-cost_{{i}}_{{j}}"> </td>
+                 <td> <input type="number" name = "planned-cost_{{i}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" > </td>
+<!--                 <td> <input type="number" name = "utilized-cost_{{i}}_{{j}}"> </td>-->
                  {% endfor %}
         </tr>
         {% endfor %}
@@ -66,6 +66,44 @@
     </table>
 </div>
 </form>
+
+
+<script type="text/javascript">
+
+$(document).ready(function () 
+{
+    function mandatory_input()
+    {
+            nam = $(this).context.name.split('_')
+            i = nam[1]
+            j = nam[2]
+            
+            $("[id$=_"+parseInt(j)+"]").each(function(){
+                alert($(this).val())
+            /*
+                if ($(this).val() == " ") 
+                {
+                    $('.req label').append('<span class="cf-required">*</span>');
+                    $('.req input').attr('required', 'True');
+                }
+                else{
+                    $('.req span.cf-required').remove();
+                    $('.req input').removeClass('required').removeAttr('required');
+                }
+                */
+            })
+            
+
+            
+            
+        }
+        $(document).on("change, keyup", ".rate", mandatory_input);
+        $(document).on("change, keyup", ".unit", mandatory_input);
+        $(document).on("change, keyup", ".subheading", mandatory_input);
+});
+
+</script>
+
 
 <script>
 $(document).ready(function()
@@ -99,6 +137,8 @@ $(document).ready(function()
 });
 
 </script>
+
+
 
 <!--/*script for add more functionality-->
 <script type="text/javascript">

@@ -78,7 +78,7 @@ def project_detail(request):
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
-    return render(request,'project/comany-profile.html',locals())
+    return render(request,'project/project-summary.html',locals())
 
 def project_mapping(request):
     form = ProjectMappingForm()
@@ -288,7 +288,6 @@ def manage_parameter_values(request):
     values = aggregate_project_parameters(parameter,child_parameter)
     print values
     return render(request,'project/parameter_value_list.html',locals())
-
 
 def aggregate_project_parameters(param, values):
     ret={}
