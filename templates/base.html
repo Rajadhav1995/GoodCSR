@@ -96,7 +96,7 @@
                   <ul>
                   {% get_user_project request as obj_list %}
                       {% for i in obj_list %}
-                          <li><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></li>
+                          <li><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></li>
                       {% endfor %}
                   </ul>
                 <!--</div>-->

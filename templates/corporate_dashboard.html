@@ -238,19 +238,19 @@
             <td style="width:19%;">{{i.user.organization}}</td>
             <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:19%;">{{i.role.name}}
-            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>
+<!--            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>-->
       </tr>
       {% endfor %}
 
       </tbody>
   </table>  
     </div>
-    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+<!--    <a href="manage/project/role/add/?slug={{project_slug}}" class="link-pad">Add User</a>       -->
     </div>
     <div class="white-box-right">
       <h2>Recent Updates</h2>
         <div id="boxscroll" class="updates-scroll ">
-        <p><span>Today</span> - 29 August</p>
+        <p><span>Today</span> - 30 August</p>
             <ul>
          {% if updates_list %}
              {% for obj in updates_list %}

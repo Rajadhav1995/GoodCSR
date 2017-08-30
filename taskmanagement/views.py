@@ -146,7 +146,8 @@ def total_tasks_completed(slug):
     print milestones
     if milestones:
         total_milestones = len(milestones)
-    return project,total_tasks,completed_tasks,milestones,total_milestones,percent
+    data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
+    return data
 
 
 def my_task_updates(obj_list):

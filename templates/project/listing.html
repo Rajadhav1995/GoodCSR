@@ -49,7 +49,7 @@
         
         {% for i in obj_list %}
         <tr>
-            <td><a href="/project/detail/?slug={{i.slug}}">{{i.name}}</a></td>
+            <td><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></td>
             <td>{{i.created_by.user.username}}</td>
             <td>{{i.program.name}}</td>
             <td>{{i.get_active_display}}</td>

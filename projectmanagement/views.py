@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
+from taskmanagement.views import total_tasks_completed,updates
 # Create your views here.
 
 def create_project(request):
@@ -78,7 +79,7 @@ def project_detail(request):
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
-    return render(request,'project/project-summary.html',locals())
+    return render(request,'project/comany-profile.html',locals())
 
 def project_mapping(request):
     form = ProjectMappingForm()
@@ -257,3 +258,13 @@ def manage_parameter_values(request):
     parameter = ProjectParameterValue.objects.get_or_none(keyparameter__id=ids)
     key_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter1)
     return render(request,'project/parameter_value_list.html',locals())
+    
+def project_summary(request):
+    slug =  request.GET.get('slug')
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get(user_reference_id = user_id)
+    obj = Project.objects.get(slug = slug)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj)
+    tasks = total_tasks_completed(obj.slug)
+    updates_list = updates(Project.objects.filter(slug=slug))
+    return render(request,'project/project-summary.html',locals())
