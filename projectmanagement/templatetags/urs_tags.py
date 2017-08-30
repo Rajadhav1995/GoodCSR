@@ -15,6 +15,7 @@ def get_user_project(request):
 
 @register.assignment_tag
 def get_budget_lineitem(row):
+#    import ipdb;ipdb.set_trace();
     budget_periodobj = ProjectBudgetPeriodConf.objects.filter(row_order = int(row))[0]
     try:
         lineitem = BudgetPeriodUnit.objects.get(budget_period = budget_periodobj)
