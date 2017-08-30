@@ -108,7 +108,7 @@ def projectlinetemadd(request):
                                'unit_type':result['unit-type'],
                                'rate':result['rate'],
                                'planned_unit_cost':result['planned-cost'],
-                               'utilized_unit_cost':result['utilized-cost'],
+#                               'utilized_unit_cost':result['utilized-cost'],
                                'start_date':start_date,
                                'end_date':end_date,
                                'row_order':int(i),
@@ -119,7 +119,6 @@ def projectlinetemadd(request):
         return HttpResponseRedirect('/project/list/')
     return render(request,"budget/budget_lineitem.html",locals())
 
-from itertools import groupby
 def projectbudgetdetail(request):
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
@@ -130,3 +129,32 @@ def projectbudgetdetail(request):
     budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
     span_length = len(budget_periodconflist)
     return render(request,"budget/budget_detail.html",locals())
+
+def budgetutilization(request):
+    project_slug = request.GET.get('slug')
+    projectobj =  Project.objects.get_or_none(slug=project_slug)
+    budget_id = request.GET.get('budget_id')
+    budgetobj = Budget.objects.get_or_none(id = budget_id)
+    quarter_list = get_budget_quarters(budgetobj)
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
+    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+    span_length = len(budget_period)
+    if request.method == "POST":
+        count = request.POST.get('count')
+        
+        project_slug = request.POST.get('slug')
+        projectobj =  Project.objects.get_or_none(slug=project_slug)
+        budget_id = request.POST.get('budget_id')
+        budgetobj = Budget.objects.get_or_none(id = budget_id)
+        quarter_list = get_budget_quarters(budgetobj)
+        lineobj_list = filter(None,request.POST.getlist("line_obj"))
+        for i in lineobj_list:
+            line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i))]
+            for j in line_itemlist:
+                if str(i) == j.split("_")[3]:
+                    budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
+                    budget_periodobj.utilized_unit_cost = request.POST.get(j)
+                    budget_periodobj.save()
+                    print budget_periodobj.utilized_unit_cost
+        
+    return render(request,"budget/budget_utilization.html",locals())
