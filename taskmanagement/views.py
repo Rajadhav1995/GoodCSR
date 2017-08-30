@@ -10,6 +10,7 @@ from taskmanagement.models import *
 from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
 from projectmanagement.models import Project,UserProfile
 from media.models import Attachment
+from budgetmanagement.models import *
 # Create your views here.
 
 def listing(request,model_name):
@@ -171,6 +172,7 @@ def my_tasks_listing():
     return tasks
     
 def updates(obj_list):
+# to get the recent updates of the projects 
     formats = '%H:%M %p'
     uploads = []
     task_completed = {}
@@ -195,6 +197,7 @@ def updates(obj_list):
     return uploads
         
 def corp_task_completion_chart(obj_list):
+# to get the task  and completion progress bar in the corporate dashboard
     data={}
     task_completion={}
     complete_status = []
@@ -209,7 +212,7 @@ def corp_task_completion_chart(obj_list):
                 percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
             except:
                 percentage = 0
-            remaining_percent = 100 - percentage
+            remaining_percent = 100 - percentage if percentage !=0 else 0
             total_percent.append(str(percentage))
             progress = str(project.name)+ ' ' + str(percentage)+'%'
             task_progress.append(str(progress))
@@ -218,5 +221,41 @@ def corp_task_completion_chart(obj_list):
             complete_status.append(data)
         task_completion = {'x_axis': task_progress,'remaining':remaining,'data':complete_status}
     return task_completion
+ 
+def task_offset_date(task):
+    task = Task.objects.get(id = int(task))
+    start_date = task.start_date.strftime('%y-%m-%d')
+    end_date = task.end_date.strftime('%y-%m-%d')
+    offset = end_date - start_date
     
 
+def corp_total_budget(obj_list):
+# bar chart for the total budget in corporate dashboard
+    total_budget=[]
+    utilized_budget=[]
+    project_list=[]
+    corp_budget={}
+    disbursed=[]
+    planned_cost = utilized_cost =disbursed_amount= 0
+    if obj_list:
+        for project in obj_list:
+            try:
+                tranche = Tranche.objects.get(project = project)
+                budget = Budget.objects.get(project=project)
+                budget_period = ProjectBudgetPeriodConf.objects.filter(budget=budget,project=project).values_list('id',flat=True)
+                budget_unit = BudgetPeriodUnit.objects.filter(budget_period__in = budget_period)
+                for i in budget_unit :
+                    planned_cost = float(planned_cost + int(i.planned_unit_cost))
+                    utilized_cost = float(utilized_cost + int(i.utilized_unit_cost)) 
+                total_budget.append(planned_cost/10000000)
+                utilized_budget.append(utilized_cost/10000000)
+                disbursed_amount = float(tranche.actual_disbursed_amount)
+                disbursed.append(disbursed_amount/10000000)
+            except:
+                planned_cost = utilized_cost = disbursed_amount = 0
+                total_budget.append(planned_cost)
+                utilized_budget.append(utilized_cost)
+                disbursed.append(disbursed_amount)
+            project_list.append(str(project.name))
+        corp_budget = {'projects':project_list,'total_budget':total_budget,'utilized':utilized_budget,'disbursed':disbursed}
+    return corp_budget

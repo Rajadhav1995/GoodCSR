@@ -260,6 +260,7 @@ def manage_parameter_values(request):
     return render(request,'project/parameter_value_list.html',locals())
     
 def project_summary(request):
+# to display the project details in project summary page
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)

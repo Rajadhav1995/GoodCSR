@@ -74,7 +74,7 @@
           </div>
         </form>-->
        
-    </div>
+    
     <div class="white-box white-pad">
       <h2>Key Program Info</h2>
 <!--<!--        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>-->
@@ -201,7 +201,7 @@
         </div>
         <div class="right-white">
         	<h2>Total Budget</h2>
-            <div id="bwContainer" style="height:300px;width:500px;"></div> 
+            <div id="bwContainer" style="width:570px;"></div> 
         </div>
         <div class="hide-cont">
         	<div class="left-white">
@@ -267,6 +267,7 @@
         </div>
     </div> 
     </div>
+  </div>
 </section>
 <!--Content part Ends-->
 {% endblock %}
@@ -326,6 +327,11 @@ console.log(map_data[0]);
 		});
 </script>    
 <script type='text/javascript'>//<![CDATA[
+var data = {{total_budget | safe}}
+var projects = data.projects
+var total_budget = data.total_budget
+var utilized = data.utilized
+var disbursed = data.disbursed
 $(function(){
         //-------------------------------------------------------
         Highcharts.Renderer.prototype.symbols.line = function (x, y, width, height) {
@@ -391,7 +397,7 @@ $(function(){
                 }],
                 lineColor: 'lightgrey',
                 lineWidth: 0,
-                categories: ['Project 1', 'Project 2', 'Project 3', 'Project 4', 'Project 5']
+                categories: projects
             },
             yAxis: {
                 tickInterval: 1,
@@ -477,7 +483,7 @@ $(function(){
                 tooltip: {
                     valueSuffix: ' cr'
                 },
-                data: [6, 5, 10, 7, 9]
+                data: total_budget
             }, {
                 name: 'Disbursed',
                 color: '#00998b',
@@ -486,7 +492,7 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 8,
-                data: [1, 4, 9.5, 4, 8]
+                data: disbursed
             }, {
                 name: 'Utilized',
                 color: '#0b6861',
@@ -495,7 +501,7 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 10,
-                data: [0.5, 3, 9, 3, 6]
+                data: utilized
             }]
         });
 
