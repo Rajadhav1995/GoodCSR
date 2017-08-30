@@ -53,7 +53,7 @@ class TaskForm(forms.ModelForm):
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
-    task_dependency = forms.ModelChoiceField(queryset = Task.objects.filter(active=2),required=False,widget=forms.Select(attrs={'class': 'form-control'}))
+    task_dependency = forms.ModelMultipleChoiceField(queryset = Task.objects.filter(active=2),required=False,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
     class Meta:
         model = Task
         fields = ('name','activity','task_dependency','start_date','end_date','actual_start_date','actual_end_date','assigned_to','subscribers','status')

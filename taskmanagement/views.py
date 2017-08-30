@@ -105,7 +105,7 @@ def task_dependencies(request):
 
 # to compute start date of the tasks dependent
 def task_auto_computation_date(request):
-    ids = request.GET.get('id')
+    ids = request.GET.get('id[]')
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
@@ -218,3 +218,5 @@ def corp_task_completion_chart(obj_list):
             complete_status.append(data)
         task_completion = {'x_axis': task_progress,'remaining':remaining,'data':complete_status}
     return task_completion
+    
+
