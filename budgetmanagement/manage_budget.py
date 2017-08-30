@@ -205,8 +205,10 @@ def budget_supercategory_value(projectobj,budgetobj):
     project_category_list = SuperCategory.objects.filter(project = projectobj,active=2).exclude(parent=None)
     final_project_category_list = []
     for i in project_category_list:
-        total_amount = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj,budget_period__project=projectobj).aggregate(Sum('planned_unit_cost')).values()[0]
-        print total_amount
+        total_amount_list = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj,budget_period__project=projectobj,category=i).values_list('planned_unit_cost',flat=True)
+        total_amount_list = map(lambda x:x if x else 0,total_amount_list)
+        total_amount_number = map(int,total_amount_list)
+        total_amount = sum(total_amount_number)
         final_project_category_list.append({'name':i.name,'y':int(total_amount),'color':random.choice(colors)})
     return final_project_category_list
 
@@ -220,8 +222,7 @@ def budgetview(request):
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
     budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
     span_length = len(budget_period)
-    planned_amount,utilized_amount = budget_amount_list(budgetobj,projectobj)
-    
+    budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj)
     tranche_list = Tranche.objects.filter(project = projectobj)
     tranche_amount = tanchesamountlist(tranche_list)
     planned_amount = tranche_amount['planned_amount']

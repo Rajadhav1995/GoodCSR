@@ -66,46 +66,46 @@
         </div>
     </div>
 	<div class="content-top margin-top">
-<!--      <div class="select-area">-->
-<!--      	<label>See Data as </label>-->
-<!--        <div class="small-select">-->
-<!--        <select name="lang" class="select_box ">-->
-<!--            <option>2016</option>-->
-<!--            <option>2017</option>-->
-<!--        </select>-->
-<!--        </div>-->
-<!--        <div class="dropdown user select-down">-->
-<!--            <a href="javascript:void(0);" class="dropdown-toggle" >-->
-<!--              <p>Select Quarters</p>-->
-<!--              <i class="fa fa-angle-down"></i>-->
-<!--            </a>-->
-<!--            <ul class="dropdown-menu1" style="display:none;">-->
-<!--            -->
-<!--              <li class="user-header">-->
-<!--                <input class="check-box" type="checkbox" id="one" />-->
-<!--                <label for="one"><span><span></span></span> Quarter1</label>-->
-<!--              </li>-->
-<!--              <li>-->
-<!--                <input class="check-box" type="checkbox" id="two" />-->
-<!--                <label for="two"><span><span></span></span> Quarter2</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="three" />-->
-<!--                <label for="three"><span><span></span></span> Quarter3</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="four" />-->
-<!--                <label for="four"><span><span></span></span> Quarter4</label>  -->
-<!--              </li>-->
-<!--              -->
-<!--            </ul>-->
-<!--          </div>-->
+      <div class="select-area">
+      	<label>See Data as </label>
+        <div class="small-select">
+        <select name="lang" class="select_box ">
+            <option>2016</option>
+            <option>2017</option>
+        </select>
+        </div>
+        <div class="dropdown user select-down">
+            <a href="javascript:void(0);" class="dropdown-toggle" >
+              <p>Select Quarters</p>
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu1" style="display:none;">
+            
+              <li class="user-header">
+                <input class="check-box" type="checkbox" id="one" />
+                <label for="one"><span><span></span></span> Quarter1</label>
+              </li>
+              <li>
+                <input class="check-box" type="checkbox" id="two" />
+                <label for="two"><span><span></span></span> Quarter2</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="three" />
+                <label for="three"><span><span></span></span> Quarter3</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="four" />
+                <label for="four"><span><span></span></span> Quarter4</label>  
+              </li>
+              
+            </ul>
+          </div>
         <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
             <option>Quarter1</option>
             <option>Quarter2</option>
         </select>-->
-<!--         </div>-->
+         </div>
     </div>
     
     <div class="white-box">
@@ -389,19 +389,20 @@ Highcharts.chart('planned_utilized', {
     series: [{
         name: 'Planned',
         color: '#D0C173',
-        data: {{planned_amount|safe}},
+        data: {{budget_planned_amount|safe}},
         pointPadding: 0.1,
         pointPlacement: 0
     }, {
         name: 'Utilized',
         color: '#2C788E',
-        data: {{utilized_amount|safe}},
+        data: {{budget_utilized_amount|safe}},
         pointPadding: 0.3,
         pointPlacement: 0
     }]
 });
 
 </script>
+
 <script type="text/javascript">
 
 
@@ -423,11 +424,11 @@ Highcharts.chart('Budget_location', {
                     cursor: 'pointer',
                     showInLegend: true,
                     dataLabels: {
-                        enabled: false,                        
-                        formatter: function() {
-                            return this.percentage.toFixed(2) + '%';
-                        }
-                    }                                   
+                            enabled:true,
+                           formatter:function() {
+                               var pcnt = (this.y / dataSum) * 100;
+                               return Highcharts.numberFormat(pcnt) + '%';
+                           }                      
                 }
             },
             legend: {
@@ -446,7 +447,6 @@ Highcharts.chart('Budget_location', {
             series: [{
                 type: 'pie',
                 dataLabels:{
-                
                 },
                 data: [{% for i in final_project_category_list %}
                         {name:"{{i.name|safe}}", y:{{i.y}}, color:"{{i.color}}"},
@@ -627,8 +627,6 @@ setInterval(function () {
                
             }
         });
-
-        console.log(chartSpeed.series[1].points);
 
 
       
