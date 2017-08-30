@@ -261,17 +261,19 @@ def manage_parameter_values(request):
     
     
 def project_total_budget(slug):
+# to display the total budget ,disbursed,utilized percent in project summary page
     try:
         project = Project.objects.get(slug=slug)
         budget = project.project_budget_details()
         planned_cost = float(budget.get('planned_cost') or 0)/10000000
         utilized_cost = float(budget.get('utilized_cost') or 0)/10000000
         disbursed_budget = float(budget.get('disbursed_cost') or 0)/10000000
+        total_percent = 100
+        disbursed_percent = int((disbursed_budget/planned_cost)*100)
+        utilized_percent = int((utilized_cost/planned_cost)*100)
     except:
-        planned_cost= utilized_cost=disbursed_budget=0
-    total_percent = 100
-    disbursed_percent = int((disbursed_budget/planned_cost)*100)
-    utilized_percent = int((utilized_cost/planned_cost)*100)
+        planned_cost= utilized_cost=disbursed_budget=total_percent= disbursed_percent=utilized_percent =0
+        
     budget =  {'total':planned_cost,'disbursed':disbursed_budget,'utilized':utilized_cost,
     'total_percent':total_percent,'disbursed_percent':disbursed_percent,
     'utilized_percent':utilized_percent}

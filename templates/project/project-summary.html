@@ -472,20 +472,20 @@ under {{tasks.total_milestones}} Milestones</h5>
         <div class="right-white-pad">
         	<h3>Total Budget</h3>
             <div class="budget-pad">
-              <p><span class="green-d-circle"></span> utilized</p>
+              <p><span class="green-d-circle"></span> Utilized</p>
               <div class="budget-value">
-                  <div class="budget-left">5.3cr</div>
-                  <div class="budget-right">57%</div>
+                  <div class="budget-left">{{budget.utilized}}cr</div>
+                  <div class="budget-right">{{budget.utilized_percent}}%</div>
               </div>
-              <p><span class="green-circle"></span> Disbuirsed</p>
+              <p><span class="green-circle"></span> Disbursed</p>
               <div class="budget-value">
-                  <div class="budget-left">7.8cr</div>
-                  <div class="budget-right">65%</div>
+                  <div class="budget-left">{{budget.disbursed}}cr</div>
+                  <div class="budget-right">{{budget.disbursed_percent}}%</div>
               </div>
               <p><span class="yellow-circle"></span> Total</p>
               <div class="budget-value budget-border">
-                  <div class="budget-left">10.5cr</div>
-                  <div class="budget-right">100%</div>
+                  <div class="budget-left">{{budget.total}}cr</div>
+                  <div class="budget-right">{{budget.total_percent}}%</div>
               </div>
           </div>
           <div class="img-right">
@@ -1045,12 +1045,14 @@ Highcharts.chart('Beneficary_distribution', {
             }]
         });
     
-
 </script>
+
 <script>
 var data = {{budget|safe}}
 console.log(data);
-
+var utilized = data.utilized_percent
+var disbursed = data.disbursed_percent
+var total = 100 - (utilized + disbursed)
 var gaugeOptions = {
 
     chart: {
@@ -1179,9 +1181,9 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
             innerSize: '76%',
             data: [
 
-                {y:40,name:'Utilized',color:'#006861',borderColor: "#006861"},
-                {y:50,name:'Disbursed',color:'#169776',borderColor: "#169776"},
-                {y:10,name:'Total',color:'#D0C173',borderColor: "#D0C173"}
+                {y:utilized,name:'Utilized',color:'#006861',borderColor: "#006861"},
+                {y:disbursed,name:'Disbursed',color:'#169776',borderColor: "#169776"},
+                {y:total,name:'Total',color:'#D0C173',borderColor: "#D0C173"}
              
               
             ]
