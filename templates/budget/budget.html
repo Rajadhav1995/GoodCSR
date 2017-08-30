@@ -1,6 +1,6 @@
 
 {% extends 'base.html' %}
-
+{% load urs_tags %}
 {% block section %}
 <div class="clear"></div>
 <!--Green pad starts-->
@@ -10,7 +10,7 @@
     	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
     </div>    
     <div class="title-left">
-    <h4><a href = "/project/detail/?slug={{projectobj.slug}}">{{projectobj.name}}</h4>
+    <h4><a href = "/project/summary/?slug={{projectobj.slug}}">{{projectobj.name}}</h4>
     <ul>
     	<li><a href="">by OVP venture partners</a> </li>
         <li><a href="">NGO Partner: Akanksha</a></li>
@@ -19,7 +19,7 @@
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
-          <li><a href="/project/detail/?slug={{projectobj.slug}}">Summary</a></li>
+          <li><a href="/project/summary/?slug={{projectobj.slug}}">Summary</a></li>
           <li><a href="javascript:void(0);">Task & Milestone</a></li>
           <li><a class="active" href="javascript:void(0);">Budget</a></li>
           <li><a href="javascript:void(0);">Files</a></li>
@@ -44,8 +44,8 @@
                  <div id="total_budget" style="width: 100%;float: left; "></div>
                 <ul>
                 	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {{projectobj.project_budget_details.planned_cost}} </span></li>
-                    <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {{projectobj.project_budget_details.utilized_cost}}</span></li>
-                    <li><span class="green-circle"></span> Utilized <span class="right-li">Rs. {{projectobj.project_budget_details.disbursed_cost}} </span></li>
+                    <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {{projectobj.project_budget_details.disbursed_cost}} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li">Rs.  {{projectobj.project_budget_details.utilized_cost}} </span></li>
                 </ul>
             </div>
             <div class="budget-right-pad">
@@ -66,46 +66,46 @@
         </div>
     </div>
 	<div class="content-top margin-top">
-      <div class="select-area">
-      	<label>See Data as </label>
-        <div class="small-select">
-        <select name="lang" class="select_box ">
-            <option>2016</option>
-            <option>2017</option>
-        </select>
-        </div>
-        <div class="dropdown user select-down">
-            <a href="javascript:void(0);" class="dropdown-toggle" >
-              <p>Select Quarters</p>
-              <i class="fa fa-angle-down"></i>
-            </a>
-            <ul class="dropdown-menu1" style="display:none;">
-            
-              <li class="user-header">
-                <input class="check-box" type="checkbox" id="one" />
-                <label for="one"><span><span></span></span> Quarter1</label>
-              </li>
-              <li>
-                <input class="check-box" type="checkbox" id="two" />
-                <label for="two"><span><span></span></span> Quarter2</label>
-              </li>
-              <li>  
-                <input class="check-box" type="checkbox" id="three" />
-                <label for="three"><span><span></span></span> Quarter3</label>
-              </li>
-              <li>  
-                <input class="check-box" type="checkbox" id="four" />
-                <label for="four"><span><span></span></span> Quarter4</label>  
-              </li>
-              
-            </ul>
-          </div>
+<!--      <div class="select-area">-->
+<!--      	<label>See Data as </label>-->
+<!--        <div class="small-select">-->
+<!--        <select name="lang" class="select_box ">-->
+<!--            <option>2016</option>-->
+<!--            <option>2017</option>-->
+<!--        </select>-->
+<!--        </div>-->
+<!--        <div class="dropdown user select-down">-->
+<!--            <a href="javascript:void(0);" class="dropdown-toggle" >-->
+<!--              <p>Select Quarters</p>-->
+<!--              <i class="fa fa-angle-down"></i>-->
+<!--            </a>-->
+<!--            <ul class="dropdown-menu1" style="display:none;">-->
+<!--            -->
+<!--              <li class="user-header">-->
+<!--                <input class="check-box" type="checkbox" id="one" />-->
+<!--                <label for="one"><span><span></span></span> Quarter1</label>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <input class="check-box" type="checkbox" id="two" />-->
+<!--                <label for="two"><span><span></span></span> Quarter2</label>-->
+<!--              </li>-->
+<!--              <li>  -->
+<!--                <input class="check-box" type="checkbox" id="three" />-->
+<!--                <label for="three"><span><span></span></span> Quarter3</label>-->
+<!--              </li>-->
+<!--              <li>  -->
+<!--                <input class="check-box" type="checkbox" id="four" />-->
+<!--                <label for="four"><span><span></span></span> Quarter4</label>  -->
+<!--              </li>-->
+<!--              -->
+<!--            </ul>-->
+<!--          </div>-->
         <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
             <option>Quarter1</option>
             <option>Quarter2</option>
         </select>-->
-         </div>
+<!--         </div>-->
     </div>
     
     <div class="white-box">
@@ -113,169 +113,45 @@
            <table class="tab-resp" cellpadding="0" cellspacing="0" border="0">
             <thead>
             <tr class="table-head-pad">
-              <td colspan="6">&nbsp;</td>	
-              <td class="table-head" colspan="2">Quarter 1 - 2017</td>
-              <td class="table-head" colspan="2">Quarter 2 - 2017</td>
-              <td>&nbsp;</td>
+
+              <td colspan="4">&nbsp;</td>	
+            {% for i,j in quarter_list.items %}
+              <td class="table-head" colspan="5">{{j}}</td>
+              {% endfor %}
             </tr>  
             <tr>
               <th>Super Category</th>
               <th>Heading</th>
               <th>Subheading</th>
-              <th>Units</th>
               <th>Units Type</th>
+                {% for i,j in quarter_list.items %}
+              <th>Units</th>
               <th>Rate</th>
               <th>Total Planned</th>
               <th>Total Utilized</th>
-              <th>Total Planned</th>
-              <th>Total Utilized</th>
               <th>Variance</th>
+              {% endfor %}
             </tr>
             </thead>
             <tbody>
+            {% for j in budget_period %}
             <tr>
-              <td>Nasik</td>
-              <td>Salaries(P)</td>
-              <td>Project Manager Salary</td>
-              <td>1</td>
-              <td>A</td>
-              <td>1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td>0</td>
+                {% get_budget_lineitem j as lineitemobj %}
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
+                 <td> {{lineitemobj.unit_type}}  </td>
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_details j i as line_itemobj %}
+                   <td class="table-bg"> {{line_itemobj.unit}} </td>
+                    <td class="table-bg"> {{line_itemobj.rate}} </td>
+                     <td class="table-bg"> {{line_itemobj.planned_unit_cost}} </td>
+                     <td class="table-bg"> {{line_itemobj.utilized_unit_cost}} </td>
+                     <td class="table-bg"> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     {% endfor %}
             </tr>
-            <tr>
-              <td>Nasik</td>	
-              <td>Instruction(P)</td>
-              <td>Materials Purchase</td>
-              <td>2</td>
-              <td>B</td>
-              <td>500</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1200</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1200</td>
-              <td>-200</td>
-            </tr>
-            <tr class="table-tr">
-              <td>Total Nasik</td>	
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td class="table-bg1">2000</td>
-              <td class="table-bg1">2200</td>
-              <td class="table-bg1">2000</td>
-              <td class="table-bg1">2200</td>
-              <td>-200</td>
-            </tr>
-            <tr>
-              <td>Aurangabad</td>
-              <td>Salaries(P)</td>
-              <td>Project Manager Salary</td>
-              <td>1</td>
-              <td>A</td>
-              <td>1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td>0</td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>	
-              <td>Instruction(P)</td>
-              <td>Materials Purchase</td>
-              <td>2</td>
-              <td>B</td>
-              <td>500</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1200</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1200</td>
-              <td>-200</td>
-            </tr>
-            <tr class="table-tr">
-              <td>Total Aurangabad</td>	
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td class="table-bg1">2000</td>
-              <td class="table-bg1">2200</td>
-              <td class="table-bg1">2000</td>
-              <td class="table-bg1">2200</td>
-              <td>-200</td>
-            </tr>
-            <tr>
-              <td>HQ</td>	
-              <td>Management(MP)</td>
-              <td>Utilization Fees</td>
-              <td>1</td>
-              <td>&nbsp;</td>
-              <td>1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td class="table-bg">1000</td>
-              <td>0</td>
-            </tr>
-            <tr class="table-tr">
-              <td>Total HQ</td>	
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td class="table-bg1">1000</td>
-              <td class="table-bg1">1000</td>
-              <td class="table-bg1">1000</td>
-              <td class="table-bg1">1000</td>
-              <td>0</td>
-            </tr>
-            <tr class="table-tr">
-              <td>Total Programmatic</td>	
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td class="table-bg1">4000</td>
-              <td class="table-bg1">4400</td>
-              <td class="table-bg1">4000</td>
-              <td class="table-bg1">4400</td>
-              <td>-400</td>
-            </tr>
-            <tr class="table-tr">
-              <td>Total Non Programmatic</td>	
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td class="table-bg1">1000</td>
-              <td class="table-bg1">1000</td>
-              <td class="table-bg1">1000</td>
-              <td class="table-bg1">1000</td>
-              <td>0</td>
-            </tr>
-            <tr class="table-tr">
-              <td>Total Budget</td>	
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td class="table-bg1">5000</td>
-              <td class="table-bg1">5400</td>
-              <td class="table-bg1">5000</td>
-              <td class="table-bg1">5400</td>
-              <td>-400</td>
-            </tr>
+            {% endfor %}
+
             </tbody>
           </table>
         </div>
@@ -525,6 +401,8 @@ Highcharts.chart('planned_utilized', {
     }]
 });
 
+</script>
+<script type="text/javascript">
 
 
 Highcharts.chart('Budget_location', {
@@ -570,32 +448,10 @@ Highcharts.chart('Budget_location', {
                 dataLabels:{
                 
                 },
-                data: [{
-            name: 'Nabarangpur',
-            y: 56.33,
-            color:'#D0C173'
-        }, {
-            name: 'Kasturbadham',
-            y: 24.03,
-            color:'#27988A'
-        }, {
-            name: 'Narauli Dang',
-            y: 10.38,
-            color:'#31798F'
-        }, {
-            name: 'Mallian Khurd',
-            y: 4.77,
-            color:'#1C6A66'
-        }, {
-            name: 'Gokarna village',
-            y: 4.77,
-            color:'#A13F5D'
-        }
-
-
-        ]
-
-            }]
+                data: [{% for i in final_project_category_list %}
+                        {name:"{{i.name|safe}}", y:{{i.y}}, color:"{{i.color}}"},
+                        {% endfor %}]
+                        }]
         });
 
 </script>
