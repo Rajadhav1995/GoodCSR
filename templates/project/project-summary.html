@@ -425,14 +425,17 @@
     <div class="white-box white-pad">
     	<div class="key-program">
         <h2>Key Program Info</h2>
-        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
+        <a class="link-pad" href="/project/parameter/add/">Upload Parameters</a>
         </div>
-        <ul>
+        <ul>{{parent_paremeter}}
+            {% for i in parent_paremeter %}
         	<li>
-            	<h3>No. of Beneficiaries</h3>
+            	<h3>{{i.keyparameter.name}}</h3>
                  <img class="key-image" src="/static/img/key-icon2.png" alt="">
-                <h4 class="title-pad">7.148</h4> 
+                <h4 class="title-pad">{{i.parameter_value}}</h4> 
             </li>
+            {% endfor %}
+            {{master_obj}}
             <li>
             	<h3>Beneficiaries distribution</h3>
                 <div class="right-budget beni-dist">
@@ -756,6 +759,7 @@ Will be given certificates from our ngo after successfully completing of the ski
       </div>
     </div>
 </div>
+<input type="hidden" name="dataone" id="dataone" value="{{dataone}}">
 {% endblock %}
 
 {% block script %}
@@ -978,30 +982,7 @@ Highcharts.chart('Batch_size', {
                 dataLabels:{
                 
                 },
-                data: [{
-            name: 'Nabarangpur',
-            y: 56.33,
-            color:'#D0C173'
-        }, {
-            name: 'Kasturbadham',
-            y: 24.03,
-            color:'#27988A'
-        }, {
-            name: 'Narauli Dang',
-            y: 10.38,
-            color:'#31798F'
-        }, {
-            name: 'Mallian Khurd',
-            y: 4.77,
-            color:'#1C6A66'
-        }, {
-            name: 'Gokarna village',
-            y: 4.77,
-            color:'#A13F5D'
-        }
-
-
-        ]
+                data: new $('#dataone').val()
 
             }]
         });

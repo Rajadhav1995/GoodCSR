@@ -78,6 +78,51 @@ def project_detail(request):
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
+    master_obj = []
+    parameter = ProjectParameter.objects.filter(project=obj)
+    for i in parameter:
+        if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
+            parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
+            parent_paremeter = ProjectParameterValue.objects.filter(keyparameter__in=parameter1)
+        elif i.parameter_type == 'PIN' or i.parameter_type == 'PIP':
+            child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=i.id)
+            if child_parameter.exists():
+                master_obj = child_parameter
+            print [i.keyparameter for i in child_parameter]
+    print master_obj
+    # import ipdb; ipdb.set_trace()
+    # values = aggregate_project_parameters(parameter,child_parameter)
+    # print values
+
+    dataone = [{
+            name: 'Nabarangpur',
+            y: 56.33,
+            color:'#D0C173'
+        }, {
+            name: 'Kasturbadham',
+            y: 24.03,
+            color:'#27988A'
+        }, {
+            name: 'Narauli Dang',
+            y: 10.38,
+            color:'#31798F'
+        }, {
+            name: 'Mallian Khurd',
+            y: 4.77,
+            color:'#1C6A66'
+        }, {
+            name: 'Gokarna village',
+            y: 4.77,
+            color:'#A13F5D'
+        }
+
+
+        ]
+
+
+    #     ]
+
+    #         }]
     return render(request,'project/project-summary.html',locals())
 
 def project_mapping(request):
