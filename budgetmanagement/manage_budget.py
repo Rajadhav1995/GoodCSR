@@ -1,10 +1,13 @@
 from django.shortcuts import render
+from django.db.models import Sum
 from datetime import timedelta
 from django.template.defaultfilters import slugify
 from django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import (Project,MasterCategory,UserProfile)
-from .models import (Budget,SuperCategory,ProjectBudgetPeriodConf,BudgetPeriodUnit)
+from .models import (Budget,SuperCategory,ProjectBudgetPeriodConf,BudgetPeriodUnit,
+                    Tranche,)
 from .forms import(ProjectBudgetForm,)
+from datetime import datetime
 
 def projectbudgetlist(request):
     project_slug = request.GET.get("slug")
@@ -65,6 +68,20 @@ def get_budget_quarters(budgetobj):
         sd = ed
     return quarter_list
 
+def get_budget_quarter_names(budgetobj):
+    sd = budgetobj.actual_start_date
+    if sd.day > 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month+1,year=year)
+    ed = budgetobj.end_date
+    no_of_quarters = ((ed.year - sd.year) * 12 + ed.month - sd.month)/3
+    quarter_list = []
+    for i in range(no_of_quarters):
+        ed = sd+timedelta(days=90)
+        quarter_list.append(sd.strftime("%b")+"-"+ed.strftime("%b"))
+        sd = ed
+    return quarter_list
+
 def projectlinetemadd(request):
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
@@ -83,10 +100,6 @@ def projectlinetemadd(request):
         for i in range(int(count)):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i+1))]
             for quarter,value in quarter_list.items():
-                budget_period = value
-                start_date = budget_period.split('to')[0].rstrip()
-                end_date = budget_period.split('to')[1].lstrip()
-                budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(i))
                 result = {}
                 for line in line_itemlist:
                     line_list = line.split('_')
@@ -99,6 +112,10 @@ def projectlinetemadd(request):
                         result.update({name:request.POST.get(line)})
                 print result
                 if result["subheading"]:
+                    budget_period = value
+                    start_date = budget_period.split('to')[0].rstrip()
+                    end_date = budget_period.split('to')[1].lstrip()
+                    budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(i))
                     budget_dict = {'created_by':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))),
                                'budget_period':budget_periodobj,
                                'category':SuperCategory.objects.get_or_none(id = result['location']),
@@ -158,3 +175,44 @@ def budgetutilization(request):
                     print budget_periodobj.utilized_unit_cost
         
     return render(request,"budget/budget_utilization.html",locals())
+
+def budget_amount_list(budgetobj,projectobj):
+    budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('id', flat=True)
+    budget_period_plannedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist).values_list('planned_unit_cost', flat=True)
+    budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist).values_list('utilized_unit_cost', flat=True)
+    budget_period_plannedamount = map(lambda x:x if x else 0,budget_period_plannedamount)
+    budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
+    return map(int,budget_period_plannedamount),map(int,budget_period_utilizedamount)
+
+def tanchesamountlist(tranche_list):
+     planned_amount = tranche_list.aggregate(Sum('planned_amount')).values()[0]
+     actual_disbursed_amount = tranche_list.aggregate(Sum('actual_disbursed_amount')).values()[0]
+     recommended_amount = tranche_list.aggregate(Sum('recommended_amount')).values()[0]
+     utilized_amount = tranche_list.aggregate(Sum('utilized_amount')).values()[0]
+     tranche_amount = {'planned_amount':planned_amount,
+                       'actual_disbursed_amount':actual_disbursed_amount,
+                       'recommended_amount':recommended_amount,
+                       'utilized_amount': utilized_amount
+                       }
+     return tranche_amount
+
+def budgetview(request):
+
+    project_slug = request.GET.get('slug')
+    projectobj =  Project.objects.get_or_none(slug=project_slug)
+    budgetobj = Budget.objects.latest_one(project = projectobj)
+    quarter_list = get_budget_quarters(budgetobj)
+    quarter_names = get_budget_quarter_names(budgetobj)
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
+    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+    span_length = len(budget_period)
+    planned_amount,utilized_amount = budget_amount_list(budgetobj,projectobj)
+    tranche_list = Tranche.objects.filter(project = projectobj)
+    tranche_amount = tanchesamountlist(tranche_list)
+    planned_amount = tranche_amount['planned_amount']
+    actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
+    recommended_amount = tranche_amount['recommended_amount']
+    utilized_amount = tranche_amount['utilized_amount']
+    
+    
+    return render(request,"budget/budget.html",locals())
