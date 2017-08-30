@@ -414,8 +414,7 @@ Highcharts.chart('Budget_location', {
                 ],
             title:{text: null},
             tooltip:{
-                enabled: true,
-                animation: true
+                pointFormat: ' <b>{point.percentage:.1f}%</b>'
             },
             plotOptions: {
                 pie: {
@@ -424,11 +423,9 @@ Highcharts.chart('Budget_location', {
                     cursor: 'pointer',
                     showInLegend: true,
                     dataLabels: {
-                            enabled:true,
-                           formatter:function() {
-                               var pcnt = (this.y / dataSum) * 100;
-                               return Highcharts.numberFormat(pcnt) + '%';
-                           }                      
+                            enabled:false,
+                                              
+                }
                 }
             },
             legend: {
