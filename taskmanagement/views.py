@@ -259,3 +259,9 @@ def corp_total_budget(obj_list):
             project_list.append(str(project.name))
         corp_budget = {'projects':project_list,'total_budget':total_budget,'utilized':utilized_budget,'disbursed':disbursed}
     return corp_budget
+
+#def corp_total_budget_disbursed(obj_list):
+#    if obj_list:
+#        for project in obj_list:
+#            budget = project.total_tasks_completed()
+#            {'projects':project_list,'total_budget':total_budget,'utilized':utilized_budget,'disbursed':disbursed}
