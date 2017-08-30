@@ -52,7 +52,7 @@ class Task(BaseContent):
     actual_start_date = models.DateTimeField(**OPTIONAL)
     actual_end_date = models.DateTimeField(**OPTIONAL)
     status = models.IntegerField(choices = STATUS_CHOICES,default=0)
-    task_dependency = models.ForeignKey('self',blank=True,null=True)
+    task_dependency = models.ManyToManyField('self',blank=True)
     created_by = models.ForeignKey("projectmanagement.UserProfile",related_name ='task_created_user',**OPTIONAL)
     assigned_to = models.ForeignKey("projectmanagement.UserProfile",related_name ='task_assigned_user',blank=True,null=True)
     subscribers = models.ManyToManyField("projectmanagement.UserProfile",related_name = 'task_subscriber_user',blank=True )

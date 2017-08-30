@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from .manager import ActiveQuerySet
 from django.template.defaultfilters import slugify
 from constants import levels, OPTIONAL
@@ -197,6 +198,21 @@ class Project(BaseContent):
                 if task.actual_end_date.strftime('%Y-%m-%d') <= datetime.now().strftime('%Y-%m-%d'):
                     completed_tasks = completed_tasks + 1
         return completed_tasks
+
+    def project_budget_details(self):
+        from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,
+                                            Tranche,BudgetPeriodUnit)
+        budgetobj = Budget.objects.latest_one(project = self)
+        budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = self,budget = budgetobj).values_list('id', flat=True)
+        budget_periodunitlist = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist)
+        planned_cost = budget_periodunitlist.aggregate(Sum('planned_unit_cost')).values()[0]
+        utilized_cost = budget_periodunitlist.aggregate(Sum('utilized_unit_cost')).values()[0]
+        disbursed_cost = Tranche.objects.filter(project = self).aggregate(Sum('utilized_amount')).values()[0]
+        project_budget = {'planned_cost':planned_cost,
+                          'utilized_cost':utilized_cost,
+                          'disbursed_cost':disbursed_cost
+                          }
+        return project_budget
 
     # def save(self):
     #     super(Project, self).save()

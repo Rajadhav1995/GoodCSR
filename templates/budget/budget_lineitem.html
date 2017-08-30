@@ -79,6 +79,9 @@ $(document).ready(function ()
             console.log(sname[1])
             $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
         }
+        else{
+                    $("[id$=_"+parseInt(sname[2])+"]").attr('required', 'required')
+        }
         }
         $(document).on("change, keyup", "#example1 tbody tr td input", mandatory_input);
         $(document).on("change, keyup", "#example1 tbody tr td select", mandatory_input);

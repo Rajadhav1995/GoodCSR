@@ -17,7 +17,7 @@ class Attachment(BaseContent):
     created_by = models.ForeignKey(
         UserProfile, related_name='document_created_user', **OPTIONAL)
     attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
-    name = models.CharField("Description", max_length=300, **OPTIONAL)
+    name = models.CharField("Name", max_length=300, **OPTIONAL)
     description = models.CharField("Description", max_length=600, **OPTIONAL)
     attachment_type = models.IntegerField('ATTACHMENT_TYPE',choices=ATTACHMENT_TYPE,**OPTIONAL)
     document_type = models.IntegerField('DOCUMENT_TYPE',choices = DOCUMENT_TYPE,**OPTIONAL)
@@ -76,3 +76,8 @@ class ProjectLocation(BaseContent):
     def __unicode__(self):
         return str(self.id)
 
+class Comment(BaseContent):
+    text = models.TextField(**OPTIONAL)
+    content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
+    object_id = models.IntegerField(_('object ID'),null=True,blank=True)
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")

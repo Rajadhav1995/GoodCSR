@@ -1,0 +1,806 @@
+
+{% extends 'base.html' %}
+
+{% block section %}
+<div class="clear"></div>
+<!--Green pad starts-->
+<section class="green-pad green-height">
+	<div class="row">
+	<div class="image-pad logo-shadow">
+    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
+    </div>    
+    <div class="title-left">
+    <h4><a href = "/project/detail/?slug={{projectobj.slug}}">{{projectobj.name}}</h4>
+    <ul>
+    	<li><a href="">by OVP venture partners</a> </li>
+        <li><a href="">NGO Partner: Akanksha</a></li>
+    </ul>    
+    </div>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+     <div class="menu-bottom">
+        <ul>
+          <li><a href="/project/detail/?slug={{projectobj.slug}}">Summary</a></li>
+          <li><a href="javascript:void(0);">Task & Milestone</a></li>
+          <li><a class="active" href="javascript:void(0);">Budget</a></li>
+          <li><a href="javascript:void(0);">Files</a></li>
+        </ul>
+     </div>         
+    </div>
+</section>
+<!--Green pad Ends-->
+<!--Content part starts-->
+{% endblock %}
+
+{% block content %}
+<!--Content part starts-->
+<section class="content-part">
+	<div class="row">
+    <div class="white-box">
+    	<h2>Budget</h2>
+        <div class="clear"></div>
+        <div class="left-budget">
+        		<div class="budget-left-pad">
+            	<h3>Budget</h3>
+                 <div id="total_budget" style="width: 100%;float: left; "></div>
+                <ul>
+                	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {{projectobj.project_budget_details.planned_cost}} </span></li>
+                    <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {{projectobj.project_budget_details.utilized_cost}}</span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li">Rs. {{projectobj.project_budget_details.disbursed_cost}} </span></li>
+                </ul>
+            </div>
+            <div class="budget-right-pad">
+            	<h3>Planned and Utilized</h3>
+              <div id="planned_utilized" style="width: 100%;float: left;"></div>
+            </div>
+        </div>
+        <div class="right-budget">
+        	<h3>Budget by Location</h3>
+            <div id="Budget_location" style="width: 100%;float: left;"></div>
+            <!--  <ul>
+                <li><span class="yellow-circle"></span> Nabarangpur</li>
+                <li><span class="green-d-circle"></span> Mallian Khurd</li>
+                <li><span class="green-circle"></span> Kasturbadham</li>
+                <li><span class="red-circle"></span> Gokarna village</li>
+                <li><span class="blue-circle"></span> Narauli Dang</li>
+            </ul> -->
+        </div>
+    </div>
+	<div class="content-top margin-top">
+      <div class="select-area">
+      	<label>See Data as </label>
+        <div class="small-select">
+        <select name="lang" class="select_box ">
+            <option>2016</option>
+            <option>2017</option>
+        </select>
+        </div>
+        <div class="dropdown user select-down">
+            <a href="javascript:void(0);" class="dropdown-toggle" >
+              <p>Select Quarters</p>
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu1" style="display:none;">
+            
+              <li class="user-header">
+                <input class="check-box" type="checkbox" id="one" />
+                <label for="one"><span><span></span></span> Quarter1</label>
+              </li>
+              <li>
+                <input class="check-box" type="checkbox" id="two" />
+                <label for="two"><span><span></span></span> Quarter2</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="three" />
+                <label for="three"><span><span></span></span> Quarter3</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="four" />
+                <label for="four"><span><span></span></span> Quarter4</label>  
+              </li>
+              
+            </ul>
+          </div>
+        <!--<select name="lang" class="select_box ">
+            <option>Select Quarters</option>
+            <option>Quarter1</option>
+            <option>Quarter2</option>
+        </select>-->
+         </div>
+    </div>
+    
+    <div class="white-box">
+    	<div id="boxscroll1">
+           <table class="tab-resp" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            <tr class="table-head-pad">
+              <td colspan="6">&nbsp;</td>	
+              <td class="table-head" colspan="2">Quarter 1 - 2017</td>
+              <td class="table-head" colspan="2">Quarter 2 - 2017</td>
+              <td>&nbsp;</td>
+            </tr>  
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Units</th>
+              <th>Units Type</th>
+              <th>Rate</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Nasik</td>
+              <td>Salaries(P)</td>
+              <td>Project Manager Salary</td>
+              <td>1</td>
+              <td>A</td>
+              <td>1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Nasik</td>	
+              <td>Instruction(P)</td>
+              <td>Materials Purchase</td>
+              <td>2</td>
+              <td>B</td>
+              <td>500</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1200</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1200</td>
+              <td>-200</td>
+            </tr>
+            <tr class="table-tr">
+              <td>Total Nasik</td>	
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="table-bg1">2000</td>
+              <td class="table-bg1">2200</td>
+              <td class="table-bg1">2000</td>
+              <td class="table-bg1">2200</td>
+              <td>-200</td>
+            </tr>
+            <tr>
+              <td>Aurangabad</td>
+              <td>Salaries(P)</td>
+              <td>Project Manager Salary</td>
+              <td>1</td>
+              <td>A</td>
+              <td>1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>	
+              <td>Instruction(P)</td>
+              <td>Materials Purchase</td>
+              <td>2</td>
+              <td>B</td>
+              <td>500</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1200</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1200</td>
+              <td>-200</td>
+            </tr>
+            <tr class="table-tr">
+              <td>Total Aurangabad</td>	
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="table-bg1">2000</td>
+              <td class="table-bg1">2200</td>
+              <td class="table-bg1">2000</td>
+              <td class="table-bg1">2200</td>
+              <td>-200</td>
+            </tr>
+            <tr>
+              <td>HQ</td>	
+              <td>Management(MP)</td>
+              <td>Utilization Fees</td>
+              <td>1</td>
+              <td>&nbsp;</td>
+              <td>1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td class="table-bg">1000</td>
+              <td>0</td>
+            </tr>
+            <tr class="table-tr">
+              <td>Total HQ</td>	
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="table-bg1">1000</td>
+              <td class="table-bg1">1000</td>
+              <td class="table-bg1">1000</td>
+              <td class="table-bg1">1000</td>
+              <td>0</td>
+            </tr>
+            <tr class="table-tr">
+              <td>Total Programmatic</td>	
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="table-bg1">4000</td>
+              <td class="table-bg1">4400</td>
+              <td class="table-bg1">4000</td>
+              <td class="table-bg1">4400</td>
+              <td>-400</td>
+            </tr>
+            <tr class="table-tr">
+              <td>Total Non Programmatic</td>	
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="table-bg1">1000</td>
+              <td class="table-bg1">1000</td>
+              <td class="table-bg1">1000</td>
+              <td class="table-bg1">1000</td>
+              <td>0</td>
+            </tr>
+            <tr class="table-tr">
+              <td>Total Budget</td>	
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="table-bg1">5000</td>
+              <td class="table-bg1">5400</td>
+              <td class="table-bg1">5000</td>
+              <td class="table-bg1">5400</td>
+              <td>-400</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+    <div class="link-right">
+    	<a href="javascript:void(0);" class="link-pad1">Report Utilization</a>
+        <a href="javascript:void(0);" class="link-pad1">Edit/Update Budget</a>
+    </div>   
+    <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date}}</td>
+        <td> Rs. {{i.planned_amount}}</td>
+        <td> Rs. {{i.actual_disbursed_amount}}</td>
+        <td> Rs. {{i.recommended_amount}}</td>
+        <td> Rs. {{i.utilized_amount}}</td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {{planned_amount}}</td>
+        <td>Rs. {{actual_disbursed_amount}}</td>
+        <td>Rs. {{recommended_amount}}</td>
+        <td>Rs. {{utilized_amount}}</td>
+      </tr>
+      </tbody>
+	</table>  
+    </div>
+    </div>
+    </div>
+</section>
+<!--Content part Ends-->
+</div>
+
+
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+ <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+<script>
+//Toggle
+		
+	$('.user-menu').on('click',function(){
+		$('.dropdown-menu').slideDown(350);
+	
+	});
+	$('.select-down').on('click',function(){
+        $('.dropdown-menu1').slideDown(350);
+          
+    });
+	
+	$(document).ready(function(e) {	
+		/*Content Show/Hide */
+		$('.hide-cont').hide();
+		$('.close-cont').hide();
+		$('.view-cont').click(function(){
+			$('.hide-cont').slideDown(350);
+			$('.close-cont').show();
+			$('.view-cont').hide();
+		});
+		$('.close-cont').click(function(){
+			$('.hide-cont').slideUp(350);
+			$('.close-cont').hide();
+			$('.view-cont').show();
+		});	
+		$(document).trigger( "click" );
+	});
+	
+	$(document).click(function(){
+	
+		$('.user-menu, .select-down').click(function(event){
+			event.stopPropagation();
+		});
+	
+		$('.dropdown-menu, .dropdown-menu1').slideUp(350);	 
+	
+	});		 
+</script>
+
+<script>
+  $(document).ready(function() {
+  
+    $("#boxscroll1").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+    
+  });
+</script>
+
+    <script type="text/javascript">
+   
+	
+	var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#horizontalTab').easyResponsiveTabs({
+            type: 'default', //Types: default, vertical, accordion           
+            width: 'auto', //auto or any width like 600px
+            fit: true,   // 100% fit in a container
+            closed: 'accordion', // Start closed if in accordion view
+            activate: function(event) { // Callback function if tab is switched
+                var $tab = $(this);
+                var $info = $('#tabInfo');
+                var $name = $('span', $info);
+
+                $name.text($tab.text());
+
+                $info.show();
+            }
+        });
+		});
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#horizontalTab').easyResponsiveTabs({
+            type: 'default', //Types: default, vertical, accordion           
+            width: 'auto', //auto or any width like 600px
+            fit: true,   // 100% fit in a container
+            closed: 'accordion', // Start closed if in accordion view
+            activate: function(event) { // Callback function if tab is switched
+                var $tab = $(this);
+                var $info = $('#tabInfo');
+                var $name = $('span', $info);
+
+                $name.text($tab.text());
+
+                $info.show();
+            }
+        });
+		});
+</script>
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#myBtn1').click(function(){
+	$('#pop3').simplePopup();
+    });
+});
+</script>
+
+<!---datepicker script-->
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script>
+	$(function() {
+	$( ".datepicker" ).datepicker({
+	showOn: "button",
+	buttonImage: "img/calender-icon.png", 
+	buttonImageOnly: true
+	});
+	});
+</script>
+
+<script src="/static/code/highcharts.js"></script>
+<script src="/static/code/highcharts-more.js"></script>
+
+<script src="/static/code/modules/solid-gauge.js"></script>
+<script type="text/javascript">
+  
+Highcharts.chart('planned_utilized', {
+    chart: {
+        type: 'column',
+        height:300,
+         backgroundColor: null,
+    },
+    credits: {
+        enabled: false
+    },
+    title: {
+        text: null
+    },
+    xAxis: {
+        categories: {{quarter_names|safe}}
+    },
+    yAxis: [{
+        min: 0,
+
+        title: {
+            text: ''
+        }
+    }, {
+        title: {
+            text: '2016-2017',
+            align: "middle",
+            rotation: 360
+        },
+        opposite: true
+    }],
+    legend: {
+        shadow: false
+    },
+    tooltip: {
+        shared: true
+    },
+    plotOptions: {
+        column: {
+            grouping: false,
+            shadow: false,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Planned',
+        color: '#D0C173',
+        data: {{planned_amount|safe}},
+        pointPadding: 0.1,
+        pointPlacement: 0
+    }, {
+        name: 'Utilized',
+        color: '#2C788E',
+        data: {{utilized_amount|safe}},
+        pointPadding: 0.3,
+        pointPlacement: 0
+    }]
+});
+
+
+
+Highcharts.chart('Budget_location', {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: null},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,                        
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }                                   
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+              
+                margin: 12
+            
+               
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+                
+                },
+                data: [{
+            name: 'Nabarangpur',
+            y: 56.33,
+            color:'#D0C173'
+        }, {
+            name: 'Kasturbadham',
+            y: 24.03,
+            color:'#27988A'
+        }, {
+            name: 'Narauli Dang',
+            y: 10.38,
+            color:'#31798F'
+        }, {
+            name: 'Mallian Khurd',
+            y: 4.77,
+            color:'#1C6A66'
+        }, {
+            name: 'Gokarna village',
+            y: 4.77,
+            color:'#A13F5D'
+        }
+
+
+        ]
+
+            }]
+        });
+
+</script>
+
+<script>
+var gaugeOptions = {
+
+    chart: {
+   
+        height: 250,
+       width:250,
+   
+         plotBackgroundColor: null,
+            plotBackgroundImage: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+
+    },
+
+    title: null,
+
+      pane: {
+            center: ['50%', '50%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                borderWidth: 1,
+                backgroundColor: '#D0C173',
+                borderColor: '#D0C173',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        //     stops: [
+        //     [0.1, '#D0C173'], // green
+        //     [0.5, '#34837C'] // yellow
+            
+           
+        // ],
+        lineWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 0,
+        title: {
+            y: -70
+        },
+        labels: {
+            enabled: false
+        },
+       
+   },
+
+
+    // plotOptions: {
+    //    gauge: {
+    //             pivot: {
+    //                 radius: 0
+        
+    //             }, dial: {
+    //                 backgroundColor:'#7A4F59',
+    //                 borderColor: "#DAC7CC",
+    //                 radius: '100%',
+    //                 baseWidth: 2,
+    //                    baseLength: '100%',
+    //                     baseWidth: 2,
+    //                     rearLength: '0%',
+    //                     borderWidth: 0
+    //             }
+    //         }
+    // } 
+
+     plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: false
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '50%']
+            },
+            gauge: {
+                dataLabels: {
+                    enabled: false
+                },
+                pivot: {
+                    radius: 0
+        
+                }
+                ,
+                dial: {
+                    backgroundColor:'#7A4F59',
+                    borderColor: "#7A4F59",
+                    radius: '105%',
+                    baseWidth: 2,
+                       baseLength: '100%',
+                        baseWidth: 2,
+                        rearLength: '0%',
+                       // borderWidth: 0
+                }
+            }
+        },
+     
+};
+
+// The speed gauge
+var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
+  
+    yAxis: {
+        min: 0,
+        max: 100,
+        title: {
+            text: ''
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+      series: [
+      {
+            type: 'pie',
+             size: '100%',
+
+            innerSize: '76%',
+            data: [
+
+                {y:40,name:'Utilized',color:'#006861',borderColor: "#006861"},
+                {y:50,name:'Disbursed',color:'#169776',borderColor: "#169776"},
+                {y:10,name:'Total',color:'#D0C173',borderColor: "#D0C173"}
+             
+              
+            ]
+        },
+
+        {
+            type: 'gauge',
+            data: [0],
+            
+        }
+    ],
+        dataLabels: {
+               enabled: false
+        }        
+   
+
+}));
+
+// Bring life to the dials
+setInterval(function () {
+    // Speed
+    var point,
+        point1,
+        newVal,
+        inc;
+
+    if (chartSpeed) {
+        point = chartSpeed.series[0].points[0];
+       
+        point1 = chartSpeed.series[0].points[1]; 
+
+        $.each(chartSpeed.series, function(i, item){
+            if(item.type == 'gauge'){
+              
+               item.setData([["none",point1.y+point.y]], true);
+               
+            }
+        });
+
+        console.log(chartSpeed.series[1].points);
+
+
+      
+        // chartSpeed.yAxis[0].removePlotBand('plot-band-1');
+        //     chartSpeed.yAxis[0].addPlotBand({
+        //         from: 0,
+        //         to: point.y,
+        //         color: '#2F9974',
+        //         thickness: '40%',
+        //         id: 'plot-band-1'
+        //     });
+
+   
+
+        // point.update(point.y);
+    }
+   
+}, 800);
+
+
+</script>
+<style type="text/css">
+  #total_budget .highcharts-container {
+        border-bottom: 1px solid;
+        height: 120px !important;
+    }
+</style>
+{% endblock %}
+
