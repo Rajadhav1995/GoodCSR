@@ -92,16 +92,16 @@
             <li>
               <h3>% Total budget disbursed<span></span></h3>
                  <div id="total_budget" ></div>
-                <div class="budget-pad">
+                <div class="budget-pad" style="margin-top:-20px">
                   <p><span class="green-circle"></span> Disbursed</p>
                     <div class="budget-value">
-                      <div class="budget-left">7.8cr</div>
-                        <div class="budget-right">65%</div>
+                      <div class="budget-left">{{budget.disbursed}}cr</div>
+                        <div class="budget-right">{{budget.disbursed_percent}}%</div>
                     </div>
                     <p><span class="yellow-circle"></span> Total</p>
                     <div class="budget-value budget-border">
-                      <div class="budget-left">10.5cr</div>
-                        <div class="budget-right">100%</div>
+                      <div class="budget-left">{{budget.total}}cr</div>
+                        <div class="budget-right">{{budget.total_percent}}%</div>
                     </div>
                 </div>
             </li>
@@ -546,14 +546,12 @@ function showCheckboxes() {
 <script>
 var tasks = {{tasks_progress| safe}} ;
 var category = tasks.x_axis;
-console.log("hello");
 var remaining = tasks.remaining;
 var completed_status = tasks.data;
 var progress = []
 for (i=0;i<completed_status.length;i++){
        progress.push( { 'y': completed_status[i], 'color': '#2E9776' })
 } 
-console.log(progress);
 Highcharts.chart('Progress_Completion',{
         chart: {
             type: 'bar',
@@ -905,7 +903,14 @@ var gaugeOptions = {
         },
      
 };
+</script>
 
+<script type="text/javascript">
+var data = {{budget | safe}}
+console.log(data);
+var disbursed = data.disbursed_percent
+var total = 100 - disbursed
+console.log(disbursed);
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
   
@@ -927,8 +932,8 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
             innerSize: '70%',
             data: [
 
-                    {y:60,name:'Disbursed',color:'#2E9874'},
-                    {y:40,name:'Total',color:'#D0C173'}
+                    {y:disbursed,name:'Disbursed',color:'#2E9874'},
+                    {y:total,name:'Total',color:'#D0C173'}
              
               
             ]
@@ -1062,11 +1067,13 @@ Highcharts.chart('Beneficiary_Distribution', {
 </script>
 
 
-        <style type="text/css">
-    #total_budget .highcharts-container {
-    
-        
-    }
+         <style type="text/css">
+   #total_budget .highcharts-container {
+        border-bottom: 1px solid;
+       height: 175px !important;
+       top: -60px !important;
+       
+   }
 </style>
 
 {% endblock %}

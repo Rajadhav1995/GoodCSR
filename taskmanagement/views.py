@@ -239,29 +239,39 @@ def corp_total_budget(obj_list):
     planned_cost = utilized_cost =disbursed_amount= 0
     if obj_list:
         for project in obj_list:
-            try:
-                tranche = Tranche.objects.get(project = project)
-                budget = Budget.objects.get(project=project)
-                budget_period = ProjectBudgetPeriodConf.objects.filter(budget=budget,project=project).values_list('id',flat=True)
-                budget_unit = BudgetPeriodUnit.objects.filter(budget_period__in = budget_period)
-                for i in budget_unit :
-                    planned_cost = float(planned_cost + int(i.planned_unit_cost))
-                    utilized_cost = float(utilized_cost + int(i.utilized_unit_cost)) 
-                total_budget.append(planned_cost/10000000)
-                utilized_budget.append(utilized_cost/10000000)
-                disbursed_amount = float(tranche.actual_disbursed_amount)
-                disbursed.append(disbursed_amount/10000000)
-            except:
-                planned_cost = utilized_cost = disbursed_amount = 0
-                total_budget.append(planned_cost)
-                utilized_budget.append(utilized_cost)
-                disbursed.append(disbursed_amount)
+            budget_details = project.project_budget_details()
+            planned_cost = float(budget_details.get('planned_cost') or 0)/10000000
+            utilized_cost = float(budget_details.get('utilized_cost') or 0)/10000000
+            disbursed_budget = float(budget_details.get('disbursed_cost') or 0)/10000000
+            total_budget.append(planned_cost)
+            utilized_budget.append(utilized_cost)
+            disbursed.append(disbursed_budget)
             project_list.append(str(project.name))
         corp_budget = {'projects':project_list,'total_budget':total_budget,'utilized':utilized_budget,'disbursed':disbursed}
     return corp_budget
 
-#def corp_total_budget_disbursed(obj_list):
-#    if obj_list:
-#        for project in obj_list:
-#            budget = project.total_tasks_completed()
-#            {'projects':project_list,'total_budget':total_budget,'utilized':utilized_budget,'disbursed':disbursed}
+def corp_total_budget_disbursed(obj_list):
+    total_budget=[]
+    utilized_budget=[]
+    total_disbursed={}
+    disbursed_amount=[]
+    total =disbursed=0
+    if obj_list:
+        for project in obj_list:
+            try:
+                budget = project.project_budget_details()
+                planned_cost = float(budget.get('planned_cost') or 0)/10000000
+                utilized_cost = float(budget.get('utilized_cost') or 0)/10000000
+                disbursed_budget = float(budget.get('disbursed_cost') or 0)/10000000
+                total_budget.append(planned_cost)
+                utilized_budget.append(utilized_cost)
+                disbursed_amount.append(disbursed_budget)
+            except:
+                total = 0
+                disbursed=0
+        total = sum(total_budget)
+        total_percentage = 100
+        disbursed = sum(disbursed_amount)
+        disbursed_percent =int((disbursed/total)*100)
+        total_disbursed = {'total':total,'disbursed':disbursed,'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
+    return total_disbursed 

@@ -4,7 +4,7 @@ from django.db.models import Sum
 from projectmanagement.models import (UserProfile,Project)
 from userprofile.models import (ProjectUserRoleRelationship,)
 from taskmanagement.views import (updates,corp_task_completion_chart,
-    total_tasks_completed,corp_total_budget)
+    total_tasks_completed,corp_total_budget,corp_total_budget_disbursed)
 
 #create views of dashboard
 
@@ -18,6 +18,7 @@ def admin_dashboard(request):
     updates_list = updates(obj_list)
     tasks_progress = corp_task_completion_chart(obj_list)
     total_budget = corp_total_budget(obj_list)
+    budget = corp_total_budget_disbursed(obj_list)
     return render(request,'corporate_dashboard.html',locals())
 
 

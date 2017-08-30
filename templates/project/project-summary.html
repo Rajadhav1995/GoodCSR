@@ -472,24 +472,24 @@ under {{tasks.total_milestones}} Milestones</h5>
         <div class="right-white-pad">
         	<h3>Total Budget</h3>
             <div class="budget-pad">
-              <p><span class="green-d-circle"></span> utilized</p>
+              <p><span class="green-d-circle"></span> Utilized</p>
               <div class="budget-value">
-                  <div class="budget-left">5.3cr</div>
-                  <div class="budget-right">57%</div>
+                  <div class="budget-left">{{budget.utilized}}cr</div>
+                  <div class="budget-right">{{budget.utilized_percent}}%</div>
               </div>
-              <p><span class="green-circle"></span> Disbuirsed</p>
+              <p><span class="green-circle"></span> Disbursed</p>
               <div class="budget-value">
-                  <div class="budget-left">7.8cr</div>
-                  <div class="budget-right">65%</div>
+                  <div class="budget-left">{{budget.disbursed}}cr</div>
+                  <div class="budget-right">{{budget.disbursed_percent}}%</div>
               </div>
               <p><span class="yellow-circle"></span> Total</p>
               <div class="budget-value budget-border">
-                  <div class="budget-left">10.5cr</div>
-                  <div class="budget-right">100%</div>
+                  <div class="budget-left">{{budget.total}}cr</div>
+                  <div class="budget-right">{{budget.total_percent}}%</div>
               </div>
           </div>
           <div class="img-right">
-            <img src="/static/img/budget-chart-b.png" alt="">
+            <div id = "total_budget" style="width:100%;float:left;"></div>
           </div>  
         </div>
     </div>
@@ -1045,7 +1045,212 @@ Highcharts.chart('Beneficary_distribution', {
             }]
         });
     
+</script>
 
+<script>
+var data = {{budget|safe}}
+console.log(data);
+var utilized = data.utilized_percent
+var disbursed = data.disbursed_percent
+var total = 100 - (utilized + disbursed)
+var gaugeOptions = {
+
+    chart: {
+        height:250,
+         plotBackgroundColor: null,
+            plotBackgroundImage: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+
+    },
+
+    title: null,
+
+      pane: {
+            center: ['50%', '50%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                borderWidth: 1,
+                backgroundColor: '#D0C173',
+                borderColor: '#D0C173',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        //     stops: [
+        //     [0.1, '#D0C173'], // green
+        //     [0.5, '#34837C'] // yellow
+            
+           
+        // ],
+        lineWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 0,
+        title: {
+            y: -70
+        },
+        labels: {
+            enabled: false
+        },
+       
+   },
+
+
+    // plotOptions: {
+    //    gauge: {
+    //             pivot: {
+    //                 radius: 0
+        
+    //             }, dial: {
+    //                 backgroundColor:'#7A4F59',
+    //                 borderColor: "#DAC7CC",
+    //                 radius: '100%',
+    //                 baseWidth: 2,
+    //                    baseLength: '100%',
+    //                     baseWidth: 2,
+    //                     rearLength: '0%',
+    //                     borderWidth: 0
+    //             }
+    //         }
+    // } 
+
+     plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: false
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '50%']
+            },
+            gauge: {
+                dataLabels: {
+                    enabled: false
+                },
+                pivot: {
+                    radius: 0
+        
+                }
+                ,
+                dial: {
+                    backgroundColor:'#7A4F59',
+                    borderColor: "#7A4F59",
+                    radius: '105%',
+                    baseWidth: 2,
+                       baseLength: '100%',
+                        baseWidth: 2,
+                        rearLength: '0%',
+                       // borderWidth: 0
+                }
+            }
+        },
+     
+};
+
+// The speed gauge
+var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
+  
+    yAxis: {
+        min: 0,
+        max: 100,
+        title: {
+            text: ''
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+      series: [
+      {
+            type: 'pie',
+             size: '100%',
+
+            innerSize: '76%',
+            data: [
+
+                {y:utilized,name:'Utilized',color:'#006861',borderColor: "#006861"},
+                {y:disbursed,name:'Disbursed',color:'#169776',borderColor: "#169776"},
+                {y:total,name:'Total',color:'#D0C173',borderColor: "#D0C173"}
+             
+              
+            ]
+        },
+
+        {
+            type: 'gauge',
+            data: [0],
+            
+        }
+    ],
+        dataLabels: {
+               enabled: false
+        }        
+   
+
+}));
+
+// Bring life to the dials
+setInterval(function () {
+    // Speed
+    var point,
+        point1,
+        newVal,
+        inc;
+
+    if (chartSpeed) {
+        point = chartSpeed.series[0].points[0];
+       
+        point1 = chartSpeed.series[0].points[1]; 
+
+        $.each(chartSpeed.series, function(i, item){
+            if(item.type == 'gauge'){
+              
+               item.setData([["none",point1.y+point.y]], true);
+               
+            }
+        });
+
+        console.log(chartSpeed.series[1].points);
+
+
+      
+        // chartSpeed.yAxis[0].removePlotBand('plot-band-1');
+        //     chartSpeed.yAxis[0].addPlotBand({
+        //         from: 0,
+        //         to: point.y,
+        //         color: '#2F9974',
+        //         thickness: '40%',
+        //         id: 'plot-band-1'
+        //     });
+
+   
+
+        // point.update(point.y);
+    }
+   
+}, 800);
 
 </script>
+<style type="text/css">
+ #total_budget .highcharts-container {
+       border-bottom: 1px solid;
+       height: 120px !important;
+   }
+    .highcharts-background {
+   fill: none
+}
+</style>
 {% endblock %}

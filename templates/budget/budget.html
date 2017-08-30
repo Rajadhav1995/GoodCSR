@@ -41,7 +41,7 @@
         <div class="left-budget">
         		<div class="budget-left-pad">
             	<h3>Budget</h3>
-                 <div id="total_budget" style="width: 100%;float: left; "></div>
+                 <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
                 	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {{projectobj.project_budget_details.planned_cost}} </span></li>
                     <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {{projectobj.project_budget_details.disbursed_cost}} </span></li>
@@ -454,13 +454,11 @@ Highcharts.chart('Budget_location', {
 </script>
 
 <script>
+
 var gaugeOptions = {
 
     chart: {
-   
-        height: 250,
-       width:250,
-   
+        height:250,
          plotBackgroundColor: null,
             plotBackgroundImage: null,
             plotBorderWidth: 0,
@@ -645,13 +643,16 @@ setInterval(function () {
    
 }, 800);
 
-
 </script>
 <style type="text/css">
   #total_budget .highcharts-container {
         border-bottom: 1px solid;
         height: 120px !important;
+        margin-bottom:20px;
     }
+     .highcharts-background {
+    fill: none
+}
 </style>
 {% endblock %}
 
