@@ -79,50 +79,52 @@ def project_detail(request):
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
     master_obj = []
+    master_obj_pin=[]
+    master_obj_pip=[]
     parameter = ProjectParameter.objects.filter(project=obj)
     for i in parameter:
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
             parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
             parent_paremeter = ProjectParameterValue.objects.filter(keyparameter__in=parameter1)
-        elif i.parameter_type == 'PIN' or i.parameter_type == 'PIP':
-            child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=i.id)
-            if child_parameter.exists():
-                master_obj = child_parameter
-            print [i.keyparameter for i in child_parameter]
-    print master_obj
+        elif i.parameter_type == 'PIN':
+            child_parameter_pin = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
+            if child_parameter_pin.exists():
+                master_obj_pin = child_parameter_pin
+                chart_name_pin = child_parameter_pin[0].keyparameter.parent.name
+        elif i.parameter_type == 'PIP':
+            child_parameter_pip = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIP')
+            if child_parameter_pip.exists():
+                master_obj_pip = child_parameter_pip
+                chart_name_pip = child_parameter_pip[0].keyparameter.parent.name
+            pass
+    import json
+
+    aa = ProjectParameterValue.objects.filter(keyparameter__project=obj,keyparameter__parent=None)
+    for i in aa:
+        if keyparameter.parameter_type=='PIN':
+            pass
+
+    data_list_pin=[]
+    data_list_pip=[]
     # import ipdb; ipdb.set_trace()
-    # values = aggregate_project_parameters(parameter,child_parameter)
-    # print values
+    counter = 0
+    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
+    for k in master_obj_pin:
+        name = str(k.keyparameter.name)
+        value = float(k.parameter_value)
+        color = colors[counter]
+        counter+=1
+        data_list_pin.append({'name': name,'y':value,'color':color})
 
-    dataone = [{
-            name: 'Nabarangpur',
-            y: 56.33,
-            color:'#D0C173'
-        }, {
-            name: 'Kasturbadham',
-            y: 24.03,
-            color:'#27988A'
-        }, {
-            name: 'Narauli Dang',
-            y: 10.38,
-            color:'#31798F'
-        }, {
-            name: 'Mallian Khurd',
-            y: 4.77,
-            color:'#1C6A66'
-        }, {
-            name: 'Gokarna village',
-            y: 4.77,
-            color:'#A13F5D'
-        }
+    for k in master_obj_pip:
+        name = str(k.keyparameter.name)
+        value = float(k.parameter_value)
+        color = colors[counter]
+        counter+=1
+        data_list_pip.append({'name': name,'y':value,'color':color})
 
-
-        ]
-
-
-    #     ]
-
-    #         }]
+    data_pip = json.dumps(data_list_pip)
+    data_pin = json.dumps(data_list_pin)
     return render(request,'project/project-summary.html',locals())
 
 def project_mapping(request):
