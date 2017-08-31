@@ -15,10 +15,10 @@
     <h4><a href = '#'>Project Name</h4>
     {% endif %}
     <ul>
-        {%if project_funder%}
-    	<li><a href="">by {{project_funder.funder}}</a> </li>
-        <li><a href="">NGO Partner: {{project_funder.implementation_partner}}</a></li>
-        {% else %}
+        {%if project_funders %}
+    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
+        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
+        {% else %}c
         <li><a href="">by Funder</a> </li>
         <li><a href="">NGO Partner: </a></li>
         {% endif %}
@@ -30,7 +30,7 @@
           <li><a class="active" href="/project/summary/?slug={{obj.slug}}">Summary</a></li>
           <li><a href="javascript:void(0);">Task & Milestone</a></li>
           <li><a href="/manage/project/budget/view/?slug={{obj.slug}}">Budget</a></li>
-          <li><a href="/upload/list/?slug={{obj.slug}}&model=Project"">Files</a></li>
+          <li><a href="/upload/list/?slug={{obj.slug}}&model=Project">Files</a></li>
         </ul>
      </div>         
     </div>
@@ -52,48 +52,32 @@
             <div class="time-line">
                 <div class="time-line-bdr"></div>
                 {% if timeline %}
-                {% for i in timeline %}
-                <ul>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
-                        <p>{{i.description}}</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">20 <span>May</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>50 Admission Done</p>
-                        <img src="/static/img/timeline-img2.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">04 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img3.jpg" alt="">
-                        <p>Teacher hired fot I to IV...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">19 <span>Jun</span></div>
-                </li>
-                <li class="event-down red-down current-event">
-                 &nbsp;
-                    <a href="javascript:void(0);" id="myBtn">
-                    <div class="event-img">
-                        <h3>Milestone Achieved</h3>
-                        <img src="/static/img/milestone-icon.png" alt="">
-                        <p>Nabarangpur school project</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">27 <span>Jun</span></div></a>
-                </li>
-
-                </ul>
-                {% endfor %}
+                    {% for i in timeline %}
+                    
+                        <ul>
+                        {% if not forloop.counter|divisibleby:2 %}
+                        <li class="event-up">
+                            &nbsp;
+                            <div class="event-img">
+                                <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
+                                <p>{% if i.description %} {{i.description}} {% endif %}</p>
+                            </div>
+                            <div class="event-circle"></div>
+                            <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
+                        </li>
+                        {% else %}
+                        <li class="event-down">
+                         &nbsp;
+                            <div class="event-img">
+                                <p>{{i.description}}</p>
+                                <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
+                            </div>
+                            <div class="event-circle"></div>
+                            <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
+                        </li>
+                        {% endif %}
+                        </ul>
+                    {% endfor %}
                 {% endif %}
             </div>
            </div> 

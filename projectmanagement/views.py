@@ -282,7 +282,7 @@ def project_total_budget(slug):
 
 def timeline_listing(obj):
     attach = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(obj),
-        object_id = obj.id,active=2,attachment_type= 1)
+        object_id = obj.id,active=2,attachment_type= 1).order_by('-date')
     return attach
     
 
@@ -298,8 +298,5 @@ def project_summary(request):
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
-    try:
-        project_funders = ProjectFunderRelation.objects.get(project = obj)
-    except:
-        project_funders = None
+    project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     return render(request,'project/project-summary.html',locals())
