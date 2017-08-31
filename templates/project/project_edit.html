@@ -241,7 +241,7 @@ width:450px;
                                 {% endif %}
                             </div>
                           </div>
-                        <input style="width: 0px;" name="activity_count" id="activity_count" type="text"/>
+                        <input style="width: 100px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
@@ -275,7 +275,13 @@ $(document).ready(function() {
     var add_button      = $(".add_field_button"); //Add button ID
     
     var loop_count = $('#loop_count').val()
-    var x =Number(loop_count)+1;
+    var loop_count = Number(loop_count);
+    if (loop_count > 0) {
+        var x =Number(loop_count);
+    } else {
+        var x =Number(loop_count)+1
+    }
+    //var x =Number(loop_count)+1;
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();
         if(x < max_fields){ //max input box allowed

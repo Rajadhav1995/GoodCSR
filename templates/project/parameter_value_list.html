@@ -31,30 +31,63 @@
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
-        <h3>Parameter Uploaded Values</h3>
+        <h3>Parameter Uploaded Values for {{parameter.name}}</h3>
         <div style="float: right;"><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Add Parameter</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        {% if child_parameter %}
         <thead>
             <tr>
+                <th>Month</th>
+                <!-- {% for i in child_parameter %} -->
+                <!-- <th>{{i.keyparameter.name}}</th> -->
+                <!-- {% endfor %} -->
+                <th>Parameter</th>
+                <th>Value</th>
+                <!-- <th>Name2</th>
+                <th>Name3</th>
+                <th>Name4</th>
+                <th>Name5</th>
+                <th>Name6</th> -->
+            </tr>
+        </thead>
+        
+        {% for i in child_parameter %}
+        <tr>
+            
+            <b><td>{{i.submit_date}}</td></b>
+            <td>{{i.keyparameter.name}}</td>
+            <td>{{i.parameter_value}}</td>
+            <!-- <td>{{i.parameter_value}}</td> -->
+            
+            <td></td>
+           
+            
+        </tr>{% endfor %}
+
+        {% else %}
+
+        <thead>
+            <tr>
+                <th>Month</th>
                 <th>{{parameter.name}}</th>
-                {% for i in key_parameter %}
+                <!-- {% for i in key_parameter %} -->
                 <th>{{i.name}}</th>
-                {% endfor %}
+                <!-- {% endfor %} -->
                 
                 <th>Action</th>
             </tr>
         </thead>
         
-        
+        {% for i in ff %}
         <tr>
-            <td>{{i.name}}</td>
-            <td>{{i.project.name}}</td>
-            <td>{{i.get_active_display}}</td>
-            <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a></td>
+            
+            <b><td>{{i.submit_date}}</td></b>
+            <td>{{i.parameter_value}}</td>
+            <td></td>
            
             </td>
-        </tr>
-        
+        </tr>{% endfor %}
+        {% endif %}
 
   </tbody>
 </table>

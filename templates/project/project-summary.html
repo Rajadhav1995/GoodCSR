@@ -125,6 +125,9 @@
             <option>2017</option>
         </select>
         </div>
+
+
+
         <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
             <option>Quarter1</option>
@@ -136,32 +139,43 @@
     <div class="white-box white-pad">
     	<div class="key-program">
         <h2>Key Program Info</h2>
-        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>
+        <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}">Upload Parameters</a>
         </div>
         <ul>
+            {% for i in parent_paremeter %}
         	<li>
-            	<h3>No. of Beneficiaries</h3>
+            	<h3>{{i.keyparameter.name}}</h3>
+                
+                {% if i.keyparameter.parameter_type == 'CUR' %}
+                 <img class="key-image" src="/static/img/budget-icon.png" alt="">
+                 {% else %}
                  <img class="key-image" src="/static/img/key-icon2.png" alt="">
-                <h4 class="title-pad">7.148</h4> 
+                 {% endif %}
+                <h4 class="title-pad">{{i.parameter_value}}</h4> 
             </li>
+            {% endfor %}
+            {% if master_obj_pip %}
             <li>
-            	<h3>Beneficiaries distribution</h3>
+            	<h3>{{chart_name_pip}}</h3>
                 <div class="right-budget beni-dist">
                  <div id="Beneficary_distribution" style="width: 100%;float: left;"></div>
                 
             </div>
             </li>
-            <li>
+            {% endif %}
+            <!-- <li>
             	<h3>Total Budget</h3>
                  <img class="key-image" src="/static/img/budget-icon.png" alt="">
                 <h4 class="title-pad">2.3cr</h4> 
-            </li>
+            </li> -->
+            {% if master_obj_pin %}
              <li>
-            	<h3>Batch Size</h3>
+            	<h3>{{chart_name_pin}}</h3>
                 <div class="right-budget beni-dist beni-dist1">
                 <div id="Batch_size" style="width: 100%;float: left;"></div>
             </div>
             </li>
+            {% endif %}
         </ul>
     </div>
     <div class="white-box">
@@ -624,7 +638,9 @@ $(document).ready(function(){
 <script src="/static/code/modules/solid-gauge.js"></script>
 
 <script type="text/javascript">
+var data1 = {{data_pin | safe}};
 
+console.log(data1);
 Highcharts.chart('Batch_size', {
    chart:{type:'pie', backgroundColor: null,height:288},
             credits:{enabled: false},
@@ -668,36 +684,14 @@ Highcharts.chart('Batch_size', {
                 dataLabels:{
                 
                 },
-                data: [{
-            name: 'Nabarangpur',
-            y: 56.33,
-            color:'#D0C173'
-        }, {
-            name: 'Kasturbadham',
-            y: 24.03,
-            color:'#27988A'
-        }, {
-            name: 'Narauli Dang',
-            y: 10.38,
-            color:'#31798F'
-        }, {
-            name: 'Mallian Khurd',
-            y: 4.77,
-            color:'#1C6A66'
-        }, {
-            name: 'Gokarna village',
-            y: 4.77,
-            color:'#A13F5D'
-        }
-
-
-        ]
+                data: data1
 
             }]
         });
 
 </script>
 <script type="text/javascript">
+var data2 = {{data_pip | safe}};
 Highcharts.chart('Beneficary_distribution', {
    chart:{type:'pie', backgroundColor: null,height:288},
             credits:{enabled: false},
@@ -741,30 +735,7 @@ Highcharts.chart('Beneficary_distribution', {
                 dataLabels:{
                 
                 },
-                data: [{
-            name: 'Nabarangpur',
-            y: 56.33,
-            color:'#D0C173'
-        }, {
-            name: 'Kasturbadham',
-            y: 24.03,
-            color:'#27988A'
-        }, {
-            name: 'Narauli Dang',
-            y: 10.38,
-            color:'#31798F'
-        }, {
-            name: 'Mallian Khurd',
-            y: 4.77,
-            color:'#1C6A66'
-        }, {
-            name: 'Gokarna village',
-            y: 4.77,
-            color:'#A13F5D'
-        }
-
-
-        ]
+                data: data2
 
             }]
         });
@@ -947,7 +918,7 @@ setInterval(function () {
             }
         });
 
-        console.log(chartSpeed.series[1].points);
+        //console.log(chartSpeed.series[1].points);
 
 
       
