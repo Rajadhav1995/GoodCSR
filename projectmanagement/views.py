@@ -231,8 +231,15 @@ def add_parameter(request):
 
 def upload_parameter(request):
     ids =  request.GET.get('id')
+    key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
     key_parameter = ProjectParameter.objects.filter(parent=parameter)
+    key_parameter_list = [i.id for i in key_parameter]
+    key_parameter_value = ProjectParameterValue.objects.filter(keyparameter__in=key_parameter_list)
+    existing_month = [k.start_date.month for k in key_parameter_value]
+    month = ['January','February','March','April','May','June','July','August','September','October','November','December']
+    month_id = [1,2,3,4,5,6,7,8,9,10,11,12]
+    month_zip = zip(month,month_id)
     if request.method == 'POST':
         month = int(request.POST.get('month'))
         now = datetime.datetime.now()
@@ -249,12 +256,14 @@ def upload_parameter(request):
         else:
             obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
-        return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parameter.project.slug)
+        return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %parameter.project.slug)
     return render(request,'project/key_parameter.html',locals())
 
 def manage_parameter(request):
     slug =  request.GET.get('slug')
+    key = int(request.GET.get('key'))
     parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
+    project_name = parameter[0].project.name
     return render(request,'project/parameter_list.html',locals())
 
 
@@ -370,6 +379,7 @@ def project_summary(request):
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
             parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
             parent_paremeter = ProjectParameterValue.objects.filter(keyparameter__in=parameter1)
+            import ipdb; ipdb.set_trace()
         elif i.parameter_type == 'PIN':
             child_parameter_pin = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
             if child_parameter_pin.exists():

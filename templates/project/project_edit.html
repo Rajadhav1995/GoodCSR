@@ -33,7 +33,7 @@ width:450px;
                                 </label>
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                     {{form.name}}
-                                    {{ form.name.errors }}
+                                    
                                 </div>
                         </div>
                         <div class="row">
@@ -219,12 +219,13 @@ width:450px;
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 
-                                <select class="form-control" name="funder" id="funder"><option>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
-                                {% if budgetform.total_budget.errors %}
+                                <select class="form-control" name="funder" id="funder"><option value="0">Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                                
                                 <p style="color: red;">
-                                    Please select Funder.
+                                    
+                                <p id="demo"></p>
                                 </p>
-                                {% endif %}
+                                
                             </div>
                           </div>
 
@@ -233,7 +234,7 @@ width:450px;
                                 Implementation partner:
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <select class="form-control" name="implementation_partner" id="implementation_partner"><option>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                                <select class="form-control" name="implementation_partner" id="implementation_partner"><option value="0">Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
                                 {% if budgetform.total_budget.errors %}
                                 <p style="color: red;">
                                     Please select Implementation partner.
@@ -241,9 +242,9 @@ width:450px;
                                 {% endif %}
                             </div>
                           </div>
-                        <input style="width: 100px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
+                        <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
 
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return date_validate(); funder_val('funder');" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
   </div>
@@ -330,7 +331,7 @@ $(document).ready(function() {
 });
 </script>
 <script>
-function RemoveProduct() {
+function date_validate() {
     if ($('#id_start_date').val()>$('#id_end_date').val()){
         alert("'End date' should be greater than 'Start date'");
         return false;
@@ -338,5 +339,46 @@ function RemoveProduct() {
             return true;
         }
     }
+</script>
+
+<script type="text/javascript">
+function funder_val(el) {
+    var x = document.getElementById(el);
+    alert(x);
+    document.getElementById("demo").innerHTML = "Found " + x + " options in the list.";
+}
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#prog_edit").validate({
+            rules :
+            {
+                //id_project : {required:true},
+                //program : {required:true},
+                no_of_beneficiaries : {required:true},
+                target_beneficiaries : {required:true},
+                cause_area : {required:true},
+                id_end_date: { greaterThan: "#id_start_date" },
+            },
+            messages:
+            {
+                //id_project : {required : "<font color=#fc282f>Please enter the name</font>"},
+                //program:{required:"<font color=#fc282f>Please select the program</font>"},
+                no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
+                target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
+                cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
+                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+        });
+        });
 </script>
 {% endblock %}

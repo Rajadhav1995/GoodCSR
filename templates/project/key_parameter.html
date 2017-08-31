@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% block section %}
+{% endblock %}
 {% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
@@ -15,15 +16,15 @@ width:450px;
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Upload Key Parameter Value for {{parameter.name}}</h3>
+              <h3 class="box-title"> Upload Parameter Value for {{parameter.name}}</h3>
               <div align="right">
-             <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+             <a class="btn btn-success" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
          </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
             
-            <form autocomplete="off" id="prog_edit" action="/project/upload/parameter/value/?id={{ids}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/project/upload/parameter/value/?id={{ids}}&key={{key}}" method="POST" enctype="multipart/form-data">
             
             {% csrf_token %}
 
@@ -35,8 +36,12 @@ width:450px;
                                 <div>
                                 <select class='form-control' id='gMonth' name='month'>
                                 <option value=''>--Select Month--</option>
-                                <option value='1'>January</option>
-                                <option value='2'>February</option>
+                                {% for i,j in month_zip %}
+                                {% if not j in existing_month %}
+                                <option value='{{j}}'>{{i}}</option>
+                                {% endif %}
+                                {% endfor %}
+                                <!-- <option value='2'>February</option>
                                 <option value='3'>March</option>
                                 <option value='4'>April</option>
                                 <option value='5'>May</option>
@@ -46,22 +51,23 @@ width:450px;
                                 <option value='9'>September</option>
                                 <option value='10'>October</option>
                                 <option value='11'>November</option>
-                                <option value='12'>December</option>
+                                <option value='12'>December</option> -->
                                 </select>
                                 </div>
 
                         </div>
                         </div>
-
+                        {% if not key_parameter %}
                         <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     {{parameter.name}} <font color="red">*</font>
                                 </label>
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}
-                                    <input class="form-control" type="number" name="value" id="value{{parameter.id}}">
+                                    
+                                    <input class="form-control" type="number" name="value" id="value{{parameter.id}}">{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}
                                 </div>
                         </div>
+                        {% endif %}
 
                         {% for i in key_parameter %}
                         <div class="row">
@@ -72,73 +78,12 @@ width:450px;
                                     <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}">{% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
                                 </div>
                         </div>
-                        
+
                         {% endfor %}
 
-
-
-                        
-<!-- 
-                        <div id="name" class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Name
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <input class="form-control" type="text" name="name" id="name">
-                            </div>
-                        </div> 
-
-                        <div id="value" class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Value
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <input class="form-control" type="number" name="value" id="value">
-                            </div>
-                        </div> 
-
-                        <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
-                            </label>
-                        <div id="pie" class="col-md-3 col-sm-12 col-xs-12 form-group">
-                        <div class="input_fields_wrap">
-                            <button class="add_field_button">Add More</button>
-                            {% if slug %}
-                            {% for i in activity_view %}
-                            <div><input value="{{i.name}}" type="text" name="activity[1]"><input type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"><select name="activity_type[1]" id="id_activity_type"><option value="1" selected="">Core</option><option value="2">Non-core</option></select></div>
-                            {% endfor %}
-                            {% else %}
-                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]"><input class="form-control" type="number" value="{{i.activity_duration}}" name="value[1]" placeholder="Value" id="id_number"></div>
-                            {% endif %}
-                        </div>
-                        </div>
-                    </div>
-                        <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Start Date
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <input type="text" name="start_date" readonly="true" class="form-control" id="id_start_date">
-                                <font color=#fc282f><b><span id="dateError1"></span></b></font>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                End Date
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <input type="text" name="end_date" readonly="true" class="form-control" id="id_end_date">
-                                <font color=#fc282f><b><span id="dateError"></span></b></font>
-
-                            </div>
-                            
-                        </div>
-
-                        <input style="width: 0px;" name="name_count" id="activity_count" type="text"/> -->
-
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
-                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                        <a class="btn btn-success" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}">Back</button></a>
+
                     </form>
   </div>
 
