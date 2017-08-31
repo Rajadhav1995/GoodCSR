@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% block section %}
+{% endblock %}
 {% block content %}
 <!--Green pad Ends-->
 <!--Content part starts-->
@@ -37,8 +38,8 @@
         <thead>
             <tr>
                 <th>Project Name</th>
-                <th>User</th>
-                <th>Program Name</th>
+                
+                
                 <th>Status</th>
                 <th>Action</th>
                 <th>Manage Activites</th>
@@ -50,8 +51,9 @@
         {% for i in obj_list %}
         <tr>
             <td><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></td>
-            <td>{{i.created_by.user.username}}</td>
-            <td>{{i.program.name}}</td>
+            
+            
+            
             <td>{{i.get_active_display}}</td>
             <td><a class="btn btn-primary" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
             <td><a class="btn btn-primary" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
