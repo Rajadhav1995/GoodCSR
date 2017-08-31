@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 {% load common_tags %}
 
+{% block section %}
+<div class="clear"></div>
+
+<!--Green pad starts-->
+<section class="green-pad">
+	<div class="row">
+	<div class="image-pad logo-shadow">
+    	<a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
+    </div>    
+    <h3>{{user_obj.organization|title}}</h3>
+    <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>
+    </div>
+</section>
+{% endblock %}
 <!--Content part starts-->
 {% block content %}
 <section class="content-part">
@@ -228,10 +242,10 @@
         <th style="width:19%;">Organization</th>
         <th style="width:26%;">Designation</th>
         <th style="width:19%;">PMU Role</th>
-        <th style="width:10%;">&nbsp;</th>
       </tr>
       </thead>
       <tbody>
+      {% if projectuserlist %}
       {% for i in projectuserlist %}
       <tr>
             <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
@@ -241,7 +255,9 @@
 <!--            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>-->
       </tr>
       {% endfor %}
-
+      {% else %}
+        <h5>Users not tagged</h5>
+      {% endif %}
       </tbody>
   </table>  
     </div>
@@ -331,7 +347,9 @@ var data = {{total_budget | safe}}
 var projects = data.projects
 var total_budget = data.total_budget
 var utilized = data.utilized
-var disbursed = data.disbursed
+var disbursed_budget = data.disbursed
+console.log(disbursed_budget);
+
 $(function(){
         //-------------------------------------------------------
         Highcharts.Renderer.prototype.symbols.line = function (x, y, width, height) {
@@ -492,7 +510,7 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 8,
-                data: disbursed
+                data: disbursed_budget
             }, {
                 name: 'Utilized',
                 color: '#0b6861',
