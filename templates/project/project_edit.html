@@ -244,7 +244,7 @@ width:450px;
                           </div>
                         <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
 
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return date_validate(); funder_val('funder');" />
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return funder_val();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
   </div>
@@ -341,11 +341,11 @@ function date_validate() {
     }
 </script>
 
-<script type="text/javascript">
-function funder_val(el) {
-    var x = document.getElementById(el);
-    alert(x);
-    document.getElementById("demo").innerHTML = "Found " + x + " options in the list.";
+<script>
+function funder_val() {
+    var e = document.getElementById("funder");
+    var str = e.options[e.selectedIndex].value;
+    alert(str);
 }
 </script>
 
