@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block section %}
+{% endblock %}
+{% block content %}
+
+</br>
+<form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+<input type="submit" value="Save Budget Lineitems" class="btn btn-success">
+<input type="hidden" name="count" value="6">
+<input type="hidden" name="slug" value="{{project_slug}}">
+<input type="hidden" name="budget_id" value="{{budget_id}}">
+<div class="box-body table-responsive">
+    <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="80%">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                {% for i,j in quarter_list.items %}
+                <th colspan="3">{{j}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th> Location </th>
+                <th> Heading </th>
+                <th> Subheading </th>
+                <th> Line Total </th>
+                <th> Unit Type </th>
+                {% for i,j in quarter_list.items %}
+                <th> No. of unit </th>
+                <th> Rate </th>
+                <th> Total Planned </th>
+<!--                <th> Total Utilized </th>-->
+                {% endfor %}
+            </tr>
+        </thead>
+        {% for j in "123456"%}
+        <tr class="data_row">
+            <td><select name="location_{{j}}" id="location_{{j}}" class="location">
+                <option value = "">Select option </option>
+                {% for i in supercategory_list %}
+                <option value="{{i.id}}">{{i.name}}</option>
+                {% endfor %}
+                </select></td>
+            <td><select name="heading_{{j}}" id="heading_{{j}}" class="heading">
+            <option value = "">Select Heading </option>
+            {% for i in heading_list %}
+                <option value="{{i.id}}">{{i.name}}</option>
+                {% endfor %}
+                </select></td>
+            <td> <input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}"> </td>
+             <td> <input type="number" class = "linetotal" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"> </td>
+              <td> <input type="text" class="unit-type" name = "unit-type_{{j}}"> </td>
+            {% for i,v in quarter_list.items %}
+               <td> <input type="number" name = "unit_{{i}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" > </td>
+                <td> <input type="number" name = "rate_{{i}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}"> </td>
+                 <td> <input type="number" name = "planned-cost_{{i}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" > </td>
+<!--                 <td> <input type="number" name = "utilized-cost_{{i}}_{{j}}"> </td>-->
+                 {% endfor %}
+        </tr>
+        {% endfor %}
+            <input type="button" class="clone" value="Add"/>
+            <input type="button" class="remove" value="Remove"/>
+    </table>
+</div>
+</form>
+
+
+<script type="text/javascript">
+
+$(document).ready(function () 
+{
+    function mandatory_input()
+    {
+        sname = $(this).context.name.split('_');
+        if (sname.length == 2){
+            console.log(sname[1])
+            $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
+        }
+        else{
+                    $("[id$=_"+parseInt(sname[2])+"]").attr('required', 'required')
+        }
+        }
+        $(document).on("change, keyup", "#example1 tbody tr td input", mandatory_input);
+        $(document).on("change, keyup", "#example1 tbody tr td select", mandatory_input);
+});
+
+</script>
+
+
+<script>
+$(document).ready(function()
+{
+    function updatePrice()
+    {
+        nam = $(this).context.name.split('_')
+        i = nam[1]
+        j = nam[2]
+        
+        var rate = parseFloat($("#rate_"+i+"_"+j).val());
+        var unit = parseFloat($("#unit_"+i+"_"+j).val());
+        var total = (rate) * (unit);
+        //var total = total.toFixed(2);
+        if (total.toString() == 'NaN'){
+            $("#planned-cost_"+i+"_"+j).val('');
+        }
+        else{
+            $("#planned-cost_"+i+"_"+j).val(parseInt(total));
+        }
+        
+        var linetotal = 0
+        $("[id^=planned-cost_][id$=_"+parseInt(j)+"]").each(function(){
+            linetotal = +linetotal + +$(this).val()
+        })
+        
+        $("#linetotal_"+j).val(parseInt(linetotal));
+    }
+    $(document).on("change, keyup", ".rate", updatePrice);
+    $(document).on("change, keyup", ".unit", updatePrice);
+});
+
+</script>
+
+
+
+<!--/*script for add more functionality-->
+<script type="text/javascript">
+    $(document).ready(function(){
+                function clone(){
+                    var count = $('input[name=count]').val();
+                    var c = count;
+                    var tR = $('.data_row:last').clone();
+                    count++; /* To increase the count */
+                    /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).find('td input, td select').each(function(){
+                      if ($(this).attr('name')){
+                           if ($(this).attr('name').split('_').length == 3){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 2){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+count);
+                              $(this).attr('id', name[0]+"_"+count);
+                            }
+                      }
+                    });
+                    $('input[name=count]').val(count)
+                    $(tR).insertAfter('.data_row:last');
+                    }
+                function remove(){
+                    var count = $('input[name=count').val();
+                      if (count > 1) {
+                            $('tr.data_row:last').remove();
+                            count  = $('tr.data_row').length;
+                            $('input[name=count]').val(count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            $("input[class='clone']").on("click", clone);
+            $("input[class='remove']").on("click", remove);
+
+    });
+</script>
+
+{% endblock %}

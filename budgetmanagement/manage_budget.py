@@ -7,6 +7,8 @@ from django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import (Project,MasterCategory,UserProfile)
 from .models import (Budget,SuperCategory,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                     Tranche,)
+from media.models import (Comment,)
+from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
 
@@ -135,7 +137,7 @@ def projectlinetemadd(request):
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
                     print "budget line itme object" ,budet_lineitem_obj
         return HttpResponseRedirect('/project/list/')
-    return render(request,"budget/budget-form.html",locals())
+    return render(request,"budget/budget_lineitem.html",locals())
 
 def projectbudgetdetail(request):
     project_slug = request.GET.get('slug')
@@ -159,7 +161,6 @@ def budgetutilization(request):
     span_length = len(budget_period)
     if request.method == "POST":
         count = request.POST.get('count')
-        
         project_slug = request.POST.get('slug')
         projectobj =  Project.objects.get_or_none(slug=project_slug)
         budget_id = request.POST.get('budget_id')
@@ -169,12 +170,20 @@ def budgetutilization(request):
         for i in lineobj_list:
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i))]
             for j in line_itemlist:
-                if str(i) == j.split("_")[3]:
+                line_item_updated_values = {}
+                item_list = j.split("_")
+                if str(i) == item_list[3]:
                     budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
-                    budget_periodobj.utilized_unit_cost = request.POST.get(j)
+                    if str(item_list[0]) == "utilized-cost":
+                        utilized_unit_cost = request.POST.get(j)
+                        line_item_updated_values.update({'utilized_unit_cost':utilized_unit_cost})
+                    elif str(item_list[0]) == "variance":
+                        variance = request.POST.get(j)
+                        line_item_updated_values.update({'variance':variance})
+                    else:
+                        comment,created = Comment.objects.get_or_create(text =request.POST.get(j),content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=j)
+                    budget_periodobj = budget_periodobj.__dict__.update(line_item_updated_values)
                     budget_periodobj.save()
-                    print budget_periodobj.utilized_unit_cost
-        
     return render(request,"budget/budget_utilization.html",locals())
 
 def budget_amount_list(budgetobj,projectobj):
