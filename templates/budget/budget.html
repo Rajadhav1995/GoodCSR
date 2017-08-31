@@ -414,8 +414,7 @@ Highcharts.chart('Budget_location', {
                 ],
             title:{text: null},
             tooltip:{
-                enabled: true,
-                animation: true
+                pointFormat: ' <b>{point.percentage:.1f}%</b>'
             },
             plotOptions: {
                 pie: {
@@ -424,11 +423,9 @@ Highcharts.chart('Budget_location', {
                     cursor: 'pointer',
                     showInLegend: true,
                     dataLabels: {
-                            enabled:true,
-                           formatter:function() {
-                               var pcnt = (this.y / dataSum) * 100;
-                               return Highcharts.numberFormat(pcnt) + '%';
-                           }                      
+                            enabled:false,
+                                              
+                }
                 }
             },
             legend: {
@@ -563,9 +560,12 @@ var gaugeOptions = {
      
 };
 
+var disbursed = {{projectobj.project_budget_details.disbursed_percent}}
+var utilized = {{projectobj.project_budget_details.utilized_percent}}
+var total = 100 - (utilized + disbursed)
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
-  
+
     yAxis: {
         min: 0,
         max: 100,
@@ -586,9 +586,9 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
             innerSize: '76%',
             data: [
 
-                {y:40,name:'Utilized',color:'#006861',borderColor: "#006861"},
-                {y:50,name:'Disbursed',color:'#169776',borderColor: "#169776"},
-                {y:10,name:'Total',color:'#D0C173',borderColor: "#D0C173"}
+                {y:utilized,name:'Utilized',color:'#006861',borderColor: "#006861"},
+                {y:disbursed,name:'Disbursed',color:'#169776',borderColor: "#169776"},
+                {y:total,name:'Total',color:'#D0C173',borderColor: "#D0C173"}
              
               
             ]

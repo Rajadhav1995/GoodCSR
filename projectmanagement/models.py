@@ -208,9 +208,18 @@ class Project(BaseContent):
         planned_cost = budget_periodunitlist.aggregate(Sum('planned_unit_cost')).values()[0]
         utilized_cost = budget_periodunitlist.aggregate(Sum('utilized_unit_cost')).values()[0]
         disbursed_cost = Tranche.objects.filter(project = self).aggregate(Sum('utilized_amount')).values()[0]
+        total_percent = 100
+        try:
+            disbursed_percent = int((disbursed_cost/planned_cost)*100)
+            utilized_percent = int((utilized_cost/planned_cost)*100)
+        except:
+            disbursed_percent = 0
+            utilized_percent = 0
         project_budget = {'planned_cost':planned_cost,
                           'utilized_cost':utilized_cost,
-                          'disbursed_cost':disbursed_cost
+                          'disbursed_cost':disbursed_cost,
+                          'disbursed_percent':disbursed_percent,
+                          'utilized_percent':utilized_percent,
                           }
         return project_budget
 
