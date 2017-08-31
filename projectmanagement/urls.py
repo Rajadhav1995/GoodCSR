@@ -1,9 +1,8 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from projectmanagement.views import (create_project,project_list,project_detail,project_mapping,
-									budget_tranche,key_parameter,tranche_list,add_parameter,
-									upload_parameter,manage_parameter,manage_parameter_values,
-			project_summary)
+    budget_tranche,key_parameter,tranche_list,add_parameter,
+    upload_parameter,manage_parameter,manage_parameter_values,project_summary)
 #from views.dashboard import project_summary
 
 urlpatterns = [
