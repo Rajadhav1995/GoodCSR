@@ -208,6 +208,7 @@ def key_parameter(request):
 def add_parameter(request):
     form = ProjectParameterForm()
     slug =  request.GET.get('slug')
+    key =  request.GET.get('key')
     if request.method == 'POST':
         slug =  request.GET.get('slug')
         project = Project.objects.get(slug=slug)
@@ -225,7 +226,7 @@ def add_parameter(request):
                 instruction = 'instruction['+str(i+1)+']'
                 obj = ProjectParameter.objects.create(parameter_type=parameter_type,project=project,instructions=request.POST.get(instruction),\
                         name=request.POST.get(name),parent=parent_obj,aggregation_function=request.POST.get('agg_type'))
-        return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %slug)
+        return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %slug)
         # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
     return render(request,'project/add_key_parameter.html',locals())
 
@@ -378,7 +379,6 @@ def project_summary(request):
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
             parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
             parent_paremeter = ProjectParameterValue.objects.filter(keyparameter__in=parameter1)
-            import ipdb; ipdb.set_trace()
         elif i.parameter_type == 'PIN':
             child_parameter_pin = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
             if child_parameter_pin.exists():
@@ -424,24 +424,25 @@ def project_summary(request):
                 para_name.setdefault(i.parameter_type,[])
                 para_name[i.parameter_type].append(ttt)
             name_list.append(str(i.name))
-    data_list_pin=[]
-    data_list_pip=[]
-    counter = 0
-    for k in master_obj_pin:
-        name = str(k.keyparameter.name)
-        value = float(k.parameter_value)
-        color = colors[counter]
-        counter+=1
-        data_list_pin.append({'name': name,'y':value,'color':color})
-    for k in master_obj_pip:
-        name = str(k.keyparameter.name)
-        value = float(k.parameter_value)
-        color = colors[counter]
-        counter+=1
-        data_list_pip.append({'name': name,'y':value,'color':color})
-    data_pip = json.dumps(data_list_pip)
-    data_pin = json.dumps(data_list_pin)
+    # data_list_pin=[]
+    # data_list_pip=[]
+    # counter = 0
+    # for k in master_obj_pin:
+    #     name = str(k.keyparameter.name)
+    #     value = float(k.parameter_value)
+    #     color = colors[counter]
+    #     counter+=1
+    #     data_list_pin.append({'name': name,'y':value,'color':color})
+    # for k in master_obj_pip:
+    #     name = str(k.keyparameter.name)
+    #     value = float(k.parameter_value)
+    #     color = colors[counter]
+    #     counter+=1
+    #     data_list_pip.append({'name': name,'y':value,'color':color})
+    # data_pip = json.dumps(data_list_pip)
+    # data_pin = json.dumps(data_list_pin)
     master_sh = para_name
+    import ipdb; ipdb.set_trace()
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN')))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP')))

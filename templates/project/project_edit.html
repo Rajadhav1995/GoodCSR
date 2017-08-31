@@ -223,7 +223,7 @@ width:450px;
                                 
                                 <p style="color: red;">
                                     
-                                <p id="demo"></p>
+                                <font color=#fc282f><span id="funder_error"></span></font>
                                 </p>
                                 
                             </div>
@@ -235,16 +235,15 @@ width:450px;
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 <select class="form-control" name="implementation_partner" id="implementation_partner"><option value="0">Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
-                                {% if budgetform.total_budget.errors %}
                                 <p style="color: red;">
-                                    Please select Implementation partner.
+                                    
+                                <font color=#fc282f><span id="partner_error"></span></font>
                                 </p>
-                                {% endif %}
                             </div>
                           </div>
                         <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
 
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return funder_val();" />
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
   </div>
@@ -346,8 +345,27 @@ function funder_val() {
     var e = document.getElementById("funder");
     var str = e.options[e.selectedIndex].value;
     alert(str);
+
 }
 </script>
+
+<script type="text/javascript">
+        function ddlValidate() {
+            var e = document.getElementById("funder");
+            var f = document.getElementById("implementation_partner");
+            var funder = e.options[e.selectedIndex].value;
+            var implementation_partner = f.options[f.selectedIndex].value;
+            document.getElementById('funder_error').innerHTML="Please select Funder"
+            if (funder == 0) {
+                document.getElementById('funder_error').innerHTML="PLease select Funder"
+            }
+            if (implementation_partner == 0) {
+                document.getElementById('partner_error').innerHTML="Please select Implementation Partner"
+            }
+        }
+    </script>
+
+
 
 
 <script type="text/javascript">
