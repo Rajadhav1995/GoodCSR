@@ -45,7 +45,7 @@
                 <ul>
                 	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {{projectobj.project_budget_details.planned_cost}} </span></li>
                     <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {{projectobj.project_budget_details.disbursed_cost}} </span></li>
-                    <li><span class="green-circle"></span> Utilized <span class="right-li">Rs.  {{projectobj.project_budget_details.utilized_cost}} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}Rs.  {{projectobj.project_budget_details.utilized_cost}} {% else %} Rs.0 {% endif %} </span></li>
                 </ul>
             </div>
             <div class="budget-right-pad">
@@ -136,17 +136,17 @@
             <tbody>
             {% for j in budget_period %}
             <tr>
-                {% get_budget_lineitem j as lineitemobj %}
+                {% get_budget_lineitem j projectobj as lineitemobj %}
                 <td> {{lineitemobj.category.name}}</td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                  <td> {{lineitemobj.unit_type}}  </td>
                 {% for i,v in quarter_list.items %}
-                {% get_quarter_details j i as line_itemobj %}
+                {% get_quarter_details j i projectobj as line_itemobj %}
                    <td class="table-bg"> {{line_itemobj.unit}} </td>
                     <td class="table-bg"> {{line_itemobj.rate}} </td>
                      <td class="table-bg"> {{line_itemobj.planned_unit_cost}} </td>
-                     <td class="table-bg"> {{line_itemobj.utilized_unit_cost}} </td>
+                     <td class="table-bg"> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {%endif %}</td>
                      <td class="table-bg"> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                      {% endfor %}
             </tr>
@@ -157,8 +157,8 @@
         </div>
     </div>
     <div class="link-right">
-    	<a href="javascript:void(0);" class="link-pad1">Report Utilization</a>
-        <a href="javascript:void(0);" class="link-pad1">Edit/Update Budget</a>
+    	<a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Report Utilization</a>
+        <a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>
     </div>   
     <div class="white-box">
     <div class="table-responsive">

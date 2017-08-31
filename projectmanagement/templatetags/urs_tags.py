@@ -14,9 +14,9 @@ def get_user_project(request):
     return obj_list
 
 @register.assignment_tag
-def get_budget_lineitem(row):
+def get_budget_lineitem(row,projectobj):
 #    import ipdb;ipdb.set_trace();
-    budget_periodobj = ProjectBudgetPeriodConf.objects.filter(row_order = int(row))[0]
+    budget_periodobj = ProjectBudgetPeriodConf.objects.latest_one(project = projectobj,row_order = int(row),active=2)
     try:
         lineitem = BudgetPeriodUnit.objects.get(budget_period = budget_periodobj)
     except:
@@ -24,9 +24,9 @@ def get_budget_lineitem(row):
     return lineitem
 
 @register.assignment_tag
-def get_quarter_details(row,quarter):
+def get_quarter_details(row,quarter,projectobj):
     try:
-        line_itemobj = BudgetPeriodUnit.objects.get_or_none(row_order = int(row),quarter_order=int(quarter))
+        line_itemobj = BudgetPeriodUnit.objects.get_or_none(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     except:
-        line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter))
+        line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj

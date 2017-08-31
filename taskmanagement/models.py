@@ -70,6 +70,7 @@ class Task(BaseContent):
             
 
 class Milestone(BaseContent):
+    project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)
     name = models.CharField(max_length=300,**OPTIONAL)
     task = models.ManyToManyField(Task,blank=True)
     overdue = models.DateTimeField(**OPTIONAL)
