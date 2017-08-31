@@ -429,13 +429,17 @@
     <div class="white-box white-pad">
     	<div class="key-program">
         <h2>Key Program Info</h2>
-        <a class="link-pad" href="/project/parameter/add/?slug={{slug}}">Upload Parameters</a>
+        <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}">Upload Parameters</a>
         </div>
         <ul>
             {% for i in parent_paremeter %}
         	<li>
             	<h3>{{i.keyparameter.name}}</h3>
+                {% if i.keyparameter.parameter_type == 'CUR' %}
+                 <img class="key-image" src="/static/img/budget-icon.png" alt="">
+                 {% else %}
                  <img class="key-image" src="/static/img/key-icon2.png" alt="">
+                 {% endif %}
                 <h4 class="title-pad">{{i.parameter_value}}</h4> 
             </li>
             {% endfor %}
