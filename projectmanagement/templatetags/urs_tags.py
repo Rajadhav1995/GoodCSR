@@ -28,5 +28,5 @@ def get_quarter_details(row,quarter):
     try:
         line_itemobj = BudgetPeriodUnit.objects.get_or_none(row_order = int(row),quarter_order=int(quarter))
     except:
-        line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter))[0]
+        line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter))
     return line_itemobj

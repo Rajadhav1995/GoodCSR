@@ -135,7 +135,7 @@ def projectlinetemadd(request):
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
                     print "budget line itme object" ,budet_lineitem_obj
         return HttpResponseRedirect('/project/list/')
-    return render(request,"budget/budget_lineitem.html",locals())
+    return render(request,"budget/budget-form.html",locals())
 
 def projectbudgetdetail(request):
     project_slug = request.GET.get('slug')
@@ -216,7 +216,7 @@ def budgetview(request):
 
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
-    budgetobj = Budget.objects.latest_one(project = projectobj)
+    budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     quarter_list = get_budget_quarters(budgetobj)
     quarter_names = get_budget_quarter_names(budgetobj)
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
