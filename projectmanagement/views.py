@@ -99,16 +99,50 @@ def project_detail(request):
             pass
     import json
 
+    list1=[]
     aa = ProjectParameterValue.objects.filter(keyparameter__project=obj,keyparameter__parent=None)
+    # import ipdb; ipdb.set_trace()
     for i in aa:
-        if keyparameter.parameter_type=='PIN':
+        if i.keyparameter.parameter_type=='PIN' or i.keyparameter.parameter_type=='PIP':
+            pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
+        # for p in pin:
+
+    pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
+
+
+    tst = ProjectParameter.objects.filter(project=obj,parent=None)
+    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
+    counter =0
+    master_l = []
+    for i in tst:
+        if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             pass
+            ttt=[]
+        elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
+            counter+=1
+            ttt = []
+            fds = ProjectParameterValue.objects.filter(keyparameter__parent=i)
+            for j in fds:
+                name = str(j.keyparameter.name)
+                value = float(j.parameter_value)
+                color = colors[counter]
+                ttt.append({'name': name,'y':value,'color':color})
+        
+        if ttt:
+            para_name = str(i.name)
+            master_l.append({para_name:ttt})
+    # master_l=[x for x in master_l if x]
+    # import ipdb; ipdb.set_trace()
+    print master_l
+    # for n, val in enumerate(master_l):
+    #     globals()["var%d"%n] = val
+    
+    print master_l
 
     data_list_pin=[]
     data_list_pip=[]
     # import ipdb; ipdb.set_trace()
     counter = 0
-    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     for k in master_obj_pin:
         name = str(k.keyparameter.name)
         value = float(k.parameter_value)
@@ -125,6 +159,7 @@ def project_detail(request):
 
     data_pip = json.dumps(data_list_pip)
     data_pin = json.dumps(data_list_pin)
+    master_sh = json.dumps(master_l)
     return render(request,'project/project-summary.html',locals())
 
 def project_mapping(request):
