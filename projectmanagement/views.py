@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
+from taskmanagement.views import total_tasks_completed,updates
 # Create your views here.
 
 def create_project(request):
@@ -63,8 +64,11 @@ def create_project(request):
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
             if funder and implementation_partner:
-                mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
-                        implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
+                mapping,created = ProjectFunderRelation.objects.get_or_create(project=obj)
+                mapping.funder=funder
+                mapping.implementation_partner=implementation_partner
+                mapping.total_budget=request.POST.get('total_budget')
+                mapping.save()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_edit.html',locals())
 
@@ -78,89 +82,9 @@ def project_detail(request):
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
-    master_obj = []
-    master_obj_pin=[]
-    master_obj_pip=[]
-    parameter = ProjectParameter.objects.filter(project=obj)
-    for i in parameter:
-        if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
-            parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
-            parent_paremeter = ProjectParameterValue.objects.filter(keyparameter__in=parameter1)
-        elif i.parameter_type == 'PIN':
-            child_parameter_pin = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
-            if child_parameter_pin.exists():
-                master_obj_pin = child_parameter_pin
-                chart_name_pin = child_parameter_pin[0].keyparameter.parent.name
-        elif i.parameter_type == 'PIP':
-            child_parameter_pip = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIP')
-            if child_parameter_pip.exists():
-                master_obj_pip = child_parameter_pip
-                chart_name_pip = child_parameter_pip[0].keyparameter.parent.name
-            pass
-    import json
 
-    list1=[]
-    aa = ProjectParameterValue.objects.filter(keyparameter__project=obj,keyparameter__parent=None)
-    # import ipdb; ipdb.set_trace()
-    for i in aa:
-        if i.keyparameter.parameter_type=='PIN' or i.keyparameter.parameter_type=='PIP':
-            pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
-        # for p in pin:
+    return render(request,'project/comany-profile.html',locals())
 
-    pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
-
-
-    tst = ProjectParameter.objects.filter(project=obj,parent=None)
-    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
-    counter =0
-    master_l = []
-    for i in tst:
-        if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
-            pass
-            ttt=[]
-        elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
-            counter+=1
-            ttt = []
-            fds = ProjectParameterValue.objects.filter(keyparameter__parent=i)
-            for j in fds:
-                name = str(j.keyparameter.name)
-                value = float(j.parameter_value)
-                color = colors[counter]
-                ttt.append({'name': name,'y':value,'color':color})
-        
-        if ttt:
-            para_name = str(i.name)
-            master_l.append({para_name:ttt})
-    # master_l=[x for x in master_l if x]
-    # import ipdb; ipdb.set_trace()
-    print master_l
-    # for n, val in enumerate(master_l):
-    #     globals()["var%d"%n] = val
-    
-    print master_l
-
-    data_list_pin=[]
-    data_list_pip=[]
-    # import ipdb; ipdb.set_trace()
-    counter = 0
-    for k in master_obj_pin:
-        name = str(k.keyparameter.name)
-        value = float(k.parameter_value)
-        color = colors[counter]
-        counter+=1
-        data_list_pin.append({'name': name,'y':value,'color':color})
-
-    for k in master_obj_pip:
-        name = str(k.keyparameter.name)
-        value = float(k.parameter_value)
-        color = colors[counter]
-        counter+=1
-        data_list_pip.append({'name': name,'y':value,'color':color})
-
-    data_pip = json.dumps(data_list_pip)
-    data_pin = json.dumps(data_list_pin)
-    master_sh = json.dumps(master_l)
-    return render(request,'project/project-summary.html',locals())
 
 def project_mapping(request):
     form = ProjectMappingForm()
@@ -406,3 +330,120 @@ def aggregate_project_parameters(param, values):
     ret['aggregate_value'] = aggr
     ret['parent_name'] = None if param.parent is None else param.parent.name
     return ret
+    
+def project_total_budget(slug):
+# to display the total budget ,disbursed,utilized percent in project summary page
+    try:
+        project = Project.objects.get(slug=slug)
+        budget = project.project_budget_details()
+        planned_cost = float(budget.get('planned_cost') or 0)/10000000
+        utilized_cost = float(budget.get('utilized_cost') or 0)/10000000
+        disbursed_budget = float(budget.get('disbursed_cost') or 0)/10000000
+        total_percent = 100
+        disbursed_percent = int((disbursed_budget/planned_cost)*100)
+        utilized_percent = int((utilized_cost/planned_cost)*100)
+    except:
+        planned_cost= utilized_cost=disbursed_budget=total_percent= disbursed_percent=utilized_percent =0
+        
+    budget =  {'total':planned_cost,'disbursed':disbursed_budget,'utilized':utilized_cost,
+    'total_percent':total_percent,'disbursed_percent':disbursed_percent,
+    'utilized_percent':utilized_percent}
+    return budget
+
+def project_summary(request):
+# to display the project details in project summary page
+    slug =  request.GET.get('slug')
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get(user_reference_id = user_id)
+    obj = Project.objects.get(slug = slug)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj)
+    tasks = total_tasks_completed(obj.slug)
+    updates_list = updates(Project.objects.filter(slug=slug))
+    budget = project_total_budget(obj.slug)
+
+
+    master_obj = []
+    master_obj_pin=[]
+    master_obj_pip=[]
+    parameter = ProjectParameter.objects.filter(project=obj)
+    for i in parameter:
+        if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
+            parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
+            parent_paremeter = ProjectParameterValue.objects.filter(keyparameter__in=parameter1)
+        elif i.parameter_type == 'PIN':
+            child_parameter_pin = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
+            if child_parameter_pin.exists():
+                master_obj_pin = child_parameter_pin
+                chart_name_pin = child_parameter_pin[0].keyparameter.parent.name
+        elif i.parameter_type == 'PIP':
+            child_parameter_pip = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIP')
+            if child_parameter_pip.exists():
+                master_obj_pip = child_parameter_pip
+                chart_name_pip = child_parameter_pip[0].keyparameter.parent.name
+            pass
+    import json
+
+    list1=[]
+    aa = ProjectParameterValue.objects.filter(keyparameter__project=obj,keyparameter__parent=None)
+    # import ipdb; ipdb.set_trace()
+    for i in aa:
+        if i.keyparameter.parameter_type=='PIN' or i.keyparameter.parameter_type=='PIP':
+            pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
+        # for p in pin:
+
+    pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
+
+
+    tst = ProjectParameter.objects.filter(project=obj,parent=None)
+    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
+    counter =0
+    master_l = []
+    name_list = []
+    for i in tst:
+        if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
+            pass
+            ttt=[]
+        elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
+            counter+=1
+            ttt = []
+            fds = ProjectParameterValue.objects.filter(keyparameter__parent=i)
+            for j in fds:
+                name = str(j.keyparameter.name)
+                value = float(j.parameter_value)
+                color = colors[counter]
+                ttt.append({'name': name,'y':value,'color':color})
+        
+        if ttt:
+            para_name = str(i.name)
+            master_l.append({para_name:ttt})
+            name_list.append(para_name)
+    # master_l=[x for x in master_l if x]
+    # import ipdb; ipdb.set_trace()
+    # for n, val in enumerate(master_l):
+    #     globals()["var%d"%n] = val
+    
+
+    data_list_pin=[]
+    data_list_pip=[]
+    # import ipdb; ipdb.set_trace()
+    counter = 0
+    for k in master_obj_pin:
+        name = str(k.keyparameter.name)
+        value = float(k.parameter_value)
+        color = colors[counter]
+        counter+=1
+        data_list_pin.append({'name': name,'y':value,'color':color})
+
+    for k in master_obj_pip:
+        name = str(k.keyparameter.name)
+        value = float(k.parameter_value)
+        color = colors[counter]
+        counter+=1
+        data_list_pip.append({'name': name,'y':value,'color':color})
+
+    data_pip = json.dumps(data_list_pip)
+    data_pin = json.dumps(data_list_pin)
+    master_sh = json.dumps(master_l)
+
+
+    return render(request,'project/project-summary.html',locals())

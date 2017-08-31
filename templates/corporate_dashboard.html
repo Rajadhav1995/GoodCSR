@@ -74,7 +74,7 @@
           </div>
         </form>-->
        
-    </div>
+    
     <div class="white-box white-pad">
       <h2>Key Program Info</h2>
 <!--<!--        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>-->
@@ -92,16 +92,16 @@
             <li>
               <h3>% Total budget disbursed<span></span></h3>
                  <div id="total_budget" ></div>
-                <div class="budget-pad">
+                <div class="budget-pad" style="margin-top:-20px">
                   <p><span class="green-circle"></span> Disbursed</p>
                     <div class="budget-value">
-                      <div class="budget-left">7.8cr</div>
-                        <div class="budget-right">65%</div>
+                      <div class="budget-left">{{budget.disbursed}}cr</div>
+                        <div class="budget-right">{{budget.disbursed_percent}}%</div>
                     </div>
                     <p><span class="yellow-circle"></span> Total</p>
                     <div class="budget-value budget-border">
-                      <div class="budget-left">10.5cr</div>
-                        <div class="budget-right">100%</div>
+                      <div class="budget-left">{{budget.total}}cr</div>
+                        <div class="budget-right">{{budget.total_percent}}%</div>
                     </div>
                 </div>
             </li>
@@ -201,7 +201,7 @@
         </div>
         <div class="right-white">
         	<h2>Total Budget</h2>
-            <div id="bwContainer" style="height:300px;width:500px;"></div> 
+            <div id="bwContainer" style="width:570px;"></div> 
         </div>
         <div class="hide-cont">
         	<div class="left-white">
@@ -238,19 +238,19 @@
             <td style="width:19%;">{{i.user.organization}}</td>
             <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:19%;">{{i.role.name}}
-            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>
+<!--            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>-->
       </tr>
       {% endfor %}
 
       </tbody>
   </table>  
     </div>
-    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+<!--    <a href="manage/project/role/add/?slug={{project_slug}}" class="link-pad">Add User</a>       -->
     </div>
     <div class="white-box-right">
       <h2>Recent Updates</h2>
         <div id="boxscroll" class="updates-scroll ">
-        <p><span>Today</span> - 29 August</p>
+        <p><span>Today</span> - 30 August</p>
             <ul>
          {% if updates_list %}
              {% for obj in updates_list %}
@@ -267,6 +267,7 @@
         </div>
     </div> 
     </div>
+  </div>
 </section>
 <!--Content part Ends-->
 {% endblock %}
@@ -326,6 +327,11 @@ console.log(map_data[0]);
 		});
 </script>    
 <script type='text/javascript'>//<![CDATA[
+var data = {{total_budget | safe}}
+var projects = data.projects
+var total_budget = data.total_budget
+var utilized = data.utilized
+var disbursed = data.disbursed
 $(function(){
         //-------------------------------------------------------
         Highcharts.Renderer.prototype.symbols.line = function (x, y, width, height) {
@@ -391,7 +397,7 @@ $(function(){
                 }],
                 lineColor: 'lightgrey',
                 lineWidth: 0,
-                categories: ['Project 1', 'Project 2', 'Project 3', 'Project 4', 'Project 5']
+                categories: projects
             },
             yAxis: {
                 tickInterval: 1,
@@ -477,7 +483,7 @@ $(function(){
                 tooltip: {
                     valueSuffix: ' cr'
                 },
-                data: [6, 5, 10, 7, 9]
+                data: total_budget
             }, {
                 name: 'Disbursed',
                 color: '#00998b',
@@ -486,7 +492,7 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 8,
-                data: [1, 4, 9.5, 4, 8]
+                data: disbursed
             }, {
                 name: 'Utilized',
                 color: '#0b6861',
@@ -495,7 +501,7 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 10,
-                data: [0.5, 3, 9, 3, 6]
+                data: utilized
             }]
         });
 
@@ -540,14 +546,12 @@ function showCheckboxes() {
 <script>
 var tasks = {{tasks_progress| safe}} ;
 var category = tasks.x_axis;
-console.log("hello");
 var remaining = tasks.remaining;
 var completed_status = tasks.data;
 var progress = []
 for (i=0;i<completed_status.length;i++){
        progress.push( { 'y': completed_status[i], 'color': '#2E9776' })
 } 
-console.log(progress);
 Highcharts.chart('Progress_Completion',{
         chart: {
             type: 'bar',
@@ -899,7 +903,14 @@ var gaugeOptions = {
         },
      
 };
+</script>
 
+<script type="text/javascript">
+var data = {{budget | safe}}
+console.log(data);
+var disbursed = data.disbursed_percent
+var total = 100 - disbursed
+console.log(disbursed);
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
   
@@ -921,8 +932,8 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
             innerSize: '70%',
             data: [
 
-                    {y:60,name:'Disbursed',color:'#2E9874'},
-                    {y:40,name:'Total',color:'#D0C173'}
+                    {y:disbursed,name:'Disbursed',color:'#2E9874'},
+                    {y:total,name:'Total',color:'#D0C173'}
              
               
             ]
@@ -1056,11 +1067,13 @@ Highcharts.chart('Beneficiary_Distribution', {
 </script>
 
 
-        <style type="text/css">
-    #total_budget .highcharts-container {
-    
-        
-    }
+         <style type="text/css">
+   #total_budget .highcharts-container {
+        border-bottom: 1px solid;
+       height: 175px !important;
+       top: -60px !important;
+       
+   }
 </style>
 
 {% endblock %}

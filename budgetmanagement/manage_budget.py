@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render
 from django.db.models import Sum
 from datetime import timedelta
@@ -196,6 +197,21 @@ def tanchesamountlist(tranche_list):
                        }
      return tranche_amount
 
+def budget_supercategory_value(projectobj,budgetobj):
+#    budget_categorylist = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj).values_list('category_id', flat=True).distinct()
+    colors= [
+    '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+    ]
+    project_category_list = SuperCategory.objects.filter(project = projectobj,active=2).exclude(parent=None)
+    final_project_category_list = []
+    for i in project_category_list:
+        total_amount_list = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj,budget_period__project=projectobj,category=i).values_list('planned_unit_cost',flat=True)
+        total_amount_list = map(lambda x:x if x else 0,total_amount_list)
+        total_amount_number = map(int,total_amount_list)
+        total_amount = sum(total_amount_number)
+        final_project_category_list.append({'name':i.name,'y':int(total_amount),'color':random.choice(colors)})
+    return final_project_category_list
+
 def budgetview(request):
 
     project_slug = request.GET.get('slug')
@@ -206,7 +222,7 @@ def budgetview(request):
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
     budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
     span_length = len(budget_period)
-    planned_amount,utilized_amount = budget_amount_list(budgetobj,projectobj)
+    budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj)
     tranche_list = Tranche.objects.filter(project = projectobj)
     tranche_amount = tanchesamountlist(tranche_list)
     planned_amount = tranche_amount['planned_amount']
@@ -214,5 +230,6 @@ def budgetview(request):
     recommended_amount = tranche_amount['recommended_amount']
     utilized_amount = tranche_amount['utilized_amount']
     
+    final_project_category_list = budget_supercategory_value(projectobj,budgetobj)
     
     return render(request,"budget/budget.html",locals())

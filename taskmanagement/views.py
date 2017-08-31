@@ -10,6 +10,7 @@ from taskmanagement.models import *
 from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
 from projectmanagement.models import Project,UserProfile
 from media.models import Attachment
+from budgetmanagement.models import *
 # Create your views here.
 
 def listing(request,model_name):
@@ -105,7 +106,7 @@ def task_dependencies(request):
 
 # to compute start date of the tasks dependent
 def task_auto_computation_date(request):
-    ids = request.GET.get('id')
+    ids = request.GET.get('id[]')
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
@@ -146,7 +147,8 @@ def total_tasks_completed(slug):
     print milestones
     if milestones:
         total_milestones = len(milestones)
-    return project,total_tasks,completed_tasks,milestones,total_milestones,percent
+    data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
+    return data
 
 
 def my_task_updates(obj_list):
@@ -170,6 +172,7 @@ def my_tasks_listing():
     return tasks
     
 def updates(obj_list):
+# to get the recent updates of the projects 
     formats = '%H:%M %p'
     uploads = []
     task_completed = {}
@@ -194,6 +197,7 @@ def updates(obj_list):
     return uploads
         
 def corp_task_completion_chart(obj_list):
+# to get the task  and completion progress bar in the corporate dashboard
     data={}
     task_completion={}
     complete_status = []
@@ -208,7 +212,7 @@ def corp_task_completion_chart(obj_list):
                 percentage = int((float(tasks_completed_count) / float(total_tasks))*100)
             except:
                 percentage = 0
-            remaining_percent = 100 - percentage
+            remaining_percent = 100 - percentage if percentage !=0 else 0
             total_percent.append(str(percentage))
             progress = str(project.name)+ ' ' + str(percentage)+'%'
             task_progress.append(str(progress))
@@ -217,3 +221,60 @@ def corp_task_completion_chart(obj_list):
             complete_status.append(data)
         task_completion = {'x_axis': task_progress,'remaining':remaining,'data':complete_status}
     return task_completion
+ 
+def task_offset_date(task):
+    task = Task.objects.get(id = int(task))
+    start_date = task.start_date.strftime('%y-%m-%d')
+    end_date = task.end_date.strftime('%y-%m-%d')
+    offset = end_date - start_date
+    
+
+def corp_total_budget(obj_list):
+# bar chart for the total budget in corporate dashboard
+    total_budget=[]
+    utilized_budget=[]
+    project_list=[]
+    corp_budget={}
+    disbursed=[]
+    planned_cost = utilized_cost =disbursed_amount= 0
+    if obj_list:
+        for project in obj_list:
+            budget_details = project.project_budget_details()
+            planned_cost = float(budget_details.get('planned_cost') or 0)/10000000
+            utilized_cost = float(budget_details.get('utilized_cost') or 0)/10000000
+            disbursed_budget = float(budget_details.get('disbursed_cost') or 0)/10000000
+            total_budget.append(planned_cost)
+            utilized_budget.append(utilized_cost)
+            disbursed.append(disbursed_budget)
+            project_list.append(str(project.name))
+        corp_budget = {'projects':project_list,'total_budget':total_budget,'utilized':utilized_budget,'disbursed':disbursed}
+    return corp_budget
+
+def corp_total_budget_disbursed(obj_list):
+    total_budget=[]
+    utilized_budget=[]
+    total_disbursed={}
+    disbursed_amount=[]
+    total =disbursed=0
+    if obj_list:
+        for project in obj_list:
+            try:
+                budget = project.project_budget_details()
+                planned_cost = float(budget.get('planned_cost') or 0)/10000000
+                utilized_cost = float(budget.get('utilized_cost') or 0)/10000000
+                disbursed_budget = float(budget.get('disbursed_cost') or 0)/10000000
+                total_budget.append(planned_cost)
+                utilized_budget.append(utilized_cost)
+                disbursed_amount.append(disbursed_budget)
+            except:
+                total = 0
+                disbursed=0
+        total = sum(total_budget)
+        total_percentage = 100
+        disbursed = sum(disbursed_amount)
+        try:
+            disbursed_percent =int((disbursed/total)*100) if int(disbursed) > 0 else 0
+        except:
+            disbursed_percent = 0
+        total_disbursed = {'total':total,'disbursed':disbursed,'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
+    return total_disbursed 

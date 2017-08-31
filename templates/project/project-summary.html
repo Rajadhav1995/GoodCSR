@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load common_tags %}
 {% block section %}
 <div class="clear"></div>
 <!--Green pad starts-->
@@ -10,6 +10,7 @@
     </div>    
     <div class="title-left">
     <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</h4>
+    
     <ul>
     	<li><a href="">by OVP venture partners</a> </li>
         <li><a href="">NGO Partner: Akanksha</a></li>
@@ -18,7 +19,7 @@
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
-          <li><a class="active" href="javascript:void(0);">Summary</a></li>
+          <li><a class="active" href="/project/summary/?slug={{obj.slug}}">Summary</a></li>
           <li><a href="javascript:void(0);">Task & Milestone</a></li>
           <li><a href="/manage/project/budget/view/?slug={{obj.slug}}">Budget</a></li>
           <li><a href="javascript:void(0);">Files</a></li>
@@ -414,14 +415,8 @@
             <option>2017</option>
         </select>
         </div>
-<script>
-var rr={{master_sh | safe}};
-console.log(rr);
-alert(rr[0]);
-for (i = 0; i < rr.length; i++) {
-    console.log(rr[i]);
 
-</script>
+
 
         <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
@@ -476,34 +471,34 @@ for (i = 0; i < rr.length; i++) {
             </div>
             <div class="budget-value-right">
             <div class="budget-value">
-                  <div class="budget-left">16 tasks</div>
-                  <div class="budget-right">33%</div>
+                  <div class="budget-left">{{tasks.completed_tasks}} tasks</div>
+                  <div class="budget-right">{{tasks.percent}}%</div>
               </div>
-              <h5>of 50 tasks <br>
-under 7 Milestones</h5>
+              <h5>of {{tasks.total_tasks}} tasks <br>
+under {{tasks.total_milestones}} Milestones</h5>
 		</div>
         </div>
         <div class="right-white-pad">
         	<h3>Total Budget</h3>
             <div class="budget-pad">
-              <p><span class="green-d-circle"></span> utilized</p>
+              <p><span class="green-d-circle"></span> Utilized</p>
               <div class="budget-value">
-                  <div class="budget-left">5.3cr</div>
-                  <div class="budget-right">57%</div>
+                  <div class="budget-left">{{budget.utilized}}cr</div>
+                  <div class="budget-right">{{budget.utilized_percent}}%</div>
               </div>
-              <p><span class="green-circle"></span> Disbuirsed</p>
+              <p><span class="green-circle"></span> Disbursed</p>
               <div class="budget-value">
-                  <div class="budget-left">7.8cr</div>
-                  <div class="budget-right">65%</div>
+                  <div class="budget-left">{{budget.disbursed}}cr</div>
+                  <div class="budget-right">{{budget.disbursed_percent}}%</div>
               </div>
               <p><span class="yellow-circle"></span> Total</p>
               <div class="budget-value budget-border">
-                  <div class="budget-left">10.5cr</div>
-                  <div class="budget-right">100%</div>
+                  <div class="budget-left">{{budget.total}}cr</div>
+                  <div class="budget-right">{{budget.total_percent}}%</div>
               </div>
           </div>
           <div class="img-right">
-            <img src="/static/img/budget-chart-b.png" alt="">
+            <div id = "total_budget" style="width:100%;float:left;"></div>
           </div>  
         </div>
     </div>
@@ -523,76 +518,41 @@ under 7 Milestones</h5>
       </tr>
       </thead>
       <tbody>
+      {% for i in projectuserlist %}
       <tr>
-        <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <span>Ramesh Tawde</span></td>
-        <td style="width:19%;">OVP Venture</td>
-        <td style="width:26%;">CSR Head</td>
-        <td style="width:19%;">Super Admin</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
+            <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
+            <td style="width:19%;">{{i.user.organization}}</td>
+            <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
+            <td style="width:19%;">{{i.role.name}}
+            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}">Edit</a></td>
       </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Anil Sharma</span></td>
-        <td style="width:19%;">OVP Venture</td>
-        <td style="width:26%;">CSR Program Accountant</td>
-        <td style="width:19%;">Admin</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Priya Dutta</span></td>
-        <td style="width:19%;">OVP Venture</td>
-        <td style="width:26%;">Human Resource</td>
-        <td style="width:19%;">Account Manager</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <span>Shakeel Ahmed</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Program Manager</td>
-        <td style="width:19%;">Program Manager</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img4.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Volunteer</td>
-        <td style="width:19%;">Volunteer</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img1.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Volunteer</td>
-        <td style="width:19%;">Volunteer</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
-      <tr>
-        <td style="width:28%;"><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <span>Vikas Gupta</span></td>
-        <td style="width:19%;">Akanksha</td>
-        <td style="width:26%;">Volunteer</td>
-        <td style="width:19%;">Volunteer</td>
-        <td style="width:10%;"><a href="javascript:void(0);">Edit</a></td>
-      </tr>
+      {% endfor %}
+
       </tbody>
+  </table>  
 	</table>  
     </div>
-    <a href="javascript:void(0);" class="link-pad">Add User</a>       
+    <a href="/manage/project/role/add/?slug={{obj.slug}}" class="link-pad">Add User</a>       
     </div>
     <div class="white-box-right">
     	<h2>Recent Updates</h2>
-        <div id="boxscroll" class="updates-scroll ">
-        <p><span>Today</span> - 10 August</p>
-        <ul>
-        	<li><img src="/static/img/user-img2.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school <u>construction pictures</u> in <u>Nabarangpur School Project</u> <span>3:15 pm</span></div></li>
-            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Ramesh completed <u>Planning task under construction - Nabarangpur School Project</u><span>12:07 pm</span></div></li>
+         <div id="boxscroll" class="updates-scroll ">
+        <p><span>Today</span> - {% now "jS F Y" %}</p>
+            <ul>
+         {% if updates_list %}
+             {% for obj in updates_list %}
+                    {% get_details obj as update %}
+                        {% for i in update %}
+                           {{i | safe}}
+                        {% endfor %}
+            </ul>  
+                {% endfor %}
+         {% else %}
+            <li><span>No updates </span></li>
+         {% endif %}
         </ul>   
-        <p><span>Today</span> - 10 August</p>
-        <ul>
-        	<li><img src="/static/img/user-img3.png" class="user-image" alt="User Image"> <div class="update-pad">Shakeel updated <u>budget</u> in 
-<u>Nabarangpur School Project</u> <span>10:10 am</span></div></li>
-            <li><img src="/static/img/user-img.png" class="user-image" alt="User Image"> <div class="update-pad">Aarti uploaded school construction pictures in Nabarangpur School Project <span>3:15 pm</span></div></li>
-        </ul>    
         </div>
-    </div>
+    </div> 
     </div>
 </section>
 <!--Content part Ends-->
@@ -1051,7 +1011,212 @@ Highcharts.chart('Beneficary_distribution', {
             }]
         });
     
+</script>
 
+<script>
+var data = {{budget|safe}}
+console.log(data);
+var utilized = data.utilized_percent
+var disbursed = data.disbursed_percent
+var total = 100 - (utilized + disbursed)
+var gaugeOptions = {
+
+    chart: {
+        height:250,
+         plotBackgroundColor: null,
+            plotBackgroundImage: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+
+    },
+
+    title: null,
+
+      pane: {
+            center: ['50%', '50%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                borderWidth: 1,
+                backgroundColor: '#D0C173',
+                borderColor: '#D0C173',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        //     stops: [
+        //     [0.1, '#D0C173'], // green
+        //     [0.5, '#34837C'] // yellow
+            
+           
+        // ],
+        lineWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 0,
+        title: {
+            y: -70
+        },
+        labels: {
+            enabled: false
+        },
+       
+   },
+
+
+    // plotOptions: {
+    //    gauge: {
+    //             pivot: {
+    //                 radius: 0
+        
+    //             }, dial: {
+    //                 backgroundColor:'#7A4F59',
+    //                 borderColor: "#DAC7CC",
+    //                 radius: '100%',
+    //                 baseWidth: 2,
+    //                    baseLength: '100%',
+    //                     baseWidth: 2,
+    //                     rearLength: '0%',
+    //                     borderWidth: 0
+    //             }
+    //         }
+    // } 
+
+     plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: false
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '50%']
+            },
+            gauge: {
+                dataLabels: {
+                    enabled: false
+                },
+                pivot: {
+                    radius: 0
+        
+                }
+                ,
+                dial: {
+                    backgroundColor:'#7A4F59',
+                    borderColor: "#7A4F59",
+                    radius: '105%',
+                    baseWidth: 2,
+                       baseLength: '100%',
+                        baseWidth: 2,
+                        rearLength: '0%',
+                       // borderWidth: 0
+                }
+            }
+        },
+     
+};
+
+// The speed gauge
+var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
+  
+    yAxis: {
+        min: 0,
+        max: 100,
+        title: {
+            text: ''
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+      series: [
+      {
+            type: 'pie',
+             size: '100%',
+
+            innerSize: '76%',
+            data: [
+
+                {y:utilized,name:'Utilized',color:'#006861',borderColor: "#006861"},
+                {y:disbursed,name:'Disbursed',color:'#169776',borderColor: "#169776"},
+                {y:total,name:'Total',color:'#D0C173',borderColor: "#D0C173"}
+             
+              
+            ]
+        },
+
+        {
+            type: 'gauge',
+            data: [0],
+            
+        }
+    ],
+        dataLabels: {
+               enabled: false
+        }        
+   
+
+}));
+
+// Bring life to the dials
+setInterval(function () {
+    // Speed
+    var point,
+        point1,
+        newVal,
+        inc;
+
+    if (chartSpeed) {
+        point = chartSpeed.series[0].points[0];
+       
+        point1 = chartSpeed.series[0].points[1]; 
+
+        $.each(chartSpeed.series, function(i, item){
+            if(item.type == 'gauge'){
+              
+               item.setData([["none",point1.y+point.y]], true);
+               
+            }
+        });
+
+        //console.log(chartSpeed.series[1].points);
+
+
+      
+        // chartSpeed.yAxis[0].removePlotBand('plot-band-1');
+        //     chartSpeed.yAxis[0].addPlotBand({
+        //         from: 0,
+        //         to: point.y,
+        //         color: '#2F9974',
+        //         thickness: '40%',
+        //         id: 'plot-band-1'
+        //     });
+
+   
+
+        // point.update(point.y);
+    }
+   
+}, 800);
 
 </script>
+<style type="text/css">
+ #total_budget .highcharts-container {
+       border-bottom: 1px solid;
+       height: 120px !important;
+   }
+    .highcharts-background {
+   fill: none
+}
+</style>
 {% endblock %}

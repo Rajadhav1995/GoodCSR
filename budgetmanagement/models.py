@@ -88,6 +88,7 @@ class BudgetPeriodUnit(BaseContent):
     rate = models.CharField(max_length=200,**OPTIONAL)
     planned_unit_cost = models.CharField(max_length=200,**OPTIONAL)
     utilized_unit_cost = models.CharField(max_length=200,**OPTIONAL)
+    variance = models.CharField(max_length=200,**OPTIONAL)
     start_date = models.DateTimeField(**OPTIONAL)
     end_date = models.DateTimeField(**OPTIONAL)
     remarks = models.TextField()
