@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from pmu.settings import PMU_URL
+from projectmanagement.models import *
 
 # def add_doccument(request):
 # 	ids =  request.GET.get('id')
@@ -28,14 +29,18 @@ def timeline_upload(request):
     slug = request.GET.get('slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
-    project = Project.objects.get_or_none(slug = slug)
+    try:
+        project = Project.objects.get(slug = request.POST.get('slug'))
+    except:
+        project = Project.objects.get(slug=slug)
     form = ImageUpload()
     if request.method=='POST':
         form=ImageUpload(request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
+            f.attachment_type = 1
             f.created_by = user
-            f.content_type = ContentType.objects.get_for_model(project)
+            f.content_type = ContentType.objects.get(model=('project'))
             f.object_id = project.id
             f.save()
             return HttpResponseRedirect('/project/summary/?slug='+project.slug)

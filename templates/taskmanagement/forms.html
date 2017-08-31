@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block section %}
+<div></div>
+{% endblock %}
 {% block content %}
 <!--<link href="static/css/multiselect.css" media="screen" rel="stylesheet" type="text/css">-->
     <!-- Content Header (Page header) -->
@@ -38,7 +41,7 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        
+                        <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
                         <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
                         <a class="btn btn-success" href="/project/summary/?slug=project.slug">Back</button></a>
                             </div>
@@ -59,6 +62,7 @@
 
 <script>
     $(document).ready(function() {
+        $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });

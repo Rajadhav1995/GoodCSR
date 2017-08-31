@@ -8,18 +8,35 @@ from django.contrib.auth.decorators import login_required
 from pmu.settings import BASE_DIR
 from taskmanagement.models import *
 from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
-from projectmanagement.models import Project,UserProfile
+from projectmanagement.models import Project,UserProfile,ProjectFunderRelation
 from media.models import Attachment
 from budgetmanagement.models import *
+from userprofile.models import ProjectUserRoleRelationship
+
 # Create your views here.
 
-def listing(request,model_name):
-#    model = ContentType.objects.get(model__iexact = model_name)
-    obj_list = eval(model_name).objects.all().order_by('-id')
-    if model_name == 'Activity':
-        project = Project.object.get_or_none(slug = request.GET.get('slug'))
-        obj_list = eval(model_name).objects.filter(project = project).order_by('-id')
-    return render(request,'listing.html',locals())
+#def listing(request,model_name):
+##    model = ContentType.objects.get(model__iexact = model_name)
+#    obj_list = eval(model_name).objects.all().order_by('-id')
+#    if model_name == 'Activity':
+#        project = Project.object.get_or_none(slug = request.GET.get('slug'))
+#        obj_list = eval(model_name).objects.filter(project = project).order_by('-id')
+#    return render(request,'listing.html',locals())
+
+def listing(request):
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get(user_reference_id = user_id)
+    project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    import ipdb;ipdb.set_trace();
+    try:
+        project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
+        activity_list = Activity.objects.filter(project = project).order_by('-id')
+        task_list = get_tasks_list(activity_list)
+        milestone = get_milestone_lists(task_list)
+        project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
+    except:
+        activity_list=task_list=milestone =project_funders=[]
+    return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
     if model_name == 'Activity':
@@ -281,3 +298,21 @@ def corp_total_budget_disbursed(obj_list):
             disbursed_percent = 0
         total_disbursed = {'total':total,'disbursed':disbursed,'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
     return total_disbursed 
+
+
+def get_tasks_list(activity_list):
+    task_list=[]
+    for i in activity_list:
+        task = Task.objects.filter(activity = i).order_by('-id')
+        if task not in task_list:
+            task_list.append(task)
+    return task_list
+
+
+def get_milestone_lists(task_list):
+    milestone_list=[]
+    for i in task_list:
+        mile = Milestone.objects.filter(task = i).order_by('-id')
+        if mile not in milestone_list:
+            milestone_list.append(mile)
+    return milestone_list
