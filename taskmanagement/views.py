@@ -27,41 +27,40 @@ def listing(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
-    import ipdb;ipdb.set_trace();
     try:
         project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
         activity_list = Activity.objects.filter(project = project).order_by('-id')
         task_list = get_tasks_list(activity_list)
-        milestone = get_milestone_lists(task_list)
+        try:
+            milestone = Milestone.objects.filter(project=project).order_by('-id')
+        except:
+            milestone =[]
         project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
     except:
         activity_list=task_list=milestone =project_funders=[]
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
-    if model_name == 'Activity':
-        try:
-            project_id = Project.objects.get(slug = request.GET.get('slug')).id
-        except:
-            project_id = Project.objects.get(id = request.POST.get('project')).id
-    else :
-        project_id = None
+    try:
+        project = Project.objects.get(slug = request.GET.get('slug'))
+    except:
+        project = Project.objects.get(slug= request.POST.get('slug'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
-        form=form(user_id,project_id,request.POST,request.FILES)
+        form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/listing/?slug'+project.slug)
             else :
-                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/listing/?slug'+project.slug)
     else:
-        form=form(user_id,project_id)
+        form=form(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
@@ -304,15 +303,8 @@ def get_tasks_list(activity_list):
     task_list=[]
     for i in activity_list:
         task = Task.objects.filter(activity = i).order_by('-id')
-        if task not in task_list:
-            task_list.append(task)
+        for i in task:
+            if i not in task_list:
+                task_list.append(i)
     return task_list
 
-
-def get_milestone_lists(task_list):
-    milestone_list=[]
-    for i in task_list:
-        mile = Milestone.objects.filter(task = i).order_by('-id')
-        if mile not in milestone_list:
-            milestone_list.append(mile)
-    return milestone_list

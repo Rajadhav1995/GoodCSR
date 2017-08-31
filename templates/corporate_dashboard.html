@@ -266,7 +266,7 @@
     <div class="white-box-right">
       <h2>Recent Updates</h2>
         <div id="boxscroll" class="updates-scroll ">
-        <p><span>Today</span> - 30 August</p>
+        <p><span>Today</span> - {% now "jS F Y" %}</p>
             <ul>
          {% if updates_list %}
              {% for obj in updates_list %}

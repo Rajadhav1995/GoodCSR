@@ -25,7 +25,7 @@ width:450px;
                     <h3 class="box-title">Add {{model_name}}</h3>
                   {% endif %}
               <div align="right">
-             <a class="btn btn-success" href="/managing/{{model_name}}/listing/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+             <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
          </div>
             </div>
             <!-- /.box-header -->
@@ -44,8 +44,9 @@ width:450px;
                                 </div>
                         </div>
                     {% endfor %}
+                    <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
                     <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
-                        <a class="btn btn-success" href="/managing/{{model_name}}/listing/">Back</button></a>
+                        <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}">Back</button></a>
                     
                     </form>
   </div>

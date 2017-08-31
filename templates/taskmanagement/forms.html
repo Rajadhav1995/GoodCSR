@@ -43,7 +43,7 @@
                         {% endfor %}
                         <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
                         <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
-                        <a class="btn btn-success" href="/project/summary/?slug=project.slug">Back</button></a>
+                        <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}">Back</button></a>
                             </div>
                     </form>
                     
