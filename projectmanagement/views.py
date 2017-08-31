@@ -82,7 +82,6 @@ def project_detail(request):
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
-
     return render(request,'project/comany-profile.html',locals())
 
 
