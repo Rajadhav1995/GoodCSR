@@ -435,6 +435,7 @@
             {% for i in parent_paremeter %}
         	<li>
             	<h3>{{i.keyparameter.name}}</h3>
+                
                 {% if i.keyparameter.parameter_type == 'CUR' %}
                  <img class="key-image" src="/static/img/budget-icon.png" alt="">
                  {% else %}
