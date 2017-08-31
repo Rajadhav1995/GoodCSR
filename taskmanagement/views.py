@@ -16,6 +16,9 @@ from budgetmanagement.models import *
 def listing(request,model_name):
 #    model = ContentType.objects.get(model__iexact = model_name)
     obj_list = eval(model_name).objects.all().order_by('-id')
+    if model_name == 'Activity':
+        project = Project.object.get_or_none(slug = request.GET.get('slug'))
+        obj_list = eval(model_name).objects.filter(project = project).order_by('-id')
     return render(request,'listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
@@ -42,7 +45,7 @@ def add_taskmanagement(request,model_name,m_form):
                 return HttpResponseRedirect('/managing/'+model_name+'/listing/')
     else:
         form=form(user_id,project_id)
-    return render(request,'taskmanagement/forms.html',locals())
+    return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('user_id')
@@ -66,7 +69,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
                 return HttpResponseRedirect('/managing/'+model_name+'/listing/')
     else:
         form=form(user_id,project_id,instance=m)
-    return render(request,'taskmanagement/forms.html',locals())
+    return render(request,'taskmanagement/base_forms.html',locals())
 
 def active_change(request,model_name):
     ids = request.GET.get('id')

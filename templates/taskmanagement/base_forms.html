@@ -29,6 +29,7 @@ width:450px;
 
             <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
                     {% for field in form %}
+                         {{form.media}}
                         <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     {{field.label_tag}}
@@ -38,9 +39,10 @@ width:450px;
                                     {{field.errors}}
                                 </div>
                         </div>
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
-                        <a class="btn btn-success" href="/project/list/">Back</button></a>
                     {% endfor %}
+                    <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <a class="btn btn-success" href="/managing/{{model_name}}/listing/">Back</button></a>
+                    
                     </form>
   </div>
 

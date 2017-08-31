@@ -22,3 +22,25 @@ def list_document(request):
 	attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model')))
 	image = PMU_URL
 	return render(request,'attachment/listing.html',locals())
+	
+	
+def timeline_upload(request):
+    slug = request.GET.get('slug')
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get(user_reference_id = user_id)
+    project = Project.objects.get_or_none(slug = slug)
+    form = ImageUpload()
+    if request.method=='POST':
+        form=ImageUpload(request.POST,request.FILES)
+        if form.is_valid():
+            f=form.save()
+            f.created_by = user
+            f.content_type = ContentType.objects.get_for_model(project)
+            f.object_id = project.id
+            f.save()
+            return HttpResponseRedirect('/project/summary/?slug='+project.slug)
+        else :
+            return HttpResponseRedirect('/project/summary/?slug='+project.slug)
+    else:
+        form=ImageUpload()
+    return render(request,'taskmanagement/forms.html',locals())
