@@ -405,7 +405,7 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj,project=obj)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)

@@ -1,4 +1,5 @@
 from django import template
+from itertools import chain
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation)
@@ -27,10 +28,14 @@ def get_user_project(request):
         obj_list = Project.objects.filter()
     elif user_obj.owner == True and user_obj.organization_type == 1:
         project_ids = ProjectFunderRelation.objects.filter(funder = user_obj).values_list("project_id",flat=True)
-        obj_list = Project.objects.filter(id__in = project_ids,active=2)
+        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
+        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
+        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
     elif user_obj.owner == True and user_obj.organization_type == 2:
         project_ids = ProjectFunderRelation.objects.filter(implementation_partner = user_obj).values_list("project_id",flat=True)
-        obj_list = Project.objects.filter(id__in = project_ids,active=2)
+        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
+        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
+        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
     else:
         project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
