@@ -6,12 +6,10 @@
 
 {% block content %}
     <!-- Content Header (Page header) -->
-<!--<style>
-form {
-margin: 0 auto;
-width:450px;
-}
-</style>-->
+<style>
+    .error,.errorlist { color :red;}
+    #date_error,#min_max {color : red;}
+</style>
     <!-- Main content -->
 
     <section class="content">
@@ -72,7 +70,7 @@ width:450px;
 
 <script>
     $(document).ready(function() {
-    $("#id_project").hide();
+   // $("#id_project").hide();
     $('#id_activity').on('change',function(e){
         var select_id = $('#id_activity').val();
         $.ajax({

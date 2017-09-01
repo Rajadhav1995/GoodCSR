@@ -44,67 +44,69 @@
 <!--Content part starts-->
 <section class="content-part">
 	<div class="row">
-    <div class="green-box">
-    	<div class="green-box-lft">
-    		<h2>Activities</h2>
-        <div class="green-content">
-          <div id="boxscroll-atm">
-          <ul>{% if activity_list %}
-              {% for i in activity_list %}
-              <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}})</span></a>
-<!--                <a class="add-task" href="/managing/Activity/ActivityForm/edit/?slug={{i.slug}}"><i class="fa fa-edit"></i> Edit </a>-->
-              </li>
-              {% endfor %}
-              {% else %}
-              </h5> No activites are created
-              {% endif %}
-          </ul>
-          </div>
-          <div class="clear"></div>
-          <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
-    	</div>
-        <div class="green-box-lft">
-    		<h2>Tasks</h2>
-        <div class="green-content">
-          <div id="boxscroll-atm1">
-          <ul>
-              {% if task_list %}
-              {% for task in task_list %}
-              <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date}} - {{task.end_date}}</span></a>
-<!--              <a class="add-task" href="/managing/Task/TaskForm/edit/?slug={{task.slug}}"><i class="fa fa-edit"></i> Edit</a>-->
-              </li>
-              {% endfor %}
-              {% else %}
-              </h5> No tasks are created
-              {% endif %}
-          </ul>
-          </div>
-          <div class="clear"></div>
-          <a class="add-task" href="/managing/Task/TaskForm/add/?slug={{project.slug}}">Add Task</a>
-        </div>
-    	</div>
-        <div class="green-box-lft">
-    		<h2>Milestones</h2>
-        <div class="green-content">
-          <div id="boxscroll-atm2">
-          <ul>
-              {% if milestone_list %}
-              {% for mile in milestone_list %}
-              <li><a href="javascript:void(0);">{{mile.name}} <span>(due - {{mile.overdue|date:'jS F'}})</span></a>
-<!--              <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/?id={{mile.id}}"><i class="fa fa-edit"></i> Edit</a>-->
-              </li>
-              {% endfor %}
-              {% else %}
-              </h5> No milestones
-              {% endif %}
-          </ul>
-          </div>
-          <div class="clear"></div>
-          <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
-        </div>
-    	</div>
-     </div>
-    </div>
+<div class="green-box">
+   <div class="green-box-lft">
+      <h2>Activities</h2>
+      <div class="green-content">
+         <div id="boxscroll-atm">
+            <ul>
+               {% if activity_list %}
+               {% for i in activity_list %}
+               <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}})</span></a>
+                  <a class="add-task" href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit </a>
+               </li>
+               {% endfor %}
+               {% else %}
+               </h5> No activites are created
+               {% endif %}
+            </ul>
+         </div>
+         <div class="clear"></div>
+         <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
+      </div>
+   </div>
+      <div class="green-box-lft">
+         <h2>Tasks</h2>
+         <div class="green-content">
+            <div id="boxscroll-atm1">
+               <ul>
+                  {% if task_list %}
+                  {% for task in task_list %}
+                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date}} - {{task.end_date}}</span></a>
+                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
+                  </li>
+                  {% endfor %}
+                  {% else %}
+                  </h5> No tasks are created
+                  {% endif %}
+               </ul>
+            </div>
+            <div class="clear"></div>
+            <a class="add-task" href="/managing/Task/TaskForm/add/?slug={{project.slug}}">Add Task</a>
+         </div>
+      </div>
+      <div class="green-box-lft">
+         <h2>Milestones</h2>
+         <div class="green-content">
+            <div id="boxscroll-atm2">
+               <ul>
+                  {% if milestone %}
+                  {% for mile in milestone %}
+                  <li><a href="javascript:void(0);">{{mile.name}} <span>(due - {{mile.overdue|date:'jS F'}})</span></a>
+                     <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
+                  </li>
+                  {% endfor %}
+                  {% else %}
+                  </h5> No milestones
+                  {% endif %}
+               </ul>
+            </div>
+            <div class="clear"></div>
+            <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
+         </div>
+      </div>
+   </div>
+</div>
 </section>
 <!--Content part Ends-->
 

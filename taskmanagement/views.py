@@ -26,7 +26,7 @@ from userprofile.models import ProjectUserRoleRelationship
 def listing(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
-    project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    project = Project.objects.get(slug =request.GET.get('slug'))
     try:
         project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
         activity_list = Activity.objects.filter(project = project).order_by('-id')
@@ -52,13 +52,13 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
+            f.slug = f.name.replace(' ','-')
             if model_name == 'Activity' or model_name == 'Task':
-                f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/managing/listing/?slug'+project.slug)
+                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
             else :
-                return HttpResponseRedirect('/managing/listing/?slug'+project.slug)
+                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
         form=form(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
@@ -67,24 +67,24 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
-    if model_name == 'Milestone':
-        m = eval(model_name).objects.get(id = int(slug))
-    else :
-        m=eval(model_name).objects.get(slug = slug)
-    project_id = m.project.id if model_name == 'Activity' else None
+    m=eval(model_name).objects.get(slug = slug)
+    try:
+        project = Project.objects.get(slug =request.GET.get('key') )
+    except:
+        project = Project.objects.get(slug = request.POST.get('slug'))
     if request.method == 'POST':
-        form=form(user_id,project_id,request.POST,request.FILES,instance=m)
+        form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
+            f.slug = f.name.replace(' ','-')
             if model_name == 'Activity' or model_name == 'Task':
-                f.slug = f.name.replace(' ','-')
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
             else:
-                return HttpResponseRedirect('/managing/'+model_name+'/listing/')
+                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
-        form=form(user_id,project_id,instance=m)
+        form=form(user_id,project.id,instance=m)
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def active_change(request,model_name):
@@ -150,20 +150,17 @@ def total_tasks_completed(slug):
     milestones = []
     project = Project.objects.get(slug = slug)
     activity = Activity.objects.filter(project=project)
+    milestones= Milestone.objects.filter(project = project)
     for act in activity:
         tasks = Task.objects.filter(activity = act)
         total_tasks = len(tasks) + total_tasks
         for t in tasks:
             if t.end_date.strftime('%Y-%m-%d') <= datetime.now().strftime('%Y-%m-%d'):
                 completed_tasks = completed_tasks + 1
-            miles_obj = Milestone.objects.get_or_none(task = t)
-            if miles_obj not in milestones:
-                milestones.append(miles_obj)
     if completed_tasks != 0:
         percent =int((float(completed_tasks) / float(total_tasks))*100)
     else:
         percent = 0
-    print milestones
     if milestones:
         total_milestones = len(milestones)
     data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
@@ -212,7 +209,13 @@ def updates(obj_list):
                 if task.status == 2 and task.history.latest():
                     task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
                         'user_name':task.created_by.email,'time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                if project.history.latest():
+                    attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
+                    for a in attach_lists:
+                        task_uploads={'project_name':project.name,'task_name':task.name,'attach':a.description,
+                        'user_name':a.created_by.email,'time':a.modified.time(),'date':a.modified.date(),'task_status':''}
                     uploads.append(task_uploads)
+    uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
     return uploads
         
 def corp_task_completion_chart(obj_list):
