@@ -102,7 +102,21 @@ def unique_slug_generator(instance, new_slug=None):
 def project_list(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
-    obj_list = Project.objects.filter(created_by = user_obj)
+    if user_obj.is_admin_user == True:
+        obj_list = Project.objects.filter()
+    elif user_obj.owner == True and user_obj.organization_type == 1:
+        project_ids = ProjectFunderRelation.objects.filter(funder = user_obj).values_list("project_id",flat=True)
+        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
+        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
+        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
+    elif user_obj.owner == True and user_obj.organization_type == 2:
+        project_ids = ProjectFunderRelation.objects.filter(implementation_partner = user_obj).values_list("project_id",flat=True)
+        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
+        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
+        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
+    else:
+        project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
+        obj_list = Project.objects.filter(id__in = project_ids,active=2)
     return render(request,'project/listing.html',locals())
 
 def project_detail(request):
