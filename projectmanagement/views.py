@@ -208,6 +208,7 @@ def key_parameter(request):
 def add_parameter(request):
     form = ProjectParameterForm()
     slug =  request.GET.get('slug')
+    key =  request.GET.get('key')
     if request.method == 'POST':
         slug =  request.GET.get('slug')
         project = Project.objects.get(slug=slug)
@@ -225,14 +226,21 @@ def add_parameter(request):
                 instruction = 'instruction['+str(i+1)+']'
                 obj = ProjectParameter.objects.create(parameter_type=parameter_type,project=project,instructions=request.POST.get(instruction),\
                         name=request.POST.get(name),parent=parent_obj,aggregation_function=request.POST.get('agg_type'))
-        return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %slug)
+        return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %slug)
         # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
     return render(request,'project/add_key_parameter.html',locals())
 
 def upload_parameter(request):
     ids =  request.GET.get('id')
+    key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
     key_parameter = ProjectParameter.objects.filter(parent=parameter)
+    key_parameter_list = [i.id for i in key_parameter]
+    key_parameter_value = ProjectParameterValue.objects.filter(keyparameter__in=key_parameter_list)
+    existing_month = [k.start_date.month for k in key_parameter_value]
+    month = ['January','February','March','April','May','June','July','August','September','October','November','December']
+    month_id = [1,2,3,4,5,6,7,8,9,10,11,12]
+    month_zip = zip(month,month_id)
     if request.method == 'POST':
         month = int(request.POST.get('month'))
         now = datetime.datetime.now()
@@ -249,12 +257,14 @@ def upload_parameter(request):
         else:
             obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
-        return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parameter.project.slug)
+        return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %parameter.project.slug)
     return render(request,'project/key_parameter.html',locals())
 
 def manage_parameter(request):
     slug =  request.GET.get('slug')
+    key = int(request.GET.get('key'))
     parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
+    project_name = parameter[0].project.name
     return render(request,'project/parameter_list.html',locals())
 
 
@@ -288,7 +298,7 @@ def manage_parameter_values(request):
     else:
         child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter).order_by('-submit_date')
         # child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=para)
-    
+
     name_range = range(1,parameter_count)
     values_list = child_parameter.values_list('parameter_value',flat=True)
     values = aggregate_project_parameters(parameter,child_parameter)
@@ -310,7 +320,7 @@ def aggregate_project_parameters(param, values):
     elif param.aggregation_function == "WAV":
         paggr=0
         for val in values:
-            
+
             parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
             aggr+=int(val.parameter_value)*int(parent.parameter_value)
             paggr+=int(parent.parameter_value)
@@ -318,19 +328,19 @@ def aggregate_project_parameters(param, values):
     elif param.aggregation_function == "WAP":
         paggr=0
         for val in values:
-            
+
             parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
             aggr+=int(val.parameter_value)*int(parent.parameter_value)
             paggr+=int(parent.parameter_value)
-        aggr=aggr/paggr  
-             
+        aggr=aggr/paggr
+
     ret['name']=param.name
     ret['parameter_type']= param.parameter_type
     ret['instructions'] = param.instructions
     ret['aggregate_value'] = aggr
     ret['parent_name'] = None if param.parent is None else param.parent.name
     return ret
-    
+
 def project_total_budget(slug):
 # to display the total budget ,disbursed,utilized percent in project summary page
     try:
@@ -344,13 +354,14 @@ def project_total_budget(slug):
         utilized_percent = int((utilized_cost/planned_cost)*100)
     except:
         planned_cost= utilized_cost=disbursed_budget=total_percent= disbursed_percent=utilized_percent =0
-        
+
     budget =  {'total':planned_cost,'disbursed':disbursed_budget,'utilized':utilized_cost,
     'total_percent':total_percent,'disbursed_percent':disbursed_percent,
     'utilized_percent':utilized_percent}
     return budget
 
 def timeline_listing(obj):
+# lisiting of timeline images function
     attach = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(obj),
         object_id = obj.id,active=2,attachment_type= 1).order_by('-date')
     return attach
@@ -369,11 +380,12 @@ def project_summary(request):
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
-
+# key paramter function
     master_obj = []
     master_obj_pin=[]
     master_obj_pip=[]
     parameter = ProjectParameter.objects.filter(project=obj)
+    parameter_count = parameter.count()
     for i in parameter:
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
             parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
@@ -390,23 +402,19 @@ def project_summary(request):
                 chart_name_pip = child_parameter_pip[0].keyparameter.parent.name
             pass
     import json
-
     list1=[]
     aa = ProjectParameterValue.objects.filter(keyparameter__project=obj,keyparameter__parent=None)
-    # import ipdb; ipdb.set_trace()
     for i in aa:
         if i.keyparameter.parameter_type=='PIN' or i.keyparameter.parameter_type=='PIP':
             pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
         # for p in pin:
-
     pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
-
-
     tst = ProjectParameter.objects.filter(project=obj,parent=None)
     colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     counter =0
     master_l = []
     name_list = []
+    para_name = {}
     for i in tst:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             pass
@@ -420,38 +428,33 @@ def project_summary(request):
                 value = float(j.parameter_value)
                 color = colors[counter]
                 ttt.append({'name': name,'y':value,'color':color})
-        
         if ttt:
-            para_name = str(i.name)
-            master_l.append({para_name:ttt})
-            name_list.append(para_name)
-    # master_l=[x for x in master_l if x]
+            if i.parameter_type in para_name:
+                para_name[i.parameter_type].append(ttt)
+            else:
+                para_name.setdefault(i.parameter_type,[])
+                para_name[i.parameter_type].append(ttt)
+            name_list.append(str(i.name))
+    # data_list_pin=[]
+    # data_list_pip=[]
+    # counter = 0
+    # for k in master_obj_pin:
+    #     name = str(k.keyparameter.name)
+    #     value = float(k.parameter_value)
+    #     color = colors[counter]
+    #     counter+=1
+    #     data_list_pin.append({'name': name,'y':value,'color':color})
+    # for k in master_obj_pip:
+    #     name = str(k.keyparameter.name)
+    #     value = float(k.parameter_value)
+    #     color = colors[counter]
+    #     counter+=1
+    #     data_list_pip.append({'name': name,'y':value,'color':color})
+    # data_pip = json.dumps(data_list_pip)
+    # data_pin = json.dumps(data_list_pin)
+    master_sh = para_name
     # import ipdb; ipdb.set_trace()
-    # for n, val in enumerate(master_l):
-    #     globals()["var%d"%n] = val
-    
-
-    data_list_pin=[]
-    data_list_pip=[]
-    # import ipdb; ipdb.set_trace()
-    counter = 0
-    for k in master_obj_pin:
-        name = str(k.keyparameter.name)
-        value = float(k.parameter_value)
-        color = colors[counter]
-        counter+=1
-        data_list_pin.append({'name': name,'y':value,'color':color})
-
-    for k in master_obj_pip:
-        name = str(k.keyparameter.name)
-        value = float(k.parameter_value)
-        color = colors[counter]
-        counter+=1
-        data_list_pip.append({'name': name,'y':value,'color':color})
-
-    data_pip = json.dumps(data_list_pip)
-    data_pin = json.dumps(data_list_pin)
-    master_sh = json.dumps(master_l)
-
-
+    master_sh_len = {key:len(values) for key,values in master_sh.items()}
+    master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
+    master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
     return render(request,'project/project-summary.html',locals())

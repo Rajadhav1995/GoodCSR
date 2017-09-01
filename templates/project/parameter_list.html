@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% block section %}
+{% endblock %}
 {% block content %}
 <!--Green pad Ends-->
 <!--Content part starts-->
@@ -31,14 +32,15 @@
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
-        <h3>Parameter List</h3>
-        <div style="float: right;"><a class="btn btn-primary" href="/project/parameter/add/?slug={{slug}}">Add Parameter</a></div>
+        <h3><a href="/project/summary/?slug={{slug}}">{{project_name}}</a></h3>
+        {% if key == 1 %}
+        <div style="float: right;"><a class="btn btn-primary" href="/project/parameter/add/?slug={{slug}}&key={{key}}">Add Parameter</a></div>
+        {% endif %}
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Parameter Name</th>
-                <th>Project Name</th>
-                <th>Status</th>
+                <th>Project Parameter</th>
+                <th>Parameter Type</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -46,9 +48,9 @@
         {% for i in parameter %}
         <tr>
             <td>{{i.name}}</td>
-            <td>{{i.project.name}}</td>
-            <td>{{i.get_active_display}}</td>
-            <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a>
+            <td>{{i.get_parameter_type_display}}</td>
+            
+            <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}&key={{key}}">Upload Values</button></a>
                 <a class="btn btn-primary" href="/project/parameter/values/manage/?id={{i.id}}">Manage Values</button></a>
             </td>
 

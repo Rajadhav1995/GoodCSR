@@ -11,7 +11,7 @@ from userprofile.models import (ProjectUserRoleRelationship,RoleTypes)
 BUDGET_TYPE = ((1,'Yearly'),(2,'Quarterly'),(3,'Half Yearly'))
 STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 class ProjectForm(forms.ModelForm):
-	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
+	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
 	target_beneficiaries = forms.ModelMultipleChoiceField(queryset = MasterCategory.objects.filter(parent__slug='target-beneficiarys'),
                         required = False,
                         widget = forms.SelectMultiple(attrs = {'class': 'form-control'}))
