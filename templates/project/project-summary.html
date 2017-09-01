@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load common_tags %}
+{% load urs_tags %}
 {% block section %}
 <div class="clear"></div>
 <!--Green pad starts-->
@@ -46,7 +47,10 @@
 	<div class="row">
     <div class="white-box timeline-white">
     	<h2>Timeline Progress</h2>
+    	    {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
     	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
+    	{% endif %}
         <div class="clear"></div>
         <div id="scrollbar1">
                 <div class="viewport">
@@ -142,10 +146,13 @@
     <div class="white-box white-pad">
     	<div class="key-program">
         <h2>Key Program Info</h2>
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
         {% if parameter_count > 4 %}
         <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% else %}
         <a class="link-pad" href="#">Upload Parameters</a>
+        {% endif %}
         {% endif %}
         </div>
         <ul>
@@ -260,7 +267,9 @@ under 0 Milestones</h5>
             <td style="width:19%;">{{i.user.organization}}</td>
             <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:19%;">{{i.role.name}}
-            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}">Edit</a></td>
+                {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}">Edit</a></td>{% endif %}
       </tr>
       {% endfor %}
       {% else %}

@@ -14,6 +14,10 @@ def get_user_permission(request):
     user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
     return user_obj
 
+@register.assignment_tag
+def get_funder(projectobj):
+    funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
+    return funderobj
 
 @register.assignment_tag
 def get_user_project(request):
