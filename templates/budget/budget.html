@@ -37,6 +37,7 @@
 	<div class="row">
     <div class="white-box">
     	<h2>Budget</h2>
+    	{% if budgetobj %}
         <div class="clear"></div>
         <div class="left-budget">
         		<div class="budget-left-pad">
@@ -197,6 +198,9 @@
       </tbody>
 	</table>  
     </div>
+    {% else %}
+    Click here to add <a href="/manage/project/budget/create/?slug={{project_slug}}">BUDGET </a>
+    {% endif %}
     </div>
     </div>
 </section>
