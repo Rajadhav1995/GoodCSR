@@ -89,9 +89,10 @@ class MilestoneForm(forms.ModelForm):
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.SelectMultiple(attrs={'class' :'form-control'}))
     overdue = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
+    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = Milestone
-        fields = ('name','task','overdue','subscribers','status')
+        fields = ('name','project','task','overdue','subscribers','status')
 
 
     def __init__(self,user_id,project_id, *args, **kwargs):

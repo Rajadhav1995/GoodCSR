@@ -20,11 +20,11 @@
      <div class="menu-bottom">
         <ul>
           <li><a href="/project/summary/?slug={{projectobj.slug}}">Summary</a></li>
-          <li><a href="javascript:void(0);">Task & Milestone</a></li>
-          <li><a class="active" href="javascript:void(0);">Budget</a></li>
-          <li><a href="javascript:void(0);">Files</a></li>
+          <li><a href="/managing/listing/?slug={{projectobj.slug}}">Task & Milestone</a></li>
+          <li><a class="active" href="/manage/project/budget/view/?slug={{projectobj.slug}}">Budget</a></li>
+          <li><a href="/upload/list/?slug={{projectobj.slug}}&model=Project">Files</a></li>
         </ul>
-     </div>         
+     </div>
     </div>
 </section>
 <!--Green pad Ends-->
@@ -608,7 +608,6 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
                enabled: false
         }        
    
-
 }));
 
 // Bring life to the dials

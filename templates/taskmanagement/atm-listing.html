@@ -1,227 +1,126 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<link rel="icon" type="image/png" href="img/favicon.ico">
-<title>Samhita GoodCSR</title>
-
-<!--CSS Srat-->
-<link rel="stylesheet" href="css/style.css" />
-<link rel="stylesheet" href="css/font-awesome.css">
-<link rel="stylesheet" href="css/ddsmoothmenu.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery.mmenu.all.css" />
-<link rel="stylesheet" href="css/jquery.selectbox.css" type="text/css" />
-<link type="text/css" rel="stylesheet" href="css/easy-responsive-tabs.css" />
-<link rel="stylesheet" href="css/popup.css">
-<!---datepicker css--->
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-<!--Common Script-->   
-<script type="text/javascript" src="js/respond.js"></script>
-<script type="text/javascript" src="js/html5.js"></script>
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.sticky.js"></script>
-
-<!-- IE less than 9 -->
-<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-<!--[if lt IE 9]><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
-
-<!--  Responsive CSS  -->
-<link rel="stylesheet" href="css/media.css" />
-</head>
-<body>
-<!-- Mobile Navigation -->
-<div id="mobNav" class="mobNav">
-    <figure class="mobi-logo"><a href="index.html" title=""><img src="img/logo.png" alt=""></a>
-    </figure>
+{% extends 'base.html'%}
+{% load urs_tags %}
+{% block section %}
+<div class="clear"></div>
+<!--Green pad starts-->
+<section class="green-pad green-height">
+	<div class="row">
+	<div class="image-pad logo-shadow">
+    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
+    </div>    
+    <div class="title-left">
+    {% if project %}
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{project.name}}</h4>
+    {% else %}
+    <h4><a href = '#'>Project Name</h4>
+    {% endif %}
     <ul>
-        <li><a href="index.html">Dashboard</a></li>
-        <li><a href="products.html">Projects</a>
-        	<ul>
-            	<li><a href="javascript:void(0);">Projects</a></li>
-                <li><a href="javascript:void(0);">Projects</a></li>
-            </ul>
-        </li>
-        <li><a href="javascript:void(0);">My Tasks</a></li>
-    </ul>
-</div>
-<!-- /Mobile Navigation -->
+        {%if project_funders %}
+    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
+        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
+        {% else %}
+        <li><a href="">by Funder</a> </li>
+        <li><a href="">NGO Partner: </a></li>
+        {% endif %}
+    </ul>    
+    </div>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+     <div class="menu-bottom">
+        <ul>
+          <li><a class="active" href="/project/summary/?slug={{project.slug}}">Summary</a></li>
+          <li><a href="/managing/listing/?slug={{project.slug}}">Task & Milestone</a></li>
+          <li><a href="/manage/project/budget/view/?slug={{project.slug}}">Budget</a></li>
+          <li><a href="/upload/list/?slug={{project.slug}}&model=Project">Files</a></li>
+        </ul>
+     </div>         
+    </div>
+</section>
+<!--Green pad Ends-->
+{% endblock %}
+<!--Content part starts-->
 
-<div id="page">
-<!--Header Starts-->
-<header class="header-pad">
-    <div class="row">
-        <div id="menu">
-        	<div class="logo"><a href="index.html"><img src="img/logo.png" alt="GOODCSR" title="GOODCSR" ></a></div>
-           <div class="m-menu"><a href="#mobNav"><span></span><span></span><span></span></a></div>       
-           <nav id="smoothmenu" class="ddsmoothmenu">
-            <ul>
-              <li><a href="javascript:void(0);">Dashboard</a></li>
-              <li class="user-wrap"><a href="javascript:void(0);">
-                Projects
-                <i class="fa fa-angle-down"></i></a>
-                  <ul>
-                    <li><a href="javascript:void(0);"> Project1 </a></li>
-                    <li><a href="javascript:void(0);"> Project2 </a></li>
-                  </ul>
-              </li>
-              <li><a href="javascript:void(0);" class="active">My Tasks</a></li>
-            </ul>
-          </nav>
-            <div class="menu-rgt">
-    	     <ul>
-                <li class="dropdown user user-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      <img src="img/user-img.png" class="user-image" alt="User Image">
-                      <i class="fa fa-angle-down"></i>
-                    </a>
-                    <ul class="dropdown-menu" style="display:none;">
-                      <!-- User image -->
-                      <li class="user-header">
-                        <img src="img/user-img.png" class="img-circle" alt="User Image">
-        
-                        <h3>Admin Name</h3>
-                        <h4>Admin</h4>
-                      </li>
-                      <!-- Menu Footer-->
-                      <li class="user-footer">
-                        <div class="pull-left">
-                          <a href="javascript:void(0);" class="btn btn-default btn-flat">Profile</a>
-                        </div>
-                        <div class="pull-right">
-                          <a href="javascript:void(0);" class="btn btn-default btn-flat">Sign out</a>
-                        </div>
-                      </li>
-                    </ul>
-                  </li>
-              </ul>
-      
-    </div>
-        </div>
-    </div>
-</header><!--Header Ends-->
+{% block content %}
 <div class="clear"></div>
 <!--Content part starts-->
 <section class="content-part">
 	<div class="row">
-    <div class="green-box">
-    	<div class="green-box-lft">
-    		<h2>Activities</h2>
-        <div class="green-content">
-          <div id="boxscroll-atm">
-          <ul>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet, consectetur  adipiscing elit. Nulla vestibulum placerat vulputate. Curabitur Viverra. <span>(core)</span></a></li>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet, consectetur  adipiscing elit.  <span>(core)</span></a></li>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet, consectetur  adipiscing elit. Nulla vestibulum placerat vulputate. Curabitur Viverra. <span>(non core)</span></a></li>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet, consectetur  adipiscing elit. Nulla vestibulum placerat vulputate. Curabitur Viverra. <span>(core)</span></a></li>
-          </ul>
-          </div>
-          <div class="clear"></div>
-          <a class="add-task" href="javascript:void(0);">Add Activity</a>
-        </div>
-    	</div>
-        <div class="green-box-lft">
-    		<h2>Tasks</h2>
-        <div class="green-content">
-          <div id="boxscroll-atm1">
-          <ul>
-              <li><a href="javascript:void(0);">upload picture of benches bought <span>03/06/2017 - 08/06/2017</span></a></li>
-              <li><a href="javascript:void(0);">Finance team to submit the bills for land acquisition <span>17/05/2017 - 01/06/2017</span></a></li>
-              <li><a href="javascript:void(0);">upload picture of benches bought <span>03/06/2017 - 08/06/2017</span></a></li>
-              <li><a href="javascript:void(0);">Finance team to submit the bills for land acquisition <span>17/05/2017 - 01/06/2017</span></a></li>
-              <li><a href="javascript:void(0);">upload picture of benches bought <span>03/06/2017 - 08/06/2017</span></a></li>
-              <li><a href="javascript:void(0);">Finance team to submit the bills for land acquisition <span>17/05/2017 - 01/06/2017</span></a></li>
-          </ul>
-          </div>
-          <div class="clear"></div>
-          <a class="add-task" href="javascript:void(0);">Add Task</a>
-        </div>
-    	</div>
-        <div class="green-box-lft">
-    		<h2>Milestones</h2>
-        <div class="green-content">
-          <div id="boxscroll-atm2">
-          <ul>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet,  <span>(due - 25th Aug)</span></a></li>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet, consectetur  adipiscing elit. Nulla vestibulum placerat <span>(core)</span></a></li>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet, consectetur <span>(due - 30th July)</span></a></li>
-              <li><a href="javascript:void(0);">Lorem ipsum dolor sit amet, consectetur  adipiscing elit. Nulla vestibulum placerat. <span>(due - 24th July)</span></a></li>
-              <li><a href="javascript:void(0);">Nulla vestibulum placerat vulputate. <span>(due - 12th July)</span></a></li>
-          </ul>
-          </div>
-          <div class="clear"></div>
-          <a class="add-task" href="javascript:void(0);">Add Milestone</a>
-        </div>
-    	</div>
-     </div>
-    </div>
+<div class="green-box">
+   <div class="green-box-lft">
+      <h2>Activities</h2>
+      <div class="green-content">
+         <div id="boxscroll-atm">
+            <ul>
+               {% if activity_list %}
+               {% for i in activity_list %}
+               <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}})</span></a>
+                  <a class="add-task" href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit </a>
+               </li>
+               {% endfor %}
+               {% else %}
+               </h5> No activites are created
+               {% endif %}
+            </ul>
+         </div>
+         <div class="clear"></div>
+         <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
+      </div>
+   </div>
+      <div class="green-box-lft">
+         <h2>Tasks</h2>
+         <div class="green-content">
+            <div id="boxscroll-atm1">
+               <ul>
+                  {% if task_list %}
+                  {% for task in task_list %}
+                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date}} - {{task.end_date}}</span></a>
+                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
+                  </li>
+                  {% endfor %}
+                  {% else %}
+                  </h5> No tasks are created
+                  {% endif %}
+               </ul>
+            </div>
+            <div class="clear"></div>
+            <a class="add-task" href="/managing/Task/TaskForm/add/?slug={{project.slug}}">Add Task</a>
+         </div>
+      </div>
+      <div class="green-box-lft">
+         <h2>Milestones</h2>
+         <div class="green-content">
+            <div id="boxscroll-atm2">
+               <ul>
+                  {% if milestone %}
+                  {% for mile in milestone %}
+                  <li><a href="javascript:void(0);">{{mile.name}} <span>(due - {{mile.overdue|date:'jS F'}})</span></a>
+                     <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
+                  </li>
+                  {% endfor %}
+                  {% else %}
+                  </h5> No milestones
+                  {% endif %}
+               </ul>
+            </div>
+            <div class="clear"></div>
+            <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
+         </div>
+      </div>
+   </div>
+</div>
 </section>
 <!--Content part Ends-->
 
-<!--Footer starts-->
-<footer>
-    <div class="row">
-        <div class="f-left">
-        	<ul>
-            	<li><a href="javascript:void(0);">Privacy Policy</a></li>
-                <li><a href="javascript:void(0);">Terms of Service</a></li>
-            </ul>
-        </div>
-        <div class="f-right">&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</div>
-    </div>
-</footer>
-<!--Footer Ends-->
+{% endblock %}
 
-</div>
-<div id="pop3" class="simplePopup">
-   <div class="pop-content">
-      <div class="cont-det">
-         <h2>Create Budget</h2>
-         <div class="form-pad">
-			<h3>Budget Info</h3>
-            <div class="form-label">
-              <label>Project</label>
-              <input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="" type="text">		
-            </div>
-            <div class="form-label-left">
-            	<label>Start Date</label>
-             	<input type="text" name="" placeholder="DD/MM/YY" class="datepicker">
-            </div>
-            <div class="form-label-right">
-            	<label>End Date</label>
-              	<input type="text" name="" placeholder="DD/MM/YY" class="datepicker">
-            </div>
-            <div class="form-label">
-              <label>Budget Duration</label>
-              <input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="" type="text">		
-            </div>
-            <div class="form-label-left">
-            	<label>Fin. Reporting Period</label>
-             	 <select name="lang" class="select_box ">
-                    <option>select</option>
-                    <option>select1</option>
-                </select>
-            </div>
-            <div class="form-label-right">
-            	<label>Super Category Label</label>
-              	<input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="Enter Location" type="text">	
-            </div>
-            <div class="form-label-pad form-link">
-            	<a href="javascript:void(0);">Save and Add Super Categories</a>
-            </div>
-         </div>
-      </div>
-    </div>
-</div>
-
+{% block script %}
 <!-- jQuery (necessary for JavaScript plugins) -->
-<script type="text/javascript" src="js/jquery.selectbox-0.2.js"></script>
-<script type="text/javascript" src="js/ddsmoothmenu.js"></script>
-<script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
-<script type="text/javascript" src="js/common.js" /></script>
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
-<script src="js/jquery.nicescroll.min.js"></script>
- <script src="js/easyResponsiveTabs.js" type="text/javascript"></script>
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+ <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 <script>
 //Toggle
 		
@@ -308,7 +207,7 @@ function showCheckboxes() {
         });
 		});
 </script>
-<script src="js/jquery.simplePopup.js" type="text/javascript"></script>
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $('#myBtn1').click(function(){
@@ -328,6 +227,5 @@ $(document).ready(function(){
 	});
 	});
 </script>
-</body>
-</html>
+{% endblock %}
 
