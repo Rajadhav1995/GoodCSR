@@ -41,7 +41,6 @@
                 <th>Due Date</th>
                 <th>Disbursed Date</th>
                 <th>Action</th>
-                <th>Manage</th>
             </tr>            
         </thead>
         
@@ -51,7 +50,7 @@
             <td>{{i.project.name}}</td>
             <td>{{i.due_date}}</td>
             <td>{{i.disbursed_date}}</td>
-            <td><!-- <a class="btn btn-primary" href="/project/add/?id={{i.id}}"></button></a> --></td>
+            <!-- <td><a class="btn btn-primary" href="/project/add/?id={{i.id}}"></button></a></td> -->
             <td><a class="btn btn-primary" href="/upload/list/?id={{i.id}}&model=Tranche">Manage Files</a>
             </td>
         </tr>

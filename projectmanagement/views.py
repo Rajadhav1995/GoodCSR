@@ -102,7 +102,21 @@ def unique_slug_generator(instance, new_slug=None):
 def project_list(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
-    obj_list = Project.objects.filter(created_by = user_obj)
+    if user_obj.is_admin_user == True:
+        obj_list = Project.objects.filter()
+    elif user_obj.owner == True and user_obj.organization_type == 1:
+        project_ids = ProjectFunderRelation.objects.filter(funder = user_obj).values_list("project_id",flat=True)
+        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
+        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
+        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
+    elif user_obj.owner == True and user_obj.organization_type == 2:
+        project_ids = ProjectFunderRelation.objects.filter(implementation_partner = user_obj).values_list("project_id",flat=True)
+        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
+        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
+        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
+    else:
+        project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
+        obj_list = Project.objects.filter(id__in = project_ids,active=2)
     return render(request,'project/listing.html',locals())
 
 def project_detail(request):
@@ -158,6 +172,7 @@ def upload_attachment(request):
 def edit_attachment(request):
     ids = request.GET.get('id')
     obj_id =  request.GET.get('obj_id')
+    slug = Project.objects.get(id=obj_id).slug
     model =  request.GET.get('model')
     obj = Attachment.objects.get(id=ids)
     if obj.attachment_type==2:
@@ -178,10 +193,11 @@ def edit_attachment(request):
             obj.save()
         try:
             keys = request.POST.get('keywords').split(',')
-            model = 'Attachment'
-            keywords = add_keywords(keys,obj,model,1)
+            attach_model = 'Attachment'
+            keywords = add_keywords(keys,obj,attach_model,1)
         except:
             pass
+            return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
     return render(request,'attachment/doc_upload.html',locals())
 
 def add_keywords(keys,obj,model,edit):
@@ -294,7 +310,7 @@ def manage_parameter(request):
     slug =  request.GET.get('slug')
     key = int(request.GET.get('key'))
     parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
-    project_name = parameter[0].project.name
+    project_name = Project.objects.get(slug=slug).name
     return render(request,'project/parameter_list.html',locals())
 
 
@@ -403,7 +419,7 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj,project=obj)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)

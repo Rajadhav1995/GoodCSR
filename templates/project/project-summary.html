@@ -132,8 +132,6 @@
         </select>
         </div>
 
-
-
         <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
             <option>Quarter1</option>
@@ -146,11 +144,11 @@
     	<div class="key-program">
         <h2>Key Program Info</h2>
         {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
         {% if parameter_count > 4 %}
-        <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
-        {% else %}
         <a class="link-pad" href="#">Upload Parameters</a>
+        {% else %}
+        <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
         {% endif %}
         </div>
@@ -279,7 +277,10 @@ under 0 Milestones</h5>
   </table>
 	</table>
     </div>
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
     <a href="/manage/project/role/add/?slug={{obj.slug}}" class="link-pad">Add User</a>
+    {% endif %}
     </div>
     <div class="white-box-right">
     	<h2>Recent Updates</h2>

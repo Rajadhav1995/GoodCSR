@@ -93,7 +93,7 @@
     {% for i in attachment %}
     <tr>
       <td>{% if i.attachment_type == 2 %}<img src="/static/img/doc.png" height=128px width=128px>{% else %}<img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% endif %}</td>
-      <td>{{i.name}}</td>
+      <td><a href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}">{{i.name}}</a></td>
       <td>{{i.get_attachment_type_display}} {% if i.attachment_type == 2 %} ({{i.get_document_type_display}}) {% endif %}</td>
       <!-- <td>{{i.created_by.user.first_name}} {{i.created_by.user.last_name}}</td> -->
         <td><div class="span_bottom">{% for j in i.get_file_keywords %}<span>{{j}} </span>{% endfor %}<!-- <span>Budget</span><span>Report</span><span>Document</span><span>Files</span> --></div class="span_bottom"></td>
