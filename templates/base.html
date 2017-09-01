@@ -251,6 +251,12 @@
 <script type="text/javascript" src="/static/js/common.js" /></script>
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <!--<script src="/static/js/jquery.nicescroll.min.js"></script>-->
+{% load static %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
+<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 <!--    <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>-->
@@ -258,7 +264,6 @@
 {% block script %}
 
 {% endblock %}
-
 
 </body>
 </html>
