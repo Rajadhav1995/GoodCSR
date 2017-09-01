@@ -212,10 +212,13 @@ def updates(obj_list):
                 if project.history.latest():
                     attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
                     for a in attach_lists:
-                        task_uploads={'project_name':project.name,'task_name':'','attach':a.description,
-                        'user_name':a.created_by.email,'time':a.modified.time(),'date':a.modified.date(),'task_status':''}
+                        task_uploads={'project_name':project.name,'task_name':task.name,'attach':a.description,
+                        'user_name':a.created_by.email,'time':a.created.time(),'date':a.created.date(),'task_status':''}
                     uploads.append(task_uploads)
-    uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+    if uploads:
+        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+    else:
+        uploads = []
     return uploads
         
 def corp_task_completion_chart(obj_list):
