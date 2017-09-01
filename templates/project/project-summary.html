@@ -147,7 +147,7 @@
     	<div class="key-program">
         <h2>Key Program Info</h2>
         {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
         {% if parameter_count > 4 %}
         <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% else %}
@@ -281,7 +281,7 @@ under 0 Milestones</h5>
 	</table>
     </div>
         {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
     <a href="/manage/project/role/add/?slug={{obj.slug}}" class="link-pad">Add User</a>
     {% endif %}
     </div>
