@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% block section %}
+{% endblock %}
 {% block content %}
 <!--<link href="static/css/multiselect.css" media="screen" rel="stylesheet" type="text/css">-->
     <!-- Content Header (Page header) -->
@@ -24,7 +25,7 @@
     
                             <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.project.label_tag}}<font color="red">*</font>
+                                    {{form.project.label_tag}}
                                 </label>
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                     {{form.project}}
@@ -113,7 +114,7 @@
                             </div>
                         
                         <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
-                        <a class="btn btn-success" href="/manage-task/{{model_name}}/listing/">Back</button></a>
+                        <a class="btn btn-success" href="/project/tranche/list/?slug={{slug}}">Back</button></a>
                             </div>
                     </form>
                     

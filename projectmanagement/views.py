@@ -294,7 +294,7 @@ def manage_parameter(request):
     slug =  request.GET.get('slug')
     key = int(request.GET.get('key'))
     parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
-    project_name = parameter[0].project.name
+    project_name = Project.objects.get(slug=slug).name
     return render(request,'project/parameter_list.html',locals())
 
 

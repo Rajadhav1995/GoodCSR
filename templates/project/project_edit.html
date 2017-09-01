@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% block section %}
+{% endblock %}
 {% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
@@ -262,7 +263,8 @@ width:450px;
 
 <script>
   $( function() {
-    $( "#id_start_date").datepicker();
+    $( "#id_start_date").datepicker({
+    dateFormat: 'yy-mm-dd'});
     $( "#id_end_date").datepicker();
   } );
   </script>
@@ -309,6 +311,29 @@ $(document).ready(function() {
 
 <script>
   $("#id_end_date").datepicker({
+    dateFormat: 'yy-mm-dd',
+    onSelect: function(dateText, inst) {
+        var start = new Date($('#id_start_date').val());
+        var end = new Date($('#id_end_date').val());
+        if (end <= start) {
+            alert("'End date' should be greater than 'Start date'")
+            document.getElementById('dateError').innerHTML="End date should be greater than Start date"
+        };
+        if (end > start) {
+            document.getElementById('dateError').innerHTML=""
+            document.getElementById('dateError1').innerHTML=""
+        };
+
+        var months = (end.getFullYear() - start.getFullYear()) * 12;
+        months += end.getMonth() - start.getMonth();
+        document.getElementById("id_duration").value = months;
+    }
+
+});
+</script>
+
+<script>
+  $("#id_start_date").datepicker({
     dateFormat: 'yy-mm-dd',
     onSelect: function(dateText, inst) {
         var start = new Date($('#id_start_date').val());
