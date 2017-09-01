@@ -49,6 +49,7 @@
                     </form>
   </div>
 
+{% block script %}
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -58,20 +59,45 @@
 
 <script>
     $(document).ready(function() {
-        
+        $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-
-        //$( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
+       // $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+    if ('{{model_name}}' == 'Milestone'){
+    $('#id_task').on('click',function(e){
+        var tasks_ids = $('#id_task').val();
+        $.ajax({
+            url:'/managing/milestone/overdue/',
+            type:'GET',
+            data:{'id':tasks_ids},
+            dataType:"json",
+            success:function(data){
+            if (data.milestone_overdue_date != ""){
+                document.getElementById("id_overdue").value = data.milestone_overdue_date;
+             }
+            else{
+                $( "#id_overdue_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                }
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    }
+    });
+</script>
 
 <script>
     $(document).ready(function() {
-   // $("#id_project").hide();
     $('#id_activity').on('change',function(e){
+        
         var select_id = $('#id_activity').val();
         $.ajax({
             url:'/managing/task/dependencies/',
@@ -90,7 +116,7 @@
                     .find('option')
                     .remove()
                     for(var i=0;i<data.tasks_dependency.length;i++){
-
+                        
                         $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
                         }
             },
@@ -99,14 +125,13 @@
         e.stopImmediatePropagation();
         return false;
       });
-      $("#id_activity").trigger("change");
     });
 </script>
 
 <script>
     $(document).ready(function() {
     if ('{{model_name}}' == 'Task'){
-    $('#id_task_dependency').on('change',function(e){
+    $('#id_task_dependency').on('click',function(e){
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({
             url:'/managing/tasks/auto-computation/date',
@@ -127,6 +152,6 @@
     });
 </script>
 
-
+{% endblock %}
 
 {% endblock %}
