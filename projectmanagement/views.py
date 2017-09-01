@@ -158,6 +158,7 @@ def upload_attachment(request):
 def edit_attachment(request):
     ids = request.GET.get('id')
     obj_id =  request.GET.get('obj_id')
+    slug = Project.objects.get(id=obj_id).slug
     model =  request.GET.get('model')
     obj = Attachment.objects.get(id=ids)
     if obj.attachment_type==2:
@@ -178,10 +179,11 @@ def edit_attachment(request):
             obj.save()
         try:
             keys = request.POST.get('keywords').split(',')
-            model = 'Attachment'
-            keywords = add_keywords(keys,obj,model,1)
+            attach_model = 'Attachment'
+            keywords = add_keywords(keys,obj,attach_model,1)
         except:
             pass
+            return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
     return render(request,'attachment/doc_upload.html',locals())
 
 def add_keywords(keys,obj,model,edit):

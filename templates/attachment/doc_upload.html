@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+{% block section %}
 
+{% endblock %}
 {% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
@@ -105,9 +107,11 @@ width:450px;
                             </div>
                         </div>
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
-                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                        <a class="btn btn-success" href="/upload/list/?slug={{slug}}&model={{model}}">Back</button></a>
+
                     </form>
   </div>
+  <br>
 <div style="padding :0 7px 0 5px;max-width:900px;margin:auto">
     <textarea id="hero-demo" class="tag-editor-hidden-src"></textarea>
     <ul class="tag-editor ui-sortable" style="display:none;">

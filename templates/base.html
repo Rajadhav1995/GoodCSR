@@ -106,22 +106,21 @@
                 <!--</div>-->
               </li>
               
-              
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True %}
         <li class="user-wrap"><a href="javascript:void(0);">
                 Settings
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
                   <ul>
                         <li><a href="/project/list/">Project List</a></li>
-                        <li><a href="/project/budget/tranche/">Add Budget Tranche</a></li>
 <!--                        <li><a href="/managing/Task/listing/">Tasks</a></li>-->
 <!--                    	<li><a href="/managing/Milestone/listing/">Milestone</a></li>-->
-                      <li><a href="/project/tranche/list/">Tranches</a></li>
 
                   </ul>
                 <!--</div>-->
               </li>
-
+            {% endif %}
             </ul>
           </nav>
             <div class="menu-rgt">
@@ -199,7 +198,7 @@
         {%if project_funders %}
     	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
-        {% else %}c
+        {% else %}
         <li><a href="">by Funder</a> </li>
         <li><a href="">NGO Partner: </a></li>
         {% endif %}
@@ -213,7 +212,6 @@
           <li><a href="/manage/project/budget/view/?slug={{slug}}">Budget</a></li>
           <li><a href="/upload/list/?slug={{slug}}&model=Project">Files</a></li>
           <li><a href="/project/tranche/list/?slug={{slug}}">Tranches</a></li>
-
         </ul>
      </div>         
     </div>

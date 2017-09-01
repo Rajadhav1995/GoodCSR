@@ -9,6 +9,17 @@ from userprofile.models import ProjectUserRoleRelationship
 register = template.Library()
 
 @register.assignment_tag
+def get_user_permission(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
+    return user_obj
+
+@register.assignment_tag
+def get_funder(projectobj):
+    funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
+    return funderobj
+
+@register.assignment_tag
 def get_user_project(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
