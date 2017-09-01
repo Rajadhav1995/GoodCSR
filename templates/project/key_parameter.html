@@ -35,7 +35,7 @@ width:450px;
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 <div>
                                 <select class='form-control' id='gMonth' name='month'>
-                                <option value=''>--Select Month--</option>
+                                <option value='0'>--Select Month--</option>
                                 {% for i,j in month_zip %}
                                 {% if not j in existing_month %}
                                 <option value='{{j}}'>{{i}}</option>
@@ -53,6 +53,10 @@ width:450px;
                                 <option value='11'>November</option>
                                 <option value='12'>December</option> -->
                                 </select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="funder_error"></span></font>
+                                </p>
                                 </div>
 
                         </div>
@@ -64,8 +68,9 @@ width:450px;
                                 </label>
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                     
-                                    <input class="form-control" type="number" name="value" id="value{{parameter.id}}">{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}
+                                    <input class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}
                                 </div>
+
                         </div>
                         {% endif %}
 
@@ -81,7 +86,7 @@ width:450px;
 
                         {% endfor %}
 
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}">Back</button></a>
 
                     </form>
@@ -99,6 +104,23 @@ width:450px;
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+
+
+
+<script type="text/javascript">
+        function ddlValidate() {
+            var e = document.getElementById("gMonth");
+            var para_type = e.options[e.selectedIndex].value;
+            alert(para_type);
+            if (para_type == 0) {
+                alert(para_type);
+                document.getElementById('funder_error').innerHTML="Please select Month"
+                return false;
+            }
+        }
+    </script>
+
 
 <script>
   $( function() {

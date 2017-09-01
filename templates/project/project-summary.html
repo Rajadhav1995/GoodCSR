@@ -429,7 +429,11 @@
     <div class="white-box white-pad">
     	<div class="key-program">
         <h2>Key Program Info</h2>
+        {% if parameter_count > 4 %}
         <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
+        {% else %}
+        <a class="link-pad" href="#">Upload Parameters</a>
+        {% endif %}
         </div>
         <ul>
             {% for i in parent_paremeter %}
@@ -919,10 +923,11 @@ $(document).ready(function(){
     var new_data_pin = 0;
     var new_data_pip = 0;
 </script>
-
+{{master_sh}}
 /* Pie Chat Number */
 <script type="text/javascript">
 {% for pin in master_sh.PIN %}
+//alert(pin);
 var data1 = {{pin | safe}};
 var values = "Batch_size_" + (new_data_pin).toString()
 new_data_pin++;

@@ -32,7 +32,7 @@ width:450px;
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 <select class="form-control" name="para_type" id="para_type" required>
-                                    <option selected>Select</option>
+                                    <option selected value="0">Select</option>
                                     
                                     <option value="PIN" >Pie chart Numbers</option>
                                      <option value="PIP">Pie Chart Percent</option>
@@ -40,6 +40,10 @@ width:450px;
                                     <option value="PER">Percent</option>
                                     <option value="CUR">Currency</option>
                                 </select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="funder_error"></span></font>
+                                </p>
                             </div>
                         </div>
 
@@ -55,12 +59,16 @@ width:450px;
                                     <option value="WAV">Weighted Average</option>
                                     <option value="WAP">Weighted average over peers</option>
                                 </select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="partner_error"></span></font>
+                                </p>
                             </div>
                         </div>
 
                         <div id="name" class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                name
+                                Name
                             </label>
                             <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                 <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required="True">
@@ -79,7 +87,7 @@ width:450px;
                         </div>
                     </div>
                     <input style="width: 0px;" value=0 name="name_count" id="activity_count" type="text"/>
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
   </div>
@@ -91,6 +99,22 @@ width:450px;
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
+
+<script type="text/javascript">
+        function ddlValidate() {
+            var e = document.getElementById("para_type");
+            var f = document.getElementById("agg_type");
+            var para_type = e.options[e.selectedIndex].value;
+            var agg_type = f.options[f.selectedIndex].value;
+            
+            if (para_type == 0) {
+                document.getElementById('funder_error').innerHTML="Please select Parameter Type"
+            }
+            if (agg_type == 0) {
+                document.getElementById('partner_error').innerHTML="Please select Aggregation Type"
+            }
+        }
+    </script>
 
 
 <script type="text/javascript">

@@ -375,6 +375,7 @@ def project_summary(request):
     master_obj_pin=[]
     master_obj_pip=[]
     parameter = ProjectParameter.objects.filter(project=obj)
+    parameter_count = parameter.count()
     for i in parameter:
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
             parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
@@ -442,8 +443,8 @@ def project_summary(request):
     # data_pip = json.dumps(data_list_pip)
     # data_pin = json.dumps(data_list_pin)
     master_sh = para_name
-    import ipdb; ipdb.set_trace()
+    # import ipdb; ipdb.set_trace()
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
-    master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN')))
-    master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP')))
+    master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
+    master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
     return render(request,'project/project-summary.html',locals())
