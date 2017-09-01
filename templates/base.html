@@ -104,7 +104,8 @@
                 <!--</div>-->
               </li>
               
-              
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True %}
         <li class="user-wrap"><a href="javascript:void(0);">
                 Settings
                 <i class="fa fa-angle-down"></i></a>
@@ -119,7 +120,7 @@
                   </ul>
                 <!--</div>-->
               </li>
-
+            {% endif %}
             </ul>
           </nav>
             <div class="menu-rgt">
@@ -197,7 +198,7 @@
         {%if project_funders %}
     	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
-        {% else %}c
+        {% else %}
         <li><a href="">by Funder</a> </li>
         <li><a href="">NGO Partner: </a></li>
         {% endif %}
