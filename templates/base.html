@@ -110,11 +110,10 @@
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
                   <ul>
-                        <li><a href="/project/add/">Add Project</a></li>
                         <li><a href="/project/list/">Project List</a></li>
                         <li><a href="/project/budget/tranche/">Add Budget Tranche</a></li>
-                        <li><a href="/managing/Task/listing/">Tasks</a></li>
-                    	<li><a href="/managing/Milestone/listing/">Milestone</a></li>
+<!--                        <li><a href="/managing/Task/listing/">Tasks</a></li>-->
+<!--                    	<li><a href="/managing/Milestone/listing/">Milestone</a></li>-->
                       <li><a href="/project/tranche/list/">Tranches</a></li>
 
                   </ul>
@@ -182,20 +181,41 @@
 
 {% block section %}
 <div class="clear"></div>
-
 <!--Green pad starts-->
-<section class="green-pad">
+<section class="green-pad green-height">
 	<div class="row">
 	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
+    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
     </div>    
-    <h3>{{user_obj.organization|title}}</h3>
-    <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>
+    <div class="title-left">
+    {% if obj %}
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</h4>
+    {% else %}
+    <h4><a href = '#'>Project Name</h4>
+    {% endif %}
+    <ul>
+        {%if project_funders %}
+    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
+        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
+        {% else %}c
+        <li><a href="">by Funder</a> </li>
+        <li><a href="">NGO Partner: </a></li>
+        {% endif %}
+    </ul>    
+    </div>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+     <div class="menu-bottom">
+        <ul>
+          <li><a class="active" href="/project/summary/?slug={{obj.slug}}">Summary</a></li>
+          <li><a href="/managing/listing/?slug={{obj.slug}}">Task & Milestone</a></li>
+          <li><a href="/manage/project/budget/view/?slug={{obj.slug}}">Budget</a></li>
+          <li><a href="/upload/list/?slug={{i.slug}}&model=Project">Files</a></li>
+        </ul>
+     </div>         
     </div>
 </section>
-{% endblock %}
 <!--Green pad Ends-->
-
+{% endblock %}
 {% block content %}
 
 {% endblock %}

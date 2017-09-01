@@ -12,6 +12,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
+from pmu.settings import PMU_URL
 # Create your views here.
 
 def create_project(request):
@@ -359,17 +360,27 @@ def project_total_budget(slug):
     'utilized_percent':utilized_percent}
     return budget
 
+def timeline_listing(obj):
+# lisiting of timeline images function
+    attach = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(obj),
+        object_id = obj.id,active=2,attachment_type= 1).order_by('-date')
+    return attach
+    
 
 def project_summary(request):
 # to display the project details in project summary page
+    image_url = PMU_URL
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj,project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)
+    timeline = timeline_listing(obj)
+    project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
+# key paramter function
     master_obj = []
     master_obj_pin=[]
     master_obj_pip=[]

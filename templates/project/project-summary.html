@@ -9,20 +9,28 @@
     	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
     </div>
     <div class="title-left">
+    {% if obj %}
     <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</h4>
-
+    {% else %}
+    <h4><a href = '#'>Project Name</h4>
+    {% endif %}
     <ul>
-    	<li><a href="">by OVP venture partners</a> </li>
-        <li><a href="">NGO Partner: Akanksha</a></li>
-    </ul>
+        {%if project_funders %}
+    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
+        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
+        {% else %}
+        <li><a href="">by Funder</a> </li>
+        <li><a href="">NGO Partner: </a></li>
+        {% endif %}
+    </ul>    
     </div>
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
           <li><a class="active" href="/project/summary/?slug={{obj.slug}}">Summary</a></li>
-          <li><a href="javascript:void(0);">Task & Milestone</a></li>
+          <li><a href="/managing/listing/?slug={{obj.slug}}">Task & Milestone</a></li>
           <li><a href="/manage/project/budget/view/?slug={{obj.slug}}">Budget</a></li>
-          <li><a href="javascript:void(0);">Files</a></li>
+          <li><a href="/upload/list/?slug={{i.slug}}&model=Project">Files</a></li>
         </ul>
      </div>
     </div>
@@ -36,6 +44,7 @@
 	<div class="row">
     <div class="white-box timeline-white">
     	<h2>Timeline Progress</h2>
+    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
         <div class="clear"></div>
         <div id="scrollbar1">
                 <div class="viewport">
@@ -43,333 +52,35 @@
                        <div id="time-line-pad">
             <div class="time-line">
                 <div class="time-line-bdr"></div>
-                <ul>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img1.jpg" alt="">
-                        <p>School Construction Star...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">20 <span>May</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>50 Admission Done</p>
-                        <img src="/static/img/timeline-img2.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">04 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img3.jpg" alt="">
-                        <p>Teacher hired fot I to IV...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">19 <span>Jun</span></div>
-                </li>
-                <li class="event-down red-down current-event">
-                 &nbsp;
-                    <a href="javascript:void(0);" id="myBtn">
-                    <div class="event-img">
-                        <h3>Milestone Achieved</h3>
-                        <img src="/static/img/milestone-icon.png" alt="">
-                        <p>Nabarangpur school project</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">27 <span>Jun</span></div></a>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img4.jpg" alt="">
-                        <p>School Inaguration</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">30 <span>Jul</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>New Benches</p>
-                        <img src="/static/img/timeline-img5.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">05 <span>Aug</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img1.jpg" alt="">
-                        <p>School Construction Star...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">20 <span>May</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>50 Admission Done</p>
-                        <img src="/static/img/timeline-img2.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">04 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img3.jpg" alt="">
-                        <p>Teacher hired fot I to IV...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">19 <span>Jun</span></div>
-                </li>
-                <li class="event-down red-down current-event">
-                 &nbsp;
-                    <div class="event-img">
-                        <h3>Milestone Achieved</h3>
-                        <img src="/static/img/milestone-icon.png" alt="">
-                        <p>Nabarangpur school project</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">27 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img4.jpg" alt="">
-                        <p>School Inaguration</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">30 <span>Jul</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>New Benches</p>
-                        <img src="/static/img/timeline-img5.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">05 <span>Aug</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img1.jpg" alt="">
-                        <p>School Construction Star...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">20 <span>May</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>50 Admission Done</p>
-                        <img src="/static/img/timeline-img2.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">04 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img3.jpg" alt="">
-                        <p>Teacher hired fot I to IV...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">19 <span>Jun</span></div>
-                </li>
-                <li class="event-down red-down current-event">
-                 &nbsp;
-                    <div class="event-img">
-                        <h3>Milestone Achieved</h3>
-                        <img src="/static/img/milestone-icon.png" alt="">
-                        <p>Nabarangpur school project</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">27 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img4.jpg" alt="">
-                        <p>School Inaguration</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">30 <span>Jul</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>New Benches</p>
-                        <img src="/static/img/timeline-img5.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">05 <span>Aug</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img1.jpg" alt="">
-                        <p>School Construction Star...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">20 <span>May</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>50 Admission Done</p>
-                        <img src="/static/img/timeline-img2.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">04 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img3.jpg" alt="">
-                        <p>Teacher hired fot I to IV...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">19 <span>Jun</span></div>
-                </li>
-                <li class="event-down red-down current-event">
-                 &nbsp;
-                    <div class="event-img">
-                        <h3>Milestone Achieved</h3>
-                        <img src="/static/img/milestone-icon.png" alt="">
-                        <p>Nabarangpur school project</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">27 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img4.jpg" alt="">
-                        <p>School Inaguration</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">30 <span>Jul</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>New Benches</p>
-                        <img src="/static/img/timeline-img5.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">05 <span>Aug</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img1.jpg" alt="">
-                        <p>School Construction Star...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">20 <span>May</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>50 Admission Done</p>
-                        <img src="/static/img/timeline-img2.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">04 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img3.jpg" alt="">
-                        <p>Teacher hired fot I to IV...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">19 <span>Jun</span></div>
-                </li>
-                <li class="event-down red-down current-event">
-                 &nbsp;
-                    <div class="event-img">
-                        <h3>Milestone Achieved</h3>
-                        <img src="/static/img/milestone-icon.png" alt="">
-                        <p>Nabarangpur school project</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">27 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img4.jpg" alt="">
-                        <p>School Inaguration</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">30 <span>Jul</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>New Benches</p>
-                        <img src="/static/img/timeline-img5.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">05 <span>Aug</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img1.jpg" alt="">
-                        <p>School Construction Star...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">20 <span>May</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>50 Admission Done</p>
-                        <img src="/static/img/timeline-img2.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">04 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img3.jpg" alt="">
-                        <p>Teacher hired fot I to IV...</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">19 <span>Jun</span></div>
-                </li>
-                <li class="event-down red-down current-event">
-                 &nbsp;
-                    <div class="event-img">
-                        <h3>Milestone Achieved</h3>
-                        <img src="/static/img/milestone-icon.png" alt="">
-                        <p>Nabarangpur school project</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">27 <span>Jun</span></div>
-                </li>
-                <li class="event-up">
-                    &nbsp;
-                    <div class="event-img">
-                        <img src="/static/img/timeline-img4.jpg" alt="">
-                        <p>School Inaguration</p>
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">30 <span>Jul</span></div>
-                </li>
-                <li class="event-down">
-                 &nbsp;
-                    <div class="event-img">
-                        <p>New Benches</p>
-                        <img src="/static/img/timeline-img5.jpg" alt="">
-                    </div>
-                    <div class="event-circle"></div>
-                    <div class="event-date">05 <span>Aug</span></div>
-                </li>
-                </ul>
+                            
+                {% if timeline %}
+                    {% for i in timeline %}
+                    
+                        <ul>
+                        {% if not forloop.counter|divisibleby:2 %}
+                        <li class="event-up">
+                            &nbsp;
+                            <div class="event-img">
+                                <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
+                                <p>{% if i.description %} {{i.description}} {% endif %}</p>
+                            </div>
+                            <div class="event-circle"></div>
+                            <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
+                        </li>
+                        {% else %}
+                        <li class="event-down">
+                         &nbsp;
+                            <div class="event-img">
+                                <p>{{i.description}}</p>
+                                <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
+                            </div>
+                            <div class="event-circle"></div>
+                            <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
+                        </li>
+                        {% endif %}
+                        </ul>
+                    {% endfor %}
+                {% endif %}
 
             </div>
            </div>
@@ -483,19 +194,28 @@
             </div>
             <div class="budget-value-right">
             <div class="budget-value">
+                {% if tasks %}
                   <div class="budget-left">{{tasks.completed_tasks}} tasks</div>
                   <div class="budget-right">{{tasks.percent}}%</div>
               </div>
               <h5>of {{tasks.total_tasks}} tasks <br>
 under {{tasks.total_milestones}} Milestones</h5>
+                {% else %}
+                    <div class="budget-left">0 tasks</div>
+                  <div class="budget-right">0%</div>
+              </div>
+              <h5>of 0 tasks <br>
+under 0 Milestones</h5>
+                {% endif %}
 		</div>
         </div>
         <div class="right-white-pad">
         	<h3>Total Budget</h3>
             <div class="budget-pad">
+            {% if budget %}
               <p><span class="green-d-circle"></span> Utilized</p>
               <div class="budget-value">
-                  <div class="budget-left">{{budget.utilized}}cr</div>
+                  <div class="budget-left">{{budget.utilized}}cr </div>
                   <div class="budget-right">{{budget.utilized_percent}}%</div>
               </div>
               <p><span class="green-circle"></span> Disbursed</p>
@@ -508,6 +228,7 @@ under {{tasks.total_milestones}} Milestones</h5>
                   <div class="budget-left">{{budget.total}}cr</div>
                   <div class="budget-right">{{budget.total_percent}}%</div>
               </div>
+            {% endif %}
           </div>
           <div class="img-right">
             <div id = "total_budget" style="width:100%;float:left;"></div>
@@ -530,6 +251,7 @@ under {{tasks.total_milestones}} Milestones</h5>
       </tr>
       </thead>
       <tbody>
+      {% if projectuserlist %}
       {% for i in projectuserlist %}
       <tr>
             <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
@@ -539,6 +261,9 @@ under {{tasks.total_milestones}} Milestones</h5>
             <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}">Edit</a></td>
       </tr>
       {% endfor %}
+      {% else %}
+        <h5>Users not tagged</h5>
+      {% endif %}
 
       </tbody>
   </table>
