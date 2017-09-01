@@ -53,7 +53,10 @@
                {% if activity_list %}
                {% for i in activity_list %}
                <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}})</span></a>
+               {% get_user_permission request as user_obj %}
+                    {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
                   <a class="add-task" href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit </a>
+                    {% endif %}
                </li>
                {% endfor %}
                {% else %}
@@ -62,7 +65,10 @@
             </ul>
          </div>
          <div class="clear"></div>
-         <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
+                  {% get_user_permission request as user_obj %}
+                    {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+                    <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
+                    {% endif %}
       </div>
    </div>
       <div class="green-box-lft">
@@ -73,7 +79,10 @@
                   {% if task_list %}
                   {% for task in task_list %}
                   <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date}} - {{task.end_date}}</span></a>
+                    {% get_user_permission request as user_obj %}
+                    {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
                      <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
+                     {% endif %}
                   </li>
                   {% endfor %}
                   {% else %}
@@ -82,7 +91,10 @@
                </ul>
             </div>
             <div class="clear"></div>
+            {% get_user_permission request as user_obj %}
+                    {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
             <a class="add-task" href="/managing/Task/TaskForm/add/?slug={{project.slug}}">Add Task</a>
+                {% endif %}
          </div>
       </div>
       <div class="green-box-lft">
@@ -93,7 +105,10 @@
                   {% if milestone %}
                   {% for mile in milestone %}
                   <li><a href="javascript:void(0);">{{mile.name}} <span>(due - {{mile.overdue|date:'jS F'}})</span></a>
+                     {% get_user_permission request as user_obj %}
+                        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
                      <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
+                     {% endif %}
                   </li>
                   {% endfor %}
                   {% else %}
@@ -102,7 +117,10 @@
                </ul>
             </div>
             <div class="clear"></div>
-            <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
+                {% get_user_permission request as user_obj %}
+                    {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+                <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
+                {% endif %}
          </div>
       </div>
    </div>

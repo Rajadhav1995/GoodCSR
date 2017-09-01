@@ -95,7 +95,7 @@ class MilestoneForm(forms.ModelForm):
         fields = ('name','project','task','overdue','subscribers','status')
 
 
-    def __init__(self,user_id,project_id, *args, **kwargs):
+    def __init__(self,user_id,project_id,key,*args, **kwargs):
         self.user = user_id
         self.project = project_id
         super(MilestoneForm, self).__init__(*args, **kwargs)

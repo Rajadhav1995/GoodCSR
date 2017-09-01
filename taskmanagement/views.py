@@ -74,7 +74,6 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         project = Project.objects.get(slug =request.GET.get('key') )
     except:
         project = Project.objects.get(slug = request.POST.get('slug'))
-    import ipdb;ipdb.set_trace();
     if request.method == 'POST':
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         
