@@ -53,6 +53,7 @@ def add_taskmanagement(request,model_name,m_form):
         if form.is_valid():
             f=form.save()
             f.slug = f.name.replace(' ','-')
+            f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
@@ -77,6 +78,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         if form.is_valid():
             f=form.save()
             f.slug = f.name.replace(' ','-')
+            f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
@@ -84,7 +86,16 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             else:
                 return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
-        form=form(user_id,project.id,instance=m)
+#        if model_name == 'Milestone':
+#            task_list = m.task.all().ids()
+#            obj1=set(list(Milestone.objects.filter(active=2).values_list('task',flat=True)))
+#            obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
+#            tasks = list(obj2 - obj1)
+#            tasks.extend(task_list)
+#            form=form(user_id,project.id,instance=m)
+#            form.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
+#        else:
+         form=form(user_id,project.id,instance=m)
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def active_change(request,model_name):
@@ -215,10 +226,10 @@ def updates(obj_list):
                         task_uploads={'project_name':project.name,'task_name':task.name,'attach':a.description,
                         'user_name':a.created_by.email,'time':a.created.time(),'date':a.created.date(),'task_status':''}
                     uploads.append(task_uploads)
-#    if uploads:
-#        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
-#    else:
-#    uploads = [{}]
+    if uploads:
+        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+    else:
+        uploads = []
     return uploads
         
 def corp_task_completion_chart(obj_list):
