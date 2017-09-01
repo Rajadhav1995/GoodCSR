@@ -85,7 +85,7 @@ def get_budget_quarter_names(budgetobj):
         sd = ed
     return quarter_list
 
-def projectlinetemadd(request):
+def projectlineitemadd(request):
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
@@ -113,7 +113,6 @@ def projectlinetemadd(request):
                     else:
                         name = line.split('_')[0]
                         result.update({name:request.POST.get(line)})
-                print result
                 if result["subheading"]:
                     budget_period = value
                     start_date = budget_period.split('to')[0].rstrip()
@@ -135,8 +134,7 @@ def projectlinetemadd(request):
                                'quarter_order':int(quarter),
                                }
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
-                    print "budget line itme object" ,budet_lineitem_obj
-        return HttpResponseRedirect('/project/list/')
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/budget_lineitem.html",locals())
 
 def projectbudgetdetail(request):
@@ -169,21 +167,23 @@ def budgetutilization(request):
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
         for i in lineobj_list:
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i))]
+            line_item_updated_values = {}
             for j in line_itemlist:
-                line_item_updated_values = {}
                 item_list = j.split("_")
-                if str(i) == item_list[3]:
+                if str(i) == item_list[-1]:
                     budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
-                    if str(item_list[0]) == "utilized-cost":
-                        utilized_unit_cost = request.POST.get(j)
-                        line_item_updated_values.update({'utilized_unit_cost':utilized_unit_cost})
-                    elif str(item_list[0]) == "variance":
-                        variance = request.POST.get(j)
-                        line_item_updated_values.update({'variance':variance})
+                    if str(item_list[0]) == "utilized" :
+                        line_item_updated_values.update({'utilized_unit_cost':request.POST.getlist(j)[0]})
+                    elif str(item_list[0]) == "variance": 
+                        line_item_updated_values.update({item_list[0]:request.POST.getlist(j)[0]})
                     else:
-                        comment,created = Comment.objects.get_or_create(text =request.POST.get(j),content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=j)
-                    budget_periodobj = budget_periodobj.__dict__.update(line_item_updated_values)
-                    budget_periodobj.save()
+                        text =request.POST.getlist(j)[0]
+                        commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
+                        commentobj.text = text
+                        commentobj.save()
+            budget_periodobj.__dict__.update(line_item_updated_values)
+            budget_periodobj.save()
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/budget_utilization.html",locals())
 
 def budget_amount_list(budgetobj,projectobj):
@@ -226,19 +226,19 @@ def budgetview(request):
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
-    quarter_list = get_budget_quarters(budgetobj)
-    quarter_names = get_budget_quarter_names(budgetobj)
-    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
-    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
-    span_length = len(budget_period)
-    budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj)
-    tranche_list = Tranche.objects.filter(project = projectobj)
-    tranche_amount = tanchesamountlist(tranche_list)
-    planned_amount = tranche_amount['planned_amount']
-    actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
-    recommended_amount = tranche_amount['recommended_amount']
-    utilized_amount = tranche_amount['utilized_amount']
-    
-    final_project_category_list = budget_supercategory_value(projectobj,budgetobj)
-    
+    if budgetobj:
+        quarter_list = get_budget_quarters(budgetobj)
+        quarter_names = get_budget_quarter_names(budgetobj)
+        budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
+        budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+        span_length = len(budget_period)
+        budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj)
+        tranche_list = Tranche.objects.filter(project = projectobj)
+        tranche_amount = tanchesamountlist(tranche_list)
+        planned_amount = tranche_amount['planned_amount']
+        actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
+        recommended_amount = tranche_amount['recommended_amount']
+        utilized_amount = tranche_amount['utilized_amount']
+        
+        final_project_category_list = budget_supercategory_value(projectobj,budgetobj)
     return render(request,"budget/budget.html",locals())
