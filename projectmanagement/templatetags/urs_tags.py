@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from projectmanagement.models import (Project, UserProfile)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit)
 from media.models import (Comment,)
+from userprofile.models import ProjectUserRoleRelationship
 
 register = template.Library()
 
