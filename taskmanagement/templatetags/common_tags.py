@@ -9,8 +9,8 @@ def get_details(obj):
     user = obj.get('user_name') or ''
     task_name = obj.get('task_name') or ''
     project = obj.get('project_name') or ''
-    time= obj.get('time').strftime(formats) or ''
-    date = obj.get('date').strftime('%d %B %Y') or ''
+    time= obj.get('time').strftime(formats) if obj.get('time') else ''
+    date = obj.get('date').strftime('%d %B %Y') if obj.get('time') else ''
     description = obj.get('attach') or ''
     task_status = obj.get('task_status') or ''
     if task_status and task_status.status == 2:
