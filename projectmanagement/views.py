@@ -124,7 +124,7 @@ def upload_attachment(request):
         except:
             pass
         # url = 'upload/list/?slug=%s&model=Project' %slug
-        return HttpResponseRedirect('/project/list/')
+        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
 
     return render(request,'attachment/doc_upload.html',locals())
 
@@ -409,13 +409,14 @@ def project_summary(request):
             pass
             ttt=[]
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
-            counter+=1
+            
             ttt = []
             fds = ProjectParameterValue.objects.filter(keyparameter__parent=i)
             for j in fds:
                 name = str(j.keyparameter.name)
                 value = float(j.parameter_value)
                 color = colors[counter]
+                counter+=1
                 ttt.append({'name': name,'y':value,'color':color})
         if ttt:
             if i.parameter_type in para_name:
