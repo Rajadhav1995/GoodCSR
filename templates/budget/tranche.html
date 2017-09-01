@@ -20,7 +20,7 @@
             
             <!-- /.box-header -->
             <div class="box-body">
-            <form action="/project/budget/tranche/" id="tranche" method='POST' enctype="multipart/form-data">{% csrf_token %}
+            <form action="/project/budget/tranche/?slug={{slug}}" id="tranche" method='POST' enctype="multipart/form-data">{% csrf_token %}
     
                             <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">

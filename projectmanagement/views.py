@@ -13,6 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
 from pmu.settings import PMU_URL
+from projectmanagement.utils import random_string_generator
 # Create your views here.
 
 def create_project(request):
@@ -25,8 +26,8 @@ def create_project(request):
         activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
-    funder_user = UserProfile.objects.filter(active=2,organization_type=2)
-    partner = UserProfile.objects.filter(active=2,organization_type=1)
+    funder_user = UserProfile.objects.filter(active=2,organization_type=1)
+    partner = UserProfile.objects.filter(active=2,organization_type=2)
 
     if request.method == 'POST':
         try:
@@ -44,7 +45,7 @@ def create_project(request):
             except:
                 pass
             if not instance:
-                obj.slug = obj.name.replace(' ','-')
+                obj.slug = unique_slug_generator(obj)
             obj.save()
             form.save_m2m()
             activity_del = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project")).delete()
@@ -65,13 +66,38 @@ def create_project(request):
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
             if funder and implementation_partner:
-                mapping,created = ProjectFunderRelation.objects.get_or_create(project=obj)
-                mapping.funder=funder
-                mapping.implementation_partner=implementation_partner
-                mapping.total_budget=request.POST.get('total_budget')
-                mapping.save()
+                mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
+                if mapping:
+                    mapping.funder=funder
+                    mapping.implementation_partner=implementation_partner
+                    mapping.total_budget=request.POST.get('total_budget')
+                    mapping.save()
+                else:
+                    mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
+                        implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_edit.html',locals())
+
+def unique_slug_generator(instance, new_slug=None):
+    """
+    This is for a Django project and it assumes your instance 
+    has a model with a slug field and a title character (char) field.
+    """
+    if new_slug is not None:
+        slug = new_slug
+    else:
+        slug = slugify(instance.name)
+
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(slug=slug).exists()
+    if qs_exists:
+        new_slug = "{slug}-{randstr}".format(
+                    slug=slug,
+                    randstr=random_string_generator(size=4)
+                )
+        return unique_slug_generator(instance, new_slug=new_slug)
+    return slug
+
 
 def project_list(request):
     user_id = request.session.get('user_id')
@@ -120,12 +146,12 @@ def upload_attachment(request):
             obj.save()
         try:
             keys = request.POST.get('keywords').split(',')
-            model = 'Attachment'
-            keywords = add_keywords(keys,obj,model,0)
+            key_model = 'Attachment'
+            keywords = add_keywords(keys,obj,key_model,0)
         except:
             pass
         # url = 'upload/list/?slug=%s&model=Project' %slug
-        return HttpResponseRedirect('/project/list/')
+        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
 
     return render(request,'attachment/doc_upload.html',locals())
 
@@ -173,20 +199,24 @@ def add_keywords(keys,obj,model,edit):
 
 def budget_tranche(request):
     form = TrancheForm()
+    slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
-    form.fields["project"].queryset = Project.objects.filter(created_by__id=user_id)
+    project = Project.objects.get_or_none(slug=slug)
+    # form.fields["project"].queryset = Project.objects.filter(created_by__id=user_id)
     form.fields["recommended_by"].queryset = UserProfile.objects.filter(is_admin_user=True)
     if request.method == 'POST':
         form = TrancheForm(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
+            obj.project = project
             obj.save()
-            return HttpResponseRedirect('/dashboard/')
+            return HttpResponseRedirect('/project/tranche/list/?slug=%s' %slug)
     return render(request,'budget/tranche.html',locals())
 
 def tranche_list(request):
+    slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
-    tranche_list = Tranche.objects.filter()
+    tranche_list = Tranche.objects.filter(project__slug=slug)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -302,7 +332,6 @@ def manage_parameter_values(request):
     name_range = range(1,parameter_count)
     values_list = child_parameter.values_list('parameter_value',flat=True)
     values = aggregate_project_parameters(parameter,child_parameter)
-    print values
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
@@ -420,13 +449,14 @@ def project_summary(request):
             pass
             ttt=[]
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
-            counter+=1
+            
             ttt = []
             fds = ProjectParameterValue.objects.filter(keyparameter__parent=i)
             for j in fds:
                 name = str(j.keyparameter.name)
                 value = float(j.parameter_value)
                 color = colors[counter]
+                counter+=1
                 ttt.append({'name': name,'y':value,'color':color})
         if ttt:
             if i.parameter_type in para_name:
@@ -453,7 +483,6 @@ def project_summary(request):
     # data_pip = json.dumps(data_list_pip)
     # data_pin = json.dumps(data_list_pin)
     master_sh = para_name
-    # import ipdb; ipdb.set_trace()
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))

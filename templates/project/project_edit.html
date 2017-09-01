@@ -370,11 +370,17 @@ function funder_val() {
 
 <script type="text/javascript">
     $(document).ready(function(){
+        $('select[multiple=multiple]').multiSelect()
         $("#prog_edit").validate({
             rules :
             {
                 //id_project : {required:true},
                 //program : {required:true},
+                id_name: {
+                        required: true,
+                        maxlength: 75,
+                        remote: "/propject/name/validation/"
+                        },
                 no_of_beneficiaries : {required:true},
                 target_beneficiaries : {required:true},
                 cause_area : {required:true},
@@ -384,6 +390,7 @@ function funder_val() {
             {
                 //id_project : {required : "<font color=#fc282f>Please enter the name</font>"},
                 //program:{required:"<font color=#fc282f>Please select the program</font>"},
+                id_name:{required:"<font color=#fc282f>Please enter name"},
                 no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
                 target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
                 cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
