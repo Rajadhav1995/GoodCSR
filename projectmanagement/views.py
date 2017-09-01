@@ -120,8 +120,8 @@ def upload_attachment(request):
             obj.save()
         try:
             keys = request.POST.get('keywords').split(',')
-            model = 'Attachment'
-            keywords = add_keywords(keys,obj,model,0)
+            key_model = 'Attachment'
+            keywords = add_keywords(keys,obj,key_model,0)
         except:
             pass
         # url = 'upload/list/?slug=%s&model=Project' %slug
@@ -173,20 +173,24 @@ def add_keywords(keys,obj,model,edit):
 
 def budget_tranche(request):
     form = TrancheForm()
+    slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
-    form.fields["project"].queryset = Project.objects.filter(created_by__id=user_id)
+    project = Project.objects.get_or_none(slug=slug)
+    # form.fields["project"].queryset = Project.objects.filter(created_by__id=user_id)
     form.fields["recommended_by"].queryset = UserProfile.objects.filter(is_admin_user=True)
     if request.method == 'POST':
         form = TrancheForm(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
+            obj.project = project
             obj.save()
-            return HttpResponseRedirect('/dashboard/')
+            return HttpResponseRedirect('/project/tranche/list/?slug=%s' %slug)
     return render(request,'budget/tranche.html',locals())
 
 def tranche_list(request):
+    slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
-    tranche_list = Tranche.objects.filter()
+    tranche_list = Tranche.objects.filter(project__slug=slug)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):

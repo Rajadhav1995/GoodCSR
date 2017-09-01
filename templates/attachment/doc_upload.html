@@ -34,40 +34,7 @@ width:450px;
             {% endif %}
             {% csrf_token %}
 
-                            <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    Attachment Name<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.name}}
-                                    {{ form.name.errors }}
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    Attachment File<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.attachment_file}}
-                                    {{ form.attachment_file.errors }}
-                                </div>
-                            </div>
-                        
-                        <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                {{form.date.label_tag}}<font color="red">*</font>
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                {{form.date}}
-                                {% if form.date.errors %}
-                                <p style="color: red;">
-                                    Please Select.
-                                </p>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% if key == 1 %}
+                            {% if key == 1 %}
                         <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 {{form.document_type.label_tag}}<font color="red">*</font>
@@ -82,6 +49,51 @@ width:450px;
                             </div>
                         </div>
                         {% endif %}
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    Attachment File<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.attachment_file}}
+                                    {{ form.attachment_file.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    Attachment Name<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.name}}
+                                    {{ form.name.errors }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                    Attachment Description<font color="red">*</font>
+                                </label>
+                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                    {{form.description}}
+                                    {{ form.description.errors }}
+                                </div>
+                            </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                {{form.date.label_tag}}<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{form.date}}
+                                {% if form.date.errors %}
+                                <p style="color: red;">
+                                    Please Select.
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
                         <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
                                 Keywords:
@@ -116,7 +128,7 @@ width:450px;
 
 <script>
   $(function() {
-    $( ".datepicker" ).datepicker({
+    $( "#id_date").datepicker({
       changeMonth: true,
       changeYear: true,
       yearRange: "1900:2012",
