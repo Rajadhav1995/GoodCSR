@@ -1,12 +1,23 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from projectmanagement.models import (Project, UserProfile)
+from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 
 register = template.Library()
+
+@register.assignment_tag
+def get_user_permission(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
+    return user_obj
+
+@register.assignment_tag
+def get_funder(projectobj):
+    funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
+    return funderobj
 
 @register.assignment_tag
 def get_user_project(request):

@@ -28,6 +28,7 @@
 <link rel= "stylesheet" href="/static/css/multi-select.css/">
 <link rel="stylesheet" href="/static/css/style-new.css" />
 <link rel="stylesheet" href="/static/css/custome.css" />
+<link rel="stylesheet" href="/static/css/multi-select.css">
 
 
 
@@ -36,7 +37,8 @@
 <script type="text/javascript" src="/static/js/html5.js"></script>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
-<script type="text/javascript" src="/static/js/bootstrap-multiselect.js"></script>
+<!-- <script type="text/javascript" src="/static/js/bootstrap-multiselect.js"></script> -->
+<script src="/static/js/jquery.multi-select.js"></script>
 
 <!-- IE less than 9 -->
 <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -105,22 +107,21 @@
                 <!--</div>-->
               </li>
               
-              
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True %}
         <li class="user-wrap"><a href="javascript:void(0);">
                 Settings
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
                   <ul>
                         <li><a href="/project/list/">Project List</a></li>
-                        <li><a href="/project/budget/tranche/">Add Budget Tranche</a></li>
 <!--                        <li><a href="/managing/Task/listing/">Tasks</a></li>-->
 <!--                    	<li><a href="/managing/Milestone/listing/">Milestone</a></li>-->
-                      <li><a href="/project/tranche/list/">Tranches</a></li>
 
                   </ul>
                 <!--</div>-->
               </li>
-
+            {% endif %}
             </ul>
           </nav>
             <div class="menu-rgt">
@@ -198,7 +199,7 @@
         {%if project_funders %}
     	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
-        {% else %}c
+        {% else %}
         <li><a href="">by Funder</a> </li>
         <li><a href="">NGO Partner: </a></li>
         {% endif %}
@@ -207,10 +208,11 @@
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
-          <li><a class="active" href="/project/summary/?slug={{obj.slug}}">Summary</a></li>
-          <li><a href="/managing/listing/?slug={{obj.slug}}">Task & Milestone</a></li>
-          <li><a href="/manage/project/budget/view/?slug={{obj.slug}}">Budget</a></li>
-          <li><a href="/upload/list/?slug={{i.slug}}&model=Project">Files</a></li>
+          <li><a class="active" href="/project/summary/?slug={{slug}}">Summary</a></li>
+          <li><a href="/managing/listing/?slug={{slug}}">Task & Milestone</a></li>
+          <li><a href="/manage/project/budget/view/?slug={{slug}}">Budget</a></li>
+          <li><a href="/upload/list/?slug={{slug}}&model=Project">Files</a></li>
+          <li><a href="/project/tranche/list/?slug={{slug}}">Tranches</a></li>
         </ul>
      </div>         
     </div>
@@ -249,6 +251,12 @@
 
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <!--<script src="/static/js/jquery.nicescroll.min.js"></script>-->
+{% load static %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<!--<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>-->
+<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 <!--    <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>-->
@@ -256,7 +264,6 @@
 {% block script %}
 
 {% endblock %}
-
 
 </body>
 </html>

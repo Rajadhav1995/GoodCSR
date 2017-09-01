@@ -73,27 +73,31 @@
         </form>-->
        
     </div>
-    <div class="white-box white-pad"><div style="float: right;"><a class="btn btn-primary" href="/upload/doc/?model=Project&slug={{slug}}&key=1">Add Attachment</a></div>
+    <div class="white-box white-pad"><div style="float: right;">
+      <a class="btn btn-primary" href="/upload/doc/?model=Project&slug={{slug}}&key=2">Add Image</a>
+      <a class="btn btn-primary" href="/upload/doc/?model=Project&slug={{slug}}&key=1">Add Document</a></div>
     <div class="table-responsive">
     	<table class="table table-striped table-bordered sort_table" id="dest">
   <thead>
     <tr>
       <th>File</th>
-      <th>Description</th>
-      <th>Uploadaed by</th>
+      <th>File Title</th>
+      <th>File Type</th>
+      <!-- <th>Uploadaed by</th> -->
       <th>Tags</th>
-      <th>Source</th>
+      <!-- <th>Source</th> -->
       <th>Upload Date </th>
     </tr>
   </thead>
   <tbody>
     {% for i in attachment %}
     <tr>
-      <td><img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px><p>{{i.name}}</p></td>
-      <td>{{i.description}}</td>
-      <td>{{i.created_by.user.first_name}} {{i.created_by.user.last_name}}</td>
-        <td><div class="span_bottom">{% for j in i.get_file_keywords %}<span>{{j}}</span>{% endfor %}<!-- <span>Budget</span><span>Report</span><span>Document</span><span>Files</span> --></div class="span_bottom"></td>
-      <td>Task: Dhenuki Labours Unit</td>
+      <td>{% if i.attachment_type == 2 %}<img src="/static/img/doc.png" height=128px width=128px>{% else %}<img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% endif %}</td>
+      <td>{{i.name}}</td>
+      <td>{{i.get_attachment_type_display}} {% if i.attachment_type == 2 %} ({{i.get_document_type_display}}) {% endif %}</td>
+      <!-- <td>{{i.created_by.user.first_name}} {{i.created_by.user.last_name}}</td> -->
+        <td><div class="span_bottom">{% for j in i.get_file_keywords %}<span>{{j}} </span>{% endfor %}<!-- <span>Budget</span><span>Report</span><span>Document</span><span>Files</span> --></div class="span_bottom"></td>
+      <!-- <td>Task: Dhenuki Labours Unit</td> -->
       <td>{{i.created}}</td>
     </tr>
     {% endfor %}

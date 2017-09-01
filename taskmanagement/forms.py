@@ -95,15 +95,15 @@ class MilestoneForm(forms.ModelForm):
         fields = ('name','project','task','overdue','subscribers','status')
 
 
-    def __init__(self,user_id,project_id,key,*args, **kwargs):
+    def __init__(self,user_id,project_id,*args, **kwargs):
         self.user = user_id
         self.project = project_id
         super(MilestoneForm, self).__init__(*args, **kwargs)
-        obj1=set(list(Milestone.objects.filter(active=2).values_list('task',flat=True)))
-        obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
-        tasks = obj2 - obj1
+#        obj1=set(list(Milestone.objects.filter(active=2).values_list('task',flat=True)))
+#        obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
+#        tasks = obj2 - obj1
         self.fields['name'].required = True
         self.fields['overdue'].required = False
-        self.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
+#        self.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
         self.fields['subscribers'].required = True
         self.fields['status'].required = True

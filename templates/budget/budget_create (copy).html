@@ -1,0 +1,414 @@
+{% extends 'base.html' %}
+{% block section %}
+{% endblock %}
+{% block content %}
+
+
+<!--                <div class="white-box">-->
+<!--                    <div class="col-md-12">-->
+<!--                        <div>-->
+
+<!--                            <section class="content">-->
+<!--                                <div class="">-->
+
+<!--                                    <div class="listing-body signup_form_height">-->
+<!--                                        <div class="box-body">-->
+<!--                                            <div class="clearfix"></div>-->
+<!--                                            <div class="">-->
+<!--                                                <div class="col-md-12 col-sm-12 col-xs-12">-->
+<!--                                                    <div class="wizard_form">-->
+<!--                                                        <div id="wizard" class="form_wizard wizard_horizontal">-->
+<!--                                                            <ul class="wizard_steps nav nav-tabs">-->
+<!--                                                                <li class="active">-->
+<!--                                                                    <a href="#step-1" data-toggle="tab">-->
+<!--                                                                        <span class="step_no">1</span>-->
+<!--                                                                        <span class="step_descr"> Step 1<br />-->
+<!--                                                    <label class="main-label text-bold">Budget Info</label>-->
+
+<!--                                        </span>-->
+<!--                                                                    </a>-->
+<!--                                                                </li>-->
+
+<!--                                                                <li>-->
+<!--                                                                    <a href="#step-2" data-toggle="tab">-->
+<!--                                                                        <span class="step_no">2</span>-->
+<!--                                                                        <span class="step_descr">Step 2<br />-->
+<!--                                                    <label class="main-label text-bold">Super Categories</label>-->
+
+<!--                                        </span>-->
+<!--                                                                    </a>-->
+<!--                                                                </li>-->
+<!--                                                                <li>-->
+<!--                                                                    <a href="#step-3" data-toggle="tab">-->
+<!--                                                                        <span class="step_no">3</span>-->
+<!--                                                                        <span class="step_descr">Step 3<br />-->
+<!--                                                    <label class="main-label text-bold">Budget Line Items</label>-->
+
+<!--                                        </span>-->
+<!--                                                                    </a>-->
+<!--                                                                </li>-->
+
+<!--                                                            </ul>-->
+<!--                                                            <div class="tab-content box_shadow">-->
+<!--                                                                <div id="step-1" class="tab-pane fade in active">-->
+<!--                                                                   {% if key == 'budget' %}-->
+<!--                                                                   <form id="ic_form" action="." method = "post" >{% csrf_token %}-->
+<!--                        <input type="hidden" name="slug" value="{{project_slug}}">-->
+<!--                                                                    <div class="col-md-offset-2 col-md-8">-->
+<!--                                                                       <div class="budget_create">-->
+<!--                                                                        <h3>Create Budget</h3>-->
+<!--                                                                        <p>1. Budget Info</p>-->
+<!--                                                                    </div>-->
+<!--                                                                        <div class="col-md-12">-->
+<!--                                                                            <div class="budget_create budget_formheading">-->
+<!--                                                                                <h3>Registration Form</h3>-->
+<!--                                                                                <p class="color_green">Basic Profile Details</p>-->
+<!--                                                                            </div>-->
+<!--                                                                        </div>-->
+
+<!--                                                                        <form class="budget_form">-->
+<!--                                                                            <div class="col-md-12">-->
+<!--                                                                                <div class=" ">-->
+<!--                                                                                    <div class="">-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Project</label>-->
+<!--                                                                                            <input type="text">-->
+<!--                                                                                        </div>-->
+<!--                                                                                        <div class="col-md-6 padding_left">-->
+<!--                                                                                            <div class="form-group">-->
+<!--                                                                                                <label>Start Date</label>-->
+<!--                                                                                                <input type="text" id="from" name="from">-->
+<!--                                                                                            </div>-->
+<!--                                                                                        </div>-->
+<!--                                                                                        <div class="col-md-6 padding_right">-->
+<!--                                                                                            <div class="form-group">-->
+<!--                                                                                                <label>End Date</label>-->
+<!--                                                                                                <input type="text" id="to" name="to">-->
+<!--                                                                                            </div>-->
+<!--                                                                                        </div>-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Budget Duration</label>-->
+<!--                                                                                            <input type="text">-->
+<!--                                                                                        </div>-->
+<!--                                                                                    </div>-->
+<!--                                                                                </div>-->
+<!--                                                                            </div>-->
+
+<!--                                                                            <div class="click_buttons">-->
+<!--                                                                                <div class="link-right">-->
+<!--                                                                                    <a href="javascript:void(0);" class="link-pad1">Next</a>-->
+<!--                                                                                </div>-->
+<!--                                                                            </div>-->
+<!--                                                                        </form>-->
+<!--                                                                    </div>-->
+<!--                                                                </div>-->
+<!--                                                                <div id="step-2" class="tab-pane fade in">-->
+<!--                                                                {% else %}-->
+<!--                                                                 <div class="col-md-offset-2 col-md-8">-->
+<!--                                                                   <div class="budget_create">-->
+<!--                                                                        <h3>Create Budget</h3>-->
+<!--                                                                        <p>2. Super Categories</p>-->
+<!--                                                                    </div>-->
+<!--                        <input type="hidden" name="slug" value="{{project_slug}}">-->
+<!--                        <input type="hidden" name="budget_id" value="{{budget_id}}">-->
+<!--                                                                    <form  id="ic_form" action="/manage/project/budget/category/add/?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" class="budget_form super_categories"> {% csrf_token %}-->
+<!--                                                                        <div class="col-md-12">-->
+<!--                                                                            <div class=" ">-->
+<!--                                                                                <div class="">-->
+<!--                                                                                    <div class="form-group">-->
+<!--                                                                                        <label>Super Categories Label</label>-->
+<!--                                                                                        <input type="text" placeholder="Enter Location">-->
+<!--                                                                                    </div>-->
+<!--                                                                                    <div class="col-md-6 padding_left">-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Category 1</label>-->
+<!--                                                                                            <input type="text">-->
+<!--                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>-->
+<!--                                                                                        </div>-->
+<!--                                                                                    </div>-->
+<!--                                                                                    <div class="col-md-6 padding_right">-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Category 2</label>-->
+<!--                                                                                            <input type="email">-->
+<!--                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>-->
+<!--                                                                                        </div>-->
+<!--                                                                                    </div>-->
+<!--                                                                                    <div class="col-md-6 padding_left">-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Category 3</label>-->
+<!--                                                                                            <input type="text">-->
+<!--                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>-->
+<!--                                                                                        </div>-->
+<!--                                                                                    </div>-->
+<!--                                                                                    <div class="col-md-6 padding_right">-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Category 4</label>-->
+<!--                                                                                            <input type="email">-->
+<!--                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                            <span>Unsaved</span>-->
+<!--                                                                                        </div>-->
+<!--                                                                                    </div>-->
+<!--                                                                                    <div class="col-md-6 padding_left">-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Category 5</label>-->
+<!--                                                                                            <input type="text">-->
+<!--                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                <span>Unsaved</span>-->
+<!--                                                                                        </div>-->
+<!--                                                                                    </div>-->
+<!--                                                                                    <div class="col-md-6 padding_right">-->
+<!--                                                                                        <div class="form-group">-->
+<!--                                                                                            <label>Category 6</label>-->
+<!--                                                                                            <input type="email">-->
+<!--                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>-->
+<!--                                                                                        </div>-->
+<!--                                                                                    </div>-->
+<!--                                                                                    -->
+<!--                                                                                </div>-->
+<!--                                                                            </div>-->
+<!--                                                                        </div>-->
+<!--                                                                    {% endif %}-->
+<!--                                                                        <div class="click_buttons">-->
+<!--                                                                            <div class="link-right">-->
+<!--                                                                                <a href="javascript:void(0);" class="link-pad1">Next</a>-->
+<!--                                                                            </div>-->
+<!--                                                                        </div>-->
+<!--                                                                    </form>-->
+<!--                                                                    </div>-->
+
+<!--                                                                </div>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                        -->
+                        
+                        
+<!--                        before editing -->
+                        {% if key == 'budget' %}
+                        <form id="ic_form" action="." method = "post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                        <input type="hidden" name="slug" value="{{project_slug}}">
+                    {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
+                    <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Project <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input class="form-control" type="text" name="project" value="{{projectobj.name}}" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Start Date <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{ form.actual_start_date }}
+								{{ form.actual_start_date.errors }}
+                                <font color=#fc282f><b><span id="dateError1"></span></b></font>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                End Date <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                {{ form.end_date }}
+								{{ form.end_date.errors }}
+                                <font color=#fc282f><b><span id="dateError"></span></b></font>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Budget Duration <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <input class="form-control" type="text" id="id_duration"  readonly /> 
+                            </div>
+                        </div>
+
+                    {% else %}
+                        <form id="ic_form" action="/manage/project/budget/category/add/?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                        <input type="hidden" name="slug" value="{{project_slug}}">
+                        <input type="hidden" name="budget_id" value="{{budget_id}}">
+                    {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
+                                        <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Super Category Label <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input type="text" name="super-category" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Category 1 <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input type="text" name="category_1"  required />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Category 2 <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input type="text" name="category_2"  >
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Category 3 <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input type="text" name="category_3"  >
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Category 4 <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input type="text" name="category_4"  >
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Category 5 <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input type="text" name="category_5"  >
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Category 6 <span class="required" style="color:red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input type="text" name="category_6" >
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                        <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    {% if key == "budget" %}
+                                        <input type="submit" class="btn btn-success" value="Save and add SuperCategory">
+                                    {% else %}
+                                        <input type="submit" value="Save and add Budget Lineitems" class="btn btn-success">
+                                    {% endif %}
+                                        <input class="btn btn-primary" type="button" value="Cancel" onClick="parent.location='/manage/project/budget/list/?slug={{project_slug}}'">
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+
+<script>
+  $( function() {
+    $( "#id_actual_start_date" ).datepicker({
+        format: 'yyyy-mm'
+    });
+    $( "#id_end_date" ).datepicker({
+        format: 'yyyy-mm-dd'
+    });
+  } );
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $.validator.addMethod("endDate", function(value, element) {
+            var startDate = $('#id_actual_start_date').val();
+            aa = startDate.split("-")
+            aab = [aa[2], aa[1], aa[0]]
+            sd = aab.join("-")
+            bb = value.split("-")
+            bbb = [bb[2], bb[1], bb[0]]
+            ed = bbb.join("-") 
+            return Date.parse(sd) <= Date.parse(ed) || value == "";
+        }, "* End date must be after start date");
+        
+        $("#ic_form").validate({
+            rules :
+            {
+                actual_start_date : {required:true},
+                end_date : {required:true},
+            },
+            messages:
+            {
+                actual_start_date : {required : "Please Choose the Start Date"},
+                end_date : {required:"Please Choose the End Date"},
+            },
+    });
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+        });
+        });
+        
+</script>
+
+
+
+<style>
+.error{color:red; min-width: 200px;}
+</style>
+
+
+<script>
+  $("#id_end_date").datepicker({
+    dateFormat: 'yy-mm-dd',
+    onSelect: function(dateText, inst) {
+        var start = new Date($('#id_actual_start_date').val());
+        var end = new Date($('#id_end_date').val());
+        if (end <= start) {
+            alert("'End date' should be greater than 'Start date'")
+            document.getElementById('dateError').innerHTML="End date should be greater than Start date"
+        };
+        if (end > start) {
+            document.getElementById('dateError').innerHTML=""
+            document.getElementById('dateError1').innerHTML=""
+        };
+
+        var months = (end.getFullYear() - start.getFullYear()) * 12;
+        months += end.getMonth() - start.getMonth();
+        document.getElementById("id_duration").value = months;
+    }
+
+});
+  $("#id_actual_start_date").datepicker({
+    dateFormat: 'yy-mm-dd',
+  });
+</script>
+{% endblock %}
+

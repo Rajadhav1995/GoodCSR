@@ -8,11 +8,13 @@ from django.contrib.contenttypes.models import ContentType
 
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
 class AttachmentForm(forms.ModelForm):
-	date = forms.DateField(widget=forms.TextInput(attrs={'class':'datepicker'}))
-	document_type = forms.ChoiceField(choices = DOCUMENT_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))
-	class Meta:
-		model = Attachment
-		fields  = ('attachment_file','name','date','document_type')
+    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    date = forms.DateField(widget=forms.TextInput(attrs={'class':'datepicker'}))
+    document_type = forms.ChoiceField(choices = DOCUMENT_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))
+    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True)
+    class Meta:
+        model = Attachment
+        fields  = ('attachment_file','name','date','document_type')
 
 class ImageUpload(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
