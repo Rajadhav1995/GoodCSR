@@ -50,12 +50,11 @@
   </div>
 
 {% block script %}
-<script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script src="/static/js/jquery.quicksearch.js"></script>
-<script src = "/static/js/jquery.multi-select.js"></script>
+<script src="/static/js/jquery.multi-select.js" type="text/javascript"></script>
+
 
 <script>
     $(document).ready(function() {
@@ -64,13 +63,17 @@
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
        // $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
+       $("#id_subscribers").multiSelect();
+       $("#id_task").multiSelect();
+       $("#id_task_dependency").multiSelect();
     });
 </script>
 
 <script>
     $(document).ready(function() {
     if ('{{model_name}}' == 'Milestone'){
-    $('#id_task').on('click',function(e){
+    $('#id_task').on('change',function(e){
+        alert("hi");
         var tasks_ids = $('#id_task').val();
         $.ajax({
             url:'/managing/milestone/overdue/',
@@ -131,7 +134,7 @@
 <script>
     $(document).ready(function() {
     if ('{{model_name}}' == 'Task'){
-    $('#id_task_dependency').on('click',function(e){
+    $('#id_task_dependency').on('change',function(e){
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({
             url:'/managing/tasks/auto-computation/date',

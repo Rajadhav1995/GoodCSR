@@ -53,6 +53,7 @@ def add_taskmanagement(request,model_name,m_form):
         if form.is_valid():
             f=form.save()
             f.slug = f.name.replace(' ','-')
+            f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
@@ -68,15 +69,19 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
     m=eval(model_name).objects.get(slug = slug)
+
     try:
         project = Project.objects.get(slug =request.GET.get('key') )
     except:
         project = Project.objects.get(slug = request.POST.get('slug'))
+    import ipdb;ipdb.set_trace();
     if request.method == 'POST':
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
+        
         if form.is_valid():
             f=form.save()
             f.slug = f.name.replace(' ','-')
+            f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
@@ -84,7 +89,16 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             else:
                 return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
-        form=form(user_id,project.id,instance=m)
+        if model_name == 'Milestone':
+            task_list = m.task.all().ids()
+            obj1=set(list(Milestone.objects.filter(active=2).values_list('task',flat=True)))
+            obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
+            tasks = list(obj2 - obj1)
+            tasks.extend(task_list)
+            form=form(user_id,project.id,instance=m)
+            form.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
+        else:
+            form=form(user_id,project.id,instance=m)
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def active_change(request,model_name):
