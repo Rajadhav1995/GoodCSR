@@ -1,4 +1,6 @@
 import random
+import math
+from dateutil import relativedelta
 from django.shortcuts import render
 from django.db.models import Sum
 from datetime import timedelta
@@ -59,28 +61,34 @@ def projectbudgetcategoryadd(request):
 
 def get_budget_quarters(budgetobj):
     sd = budgetobj.actual_start_date
+    budget_enddate = budgetobj.end_date
     if sd.day > 15:
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     ed = budgetobj.end_date
-    no_of_quarters = ((ed.year - sd.year) * 12 + ed.month - sd.month)/3
+    no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
-    for i in range(no_of_quarters):
-        ed = sd+timedelta(days=90)
+    for i in range(int(no_of_quarters)):
+        ed = sd+relativedelta.relativedelta(months=3)
+        if ed > budget_enddate:
+            ed = budget_enddate
         quarter_list.update({i:str(sd)+" to "+str(ed)})
         sd = ed
     return quarter_list
 
 def get_budget_quarter_names(budgetobj):
     sd = budgetobj.actual_start_date
+    budget_enddate = budgetobj.end_date
     if sd.day > 15:
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     ed = budgetobj.end_date
-    no_of_quarters = ((ed.year - sd.year) * 12 + ed.month - sd.month)/3
+    no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = []
     for i in range(no_of_quarters):
-        ed = sd+timedelta(days=90)
+        ed = sd+relativedelta.relativedelta(months=3)
+        if ed > budget_enddate:
+            ed = budget_enddate
         quarter_list.append(sd.strftime("%b")+"-"+ed.strftime("%b"))
         sd = ed
     return quarter_list
