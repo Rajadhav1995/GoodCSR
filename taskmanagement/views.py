@@ -319,3 +319,6 @@ def get_tasks_list(activity_list):
                 task_list.append(i)
     return task_list
 
+
+def my_tasks_details(request):
+    return render(request,'taskmanagement/my-task.html',locals())

@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load common_tags %}
+{% load urs_tags %}
+{% block section %}
+<div class="clear"></div>
+<!--Green pad starts-->
+<section class="green-pad green-height">
+	<div class="row">
+	<div class="image-pad logo-shadow">
+    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
+    </div>
+    <div class="title-left">
+    {% if obj %}
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</h4>
+    {% else %}
+    <h4><a href = '#'>Project Name</h4>
+    {% endif %}
+    <ul>
+        {%if project_funders %}
+    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
+        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
+        {% else %}
+        <li><a href="">by Funder</a> </li>
+        <li><a href="">NGO Partner: </a></li>
+        {% endif %}
+    </ul>    
+    </div>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+     <div class="menu-bottom">
+        <ul>
+          <li><a  href="/project/summary/?slug={{slug}}">Summary</a></li>
+          <li><a href="/managing/listing/?slug={{slug}}">Task & Milestone</a></li>
+          <li><a href="/manage/project/budget/view/?slug={{slug}}">Budget</a></li>
+          <li><a href="/upload/list/?slug={{slug}}&model=Project">Files</a></li>
+          <li><a href="/project/tranche/list/?slug={{slug}}">Tranches</a></li>
+          <li><a class="active" href = '/managing/my-tasks/details/?slug={{slug}}'>My Tasks </ad></li>
+        </ul>
+     </div>
+    </div>
+</section>
+<!--Green pad Ends-->
+<!--Content part starts-->
+{% endblock %}
+
+{% block content %}
+<div class="clear"></div>
+<!--Content part starts-->
+<section class="content-part">
+	<div class="row">
+		<div class="left-task">
+          <div class="content-top content-top-task">
+      <div class="select-area">
+      	<label>Sort by </label>
+        <div class="small-select">
+        <select name="lang" class="select_box ">
+            <option>Priority</option>
+            <option>Ascending</option>
+            <option>Descending</option>
+        </select>
+        </div>
+       </div>
+    </div>
+    <div id="boxscroll-pad">
+    <div class="task-head">
+    	<h4>Overdue</h4>
+        <span>3</span>
+    </div>
+          <ul>
+              <li><a href="javascript:void(0);">Estimate duration for Phase I of school Construction <span>Jul 30 - Construction</span></a></li>
+              <li><a href="javascript:void(0);">Shortlist the vendor for construction materials <span>Aug 1 - Research</span></a></li>
+              <li><a href="javascript:void(0);">Recrutiment of teachers for 1 - V std <span>Aug 12 - Construction</span></a></li>
+          </ul>
+          <div class="task-head current-date">
+              <h4>Today</h4>
+              <span>5</span>
+          </div>
+          <ul>
+              <li><a href="javascript:void(0);">Upload picture of benches bought <span>Aug 15 - Class Setup</span></a></li>
+              <li><a href="javascript:void(0);">Finance team to submit the bills for land acquisition <span>Aug 15 - Budgeting</span></a></li>
+              <li><a href="javascript:void(0);">Add details on company profile page <span>Aug 15 - Corporate</span></a></li>
+              <li><a href="javascript:void(0);">Add details of Q3 and Q4 budget <span>Aug 15 - Budgeting</span></a></li>
+          </ul>
+          <div class="task-head">
+              <h4>Tommorow</h4>
+              <span>4</span>
+          </div>
+          <ul>
+              <li><a href="javascript:void(0);">Shortlist the vendor for construction materials <span>Aug 16 - Class Setup</span></a></li>
+              <li><a href="javascript:void(0);">Add details of Q3 and Q4 budget <span>Aug 16 - Budgeting</span></a></li>
+              <li><a href="javascript:void(0);">Finance team to submit the bills for land acquisition <span>Aug 18 - Corporate</span></a></li>
+             <li><a href="javascript:void(0);">Shortlist the vendor for construction materials <span>Aug 16 - Class Setup</span></a></li>
+          </ul>
+          </div>
+        </div>
+        <div class="right-task">
+        	<div class="task-head-lft">
+              <h4>Shortlist the vendor for construction materials <img src="img/vender-icon.png" alt=""></h4>
+              <h5>in <span class="under-line">Nabarangpur School Project</span> for <span>Construction Activity</span> <img src="img/material-icon.png" alt=""></h5>
+              <p>Details: This project works for child development, health and
+welfare of Ramnagar village in Andhra Pradesh. </p>
+          </div>
+            <div class="task-head-rgt">
+              <img src="img/progress-icon.png" alt="">
+              <p>in progress</p>
+          </div>
+          <div class="planned-date">
+          <ul>
+              <li>Planned Start Date : <span>Oct 30, 2016</span></li>
+              <li>Planned End Date&nbsp;&nbsp;&nbsp;: <span>Apr 12, 2017</span></li>
+          </ul>
+          <ul>    
+              <li>Actual Start Date : <span>Oct 30, 2016</span></li>
+              <li>Actual End Date&nbsp;&nbsp;&nbsp;: <span>Apr 12, 2017</span></li>
+          </ul>
+          </div>
+          <div class="planned-pad">
+          <ul>
+              <li><span>Assigned to</span> <img src="img/user-icon1.png" alt=""></li>
+              <li><span>Created by </span><img src="img/user-icon2.png" alt=""></li>
+              <li><span>Approval</span> <img src="img/user-icon3.png" alt=""></li>
+              <li><span>Subscribed to</span> <img src="img/user-icon4.png" alt=""> <img src="img/user-icon5.png" alt=""></li>
+          </ul>
+          </div>
+          <div class="task-completion">
+          	<div class="task-completion-left">
+          		<img class="user-image" src="img/user-img.png" alt="">
+            </div>
+            <div class="task-completion-right">
+            	<textarea name="Write a update..." onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Write a update...</textarea>
+            <div class="task-details">
+            	<h4>Task Completion Status (%)</h4>
+                <div class="range-holder">
+                <div id="pr-slider" class="dragdealer">
+		            <div class="stripe">
+					<div class="handle">
+			        	<div class="square">
+						</div>	
+		            </div>
+		            
+		          </div>
+			  </div>
+              <ul>
+              	  <li>10</li>
+                  <li>20</li>
+                  <li>30</li>
+                  <li>40</li>
+                  <li>50</li>
+                  <li>60</li>
+                  <li>70</li>
+                  <li>80</li>
+                  <li>90</li>
+                  <li>100</li>
+              </ul>    	
+              </div>
+              <a class="task-link" href="javascript:void(0);">Add Update</a>
+            </div>
+            </div>
+          </div>
+          <div class="user-timeline">
+          	<div id="boxscroll-timeline">
+            <div class="month-pad">Aug 15, 2017</div>
+            <ul>
+            	<li>
+                	<div class="left-li"><img class="user-image" src="img/user-img3.png" alt=""></div>
+                    <div class="right-li first-li">
+                    	<p>Teacher hired for I to IV stds</p>
+                        <ul>
+                        	<li><img src="img/teacher-img1.jpg" alt=""></li>
+                            <li><img src="img/teacher-img2.jpg" alt=""></li>
+                            <li><a href="javascript:void(0);"><img src="img/teacher-img3.jpg" alt="">
+                            <div class="image-hover">4 More files</div></a>
+                            </li>
+                        </ul>    
+                        <span>12.30 pm</span>
+            	</div>
+                </li>
+                <li>
+                	<div class="left-li"><img class="user-image" src="img/user-img1.png" alt=""></div>
+                    <div class="right-li second-li">
+                    	<ul>
+                        	<li>
+                            	<a href="javascript:void(0);">
+                                <img src="img/excel-icon.png" alt=""> <span>List of shortlisted vendors</span></a>
+							</li>
+                            <li>
+                            	<a href="javascript:void(0);">
+                                <img src="img/ppt-icon.png" alt=""> <span>Presentation for board of directors</span></a>
+							</li>
+                        </ul>    
+                        <span>3.09 pm</span>
+            	</div>
+                </li>	
+                 <li>
+                	<div class="left-li"><img class="user-image" src="img/user-img1.png" alt=""></div>
+                    <div class="right-li third-li">
+                    	<ul>
+                        	<li>I have updated the budget for Q1 and Q2. @karangupta. Please go through it.</li>
+                        </ul>    
+                        <span>3.09 pm</span>
+            	</div>
+                </li>
+            </ul>
+            <div class="month-pad">Aug 15, 2017</div>
+            <ul>
+            	<li>
+                	<div class="left-li"><img class="user-image" src="img/user-img3.png" alt=""></div>
+                    <div class="right-li first-li">
+                    	<p>Teacher hired for I to IV stds</p>
+                        <ul>
+                        	<li><img src="img/teacher-img1.jpg" alt=""></li>
+                            <li><img src="img/teacher-img2.jpg" alt=""></li>
+                            <li><a href="javascript:void(0);"><img src="img/teacher-img3.jpg" alt="">
+                            <div class="image-hover">4 More files</div></a>
+                            </li>
+                        </ul>    
+                        <span>12.30 pm</span>
+            	</div>
+                </li>
+                <li>
+                	<div class="left-li"><img class="user-image" src="img/user-img1.png" alt=""></div>
+                    <div class="right-li second-li">
+                    	<ul>
+                        	<li>
+                            	<a href="javascript:void(0);">
+                                <img src="img/excel-icon.png" alt=""> <span>List of shortlisted vendors</span></a>
+							</li>
+                            <li>
+                            	<a href="javascript:void(0);">
+                                <img src="img/ppt-icon.png" alt=""> <span>Presentation for board of directors</span></a>
+							</li>
+                        </ul>    
+                        <span>3.09 pm</span>
+            	</div>
+                </li>	
+                 <li>
+                	<div class="left-li"><img class="user-image" src="img/user-img1.png" alt=""></div>
+                    <div class="right-li third-li">
+                    	<ul>
+                        	<li>I have updated the budget for Q1 and Q2. @karangupta. Please go through it.</li>
+                        </ul>    
+                        <span>3.09 pm</span>
+            	</div>
+                </li>
+            </ul>
+            </div>
+          </div>
+        </div>    
+    </div>
+</section>
+<!--Content part Ends-->
+{% endblock %}
+{% block script %}
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+
+<script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+<script>
+//Toggle
+		
+	$('.user-menu').on('click',function(){
+		$('.dropdown-menu').slideDown(350);
+	
+	});
+	$('.select-down').on('click',function(){
+        $('.dropdown-menu1').slideDown(350);
+          
+    });
+	
+	$(document).ready(function(e) {	
+		/*Content Show/Hide */
+		$('.hide-cont').hide();
+		$('.close-cont').hide();
+		$('.view-cont').click(function(){
+			$('.hide-cont').slideDown(350);
+			$('.close-cont').show();
+			$('.view-cont').hide();
+		});
+		$('.close-cont').click(function(){
+			$('.hide-cont').slideUp(350);
+			$('.close-cont').hide();
+			$('.view-cont').show();
+		});	
+		$(document).trigger( "click" );
+	});
+	
+	$(document).click(function(){
+	
+		$('.user-menu, .select-down').click(function(event){
+			event.stopPropagation();
+		});
+	
+		$('.dropdown-menu, .dropdown-menu1').slideUp(350);	 
+	
+	});		 
+</script>
+
+    <script type="text/javascript">
+   
+	
+	var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+<script>
+  $(document).ready(function() {  
+    $("#boxscroll-pad").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});
+	// First scrollable DIV
+	$("#boxscroll-timeline").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});    
+  });
+  $(document).resize(function() {
+  $("#boxscroll-pad").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});
+	// First scrollable DIV
+	$("#boxscroll-timeline").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); 
+  });
+</script> 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#horizontalTab').easyResponsiveTabs({
+            type: 'default', //Types: default, vertical, accordion           
+            width: 'auto', //auto or any width like 600px
+            fit: true,   // 100% fit in a container
+            closed: 'accordion', // Start closed if in accordion view
+            activate: function(event) { // Callback function if tab is switched
+                var $tab = $(this);
+                var $info = $('#tabInfo');
+                var $name = $('span', $info);
+                $name.text($tab.text());
+
+                $info.show();
+            }
+        });
+		});
+</script>
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#myBtn1').click(function(){
+	$('#pop3').simplePopup();
+    });
+});
+</script>
+
+<!---datepicker script-->
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script>
+	$(function() {
+	$( ".datepicker" ).datepicker({
+	showOn: "button",
+	buttonImage: "img/calender-icon.png", 
+	buttonImageOnly: true
+	});
+	});
+</script>
+ <script src="/static/js/price-range.js"></script>
+{% endblock %}
