@@ -59,9 +59,11 @@
         <span>3</span>
     </div>
           <ul>
-              <li><a href="javascript:void(0);">Estimate duration for Phase I of school Construction <span>Jul 30 - Construction</span></a></li>
-              <li><a href="javascript:void(0);">Shortlist the vendor for construction materials <span>Aug 1 - Research</span></a></li>
-              <li><a href="javascript:void(0);">Recrutiment of teachers for 1 - V std <span>Aug 12 - Construction</span></a></li>
+            {% if task_listing %}
+                {% for task in task_listing %}
+              <li><a href = # onclick="return hidediv({{task.slug}})">{{task.name}} <span>{{task.start_date}} - {{task.activity.name}}</span></a></li>
+              {% endfor %}
+            {% endif %}
           </ul>
           <div class="task-head current-date">
               <h4>Today</h4>
@@ -86,9 +88,10 @@
           </div>
         </div>
         <div class="right-task">
-        	<div class="task-head-lft">
-              <h4>Shortlist the vendor for construction materials <img src="/static/img/vender-icon.png" alt=""></h4>
-              <h5>in <span class="under-line">Nabarangpur School Project</span> for <span>Construction Activity</span> <img src="/static/img/material-icon.png" alt=""></h5>
+            {% for i in task_listing %}
+        	<div class="task-head-lft div-{{i.slug}}">
+              <h4>{{i.name}}<img src="/static/img/vender-icon.png" alt=""></h4>
+              <h5>in <span class="under-line">{{i.activity.project.name}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
               <p>Details: This project works for child development, health and
 welfare of Ramnagar village in Andhra Pradesh. </p>
           </div>
@@ -98,12 +101,12 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
           </div>
           <div class="planned-date">
           <ul>
-              <li>Planned Start Date : <span>Oct 30, 2016</span></li>
-              <li>Planned End Date&nbsp;&nbsp;&nbsp;: <span>Apr 12, 2017</span></li>
+              <li>Planned Start Date : <span>{{i.start_date}}</span></li>
+              <li>Planned End Date&nbsp;&nbsp;&nbsp;: <span>{{i.end_date}}</span></li>
           </ul>
           <ul>    
-              <li>Actual Start Date : <span>Oct 30, 2016</span></li>
-              <li>Actual End Date&nbsp;&nbsp;&nbsp;: <span>Apr 12, 2017</span></li>
+              <li>Actual Start Date : <span>{{i.actual_start_date}}</span></li>
+              <li>Actual End Date&nbsp;&nbsp;&nbsp;: <span>{{i.actual_end_date}}</span></li>
           </ul>
           </div>
           <div class="planned-pad">
@@ -237,6 +240,7 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
             </ul>
             </div>
           </div>
+          {% endfor %}
         </div>    
     </div>
 </section>
@@ -359,4 +363,11 @@ $(document).ready(function(){
 	});
 </script>
  <script src="/static/js/price-range.js"></script>
+ 
+ <script>
+    function hidediv(slug){
+        $('.task-head-lft').hide();
+        $('.div-'+slug).show();
+    }
+ </script>
 {% endblock %}

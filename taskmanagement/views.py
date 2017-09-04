@@ -187,7 +187,7 @@ def my_tasks_listing(project):
     task_lists=[]
     activities = Activity.objects.filter(project = project)
     tasks_list = Task.objects.filter(activity__project = project).order_by('-id')
-    return task_lists
+    return tasks_list
     
 def updates(obj_list):
 # to get the recent updates of the projects 
@@ -325,7 +325,7 @@ def my_tasks_details(request):
     user = UserProfile.objects.get(user_reference_id = user_id)
     project = Project.objects.get(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
-    tasks_list = my_tasks_listing(project)
+    task_listing = my_tasks_listing(project)
     return render(request,'taskmanagement/my-task.html',locals())
     
 
