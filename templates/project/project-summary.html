@@ -63,7 +63,7 @@
                             &nbsp;
                             <div class="event-img">
                                 <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
-                                <p>{% if i.description %} {{i.description}} {% endif %}</p>
+                                <p class="trunc">{% if i.description %} {{i.description}} {% endif %}</p>
                             </div>
                             <div class="event-circle"></div>
                             <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
@@ -72,7 +72,7 @@
                         <li class="event-down">
                          &nbsp;
                             <div class="event-img">
-                                <p>{{i.description}}</p>
+                                <p class="trunc">{{i.description}}</p>
                                 <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
                             </div>
                             <div class="event-circle"></div>
@@ -1120,6 +1120,20 @@ setInterval(function () {
 
 }, 800);
 
+</script>
+
+<script>
+$(function() {
+   $('.trunc').each(function(i) {
+       if (isEllipsisActive(this)) {
+           $(this).attr("title", $(this).text());
+       }        
+   });
+});
+
+function isEllipsisActive(e) {
+    return (e.offsetWidth < e.scrollWidth);
+}
 </script>
 <style type="text/css">
  #total_budget .highcharts-container {

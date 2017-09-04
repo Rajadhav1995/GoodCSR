@@ -10,9 +10,9 @@
     </div>    
     <div class="title-left">
     {% if project %}
-    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{project.name}}</h4>
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{project.name}}</h4></a>
     {% else %}
-    <h4><a href = '#'>Project Name</h4>
+    <h4><a href = '#'>Project Name</h4></a>
     {% endif %}
     <ul>
         {%if project_funders %}
@@ -52,15 +52,16 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-               <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}})</span></a>
+               <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}})</span>
                {% get_user_permission request as user_obj %}
-                    {% if user_obj.is_admin_user == True %}
-                  <a class="add-task" href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit </a>
-                    {% endif %}
+<!--                    {% if user_obj.is_admin_user == True %}-->
+<!--                    <i class="fa fa-edit"><a href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"></a></i>-->
+<!--                    {% endif %}-->
+                    </a>
                </li>
                {% endfor %}
                {% else %}
-               </h5> No activites are created
+               <li><a href="javascript:void(0);"> No activites are created</a></li>
                {% endif %}
             </ul>
          </div>
@@ -78,15 +79,15 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
-                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date}} - {{task.end_date}}</span></a>
-                    {% get_user_permission request as user_obj %}
-                    {% if user_obj.is_admin_user == True %}
-                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
-                     {% endif %}
+                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date}} - {{task.end_date}}</span>
+<!--                    {% get_user_permission request as user_obj %}-->
+<!--                    {% if user_obj.is_admin_user == True %}-->
+<!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
+<!--                     {% endif %}-->
                   </li>
                   {% endfor %}
                   {% else %}
-                  </h5> No tasks are created
+                  <li><a href="javascript:void(0);"> No tasks are created </a></li>
                   {% endif %}
                </ul>
             </div>
@@ -104,15 +105,15 @@
                <ul>
                   {% if milestone %}
                   {% for mile in milestone %}
-                  <li><a href="javascript:void(0);">{{mile.name}} <span>(due - {{mile.overdue|date:'jS F'}})</span></a>
-                  {% get_user_permission request as user_obj %}
-                    {% if user_obj.is_admin_user == True %}
-                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> Edit</a>
-                  {% endif %}
+                  <li><a href="javascript:void(0);">{{mile.name}} <span>(due - {{mile.overdue|date:'jS F'}})</span>
+<!--                  {% get_user_permission request as user_obj %}-->
+<!--                    {% if user_obj.is_admin_user == True %}-->
+<!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
+<!--                  {% endif %}-->
                   </li>
                   {% endfor %}
                   {% else %}
-                  </h5> No milestones
+                  <li><a href="javascript:void(0);"> No milestones</a></li>
                   {% endif %}
                </ul>
             </div>
