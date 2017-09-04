@@ -189,11 +189,7 @@ def my_task_details(task_id):
 def my_tasks_listing(project):
     task_lists=[]
     activities = Activity.objects.filter(project = project)
-    for i in activities:
-        tasks = Task.objects.filter(active=2,activity=i).order_by('-created')
-        for t in tasks:
-            if t not in task_lists:
-                task_lists.append(t)
+    tasks_list = Task.objects.filter(activity__project = project).order_by('-id')
     return task_lists
     
 def updates(obj_list):

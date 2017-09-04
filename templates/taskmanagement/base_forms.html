@@ -13,7 +13,8 @@
 {% block content %}
 <div class="clear"></div>
 <section class="content-part">
-	<div class="row">
+    <div class='container' >
+	<div class="white-box">
 	
     <form class="form-horizantal budget_form" action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
      <div class="col-md-12">
@@ -38,16 +39,14 @@
                     {% endfor %}
             <input id = 'slug' name = 'slug_project' type='hidden' value = "{{project.slug}}"/>
            <div class="col-md-12">
-        <div class="form-group">
-              <input type="submit" class="budget_button" value="Submit">
-              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}">Back</button></a>
-               </div>
+              <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}" style="margin-right:5px;">Back</button></a>
            </div>
         </div>
     </form>
     
     
-    
+    </div>
     </div>
 </section>
 <!--Content part Ends-->

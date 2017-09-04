@@ -35,10 +35,8 @@
                     {% endfor %}
             <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
            <div class="col-md-12">
-        <div class="form-group">
-              <input type="submit" class="budget_button" value="Submit">
-              <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}">Back</button></a>
-               </div>
+              <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+              <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}" style="margin-right:5px;">Back</button></a>
            </div>
         </div>
     </form>
