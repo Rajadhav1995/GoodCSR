@@ -127,6 +127,7 @@
 <script type="text/javascript">
     $(document).ready(function () 
     {
+        $("[id$=_1]").attr('required', 'required')
         function mandatory_input()
         {
             sname = $(this).context.name.split('_');
@@ -169,8 +170,8 @@
             
             $("#linetotal_"+j).val(parseInt(linetotal));
         }
-        $(document).on("change, keyup", ".rate", updatePrice);
-        $(document).on("change, keyup", ".unit", updatePrice);
+        $(document).on("change,blur, keyup", ".rate", updatePrice);
+        $(document).on("change,blur, keyup", ".unit", updatePrice);
     });
     
 </script>
