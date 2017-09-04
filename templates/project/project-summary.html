@@ -266,7 +266,7 @@ under 0 Milestones</h5>
             <td style="width:19%;">{{i.role.name}}
                 {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}">Edit</a></td>{% endif %}
+            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}&key=summary">Edit</a></td>{% endif %}
       </tr>
       {% endfor %}
       {% else %}
@@ -279,7 +279,7 @@ under 0 Milestones</h5>
     </div>
         {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
-    <a href="/manage/project/role/add/?slug={{obj.slug}}" class="link-pad">Add User</a>
+    <a href="/manage/project/role/add/?slug={{obj.slug}}&key=summary" class="link-pad">Add User</a>
     {% endif %}
     </div>
     <div class="white-box-right">
@@ -306,179 +306,7 @@ under 0 Milestones</h5>
 <!--Content part Ends-->
 
 </div>
-<div id="pop1" class="simplePopup">
-   <div class="pop-content">
-      <div class="img"> <img src="/static/img/pop-up/side-girl.jpg" alt="girl"> </div>
-      <div class="course-dtl">
-        <h1>Nabarangpur school project <sup>PGR</sup></h1>
-        <ul class="pop-list">
-          <li> <img src="/static/img/pop-up/users.jpg">
-            <p> No. of beneficiaries <span>2000</span> </p>
-          </li>
-          <li> <img src="/static/img/pop-up/dureation.jpg">
-            <p> Program duration <span>12 months </span> </p>
-          </li>
-          <li> <img src="/static/img/pop-up/dureation.jpg">
-            <p> Total Budget <span>25Lac</span> </p>
-          </li>
-        </ul>
 
-        <div class="rht-content">
-         <ul>
-         <li class="fst">
-            <h2>Target beneficiaries</h2>
-            <p>Sex workers, woman<br> and girls, youth adults,<br> children: 6-18 years</p>
-         </li>
-         <li class="snd">
-
-            <h2>Cause area</h2>
-            <p>Education, skill development and Livelihood, Women Empowerment and Gender equality, Skills Development, Empowerment, or Livelihood, Education, literacy, and empowerment.</p>
-            </li>
-            </ul>
-
-        </div>
-      </div>
-
-      <div class="cont-det">
-         <h2>Location coverage</h2>
-         <p>Semi-urban, West Bengal, North 24 Parganas Rural, West Bengal, East Midnapore Urban,   West Bengal, Kolkata Semi-urban, West Bengal, Hooghly</p>
-         <h2>About the Program</h2>
-<p>Our mission is to spread education among the underprivileged women / girls / children / youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time  to make them self employed we have introduced  the skill development training session so that they acquire the required skills set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs form the underprivileged women and youth.</p>
-<p>Our volunteers will give free tuition 5days a week and Saturday and Sunday will be holidays. <br>
-Skill development program will be held also 5days a week with different timings so that one person can get enrolled in both educational program classes and skill development program too.<br>
-Will be given certificates from our ngo after successfully completing of the skill development course and will also guide them in placememnts.</p>
-
-       <h2>Primary Activities </h2>
-<ul class="act-list"><li>Free tuition  classes</li>
-<li>Free livelihood skill development program </li>
-<li>Free career counseling and placement </li>
-</ul>
-
-   <div class="concepto-carousel">
-         <h1>Pictures and files</h1>
-            <!-- carousel starts -->
-              <div id="con-carousel" class="owl-carousel">
-                <div class="item">
-                    <img src="/static/img/pop-up/word-icon.jpg" alt="">
-                    <h2>Activities </h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/word-icon.jpg" alt="">
-                    <h2>Activities </h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">
-                    <h2>Project Details</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">
-                    <h2>Project Details</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/excel-incon.jpg" alt="">
-                    <h2>Project Details</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/ppt-icon.jpg" alt="">
-                    <h2>Project Details</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">
-                    <h2>Project Details</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/excel-incon.jpg" alt="">
-                    <h2>Project Details</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/ppt-icon.jpg" alt="">
-                    <h2>Project Details</h2>
-                </div>
-             </div>
-            <!-- carousel ends -->
-
-            <!-- carousel starts -->
-              <div id="img-carousel" class="owl-carousel">
-                <div class="item">
-                    <img src="/static/img/pop-up/student.jpg" alt="">
-                    <h2>Student</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/class-room.jpg" alt="">
-                    <h2>Class Image</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/student.jpg" alt="">
-                    <h2>Student</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/class-room.jpg" alt="">
-                    <h2>Class Image</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/student.jpg" alt="">
-                    <h2>Student</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/class-room.jpg" alt="">
-                    <h2>Class Image</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/student.jpg" alt="">
-                    <h2>Student</h2>
-                </div>
-                <div class="item">
-                    <img src="/static/img/pop-up/class-room.jpg" alt="">
-                    <h2>Class Image</h2>
-                </div>
-
-             </div>
-            <!-- carousel ends -->
-      </div>
-
-      </div>
-    </div>
-</div>
-<div id="pop3" class="simplePopup">
-   <div class="pop-content">
-      <div class="cont-det">
-         <h2>Create Budget</h2>
-         <div class="form-pad">
-			<h3>Budget Info</h3>
-            <div class="form-label">
-              <label>Project</label>
-              <input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="" type="text">
-            </div>
-            <div class="form-label-left">
-            	<label>Start Date</label>
-             	 <input type="text" name="" placeholder="DD/MM/YY" class="datepicker">
-            </div>
-            <div class="form-label-right">
-            	<label>End Date</label>
-              	<input type="text" name="" placeholder="DD/MM/YY" class="datepicker">
-            </div>
-            <div class="form-label">
-              <label>Budget Duration</label>
-              <input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="" type="text">
-            </div>
-            <div class="form-label-left">
-            	<label>Fin. Reporting Period</label>
-             	 <select name="lang" class="select_box ">
-                    <option>select</option>
-                    <option>select1</option>
-                </select>
-            </div>
-            <div class="form-label-right">
-            	<label>Super Category Label</label>
-              	<input onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" value="Enter Location" type="text">
-            </div>
-            <div class="form-label-pad form-link">
-            	<a href="javascript:void(0);">Save and Add Super Categories</a>
-            </div>
-         </div>
-      </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block script %}
@@ -659,8 +487,7 @@ $(document).ready(function(){
     var new_data_pin = 0;
     var new_data_pip = 0;
 </script>
-{{master_sh}}
-/* Pie Chat Number */
+<!--/* Pie Chat Number */-->
 <script type="text/javascript">
 {% for pin in master_sh.PIN %}
 //alert(pin);
@@ -717,7 +544,7 @@ Highcharts.chart(values, {
 {% endfor %}
 </script>
 
-/* Pie Chart Percentage */
+<!--/* Pie Chart Percentage */-->
 <script type="text/javascript">
 {% for pip in master_sh.PIP %}
 var data2 = {{pip | safe}};
