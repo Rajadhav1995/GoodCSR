@@ -1,73 +1,180 @@
 {% extends 'base.html' %}
 
 {% block section %}
-<div></div>
+<div> </div>
 {% endblock %}
 
 {% block content %}
-    <!-- Content Header (Page header) -->
-<style>
-    .error,.errorlist { color :red;}
-    #date_error,#min_max {color : red;}
-</style>
-    <!-- Main content -->
-
-    <section class="content">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-                    {% if slug %}
-                  <h3 class="box-title">Edit {{model_name}}</h3>
+<div class="clear"></div>
+<section class="content-part">
+	<div class="row">
+	
+    <form class="form-horizantal budget_form">
+     <div class="col-md-12">
+        {% if slug %}
+                   <h3 class="border_line">Edit {{model_name}}</h3>
                   {% else %}
-                    <h3 class="box-title">Add {{model_name}}</h3>
+                     <h3 class="border_line">Add {{model_name}}</h3>
                   {% endif %}
-              <div align="right">
-             <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
-         </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-
+        </div>
+       <div class="col-md-6 nopadding">
             <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
                     {% for field in form %}
                          {{form.media}}
-                        <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{field.label_tag}}
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{field}}
-                                    {{field.errors}}
-                                </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                
+                                <label>{{field.label_tag}}</label>
+                                {{field}}
+                                {{field.errors}}
+                            </div>
                         </div>
                     {% endfor %}
-                    <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
-                    <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
-                        <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}">Back</button></a>
-                    
-                    </form>
-  </div>
+            <input id = 'slug' name = 'slug_project' type='hidden' value = "{{project.slug}}"/>
+           <div class="col-md-12">
+        <div class="form-group">
+              <input type="submit" class="budget_button" value="Submit">
+              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}">Back</button></a>
+               </div>
+           </div>
+        </div>
+    </form>
+    
+    
+    
+    </div>
+</section>
+<!--Content part Ends-->
+{% endblock %}
+<!--Footer starts-->
+
+
+</div>
+
 
 {% block script %}
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script src="/static/js/jquery.multi-select.js" type="text/javascript"></script>
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<script src="/static/js/fSelect.js"></script>
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
 
+<script>
+//Toggle
+		
+		 $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+		 $(document).ready(function(e) {	
+	/*Content Show/Hide */
+	$('.hide-cont').hide();
+	$('.close-cont').hide();
+	$('.view-cont').click(function(){
+		$('.hide-cont').slideDown(350);
+		$('.close-cont').show();
+		$('.view-cont').hide();
+	});
+	$('.close-cont').click(function(){
+		$('.hide-cont').slideUp(350);
+		$('.close-cont').hide();
+		$('.view-cont').show();
+	});	
+ });
+	
+</script>
 
+    <script type="text/javascript">
+   
+	
+	var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+    <script>
+  $(document).ready(function() {
+  
+	var nice = $("html").niceScroll();  // The document page (body)
+	
+	$("#div1").html($("#div1").html()+' '+nice.version);
+    
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+    
+  });
+</script>
+<script src="/static/js/bootstrap.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
 <script>
     $(document).ready(function() {
         $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-       // $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
-       $("#id_subscribers").multiSelect();
-       $("#id_task").multiSelect();
-       $("#id_task_dependency").multiSelect();
+        });
+</script>
+  <script>
+  $( function() {
+    var dateFormat = "mm/dd/yy",
+      from = $( "#id_start_date" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 1
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#id_end_date" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+  } );
+</script>
+
+<script>
+$(function($) {
+    $(function() {
+        $('.test').fSelect();
+    });
+});
+</script>
+<script>
+    $(document).ready(function() {
+        $('#is_subscribers').addClass('test');
+        $('#id_task').addClass('test');
+        $("#id_task_dependency").addClass('test');
     });
 </script>
+
 
 <script>
     $(document).ready(function() {
@@ -157,4 +264,4 @@
 
 {% endblock %}
 
-{% endblock %}
+
