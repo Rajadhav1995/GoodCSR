@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load urs_tags %}
 
 {% block section %}
 <div class="clear"></div>
@@ -15,7 +16,7 @@
     <h4><a href = '#'>Project Name</h4>
     {% endif %}
     <ul>
-        {% get_funder projectobj as project_funders %}
+        {% get_funder obj as project_funders %}
     	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% else %} Funder {% endif %}</a> </li>
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
     </ul>     

@@ -325,7 +325,6 @@ def my_tasks_details(request):
     user = UserProfile.objects.get(user_reference_id = user_id)
     project = Project.objects.get(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
-    project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
     tasks_list = my_tasks_listing(project)
     return render(request,'taskmanagement/my-task.html',locals())
     
