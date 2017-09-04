@@ -65,7 +65,6 @@ def add_taskmanagement(request,model_name,m_form):
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
-    import ipdb;ipdb.set_trace();
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
