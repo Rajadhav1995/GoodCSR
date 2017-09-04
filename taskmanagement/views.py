@@ -226,10 +226,13 @@ def updates(obj_list):
                         task_uploads={'project_name':project.name,'task_name':task.name,'attach':a.description,
                         'user_name':a.created_by.email,'time':a.created.time(),'date':a.created.date(),'task_status':''}
                     uploads.append(task_uploads)
-    if uploads:
-        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
-    else:
-        uploads = []
+    try:
+        if uploads:
+            uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+        else:
+            uploads = []
+    except:
+        uploads = uploads
     return uploads
         
 def corp_task_completion_chart(obj_list):
