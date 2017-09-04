@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import datetime
+from django.contrib import messages
 from calendar import monthrange
 from projectmanagement.models import *
 from projectmanagement.forms import *
@@ -26,6 +27,7 @@ def create_project(request):
         activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
+    # import ipdb;ipdb.set_trace()
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
 
@@ -36,6 +38,11 @@ def create_project(request):
         except:
             form = ProjectForm(request.POST,request.FILES)
             instance = ''
+        project_name = Project.objects.all()
+        # for j in project_name:
+        #     if j.name == request.POST.get('name'):
+        #         messages.error(request, 'Project Name already Exist')
+        #         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         if form.is_valid():
             obj = form.save(commit=False)
             obj.content_type = ContentType.objects.get(model="Program")
@@ -308,7 +315,6 @@ def upload_parameter(request):
 
 def manage_parameter(request):
     slug =  request.GET.get('slug')
-    key = int(request.GET.get('key'))
     parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     project_name = Project.objects.get(slug=slug).name
     return render(request,'project/parameter_list.html',locals())

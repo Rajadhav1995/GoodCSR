@@ -23,9 +23,36 @@ width:450px;
             <!-- /.box-header -->
             <div class="box-body">
             
-            <form autocomplete="off" id="para_add" action="/project/parameter/add/?slug={{slug}}&key={{key}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="para_add" class ="form-horizantal budget_form" action="/project/parameter/add/?slug={{slug}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
+                            
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Parameter Type</label>
+                                    {{form.total_budget}}
+                                    <select class="form-control" name="para_type" id="para_type" required>
+                                    <option selected value="0">Select</option>
+                                    
+                                    <option value="PIN" >Pie chart Numbers</option>
+                                     <option value="PIP">Pie Chart Percent</option>
+                                    <option value="NUM">Number</option>
+                                    <option value="PER">Percent</option>
+                                    <option value="CUR">Currency</option>
+                                </select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="funder_error"></span></font>
+                                </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+<!-- 
                             <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 Parameter Type<font color="red">*</font>
@@ -45,14 +72,16 @@ width:450px;
                                 <font color=#fc282f><span id="funder_error"></span></font>
                                 </p>
                             </div>
-                        </div>
+                        </div> -->
+
 
                         <div class="row" id='agg_div'>
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Aggregation Type<font color="red">*</font>
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <select class="form-control" name="agg_type" id="agg_type">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Aggregation Type<font color="red">*</font></label>
+                                    {{form.total_budget}}
+                                    <select class="form-control" name="agg_type" id="agg_type">
                                     <option selected>Select</option>
                                     <option value="ADD" >ADDITION</option>
                                      <option value="AVG">Average</option>
@@ -63,10 +92,28 @@ width:450px;
                                     
                                 <font color=#fc282f><span id="partner_error"></span></font>
                                 </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div id="name" class="row">
+                    
+                        <div class="row" id="name">
+            <div class="col-md-6 nopadding">
+                <div class="col-md-12">
+                    <div class="form-group">
+                                    <label>Name</label>
+                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required="True">
+                                <br>
+                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
+                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+
+
+                        <!-- <div id="name" class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 Name
                             </label>
@@ -75,9 +122,13 @@ width:450px;
 
                                 <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
                             </div>
-                        </div>
-                        <div id="pie" class="row">
-                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                        </div> -->
+
+
+                        <div class="row" id="pie">
+            <div class="col-md-6 nopadding">
+                <div class="col-md-12">
+                    <div class="form-group">
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More</button>
                             <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name">
@@ -85,7 +136,7 @@ width:450px;
                             </div>
                         </div>
                         </div>
-                    </div>
+                    </div></div></div>
                     <input style="width: 0px;" value=0 name="name_count" id="activity_count" type="text"/>
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
