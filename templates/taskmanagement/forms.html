@@ -12,46 +12,44 @@
 
     <!-- Main content -->
 
-    <section class="content">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Upload Images</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
+<section class="content-part">
+	<div class="row">
+	
+    <form class="form-horizantal budget_form" action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+     <div class="col-md-12">
+                   <h3 class="border_line">Upload Images</h3>
+                  
+        </div>
+       <div class="col-md-6 nopadding">
             <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+                    {% for field in form %}
+                         {{form.media}}
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                
+                                <label>{{field.label_tag}}</label>
+                                {{field}}
+                                {{field.errors}}
+                            </div>
+                        </div>
+                    {% endfor %}
+            <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
+           <div class="col-md-12">
+        <div class="form-group">
+              <input type="submit" class="budget_button" value="Submit">
+              <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}">Back</button></a>
+               </div>
+           </div>
+        </div>
+    </form>
     
-                {{form.non_fields_errors}}
-        
-                    {{form.media}}
-        
-                <div class="box-content">
-                    <form role="form">
-                        {% for field in form %}
-                            <div class="row">
-                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
-                                    {{field.label_tag}}
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{field}}
-                                    {{field.errors}}
-                                        
-                                </div>
-                            </div>
-                        {% endfor %}
-                        <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
-                        <input id = "save" class="btn btn-primary" type="submit" value="Save"/>
-                        <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}">Back</button></a>
-                            </div>
-                    </form>
-                    
-                </div>
-            </form>
-     </div>
+    
+    
+    </div>
+</section>
 
-  </div>
+{% endblock %}
+
   {% block script %}
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -131,29 +129,6 @@
     });
 </script>
 
-<script>
-    $(document).ready(function() {
-    if ('{{model_name}}' == 'Task'){
-    $('#id_task_dependency').on('click',function(e){
-        var dependency_id = $('#id_task_dependency').val();
-        $.ajax({
-            url:'/managing/tasks/auto-computation/date',
-            type:'GET',
-            data:{'id':dependency_id},
-            dataType:"json",
-            success:function(data){
-            if (data.computation_date != ""){
-                document.getElementById("id_start_date").value = data.computation_date;
-             }
-            },
-            error : function(){}
-        });
-        e.stopImmediatePropagation();
-        return false;
-      });
-    }
-    });
-</script>
 
-{% endblock %}
+
 {% endblock %}

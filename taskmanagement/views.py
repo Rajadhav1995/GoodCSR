@@ -44,7 +44,7 @@ def add_taskmanagement(request,model_name,m_form):
     try:
         project = Project.objects.get(slug = request.GET.get('slug'))
     except:
-        project = Project.objects.get(slug= request.POST.get('slug'))
+        project = Project.objects.get(slug= request.POST.get('slug_project'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     form=eval(m_form)
@@ -72,7 +72,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     try:
         project = Project.objects.get(slug =request.GET.get('key') )
     except:
-        project = Project.objects.get(slug = request.POST.get('slug'))
+        project = Project.objects.get(slug = request.POST.get('slug_project'))
     if request.method == 'POST':
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
@@ -86,15 +86,6 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             else:
                 return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
-#        if model_name == 'Milestone':
-#            task_list = m.task.all().ids()
-#            obj1=set(list(Milestone.objects.filter(active=2).values_list('task',flat=True)))
-#            obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
-#            tasks = list(obj2 - obj1)
-#            tasks.extend(task_list)
-#            form=form(user_id,project.id,instance=m)
-#            form.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
-#        else:
          form=form(user_id,project.id,instance=m)
     return render(request,'taskmanagement/base_forms.html',locals())
 
@@ -194,9 +185,15 @@ def my_task_details(task_id):
         task = []
     return task
    
-def my_tasks_listing():
-    tasks = Task.objects.filter(active=2).order_by('-createdby')
-    return tasks
+def my_tasks_listing(project):
+    task_lists=[]
+    activities = Activity.objects.filter(project = project)
+    for i in activities:
+        tasks = Task.objects.filter(active=2,activity=i).order_by('-created')
+        for t in tasks:
+            if t not in task_lists:
+                task_lists.append(t)
+    return task_lists
     
 def updates(obj_list):
 # to get the recent updates of the projects 
@@ -328,3 +325,12 @@ def get_tasks_list(activity_list):
                 task_list.append(i)
     return task_list
 
+
+def my_tasks_details(request):
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get(user_reference_id = user_id)
+    project = Project.objects.get(slug =request.GET.get('slug'))
+    project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
+    project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
+    tasks_list = my_tasks_listing(project)
+    return render(request,'taskmanagement/my-task.html',locals())
