@@ -46,8 +46,8 @@
             	<h3>Budget</h3>
                  <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
-                	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {{projectobj.project_budget_details.planned_cost}} </span></li>
-                    <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {{projectobj.project_budget_details.disbursed_cost}} </span></li>
+                	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
                     <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}Rs.  {{projectobj.project_budget_details.utilized_cost}} {% else %} Rs.0 {% endif %} </span></li>
                 </ul>
             </div>
@@ -185,26 +185,29 @@
       <tr>
         <td>{{rnum}}</td>
         <td>{{i.due_date}}</td>
-        <td> Rs. {{i.planned_amount}}</td>
-        <td> Rs. {{i.actual_disbursed_amount}}</td>
-        <td> Rs. {{i.recommended_amount}}</td>
-        <td> Rs. {{i.utilized_amount}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
       </tr>
       {% endwith %}
       {% endfor %}
       <tr bgcolor="#f1f3e9" class="table-tr">
         <td>Total</td>
         <td>&nbsp;</td>
-        <td>Rs. {{planned_amount}}</td>
-        <td>Rs. {{actual_disbursed_amount}}</td>
-        <td>Rs. {{recommended_amount}}</td>
-        <td>Rs. {{utilized_amount}}</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
       </tr>
       </tbody>
 	</table>  
     </div>
     {% else %}
+    {% get_user_permission request as user_obj %}
+    {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     Click here to add <a href="/manage/project/budget/create/?slug={{project_slug}}">BUDGET </a>
+    {% endif %}
     {% endif %}
     </div>
     </div>

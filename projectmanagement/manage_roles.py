@@ -12,9 +12,11 @@ def projectuserslist(request):
 
 def projectuseradd(request):
     key = "add"
+    redirect_key = request.GET.get('key')
     project_slug = request.GET.get('slug')
     form = ProjectUserRoleRelationshipForm()
     if request.method == "POST":
+        redirect_key = request.POST.get('key')
         project_slug = request.POST.get('slug')
         projectobj =  Project.objects.get(slug=project_slug)
         form1 = ProjectUserRoleRelationshipForm(request.POST,request.FILES)
@@ -23,7 +25,9 @@ def projectuseradd(request):
             projectuserobj = form1.save()
             projectuserobj.project = projectobj
             projectuserobj.save()
-            msg = "form is submitted" 
+            msg = "form is submitted"
+            if str(redirect_key) == "summary":
+                return HttpResponseRedirect('/project/summary/?slug='+str(project_slug))
             return HttpResponseRedirect('/manage/project/role/list/?slug='+str(project_slug))
         else :
             msg = "Please fill the form properly"
@@ -31,15 +35,19 @@ def projectuseradd(request):
 
 def projectuseredit(request):
     key = "edit"
+    redirect_key = request.GET.get('key')
     objid = request.GET.get('objid')
     project_slug = request.GET.get('slug')
     pmobj = ProjectUserRoleRelationship.objects.get(id=int(objid))
     form = ProjectUserRoleRelationshipForm(instance = pmobj)
     if request.POST:
+        redirect_key = request.POST.get('key')
         project_slug = request.POST.get('slug')
         form = ProjectUserRoleRelationshipForm(request.POST, instance = pmobj)
         if form.is_valid():
             form.save()
+            if str(redirect_key) == "summary":
+                return HttpResponseRedirect('/project/summary/?slug='+str(project_slug))
             return HttpResponseRedirect('/manage/project/role/list/?slug='+str(project_slug))
         else:
             msg = "Email Already exists"
