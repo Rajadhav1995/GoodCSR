@@ -85,7 +85,7 @@ def get_budget_quarter_names(budgetobj):
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = []
-    for i in range(no_of_quarters):
+    for i in range(int(no_of_quarters)):
         ed = sd+relativedelta.relativedelta(months=3)
         if ed > budget_enddate:
             ed = budget_enddate

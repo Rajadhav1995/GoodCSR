@@ -26,19 +26,16 @@ from dateutil import parser
 
 def listing(request):
     user_id = request.session.get('user_id')
-    user = UserProfile.objects.get(user_reference_id = user_id)
-    project = Project.objects.get(slug =request.GET.get('slug'))
-    try:
-        project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
-        activity_list = Activity.objects.filter(project = project).order_by('-id')
-        task_list = get_tasks_list(activity_list)
-        try:
-            milestone = Milestone.objects.filter(project=project).order_by('-id')
-        except:
-            milestone =[]
-        project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
-    except:
-        activity_list=task_list=milestone =project_funders=[]
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    project = Project.objects.get_or_none(slug =request.GET.get('slug'))
+    project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
+    activity_list = Activity.objects.filter(project = project).order_by('-id')
+    
+    task_list = Task.objects.filter(activity__project=project).order_by('-id')
+#        task_list = get_tasks_list(activity_list)
+    print activity_list,task_list
+    milestone = Milestone.objects.filter(project=project).order_by('-id')
+    project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
@@ -218,7 +215,7 @@ def updates(obj_list):
                     attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
                     for a in attach_lists:
                         task_uploads={'project_name':project.name,'task_name':task.name,'attach':a.description,
-                        'user_name':a.created_by.email,'time':a.created.time(),'date':a.created.date(),'task_status':''}
+                        'user_name':a.created_by.email if a.created_by else '','time':a.created.time(),'date':a.created.date(),'task_status':''}
                     uploads.append(task_uploads)
     try:
         if uploads:
