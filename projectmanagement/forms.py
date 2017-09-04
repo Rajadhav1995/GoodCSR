@@ -3,6 +3,7 @@ from collections import OrderedDict
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.admin import widgets
+from django.core.exceptions import ValidationError
 # from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
@@ -29,6 +30,20 @@ class ProjectForm(forms.ModelForm):
 		model = Project
 		fields  = ('name','start_date','end_date','total_budget','budget_type',\
         			'project_status','duration','summary','no_of_beneficiaries','cause_area','target_beneficiaries')
+
+	def clean(self):
+		cleaned_data = self.cleaned_data
+
+		try:
+			Project.objects.get(name=cleaned_data['name'])
+		except Project.DoesNotExist:
+			pass
+		else:
+			raise ValidationError('Project with this Name already exists for this problem')
+
+		# Always return cleaned_data
+		return cleaned_data
+
 
 class ProjectMappingForm(forms.ModelForm):
 	class Meta:

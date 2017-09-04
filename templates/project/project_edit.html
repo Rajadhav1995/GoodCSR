@@ -23,6 +23,7 @@ width:450px;
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+
             
             <form autocomplete="off" id="prog_edit" action="/project/add/?slug={{slug}}" method="POST" enctype="multipart/form-data">
             
@@ -34,9 +35,15 @@ width:450px;
                                 </label>
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                     {{form.name}}
+                                    {{name.errors}}
                                     
-                                </div>
+                                </div>{% if form.errors %}
+                                    <p style="color: red;">
+                                    Project name Already exist
+                                </p>
+            {% endif %}
                         </div>
+
                         <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                 {{form.total_budget.label_tag}}<font color="red">*</font>
