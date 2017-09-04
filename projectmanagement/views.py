@@ -516,5 +516,4 @@ def project_summary(request):
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
-    import ipdb;ipdb.set_trace()
     return render(request,'project/project-summary.html',locals())
