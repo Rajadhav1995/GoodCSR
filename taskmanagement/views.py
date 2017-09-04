@@ -185,9 +185,15 @@ def my_task_details(task_id):
         task = []
     return task
    
-def my_tasks_listing():
-    tasks = Task.objects.filter(active=2).order_by('-createdby')
-    return tasks
+def my_tasks_listing(project):
+    task_lists=[]
+    activities = Activity.objects.filter(project = project)
+    for i in activities:
+        tasks = Task.objects.filter(active=2,activity=i).order_by('-created')
+        for t in tasks:
+            if t not in task_lists:
+                task_lists.append(t)
+    return task_lists
     
 def updates(obj_list):
 # to get the recent updates of the projects 
@@ -321,4 +327,10 @@ def get_tasks_list(activity_list):
 
 
 def my_tasks_details(request):
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get(user_reference_id = user_id)
+    project = Project.objects.get(slug =request.GET.get('slug'))
+    project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
+    project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
+    tasks_list = my_tasks_listing(project)
     return render(request,'taskmanagement/my-task.html',locals())
