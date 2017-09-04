@@ -10,9 +10,9 @@
     </div>    
     <div class="title-left">
     {% if project %}
-    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{project.name}}</h4></a>
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{project.name}}</a></h4>
     {% else %}
-    <h4><a href = '#'>Project Name</h4></a>
+    <h4><a href = '#'>Project Name</a></h4>
     {% endif %}
     <ul>
         {%if project_funders %}

@@ -192,9 +192,9 @@
     </div>    
     <div class="title-left">
     {% if obj %}
-    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</h4>
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</a></h4>
     {% else %}
-    <h4><a href = '#'>Project Name</h4>
+    <h4><a href = '#'>Project Name</a></h4> 
     {% endif %}
     <ul>
         {%if project_funders %}
@@ -214,7 +214,7 @@
           <li><a href="/manage/project/budget/view/?slug={{slug}}">Budget</a></li>
           <li><a href="/upload/list/?slug={{slug}}&model=Project">Files</a></li>
           <li><a href="/project/tranche/list/?slug={{slug}}">Tranches</a></li>
-          <li><a href = 'managing/my-tasks/details/?slug={{slug}}'>My Tasks </ad></li>
+          <!--li><a href = '/managing/my-tasks/details/?slug={{slug}}'>My Tasks </a></li-->
         </ul>
      </div>         
     </div>
