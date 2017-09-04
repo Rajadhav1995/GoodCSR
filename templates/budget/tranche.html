@@ -21,7 +21,7 @@
             
             <!-- /.box-header -->
             <div class="box-body">
-            <form action="/project/budget/tranche/?slug={{slug}}" id="tranche" method='POST' enctype="multipart/form-data">{% csrf_token %}
+            <form action="/project/budget/tranche/?slug={{slug}}" class ="form-horizantal budget_form" id="tranche" method='POST' enctype="multipart/form-data">{% csrf_token %}
     
                             <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
@@ -35,82 +35,98 @@
 
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.name.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.name}}
-                                    {{ form.name.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.name.label_tag}}</label>
+                                        {{form.name}}
+                                        {{ form.name.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.planned_amount.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.planned_amount}}
-                                    {{ form.planned_amount.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.planned_amount.label_tag}}</label>
+                                        {{form.planned_amount}}
+                                        {{ form.planned_amount.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.actual_disbursed_amount.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.actual_disbursed_amount}}
-                                    {{ form.actual_disbursed_amount.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.actual_disbursed_amount.label_tag}}</label>
+                                        {{form.actual_disbursed_amount}}
+                                        {{ form.actual_disbursed_amount.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.recommended_amount.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.recommended_amount}}
-                                    {{ form.recommended_amount.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.recommended_amount.label_tag}}</label>
+                                        {{form.recommended_amount}}
+                                        {{ form.recommended_amount.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.recommended_by.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.recommended_by}}
-                                    {{ form.recommended_by.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.recommended_by.label_tag}}</label>
+                                        {{form.recommended_by}}
+                                        {{ form.recommended_by.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.utilized_amount.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.utilized_amount}}
-                                    {{ form.utilized_amount.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.utilized_amount.label_tag}}</label>
+                                        {{form.utilized_amount}}
+                                        {{ form.utilized_amount.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.due_date.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.due_date}}
-                                    {{ form.due_date.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.due_date.label_tag}}</label>
+                                        {{form.due_date}}
+                                        {{ form.due_date.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.disbursed_date.label_tag}}<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.disbursed_date}}
-                                    {{ form.disbursed_date.errors }}
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>{{form.disbursed_date.label_tag}}</label>
+                                        {{form.disbursed_date}}
+                                        {{ form.disbursed_date.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         
@@ -118,7 +134,7 @@
                         <a class="btn btn-success" href="/project/tranche/list/?slug={{slug}}">Back</button></a>
                             </div>
                     </form>
-                    
+                    <br>
                 </div>
             </form>
      </div>
