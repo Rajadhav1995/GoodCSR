@@ -15,14 +15,10 @@
     <h4><a href = '#'>Project Name</h4>
     {% endif %}
     <ul>
-        {%if project_funders %}
-    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
-        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
-        {% else %}
-        <li><a href="">by Funder</a> </li>
-        <li><a href="">NGO Partner: </a></li>
-        {% endif %}
-    </ul>    
+        {% get_funder projectobj as project_funders %}
+    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% else %} Funder {% endif %}</a> </li>
+        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
+    </ul>     
     </div>
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
@@ -31,6 +27,7 @@
           <li><a href="/managing/listing/?slug={{obj.slug}}">Task & Milestone</a></li>
           <li><a href="/manage/project/budget/view/?slug={{obj.slug}}">Budget</a></li>
           <li><a class="active" href="/upload/list/?slug={{obj.slug}}&model=Project">Files</a></li>
+          <li><a href = '/managing/my-tasks/details/?slug={{obj.slug}}'>My Tasks </ad></li>
         </ul>
      </div>
     </div>
