@@ -145,11 +145,7 @@
         <h2>Key Program Info</h2>
         {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
-        {% if parameter_count > 4 %}
-        <a class="link-pad" href="#">Upload Parameters</a>
-        {% else %}
         <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
-        {% endif %}
         {% endif %}
         </div>
         <ul>
@@ -165,30 +161,30 @@
                 <h4 class="title-pad">{{i.parameter_value}}</h4>
             </li>
             {% endfor %}
-            {% if master_obj_pip %}
+            {% if master_obj_pin %}
+            {% for lol in  master_pin %}
             <li>
-            	<h3>{{chart_name_pip}}</h3>
+            	<!-- <h3>{{chart_name_pip}}</h3> -->
                 <div class="right-budget beni-dist">
-                {% for  lol in  master_pin %}
                  <div id="{{lol}}" style="width: 100%;float: left;"></div>
-                {% endfor %}
             </div>
             </li>
+            {% endfor %}
             {% endif %}
             <!-- <li>
             	<h3>Total Budget</h3>
                  <img class="key-image" src="/static/img/budget-icon.png" alt="">
                 <h4 class="title-pad">2.3cr</h4>
             </li> -->
-            {% if master_obj_pin %}
+            {% if master_obj_pip %}
+            {% for rofl in master_pip %}
              <li>
-            	<h3>{{chart_name_pin}}</h3>
+            	<!-- <h3>{{chart_name_pin}}</h3> -->
                 <div class="right-budget beni-dist beni-dist1">
-                {% for rofl in master_pip %}
                 <div id="{{rofl}}" style="width: 100%;float: left;"></div>
-                {% endfor %}
             </div>
             </li>
+            {% endfor %}
             {% endif %}
         </ul>
     </div>
@@ -322,7 +318,15 @@ under 0 Milestones</h5>
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 
 
-
+<script type="text/javascript">
+function confirm_alert(node) {
+    var d1 = {{parameter_count}};
+    if (d1 > 3) {
+      alert("You cant add more than 4 Parameters")
+    };
+    
+}
+</script>
 
 <script>
 //Toggle
@@ -493,6 +497,8 @@ $(document).ready(function(){
 //alert(pin);
 var data1 = {{pin | safe}};
 var values = "Batch_size_" + (new_data_pin).toString()
+var pin_title = {{pin_title_name | safe}}
+var pin_title = pin_title[new_data_pin]
 new_data_pin++;
 Highcharts.chart(values, {
    chart:{type:'pie', backgroundColor: null,height:288},
@@ -500,7 +506,7 @@ Highcharts.chart(values, {
             colors:[
                 '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
                 ],
-            title:{text: null},
+            title:{text: pin_title},
             tooltip:{
                 enabled: true,
                 animation: true
@@ -549,6 +555,8 @@ Highcharts.chart(values, {
 {% for pip in master_sh.PIP %}
 var data2 = {{pip | safe}};
 var values = "Beneficary_distribution_" + (new_data_pip).toString()
+var pip_title = {{pip_title_name | safe}}
+var pip_title = pip_title[new_data_pip]
 new_data_pip++;
 Highcharts.chart(values, {
    chart:{type:'pie', backgroundColor: null,height:288},
@@ -556,7 +564,7 @@ Highcharts.chart(values, {
             colors:[
                 '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
                 ],
-            title:{text: null},
+            title:{text: pip_title},
             tooltip:{
                 enabled: true,
                 animation: true
