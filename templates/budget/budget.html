@@ -38,8 +38,8 @@
 <section class="content-part">
 	<div class="row">
     <div class="white-box">
-    	<h2>Budget</h2>
     	{% if budgetobj %}
+    	<h2>Budget</h2>
         <div class="clear"></div>
         <div class="left-budget">
         		<div class="budget-left-pad">
@@ -206,7 +206,7 @@
     {% else %}
     {% get_user_permission request as user_obj %}
     {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
-    Click here to add <a href="/manage/project/budget/create/?slug={{project_slug}}">BUDGET </a>
+    <h3 style="text-align:center">Click here to add <a style="text-decoration:underline;color:#169776" href="/manage/project/budget/create/?slug={{project_slug}}">BUDGET </a></h3>
     {% endif %}
     {% endif %}
     </div>
