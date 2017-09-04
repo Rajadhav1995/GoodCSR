@@ -24,15 +24,15 @@ width:450px;
               {% endif %}
               <div align="right">
              <!-- <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" /> -->
-         </div>
+         </div><br>
          
             </div>
             <!-- /.box-header -->
             <div class="box-body">
             {% if obj %}
-            <form autocomplete="off" id="prog_edit" action="/upload/edit/?model={{model}}&slug={{slug}}&id={{ids}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/upload/edit/?model={{model}}&slug={{slug}}&id={{ids}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
             {% else %}
-            <form autocomplete="off" id="prog_edit" action="/upload/doc/?model={{model}}&slug={{slug}}&key={{key}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" action="/upload/doc/?model={{model}}&slug={{slug}}&key={{key}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
             {% endif %}
             {% csrf_token %}
 

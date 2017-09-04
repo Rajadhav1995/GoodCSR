@@ -11,18 +11,13 @@
     </div>
     <div class="title-left">
     {% if obj %}
-    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</h4>
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}} </a></h4>
     {% else %}
-    <h4><a href = '#'>Project Name</h4>
+    <h4><a href = '#'>Project Name </a></h4>
     {% endif %}
     <ul>
-        {%if project_funders %}
-    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
-        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
-        {% else %}
-        <li><a href="">by Funder</a> </li>
-        <li><a href="">NGO Partner: </a></li>
-        {% endif %}
+    	<li><a href="javascript:void(0)"> by {% if project_funders.funder.name %} {{project_funders.funder.name}}  {% else %} {% endif %}</a></li>
+        <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.name %}{{project_funders.implementation_partner.name}} {% else %} {% endif %}</a></li>
     </ul>    
     </div>
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
@@ -322,6 +317,334 @@ under 0 Milestones</h5>
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 
+
+  <script>
+    var jsonData = {
+      "activities": [
+          {
+              "id": 1,
+              "activity_type": "Core",
+              "status": "Ongoing",
+              "active": "Active",
+              "created": "2017-08-31T10:57:49.083663Z",
+              "modified": "2017-08-31T10:57:49.083700Z",
+              "name": "Core Activity",
+              "description": "Some Ongoing Activity",
+              "slug": "core-act",
+              "object_id": null,
+              "project": 1,
+              "super_category": 1,
+              "created_by": 1,
+              "assigned_to": 1,
+              "content_type": null,
+              "subscribers": [
+                  1
+              ]
+          }
+      ],
+      "supercategories": [
+          {
+              "id": 1,
+              "active": 2,
+              "created": "2017-08-31T10:57:08.130582Z",
+              "modified": "2017-08-31T10:57:08.130634Z",
+              "name": "Bangalore",
+              "slug": "Bangalore",
+              "description": "asdf",
+              "budget": 1,
+              "parent": null,
+              "project": 1
+          }
+      ],
+      "tasks": [
+          {
+              "id": 1,
+              "name": "task1",
+              "expected_start_date": "2017-01-07T10:58:30Z",
+              "expected_end_date": "2017-02-07T10:58:49Z",
+              "start_date": "2016-12-01T10:58:09Z",
+              "end_date": "2017-01-31T10:58:20Z",
+              "active": "Active",
+              "status": " ",
+              "actual_start_date": "2017-01-07T10:58:30Z",
+              "actual_end_date": "2017-02-07T10:58:49Z",
+              "activity": 1,
+              "task_dependency": [],
+              "assigned_to": 1
+          },
+          {
+              "id": 2,
+              "name": "Task2",
+              "expected_start_date": "2017-02-07T10:59:58Z",
+              "expected_end_date": "2017-03-06T11:00:33Z",
+              "start_date": "2017-02-01T10:59:34Z",
+              "end_date": "2017-02-28T10:59:43Z",
+              "active": "Active",
+              "status": "Close",
+              "actual_start_date": "2017-02-07T10:59:58Z",
+              "actual_end_date": "2017-03-06T11:00:33Z",
+              "activity": 1,
+              "task_dependency": [
+                  1
+              ],
+              "assigned_to": 1
+          },
+          {
+              "id": 3,
+              "name": "task3",
+              "expected_start_date": "2017-12-01T11:03:20Z",
+              "expected_end_date": "2018-06-04T11:03:31Z",
+              "start_date": "2017-03-01T11:01:01Z",
+              "end_date": "2017-08-31T11:01:12Z",
+              "active": "Active",
+              "status": "Ongoing",
+              "actual_start_date": "2017-08-01T11:01:38Z",
+              "actual_end_date": null,
+              "activity": 1,
+              "task_dependency": [
+                  1,
+                  2
+              ],
+              "assigned_to": null
+          },
+          {
+              "id": 4,
+              "name": "task4",
+              "expected_start_date": "2017-11-01T11:03:03Z",
+              "expected_end_date": "2017-11-30T11:03:20Z",
+              "start_date": "2017-09-01T11:01:57Z",
+              "end_date": "2017-09-30T11:02:14Z",
+              "active": "Active",
+              "status": "Open",
+              "actual_start_date": null,
+              "actual_end_date": null,
+              "activity": 1,
+              "task_dependency": [
+                  3
+              ],
+              "assigned_to": null
+          },
+          {
+              "id": 5,
+              "name": "task5",
+              "expected_start_date": "2017-10-01T11:02:52Z",
+              "expected_end_date": "2017-10-31T11:03:03Z",
+              "start_date": "2017-10-01T11:02:52Z",
+              "end_date": "2017-10-31T11:03:03Z",
+              "active": "Active",
+              "status": "Open",
+              "actual_start_date": null,
+              "actual_end_date": null,
+              "activity": 1,
+              "task_dependency": [
+                  4
+              ],
+              "assigned_to": 1
+          }
+      ],
+      "milestones": [
+          {
+              "id": 1,
+              "active": "Active",
+              "status": "Open",
+              "created": "2017-08-31T11:04:30.349620Z",
+              "modified": "2017-08-31T11:04:30.349650Z",
+              "name": "WHATTA MILESTONE",
+              "overdue": "2017-10-31T11:04:06Z",
+              "slug": "milestone1",
+              "project": 1,
+              "task": [
+                  5
+              ],
+              "subscribers": [
+                  1
+              ]
+          },
+          {
+              "id": 3,
+              "active": "Active",
+              "status": "Ongoing",
+              "created": "2017-08-31T11:05:57.834731Z",
+              "modified": "2017-08-31T11:05:57.834764Z",
+              "name": "Milestone2",
+              "overdue": "2017-07-31T11:05:19Z",
+              "slug": "milestone2",
+              "project": 1,
+              "task": [
+                  2
+              ],
+              "subscribers": [
+                  1
+              ]
+          }
+      ]
+  }
+    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+    console.log(jsonData.tasks);
+    $.each(jsonData.supercategories,function(i){
+      var superId = this.id;
+      var superName = this.name;
+      var superDesc = this.description;
+      g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0,null, 0, 1, 0, 1, '',
+      '',superDesc, g));
+    });    
+    $.each(jsonData.activities,function(i){
+      var activityId = this.id.toString();
+      var superId = this.super_category;
+      activityId = activityId + this.super_category.toString();
+      console.log("ActID",activityId);
+      var activityName = this.name;
+      var activitySuper = this.super_category;
+      var activityDesc = this.description;
+      g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId, 1, '', '',
+      activityDesc, g));
+    });
+    $.each(jsonData.tasks,function(i){
+      var taskId = this.id;
+      var activityId = this.activity;
+      // activity = jsonData.activities.filter(function( i ) {
+      //   if(i.id == activityId){return i.super_category;}
+      // });
+      var superId = $.each(jsonData.activities,function(){
+        if(this.id==activityId) return this.super_category;
+      });
+      taskId = superId[0].super_category.toString() + activityId.toString() + taskId.toString();
+      activityId = superId[0].super_category.toString() + activityId.toString();
+      activityId = parseInt(activityId);
+      console.log("TaskID",taskId);
+      var taskName = this.name;
+      var eStartDate = this.expected_start_date;
+      var eEndDate = this.expected_end_date;
+      var taskCompletion = 0;
+      var taskStatus = 'gtaskblue';
+      switch(this.status) {
+        case "Ongoing" : break;
+        case "Open" : taskStatus = 'gtaskgreen'; break;
+        case "Close" : taskStatus = 'gtaskred'; break;
+        default : taskStatus = 'gtaskblue'; break;
+      };
+      g.AddTaskItem(new JSGantt.TaskItem(taskId,taskName , eStartDate, eEndDate , taskStatus, '', 0,
+      '', 0, 0, activityId, 1, '', '', '', g));
+    });
+    // g.AddTaskItem(new JSGantt.TaskItem(1, 'Nabarangpur School Project', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0,
+    //   1, '', '', 'Some Notes text', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(11, 'Paper Work', '', '', 'ggroupblack', '', 0, 'Shlomy', 40, 2, 1, 1, '', '',
+    //   '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(111, 'Constructor Proc', '2017-07-21', '2017-09-09', 'gtaskblue', '', 0,
+    //   'Brian T.', 60, 0, 11, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(112, 'Task Variables', '2017-09-06', '2017-09-11', 'gtaskred', '', 0, 'Brian',
+    //   0, 0, 11, 1, 121, '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(113, 'Task by Minute/Hour', '2017-09-09', '2017-09-14 12:00', 'gtaskyellow', '',
+    //   0, 'Ilan', 60, 0, 11, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(114, '4th task', '2017-09-12', '2017-09-20 12:00', 'gtaskblue', '',
+    //   0, 'Ilan', 60, 0, 11, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(115, '5th task', '2017-09-14', '2017-09-27 12:00', 'gtaskblue', '',
+    //   0, 'Ilan', 20, 0, 11, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(13, 'Education', '2017-09-09', '2017-09-29', 'gtaskred', '', 0, 'Anyone', 60, 0,
+    //   1, 1, '123SS', 'This is a caption', null, g));
+    // g.AddTaskItem(new JSGantt.TaskItem(2, 'Create HTML Shell', '2017-09-24', '2017-09-28', 'gtaskyellow', '', 0,
+    //   'Brian', 20, 0, 0, 1, 122, '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(3, 'Code Javascript', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0, 1, '', '',
+    //   '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(31, 'Define Variables', '2017-09-25', '2017-09-29', 'gtaskgreen', '', 0, 'Brian',
+    //   30, 0, 2, 1, '', 'Caption 1', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(32, 'Calculate Chart Size', '2017-09-15', '2017-09-24', 'gtaskgreen', '', 0,
+    //   'Shlomy', 40, 0, 3, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(33, 'Draw Task Items', '', '', 'ggroupblack', '', 0, 'Someone', 40, 2, 3, 1, '',
+    //   '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(332, 'Task Label Table', '2017-09-06', '2017-09-09', 'gtaskblue', '', 0, 'Brian',
+    //   60, 0, 33, 1, '331', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(333, 'Task Scrolling Grid', '2017-09-11', '2017-09-20', 'gtaskblue', '', 0,
+    //   'Brian', 0, 0, 33, 1, '332', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(34, 'Draw Task Bars', '', '', 'ggroupblack', '', 0, 'Anybody', 60, 2, 3, 0, '',
+    //   '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(341, 'Loop each Task', '2017-09-26', '2017-09-30', 'gtaskred', '', 0, 'Brian',
+    //   60, 0, 34, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(342, 'Calculate Start/Stop', '2017-04-12', '2017-05-18', 'gtaskred', '', 0, 'Brian', 60, 0, 34, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(343, 'Draw Task Div', '2017-05-13', '2017-05-17', 'gtaskred', '', 0, 'Brian', 60, 0, 34, 1, '', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(344, 'Draw Completion Div', '2017-05-17', '2017-07-04', 'gtaskred', '', 0, 'Brian', 60, 0, 34, 1, "342,343", '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(35, 'Make Updates', '2017-09-17', '2017-09-04', 'gtaskblue', '', 0, 'Brian', 30, 0, 3, 1, '333', '', '', g));
+    g.setShowStartDate(0);
+    g.setShowEndDate(0);
+    g.setShowRes(0);
+    g.setShowDeps(0);
+    g.setShowDur(0);
+    g.setUseToolTip(0);
+    g.setWeekColWidth(50);
+    g.setWeekMajorDateDisplayFormat('mon yyyy');
+    g.setWeekMinorDateDisplayFormat('W w');
+    g.setScrollTo('today');
+    g.Draw();
+
+    function collision($div1, $div2) {
+      var x1 = $div1.offset().left;
+      var y1 = $div1.offset().top;
+      var h1 = $div1.outerHeight(true);
+      var w1 = $div1.outerWidth(true);
+      var b1 = y1 + h1;
+      var r1 = x1 + w1;
+      var x2 = $div2.offset().left;
+      var y2 = $div2.offset().top;
+      var h2 = $div2.outerHeight(true);
+      var w2 = $div2.outerWidth(true);
+      var b2 = y2 + h2;
+      var r2 = x2 + w2;
+
+      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+      return true;
+    }
+    var count = 0,
+      padding = 30,
+      arrayTask = [],
+      collide = false;
+    $('.gselector').hide();
+    $(document).ready(function () {
+      var previous = null;
+      var prePrevious = null;
+      $(".gtaskbarcontainer").each(function (index) {
+        currParent = $(this).parent().parent().parent();
+        if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
+          .attr('id')) {
+          arrayTask.push($(this));
+          if (collide == true) {
+            $.each(arrayTask, function (index) {
+              if ($(this).css('top') == '-5px') {
+                $(this).css('top', '0px');
+              }
+            });
+          }
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+            listParent = currParent.attr('id').replace('row', '');
+            collide = true;
+            $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
+            if (count == 0) {
+              $(previous).css('top', '0px');
+              count++;
+              padding = 25;
+            }
+            listParentDiv = $('#' + listParent);
+            // console.log('Heights', $(this).css('top'), parseInt(currParent.css('height')));
+            if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+              listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
+              currParent.css({
+                'height': parseInt(currParent.css('height')) + 25 + 'px',
+                'vertical-align': 'top'
+              });
+            }
+          }
+        } else {
+          count = 0;
+          arrayTask = [];
+          collide = false;
+          $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
+            top: '-5px'
+          });
+        }
+        prePrevious = previous;
+        previous = this;
+      });
+    });
+  </script>
 
 
 
