@@ -27,7 +27,7 @@ def create_project(request):
         activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
-    import ipdb;ipdb.set_trace()
+    # import ipdb;ipdb.set_trace()
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
 
