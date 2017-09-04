@@ -10,7 +10,7 @@
     	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
     </div>    
     <div class="title-left">
-    <h4><a href = "/project/summary/?slug={{projectobj.slug}}">{{projectobj.name}}</h4>
+    <h4><a href = "/project/summary/?slug={{projectobj.slug}}">{{projectobj.name}}</a></h4>
     <ul>
         {% get_funder projectobj as project_funders %}
     	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% else %} Funder {% endif %}</a> </li>
@@ -40,8 +40,8 @@
 <section class="content-part">
 	<div class="row">
     <div class="white-box">
-    	<h2>Budget</h2>
     	{% if budgetobj %}
+    	<h2>Budget</h2>
         <div class="clear"></div>
         <div class="left-budget">
         		<div class="budget-left-pad">
@@ -208,7 +208,7 @@
     {% else %}
     {% get_user_permission request as user_obj %}
     {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
-    Click here to add <a href="/manage/project/budget/create/?slug={{project_slug}}">BUDGET </a>
+    <h3 style="text-align:center">Click here to add <a style="text-decoration:underline;color:#169776" href="/manage/project/budget/create/?slug={{project_slug}}">BUDGET </a></h3>
     {% endif %}
     {% endif %}
     </div>
