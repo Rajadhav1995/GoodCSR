@@ -9,7 +9,7 @@ from pmu.settings import BASE_DIR
 from taskmanagement.models import *
 from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
 from projectmanagement.models import (Project,UserProfile,
-    ProjectFunderRelation,unique_slug_generator)
+    ProjectFunderRelation)
 from media.models import Attachment
 from budgetmanagement.models import *
 from userprofile.models import ProjectUserRoleRelationship
@@ -53,6 +53,7 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
+            from projectmanagement.views import unique_slug_generator
             f.slug = unique_slug_generator(f)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
@@ -78,6 +79,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
+            from projectmanagement.views import unique_slug_generator
             f.slug = unique_slug_generator(f)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
