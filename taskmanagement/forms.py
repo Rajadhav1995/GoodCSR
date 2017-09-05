@@ -24,7 +24,7 @@ class ActivityForm(forms.ModelForm):
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
-    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text area'}), required=False,max_length=200)
+    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=False,max_length=200)
     class Meta:
         model = Activity
         fields  = ('name','project','super_category','activity_type','description','status','assigned_to','subscribers')
