@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+
 {% block section %}
+<div> </div>
 {% endblock %}
-{% block content %}
 <!--<link href="static/css/multiselect.css" media="screen" rel="stylesheet" type="text/css">-->
     <!-- Content Header (Page header) -->
 <style>
@@ -10,17 +11,21 @@
 </style>
 
     <!-- Main content -->
-
-    <section class="content">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Add Tranche</h3>
-            </div>
+{% block content %}
+<div class="clear"></div>
+<section class="content-part">
+    <div class='container' >
+    <div class="white-box">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                
+              <h3 class="border_line">Add Tranche</h3>
+          </div>
+            
             
             <!-- /.box-header -->
-            <div class="box-body">
+            
             <form action="/project/budget/tranche/?slug={{slug}}" class ="form-horizantal budget_form" id="tranche" method='POST' enctype="multipart/form-data">{% csrf_token %}
     
                             <div class="row">

@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+
 {% block section %}
+<div> </div>
 {% endblock %}
-{% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
 form { 
@@ -10,9 +11,11 @@ width:450px;
 }
 </style>-->
     <!-- Main content -->
-
-    <section class="content">
-      <div class="row">
+{% block content %}
+<div class="clear"></div>
+<section class="content-part">
+    <div class='container' >
+    <div class="white-box">
         
               <div class="col-md-12">
       <h3 class="border_line">Add Project</h3><br>
@@ -228,13 +231,14 @@ width:450px;
         </div>
 
 
-        </div>
+        
                         <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </div>
                     </form>
+                    </div>
   </div>
 </br>
 <input type="hidden" name="loop_count" id="loop_count" value="{{activity_view.count}}">

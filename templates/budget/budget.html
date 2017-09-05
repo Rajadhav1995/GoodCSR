@@ -48,7 +48,7 @@
                  <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
                 	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="green-circle"></span> Disbuirsed <span class="right-li">Rs. {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbuirsed <span class="right-li">Rs. {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
                     <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}Rs.  {{projectobj.project_budget_details.utilized_cost}} {% else %} Rs.0 {% endif %} </span></li>
                 </ul>
             </div>

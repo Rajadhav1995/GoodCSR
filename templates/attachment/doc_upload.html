@@ -59,6 +59,7 @@ width:450px;
                                 <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                                     {{form.attachment_file}}
                                     {{ form.attachment_file.errors }}
+                                    <br><b><font color=#fc282f><span id="file_error"></span></font></b>
                                 </div>
                             </div>
 
@@ -106,7 +107,7 @@ width:450px;
                                     (Please press Enter or TAB or ',' after typing each keyword)
                             </div>
                         </div>
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
+                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/upload/list/?slug={{slug}}&model={{model}}">Back</button></a>
 
                     </form>
@@ -129,6 +130,38 @@ width:450px;
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 
+
+<script>
+jQuery("input#id_attachment_file").change(function () {
+    if (typeof ($("#id_attachment_file")[0].files) != "undefined") {
+        var size = parseFloat($("#id_attachment_file")[0].files[0].size / 1024).toFixed(2);
+        //alert(size + " KB.");
+        if (size > 5000) {
+            alert("File size must be less than 5 MB");
+            document.getElementById('file_error').innerHTML="File Size must be less than 5 MB"
+        } else{
+            document.getElementById('file_error').innerHTML=""
+        };
+
+    } else {
+        alert("This browser does not support HTML5.");
+    }
+});
+</script>
+
+<script type="text/javascript">
+        function ddlValidate() {
+            var size = parseFloat($("#id_attachment_file")[0].files[0].size / 1024).toFixed(2);
+            if (size > 5000) {
+                alert("File size must be less than 5 MB");
+                document.getElementById('file_error').innerHTML="File Size must be less than 5 MB"
+                return false;
+            } else{
+                document.getElementById('file_error').innerHTML=""
+            };
+
+        };
+</script>
 
 <script>
   $(function() {
