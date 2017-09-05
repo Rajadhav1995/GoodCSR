@@ -68,6 +68,10 @@ class Task(BaseContent):
         else :
             return False
     
+    def task_attachments(self,date):
+        attachments = Attachment.objects.fitler(active=2,content_type=ContentType.objects.get(model=('task')),object_id=self.id)
+        
+        return attachments
 
 class Milestone(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)

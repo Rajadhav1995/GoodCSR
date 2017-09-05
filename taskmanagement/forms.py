@@ -18,7 +18,7 @@ STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 
 class ActivityForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
-    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control','disabled':'disabled'}))
+    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}),label='')
     activity_type = forms.ChoiceField(choices = ACTIVITY_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=False)
     super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
@@ -27,7 +27,7 @@ class ActivityForm(forms.ModelForm):
     description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=False,max_length=200)
     class Meta:
         model = Activity
-        fields  = ('name','project','super_category','activity_type','description','status','assigned_to','subscribers')
+        fields  = ('name','super_category','activity_type','description','status','assigned_to','subscribers','project')
 
     def __init__(self,user_id,project_id,*args, **kwargs):
         self.user = user_id
@@ -36,11 +36,10 @@ class ActivityForm(forms.ModelForm):
         self.fields['description'].required = True
         self.fields['name'].required = True
         self.fields['activity_type'].required = True
-        self.fields['status'].required = True
-#        self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2).values_list('id',flat="True")
+        self.fields['status'].initial = 1
         self.fields['subscribers'].required = True
-        self.fields['project'].initial = Project.objects.get(id = project_id)
-        self.fields['project'].widget.attrs['readonly'] = True
+        self.fields['project'].initial = Project.objects.get(id = int(project_id))
+        self.fields['project'].widget = forms.HiddenInput()
 
 
 
@@ -63,11 +62,12 @@ class TaskForm(forms.ModelForm):
         self.user = user_id
         self.project = project_id
         super(TaskForm, self).__init__(*args, **kwargs)
-        self.fields['activity'].required = True
+        self.fields['activity'].queryset = Activity.objects.filter(project_id = project_id)
         self.fields['name'].required = True
         self.fields['start_date'].required = True
         self.fields['end_date'].required = True
-        self.fields['status'].required = True
+        self.fields['status'].initial = 1
+        self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
 
     def clean(self):
         cleaned_data = super(TaskForm,self).clean()
@@ -90,10 +90,10 @@ class MilestoneForm(forms.ModelForm):
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     overdue = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
-    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
+    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}),label='')
     class Meta:
         model = Milestone
-        fields = ('name','project','task','overdue','subscribers','status')
+        fields = ('name','task','overdue','subscribers','status','project')
 
 
     def __init__(self,user_id,project_id,*args, **kwargs):
@@ -103,8 +103,10 @@ class MilestoneForm(forms.ModelForm):
 #        obj1=set(list(Milestone.objects.filter(active=2).values_list('task',flat=True)))
 #        obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
 #        tasks = obj2 - obj1
+        self.fields['project'].initial = Project.objects.get(id=int(project_id))
         self.fields['name'].required = True
         self.fields['overdue'].required = False
-#        self.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
+        self.fields['task'].queryset = Task.objects.filter(active=2,activity__project_id=project_id)
         self.fields['subscribers'].required = True
-        self.fields['status'].required = True
+        self.fields['status'].initial = 1
+        self.fields['project'].widget = forms.HiddenInput()

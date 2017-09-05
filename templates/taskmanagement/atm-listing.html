@@ -32,7 +32,7 @@
           <li><a href="/manage/project/budget/view/?slug={{project.slug}}">Budget</a></li>
           <li><a href="/upload/list/?slug={{project.slug}}&model=Project">Files</a></li>
           <li><a href="/project/tranche/list/?slug={{project.slug}}">Tranches</a></li>
-          <li><a href = '/managing/my-tasks/details/?slug={{project.slug}}'>My Tasks </ad></li>
+          <li><a href = '/managing/my-tasks/details/?slug={{project.slug}}'>My Tasks </a></li>
         </ul>
      </div>         
     </div>
@@ -83,7 +83,11 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
+<<<<<<< HEAD
                   <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date}} - {{task.end_date}} <i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}')"></i></span>
+=======
+                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date| date:'jS F'}} - {{task.end_date |date:'jS F'}}</span>
+>>>>>>> 83f14a395411d60efc508f3d6d8e8e143d9bc131
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
@@ -109,7 +113,11 @@
                <ul>
                   {% if milestone %}
                   {% for mile in milestone %}
+<<<<<<< HEAD
                   <li><a href="javascript:void(0);">{{mile.name}} <span>(due - {{mile.overdue|date:'jS F'}})<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}')"></i></span>
+=======
+                  <li><a href="javascript:void(0);">{{mile.name}} <span>(Due - {{mile.overdue|date:'jS F'}})</span>
+>>>>>>> 83f14a395411d60efc508f3d6d8e8e143d9bc131
 <!--                  {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
