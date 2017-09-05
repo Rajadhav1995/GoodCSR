@@ -194,12 +194,21 @@ def budgetutilization(request):
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/budget_utilization.html",locals())
 
-def budget_amount_list(budgetobj,projectobj):
-    budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('id', flat=True)
-    budget_period_plannedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist).values_list('planned_unit_cost', flat=True)
-    budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist).values_list('utilized_unit_cost', flat=True)
-    budget_period_plannedamount = map(lambda x:x if x else 0,budget_period_plannedamount)
-    budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
+def budget_amount_list(budgetobj,projectobj,quarter_list):
+    quarter_planned_amount = {}
+    quarter_utilized_amount = {}
+    for i in quarter_list.keys():
+        budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('id', flat=True)
+        budget_period_plannedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('planned_unit_cost', flat=True)
+        budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('utilized_unit_cost', flat=True)
+        budget_period_plannedamount = map(lambda x:x if x else 0,budget_period_plannedamount)
+        final_budget_period_plannedamount = sum(map(int,budget_period_plannedamount))
+        budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
+        final_budget_period_utilizedamount = sum(map(int,budget_period_utilizedamount))
+        quarter_planned_amount.update({i:final_budget_period_plannedamount})
+        quarter_utilized_amount.update({i:final_budget_period_utilizedamount})
+    budget_period_plannedamount = quarter_planned_amount.values()
+    budget_period_utilizedamount = quarter_utilized_amount.values()
     return map(int,budget_period_plannedamount),map(int,budget_period_utilizedamount)
 
 def tanchesamountlist(tranche_list):
@@ -240,7 +249,7 @@ def budgetview(request):
         budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
         span_length = len(budget_period)
-        budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj)
+        budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj,quarter_list)
         tranche_list = Tranche.objects.filter(project = projectobj)
         tranche_amount = tanchesamountlist(tranche_list)
         planned_amount = tranche_amount['planned_amount']
