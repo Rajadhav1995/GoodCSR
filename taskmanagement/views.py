@@ -35,7 +35,6 @@ def listing(request):
     activity_list = Activity.objects.filter(project = project).order_by('-id')
     
     task_list = Task.objects.filter(activity__project=project).order_by('-id')
-#        task_list = get_tasks_list(activity_list)
     print activity_list,task_list
     milestone = Milestone.objects.filter(project=project).order_by('-id')
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
@@ -53,6 +52,7 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
+            import ipdb;ipdb.set_trace();
             from projectmanagement.views import unique_slug_generator
             f.slug = unique_slug_generator(f)
             f.save()
@@ -212,11 +212,11 @@ def updates(obj_list):
                 if attach_list:
                     for attach in attach_list:
                         task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                        'user_name':attach.created_by.email,'time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
+                        'user_name':attach.created_by.email if attach.created_by else '','time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
                         uploads.append(task_uploads)
                 if task.status == 2 and task.history.latest():
                     task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
-                        'user_name':task.created_by.email,'time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                        'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
                 if project.history.latest():
                     attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
                     for a in attach_lists:
