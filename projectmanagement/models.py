@@ -229,7 +229,12 @@ class Project(BaseContent):
     #     self.slug = '%i-%s' % (
     #         date.day, slugify(self.name)
     #     )
-    #     super(Project, self).save()
+    #     super(Project, self).save()'
+    
+    def get_todays_tasks(self,today):
+        from taskmanagement.models import Task
+        tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date = today).order_by('-id')
+        return tasks
 
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 

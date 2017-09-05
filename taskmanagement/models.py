@@ -67,7 +67,7 @@ class Task(BaseContent):
             return True
         else :
             return False
-            
+    
 
 class Milestone(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)
