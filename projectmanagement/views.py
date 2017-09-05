@@ -341,6 +341,7 @@ def manage_parameter(request):
 #     import ipdb;ipdb.set_trace()
 #     return render(request,'project/parameter_value_list.html',locals())
 
+
 def manage_parameter_values1(request):
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
