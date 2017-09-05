@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^milestone/overdue/$',milestone_overdue),
     url(r'^tasks/auto-computation/date/$',task_auto_computation_date),
     url(r'^my-tasks/details/$',my_tasks_details),
+    url(r'^tasks/expected-date/caluclator',get_tasks_objects),
 ]

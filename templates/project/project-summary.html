@@ -28,7 +28,7 @@
           <li><a href="/manage/project/budget/view/?slug={{slug}}">Budget</a></li>
           <li><a href="/upload/list/?slug={{slug}}&model=Project">Files</a></li>
           <li><a href="/project/tranche/list/?slug={{slug}}">Tranches</a></li>
-<!--          <li><a href = '/managing/my-tasks/details/?slug={{slug}}'>My Tasks </ad></li>-->
+          <li><a href = '/managing/my-tasks/details/?slug={{slug}}'>My Tasks </ad></li>
         </ul>
      </div>
     </div>
@@ -73,7 +73,7 @@
                          &nbsp;
                             <div class="event-img">
                                 <p class="trunc">{{i.description}}</p>
-                                <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
+                                
                             </div>
                             <div class="event-circle"></div>
                             <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
@@ -233,8 +233,10 @@ under 0 Milestones</h5>
           </div>
         </div>
     </div>
-    <div class="wip-image">
-    	<img src="/static/img/wip-img.jpg" alt="">
+    
+    <div class=" white-box ">
+<!--    	<img src="/static/img/wip-img.jpg" alt="">-->
+        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
     </div>
     <div class="white-box-left">
     <div class="table-responsive">
@@ -312,6 +314,9 @@ under 0 Milestones</h5>
 <script type="text/javascript" src="/static/js/jquery.tinyscrollbar.js"></script>
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+  <!-- jsGanttImproved App -->
+  <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+  <script src="/static/js/jsgantt.js" type="text/javascript"></script>
 
 
 <script type="text/javascript">
@@ -324,213 +329,223 @@ function confirm_alert(node) {
 }
 </script>
 
-  <script>
+
+<script>
     var jsonData = {
-      "activities": [
-          {
-              "id": 1,
-              "activity_type": "Core",
-              "status": "Ongoing",
-              "active": "Active",
-              "created": "2017-08-31T10:57:49.083663Z",
-              "modified": "2017-08-31T10:57:49.083700Z",
-              "name": "Core Activity",
-              "description": "Some Ongoing Activity",
-              "slug": "core-act",
-              "object_id": null,
-              "project": 1,
-              "super_category": 1,
-              "created_by": 1,
-              "assigned_to": 1,
-              "content_type": null,
-              "subscribers": [
-                  1
-              ]
-          }
+      "activities": [{
+        "id": 1,
+        "activity_type": "Core",
+        "status": "Ongoing",
+        "active": "Active",
+        "created": "2017-08-31T10:57:49.083663Z",
+        "modified": "2017-08-31T10:57:49.083700Z",
+        "name": "Core Activity",
+        "description": "Some Ongoing Activity",
+        "slug": "core-act",
+        "object_id": null,
+        "project": 1,
+        "super_category": 1,
+        "created_by": 1,
+        "assigned_to": 1,
+        "content_type": null,
+        "subscribers": [
+          1
+        ]
+      }],
+      "supercategories": [{
+        "id": 1,
+        "active": 2,
+        "created": "2017-08-31T10:57:08.130582Z",
+        "modified": "2017-08-31T10:57:08.130634Z",
+        "name": "Bangalore",
+        "slug": "Bangalore",
+        "description": "asdf",
+        "budget": 1,
+        "parent": null,
+        "project": 1
+      }],
+      "tasks": [{
+          "id": 1,
+          "name": "task1",
+          "expected_start_date": "2017-01-07T10:58:30Z",
+          "expected_end_date": "2017-02-07T10:58:49Z",
+          "start_date": "2016-12-01T10:58:09Z",
+          "end_date": "2017-01-31T10:58:20Z",
+          "active": "Active",
+          "status": " ",
+          "actual_start_date": "2017-01-07T10:58:30Z",
+          "actual_end_date": "2017-02-07T10:58:49Z",
+          "activity": 1,
+          "task_dependency": [],
+          "assigned_to": 1
+        },
+        {
+          "id": 2,
+          "name": "Task2",
+          "expected_start_date": "2017-02-07T10:59:58Z",
+          "expected_end_date": "2017-03-06T11:00:33Z",
+          "start_date": "2017-02-01T10:59:34Z",
+          "end_date": "2017-02-28T10:59:43Z",
+          "active": "Active",
+          "status": "Close",
+          "actual_start_date": "2017-02-07T10:59:58Z",
+          "actual_end_date": "2017-03-06T11:00:33Z",
+          "activity": 1,
+          "task_dependency": [
+            1
+          ],
+          "assigned_to": 1
+        },
+        {
+          "id": 3,
+          "name": "task3",
+          "expected_start_date": "2017-12-01T11:03:20Z",
+          "expected_end_date": "2018-06-04T11:03:31Z",
+          "start_date": "2017-03-01T11:01:01Z",
+          "end_date": "2017-08-31T11:01:12Z",
+          "active": "Active",
+          "status": "Ongoing",
+          "actual_start_date": "2017-08-01T11:01:38Z",
+          "actual_end_date": null,
+          "activity": 1,
+          "task_dependency": [
+            1,
+            2
+          ],
+          "assigned_to": null
+        },
+        {
+          "id": 4,
+          "name": "task4",
+          "expected_start_date": "2017-11-01T11:03:03Z",
+          "expected_end_date": "2017-11-30T11:03:20Z",
+          "start_date": "2017-09-01T11:01:57Z",
+          "end_date": "2017-09-30T11:02:14Z",
+          "active": "Active",
+          "status": "Open",
+          "actual_start_date": null,
+          "actual_end_date": null,
+          "activity": 1,
+          "task_dependency": [
+            3
+          ],
+          "assigned_to": null
+        },
+        {
+          "id": 5,
+          "name": "task5",
+          "expected_start_date": "2017-10-01T11:02:52Z",
+          "expected_end_date": "2017-10-31T11:03:03Z",
+          "start_date": "2017-10-01T11:02:52Z",
+          "end_date": "2017-10-31T11:03:03Z",
+          "active": "Active",
+          "status": "Open",
+          "actual_start_date": null,
+          "actual_end_date": null,
+          "activity": 1,
+          "task_dependency": [
+            4
+          ],
+          "assigned_to": 1
+        }
       ],
-      "supercategories": [
-          {
-              "id": 1,
-              "active": 2,
-              "created": "2017-08-31T10:57:08.130582Z",
-              "modified": "2017-08-31T10:57:08.130634Z",
-              "name": "Bangalore",
-              "slug": "Bangalore",
-              "description": "asdf",
-              "budget": 1,
-              "parent": null,
-              "project": 1
-          }
-      ],
-      "tasks": [
-          {
-              "id": 1,
-              "name": "task1",
-              "expected_start_date": "2017-01-07T10:58:30Z",
-              "expected_end_date": "2017-02-07T10:58:49Z",
-              "start_date": "2016-12-01T10:58:09Z",
-              "end_date": "2017-01-31T10:58:20Z",
-              "active": "Active",
-              "status": " ",
-              "actual_start_date": "2017-01-07T10:58:30Z",
-              "actual_end_date": "2017-02-07T10:58:49Z",
-              "activity": 1,
-              "task_dependency": [],
-              "assigned_to": 1
-          },
-          {
-              "id": 2,
-              "name": "Task2",
-              "expected_start_date": "2017-02-07T10:59:58Z",
-              "expected_end_date": "2017-03-06T11:00:33Z",
-              "start_date": "2017-02-01T10:59:34Z",
-              "end_date": "2017-02-28T10:59:43Z",
-              "active": "Active",
-              "status": "Close",
-              "actual_start_date": "2017-02-07T10:59:58Z",
-              "actual_end_date": "2017-03-06T11:00:33Z",
-              "activity": 1,
-              "task_dependency": [
-                  1
-              ],
-              "assigned_to": 1
-          },
-          {
-              "id": 3,
-              "name": "task3",
-              "expected_start_date": "2017-12-01T11:03:20Z",
-              "expected_end_date": "2018-06-04T11:03:31Z",
-              "start_date": "2017-03-01T11:01:01Z",
-              "end_date": "2017-08-31T11:01:12Z",
-              "active": "Active",
-              "status": "Ongoing",
-              "actual_start_date": "2017-08-01T11:01:38Z",
-              "actual_end_date": null,
-              "activity": 1,
-              "task_dependency": [
-                  1,
-                  2
-              ],
-              "assigned_to": null
-          },
-          {
-              "id": 4,
-              "name": "task4",
-              "expected_start_date": "2017-11-01T11:03:03Z",
-              "expected_end_date": "2017-11-30T11:03:20Z",
-              "start_date": "2017-09-01T11:01:57Z",
-              "end_date": "2017-09-30T11:02:14Z",
-              "active": "Active",
-              "status": "Open",
-              "actual_start_date": null,
-              "actual_end_date": null,
-              "activity": 1,
-              "task_dependency": [
-                  3
-              ],
-              "assigned_to": null
-          },
-          {
-              "id": 5,
-              "name": "task5",
-              "expected_start_date": "2017-10-01T11:02:52Z",
-              "expected_end_date": "2017-10-31T11:03:03Z",
-              "start_date": "2017-10-01T11:02:52Z",
-              "end_date": "2017-10-31T11:03:03Z",
-              "active": "Active",
-              "status": "Open",
-              "actual_start_date": null,
-              "actual_end_date": null,
-              "activity": 1,
-              "task_dependency": [
-                  4
-              ],
-              "assigned_to": 1
-          }
-      ],
-      "milestones": [
-          {
-              "id": 1,
-              "active": "Active",
-              "status": "Open",
-              "created": "2017-08-31T11:04:30.349620Z",
-              "modified": "2017-08-31T11:04:30.349650Z",
-              "name": "WHATTA MILESTONE",
-              "overdue": "2017-10-31T11:04:06Z",
-              "slug": "milestone1",
-              "project": 1,
-              "task": [
-                  5
-              ],
-              "subscribers": [
-                  1
-              ]
-          },
-          {
-              "id": 3,
-              "active": "Active",
-              "status": "Ongoing",
-              "created": "2017-08-31T11:05:57.834731Z",
-              "modified": "2017-08-31T11:05:57.834764Z",
-              "name": "Milestone2",
-              "overdue": "2017-07-31T11:05:19Z",
-              "slug": "milestone2",
-              "project": 1,
-              "task": [
-                  2
-              ],
-              "subscribers": [
-                  1
-              ]
-          }
+      "milestones": [{
+          "id": 1,
+          "active": "Active",
+          "status": "Open",
+          "created": "2017-08-31T11:04:30.349620Z",
+          "modified": "2017-08-31T11:04:30.349650Z",
+          "name": "WHATTA MILESTONE",
+          "overdue": "2017-10-31T11:04:06Z",
+          "slug": "milestone1",
+          "project": 1,
+          "task": [
+            5
+          ],
+          "subscribers": [
+            1
+          ]
+        },
+        {
+          "id": 3,
+          "active": "Active",
+          "status": "Ongoing",
+          "created": "2017-08-31T11:05:57.834731Z",
+          "modified": "2017-08-31T11:05:57.834764Z",
+          "name": "Milestone2",
+          "overdue": "2017-07-31T11:05:19Z",
+          "slug": "milestone2",
+          "project": 1,
+          "task": [
+            2
+          ],
+          "subscribers": [
+            1
+          ]
+        }
       ]
-  }
+    }
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     console.log(jsonData.tasks);
-    $.each(jsonData.supercategories,function(i){
+    $.each(jsonData.supercategories, function (i) {
       var superId = this.id;
       var superName = this.name;
       var superDesc = this.description;
-      g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0,null, 0, 1, 0, 1, '',
-      '',superDesc, g));
-    });    
-    $.each(jsonData.activities,function(i){
+      g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+        '', superDesc, g));
+    });
+    $.each(jsonData.activities, function (i) {
       var activityId = this.id.toString();
       var superId = this.super_category;
       activityId = activityId + this.super_category.toString();
-      console.log("ActID",activityId);
+      // console.log("ActID", activityId);
       var activityName = this.name;
       var activitySuper = this.super_category;
       var activityDesc = this.description;
-      g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId, 1, '', '',
-      activityDesc, g));
+      g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
+        1, '', '',
+        activityDesc, g));
     });
-    $.each(jsonData.tasks,function(i){
+    $.each(jsonData.tasks, function (i) {
       var taskId = this.id;
       var activityId = this.activity;
+      var activity_type = 'Core';
       // activity = jsonData.activities.filter(function( i ) {
       //   if(i.id == activityId){return i.super_category;}
       // });
-      var superId = $.each(jsonData.activities,function(){
-        if(this.id==activityId) return this.super_category;
+      var superId = $.each(jsonData.activities, function () {
+        if (this.id == activityId) {
+          activity_type = this.activity_type;
+          return this.super_category;
+        }
       });
       taskId = superId[0].super_category.toString() + activityId.toString() + taskId.toString();
       activityId = superId[0].super_category.toString() + activityId.toString();
       activityId = parseInt(activityId);
-      console.log("TaskID",taskId);
+      // console.log("TaskID", taskId);
       var taskName = this.name;
       var eStartDate = this.expected_start_date;
       var eEndDate = this.expected_end_date;
       var taskCompletion = 0;
-      var taskStatus = 'gtaskblue';
-      switch(this.status) {
-        case "Ongoing" : break;
-        case "Open" : taskStatus = 'gtaskgreen'; break;
-        case "Close" : taskStatus = 'gtaskred'; break;
-        default : taskStatus = 'gtaskblue'; break;
-      };
-      g.AddTaskItem(new JSGantt.TaskItem(taskId,taskName , eStartDate, eEndDate , taskStatus, '', 0,
-      '', 0, 0, activityId, 1, '', '', '', g));
+      var taskStatus = 'gtaskred';
+      if (activity_type == "Core") {
+        switch (this.status) {
+          case "Ongoing":
+            taskStatus = 'gtaskblue';
+            break;
+          case "Open":
+            taskStatus = 'gtaskyellow';
+            break;
+          case "Close":
+            taskStatus = 'gtaskgreen';
+            break;
+          default:
+            taskStatus = 'gtaskblue';
+            break;
+        };
+      }
+      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+        '', 0, 0, activityId, 1, '', '', '', g));
     });
     // g.AddTaskItem(new JSGantt.TaskItem(1, 'Nabarangpur School Project', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0,
     //   1, '', '', 'Some Notes text', g));
@@ -579,7 +594,7 @@ function confirm_alert(node) {
     g.setWeekColWidth(50);
     g.setWeekMajorDateDisplayFormat('mon yyyy');
     g.setWeekMinorDateDisplayFormat('W w');
-    g.setScrollTo('today');
+    // g.setScrollTo('today');
     g.Draw();
 
     function collision($div1, $div2) {

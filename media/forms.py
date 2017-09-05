@@ -23,4 +23,4 @@ class ImageUpload(forms.ModelForm):
 #    attachment_file = forms.FileField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True)
     class Meta:
         model = Attachment
-        fields  = ('attachment_file','name','date','description')
+        fields  = ('name','date','description','attachment_file')

@@ -12,6 +12,7 @@ from projectmanagement.models import Project,UserProfile,ProjectFunderRelation
 from media.models import Attachment
 from budgetmanagement.models import *
 from userprofile.models import ProjectUserRoleRelationship
+from dateutil import parser
 
 # Create your views here.
 
@@ -185,12 +186,8 @@ def my_task_details(task_id):
 def my_tasks_listing(project):
     task_lists=[]
     activities = Activity.objects.filter(project = project)
-    for i in activities:
-        tasks = Task.objects.filter(active=2,activity=i).order_by('-created')
-        for t in tasks:
-            if t not in task_lists:
-                task_lists.append(t)
-    return task_lists
+    tasks_list = Task.objects.filter(activity__project = project).order_by('-id')
+    return tasks_list
     
 def updates(obj_list):
 # to get the recent updates of the projects 
@@ -328,6 +325,157 @@ def my_tasks_details(request):
     user = UserProfile.objects.get(user_reference_id = user_id)
     project = Project.objects.get(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
-    project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
-    tasks_list = my_tasks_listing(project)
+    task_listing = my_tasks_listing(project)
     return render(request,'taskmanagement/my-task.html',locals())
+    
+
+''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
+from dateutil import parser
+'''
+from datetime import timedelta, time
+
+def get_tasks_objects(request):
+    ids = request.GET.get('id[]')
+    url=request.META.get('HTTP_REFERER')
+    obj = None
+    task_list = Task.objects.get(active=2,id__in = ids)
+    populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
+    return JsonResponse({"calculation":populated_dates})
+
+class ExpectedDatesCalculator():
+
+    """ This class takes a task  or a list of tasks ActiveQuery Objects and
+    populates it with expected start date and expected end date.
+    ***** USAGE *****
+    > task1=Task.objects.get(pk=1)
+    > ExpectedDatesCalculator(task=task1)
+    > task1.expected_end_date
+      <Prints datetime object>
+    > task1.expected_start_date
+      <prints datetime object>
+    """
+    
+    def __init__(self, task=None, task_list=None):
+        ''' Initialize the class
+            task_id - optional the task whose dates are to be calculated
+            task_list - optional tasks whose dates are to be populated
+        '''
+        if(task is not None):
+            self.task = task
+            self.data = {}
+            self.populate_expected_start_end_date()
+
+        elif (task_list is not None):
+            self.task_list = task_list
+            self.data = {}
+            for task in self.task_list:
+                self.populate_expected_start_end_date(task)
+
+        else:
+            self.task_list = []
+            self.data = {}
+
+    # Helper function gets next weekday if next day is weekend
+    def next_weekday(self, somedate):
+        ret = somedate + timedelta(days=1)
+        day = somedate.strftime('%a')
+        if day == 'Fri':
+            ret = somedate + timedelta(days=3)
+        elif day == 'Sat':
+            ret = somedate + timedelta(days=2)
+        return ret
+
+    def populate_expected_start_end_date(self, itask=None):
+        # Get expected start_date of dependent tasks
+        # returns the same task with expected dates populated
+        if(itask is None):
+            taskid = self.task.id
+            itask = self.task
+        else:
+            taskid = itask.id
+
+        # if expected dates are already calculated
+        if (taskid in self.data.keys()):
+
+            expected = self.data[taskid]
+            itask.expected_start_date = expected['expected_start_date']
+            itask.expected_end_date = expected['expected_end_date']
+            return itask
+
+        # main_task = Task.objects.get(pk=taskid)
+
+        main_task = itask
+
+        # If actual dates are populated, return those
+        if (main_task.actual_end_date):
+            main_task.expected_start_date = main_task.actual_start_date
+            main_task.expected_end_date = main_task.actual_end_date
+
+            ret = {'expected_start_date': main_task.actual_start_date,
+                   'expected_end_date': main_task.actual_end_date}
+
+            self.data[taskid] = ret
+            return main_task
+
+        else:
+            # Otherwise recursively get expected start date of all ancestors
+            dependencies = Task.objects.filter(
+                task_dependency=taskid)  # .filter(status=2)
+            dep_dates = []
+            for dependency in dependencies:
+                print("Task ID:", main_task.id, " Dependency:", dependency.id)
+                dep_dates.append(self.populate_expected_start_end_date(
+                    dependency))
+
+            # Put expectedstart date as next weekday end date of latest dependent task
+            # unless expected start/end date is less than the planned one
+            expected_start_date = main_task.start_date
+            expected_end_date = main_task.end_date
+            if(len(dep_dates) > 0):
+                for dep in dep_dates:
+                    expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
+                        dep.expected_end_date) > expected_start_date) else expected_start_date
+                expected_end_date = expected_start_date + \
+                    (main_task.end_date - main_task.start_date)
+                expected_end_date = self.next_weekday(
+                    expected_end_date - timedelta(days=1))
+
+            ret = {'expected_start_date': expected_start_date,
+                   'expected_end_date': expected_end_date}
+            self.data[taskid] = ret
+            main_task.expected_start_date = ret['expected_start_date']
+            main_task.expected_end_date = ret['expected_end_date']
+            return main_task
+
+
+def get_descendants(task):
+    descendants = Task.objects.filter(task_dependency=task.id)
+    ret_descendants = Task.objects.filter(
+        task_dependency=task.id)
+    for descendant in descendants.all():
+        ret_descendants = (
+            ret_descendants | get_descendants(descendant))
+    return ret_descendants
+
+
+def get_ancestors(task):
+    ancestors = task.task_dependency
+    ret_ancestors = task.task_dependency
+    for ancestor in ancestors.all():
+        ret_ancestors = (ret_ancestors | get_ancestors(ancestor))
+    return ret_ancestors
+
+
+def related_tasks(project_id, i_task=None, activity=None, milestone=None):
+    tasks = Task.objects.filter(activity__project=project_id)
+    task = Task.objects.get(pk=i_task)
+    if (task is None):
+        return tasks
+    if (task is not None):
+        # traverse up
+        # traverse down
+        descendants = get_descendants(task)
+        ancestors = get_ancestors(task)
+        return (descendants | ancestors).distinct()
+
+
