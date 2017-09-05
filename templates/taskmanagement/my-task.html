@@ -6,7 +6,7 @@
 	<div class="row">
 	<div class="image-pad logo-shadow">
     	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
-    </div>    
+    </div>
     <div class="title-left">
     {% if project %}
     <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{project.name}}</h4>
@@ -17,7 +17,7 @@
         {% get_funder project as project_funders %}
     	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% else %} Funder {% endif %}</a> </li>
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
-    </ul>   
+    </ul>
     </div>
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
@@ -29,7 +29,7 @@
           <li><a href="/project/tranche/list/?slug={{project.slug}}">Tranches</a></li>
           <li><a class="active" href = '/managing/my-tasks/details/?slug={{project.slug}}'>My Tasks </ad></li>
         </ul>
-     </div>         
+     </div>
     </div>
 </section>
 <!--Green pad Ends-->
@@ -56,40 +56,48 @@
     <div id="boxscroll-pad">
     <div class="task-head">
     	<h4>Overdue</h4>
-        <span>3</span>
+        <span>{% if over_due %}{{over_due | length }} {% else %} 0{% endif %}</span>
     </div>
           <ul>
-            {% if task_listing %}
-                {% for task in task_listing %}
-              <li><a href = # onclick="return hidediv({{task.slug}})">{{task.name}} <span>{{task.start_date}} - {{task.activity.name}}</span></a></li>
+            {% if over_due %}
+                {% for task in over_due %}
+              <li><a href = # class="hide-show" id={{task.slug}} >{{task.name}} <span>{{task.start_date}} - {{task.activity.name}}</span></a></li>
               {% endfor %}
             {% endif %}
           </ul>
           <div class="task-head current-date">
               <h4>Today</h4>
-              <span>5</span>
+              <span>{% if tasks_today %}{{tasks_today | length }} {% else %} 0{% endif %}</span>
           </div>
           <ul>
-              <li><a href="javascript:void(0);">Upload picture of benches bought <span>Aug 15 - Class Setup</span></a></li>
-              <li><a href="javascript:void(0);">Finance team to submit the bills for land acquisition <span>Aug 15 - Budgeting</span></a></li>
-              <li><a href="javascript:void(0);">Add details on company profile page <span>Aug 15 - Corporate</span></a></li>
-              <li><a href="javascript:void(0);">Add details of Q3 and Q4 budget <span>Aug 15 - Budgeting</span></a></li>
+             {% if tasks_today %}
+                {% for i in tasks_today %}
+              <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date}} - {{i.activity.name}}</span></a></li>
+                {% endfor %}
+             {% else %}
+               <li><a href="javascript:void(0);">No tasks</a></li>
+             {% endif %}
           </ul>
           <div class="task-head">
               <h4>Tommorow</h4>
-              <span>4</span>
+              <span>{% if tasks_tomorrow %}{{tasks_tomorrow | length }} {% else %} 0{% endif %}</span>
           </div>
           <ul>
-              <li><a href="javascript:void(0);">Shortlist the vendor for construction materials <span>Aug 16 - Class Setup</span></a></li>
-              <li><a href="javascript:void(0);">Add details of Q3 and Q4 budget <span>Aug 16 - Budgeting</span></a></li>
-              <li><a href="javascript:void(0);">Finance team to submit the bills for land acquisition <span>Aug 18 - Corporate</span></a></li>
-             <li><a href="javascript:void(0);">Shortlist the vendor for construction materials <span>Aug 16 - Class Setup</span></a></li>
+                {% if tasks_tomorrow %}
+                    {% for j in tasks_tomorrow %}
+              <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date}} - {{j.activity.name}}</span></a></li>
+                {% endfor %}
+                {% else %}
+                    <li><a href="javascript:void(0);">No tasks</a></li>
+                {% endif %}
+              
           </ul>
           </div>
         </div>
-        <div class="right-task">
-            {% for i in task_listing %}
-        	<div class="task-head-lft div-{{i.slug}}">
+        {% for i in task_listing %}
+        <div class="right-task div-{{i.slug}}">
+
+        	<div class="task-head-lft ">
               <h4>{{i.name}}<img src="/static/img/vender-icon.png" alt=""></h4>
               <h5>in <span class="under-line">{{i.activity.project.name}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
               <p>Details: This project works for child development, health and
@@ -104,22 +112,22 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
               <li>Planned Start Date : <span>{{i.start_date}}</span></li>
               <li>Planned End Date&nbsp;&nbsp;&nbsp;: <span>{{i.end_date}}</span></li>
           </ul>
-          <ul>    
+          <ul>
               <li>Actual Start Date : <span>{{i.actual_start_date}}</span></li>
               <li>Actual End Date&nbsp;&nbsp;&nbsp;: <span>{{i.actual_end_date}}</span></li>
           </ul>
           </div>
           <div class="planned-pad">
           <ul>
-              <li><span>Assigned to</span> <img src="/static/img/user-icon1.png" alt=""></li>
-              <li><span>Created by </span><img src="/static/img/user-icon2.png" alt=""></li>
-              <li><span>Approval</span> <img src="/static/img/user-icon3.png" alt=""></li>
-              <li><span>Subscribed to</span> <img src="/static/img/user-icon4.png" alt=""> <img src="/static/img/user-icon5.png" alt=""></li>
+              <li><span>Assigned to</span> <img src="/static/img/default_profile_image.png" alt=""></li>
+              <li><span>Created by </span><img src="/static/img/default_profile_image.png" alt=""></li>
+              <li><span>Approval</span> <img src="/static/img/default_profile_image.png" alt=""></li>
+              <li><span>Subscribed to</span> <img src="/static/img/default_profile_image.png" alt=""> <img src="/static/img/default_profile_image.png" alt=""></li>
           </ul>
           </div>
           <div class="task-completion">
           	<div class="task-completion-left">
-          		<img class="user-image" src="/static/img/user-img.png" alt="">
+          		<img class="user-image" src="/static/img/default_profile_image.png" alt="">
             </div>
             <div class="task-completion-right">
             	<textarea name="Write a update..." onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Write a update...</textarea>
@@ -130,9 +138,9 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
 		            <div class="stripe">
 					<div class="handle">
 			        	<div class="square">
-						</div>	
+						</div>
 		            </div>
-		            
+
 		          </div>
 			  </div>
               <ul>
@@ -146,7 +154,7 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
                   <li>80</li>
                   <li>90</li>
                   <li>100</li>
-              </ul>    	
+              </ul>
               </div>
               <a class="task-link" href="javascript:void(0);">Add Update</a>
             </div>
@@ -157,7 +165,7 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
             <div class="month-pad">Aug 15, 2017</div>
             <ul>
             	<li>
-                	<div class="left-li"><img class="user-image" src="img/user-img3.png" alt=""></div>
+                	<div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
                     <div class="right-li first-li">
                     	<p>Teacher hired for I to IV stds</p>
                         <ul>
@@ -166,12 +174,12 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
                             <li><a href="javascript:void(0);"><img src="/static/img/teacher-img3.jpg" alt="">
                             <div class="/static/image-hover">4 More files</div></a>
                             </li>
-                        </ul>    
+                        </ul>
                         <span>12.30 pm</span>
             	</div>
                 </li>
                 <li>
-                	<div class="left-li"><img class="user-image" src="/static/img/user-img1.png" alt=""></div>
+                	<div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
                     <div class="right-li second-li">
                     	<ul>
                         	<li>
@@ -182,66 +190,26 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
                             	<a href="javascript:void(0);">
                                 <img src="/static/img/ppt-icon.png" alt=""> <span>Presentation for board of directors</span></a>
 							</li>
-                        </ul>    
+                        </ul>
                         <span>3.09 pm</span>
             	</div>
-                </li>	
+                </li>
                  <li>
-                	<div class="left-li"><img class="user-image" src="/static/img/user-img1.png" alt=""></div>
+                	<div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
                     <div class="right-li third-li">
                     	<ul>
                         	<li>I have updated the budget for Q1 and Q2. @karangupta. Please go through it.</li>
-                        </ul>    
+                        </ul>
                         <span>3.09 pm</span>
             	</div>
                 </li>
             </ul>
-            <div class="month-pad">Aug 15, 2017</div>
-            <ul>
-            	<li>
-                	<div class="left-li"><img class="user-image" src="/static/img/user-img3.png" alt=""></div>
-                    <div class="right-li first-li">
-                    	<p>Teacher hired for I to IV stds</p>
-                        <ul>
-                        	<li><img src="/static/img/default profile image.png" alt=""></li>
-                            <li><img src="/static/img/default profile image.png" alt=""></li>
-                            <li><a href="javascript:void(0);"><img src="/static/img/default profile image.png" alt="">
-                            <div class="image-hover">4 More files</div></a>
-                            </li>
-                        </ul>    
-                        <span>12.30 pm</span>
-            	</div>
-                </li>
-                <li>
-                	<div class="left-li"><img class="user-image" src="/static/img/user-img1.png" alt=""></div>
-                    <div class="right-li second-li">
-                    	<ul>
-                        	<li>
-                            	<a href="javascript:void(0);">
-                                <img src="/static/img/excel-icon.png" alt=""> <span>List of shortlisted vendors</span></a>
-							</li>
-                            <li>
-                            	<a href="javascript:void(0);">
-                                <img src="/static/img/ppt-icon.png" alt=""> <span>Presentation for board of directors</span></a>
-							</li>
-                        </ul>    
-                        <span>3.09 pm</span>
-            	</div>
-                </li>	
-                 <li>
-                	<div class="left-li"><img class="user-image" src="/static/img/user-img1.png" alt=""></div>
-                    <div class="right-li third-li">
-                    	<ul>
-                        	<li>I have updated the budget for Q1 and Q2. @karangupta. Please go through it.</li>
-                        </ul>    
-                        <span>3.09 pm</span>
-            	</div>
-                </li>
-            </ul>
+            
             </div>
           </div>
-          {% endfor %}
-        </div>    
+
+        </div>
+        {% endfor %}
     </div>
 </section>
 <!--Content part Ends-->
@@ -258,17 +226,17 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 <script>
 //Toggle
-		
+
 	$('.user-menu').on('click',function(){
 		$('.dropdown-menu').slideDown(350);
-	
+
 	});
 	$('.select-down').on('click',function(){
         $('.dropdown-menu1').slideDown(350);
-          
+
     });
-	
-	$(document).ready(function(e) {	
+
+	$(document).ready(function(e) {
 		/*Content Show/Hide */
 		$('.hide-cont').hide();
 		$('.close-cont').hide();
@@ -281,24 +249,24 @@ welfare of Ramnagar village in Andhra Pradesh. </p>
 			$('.hide-cont').slideUp(350);
 			$('.close-cont').hide();
 			$('.view-cont').show();
-		});	
+		});
 		$(document).trigger( "click" );
 	});
-	
+
 	$(document).click(function(){
-	
+
 		$('.user-menu, .select-down').click(function(event){
 			event.stopPropagation();
 		});
-	
-		$('.dropdown-menu, .dropdown-menu1').slideUp(350);	 
-	
-	});		 
+
+		$('.dropdown-menu, .dropdown-menu1').slideUp(350);
+
+	});
 </script>
 
     <script type="text/javascript">
-   
-	
+
+
 	var expanded = false;
 
 function showCheckboxes() {
@@ -313,21 +281,21 @@ function showCheckboxes() {
 }
     </script>
 <script>
-  $(document).ready(function() {  
+  $(document).ready(function() {
     $("#boxscroll-pad").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});
 	// First scrollable DIV
-	$("#boxscroll-timeline").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});    
+	$("#boxscroll-timeline").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});
   });
   $(document).resize(function() {
   $("#boxscroll-pad").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});
 	// First scrollable DIV
-	$("#boxscroll-timeline").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); 
+	$("#boxscroll-timeline").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true});
   });
-</script> 
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#horizontalTab').easyResponsiveTabs({
-            type: 'default', //Types: default, vertical, accordion           
+            type: 'default', //Types: default, vertical, accordion
             width: 'auto', //auto or any width like 600px
             fit: true,   // 100% fit in a container
             closed: 'accordion', // Start closed if in accordion view
@@ -357,18 +325,23 @@ $(document).ready(function(){
 	$(function() {
 	$( ".datepicker" ).datepicker({
 	showOn: "button",
-	buttonImage: "img/calender-icon.png", 
+	buttonImage: "img/calender-icon.png",
 	buttonImageOnly: true
 	});
 	});
 </script>
  <script src="/static/js/price-range.js"></script>
- 
+
  <script>
-    function hidediv(slug){
-        $('.task-head-lft').hide();
-        $('.div-'+slug).show();
-        return false;
+    $(function(){
+        
+        $('.hide-show').on('click',function(){
+            var sl_id = $(this).attr('id')
+            $('.right-task').hide();
+            $('.div-'+sl_id).show();
+        });
+        $('.hide-show').first().trigger('click');
     }
+    );
  </script>
 {% endblock %}

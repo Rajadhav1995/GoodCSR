@@ -8,11 +8,14 @@ from django.contrib.auth.decorators import login_required
 from pmu.settings import BASE_DIR
 from taskmanagement.models import *
 from taskmanagement.forms import ActivityForm,TaskForm,MilestoneForm
-from projectmanagement.models import Project,UserProfile,ProjectFunderRelation
+from projectmanagement.models import (Project,UserProfile,
+    ProjectFunderRelation,unique_slug_generator)
 from media.models import Attachment
 from budgetmanagement.models import *
 from userprofile.models import ProjectUserRoleRelationship
 from dateutil import parser
+from datetime import timedelta
+from itertools import chain
 
 # Create your views here.
 
@@ -50,7 +53,7 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
-            f.slug = f.name.replace(' ','-')
+            f.slug = unique_slug_generator(f)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
@@ -75,7 +78,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
-            f.slug = f.name.replace(' ','-')
+            f.slug = unique_slug_generator(f)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
@@ -184,9 +187,10 @@ def my_task_details(task_id):
     return task
    
 def my_tasks_listing(project):
+    today = datetime.today().date()
     task_lists=[]
     activities = Activity.objects.filter(project = project)
-    tasks_list = Task.objects.filter(activity__project = project).order_by('-id')
+    tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).order_by('-start_date')
     return tasks_list
     
 def updates(obj_list):
@@ -310,22 +314,16 @@ def corp_total_budget_disbursed(obj_list):
     return total_disbursed 
 
 
-def get_tasks_list(activity_list):
-    task_list=[]
-    for i in activity_list:
-        task = Task.objects.filter(activity = i).order_by('-id')
-        for i in task:
-            if i not in task_list:
-                task_list.append(i)
-    return task_list
-
-
 def my_tasks_details(request):
+    today = datetime.today().date()
+    tomorrow = today + timedelta(days=1)
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     project = Project.objects.get(slug =request.GET.get('slug'))
-    project_user_relation = ProjectUserRoleRelationship.objects.get(id=user.id)
-    task_listing = my_tasks_listing(project)
+    over_due = my_tasks_listing(project)
+    tasks_today = project.get_todays_tasks(today)
+    tasks_tomorrow = project.get_todays_tasks(tomorrow)
+    task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow))
     return render(request,'taskmanagement/my-task.html',locals())
     
 
