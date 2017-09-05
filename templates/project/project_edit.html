@@ -34,7 +34,7 @@ width:450px;
                     <div class="form-group">
                     <label>Project Name</label>
                     {{form.name}}
-                    {{name.errors}}
+                    
                         </div>{% if form.errors %}
                         <p style="color: red;">
                             Project name Already exist
@@ -229,60 +229,6 @@ width:450px;
 
 
         </div>
-
-
-
-                        
-
-<!--                         <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
-                            Activities
-                            </label>
-                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                        <div class="input_fields_wrap">
-                            <button class="add_field_button">Add More Activity</button>
-                            {% if slug %}
-                            {% for i in activity_view %}
-                            <div><input class="form-control" value="{{i.name}}" type="text" name="activity[{{ forloop.counter }}]"><input class="form-control" type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number"></div>
-                            {% endfor %}
-                            {% else %}
-                            <div><input class="form-control" placeholder="Enter Activity Name" value="{{i.name}}" type="text" name="activity[1]"><input class="form-control" type="number" value="{{i.activity_duration}}" name="duration[1]" placeholder="Enter Duration" id="id_number"></div>
-                            {% endif %}
-                        </div>
-                        </div>
-                    </div> -->
-
-
-
-
-                        <!-- <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                {{form.start_date.label_tag}}
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                {{form.start_date}}
-                                <font color=#fc282f><b><span id="dateError1"></span></b></font>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                {{form.end_date.label_tag}}
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                {{form.end_date}}
-                                <font color=#fc282f><b><span id="dateError"></span></b></font>
-
-                            </div>
-                            <label class="control-label col-md-1 col-sm-1 col-xs-12" for="first-name">
-                                Duration:
-                            </label>
-                            <div class="control-label col-md-1 col-sm-1 col-xs-12">
-                                {{form.duration}}
-                            </div>
-                        </div> -->
-
-
                         <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
@@ -422,12 +368,11 @@ function funder_val() {
             var f = document.getElementById("implementation_partner");
             var funder = e.options[e.selectedIndex].value;
             var implementation_partner = f.options[f.selectedIndex].value;
-            document.getElementById('funder_error').innerHTML="Please select Funder"
             if (funder == 0) {
-                document.getElementById('funder_error').innerHTML="PLease select Funder"
+                document.getElementById('funder_error').innerHTML="<b>PLease select Funder</b>"
             }
             if (implementation_partner == 0) {
-                document.getElementById('partner_error').innerHTML="Please select Implementation Partner"
+                document.getElementById('partner_error').innerHTML="<b>Please select Implementation Partner</b>"
             }
         }
     </script>
@@ -448,20 +393,26 @@ function funder_val() {
                         maxlength: 75,
                         remote: "/propject/name/validation/"
                         },
+                name : {required:true},
+                total_budget : {required:true},
                 no_of_beneficiaries : {required:true},
                 target_beneficiaries : {required:true},
                 cause_area : {required:true},
-                id_end_date: { greaterThan: "#id_start_date" },
+                duration : {required:true},
+                funder: {required:true},
             },
             messages:
             {
                 //id_project : {required : "<font color=#fc282f>Please enter the name</font>"},
                 //program:{required:"<font color=#fc282f>Please select the program</font>"},
-                id_name:{required:"<font color=#fc282f>Please enter name"},
+                name:{required:"<font color=#fc282f>Please enter name"},
+                total_budget : {required:"<font color=#fc282f>Please enter Total Budget</font>"},
                 no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
                 target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
                 cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
-                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
+                duration : {required : "<font color=#fc282f>Please Start date and End date</font>"},
+                funder : {required : "<font color=#fc282f>Please select funder</font>"},
+
 
             },
             highlight: function (element) {

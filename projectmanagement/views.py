@@ -360,32 +360,10 @@ def manage_parameter_values(request):
     ids =  request.GET.get('id')
     
     op = ProjectParameter.objects.get(id=ids)
-    rr = ProjectParameterValue.objects.filter(keyparameter=op)
-
-
-    sub_json.append("Month")
-    for j in op:
-        sub_json.append(j.name)
-    high_json.append(sub_json)
-    count = op.count()
-    # low_json = []
-    # for t in range(count):
-    #     for k in op:
-    #         uu = ProjectParameterValue.objects.get(keyparameter=k)
-    #         month = uu.start_date.strftime('%B')
-    #         low_json.append(str(month))
-    #         low_json.append(int(uu.parameter_value))
-    #         low_json = list(set(low_json))
-    #     high_json.append(low_json)
-
-    # json_count = len(high_json)
-
-
-    # high_json.append()
-    for i in parameter:
-        pass
-
-
+    rr = ProjectParameterValue.objects.filter(keyparameter__parent=op).order_by('id')
+    
+    import ipdb; ipdb.set_trace()
+    return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
         ret={}

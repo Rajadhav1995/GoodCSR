@@ -112,9 +112,7 @@ width:450px;
         function ddlValidate() {
             var e = document.getElementById("gMonth");
             var para_type = e.options[e.selectedIndex].value;
-            alert(para_type);
             if (para_type == 0) {
-                alert(para_type);
                 document.getElementById('funder_error').innerHTML="Please select Month"
                 return false;
             }
@@ -157,7 +155,6 @@ $(document).ready(function() {
 $('#pie').hide();
 $("#para_type").change(function () {
   if($(this).val() == "PIN" || $(this).val() == "PIP")
-    alert($(this).val());
     $('#pie').show();
     $('#name').hide();
     $('#value').hide();
