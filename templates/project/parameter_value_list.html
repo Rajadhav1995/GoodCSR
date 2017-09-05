@@ -42,8 +42,9 @@
                 <!-- {% for i in child_parameter %} -->
                 <!-- <th>{{i.keyparameter.name}}</th> -->
                 <!-- {% endfor %} -->
-                <th>Parameter</th>
-                <th>Value</th>
+                {% for i in names %}
+                <th>i.name</th>
+                {% endfor %}
                 <!-- <th>Name2</th>
                 <th>Name3</th>
                 <th>Name4</th>
@@ -52,10 +53,10 @@
             </tr>
         </thead>
         
-        {% for i in child_parameter %}
+        {% for i in rr %}
         <tr>
             
-            <b><td>{{i.submit_date}}</td></b>
+            <b><td>{{i.start_date.month}}</td></b>
             <td>{{i.keyparameter.name}}</td>
             <td>{{i.parameter_value}}</td>
             <!-- <td>{{i.parameter_value}}</td> -->
