@@ -136,12 +136,14 @@
                 $("#variance_"+i+"_"+j).val('');
             }
             else{
-                if (+planned_cost > +utilized_cost) {
+                $("#variance_"+i+"_"+j).val(parseInt(total));
+                /*if (+planned_cost > +utilized_cost) {
                     $("#variance_"+i+"_"+j).val('0');
                 }
                 else{
                 $("#variance_"+i+"_"+j).val(parseInt(total));
                 }
+                */
             }
             
             
