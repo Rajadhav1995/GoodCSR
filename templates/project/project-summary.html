@@ -73,7 +73,9 @@
                          &nbsp;
                             <div class="event-img">
                                 <p class="trunc">{{i.description}}</p>
-                                
+                                {% if i.attachment_file %}
+                                <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
+                                {% endif %}
                             </div>
                             <div class="event-circle"></div>
                             <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
@@ -331,160 +333,7 @@ function confirm_alert(node) {
 
 
 <script>
-    var jsonData = {
-      "activities": [{
-        "id": 1,
-        "activity_type": "Core",
-        "status": "Ongoing",
-        "active": "Active",
-        "created": "2017-08-31T10:57:49.083663Z",
-        "modified": "2017-08-31T10:57:49.083700Z",
-        "name": "Core Activity",
-        "description": "Some Ongoing Activity",
-        "slug": "core-act",
-        "object_id": null,
-        "project": 1,
-        "super_category": 1,
-        "created_by": 1,
-        "assigned_to": 1,
-        "content_type": null,
-        "subscribers": [
-          1
-        ]
-      }],
-      "supercategories": [{
-        "id": 1,
-        "active": 2,
-        "created": "2017-08-31T10:57:08.130582Z",
-        "modified": "2017-08-31T10:57:08.130634Z",
-        "name": "Bangalore",
-        "slug": "Bangalore",
-        "description": "asdf",
-        "budget": 1,
-        "parent": null,
-        "project": 1
-      }],
-      "tasks": [{
-          "id": 1,
-          "name": "task1",
-          "expected_start_date": "2017-01-07T10:58:30Z",
-          "expected_end_date": "2017-02-07T10:58:49Z",
-          "start_date": "2016-12-01T10:58:09Z",
-          "end_date": "2017-01-31T10:58:20Z",
-          "active": "Active",
-          "status": " ",
-          "actual_start_date": "2017-01-07T10:58:30Z",
-          "actual_end_date": "2017-02-07T10:58:49Z",
-          "activity": 1,
-          "task_dependency": [],
-          "assigned_to": 1
-        },
-        {
-          "id": 2,
-          "name": "Task2",
-          "expected_start_date": "2017-02-07T10:59:58Z",
-          "expected_end_date": "2017-03-06T11:00:33Z",
-          "start_date": "2017-02-01T10:59:34Z",
-          "end_date": "2017-02-28T10:59:43Z",
-          "active": "Active",
-          "status": "Close",
-          "actual_start_date": "2017-02-07T10:59:58Z",
-          "actual_end_date": "2017-03-06T11:00:33Z",
-          "activity": 1,
-          "task_dependency": [
-            1
-          ],
-          "assigned_to": 1
-        },
-        {
-          "id": 3,
-          "name": "task3",
-          "expected_start_date": "2017-12-01T11:03:20Z",
-          "expected_end_date": "2018-06-04T11:03:31Z",
-          "start_date": "2017-03-01T11:01:01Z",
-          "end_date": "2017-08-31T11:01:12Z",
-          "active": "Active",
-          "status": "Ongoing",
-          "actual_start_date": "2017-08-01T11:01:38Z",
-          "actual_end_date": null,
-          "activity": 1,
-          "task_dependency": [
-            1,
-            2
-          ],
-          "assigned_to": null
-        },
-        {
-          "id": 4,
-          "name": "task4",
-          "expected_start_date": "2017-11-01T11:03:03Z",
-          "expected_end_date": "2017-11-30T11:03:20Z",
-          "start_date": "2017-09-01T11:01:57Z",
-          "end_date": "2017-09-30T11:02:14Z",
-          "active": "Active",
-          "status": "Open",
-          "actual_start_date": null,
-          "actual_end_date": null,
-          "activity": 1,
-          "task_dependency": [
-            3
-          ],
-          "assigned_to": null
-        },
-        {
-          "id": 5,
-          "name": "task5",
-          "expected_start_date": "2017-10-01T11:02:52Z",
-          "expected_end_date": "2017-10-31T11:03:03Z",
-          "start_date": "2017-10-01T11:02:52Z",
-          "end_date": "2017-10-31T11:03:03Z",
-          "active": "Active",
-          "status": "Open",
-          "actual_start_date": null,
-          "actual_end_date": null,
-          "activity": 1,
-          "task_dependency": [
-            4
-          ],
-          "assigned_to": 1
-        }
-      ],
-      "milestones": [{
-          "id": 1,
-          "active": "Active",
-          "status": "Open",
-          "created": "2017-08-31T11:04:30.349620Z",
-          "modified": "2017-08-31T11:04:30.349650Z",
-          "name": "WHATTA MILESTONE",
-          "overdue": "2017-10-31T11:04:06Z",
-          "slug": "milestone1",
-          "project": 1,
-          "task": [
-            5
-          ],
-          "subscribers": [
-            1
-          ]
-        },
-        {
-          "id": 3,
-          "active": "Active",
-          "status": "Ongoing",
-          "created": "2017-08-31T11:05:57.834731Z",
-          "modified": "2017-08-31T11:05:57.834764Z",
-          "name": "Milestone2",
-          "overdue": "2017-07-31T11:05:19Z",
-          "slug": "milestone2",
-          "project": 1,
-          "task": [
-            2
-          ],
-          "subscribers": [
-            1
-          ]
-        }
-      ]
-    }
+    var jsonData = {{taskdict|safe}}
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     console.log(jsonData.tasks);
     $.each(jsonData.supercategories, function (i) {
@@ -497,7 +346,7 @@ function confirm_alert(node) {
     $.each(jsonData.activities, function (i) {
       var activityId = this.id.toString();
       var superId = this.super_category;
-      activityId = activityId + this.super_category.toString();
+      activityId = activityId + superId;
       // console.log("ActID", activityId);
       var activityName = this.name;
       var activitySuper = this.super_category;
@@ -519,9 +368,11 @@ function confirm_alert(node) {
           return this.super_category;
         }
       });
+      if (activityId && superId[0].super_category && taskId){
       taskId = superId[0].super_category.toString() + activityId.toString() + taskId.toString();
       activityId = superId[0].super_category.toString() + activityId.toString();
       activityId = parseInt(activityId);
+      }
       // console.log("TaskID", taskId);
       var taskName = this.name;
       var eStartDate = this.expected_start_date;

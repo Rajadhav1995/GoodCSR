@@ -1,3 +1,5 @@
+import requests
+import json, ast
 from django.shortcuts import render
 import datetime
 from django.contrib import messages
@@ -433,7 +435,7 @@ def project_summary(request):
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
-    obj = Project.objects.get(slug = slug)
+    obj = Project.objects.get_or_none(slug = slug)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
@@ -506,4 +508,8 @@ def project_summary(request):
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
+    data = {'project_id':int(obj.id)}
+    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
+    taskdict = ast.literal_eval(json.dumps(rdd.content))
+    print taskdict
     return render(request,'project/project-summary.html',locals())
