@@ -185,7 +185,6 @@ $(function($) {
     $(document).ready(function() {
     if ('{{model_name}}' == 'Milestone'){
     $('#id_task').on('change',function(e){
-        alert("hi");
         var tasks_ids = $('#id_task').val();
         $.ajax({
             url:'/managing/milestone/overdue/',
