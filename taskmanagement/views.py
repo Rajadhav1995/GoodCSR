@@ -52,7 +52,6 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
-            import ipdb;ipdb.set_trace();
             from projectmanagement.views import unique_slug_generator
             f.slug = unique_slug_generator(f)
             f.save()
@@ -320,12 +319,14 @@ def my_tasks_details(request):
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
     user_id = request.session.get('user_id')
-    user = UserProfile.objects.get(user_reference_id = user_id)
-    project = Project.objects.get(slug =request.GET.get('slug'))
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    project = Project.objects.get_or_none(slug =request.GET.get('slug'))
+    project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
     over_due = my_tasks_listing(project)
     tasks_today = project.get_todays_tasks(today)
     tasks_tomorrow = project.get_todays_tasks(tomorrow)
     task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow))
+
     return render(request,'taskmanagement/my-task.html',locals())
     
 
