@@ -35,7 +35,6 @@ def listing(request):
     activity_list = Activity.objects.filter(project = project).order_by('-id')
     
     task_list = Task.objects.filter(activity__project=project).order_by('-id')
-    print activity_list,task_list
     milestone = Milestone.objects.filter(project=project).order_by('-id')
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
     return render(request,'taskmanagement/atm-listing.html',locals())
@@ -46,7 +45,7 @@ def add_taskmanagement(request,model_name,m_form):
     except:
         project = Project.objects.get(slug= request.POST.get('slug_project'))
     user_id = request.session.get('user_id')
-    user = UserProfile.objects.get(user_reference_id = user_id)
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     form=eval(m_form)
     if request.method=='POST':
         form=form(user_id,project.id,request.POST,request.FILES)
@@ -67,9 +66,9 @@ def add_taskmanagement(request,model_name,m_form):
 
 def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('user_id')
-    user = UserProfile.objects.get(user_reference_id = user_id)
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     form=eval(m_form)
-    m=eval(model_name).objects.get(slug = slug)
+    m=eval(model_name).objects.get_or_none(slug = slug)
     try:
         project = Project.objects.get(slug =request.GET.get('key') )
     except:
@@ -96,7 +95,7 @@ def active_change(request,model_name):
     status = request.GET.get('status')
     url=request.META.get('HTTP_REFERER')
     model = ContentType.objects.get(model = model_name)
-    obj = model.model_class().objects.get(id=int(ids))
+    obj = model.model_class().objects.get_or_none(id=int(ids))
     if  obj.active ==2:
         obj.active=0
         obj.save()
@@ -116,8 +115,8 @@ def task_dependencies(request):
     obj = None
     try:
         tasks = Task.objects.filter(active=2,activity = int(ids))
-        obj = Activity.objects.get(active=2,id= int(ids),activity_type = 1)
-        project = Project.objects.get(id = obj.project.id)
+        obj = Activity.objects.get_or_none(active=2,id= int(ids),activity_type = 1)
+        project = Project.objects.get_or_none(id = obj.project.id)
         start_date = project.start_date.strftime('%Y-%m-%d')
     except:
         obj = None
@@ -152,7 +151,7 @@ from datetime import datetime
 def total_tasks_completed(slug):
     total_tasks = completed_tasks=total_milestones = 0
     milestones = []
-    project = Project.objects.get(slug = slug)
+    project = Project.objects.get_or_none(slug = slug)
     activity = Activity.objects.filter(project=project)
     milestones= Milestone.objects.filter(project = project)
     for act in activity:
@@ -174,7 +173,7 @@ def total_tasks_completed(slug):
 def my_task_updates(obj_list):
 #updates of the task
     try:
-        task_obj = Task.objects.get(id = int(task_id))
+        task_obj = Task.objects.get_or_none(id = int(task_id))
         attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('created_by')
     except:
         attachment = []
@@ -202,7 +201,7 @@ def updates(obj_list):
     completed_tasks = []
     task_uploads = {}
     for project in obj_list:
-        project = Project.objects.get(id = int(project.id))
+        project = Project.objects.get_or_none(id = int(project.id))
         activity = Activity.objects.filter(project=project)
         for act in activity:
             task_list = Task.objects.filter(activity = act)
