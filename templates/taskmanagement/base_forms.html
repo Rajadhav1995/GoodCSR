@@ -39,8 +39,10 @@
                     {% endfor %}
             <input id = 'slug' name = 'slug_project' type='hidden' value = "{{project.slug}}"/>
            <div class="col-md-12">
-              <input class="btn btn-primary" type="submit" value="Save" onclick="return RemoveProduct();" />
-              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}" style="margin-right:5px;">Back</button></a>
+            <div class="form-group">
+              <input class="budget_button" type="submit" value="Save" onclick="return RemoveProduct();" />
+              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}" style="margin-right:5px;float: right;">Back</button></a>
+            </div>
            </div>
         </div>
     </form>
@@ -227,13 +229,13 @@ $(function($) {
                     $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
                     }
                 //document.getElementById("id_task_dependency").value = data.tasks_dependency;
-                $('#id_task_dependency')
-                    .find('option')
-                    .remove()
-                    for(var i=0;i<data.tasks_dependency.length;i++){
+                //$('#id_task_dependency')
+                  //  .find('option')
+                    //.remove()
+                    //for(var i=0;i<data.tasks_dependency.length;i++){
                         
-                        $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
-                        }
+                      //  $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
+                        //}
             },
             error : function(){}
         });

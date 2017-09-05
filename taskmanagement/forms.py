@@ -63,11 +63,12 @@ class TaskForm(forms.ModelForm):
         self.user = user_id
         self.project = project_id
         super(TaskForm, self).__init__(*args, **kwargs)
-        self.fields['activity'].required = True
+        self.fields['activity'].queryset = Activity.objects.filter(project_id = project_id)
         self.fields['name'].required = True
         self.fields['start_date'].required = True
         self.fields['end_date'].required = True
         self.fields['status'].required = True
+        self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
 
     def clean(self):
         cleaned_data = super(TaskForm,self).clean()
@@ -90,7 +91,7 @@ class MilestoneForm(forms.ModelForm):
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     overdue = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
-    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
+    project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control','disabled':'disabled'}))
     class Meta:
         model = Milestone
         fields = ('name','project','task','overdue','subscribers','status')
@@ -103,6 +104,7 @@ class MilestoneForm(forms.ModelForm):
 #        obj1=set(list(Milestone.objects.filter(active=2).values_list('task',flat=True)))
 #        obj2=set(list(Task.objects.filter(active=2).values_list('id',flat=True)))
 #        tasks = obj2 - obj1
+        self.fields['project'].initial = Project.objects.get(id=project_id)
         self.fields['name'].required = True
         self.fields['overdue'].required = False
 #        self.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)

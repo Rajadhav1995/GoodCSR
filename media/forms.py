@@ -17,10 +17,8 @@ class AttachmentForm(forms.ModelForm):
         fields  = ('attachment_file','name','date','document_type')
 
 class ImageUpload(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
-    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True)
-#    attachment_file = forms.FileField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True)
+    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=True)
     class Meta:
         model = Attachment
-        fields  = ('name','date','description','attachment_file')
+        fields  = ('date','description','attachment_file')

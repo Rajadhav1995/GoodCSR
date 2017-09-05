@@ -62,6 +62,7 @@
                         <li class="event-up">
                             &nbsp;
                             <div class="event-img">
+<!--                            <i class = "fa fa-remove remove_icon"></i>-->
                                 <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
                                 <p class="trunc">{% if i.description %} {{i.description}} {% endif %}</p>
                             </div>
@@ -72,7 +73,9 @@
                         <li class="event-down">
                          &nbsp;
                             <div class="event-img">
-                                <p class="trunc">{{i.description}}</p>
+<!--                            <i class = "fa fa-remove remove_icon" onclick =""></i>  -->
+                                <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
+                                <p class="trunc">{% if i.description %} {{i.description}} {% endif %}</p>
                                 
                             </div>
                             <div class="event-circle"></div>

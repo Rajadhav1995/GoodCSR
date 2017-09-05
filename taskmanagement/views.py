@@ -215,6 +215,7 @@ def updates(obj_list):
                 if task.status == 2 and task.history.latest():
                     task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
                         'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                    uploads.append(task_uploads)
                 if project.history.latest():
                     attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
                     for a in attach_lists:
@@ -222,10 +223,10 @@ def updates(obj_list):
                         'user_name':a.created_by.email if a.created_by else '','time':a.created.time(),'date':a.created.date(),'task_status':''}
                     uploads.append(task_uploads)
     try:
-        if uploads:
-            uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
-        else:
-            uploads = []
+#        if uploads:
+        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+#        else:
+#            uploads = []
     except:
         uploads = uploads
     return uploads
