@@ -36,7 +36,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['description'].required = True
         self.fields['name'].required = True
         self.fields['activity_type'].required = True
-        self.fields['status'].required = True
+        self.fields['status'].initial = 1
 #        self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2).values_list('id',flat="True")
         self.fields['subscribers'].required = True
         self.fields['project'].initial = Project.objects.get(id = project_id)
@@ -67,7 +67,7 @@ class TaskForm(forms.ModelForm):
         self.fields['name'].required = True
         self.fields['start_date'].required = True
         self.fields['end_date'].required = True
-        self.fields['status'].required = True
+        self.fields['status'].initial = 1
         self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
 
     def clean(self):
@@ -109,4 +109,4 @@ class MilestoneForm(forms.ModelForm):
         self.fields['overdue'].required = False
 #        self.fields['task'].queryset = Task.objects.filter(active=2,id__in = tasks)
         self.fields['subscribers'].required = True
-        self.fields['status'].required = True
+        self.fields['status'].initial = 1

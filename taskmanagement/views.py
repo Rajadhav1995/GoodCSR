@@ -16,6 +16,10 @@ from userprofile.models import ProjectUserRoleRelationship
 from dateutil import parser
 from datetime import timedelta
 from itertools import chain
+from rest_framework.views import APIView
+from rest_framework.response import Response as RestResponse
+from serializers import *
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -479,3 +483,33 @@ def related_tasks(project_id, i_task=None, activity=None, milestone=None):
         return (descendants | ancestors).distinct()
 
 
+class GanttChartData(APIView):
+
+    def get(self, request, format=None):
+        '''
+         Get Main Task ( if any)
+         Get Related Tasks
+         Get Milestones
+         Get Activity and Super Category
+         Serialize data
+         Send back json response
+        '''
+        tasks = None
+        i_project_id = request.data.get('project_id')
+        # i_task = request.query_params.get('task_id')
+
+        # tasks = related_tasks(i_project_id)
+
+        tasks = Task.objects.filter(activity__project=i_project_id)
+        activities = Activity.objects.filter(project=i_project_id)
+        milestones = Milestone.objects.filter(project=i_project_id)
+        supercategories = SuperCategory.objects.filter(project=i_project_id)
+        ExpectedDatesCalculator(task_list=tasks)
+        taskdict = {}
+        taskdict['tasks'] = TaskSerializer(tasks, many=True).data
+        taskdict['activities'] = ActivitySerializer(activities, many=True).data
+        taskdict['milestones'] = MilestoneSerializer(
+            milestones, many=True).data
+        taskdict['supercategories'] = SuperCategorySerializer(
+            supercategories, many=True).data
+        return Response(taskdict)
