@@ -325,7 +325,6 @@ def my_tasks_details(request):
     tasks_today = project.get_todays_tasks(today)
     tasks_tomorrow = project.get_todays_tasks(tomorrow)
     task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow))
-
     return render(request,'taskmanagement/my-task.html',locals())
     
 
