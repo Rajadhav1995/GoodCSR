@@ -1,26 +1,36 @@
 {% extends 'base.html' %}
-{% block section %}
 
+{% block section %}
+<div> </div>
 {% endblock %}
-{% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
 form { 
 margin: 0 auto; 
 width:450px;
 }
+
 </style>-->
     <!-- Main content -->
 
-    <section class="content">
-      <div class="row">
+{% block content %}
+
+
+<div class="clear"></div>
+<section class="content-part">
+    <div class='container' >
+    <div class="white-box">
+
+
+
+    
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
               {% if key == 1 %}
-              <h3 class="box-title">Add Document</h3>
+              <h3 class="border_line">Add Document</h3>
               {% else %}
-              <h3 class="box-title">Add Image</h3>
+              <h3 class="border_line">Add Image</h3>
               {% endif %}
               <div align="right">
              <!-- <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" /> -->
@@ -36,23 +46,27 @@ width:450px;
             {% endif %}
             {% csrf_token %}
 
+
+
                             {% if key == 1 %}
-                        <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                {{form.document_type.label_tag}}<font color="red">*</font>
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                {{form.document_type}}
+                                <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>{{form.document_type.label_tag}}</label>
+                                            {{form.document_type}}
                                 {% if form.document_type.errors %}
                                 <p style="color: red;">
                                     Please Select.
                                 </p>
                                 {% endif %}
-                            </div>
-                        </div>
-                        {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
 
-                            <div class="row">
+<!--                             <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     Attachment File<font color="red">*</font>
                                 </label>
@@ -61,9 +75,37 @@ width:450px;
                                     {{ form.attachment_file.errors }}
                                     <br><b><font color=#fc282f><span id="file_error"></span></font></b>
                                 </div>
-                            </div>
+                            </div> -->
+
 
                             <div class="row">
+                                        <div class="col-md-6 nopadding">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                <label>Attachment File</label><br>
+                                                {{form.attachment_file}}
+                                                {{ form.attachment_file.errors }}
+                                                <br><b><font color=#fc282f><span id="file_error"></span></font></b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Attachment Name</label>
+                                            {{form.name}}
+                                            {{ form.name.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+<!--                             <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     Attachment Name<font color="red">*</font>
                                 </label>
@@ -72,8 +114,8 @@ width:450px;
                                     {{ form.name.errors }}
                                 </div>
                             </div>
-
-                            <div class="row">
+ -->
+                            <!-- <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     Attachment Description<font color="red">*</font>
                                 </label>
@@ -81,23 +123,38 @@ width:450px;
                                     {{form.description}}
                                     {{ form.description.errors }}
                                 </div>
-                            </div>
+                            </div> -->
+
+                                <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Attachment Description</label>
+                                            {{form.description}}
+                                    {{ form.description.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                         <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                {{form.date.label_tag}}<font color="red">*</font>
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                {{form.date}}
-                                {% if form.date.errors %}
-                                <p style="color: red;">
-                                    Please Select.
-                                </p>
-                                {% endif %}
-                            </div>
-                        </div>
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>{{form.date.label_tag}}</label>
+                                            {{form.date}}
+                                            {% if form.date.errors %}
+                                            <p style="color: red;">
+                                                Please Select.
+                                            </p>
+                                            {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                         
-                        <div class="row">
+                        <!-- <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
                                 Keywords:
                             </label>
@@ -106,11 +163,27 @@ width:450px;
                                 <p style="color:grey ;">
                                     (Please press Enter or TAB or ',' after typing each keyword)
                             </div>
-                        </div>
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
+                        </div> -->
+
+                        <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Keywords</label>
+                                            <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
+                                <p style="color:grey ;">
+                                    (Please press Enter or TAB or ',' after typing each keyword)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/upload/list/?slug={{slug}}&model={{model}}">Back</button></a>
 
                     </form>
+  </div>
+  </div>
+  </div>
   </div>
   <br>
 <div style="padding :0 7px 0 5px;max-width:900px;margin:auto">
@@ -128,7 +201,10 @@ width:450px;
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
-<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+
+<!-- <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css"> -->
+<link rel="stylesheet" href="/static/css/tag-editor.css">
 
 
 <script>
