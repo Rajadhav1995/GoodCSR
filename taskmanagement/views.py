@@ -147,7 +147,10 @@ def milestone_overdue(request):
     task_ids = request.GET.get('id[]')
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
-    milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
+    try:
+        milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
+    except:
+        milestone_overdue = ''
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
 
 from datetime import datetime

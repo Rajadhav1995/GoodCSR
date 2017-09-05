@@ -193,6 +193,7 @@ $(function($) {
             url:'/managing/milestone/overdue/',
             type:'GET',
             data:{'id':tasks_ids},
+            async: true,
             dataType:"json",
             success:function(data){
             if (data.milestone_overdue_date != ""){
