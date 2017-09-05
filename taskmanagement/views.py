@@ -321,7 +321,7 @@ def get_tasks_list(activity_list):
 
 
 def my_tasks_details(request):
-    user_id = request.session.get_or_none('user_id')
+    user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
