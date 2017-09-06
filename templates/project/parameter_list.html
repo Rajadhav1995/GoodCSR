@@ -4,6 +4,9 @@
 
 {% endblock %}
 {% block content %}
+<style>
+.budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+</style>
 <!--Green pad Ends-->
 <!--Content part starts-->
 <section class="content-part">
@@ -38,7 +41,7 @@
         
         {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-        <div style="float: right;"><a class="btn btn-primary" href="/project/parameter/add/?slug={{slug}}&key={{key}}">Add Parameter</a></div>
+        <div style="float: right;"><a class="budget_button" href="/project/parameter/add/?slug={{slug}}&key={{key}}">Add Parameter</a></div>
         {% endif %}
         
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -55,8 +58,8 @@
             <td>{{i.name}}</td>
             <td>{{i.get_parameter_type_display}}</td>
             
-            <td><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}&key={{key}}">Upload Values</button></a>
-                <a class="btn btn-primary" href="/project/parameter/values/manage/?id={{i.id}}">Manage Values</button></a>
+            <td><a class="budget_button" href="/project/upload/parameter/value/?id={{i.id}}&key={{key}}">Upload Values</button></a>
+                <a class="budget_button" href="/project/parameter/values/manage/?id={{i.id}}">Manage Values</button></a>
                 <!-- /project/parameter/values/manage/?id={{i.id}} -->
             </td>
 

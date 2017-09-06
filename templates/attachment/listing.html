@@ -2,6 +2,9 @@
 {% load urs_tags %}
 
 {% block section %}
+<style>
+.budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+</style>
 <div class="clear"></div>
 <!--Green pad starts-->
 <section class="green-pad green-height">
@@ -74,8 +77,8 @@
        
     </div>
     <div class="white-box white-pad"><div style="float: right;">
-      <a class="btn btn-primary" href="/upload/doc/?model=Project&slug={{slug}}&key=2">Add Image</a>
-      <a class="btn btn-primary" href="/upload/doc/?model=Project&slug={{slug}}&key=1">Add Document</a></div>
+      <a class="budget_button" href="/upload/doc/?model=Project&slug={{slug}}&key=2">Add Image</a>
+      <a class="budget_button" href="/upload/doc/?model=Project&slug={{slug}}&key=1">Add Document</a></div>
     <div class="table-responsive">
     	<table class="table table-striped table-bordered sort_table" id="dest">
   <thead>
