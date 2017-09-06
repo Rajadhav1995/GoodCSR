@@ -157,14 +157,23 @@ def projectbudgetdetail(request):
     return render(request,"budget/budget_detail.html",locals())
 
 def budgetutilization(request):
+    quarter_key = request.GET.get('quarter')
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
     budgetobj = Budget.objects.get_or_none(id = budget_id)
-    quarter_list = get_budget_quarters(budgetobj)
-    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
-    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
-    span_length = len(budget_period)
+    quarter_selection_list = get_budget_quarters(budgetobj)
+    if quarter_key:
+        budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
+        budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+        span_length = len(budget_period)
+        quarter_selection_list = get_budget_quarters(budgetobj)
+#        import ipdb.ipdb.set_trace();
+        quarter_list = [(k,v) for k,v in quarter_selection_list.iteritems() if int(quarter_key) in k]
+    else:
+        budget_period = []
+        budget_periodconflist = []
+        span_length = 0
     if request.method == "POST":
         count = request.POST.get('count')
         project_slug = request.POST.get('slug')
