@@ -573,8 +573,8 @@ var gaugeOptions = {
      
 };
 
-var disbursed = {{projectobj.project_budget_details.disbursed_percent}}
-var utilized = {{projectobj.project_budget_details.utilized_percent}}
+var disbursed = 00
+var utilized = 100
 var total = 100 - (utilized + disbursed)
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
@@ -635,7 +635,7 @@ setInterval(function () {
         $.each(chartSpeed.series, function(i, item){
             if(item.type == 'gauge'){
               
-               item.setData([["none",point1.y+point.y]], true);
+               item.setData([["none",point.y]], true);
                
             }
         });
