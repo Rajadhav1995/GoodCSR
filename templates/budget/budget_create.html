@@ -277,6 +277,7 @@
     onSelect: function(dateText, inst) {
         var start = new Date($('#id_actual_start_date').val());
         var end = new Date($('#id_end_date').val());
+        end.setDate(end.getDate() + 1);
         if (end <= start) {
             alert("'End date' should be greater than 'Start date'")
             document.getElementById('dateError').innerHTML="End date should be greater than Start date"
