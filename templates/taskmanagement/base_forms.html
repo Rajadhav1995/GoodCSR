@@ -4,13 +4,15 @@
 <div> </div>
 {% endblock %}
 
-<style>
-    .error,.errorlist { color :red;}
-    #date_error,#min_max {color : red;}
-</style>
+
 
 
 {% block content %}
+<style>
+    .error li{ color :red;}
+    .errorlist li{color :red;}
+    #date_error,#min_max {color : red;}
+</style>
 <div class="clear"></div>
 <section class="content-part">
     <div class='container' >
@@ -42,7 +44,7 @@
             <input id = 'slug' name = 'slug_project' type='hidden' value = "{{project.slug}}"/>
            <div class="col-md-12">
             <div class="form-group">
-              <input class="budget_button" type="submit" value="Save" onclick="return RemoveProduct();" />
+              <input class="budget_button" type="submit" value="Submit" onclick="return RemoveProduct();" />
               <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}" style="margin-right:5px;float: right;">Back</button></a>
             </div>
            </div>

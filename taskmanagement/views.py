@@ -20,6 +20,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response as RestResponse
 from serializers import *
 from rest_framework.response import Response
+from pmu.settings import PMU_URL
 
 # Create your views here.
 
@@ -170,7 +171,7 @@ def total_tasks_completed(slug):
         tasks = Task.objects.filter(activity = act)
         total_tasks = len(tasks) + total_tasks
         for t in tasks:
-            if t.end_date.strftime('%Y-%m-%d') <= datetime.now().strftime('%Y-%m-%d'):
+            if t.status == 2:
                 completed_tasks = completed_tasks + 1
     if completed_tasks != 0:
         percent =int((float(completed_tasks) / float(total_tasks))*100)
@@ -330,6 +331,7 @@ def corp_total_budget_disbursed(obj_list):
 
 
 def my_tasks_details(request):
+    image_url = PMU_URL
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
     user_id = request.session.get('user_id')

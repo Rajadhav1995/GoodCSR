@@ -68,10 +68,25 @@ class Task(BaseContent):
         else :
             return False
     
-    def task_attachments(self,date):
-        attachments = Attachment.objects.fitler(active=2,content_type=ContentType.objects.get(model=('task')),object_id=self.id)
-        
-        return attachments
+    def task_attachments(self):
+        attach_dict = {}
+        inner_attach=[]
+        from datetime import datetime
+        from media.models import Attachment
+        attachments = Attachment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=self.id).order_by('-id')
+        distinct_dates = list(set([i.date() for i in attachments.values_list('created',flat=True)]))
+        attach = []
+        if distinct_dates:
+            for date in distinct_dates:
+                inner_attach =[]
+                for i in attachments.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
+                    inner_attach.append(i)
+                attach.append({date:inner_attach})
+        else:
+            attach=[]
+        return attach
+            
+            
 
 class Milestone(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)
