@@ -114,7 +114,14 @@ class Boundary(BaseContent):
     def __str__(self):
         return str(self.id)
 
+
+CATEGORY_CHOICES=(('DBC', 'Direct to Beneficiary Cost'),
+    ('IC', 'Indirect Cost'), 
+    ('AC', 'Admin Cost'), 
+     ('O', 'Others')) 
+
 class MasterCategory(BaseContent):
+    category_type = models.TextField(choices=CATEGORY_CHOICES,blank=True, null=True)
     name = models.CharField(max_length=200,**OPTIONAL)
     code = models.CharField(max_length=100,**OPTIONAL)
     slug = models.SlugField('Slug', max_length=255, blank=True, null=True)
