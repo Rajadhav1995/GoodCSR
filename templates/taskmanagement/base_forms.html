@@ -15,7 +15,9 @@
 <section class="content-part">
     <div class='container' >
 	<div class="white-box">
-	
+	{%if message %}
+	    <h3 class border_linr">{{message |safe}} <a style="text-decoration:underline;color:#169776" href= '/manage/project/budget/create/?slug={{project.slug}}'>Budget</a></h3>
+	{% else %}
     <form class="form-horizantal budget_form" action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
      <div class="col-md-12">
         {% if slug %}
@@ -46,7 +48,7 @@
            </div>
         </div>
     </form>
-    
+    {% endif %}
     
     </div>
     </div>

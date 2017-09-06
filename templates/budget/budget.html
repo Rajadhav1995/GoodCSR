@@ -573,6 +573,9 @@ var gaugeOptions = {
      
 };
 
+//var utilized = data.utilized_percent
+//var disbursed = data.disbursed_percent-data.utilized_percent
+
 var disbursed = {{projectobj.project_budget_details.disbursed_percent}}
 var utilized = {{projectobj.project_budget_details.utilized_percent}}
 var total = 100 - (utilized + disbursed)
@@ -635,7 +638,7 @@ setInterval(function () {
         $.each(chartSpeed.series, function(i, item){
             if(item.type == 'gauge'){
               
-               item.setData([["none",point1.y+point.y]], true);
+               item.setData([["none",point.y]], true);
                
             }
         });

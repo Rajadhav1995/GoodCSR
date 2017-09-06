@@ -50,22 +50,27 @@ def add_taskmanagement(request,model_name,m_form):
         project = Project.objects.get(slug= request.POST.get('slug_project'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-    form=eval(m_form)
-    if request.method=='POST':
-        form=form(user_id,project.id,request.POST,request.FILES)
-        if form.is_valid():
-            f=form.save()
-            from projectmanagement.views import unique_slug_generator
-            f.slug = unique_slug_generator(f)
-            f.save()
-            if model_name == 'Activity' or model_name == 'Task':
-                f.created_by = user
+    
+    try:
+        budget = Budget.objects.get(project = project)
+        form=eval(m_form)
+        if request.method=='POST':
+            form=form(user_id,project.id,request.POST,request.FILES)
+            if form.is_valid():
+                f=form.save()
+                from projectmanagement.views import unique_slug_generator
+                f.slug = unique_slug_generator(f)
                 f.save()
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-            else :
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-    else:
-        form=form(user_id,project.id)
+                if model_name == 'Activity' or model_name == 'Task':
+                    f.created_by = user
+                    f.save()
+                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+                else :
+                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        else:
+            form=form(user_id,project.id)
+    except:
+        message = "Click here to add "
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
