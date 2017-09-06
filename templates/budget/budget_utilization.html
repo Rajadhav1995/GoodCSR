@@ -5,14 +5,36 @@
 {% block content %}
 
 </br>
+<script type="text/javascript">
+   $(document).ready(function(){
+       $("#quarter").change(function(){
+       $("#filter_form").submit();
+       });
+   });
+</script>
+
 <div class="row">
     <div class="white-box">
         <div class="budget_create">
             <h3>Budget Utilization for {{projectobj.name|title}}</h3>
             <p> Update Budget Utilized Items</p>
+            <p>
+            <form id="filter_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "get" >
+                <input type="hidden" name="slug" value="{{project_slug}}">
+                <input type="hidden" name="budget_id" value="{{budget_id}}">
+                <select name="quarter" id="quarter">
+                    <option value = {{quarter_key}}>Select Quarter </option>
+                    {% for i,j in quarter_selection_list.items %}
+                    <option value="{{i}}">{{j}}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            </p>
         </div>
+{% if quarter_key %}
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" >{% csrf_token %}
 <input type="hidden" name="count" value="{{span_length}}">
+
         <div id="boxscroll1" class="table-scroll">
                 <input type="hidden" name="count" value="6">
                 <input type="hidden" name="slug" value="{{project_slug}}">
@@ -78,6 +100,8 @@
             <input type="submit" value="Save Budget Utilization" class="btn btn-success">
             </div> 
         </div>
+        </form>
+        {% endif %}
     </div>
 </div>
 
