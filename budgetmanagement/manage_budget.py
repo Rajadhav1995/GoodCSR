@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db.models import Sum
 from datetime import timedelta
 from django.template.defaultfilters import slugify
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from projectmanagement.models import (Project,MasterCategory,UserProfile)
 from .models import (Budget,SuperCategory,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                     Tranche,)
@@ -156,20 +156,48 @@ def projectbudgetdetail(request):
     span_length = len(budget_periodconflist)
     return render(request,"budget/budget_detail.html",locals())
 
+def year_quarter_list(request):
+    year = request.GET.get('year')
+    budget_id = request.GET.get('budget_id')
+    budgetobj = Budget.objects.get_or_none(id = budget_id)
+    sd = budgetobj.actual_start_date
+    ed = budgetobj.end_date
+    budget_enddate = budgetobj.end_date
+    if sd.day > 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month+1,year=year)
+    ed = budgetobj.end_date
+    no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
+    quarter_list = {}
+    for i in range(int(no_of_quarters)):
+        if str(sd.year) == year or str(ed.year) == year:
+            ed = sd+relativedelta.relativedelta(months=3)
+            if ed > budget_enddate:
+                ed = budget_enddate
+            quarter_list.update({i:str(sd)+" to "+str(ed)})
+            sd = ed
+    response = {'quarter_list':quarter_list}
+    return JsonResponse(response)
+
 def budgetutilization(request):
+    ''' Report utilization update based on the quarter selected '''
     quarter_key = request.GET.get('quarter')
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
     budgetobj = Budget.objects.get_or_none(id = budget_id)
+    years_list = []
+    sd = years_list.append(budgetobj.start_date.year)
+    ed = years_list.append(budgetobj.end_date.year)
+    years_list = list(set(years_list))
     quarter_selection_list = get_budget_quarters(budgetobj)
     if quarter_key:
         budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
         span_length = len(budget_period)
         quarter_selection_list = get_budget_quarters(budgetobj)
-#        import ipdb.ipdb.set_trace();
-        quarter_list = [(k,v) for k,v in quarter_selection_list.iteritems() if int(quarter_key) in k]
+        quarter_list = {}
+        quarterobj = quarter_list.update(dict([(k,v) for k,v in quarter_selection_list.iteritems() if int(quarter_key) == k]))
     else:
         budget_period = []
         budget_periodconflist = []
