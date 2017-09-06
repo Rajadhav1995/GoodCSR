@@ -237,8 +237,8 @@ def updates(obj_list):
 #            uploads = []
     except:
         uploads = uploads
-    return [dict(t) for t in set([tuple(d.items()) for d in uploads])]
-
+    return uploads
+#[dict(t) for t in set([tuple(d.items()) for d in uploads])]
         
 def corp_task_completion_chart(obj_list):
 # to get the task  and completion progress bar in the corporate dashboard
