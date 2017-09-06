@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import requests,ast
 import datetime
 from django.contrib import messages
 from calendar import monthrange
@@ -505,4 +506,8 @@ def project_summary(request):
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
+    ''' calling api to return the gantt chart format data '''
+    data = {'project_id':int(obj.id)}
+    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
+    taskdict = ast.literal_eval(json.dumps(rdd.content))
     return render(request,'project/project-summary.html',locals())
