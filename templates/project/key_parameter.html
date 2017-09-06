@@ -33,31 +33,14 @@ width:450px;
             {% csrf_token %}
 
                         
-
                         <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                    <label>Parameter Type<font color="red">*</font></label>
+                                    <label>Select Year<font color="red">*</font></label>
                                     <div>
-                                <select class='form-control' id='gMonth' name='month'>
-                                <option value='0'>--Select Month--</option>
-                                {% for i,j in month_zip %}
-                                {% if not j in existing_month %}
-                                <option value='{{j}}'>{{i}}</option>
-                                {% endif %}
-                                {% endfor %}
-                                <!-- <option value='2'>February</option>
-                                <option value='3'>March</option>
-                                <option value='4'>April</option>
-                                <option value='5'>May</option>
-                                <option value='6'>June</option>
-                                <option value='7'>July</option>
-                                <option value='8'>August</option>
-                                <option value='9'>September</option>
-                                <option value='10'>October</option>
-                                <option value='11'>November</option>
-                                <option value='12'>December</option> -->
+                                <select class='form-control' id='gYear' name='year' onchange="configureDropDownLists(this)">
+                                <option value='0'>--Select Year--</option>
                                 </select>
                                 <p style="color: red;">
                                     
@@ -69,6 +52,23 @@ width:450px;
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Select Month<font color="red">*</font></label>
+                                    <div>
+                                <select class='form-control' id="ddl2"></select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="funder_error"></span></font>
+                                </p>
+                                </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <select class='form-control' id="ddl2"></select> -->
                         {% if not key_parameter %}
                         <div class="row">
                                     <div class="col-md-6 nopadding">
@@ -109,7 +109,9 @@ width:450px;
                         <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}">Back</button></a>
                         <br><br><br>
+
                     </form>
+                    {{start_date.month}}{{end_date}}
   </div>
   </div>
 
@@ -123,18 +125,141 @@ width:450px;
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 
+<script type="text/javascript">
+$('#ddl2').prop('disabled', true);
+var monthNames = [ "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December" ];
+var arr = [];
+var year = []
+var datFrom = new Date({{start_date.year}}, {{start_date.month}}, {{start_date.day}});
+var datTo = new Date({{end_date.year}}, {{end_date.month}}, {{end_date.day}});
+var fromYear =  datFrom.getFullYear();
+var toYear =  datTo.getFullYear();
+var diffYear = (12 * (toYear - fromYear)) + datTo.getMonth();
+for (var i = datFrom.getMonth(); i <= diffYear; i++) {
+        arr.push(monthNames[i%12]);
+    }
+
+for (var j = datFrom.getFullYear(); j <= datTo.getFullYear(); j++) {
+        year.push(j);
 
 
+    }
+//alert(arr);
+//alert(year);
+var optionsAsString = "";
+for(var i = 0; i < arr.length; i++) {
+    optionsAsString += "<option value='" + arr[i] + "'>" + arr[i] + "</option>";
+}
+$( 'select[name="month"]' ).append( optionsAsString );
+
+var optionsAsString1 = "";
+for(var i = 0; i < year.length; i++) {
+    optionsAsString1 += "<option value='" + year[i] + "'>" + year[i] + "</option>";
+}
+$( 'select[name="year"]' ).append( optionsAsString1 );
+
+var index;
+var start=0;
+var end;
+var master_list;
+// for (i = 0; i < arr.length; i++) {
+//     //master_list.push(arr[i]);
+//     if (arr[i] == 'December') {
+//         var first_list = arr.slice(start,i);
+//         alert(first_list);
+//         start+=i
+
+//         alert(i);
+//         alert(arr[i]);
+//     } else{
+
+//     };
+    
+// }
+var master_list1 = [];
+var index = arr.indexOf("January");
+for (i=0; i < year.length; i++) {
+
+    first_list = arr.slice(start,index)
+    start=index;
+    index += 12
+    master_list1[i] = first_list
+}
+
+// var index = arr.indexOf("January");
+// first_list = arr.slice(start,index)
+// alert(first_list);
+// start = index;
+// first_list2 = arr.slice(start,start+12);
+// alert(next_list);
+// first_list3 = arr.slice(start+12)
+
+//function configureDropDownLists(year,ddl2) {
+ // switch (year.value) {
+ //        case '2010':
+ //            ddl2.options.length = 0;
+ //            for (i = 0; i < arr.length; i++) {
+ //                createOption(ddl2, arr[i], arr[i]);
+ //            }
+ //            break;
+ //        case '2011':
+            
+ //            ddl2.options.length = 0; 
+ //        for (i = 0; i < arr.length; i++) {
+ //            createOption(ddl2, arr[i], arr[i]);
+ //            }
+ //            break;
+ //        case '2012':
+ //            ddl2.options.length = 0;
+ //            for (i = 0; i < arr.length; i++) {
+ //                createOption(ddl2, arr[i], arr[i]);
+ //            }
+ //            break;
+ //            default:
+ //                ddl2.options.length = 0;
+ //            break;
+ //    }
+
+
+
+ function configureDropDownLists (type){
+    $("#ddl2 option").remove();
+    $('#ddl2').prop('disabled', false);
+    var selected_year = type.options[type.selectedIndex].value;
+ for (var i in year) {
+   if (selected_year == year[i]) {
+    
+    rrr = master_list1[i]
+    for (i = 0; i < rrr.length; i++) {
+                createOption(ddl2, rrr[i], rrr[i]);
+            }
+    
+  }
+}
+}
+function createOption(ddl2, text, value) {
+        var opt = document.createElement('option');
+        opt.value = value;
+        opt.text = text;
+        ddl2.options.add(opt);
+    }
+</script>
+
+
+
+</script>
 
 <script type="text/javascript">
         function ddlValidate() {
-            var e = document.getElementById("gMonth");
+            var e = document.getElementById("ddl2");
             var para_type = e.options[e.selectedIndex].value;
             if (para_type == 0) {
                 document.getElementById('funder_error').innerHTML="Please select Month"
                 return false;
             }
         }
+
     </script>
 
 
