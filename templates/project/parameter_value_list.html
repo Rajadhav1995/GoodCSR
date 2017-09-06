@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
-
+{% block section %}
+{% endblock %}
 {% block content %}
 <!--Green pad Ends-->
 <!--Content part starts-->
+<style>
+.budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+</style>
 <section class="content-part">
     <div class="row">
     <div class="content-top">
@@ -31,18 +35,18 @@
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
-        <h3>Parameter Uploaded Values for {{parameter.name}}</h3>
-        <div style="float: right;"><a class="btn btn-primary" href="/project/upload/parameter/value/?id={{i.id}}">Add Parameter</a></div>
+        <h3>Parameter Uploaded Values for {{op.name}}</h3>
+        <div style="float: right;"><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}">Upload Values</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-        {% if child_parameter %}
+
+        {% if rr %}
         <thead>
             <tr>
                 <th>Month</th>
                 <!-- {% for i in child_parameter %} -->
                 <!-- <th>{{i.keyparameter.name}}</th> -->
                 <!-- {% endfor %} -->
-                <th>Parameter</th>
-                <th>Value</th>
+                
                 <!-- <th>Name2</th>
                 <th>Name3</th>
                 <th>Name4</th>
@@ -51,17 +55,12 @@
             </tr>
         </thead>
         
-        {% for i in child_parameter %}
+        {% for i in rr %}
         <tr>
-            
-            <b><td>{{i.submit_date}}</td></b>
+            <b><td>{{i.start_date | date:'F'}}</td></b>
             <td>{{i.keyparameter.name}}</td>
             <td>{{i.parameter_value}}</td>
-            <!-- <td>{{i.parameter_value}}</td> -->
-            
             <td></td>
-           
-            
         </tr>{% endfor %}
 
         {% else %}

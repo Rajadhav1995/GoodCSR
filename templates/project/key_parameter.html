@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+
 {% block section %}
+<div> </div>
 {% endblock %}
-{% block content %}
     <!-- Content Header (Page header) -->
 <!--<style>
 form { 
@@ -10,16 +11,19 @@ width:450px;
 }
 </style>-->
     <!-- Main content -->
+{% block content %}
+<div class="clear"></div>
+<section class="content-part">
+    <div class='container' >
+    <div class="white-box">
 
-    <section class="content">
-      <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title"> Upload Parameter Value for {{parameter.name}}</h3>
-              <div align="right">
+              <h3 class="border_line"> Upload Parameter Value for {{parameter.name}}</h3>
+              <!-- <div align="right">
              <a class="btn btn-success" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
-         </div>
+         </div> -->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -28,12 +32,14 @@ width:450px;
             
             {% csrf_token %}
 
+                        
+
                         <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Parameter Type<font color="red">*</font>
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <div>
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Parameter Type<font color="red">*</font></label>
+                                    <div>
                                 <select class='form-control' id='gMonth' name='month'>
                                 <option value='0'>--Select Month--</option>
                                 {% for i,j in month_zip %}
@@ -58,10 +64,25 @@ width:450px;
                                 <font color=#fc282f><span id="funder_error"></span></font>
                                 </p>
                                 </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                        </div>
-                        </div>
                         {% if not key_parameter %}
+                        <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>{{parameter.name}} <font color="red">*</font></label>
+                                            <input class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% endif %}
+
+                        <!-- {% if not key_parameter %}
                         <div class="row">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                                     {{parameter.name}} <font color="red">*</font>
@@ -72,31 +93,28 @@ width:450px;
                                 </div>
 
                         </div>
-                        {% endif %}
-
+                        {% endif %} -->
                         {% for i in key_parameter %}
                         <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{i.name}} <font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}">{% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>{{i.name}} <font color="red">*</font></label>
+                                            <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}">{% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                        </div>
-
                         {% endfor %}
-
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
+                        <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}">Back</button></a>
-
+                        <br><br><br>
                     </form>
   </div>
-
-<input type="hidden" name="key_list" id="key_list" value="{{key_list}}">
-<input type="hidden" name="keyss" id="keyss" value="{{keyss}}">
-  </div>
   </div>
 
+  </div>
+  </div>
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -227,6 +245,7 @@ function RemoveProduct() {
     }
 </script>
 
-
+</div>
+</div>
 
 {% endblock %}

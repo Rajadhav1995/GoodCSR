@@ -1,5 +1,3 @@
-import requests
-import json, ast
 from django.shortcuts import render
 import datetime
 from django.contrib import messages
@@ -343,7 +341,8 @@ def manage_parameter(request):
 #     import ipdb;ipdb.set_trace()
 #     return render(request,'project/parameter_value_list.html',locals())
 
-def manage_parameter_values(request):
+
+def manage_parameter_values1(request):
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
     parameter_count = ProjectParameter.objects.filter(parent=parameter).count() + 1
@@ -358,41 +357,48 @@ def manage_parameter_values(request):
     values = aggregate_project_parameters(parameter,child_parameter)
     return render(request,'project/parameter_value_list.html',locals())
 
+def manage_parameter_values(request):
+    ids =  request.GET.get('id')
+    op = ProjectParameter.objects.get(id=ids)
+    rr = ProjectParameterValue.objects.filter(keyparameter__parent=op).order_by('id')
+    names = ProjectParameter.objects.filter(parent=op)
+    return render(request,'project/parameter_value_list.html',locals())
+
 def aggregate_project_parameters(param, values):
-    ret={}
-    aggr=0
-    if param.aggregation_function=='ADD':
-        for val in values:
-            aggr+= int(val.parameter_value)
-    elif param.aggregation_function=='AVG' :
-        cnt=0
-        for val in values:
-            cnt+=1
-            aggr += int(val.parameter_value)
-        aggr=aggr/cnt
-    elif param.aggregation_function == "WAV":
-        paggr=0
-        for val in values:
+        ret={}
+        aggr=0
+        if param.aggregation_function=='ADD':
+            for val in values:
+                aggr+= int(val)
+        elif param.aggregation_function=='AVG' :
+            cnt=0
+            for val in values:
+                cnt+=1
+                aggr += int(val)
+            aggr=aggr/cnt
+        elif param.aggregation_function == "WAV":
+            paggr=0
+            for val in values:
+                parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id)
+                aggr+=int(val)*int(parent.parameter_value)
+                paggr+=int(parent.parameter_value)
+            aggr=aggr/paggr
+        elif param.aggregation_function == "WAP":
+            paggr=0
+            for val in values:
+                
+                parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
+                aggr+=int(val)*int(parent.parameter_value)
+                paggr+=int(parent.parameter_value)
+            aggr=aggr/paggr  
+        
+        ret['name']=param.name
+        ret['parameter_type']= param.parameter_type
+        ret['instructions'] = param.instructions
+        ret['aggregate_value'] = aggr
+        ret['parent_name'] = None if param.parent is None else param.parent.name
+        return aggr
 
-            parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
-            aggr+=int(val.parameter_value)*int(parent.parameter_value)
-            paggr+=int(parent.parameter_value)
-        aggr=aggr/paggr
-    elif param.aggregation_function == "WAP":
-        paggr=0
-        for val in values:
-
-            parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
-            aggr+=int(val.parameter_value)*int(parent.parameter_value)
-            paggr+=int(parent.parameter_value)
-        aggr=aggr/paggr
-
-    ret['name']=param.name
-    ret['parameter_type']= param.parameter_type
-    ret['instructions'] = param.instructions
-    ret['aggregate_value'] = aggr
-    ret['parent_name'] = None if param.parent is None else param.parent.name
-    return ret
 
 def project_total_budget(slug):
 # to display the total budget ,disbursed,utilized percent in project summary page
@@ -426,7 +432,7 @@ def project_summary(request):
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
-    obj = Project.objects.get_or_none(slug = slug)
+    obj = Project.objects.get(slug = slug)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
@@ -465,7 +471,6 @@ def project_summary(request):
     tst = ProjectParameter.objects.filter(project=obj,parent=None)
     colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     counter =0
-    master_l = []
     name_list = []
     para_name = {}
     pin_title_name = []
@@ -473,53 +478,31 @@ def project_summary(request):
     for i in tst:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             pass
-            ttt=[]
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
-            
-            ttt = []
-            fds = ProjectParameterValue.objects.filter(keyparameter__parent=i)
-            for j in fds:
-                name = str(j.keyparameter.name)
-                value = float(j.parameter_value)
+            main_list = []
+            pie_object = ProjectParameter.objects.filter(parent=i)
+            for y in pie_object:
+                ttp= ProjectParameterValue.objects.filter(keyparameter=y)
+                values = list(ttp.values_list('parameter_value',flat=True))
+                name = str(ttp[0].keyparameter.name)
+                value = aggregate_project_parameters(pie_object[0],values)
                 color = colors[counter]
                 counter+=1
-                pin_title_name
-                ttt.append({'name': name,'y':value,'color':color})
-        if ttt:
+                main_list.append({'name': name,'y':value,'color':color})
+
+        if main_list:
             if i.parameter_type in para_name:
-                para_name[i.parameter_type].append(ttt)
+                para_name[i.parameter_type].append(main_list)
             else:
                 para_name.setdefault(i.parameter_type,[])
-                para_name[i.parameter_type].append(ttt)
+                para_name[i.parameter_type].append(main_list)
             name_list.append(str(i.name))
         if i.parameter_type == 'PIN':
             pin_title_name.append(str(i.name))
         if i.parameter_type == 'PIP':
             pip_title_name.append(str(i.name))
-    # data_list_pin=[]
-    # data_list_pip=[]
-    # counter = 0
-    # for k in master_obj_pin:
-    #     name = str(k.keyparameter.name)
-    #     value = float(k.parameter_value)
-    #     color = colors[counter]
-    #     counter+=1
-    #     data_list_pin.append({'name': name,'y':value,'color':color})
-    # for k in master_obj_pip:
-    #     name = str(k.keyparameter.name)
-    #     value = float(k.parameter_value)
-    #     color = colors[counter]
-    #     counter+=1
-    #     data_list_pip.append({'name': name,'y':value,'color':color})
-    # data_pip = json.dumps(data_list_pip)
-    # data_pin = json.dumps(data_list_pin)
     master_sh = para_name
-    
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
-    data = {'project_id':int(obj.id)}
-    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
-    taskdict = ast.literal_eval(json.dumps(rdd.content))
-    print taskdict
     return render(request,'project/project-summary.html',locals())

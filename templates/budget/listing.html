@@ -3,6 +3,10 @@
 {% block content %}
 <!--Green pad Ends-->
 <!--Content part starts-->
+<style>
+.budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+</style>
+<link rel="stylesheet" href="/static/css/style-new.css" />
 <section class="content-part">
     <div class="row">
     <div class="content-top">
@@ -32,7 +36,7 @@
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
         <h3>Tranche List</h3>
-        <div style="float: right;"><a class="btn btn-primary" href="/project/budget/tranche/?slug={{slug}}">Add Tranche</a></div>
+        <div style="float: right;"><a class="budget_button" href="/project/budget/tranche/?slug={{slug}}">Add Tranche</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -51,7 +55,7 @@
             <td>{{i.due_date}}</td>
             <td>{{i.disbursed_date}}</td>
             <!-- <td><a class="btn btn-primary" href="/project/add/?id={{i.id}}"></button></a></td> -->
-            <td><a class="btn btn-primary" href="/upload/list/?id={{i.id}}&model=Tranche">Manage Files</a>
+            <td>
             </td>
         </tr>
         {% endfor %}

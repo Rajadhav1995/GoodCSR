@@ -54,10 +54,12 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-               <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}})</span>
+               <li><a href="javascript:void(0);">{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}')"></i></span>
                {% get_user_permission request as user_obj %}
 <!--                    {% if user_obj.is_admin_user == True %}-->
-<!--                    <i class="fa fa-edit"><a href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"></a></i>-->
+                  
+                      <!-- <a href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"></a> -->
+                  
 <!--                    {% endif %}-->
                     </a>
                </li>
@@ -81,7 +83,7 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
-                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date| date:'jS F'}} - {{task.end_date |date:'jS F'}}</span>
+                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date | date:'jS F'}} - {{task.end_date | date:'jS F'}} <i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}')"></i></span>
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
@@ -107,7 +109,7 @@
                <ul>
                   {% if milestone %}
                   {% for mile in milestone %}
-                  <li><a href="javascript:void(0);">{{mile.name}} <span>(Due - {{mile.overdue|date:'jS F'}})</span>
+                  <li><a href="javascript:void(0);">{{mile.name}} <span>(Due - {{mile.overdue|date:'jS F'}})<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}')"></i></span>
 <!--                  {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
@@ -142,6 +144,19 @@
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <script src="/static/js/jquery.nicescroll.min.js"></script>
  <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+
+<script>
+function activity(name,slug) {
+    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?key="+slug;
+}
+function task(name,slug) {
+    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?key="+slug;
+}
+
+function milestone(name,slug) {
+    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?key="+slug;
+}
+</script>
 <script>
 //Toggle
 		
