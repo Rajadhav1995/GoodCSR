@@ -1,3 +1,4 @@
+import requests,ast
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -42,6 +43,10 @@ def listing(request):
     task_list = Task.objects.filter(activity__project=project).order_by('-id')
     milestone = Milestone.objects.filter(project=project).order_by('-id')
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
+    import json
+    data = {'project_id':int(project.id)}
+    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
+    taskdict = ast.literal_eval(json.dumps(rdd.content))
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):

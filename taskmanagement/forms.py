@@ -40,6 +40,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['subscribers'].required = True
         self.fields['project'].initial = Project.objects.get(id = int(project_id))
         self.fields['project'].widget = forms.HiddenInput()
+        self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
 
 
 
