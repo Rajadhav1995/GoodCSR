@@ -307,6 +307,7 @@ def my_tasks_details(request):
     image_url = PMU_URL
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
+    remain_days = today + timedelta(days=2)
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
@@ -314,7 +315,8 @@ def my_tasks_details(request):
     over_due = my_tasks_listing(project)
     tasks_today = project.get_todays_tasks(today)
     tasks_tomorrow = project.get_todays_tasks(tomorrow)
-    task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow))
+    remain_tasks = project.get_remaining_tasks(remain_days)
+    task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
     return render(request,'taskmanagement/my-task.html',locals())
     
 
