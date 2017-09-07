@@ -1,24 +1,38 @@
 {% extends 'base.html' %}
+
 {% block section %}
+<div> </div>
 {% endblock %}
+    <!-- Content Header (Page header) -->
+<!--<style>
+form { 
+margin: 0 auto; 
+width:450px;
+}
+</style>-->
+    <!-- Main content -->
 {% block content %}
 <div class="clear"></div>
-<section class="">
-	<div class="row">
+<section class="content-part">
+    <div class='container' >
+    <div class="white-box">
+        <div class="col-md-12">
+      <h3 class="border_line">Manage Role</h3><br>
+        </div>
                     {% if key == 'edit' %}
                         
-                        <form id="ic_form" action="/manage/project/role/edit/?objid={{objid}}" method = "post" class="form-horizantal budget_form">{% csrf_token %}
+                        <form id="ic_form" class="form-horizantal budget_form" action="/manage/project/role/edit/?objid={{objid}}" method = "post" >{% csrf_token %}
                         <input type="hidden" name="slug" value="{{project_slug}}">
                         <input type="hidden" name="key" value="{{redirect_key}}">
                     {% else %}
-                        <form id="ic_form" action="." method = "post" class="form-horizantal budget_form">{% csrf_token %}
+                        <form id="ic_form" class="form-horizantal budget_form" action="." method = "post" >{% csrf_token %}
                         <input type="hidden" name="slug" value="{{project_slug}}">
                         <input type="hidden" name="key" value="{{redirect_key}}">
                     {% endif %}
                     {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
                     <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
                         <div class="col-md-6">
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                                 <div class="form-group">
                             <label>
                                 User <span class="required" style="color:red">*</span>
@@ -26,16 +40,32 @@
                                 {{ form.user }}
 								{{ form.user.errors }}
                         </div>
-                        </div>
-                       <div class="col-md-12">
-                                <div class="form-group">
-                            <label>
-                                Role <span class="required" style="color:red">*</span>
-                            </label>
-                                {{ form.role }}
-								{{ form.role.errors }}
-                        </div>
-                        </div>
+                        </div> -->
+
+                        <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>User <span class="required" style="color:red">*</span></label>
+                                            {{ form.user }}
+                                            {{ form.user.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Role <span class="required" style="color:red">*</span></label>
+                                            {{ form.role }}
+                                            {{ form.role.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -54,6 +84,8 @@
                             </div>
                         </form>
     </div>
+</div>
+</div>
 </section>
 
 
