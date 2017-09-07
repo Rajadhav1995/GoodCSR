@@ -285,8 +285,10 @@ def add_parameter(request):
 
 def edit_parameter(request):
     form = ProjectParameterForm()
-    ids =  request.GET.get('id')
+    ids =  int(request.GET.get('id'))
     key =  request.GET.get('key')
+    obj = ProjectParameter.objects.filter(parent=ids)
+
     pass
 from time import strptime
 def upload_parameter(request):

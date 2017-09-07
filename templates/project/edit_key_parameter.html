@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block section %}
+<div> </div>
+{% endblock %}
+    <!-- Content Header (Page header) -->
+<!--<style>
+form { 
+margin: 0 auto; 
+width:450px;
+}
+</style>-->
+    <!-- Main content -->
+{% block content %}
+<div class="clear"></div>
+<section class="content-part forms_section">
+    <div class='container' >
+    <div class="white-box">
+
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+
+              <h3 class="border_line">Add Key Parameter</h3>
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            
+            <form autocomplete="off" id="para_add" class ="form-horizantal budget_form" action="/project/parameter/add/?slug={{slug}}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+                            
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Parameter Type</label>
+                                    {{form.total_budget}}
+                                    <select class="form-control" name="para_type" id="para_type" required>
+                                    <option selected value="0">Select</option>
+                                    
+                                    <option value="PIN" >Pie chart Numbers</option>
+                                     <option value="PIP">Pie Chart Percent</option>
+                                    <option value="NUM">Number</option>
+                                    <option value="PER">Percent</option>
+                                    <option value="CUR">Currency</option>
+                                </select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="funder_error"></span></font>
+                                </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+<!-- 
+                            <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Parameter Type<font color="red">*</font>
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <select class="form-control" name="para_type" id="para_type" required>
+                                    <option selected value="0">Select</option>
+                                    
+                                    <option value="PIN" >Pie chart Numbers</option>
+                                     <option value="PIP">Pie Chart Percent</option>
+                                    <option value="NUM">Number</option>
+                                    <option value="PER">Percent</option>
+                                    <option value="CUR">Currency</option>
+                                </select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="funder_error"></span></font>
+                                </p>
+                            </div>
+                        </div> -->
+
+
+                        <div class="row" id='agg_div'>
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Aggregation Type<font color="red">*</font></label>
+                                    {{form.total_budget}}
+                                    <select class="form-control" name="agg_type" id="agg_type">
+                                    <option selected>Select</option>
+                                    <option value="ADD" >ADDITION</option>
+                                     <option value="AVG">Average</option>
+                                    <option value="WAV">Weighted Average</option>
+                                    <option value="WAP">Weighted average over peers</option>
+                                </select>
+                                <p style="color: red;">
+                                    
+                                <font color=#fc282f><span id="partner_error"></span></font>
+                                </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    
+                        <div class="row" id="name">
+            <div class="col-md-6 nopadding">
+                <div class="col-md-12">
+                    <div class="form-group">
+                                    <label>Name</label>
+                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required="True">
+                                <br>
+                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
+                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+
+
+                        <!-- <div id="name" class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required="True">
+
+                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
+                            </div>
+                        </div> -->
+
+
+                        <div class="row" id="pie">
+            <div class="col-md-6 nopadding">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="input_fields_wrap">
+                            <button class="add_field_button">Add More</button>
+                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name">
+                                <b><input class="form-control" type="text" name="instruction[1]" id="name" placeholder="Instruction"></b>
+                            </div>
+                        </div>
+                        </div>
+                    </div></div></div>
+                    <input style="width: 0px;" value=0 name="name_count" id="activity_count" type="text"/>
+                        <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
+                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                    </form>
+  </div>
+  </div></div>
+
+
+<input type="hidden" name="loop_count" id="loop_count" value="{{activity_view.count}}">
+
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+
+<script type="text/javascript">
+        function ddlValidate() {
+            var e = document.getElementById("para_type");
+            var f = document.getElementById("agg_type");
+            var para_type = e.options[e.selectedIndex].value;
+            var agg_type = f.options[f.selectedIndex].value;
+            
+            if (para_type == 0) {
+                document.getElementById('funder_error').innerHTML="Please select Parameter Type"
+            }
+            if (agg_type == 0) {
+                document.getElementById('partner_error').innerHTML="Please select Aggregation Type"
+            }
+        }
+    </script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    //var loop_count = $('#loop_count').val()
+    var max_fields      = 6; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    var loop_count = $('#loop_count').val()
+    var x =Number(loop_count)+1;
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/><b><input class="form-control" type="text" name="instruction['+x+']" id="name" placeholder="Instruction"></b><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        }
+        document.getElementById("activity_count").value = x;
+
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#para_add").validate({
+            rules :
+            {
+                para_type : {required:true},
+                //program : {required:true},
+                agg_type : {required:true},
+                target_beneficiaries : {required:true},
+                cause_area : {required:true},
+                id_end_date: { greaterThan: "#id_start_date" },
+            },
+            messages:
+            {
+                para_type : {required : "<font color=#fc282f>Please enter the name</font>"},
+                //program:{required:"<font color=#fc282f>Please select the program</font>"},
+                agg_type:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
+                target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
+                cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
+                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+        });
+        });
+</script>
+
+<script type="text/javascript">
+$('#pie').hide();
+$('#agg_div').hide();
+$("#para_type").change(function () {
+  if($(this).val() == "PIN" || $(this).val() == "PIP")
+    $('#pie').show();
+    $('#agg_div').show();
+    //$('#name').hide();
+});
+</script>
+
+<script type="text/javascript">
+$('#pie').hide();
+$("#para_type").change(function () {
+  if($(this).val() == "NUM" || $(this).val() == "PER" || $(this).val() == "CUR")
+    $('#agg_div').hide();
+    //$('#name').hide();
+});
+</script>
+
+
+  <div class="control-sidebar-bg"></div>
+</div>
+</div>
+</div>
+<br><br><br>
+
+{% endblock %}
