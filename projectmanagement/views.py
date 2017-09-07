@@ -28,7 +28,6 @@ def create_project(request):
         activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
-    # import ipdb;ipdb.set_trace()
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
 
@@ -337,7 +336,6 @@ def manage_parameter(request):
 #     # key_parameter = ProjectParameter.objects.filter(parent=parameter)
 
 #     parameter = ProjectParameterValue.objects.filter(keyparameter__id=ids)
-#     import ipdb;ipdb.set_trace()
 #     coloumn = []
 #     coloumn.append('Month')
 
@@ -349,7 +347,6 @@ def manage_parameter(request):
 #         else:
 #             coloumn.append(i.keyparameter.name)
 #             key_parameter=''
-#     import ipdb;ipdb.set_trace()
 #     return render(request,'project/parameter_value_list.html',locals())
 
 

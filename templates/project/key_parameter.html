@@ -61,7 +61,7 @@ width:450px;
                                     <div class="form-group">
                                     <label>Select Month<font color="red">*</font></label>
                                     <div>
-                                <select class='form-control' id="ddl2" name="month"></select>
+                                <select title="Please select year first" class='form-control' id="ddl2" name="month"></select>
                                 <p style="color: red;">
                                     
                                 
@@ -191,10 +191,9 @@ for (i=0; i < year.length; i++) {
 
 // var index = arr.indexOf("January");
 // first_list = arr.slice(start,index)
-// alert(first_list);
 // start = index;
 // first_list2 = arr.slice(start,start+12);
-// alert(next_list);
+
 // first_list3 = arr.slice(start+12)
 
 //function configureDropDownLists(year,ddl2) {
@@ -225,6 +224,7 @@ for (i=0; i < year.length; i++) {
 
  function configureDropDownLists (type){
     $("#ddl2 option").remove();
+    $('#ddl2').removeAttr("title");
     $('#ddl2').prop('disabled', false);
     document.getElementById('funder_error').innerHTML=""
     var selected_year = type.options[type.selectedIndex].value;
