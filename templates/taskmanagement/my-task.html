@@ -63,7 +63,7 @@
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <li><a href = # class="hide-show" id={{task.slug}} >{{task.name}} <span>{{task.start_date}} - {{task.activity.name}}</span></a></li>
+               <li><a href = # class="hide-show" id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span></a></li>
                {% endfor %}
                {% endif %}
             </ul>
@@ -74,7 +74,7 @@
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date}} - {{i.activity.name}}</span></a></li>
+               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -87,7 +87,20 @@
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date}} - {{j.activity.name}}</span></a></li>
+               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li>
+               {% endfor %}
+               {% else %}
+               <li><a href="javascript:void(0);">No tasks</a></li>
+               {% endif %}
+            </ul>
+            <div class="task-head">
+               <h4>Tasks</h4>
+               <span>{% if remain_tasks %}{{remain_tasks | length }} {% else %} 0{% endif %}</span>
+            </div>
+            <ul>
+               {% if remain_tasks %}
+               {% for t in remain_tasks %}
+               <li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}}</span></a></li>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>

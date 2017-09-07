@@ -62,9 +62,6 @@ class TaskForm(forms.ModelForm):
     def __init__(self,user_id ,project_id,*args, **kwargs):
         self.user = user_id
         self.project = project_id
-        obj = kwargs.get('instance')
-        self.start_date = obj.start_date.strftime('%Y-%m-%d')
-        self.end_date = obj.end_date.strftime('%Y-%m-%d')
         super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['activity'].queryset = Activity.objects.filter(project_id = project_id)
         self.fields['name'].required = True

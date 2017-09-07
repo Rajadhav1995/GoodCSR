@@ -48,10 +48,9 @@ def add_taskmanagement(request,model_name,m_form):
         project = Project.objects.get(slug= request.POST.get('slug_project'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-    
-    try:
-        budget = Budget.objects.get(project = project)
-        form=eval(m_form)
+    budget = Budget.objects.get_or_none(project = project)
+    form=eval(m_form)
+    if budget:
         if request.method=='POST':
             form=form(user_id,project.id,request.POST,request.FILES)
             if form.is_valid():
@@ -67,7 +66,7 @@ def add_taskmanagement(request,model_name,m_form):
                     return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
         else:
             form=form(user_id,project.id)
-    except:
+    else:
         message = "Click here to add "
     return render(request,'taskmanagement/base_forms.html',locals())
 
@@ -308,6 +307,7 @@ def my_tasks_details(request):
     image_url = PMU_URL
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
+    remain_days = today + timedelta(days=2)
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
@@ -315,7 +315,8 @@ def my_tasks_details(request):
     over_due = my_tasks_listing(project)
     tasks_today = project.get_todays_tasks(today)
     tasks_tomorrow = project.get_todays_tasks(tomorrow)
-    task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow))
+    remain_tasks = project.get_remaining_tasks(remain_days)
+    task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
     return render(request,'taskmanagement/my-task.html',locals())
     
 
