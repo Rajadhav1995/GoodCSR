@@ -10,7 +10,7 @@
     	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
     </div>    
     <div class="title-left">
-    <h4><a href = "/project/summary/?slug={{projectobj.slug}}">{{projectobj.name}}</a></h4>
+    <h4><a href = "/project/summary/?slug={{projectobj.slug}}"><p class="trunc" style="width:620px;">{{projectobj.name}}</p></a></h4>
     <ul>
         {% get_funder projectobj as project_funders %}
     	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% else %} Funder {% endif %}</a> </li>

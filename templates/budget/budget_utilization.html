@@ -6,7 +6,7 @@
 
 </br>
 
-<section class="content-part">
+<section class="content-part forms_section">
 <div class="row">
 
 	<div class="content-top margin-top">
@@ -17,15 +17,15 @@
                 <input type="hidden" name="budget_id" value="{{budget_id}}">
       	<label>See Data as </label>
         <div class="small-select">
-                <select name="year" id="year" class = "select_box">
+                <select name="year" id="year" class = "form-control" style="margin-left:5px">
                     <option value = "">Select Year </option>
                     {% for i in years_list %}
                     <option value="{{i}}">{{i}}</option>
                     {% endfor %}
                 </select>
         </div> &nbsp;&nbsp;
-         <div class="small-select">
-                <select name="quarter" id="quarter" >
+         <div class="small-select" style="margin-left:10px">
+                <select name="quarter" id="quarter" class = "form-control" >
                     <option value = "">Select Quarter </option>
                     {% for i,j in quarter_selection_list.items %}
                     <option value="{{i}}">{{j}}</option>
@@ -145,7 +145,7 @@
 
 <script type = "text/javascript">
    $(document).ready(function(){
-       var sts = "{{ quarter_year }}";
+       var sts = "{{ request.GET.year }}";
        if (sts != "None"){
            $("#year").val(sts);
        }

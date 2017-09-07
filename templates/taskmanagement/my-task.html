@@ -8,13 +8,13 @@
          <a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
       </div>
       <div class="title-left">
-         {% if project %}
          <h4>
-            <a href = '/project/detail/?slug={{project.slug}}'>
+         {% if project %}
+            <a href = '/project/detail/?slug={{project.slug}}'><p class="trunc" style="width:620px;">
                {{project.name}}
+               </p></a>
+               {% else %} <a href = '#'>Project Name</a>
          </h4>
-         {% else %}
-         <h4><a href = '#'>Project Name</h4>
          {% endif %}
          <ul>
          {% get_funder project as project_funders %}

@@ -75,8 +75,10 @@
   <li><a href="index.html">Dashboard</a></li>
         <li><a href="products.html">Projects</a>
         	<ul>
-            	<li><a href="javascript:void(0);">Projects</a></li>
-                <li><a href="javascript:void(0);">Projects</a></li>
+                  {% get_user_project request as obj_list %}
+                      {% for i in obj_list %}
+                          <li><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></li>
+                      {% endfor %}
             </ul>
         </li>
     </ul>
@@ -100,7 +102,7 @@
                   <ul>
                   {% get_user_project request as obj_list %}
                       {% for i in obj_list %}
-                          <li><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></li>
+                          <li><a href="/project/summary/?slug={{i.slug}}"><p class="trunc" style="width:180px;height:20px;margin-bottom:0px"> {{i.name}}</p></a></li>
                       {% endfor %}
                   </ul>
                 <!--</div>-->
