@@ -317,8 +317,21 @@ def my_tasks_details(request):
     tasks_tomorrow = project.get_todays_tasks(tomorrow)
     remain_tasks = project.get_remaining_tasks(remain_days)
     task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
+    
     return render(request,'taskmanagement/my-task.html',locals())
     
+    
+def task_comments(request):
+    url=request.META.get('HTTP_REFERER')
+    from media.models import Comment
+    if request.method == 'POST':
+        user_id = request.session.get('user_id')
+        user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+        comment = Attachment.objects.create(description = request.POST.get('comment'),
+            content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
+        comment.save()
+        return HttpResponseRedirect(url)
+    return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
 from dateutil import parser

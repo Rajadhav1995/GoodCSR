@@ -1,6 +1,8 @@
 from django import template
 register = template.Library()
 from datetime import datetime
+from media.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 @register.assignment_tag
 def get_details(obj):
@@ -19,4 +21,13 @@ def get_details(obj):
         update = '''<li><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' uploaded <u>'''+ ''' image '''+'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
     return update,closed_tasks 
     
+@register.assignment_tag   
+def task_comments(date,task_id):
+    attach={}
+    task_comment=[]
+    
+    comment_list = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id).order_by('-id')
+    for i in comment_list.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
+        task_comment.append(i)
+    return task_comment
     

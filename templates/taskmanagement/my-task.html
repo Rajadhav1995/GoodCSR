@@ -144,7 +144,9 @@
                <img class="user-image" src="/static/img/default_profile_image.png" alt="">
             </div>
             <div class="task-completion-right">
-               <textarea name="Write a update..." onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Write a update...</textarea>
+                <form action ='/managing/my-tasks/updates/' method='POST' enctype="multipart/form-data">{% csrf_token %}
+                <input id = 'task_id' name = 'task_id' type='hidden' value = "{{i.id}}"/>
+               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Write a update...</textarea>
                <div>
 <!--               <i class="fa fa-file"></i>-->
 <!--               <input type='file' name ='attach' id='upload-photo'/> -->
@@ -173,7 +175,8 @@
                         <li>100</li>
                      </ul>
                   </div>
-                  <a class="task-link" href="javascript:void(0);">Add Update</a>
+                  <input class="task-link" type="submit" value="Add update"/>
+                  </form>
                </div>
             </div>
          </div>
@@ -235,6 +238,7 @@
                   {% else %}
                   <li>
                      <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
+                     
                      {% if a.created_by %}
                      {{a.created_by.name}}{% else %}Unknown{% endif %} uploaded
                      <div class="right-li third-li">

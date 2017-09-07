@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^my-tasks/details/$',my_tasks_details),
     url(r'^tasks/expected-date/caluclator/$',get_tasks_objects),
     url(r'^gantt-chart-data/$', GanttChartData.as_view()),
+    url(r'^my-tasks/updates/$',task_comments),
 ]
