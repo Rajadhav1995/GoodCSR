@@ -5,32 +5,46 @@
 {% block content %}
 
 </br>
-<script type="text/javascript">
-   $(document).ready(function(){
-       $("#quarter").change(function(){
-       $("#filter_form").submit();
-       });
-   });
-</script>
 
+<section class="content-part">
 <div class="row">
-    <div class="white-box">
-        <div class="budget_create">
-            <h3>Budget Utilization for {{projectobj.name|title}}</h3>
-            <p> Update Budget Utilized Items</p>
-            <p>
-            <form id="filter_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "get" >
-                <input type="hidden" name="slug" value="{{project_slug}}">
+
+	<div class="content-top margin-top">
+      <div class="select-area">
+      
+         <form id="filter_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "get" >
+                 <input type="hidden" name="slug" value="{{project_slug}}">
                 <input type="hidden" name="budget_id" value="{{budget_id}}">
-                <select name="quarter" id="quarter">
-                    <option value = {{quarter_key}}>Select Quarter </option>
+      	<label>See Data as </label>
+        <div class="small-select">
+                <select name="year" id="year" class = "select_box">
+                    <option value = "">Select Year </option>
+                    {% for i in years_list %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+        </div> &nbsp;&nbsp;
+         <div class="small-select">
+                <select name="quarter" id="quarter" >
+                    <option value = "">Select Quarter </option>
                     {% for i,j in quarter_selection_list.items %}
                     <option value="{{i}}">{{j}}</option>
                     {% endfor %}
                 </select>
-            </form>
-            </p>
-        </div>
+                </div>
+        <!--<select name="lang" class="select_box ">
+            <option>Select Quarters</option>
+            <option>Quarter1</option>
+            <option>Quarter2</option>
+        </select>-->
+        </form>
+         </div>
+    </div>
+    <div class="white-box">
+        <div class="budget_create">
+            <h3>Budget Utilization for {{projectobj.name|title}}</h3>
+            <p> Update Budget Utilized Items</p>
+
 {% if quarter_key %}
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" >{% csrf_token %}
 <input type="hidden" name="count" value="{{span_length}}">
@@ -104,6 +118,115 @@
         {% endif %}
     </div>
 </div>
+</section>
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+ <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+ 
+ <script type="text/javascript">
+   $(document).ready(function(){
+       $("#quarter").change(function(){
+       $("#filter_form").submit();
+       });
+   });
+</script>
+
+<script type = "text/javascript">
+   $(document).ready(function(){
+       var sts = "{{ quarter_key }}";
+       if (sts != "None"){
+           $("#quarter").val(sts);
+       }
+   });
+</script>
+
+<script type = "text/javascript">
+   $(document).ready(function(){
+       var sts = "{{ quarter_year }}";
+       if (sts != "None"){
+           $("#year").val(sts);
+       }
+   });
+</script>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+<script>
+$(document).ready(function(){
+            $('#year').change(function(){
+               var year = this.value;
+               $.ajax({
+                   url : '/manage/quarter/list/',
+                   type : 'GET',
+                   dataType : 'json',
+                   data: {'year':year,'budget_id':parseInt({{budgetobj.id}})},
+                   success : function(data) {
+                            var quarter_dict = data.quarter_list
+                            $('#quarter').find('option').remove().end();
+                            $('<option>', {value : "" }).html("---------").appendTo('#quarter');
+                          for (var key in quarter_dict) {
+                                if (quarter_dict.hasOwnProperty(key)) {
+                                    var value = quarter_dict[key];
+                                    $('select[id=quarter]').append("<option value='" + key + "'>" + value +"</option>");
+                                }
+        }
+        /*
+                      for(var i=0;i<data.quarter_list.length;i++){
+                           $('select[name=quarter]').append('<option value="' + data.quarter_list[i].id + '">' + data.quarter_list[i].name +'</option>');
+                       }
+                       */
+                   },
+                       error : function() {
+                       console.log('error');
+                   }
+                });
+    });
+    });
+
+</script>
+
+<script>
+//Toggle
+		
+	$('.user-menu').on('click',function(){
+		$('.dropdown-menu').slideDown(350);
+	
+	});
+	$('.select-down').on('click',function(){
+        $('.dropdown-menu1').slideDown(350);
+          
+    });
+	
+	$(document).ready(function(e) {	
+		/*Content Show/Hide */
+		$('.hide-cont').hide();
+		$('.close-cont').hide();
+		$('.view-cont').click(function(){
+			$('.hide-cont').slideDown(350);
+			$('.close-cont').show();
+			$('.view-cont').hide();
+		});
+		$('.close-cont').click(function(){
+			$('.hide-cont').slideUp(350);
+			$('.close-cont').hide();
+			$('.view-cont').show();
+		});	
+		$(document).trigger( "click" );
+	});
+	
+	$(document).click(function(){
+	
+		$('.user-menu, .select-down').click(function(event){
+			event.stopPropagation();
+		});
+	
+		$('.dropdown-menu, .dropdown-menu1').slideUp(350);	 
+	
+	});		 
+</script>
+
 
 <script>
     $(document).ready(function() {
@@ -118,8 +241,6 @@
     
   });
 </script>
-<script src="/static/js/jquery.nicescroll.min.js"></script>
- <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 
 
 <script type="text/javascript">
