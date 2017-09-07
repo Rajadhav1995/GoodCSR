@@ -48,7 +48,6 @@ def add_taskmanagement(request,model_name,m_form):
         project = Project.objects.get(slug= request.POST.get('slug_project'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-    
     try:
         budget = Budget.objects.get(project = project)
         form=eval(m_form)
