@@ -1,3 +1,4 @@
+import requests,ast
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -20,16 +21,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response as RestResponse
 from serializers import *
 from rest_framework.response import Response
+from pmu.settings import PMU_URL
 
 # Create your views here.
-
-#def listing(request,model_name):
-##    model = ContentType.objects.get(model__iexact = model_name)
-#    obj_list = eval(model_name).objects.all().order_by('-id')
-#    if model_name == 'Activity':
-#        project = Project.object.get_or_none(slug = request.GET.get('slug'))
-#        obj_list = eval(model_name).objects.filter(project = project).order_by('-id')
-#    return render(request,'listing.html',locals())
 
 def listing(request):
     user_id = request.session.get('user_id')
@@ -41,6 +35,10 @@ def listing(request):
     task_list = Task.objects.filter(activity__project=project).order_by('-id')
     milestone = Milestone.objects.filter(project=project).order_by('-id')
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
+    import json
+    data = {'project_id':int(project.id)}
+    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
+    taskdict = ast.literal_eval(json.dumps(rdd.content))
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
@@ -50,22 +48,27 @@ def add_taskmanagement(request,model_name,m_form):
         project = Project.objects.get(slug= request.POST.get('slug_project'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-    form=eval(m_form)
-    if request.method=='POST':
-        form=form(user_id,project.id,request.POST,request.FILES)
-        if form.is_valid():
-            f=form.save()
-            from projectmanagement.views import unique_slug_generator
-            f.slug = unique_slug_generator(f)
-            f.save()
-            if model_name == 'Activity' or model_name == 'Task':
-                f.created_by = user
+    
+    try:
+        budget = Budget.objects.get(project = project)
+        form=eval(m_form)
+        if request.method=='POST':
+            form=form(user_id,project.id,request.POST,request.FILES)
+            if form.is_valid():
+                f=form.save()
+                from projectmanagement.views import unique_slug_generator
+                f.slug = unique_slug_generator(f)
                 f.save()
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-            else :
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-    else:
-        form=form(user_id,project.id)
+                if model_name == 'Activity' or model_name == 'Task':
+                    f.created_by = user
+                    f.save()
+                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+                else :
+                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        else:
+            form=form(user_id,project.id)
+    except:
+        message = "Click here to add "
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
@@ -132,7 +135,7 @@ def task_dependencies(request):
 
 # to compute start date of the tasks dependent
 def task_auto_computation_date(request):
-    ids = request.GET.get('id[]')
+    ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
@@ -144,13 +147,13 @@ def task_auto_computation_date(request):
     return JsonResponse({"computation_date":end_date})
 
 def milestone_overdue(request):
-    task_ids = request.GET.get('id[]')
+    task_ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
-    tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
+    tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
     try:
         milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     except:
-        milestone_overdue = ''
+        milestone_overdue = tasks_obj[0]
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
 
 from datetime import datetime
@@ -161,38 +164,21 @@ def total_tasks_completed(slug):
     project = Project.objects.get_or_none(slug = slug)
     activity = Activity.objects.filter(project=project)
     milestones= Milestone.objects.filter(project = project)
-    for act in activity:
-        tasks = Task.objects.filter(activity = act)
-        total_tasks = len(tasks) + total_tasks
-        for t in tasks:
-            if t.end_date.strftime('%Y-%m-%d') <= datetime.now().strftime('%Y-%m-%d'):
-                completed_tasks = completed_tasks + 1
+    tasks = Task.objects.filter(activity__project = project)
+    total_tasks = tasks.count()
+    for t in tasks:
+        if t.status == 2:
+            completed_tasks = completed_tasks + 1
     if completed_tasks != 0:
-        percent =int((float(completed_tasks) / float(total_tasks))*100)
+        percent =int((float(completed_tasks) / total_tasks)*100)
     else:
         percent = 0
     if milestones:
-        total_milestones = len(milestones)
+        total_milestones = milestones.count()
     data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
     return data
 
 
-def my_task_updates(obj_list):
-#updates of the task
-    try:
-        task_obj = Task.objects.get_or_none(id = int(task_id))
-        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('created_by')
-    except:
-        attachment = []
-    return attachment
-
-def my_task_details(task_id):
-    try:
-        task = Task.objects.get(id = int(task_id))
-    except:
-        task = []
-    return task
-   
 def my_tasks_listing(project):
     today = datetime.today().date()
     task_lists=[]
@@ -209,31 +195,27 @@ def updates(obj_list):
     task_uploads = {}
     for project in obj_list:
         project = Project.objects.get_or_none(id = int(project.id))
+        if project.history.latest():
+            attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
+            for a in attach_lists:
+                task_uploads={'project_name':project.name,'task_name':'','attach':a.description,
+                'user_name':a.created_by.email if a.created_by else '','time':a.created.time(),'date':a.created.date(),'task_status':''}
+                uploads.append(task_uploads)
         activity = Activity.objects.filter(project=project)
-        for act in activity:
-            task_list = Task.objects.filter(activity = act)
-            for task in task_list:
-                attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
-                if attach_list:
-                    for attach in attach_list:
-                        task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                        'user_name':attach.created_by.email if attach.created_by else '','time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
-                        uploads.append(task_uploads)
-                if task.status == 2 and task.history.latest():
-                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
-                        'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+        task_list = Task.objects.filter(activity__project = project)
+        for task in task_list:
+            attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
+            if attach_list:
+                for attach in attach_list:
+                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
+                    'user_name':attach.created_by.email if attach.created_by else '','time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
                     uploads.append(task_uploads)
-                if project.history.latest():
-                    attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
-                    for a in attach_lists:
-                        task_uploads={'project_name':project.name,'task_name':task.name,'attach':a.description,
-                        'user_name':a.created_by.email if a.created_by else '','time':a.created.time(),'date':a.created.date(),'task_status':''}
-                    uploads.append(task_uploads)
+            if task.status == 2 and task.history.latest():
+                task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
+                    'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                uploads.append(task_uploads)
     try:
-#        if uploads:
         uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
-#        else:
-#            uploads = []
     except:
         uploads = uploads
     return uploads
@@ -323,6 +305,7 @@ def corp_total_budget_disbursed(obj_list):
 
 
 def my_tasks_details(request):
+    image_url = PMU_URL
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
     user_id = request.session.get('user_id')
@@ -342,12 +325,17 @@ from dateutil import parser
 from datetime import timedelta, time
 
 def get_tasks_objects(request):
-    ids = request.GET.get('id[]')
+    ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
-    task_list = Task.objects.get(active=2,id__in = ids)
+    start_dates=[]
+    task_list = Task.objects.filter(active=2,id__in = eval(ids))
     populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
-    return JsonResponse({"calculation":populated_dates})
+    expected_dates = populated_dates.data
+    for key,value in expected_dates.items():
+        start_dates.append(value.get('expected_end_date'))
+    expected_end_date = max(start_dates).strftime('%Y-%m-%d')
+    return JsonResponse({"calculation":expected_end_date})
 
 class ExpectedDatesCalculator():
 

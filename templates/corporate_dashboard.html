@@ -267,9 +267,10 @@
       <h2>Recent Updates</h2>
         <div id="boxscroll" class="updates-scroll ">
         <p><span>Today</span> - {% now "jS F Y" %}</p>
-            <ul>
+            
          {% if updates_list %}
              {% for obj in updates_list %}
+             <ul>
                     {% get_details obj as update %}
                         {% for i in update %}
                            {{i | safe}}

@@ -222,7 +222,7 @@ under 0 Milestones</h5>
                   <div class="budget-left">{{budget.utilized}}cr </div>
                   <div class="budget-right">{{budget.utilized_percent}}%</div>
               </div>
-              <p><span class="green-circle"></span> Disbursed</p>
+              <p><span class="light-green-circle"></span> Disbursed</p>
               <div class="budget-value">
                   <div class="budget-left">{{budget.disbursed}}cr</div>
                   <div class="budget-right">{{budget.disbursed_percent}}%</div>
@@ -286,9 +286,10 @@ under 0 Milestones</h5>
     	<h2>Recent Updates</h2>
          <div id="boxscroll" class="updates-scroll ">
         <p><span>Today</span> - {% now "jS F Y" %}</p>
-            <ul>
+            
          {% if updates_list %}
              {% for obj in updates_list %}
+             <ul>
                     {% get_details obj as update %}
                         {% for i in update %}
                            {{i | safe}}
@@ -805,9 +806,12 @@ Highcharts.chart(values, {
 <script>
 var data = {{budget|safe}}
 console.log(data);
+//var utilized = data.utilized/(data.utilized + data.total)*100
+//var disbursed = data.disbursed/(data.disbursed + data.total)*100
 var utilized = data.utilized_percent
-var disbursed = data.disbursed_percent
+var disbursed = data.disbursed_percent-data.utilized_percent
 var total = 100 - (utilized + disbursed)
+console.log(total , utilized , disbursed);
 var gaugeOptions = {
 
     chart: {
@@ -973,7 +977,7 @@ setInterval(function () {
         $.each(chartSpeed.series, function(i, item){
             if(item.type == 'gauge'){
 
-               item.setData([["none",point1.y+point.y]], true);
+               item.setData([["none",point.y]], true);
 
             }
         });

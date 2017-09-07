@@ -40,6 +40,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['subscribers'].required = True
         self.fields['project'].initial = Project.objects.get(id = int(project_id))
         self.fields['project'].widget = forms.HiddenInput()
+        self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
 
 
 
@@ -61,6 +62,9 @@ class TaskForm(forms.ModelForm):
     def __init__(self,user_id ,project_id,*args, **kwargs):
         self.user = user_id
         self.project = project_id
+        obj = kwargs.get('instance')
+        self.start_date = obj.start_date.strftime('%Y-%m-%d')
+        self.end_date = obj.end_date.strftime('%Y-%m-%d')
         super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['activity'].queryset = Activity.objects.filter(project_id = project_id)
         self.fields['name'].required = True
