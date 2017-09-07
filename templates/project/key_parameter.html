@@ -12,6 +12,9 @@ width:450px;
 </style>-->
     <!-- Main content -->
 {% block content %}
+<style>
+.budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+</style>
 <div class="clear"></div>
 <section class="content-part">
     <div class='container' >
@@ -58,10 +61,10 @@ width:450px;
                                     <div class="form-group">
                                     <label>Select Month<font color="red">*</font></label>
                                     <div>
-                                <select class='form-control' id="ddl2"></select>
+                                <select class='form-control' id="ddl2" name="month"></select>
                                 <p style="color: red;">
                                     
-                                <font color=#fc282f><span id="funder_error"></span></font>
+                                
                                 </p>
                                 </div>
                                     </div>
@@ -75,8 +78,8 @@ width:450px;
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>{{parameter.name}} <font color="red">*</font></label>
-                                            <input class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}
-                                            </div>
+                                            <input class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>
+                                            </div><font color="green">{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}</font>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +103,7 @@ width:450px;
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>{{i.name}} <font color="red">*</font></label>
-                                            <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}">{% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
+                                            <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}" required>{% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +114,6 @@ width:450px;
                         <br><br><br>
 
                     </form>
-                    {{start_date.month}}{{end_date}}
   </div>
   </div>
 
@@ -224,6 +226,7 @@ for (i=0; i < year.length; i++) {
  function configureDropDownLists (type){
     $("#ddl2 option").remove();
     $('#ddl2').prop('disabled', false);
+    document.getElementById('funder_error').innerHTML=""
     var selected_year = type.options[type.selectedIndex].value;
  for (var i in year) {
    if (selected_year == year[i]) {
@@ -250,11 +253,14 @@ function createOption(ddl2, text, value) {
 
 <script type="text/javascript">
         function ddlValidate() {
-            var e = document.getElementById("ddl2");
+            var e = document.getElementById("gYear");
             var para_type = e.options[e.selectedIndex].value;
             if (para_type == 0) {
-                document.getElementById('funder_error').innerHTML="Please select Month"
+                document.getElementById('funder_error').innerHTML="Please select Year"
                 return false;
+            } else {
+                document.getElementById('funder_error').innerHTML=""
+                return true;
             }
         }
 

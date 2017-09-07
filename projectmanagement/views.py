@@ -284,6 +284,12 @@ def add_parameter(request):
         # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
     return render(request,'project/add_key_parameter.html',locals())
 
+def edit_parameter(request):
+    form = ProjectParameterForm()
+    slug =  request.GET.get('slug')
+    key =  request.GET.get('key')
+    pass
+from time import strptime
 def upload_parameter(request):
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
@@ -298,12 +304,14 @@ def upload_parameter(request):
     month_id = [1,2,3,4,5,6,7,8,9,10,11,12]
     month_zip = zip(month,month_id)
     if request.method == 'POST':
-        month = int(request.POST.get('month'))
+        month = request.POST.get('month')
+        year = int(request.POST.get('year'))
+        month = strptime(month[:3],'%b').tm_mon
         now = datetime.datetime.now()
-        date = str(now.year)+'-'+str(month)+'-'+'1'
+        date = str(year)+'-'+str(month)+'-'+'1'
         days = monthrange(now.year, month)[1]
-        end_date = str(now.year)+'-'+str(month)+'-'+str(days)
-        submit_date = str(now.year)+'-'+str(now.month)+'-'+str(now.day)
+        end_date = str(year)+'-'+str(month)+'-'+str(days)
+        submit_date = str(year)+'-'+str(now.month)+'-'+str(now.day)
         if key_parameter.exists():
             total_count = []
             for i in key_parameter:
