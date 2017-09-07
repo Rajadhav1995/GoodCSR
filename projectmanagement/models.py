@@ -239,6 +239,11 @@ class Project(BaseContent):
         tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date = today).order_by('-id')
         return tasks
 
+    def get_remaining_tasks(self,remain_days):
+        from taskmanagement.models import Task
+        tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days).order_by('-id')
+        return tasks
+
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 
 class PrimaryWork(BaseContent):

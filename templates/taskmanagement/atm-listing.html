@@ -10,7 +10,7 @@
     </div>    
     <div class="title-left">
     {% if project %}
-    <h4><a href = '/project/detail/?slug={{project.slug}}'>{{project.name}}</a></h4>
+    <h4><a href = '/project/detail/?slug={{project.slug}}'><p class="trunc" style="width:620px;">{{project.name}}</p></a></h4>
     {% else %}
     <h4><a href = '#'>Project Name</a></h4>
     {% endif %}
@@ -93,6 +93,7 @@
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
 <!--                     {% endif %}-->
+                    </a>
                   </li>
                   {% endfor %}
                   {% else %}
@@ -119,6 +120,7 @@
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
 <!--                  {% endif %}-->
+                    </a>
                   </li>
                   {% endfor %}
                   {% else %}
