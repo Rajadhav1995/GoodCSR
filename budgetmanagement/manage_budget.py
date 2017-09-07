@@ -62,18 +62,22 @@ def projectbudgetcategoryadd(request):
 def get_budget_quarters(budgetobj):
     sd = budgetobj.actual_start_date
     budget_enddate = budgetobj.end_date
-    if sd.day > 15:
+    if sd.day >= 15:
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
+    elif sd.day < 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
     for i in range(int(no_of_quarters)):
         ed = sd+relativedelta.relativedelta(months=3)
+        ed = ed - timedelta(days=1)
         if ed > budget_enddate:
             ed = budget_enddate
         quarter_list.update({i:str(sd)+" to "+str(ed)})
-        sd = ed
+        sd = ed + timedelta(days=1)
     return quarter_list
 
 def get_budget_quarter_names(budgetobj):
@@ -82,15 +86,19 @@ def get_budget_quarter_names(budgetobj):
     if sd.day > 15:
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
+    elif sd.day < 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = []
     for i in range(int(no_of_quarters)):
         ed = sd+relativedelta.relativedelta(months=3)
+        ed = ed - timedelta(days=1)
         if ed > budget_enddate:
             ed = budget_enddate
         quarter_list.append(sd.strftime("%b")+"-"+ed.strftime("%b"))
-        sd = ed
+        sd = ed + timedelta(days=1)
     return quarter_list
 
 def projectlineitemadd(request):
@@ -156,7 +164,7 @@ def projectbudgetdetail(request):
     span_length = len(budget_periodconflist)
     return render(request,"budget/budget_detail.html",locals())
 
-def get_year_quarterlist(year,budget_id):
+def get_year_quarterlist(selected_year,budget_id):
     budgetobj = Budget.objects.get_or_none(id = budget_id)
     sd = budgetobj.actual_start_date
     ed = budgetobj.end_date
@@ -164,22 +172,26 @@ def get_year_quarterlist(year,budget_id):
     if sd.day > 15:
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
+    elif sd.day < 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
     for i in range(int(no_of_quarters)):
         ed = sd+relativedelta.relativedelta(months=3)
+        ed = ed - timedelta(days=1)
         if ed > budget_enddate:
             ed = budget_enddate
-        if str(sd.year) == year or str(ed.year) == year:
-            quarter_list.update({i:sd.strftime("%b%y")+"-"+ed.strftime("%b%y")})
-        sd = ed
+        if str(sd.year) == str(selected_year) or str(ed.year) == str(selected_year):
+            quarter_list.update({i:sd.strftime("%b %Y")+"-"+ed.strftime("%b %Y")})
+        sd = ed + timedelta(days=1)
     return quarter_list
 
 def year_quarter_list(request):
-    year = request.GET.get('year')
+    selected_year = request.GET.get('year')
     budget_id = request.GET.get('budget_id')
-    quarter_list = get_year_quarterlist(year,budget_id)
+    quarter_list = get_year_quarterlist(selected_year,budget_id)
     response = {'quarter_list':quarter_list}
     return JsonResponse(response)
 
@@ -195,7 +207,7 @@ def budgetutilization(request):
     sd = years_list.append(budgetobj.start_date.year)
     ed = years_list.append(budgetobj.end_date.year)
     years_list = list(set(years_list))
-    quarter_selection_list = get_budget_quarters(budgetobj)
+#    quarter_selection_list = get_year_quarterlist(quarter_year,budgetobj.id)
     if quarter_key:
         budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
@@ -207,6 +219,7 @@ def budgetutilization(request):
         budget_period = []
         budget_periodconflist = []
         span_length = 0
+        quarter_selection_list = []
     if request.method == "POST":
         count = request.POST.get('count')
         project_slug = request.POST.get('slug')
