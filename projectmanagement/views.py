@@ -285,7 +285,7 @@ def add_parameter(request):
 
 def edit_parameter(request):
     form = ProjectParameterForm()
-    slug =  request.GET.get('slug')
+    ids =  request.GET.get('id')
     key =  request.GET.get('key')
     pass
 from time import strptime
@@ -293,9 +293,9 @@ def upload_parameter(request):
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
-    key_parameter = ProjectParameter.objects.filter(parent=parameter)
+    key_parameter = ProjectParameter.objects.filter(active= 2,parent=parameter)
     key_parameter_list = [i.id for i in key_parameter]
-    key_parameter_value = ProjectParameterValue.objects.filter(keyparameter__in=key_parameter_list)
+    key_parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list)
     existing_month = [k.start_date.month for k in key_parameter_value]
     start_date = parameter.project.start_date
     end_date = parameter.project.end_date
@@ -325,7 +325,7 @@ def upload_parameter(request):
 
 def manage_parameter(request):
     slug =  request.GET.get('slug')
-    parameter = ProjectParameter.objects.filter(project__slug=slug,parent=None)
+    parameter = ProjectParameter.objects.filter(active= 2,project__slug=slug,parent=None)
     project_name = Project.objects.get(slug=slug).name
     return render(request,'project/parameter_list.html',locals())
 
@@ -353,11 +353,11 @@ def manage_parameter(request):
 def manage_parameter_values1(request):
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
-    parameter_count = ProjectParameter.objects.filter(parent=parameter).count() + 1
+    parameter_count = ProjectParameter.objects.filter(active= 2,parent=parameter).count() + 1
     if parameter.parameter_type == 'NUM' or parameter.parameter_type == 'CUR' or parameter.parameter_type == 'PER':
-        ff = ProjectParameterValue.objects.filter(keyparameter=parameter)
+        ff = ProjectParameterValue.objects.filter(active= 2,keyparameter=parameter)
     else:
-        child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter).order_by('-submit_date')
+        child_parameter = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=parameter).order_by('-submit_date')
         # child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=para)
 
     name_range = range(1,parameter_count)
@@ -368,8 +368,8 @@ def manage_parameter_values1(request):
 def manage_parameter_values(request):
     ids =  request.GET.get('id')
     op = ProjectParameter.objects.get(id=ids)
-    rr = ProjectParameterValue.objects.filter(keyparameter__parent=op).order_by('id')
-    names = ProjectParameter.objects.filter(parent=op)
+    rr = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=op).order_by('id')
+    names = ProjectParameter.objects.filter(active= 2,parent=op)
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
@@ -387,7 +387,7 @@ def aggregate_project_parameters(param, values):
         elif param.aggregation_function == "WAV":
             paggr=0
             for val in values:
-                parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id)
+                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id)
                 aggr+=int(val)*int(parent.parameter_value)
                 paggr+=int(parent.parameter_value)
             aggr=aggr/paggr
@@ -395,7 +395,7 @@ def aggregate_project_parameters(param, values):
             paggr=0
             for val in values:
                 
-                parent=ProjectParameterValue.objects.filter(keyparameter_id=param.parent_id,period_id=val.period_id)
+                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
                 aggr+=int(val)*int(parent.parameter_value)
                 paggr+=int(parent.parameter_value)
             aggr=aggr/paggr  
@@ -451,32 +451,32 @@ def project_summary(request):
     master_obj = []
     master_obj_pin=[]
     master_obj_pip=[]
-    parameter = ProjectParameter.objects.filter(project=obj,parent=None)
+    parameter = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     parameter_count = parameter.count()
     for i in parameter:
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
-            parameter1 = ProjectParameter.objects.filter(project=obj,parent=None).values_list('id',flat=True)
-            parent_paremeter = ProjectParameterValue.objects.filter(keyparameter__in=parameter1)
+            parameter1 = ProjectParameter.objects.filter(active= 2,project=obj,parent=None).values_list('id',flat=True)
+            parent_paremeter = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=parameter1)
         elif i.parameter_type == 'PIN':
-            child_parameter_pin = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
+            child_parameter_pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
             if child_parameter_pin.exists():
                 master_obj_pin = child_parameter_pin
                 chart_name_pin = child_parameter_pin[0].keyparameter.parent.name
         elif i.parameter_type == 'PIP':
-            child_parameter_pip = ProjectParameterValue.objects.filter(keyparameter__parent=i.id,keyparameter__parameter_type='PIP')
+            child_parameter_pip = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=i.id,keyparameter__parameter_type='PIP')
             if child_parameter_pip.exists():
                 master_obj_pip = child_parameter_pip
                 chart_name_pip = child_parameter_pip[0].keyparameter.parent.name
             pass
     import json
     list1=[]
-    aa = ProjectParameterValue.objects.filter(keyparameter__project=obj,keyparameter__parent=None)
+    aa = ProjectParameterValue.objects.filter(active= 2,keyparameter__project=obj,keyparameter__parent=None)
     for i in aa:
         if i.keyparameter.parameter_type=='PIN' or i.keyparameter.parameter_type=='PIP':
-            pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
+            pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parameter_type='PIN',keyparameter__project=obj)
         # for p in pin:
-    pin = ProjectParameterValue.objects.filter(keyparameter__parameter_type='PIN',keyparameter__project=obj)
-    tst = ProjectParameter.objects.filter(project=obj,parent=None)
+    pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parameter_type='PIN',keyparameter__project=obj)
+    tst = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     counter =0
     name_list = []
@@ -488,9 +488,9 @@ def project_summary(request):
             pass
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
             main_list = []
-            pie_object = ProjectParameter.objects.filter(parent=i)
+            pie_object = ProjectParameter.objects.filter(active= 2,parent=i)
             for y in pie_object:
-                ttp= ProjectParameterValue.objects.filter(keyparameter=y)
+                ttp= ProjectParameterValue.objects.filter(active= 2,keyparameter=y)
                 values = list(ttp.values_list('parameter_value',flat=True))
                 name = str(ttp[0].keyparameter.name)
                 value = aggregate_project_parameters(pie_object[0],values)
