@@ -132,6 +132,7 @@ function showCheckboxes() {
 <script>
     $(document).ready(function() {
         $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -196,7 +197,7 @@ $(function($) {
         $.ajax({
             url:'/managing/milestone/overdue/',
             type:'GET',
-            data:{'id':tasks_ids},
+            data:{'id':JSON.stringify(tasks_ids)},
             async: true,
             dataType:"json",
             success:function(data){
@@ -251,18 +252,19 @@ $(function($) {
 </script>
 
 <script>
+///managing/tasks/expected-date/caluclator/
     $(document).ready(function() {
     if ('{{model_name}}' == 'Task'){
     $('#id_task_dependency').on('change',function(e){
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({
-            url:'/managing/tasks/auto-computation/date',
+            url:'/managing/tasks/expected-date/caluclator/',
             type:'GET',
-            data:{'id':dependency_id},
+            data:{'id':JSON.stringify(dependency_id)},
             dataType:"json",
             success:function(data){
-            if (data.computation_date != ""){
-                document.getElementById("id_start_date").value = data.computation_date;
+            if (data.calculation != ""){
+                document.getElementById("id_start_date").value = data.calculation;
              }
             else {
                 $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });

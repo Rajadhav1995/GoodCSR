@@ -25,14 +25,6 @@ from pmu.settings import PMU_URL
 
 # Create your views here.
 
-#def listing(request,model_name):
-##    model = ContentType.objects.get(model__iexact = model_name)
-#    obj_list = eval(model_name).objects.all().order_by('-id')
-#    if model_name == 'Activity':
-#        project = Project.object.get_or_none(slug = request.GET.get('slug'))
-#        obj_list = eval(model_name).objects.filter(project = project).order_by('-id')
-#    return render(request,'listing.html',locals())
-
 def listing(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
@@ -143,7 +135,7 @@ def task_dependencies(request):
 
 # to compute start date of the tasks dependent
 def task_auto_computation_date(request):
-    ids = request.GET.get('id[]')
+    ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
@@ -155,13 +147,13 @@ def task_auto_computation_date(request):
     return JsonResponse({"computation_date":end_date})
 
 def milestone_overdue(request):
-    task_ids = request.GET.get('id[]')
+    task_ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
-    tasks_obj = Task.objects.filter(id__in = task_ids).values_list('end_date',flat = True)
+    tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
     try:
         milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     except:
-        milestone_overdue = ''
+        milestone_overdue = tasks_obj[0]
     return JsonResponse({"milestone_overdue_date":milestone_overdue})
 
 from datetime import datetime
@@ -356,12 +348,17 @@ from dateutil import parser
 from datetime import timedelta, time
 
 def get_tasks_objects(request):
-    ids = request.GET.get('id[]')
+    ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
-    task_list = Task.objects.get(active=2,id__in = ids)
+    start_dates=[]
+    task_list = Task.objects.filter(active=2,id__in = eval(ids))
     populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
-    return JsonResponse({"calculation":populated_dates})
+    expected_dates = populated_dates.data
+    for key,value in expected_dates.items():
+        start_dates.append(value.get('expected_end_date'))
+    expected_end_date = max(start_dates).strftime('%Y-%m-%d')
+    return JsonResponse({"calculation":expected_end_date})
 
 class ExpectedDatesCalculator():
 
