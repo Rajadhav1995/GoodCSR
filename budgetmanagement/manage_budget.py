@@ -170,12 +170,12 @@ def year_quarter_list(request):
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
     for i in range(int(no_of_quarters)):
+        ed = sd+relativedelta.relativedelta(months=3)
+        if ed > budget_enddate:
+            ed = budget_enddate
         if str(sd.year) == year or str(ed.year) == year:
-            ed = sd+relativedelta.relativedelta(months=3)
-            if ed > budget_enddate:
-                ed = budget_enddate
-            quarter_list.update({i:str(sd)+" to "+str(ed)})
-            sd = ed
+            quarter_list.update({i:sd.strftime("%b%y")+"-"+ed.strftime("%b%y")})
+        sd = ed
     response = {'quarter_list':quarter_list}
     return JsonResponse(response)
 
