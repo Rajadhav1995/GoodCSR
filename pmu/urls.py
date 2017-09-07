@@ -22,7 +22,7 @@ from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
 from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
                                             projectbudgetcategoryadd,projectlineitemadd,
                                             projectbudgetdetail,budgetutilization,
-                                            budgetview,)
+                                            budgetview,year_quarter_list,)
 admin.autodiscover()
 
 roles_patterns = ([
@@ -36,6 +36,7 @@ roles_patterns = ([
     url(r'^project/budget/detail/$',projectbudgetdetail),
     url(r'^project/budget/report-utilization/$',budgetutilization),
     url(r'^project/budget/view/$',budgetview),
+    url(r'^quarter/list/$',year_quarter_list),
 
 ])
 
