@@ -156,9 +156,7 @@ def projectbudgetdetail(request):
     span_length = len(budget_periodconflist)
     return render(request,"budget/budget_detail.html",locals())
 
-def year_quarter_list(request):
-    year = request.GET.get('year')
-    budget_id = request.GET.get('budget_id')
+def get_year_quarterlist(year,budget_id):
     budgetobj = Budget.objects.get_or_none(id = budget_id)
     sd = budgetobj.actual_start_date
     ed = budgetobj.end_date
@@ -176,6 +174,12 @@ def year_quarter_list(request):
         if str(sd.year) == year or str(ed.year) == year:
             quarter_list.update({i:sd.strftime("%b%y")+"-"+ed.strftime("%b%y")})
         sd = ed
+    return quarter_list
+
+def year_quarter_list(request):
+    year = request.GET.get('year')
+    budget_id = request.GET.get('budget_id')
+    quarter_list = get_year_quarterlist(year,budget_id)
     response = {'quarter_list':quarter_list}
     return JsonResponse(response)
 
@@ -196,7 +200,7 @@ def budgetutilization(request):
         budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
         span_length = len(budget_period)
-        quarter_selection_list = get_budget_quarters(budgetobj)
+        quarter_selection_list = get_year_quarterlist(quarter_year,budgetobj.id)
         quarter_list = {}
         quarterobj = quarter_list.update(dict([(k,v) for k,v in quarter_selection_list.iteritems() if int(quarter_key) == k]))
     else:

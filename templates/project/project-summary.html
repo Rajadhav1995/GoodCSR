@@ -11,12 +11,12 @@
     </div>
     <div class="title-left">
     {% if obj %}
-    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}} </a></h4>
+    <h4><a  href = '/project/detail/?slug={{obj.slug}}'><p class="trunc" style="width:620px;">{{obj.name}} <p></a></h4>
     {% else %}
     <h4><a href = '#'>Project Name </a></h4>
     {% endif %}
     <ul>
-    	<li><a href="javascript:void(0)"> by {% if project_funders.funder.name %} {{project_funders.funder.name}}  {% else %} {% endif %}</a></li>
+    	<li><a href="javascript:void(0)"> by: {% if project_funders.funder.name %} {{project_funders.funder.name}}  {% else %} {% endif %}</a></li>
         <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.name %}{{project_funders.implementation_partner.name}} {% else %} {% endif %}</a></li>
     </ul>    
     </div>
