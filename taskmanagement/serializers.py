@@ -59,3 +59,4 @@ class SuperCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SuperCategory
+        fields = '__all__'
