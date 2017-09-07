@@ -182,6 +182,7 @@ def year_quarter_list(request):
 def budgetutilization(request):
     ''' Report utilization update based on the quarter selected '''
     quarter_key = request.GET.get('quarter')
+    quarter_year = request.GET.get('year')
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
