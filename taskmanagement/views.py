@@ -164,38 +164,21 @@ def total_tasks_completed(slug):
     project = Project.objects.get_or_none(slug = slug)
     activity = Activity.objects.filter(project=project)
     milestones= Milestone.objects.filter(project = project)
-    for act in activity:
-        tasks = Task.objects.filter(activity = act)
-        total_tasks = len(tasks) + total_tasks
-        for t in tasks:
-            if t.status == 2:
-                completed_tasks = completed_tasks + 1
+    tasks = Task.objects.filter(activity__project = project)
+    total_tasks = tasks.count()
+    for t in tasks:
+        if t.status == 2:
+            completed_tasks = completed_tasks + 1
     if completed_tasks != 0:
-        percent =int((float(completed_tasks) / float(total_tasks))*100)
+        percent =int((float(completed_tasks) / total_tasks)*100)
     else:
         percent = 0
     if milestones:
-        total_milestones = len(milestones)
+        total_milestones = milestones.count()
     data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
     return data
 
 
-def my_task_updates(obj_list):
-#updates of the task
-    try:
-        task_obj = Task.objects.get_or_none(id = int(task_id))
-        attachment = Attachment.objects.filter(active = 2,content_type = ContentType.objects.get_for_model(task_obj),object_id = task.id).order_by('created_by')
-    except:
-        attachment = []
-    return attachment
-
-def my_task_details(task_id):
-    try:
-        task = Task.objects.get(id = int(task_id))
-    except:
-        task = []
-    return task
-   
 def my_tasks_listing(project):
     today = datetime.today().date()
     task_lists=[]
@@ -219,29 +202,23 @@ def updates(obj_list):
                 'user_name':a.created_by.email if a.created_by else '','time':a.created.time(),'date':a.created.date(),'task_status':''}
                 uploads.append(task_uploads)
         activity = Activity.objects.filter(project=project)
-        for act in activity:
-            task_list = Task.objects.filter(activity = act)
-            for task in task_list:
-                attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
-                if attach_list:
-                    for attach in attach_list:
-                        task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                        'user_name':attach.created_by.email if attach.created_by else '','time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
-                        uploads.append(task_uploads)
-                if task.status == 2 and task.history.latest():
-                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
-                        'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+        task_list = Task.objects.filter(activity__project = project)
+        for task in task_list:
+            attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
+            if attach_list:
+                for attach in attach_list:
+                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
+                    'user_name':attach.created_by.email if attach.created_by else '','time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
                     uploads.append(task_uploads)
-               
+            if task.status == 2 and task.history.latest():
+                task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
+                    'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                uploads.append(task_uploads)
     try:
-#        if uploads:
         uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
-#        else:
-#            uploads = []
     except:
         uploads = uploads
     return uploads
-#[dict(t) for t in set([tuple(d.items()) for d in uploads])]
         
 def corp_task_completion_chart(obj_list):
 # to get the task  and completion progress bar in the corporate dashboard
