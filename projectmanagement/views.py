@@ -28,7 +28,6 @@ def create_project(request):
         activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
-    # import ipdb;ipdb.set_trace()
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
 
@@ -284,6 +283,12 @@ def add_parameter(request):
         # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
     return render(request,'project/add_key_parameter.html',locals())
 
+def edit_parameter(request):
+    form = ProjectParameterForm()
+    slug =  request.GET.get('slug')
+    key =  request.GET.get('key')
+    pass
+from time import strptime
 def upload_parameter(request):
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
@@ -292,16 +297,20 @@ def upload_parameter(request):
     key_parameter_list = [i.id for i in key_parameter]
     key_parameter_value = ProjectParameterValue.objects.filter(keyparameter__in=key_parameter_list)
     existing_month = [k.start_date.month for k in key_parameter_value]
+    start_date = parameter.project.start_date
+    end_date = parameter.project.end_date
     month = ['January','February','March','April','May','June','July','August','September','October','November','December']
     month_id = [1,2,3,4,5,6,7,8,9,10,11,12]
     month_zip = zip(month,month_id)
     if request.method == 'POST':
-        month = int(request.POST.get('month'))
+        month = request.POST.get('month')
+        year = int(request.POST.get('year'))
+        month = strptime(month[:3],'%b').tm_mon
         now = datetime.datetime.now()
-        date = str(now.year)+'-'+str(month)+'-'+'1'
+        date = str(year)+'-'+str(month)+'-'+'1'
         days = monthrange(now.year, month)[1]
-        end_date = str(now.year)+'-'+str(month)+'-'+str(days)
-        submit_date = str(now.year)+'-'+str(now.month)+'-'+str(now.day)
+        end_date = str(year)+'-'+str(month)+'-'+str(days)
+        submit_date = str(year)+'-'+str(now.month)+'-'+str(now.day)
         if key_parameter.exists():
             total_count = []
             for i in key_parameter:
@@ -327,7 +336,6 @@ def manage_parameter(request):
 #     # key_parameter = ProjectParameter.objects.filter(parent=parameter)
 
 #     parameter = ProjectParameterValue.objects.filter(keyparameter__id=ids)
-#     import ipdb;ipdb.set_trace()
 #     coloumn = []
 #     coloumn.append('Month')
 
@@ -339,7 +347,6 @@ def manage_parameter(request):
 #         else:
 #             coloumn.append(i.keyparameter.name)
 #             key_parameter=''
-#     import ipdb;ipdb.set_trace()
 #     return render(request,'project/parameter_value_list.html',locals())
 
 
