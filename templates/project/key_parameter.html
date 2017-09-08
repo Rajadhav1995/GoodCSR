@@ -108,9 +108,12 @@ width:450px;
                                     </div>
                                 </div>
                         {% endfor %}
+                        <div class="col-md-12">
+                            <div class="form-group">
                         <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
-                        <a class="btn btn-success" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}">Back</button></a>
-                        <br><br><br>
+                        <a class="btn btn-success"style="margin-right:5px;float: right;" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key={{key}}">Back</button></a>
+                        </div>
+                        </div>
 
                     </form>
   </div>

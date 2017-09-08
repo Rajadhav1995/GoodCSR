@@ -70,14 +70,14 @@ width:450px;
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     {% if key == "add" %}
-                                        <input type="submit" class="btn btn-success" value="Save">
+                                        <input class="budget_button" type="submit" class="btn btn-success" value="Save">
                                     {% else %}
-                                        <input type="submit" value="Update" class="btn btn-success">
+                                        <input class="budget_button" type="submit" value="Update" class="btn btn-success">
                                     {% endif %}
                                     {% if redirect_key == "summary" %}
-                                        <input class="btn btn-primary" type="button" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}'">
+                                        <input class="btn btn-primary" type="button" style="margin-right:5px;float: right;" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}'">
                                         {% else %}
-                                        <input class="btn btn-primary" type="button" value="Cancel" onClick="parent.location='/manage/project/role/list/?slug={{project_slug}}'">
+                                        <input class="btn btn-success" type="button"style="margin-right:5px;float: right;" value="Cancel" onClick="parent.location='/manage/project/role/list/?slug={{project_slug}}'">
                                         {% endif %}
                                     </div>
                                 </div>

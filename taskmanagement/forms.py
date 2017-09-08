@@ -65,8 +65,6 @@ class TaskForm(forms.ModelForm):
         super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['activity'].queryset = Activity.objects.filter(project_id = project_id)
         self.fields['name'].required = True
-        self.fields['start_date'].required = True
-        self.fields['end_date'].required = True
         self.fields['status'].initial = 1
         self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
 
@@ -111,3 +109,6 @@ class MilestoneForm(forms.ModelForm):
         self.fields['subscribers'].required = True
         self.fields['status'].initial = 1
         self.fields['project'].widget = forms.HiddenInput()
+        self.fields['task'].required = True
+        
+        
