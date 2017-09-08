@@ -299,7 +299,6 @@ def edit_parameter(request):
             import ipdb; ipdb.set_trace()
             rem_id_list = map(int,str(rem_id).split(','))
             [ProjectParameter.objects.get(id=i).switch() for i in rem_id_list]
-
             # remove_values = ProjectParameterValue.objects.filter(keyparameter__in=rem_id)
             # for k in remove_values:
             #     k.switch()
