@@ -339,7 +339,7 @@ function confirm_alert(node) {
 
 <script>
     var jsonData = {{taskdict|safe}}
-    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     console.log(jsonData.tasks);
     $.each(jsonData.supercategories, function (i) {
       var superId = this.id;
@@ -347,11 +347,14 @@ function confirm_alert(node) {
       var superDesc = this.description;
       g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
         '', superDesc, g));
+      console.log("Super");
+      console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+        '', superDesc);
     });
     $.each(jsonData.activities, function (i) {
       var activityId = this.id.toString();
       var superId = this.super_category;
-      activityId = activityId + superId;
+      activityId = this.super_category.toString() + activityId;
       // console.log("ActID", activityId);
       var activityName = this.name;
       var activitySuper = this.super_category;
@@ -359,6 +362,8 @@ function confirm_alert(node) {
       g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
         1, '', '',
         activityDesc, g));
+      console.log("Act");
+      console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
     });
     $.each(jsonData.tasks, function (i) {
       var taskId = this.id;
@@ -373,11 +378,9 @@ function confirm_alert(node) {
           return this.super_category;
         }
       });
-      if (activityId && superId[0].super_category && taskId){
       taskId = superId[0].super_category.toString() + activityId.toString() + taskId.toString();
       activityId = superId[0].super_category.toString() + activityId.toString();
       activityId = parseInt(activityId);
-      }
       // console.log("TaskID", taskId);
       var taskName = this.name;
       var eStartDate = this.expected_start_date;
@@ -402,6 +405,9 @@ function confirm_alert(node) {
       }
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
         '', 0, 0, activityId, 1, '', '', '', g));
+      console.log("Task");
+      console.log(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+        '', 0, 0, activityId, 1, '', '', '');
     });
     // g.AddTaskItem(new JSGantt.TaskItem(1, 'Nabarangpur School Project', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0,
     //   1, '', '', 'Some Notes text', g));
@@ -501,13 +507,13 @@ function confirm_alert(node) {
             }
             listParentDiv = $('#' + listParent);
             // console.log('Heights', $(this).css('top'), parseInt(currParent.css('height')));
-            if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+            // if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
               listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
               currParent.css({
                 'height': parseInt(currParent.css('height')) + 25 + 'px',
                 'vertical-align': 'top'
               });
-            }
+            // }
           }
         } else {
           count = 0;
