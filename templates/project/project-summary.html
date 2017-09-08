@@ -500,7 +500,7 @@ function confirm_alert(node) {
 
 <script>
     var jsonData = {{taskdict|safe}}
-var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     console.log(jsonData.tasks);
     $.each(jsonData.supercategories, function (i) {
       var superId = this.id;
@@ -508,9 +508,9 @@ var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
       var superDesc = this.description;
       g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
         '', superDesc, g));
-      console.log("Super");
-      console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-        '', superDesc);
+      // console.log("Super");
+      // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+      //   '', superDesc);
     });
     $.each(jsonData.activities, function (i) {
       var activityId = this.id.toString();
@@ -523,8 +523,8 @@ var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
       g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
         1, '', '',
         activityDesc, g));
-      console.log("Act");
-      console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
+      // console.log("Act");
+      // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
     });
     $.each(jsonData.tasks, function (i) {
       var taskId = this.id;
@@ -566,9 +566,9 @@ var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
       }
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
         '', 0, 0, activityId, 1, '', '', '', g));
-      console.log("Task");
-      console.log(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-        '', 0, 0, activityId, 1, '', '', '');
+      // console.log("Task");
+      // console.log(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+      //   '', 0, 0, activityId, 1, '', '', '');
     });
     // g.AddTaskItem(new JSGantt.TaskItem(1, 'Nabarangpur School Project', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0,
     //   1, '', '', 'Some Notes text', g));
@@ -649,16 +649,15 @@ var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
         currParent = $(this).parent().parent().parent();
         if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
           .attr('id')) {
-          arrayTask.push($(this));
-          if (collide == true) {
-            $.each(arrayTask, function (index) {
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+            listParent = currParent.attr('id').replace('row', '');
+            console.log("PARENT",currParent.attr('id'));
+            $('#'+currParent.attr('id')+" .gtaskbarcontainer").each(function(){
+
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
               }
             });
-          }
-          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
-            listParent = currParent.attr('id').replace('row', '');
             collide = true;
             $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
             if (count == 0) {
@@ -668,13 +667,13 @@ var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
             }
             listParentDiv = $('#' + listParent);
             // console.log('Heights', $(this).css('top'), parseInt(currParent.css('height')));
-            // if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+            if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
               listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
               currParent.css({
                 'height': parseInt(currParent.css('height')) + 25 + 'px',
                 'vertical-align': 'top'
               });
-            // }
+            }
           }
         } else {
           count = 0;
