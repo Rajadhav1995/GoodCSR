@@ -296,8 +296,9 @@ def edit_parameter(request):
         loop_count = request.POST.get('loop_count')
         name_count = request.POST.get('name_count')
         if rem_id != '':
+            import ipdb; ipdb.set_trace()
             rem_id_list = map(int,str(rem_id).split(','))
-            [ProjectParameter.objects.get(id=i).switch() for i in rem_id]
+            [ProjectParameter.objects.get(id=i).switch() for i in rem_id_list]
 
             # remove_values = ProjectParameterValue.objects.filter(keyparameter__in=rem_id)
             # for k in remove_values:
