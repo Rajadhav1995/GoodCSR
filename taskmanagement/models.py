@@ -73,18 +73,22 @@ class Task(BaseContent):
         attach_dict = {}
         inner_attach=[]
         from datetime import datetime
-        from media.models import Attachment
+        from media.models import Attachment,Comment
+        comment = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=self.id).order_by('-id')
+        comment_dates = list(set([i.date() for i in comment.values_list('created',flat=True)]))
         attachments = Attachment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=self.id).order_by('-id')
-        distinct_dates = list(set([i.date() for i in attachments.values_list('created',flat=True)]))
+        attach_dates = list(set([i.date() for i in attachments.values_list('created',flat=True)]))
+        distinct_dates = attach_dates + comment_dates
         attach = []
         if distinct_dates:
-            for date in distinct_dates:
+            for date in list(set(distinct_dates)):
                 inner_attach =[]
                 for i in attachments.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
                     inner_attach.append(i)
                 attach.append({date:inner_attach})
         else:
             attach=[]
+        print attach
         return attach
             
             
