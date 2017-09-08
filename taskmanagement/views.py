@@ -330,11 +330,15 @@ def task_comments(request):
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
         if request.FILES:
-            attach = Attachment.objects.create(description = request.POST.get('comment'),attachment_file = request.FILES.get('upload_attach'),created_by= user,content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
+            attach = Attachment.objects.create(description = request.POST.get('comment'),
+                attachment_file = request.FILES.get('upload_attach'),
+                created_by= user,content_type = ContentType.objects.get(model=('task')),
+                object_id = request.POST.get('task_id'))
             attach.save()
         else:
             comment = Comment.objects.create(text = request.POST.get('comment'),
-                content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
+                created_by = user,content_type = ContentType.objects.get(model=('task')),
+                object_id = request.POST.get('task_id'))
             comment.save()
         return HttpResponseRedirect(url+'&key='+task.slug)
     return HttpResponseRedirect(url)

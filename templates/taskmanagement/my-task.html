@@ -68,7 +68,7 @@
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <li><a href = # class="hide-show" id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span></a></li>
+               <li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span></a></li>
                {% endfor %}
                {% endif %}
             </ul>
@@ -225,7 +225,6 @@
                      
                      <div class="right-li third-li">
                         <ul>
-                            
                            <li>{% if c.text %}{{c.text}}{% endif %}</li>
                         </ul>
                         <span>{{c.created.time}}</span>
@@ -382,6 +381,7 @@
         if (key !=''){
         $('.right-task').hide();
         $(".div-"+key).show();
+        $(".hide-show").addClass('active');
         }
         else{
         $('.hide-show').first().trigger('click');
