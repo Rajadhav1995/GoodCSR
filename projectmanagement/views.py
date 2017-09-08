@@ -284,25 +284,40 @@ def add_parameter(request):
     return render(request,'project/add_key_parameter.html',locals())
 
 def edit_parameter(request):
+    rem_id_list = []
     form = ProjectParameterForm()
     ids =  int(request.GET.get('id'))
     # key =  request.GET.get('key')
     obj = ProjectParameter.objects.filter(active=2,parent=ids)
     parent_obj = ProjectParameter.objects.get_or_none(active=2,id=ids)
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
         rem_id = request.POST.get('rem_id')
-        loop_count = int(request.POST.get('loop_count'))
+        agg_type = request.POST.get('agg_type')
+        para_type = request.POST.get('para_type')
+        # return render(request,'project/edit_key_parameter.html',locals())
+        loop_count = request.POST.get('loop_count')
+        name_count = request.POST.get('name_count')
         if rem_id != '':
-            rem_id = map(int,str(rem_id).split(','))
+            rem_id_list = map(int,str(rem_id).split(','))
             [ProjectParameter.objects.get(id=i).switch() for i in rem_id]
-        i=loop_count
-        for i in range(activity_count):
-            name = 'name['+str(i+1)+']'
-            instruction = 'instruction['+str(i+1)+']'
-            create_parameter = ProjectParameter.objects.create(name=name,project=project,\
-                        parent=parent_obj,instructions=instruction,aggregation_function='ADD',\
-                        parameter_type='NUM')
+        for j in obj:
+            if j.id not in rem_id_list:
+                name = 'name['+str(j)+']'
+                instruction = 'instruction['+str(j)+']'
+                # import ipdb; ipdb.set_trace()
+                modify = ProjectParameter.objects.get(id=j.id)
+                modify.name = request.POST.get(name)
+                modify.instructions = request.POST.get(instruction)
+                modify.aggregation_function = request.POST.get('agg_type')
+                modify.save()
+        if name_count:
+            i=int(loop_count)
+            for i in range(int(loop_count),int(name_count)):
+                name = 'name['+str(i+1)+']'
+                instruction = 'instruction['+str(i+1)+']'
+                create_parameter = ProjectParameter.objects.create(name=request.POST.get(name),project=parent_obj.project,\
+                            parent=parent_obj,instructions=request.POST.get(instruction),aggregation_function=agg_type,\
+                            parameter_type=parent_obj.parameter_type)
     return render(request,'project/edit_key_parameter.html',locals())
 
 from time import strptime
@@ -508,9 +523,10 @@ def project_summary(request):
             main_list = []
             pie_object = ProjectParameter.objects.filter(active= 2,parent=i)
             for y in pie_object:
+                # import ipdb; ipdb.set_trace()
                 ttp= ProjectParameterValue.objects.filter(active= 2,keyparameter=y)
                 values = list(ttp.values_list('parameter_value',flat=True))
-                name = str(ttp[0].keyparameter.name)
+                name = str(y.name)
                 value = aggregate_project_parameters(pie_object[0],values)
                 color = colors[counter]
                 counter+=1

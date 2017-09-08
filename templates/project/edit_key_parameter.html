@@ -37,9 +37,8 @@ width:450px;
                                     <div class="form-group">
                                     <label>Parameter Type</label>
                                     {{form.total_budget}}
-                                    <select class="form-control" name="para_type" id="para_type" required>
+                                    <select class="form-control" name="para_type" id="para_type" >
                                     <option selected value="0">Select</option>
-                                    
                                     <option value="PIN" >Pie chart Numbers</option>
                                      <option value="PIP">Pie Chart Percent</option>
                                     <option value="NUM">Number</option>
@@ -54,30 +53,6 @@ width:450px;
                                 </div>
                             </div>
                         </div>
-
-
-<!-- 
-                            <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Parameter Type<font color="red">*</font>
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <select class="form-control" name="para_type" id="para_type" required>
-                                    <option selected value="0">Select</option>
-                                    
-                                    <option value="PIN" >Pie chart Numbers</option>
-                                     <option value="PIP">Pie Chart Percent</option>
-                                    <option value="NUM">Number</option>
-                                    <option value="PER">Percent</option>
-                                    <option value="CUR">Currency</option>
-                                </select>
-                                <p style="color: red;">
-                                    
-                                <font color=#fc282f><span id="funder_error"></span></font>
-                                </p>
-                            </div>
-                        </div> -->
-
 
                         <div class="row" id='agg_div'>
                             <div class="col-md-6 nopadding">
@@ -135,8 +110,8 @@ width:450px;
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More</button>
                             {% for i in obj %}
-                            <div class="con"><b><input class="form-control" value="{{i.name}}" type="text" name="name[{{forloop.counter}}]" placeholder="Parameter Name"></b>
-                                <input class="form-control" value="{{i.instructions}}" type="text" name="instruction[{{forloop.counter}}]" id="name" placeholder="Instruction"><input type="button" class="btnRemove" id="{{i.id}}" value="Remove"/>
+                            <div class="con"><b><input class="form-control" value="{{i.name}}" type="text" name="name[{{i.id}}]" placeholder="Parameter Name"></b>
+                                <input class="form-control" value="{{i.instructions}}" type="text" name="instruction[{{i.id}}]" id="name" placeholder="Instruction"><input type="button" class="btnRemove" id="{{i.id}}" value="Remove"/>
                             <!-- <div><input class="form-control" value="{{i.name}}" type="text" name="name[{{ forloop.counter }}]">
                                 <input class="form-control" type="text" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number">
                              -->
@@ -149,6 +124,7 @@ width:450px;
                     </div></div></div>
                     <input style="width: 0px;" value=0 name="name_count" id="activity_count" type="text"/>
                     <input style="width: 0px;" value=0 name="rem_id" id="rem_id" type="text"/>
+                    <input type="hidden" name="loop_count" id="loop_count" value="{{obj.count}}">
                         <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
@@ -197,7 +173,7 @@ $(document).ready(function() {
     var add_button      = $(".add_field_button"); //Add button ID
     
     var loop_count = $('#loop_count').val()
-    var x =Number(loop_count)+1;
+    var x =Number(loop_count);
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
@@ -280,6 +256,9 @@ $("#para_type").change(function () {
 $('#agg_div').show();
 $('#pie').show();
 $('#name').hide();
+$("select option[value*='NUM']").prop('disabled',true);
+$("select option[value*='PER']").prop('disabled',true);
+$("select option[value*='CUR']").prop('disabled',true);
 $("select#agg_type").val("{{parent_obj.aggregation_function}}");
 </script>
 {% endif %}
