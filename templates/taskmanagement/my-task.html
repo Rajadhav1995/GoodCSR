@@ -2,6 +2,11 @@
 {% load common_tags %}
 {% load urs_tags %}
 {% block section %}
+<style>
+    .error { color :red;}
+    .errorlist li{color :red;}
+    #date_error,#min_max {color : red;}
+</style>
 <section class="green-pad green-height">
    <div class="row">
       <div class="image-pad logo-shadow">
@@ -146,9 +151,9 @@
                <img class="user-image" src="/static/img/default_profile_image.png" alt="">
             </div>
             <div class="task-completion-right">
-                <form action ='/managing/my-tasks/updates/' method='POST' enctype="multipart/form-data">{% csrf_token %}
+                <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">{% csrf_token %}
                 <input id = 'task_id' name = 'task_id' type='hidden' value = "{{i.id}}"/>
-               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Write a update...</textarea>
+               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
                <div>
                <i class="fa fa-file"></i>
                <input type='file' name ='upload_attach' id='upload-photo'/> 
@@ -183,82 +188,60 @@
             </div>
          </div>
          <div class="user-timeline">
-            {%if i.task_attachments %}
+         {% if i.task_attachments %}
             <div id="boxscroll-timeline">
                {% for task_attach in i.task_attachments %}
                {% for dates,attach in task_attach.items %}
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
+                 {% if attach %}
                   <li>
                      {% for a in attach %}
-                     {% if a.attachment_type == 1 %}
                      <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
                      
                      <div class="right-li first-li">
-                        {% if a.created_by %}
-                     {{a.created_by.name}}{% else %}Unknown{% endif %} uploaded
+                     {% if a.attachment_file %}
                         <p>{% if a.description %}{{a.description|safe}} {% endif %}</p>
                         <ul>
-                           {% if a.attachment_file %}
                            <li>
                               <a href="{{image_url}}{{a.attachment_file.url}}">
                                  <img src="{{image_url}}{{a.attachment_file.url}}" width="162" height="112" alt="">
 <!--                                 <div class="/static/image-hover">4 More files</div>-->
                               </a>
                            </li>
+                            
                         </ul>
                         <span>{{a.created.time}}</span>
                         {% endif %}
                      </div>
-                  </li>
-                  {% elif a.attachment_type == 2 %}
-                  <li>
-                     <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
-                     {% if a.created_by %}
-                     {{a.created_by.name}}{% else %}Unknown{% endif %} uploaded
-                     <div class="right-li second-li">
-                     
-                        <ul>
-                           {% if a.attachment_file %}
-                           
-                           <li>
-                                
-                              <a href="{{image_url}}{{a.attachment_file.url}}">
-                              {% if a.document_type == 3 %}
-                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{a.name}}</span></a>
-                              {% elif a.document_type == 1 %}
-                              <img src="/static/img/excel-icon.png" alt=""> <span>{{a.name}}</span></a>
-                              {% else %}
-                              <img src="/static/img/default_profile_image.png" alt=""> <span>{{a.name}}</span></a>
-                              {% endif %}
-                           </li>
-                        </ul>
-                        <span>{{a.created.time}}</span>
-                        {% endif %}
-                     </div>
-                  </li>
-                  {% else %}
-                  <li>
-                     <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
-                     
-                     {% if a.created_by %}
-                     {{a.created_by.name}}{% else %}Unknown{% endif %} uploaded
-                     <div class="right-li third-li">
-                        <ul>
-                           <li>{% if a.description %}{{a.description}}{% endif %}</li>
-                        </ul>
-                        <span>{{a.created.time}}</span>
-                     </div>
+                     {% endfor %}
                   </li>
                   {% endif %}
-                  {% endfor %}
+                  {% task_comments dates i.id as comments %}
+                  {%if comments %}
+                  <li>
+                    {% for c in comments %}
+                     <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
+                     
+                     <div class="right-li third-li">
+                        <ul>
+                            
+                           <li>{% if c.text %}{{c.text}}{% endif %}</li>
+                        </ul>
+                        <span>{{c.created.time}}</span>
+                            
+                     </div>
+                     {% endfor %}
+                     
+                  </li>
+                  {% endif %}
                </ul>
                {% endfor %}
                {% endfor %}
             </div>
             {% else %}
-            <li>No updates </li>
-            {% endif %}
+                    <li>No updates</li>
+                  {% endif %}
          </div>
       </div>
       {% endfor %}
@@ -275,6 +258,7 @@
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script>
    //Toggle
    
@@ -391,4 +375,43 @@
    }
    );
 </script>
+<script>
+    $(function(){
+        var key = "{{request.GET.key}}"
+        console.log(key);
+        if (key !=''){
+        $('.right-task').hide();
+        $(".div-"+key).show();
+        }
+        else{
+        $('.hide-show').first().trigger('click');
+        }
+       });
+</script>
+
+<script>
+        
+    $(document).ready(function(){
+
+        $("#updation_form").validate({
+            rules :
+            {
+                comment : {required:true},
+                
+            },
+            messages:
+            {
+                comment : {required : "Please enter an update"},
+            },
+            highlight: function (element) {
+                $(element).addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).removeClass('error')
+            },
+        });
+        });
+        
+</script>
+
 {% endblock %}

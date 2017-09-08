@@ -67,7 +67,7 @@ def add_taskmanagement(request,model_name,m_form):
         else:
             form=form(user_id,project.id)
     else:
-        message = "Click here to add "
+        message = "Budget id not added"
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
@@ -327,14 +327,16 @@ def task_comments(request):
     if request.method == 'POST':
         user_id = request.session.get('user_id')
         user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-        try:
-            attach = Attachment.objects.create(description = request.POST.get('comment'),attachment_file = request.POST.get('upload_attach'),created_by= user,content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
+        task_id = request.POST.get('task_id')
+        task = Task.objects.get_or_none(id=task_id)
+        if request.FILES:
+            attach = Attachment.objects.create(description = request.POST.get('comment'),attachment_file = request.FILES.get('upload_attach'),created_by= user,content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
             attach.save()
-        except:
+        else:
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
             comment.save()
-        return HttpResponseRedirect(url)
+        return HttpResponseRedirect(url+'&key='+task.slug)
     return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''

@@ -111,5 +111,6 @@ class MilestoneForm(forms.ModelForm):
         self.fields['subscribers'].required = True
         self.fields['status'].initial = 1
         self.fields['project'].widget = forms.HiddenInput()
+        self.fields['task'].required = True
         
         
