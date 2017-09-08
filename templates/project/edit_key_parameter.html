@@ -27,7 +27,7 @@ width:450px;
             <!-- /.box-header -->
             <div class="box-body">
             
-            <form autocomplete="off" id="para_add" class ="form-horizantal budget_form" action="/project/parameter/add/?slug={{slug}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="para_add" class ="form-horizantal budget_form" action="/project/parameter/edit/?id={{ids}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
                             
@@ -107,9 +107,9 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                                     <label>Name</label>
-                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required="True">
+                                <b><input class="form-control" type="text" value="{{parent_obj.name}}" name="name" id="name" placeholder="Parameter Name" required="True"></b>
                                 <br>
-                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
+                                <input class="form-control" type="text" value="{{parent_obj.instructions}}" name="instruction" id="name" placeholder="Instruction">
                             </div>
                                     </div>
                                 </div>
@@ -128,20 +128,27 @@ width:450px;
                             </div>
                         </div> -->
 
-
-                        <div class="row" id="pie">
+            <div class="row" id="pie">
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More</button>
-                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name">
-                                <b><input class="form-control" type="text" name="instruction[1]" id="name" placeholder="Instruction"></b>
-                            </div>
+                            {% for i in obj %}
+                            <div class="con"><b><input class="form-control" value="{{i.name}}" type="text" name="name[{{forloop.counter}}]" placeholder="Parameter Name"></b>
+                                <input class="form-control" value="{{i.instructions}}" type="text" name="instruction[{{forloop.counter}}]" id="name" placeholder="Instruction"><input type="button" class="btnRemove" id="{{i.id}}" value="Remove"/>
+                            <!-- <div><input class="form-control" value="{{i.name}}" type="text" name="name[{{ forloop.counter }}]">
+                                <input class="form-control" type="text" value="{{i.activity_duration}}" name="duration[1]" placeholder="Duration" id="id_number">
+                             -->
+
+
+
+                            </div>{% endfor %}
                         </div>
                         </div>
                     </div></div></div>
                     <input style="width: 0px;" value=0 name="name_count" id="activity_count" type="text"/>
+                    <input style="width: 0px;" value=0 name="rem_id" id="rem_id" type="text"/>
                         <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
                     </form>
@@ -149,7 +156,8 @@ width:450px;
   </div></div>
 
 
-<input type="hidden" name="loop_count" id="loop_count" value="{{activity_view.count}}">
+<input type="hidden" name="loop_count" id="loop_count" value="{{obj.count}}">
+
 
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
@@ -158,7 +166,14 @@ width:450px;
 
 
 <script type="text/javascript">
+var rem_id = []
+$('body').on('click','.btnRemove',function() {
+    $(this).parent('div.con').remove();
+    rem_id.push(this.id);
+    alert(rem_id);
+});
         function ddlValidate() {
+            document.getElementById("rem_id").value = [rem_id];
             var e = document.getElementById("para_type");
             var f = document.getElementById("agg_type");
             var para_type = e.options[e.selectedIndex].value;
@@ -200,6 +215,9 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+
+</script>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -232,6 +250,11 @@ $(document).ready(function() {
         });
         });
 </script>
+<script type="text/javascript">
+//$("#para_type option:").val()
+$("select#para_type").val("{{parent_obj.parameter_type}}");
+</script>
+
 
 <script type="text/javascript">
 $('#pie').hide();
@@ -252,7 +275,14 @@ $("#para_type").change(function () {
     //$('#name').hide();
 });
 </script>
-
+{% if parent_obj.parameter_type == 'PIN' or parent_obj.parameter_type == 'PIP' %}
+<script type="text/javascript">
+$('#agg_div').show();
+$('#pie').show();
+$('#name').hide();
+$("select#agg_type").val("{{parent_obj.aggregation_function}}");
+</script>
+{% endif %}
 
   <div class="control-sidebar-bg"></div>
 </div>

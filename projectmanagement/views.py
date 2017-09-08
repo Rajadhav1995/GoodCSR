@@ -286,10 +286,25 @@ def add_parameter(request):
 def edit_parameter(request):
     form = ProjectParameterForm()
     ids =  int(request.GET.get('id'))
-    key =  request.GET.get('key')
-    obj = ProjectParameter.objects.filter(parent=ids)
+    # key =  request.GET.get('key')
+    obj = ProjectParameter.objects.filter(active=2,parent=ids)
+    parent_obj = ProjectParameter.objects.get_or_none(active=2,id=ids)
+    if request.method == 'POST':
+        import ipdb; ipdb.set_trace()
+        rem_id = request.POST.get('rem_id')
+        loop_count = int(request.POST.get('loop_count'))
+        if rem_id != '':
+            rem_id = map(int,str(rem_id).split(','))
+            [ProjectParameter.objects.get(id=i).switch() for i in rem_id]
+        i=loop_count
+        for i in range(activity_count):
+            name = 'name['+str(i+1)+']'
+            instruction = 'instruction['+str(i+1)+']'
+            create_parameter = ProjectParameter.objects.create(name=name,project=project,\
+                        parent=parent_obj,instructions=instruction,aggregation_function='ADD',\
+                        parameter_type='NUM')
+    return render(request,'project/edit_key_parameter.html',locals())
 
-    pass
 from time import strptime
 def upload_parameter(request):
     ids =  request.GET.get('id')
@@ -485,6 +500,7 @@ def project_summary(request):
     para_name = {}
     pin_title_name = []
     pip_title_name = []
+    main_list = []
     for i in tst:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             pass
