@@ -483,6 +483,7 @@ def project_summary(request):
     para_name = {}
     pin_title_name = []
     pip_title_name = []
+    main_list = []
     for i in tst:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             pass

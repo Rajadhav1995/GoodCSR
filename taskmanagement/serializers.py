@@ -28,6 +28,7 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
+        fields = '__all__'
 
     def get_activity_type(self, obj):
         return obj.get_activity_type_display()
@@ -45,6 +46,7 @@ class MilestoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Milestone
+        fields = '__all__'
 
     def get_active(self, obj):
         return obj.get_active_display()
@@ -57,3 +59,4 @@ class SuperCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SuperCategory
+        fields = '__all__'
