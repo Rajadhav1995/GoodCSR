@@ -294,12 +294,14 @@ def edit_parameter(request):
         rem_id = request.POST.get('rem_id')
         agg_type = request.POST.get('agg_type')
         para_type = request.POST.get('para_type')
-        # return render(request,'project/edit_key_parameter.html',locals())
         loop_count = request.POST.get('loop_count')
         name_count = request.POST.get('name_count')
         if rem_id != '':
             rem_id_list = map(int,str(rem_id).split(','))
             [ProjectParameter.objects.get(id=i).switch() for i in rem_id]
+            # remove_values = ProjectParameterValue.objects.filter(keyparameter__in=rem_id)
+            # for k in remove_values:
+            #     k.switch()
         for j in obj:
             if j.id not in rem_id_list:
                 name = 'name['+str(j)+']'
@@ -473,6 +475,7 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
+    activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
@@ -523,15 +526,12 @@ def project_summary(request):
             main_list = []
             pie_object = ProjectParameter.objects.filter(active= 2,parent=i)
             for y in pie_object:
-                # import ipdb; ipdb.set_trace()
                 ttp= ProjectParameterValue.objects.filter(active= 2,keyparameter=y)
                 values = list(ttp.values_list('parameter_value',flat=True))
-                name = str(y.name)
                 value = aggregate_project_parameters(pie_object[0],values)
                 color = colors[counter]
                 counter+=1
-                main_list.append({'name': name,'y':value,'color':color})
-
+                main_list.append({'name': str(y.name),'y':value,'color':color})
         if main_list:
             if i.parameter_type in para_name:
                 para_name[i.parameter_type].append(main_list)
