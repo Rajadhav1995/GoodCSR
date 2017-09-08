@@ -121,7 +121,7 @@ CATEGORY_CHOICES=(('DBC', 'Direct to Beneficiary Cost'),
      ('O', 'Others')) 
 
 class MasterCategory(BaseContent):
-    category_type = models.TextField(choices=CATEGORY_CHOICES,blank=True, null=True)
+    category_type = models.CharField(choices=CATEGORY_CHOICES,max_length=100,blank=True, null=True)
     name = models.CharField(max_length=200,**OPTIONAL)
     code = models.CharField(max_length=100,**OPTIONAL)
     slug = models.SlugField('Slug', max_length=255, blank=True, null=True)
