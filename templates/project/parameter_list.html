@@ -47,7 +47,7 @@
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Project Parameter</th>
+                <th>Project Parameter </th>
                 <th>Parameter Type</th>
                 <th>Action</th>
             </tr>
@@ -55,7 +55,7 @@
         
         {% for i in parameter %}
         <tr>
-            <td>{{i.name}}</td>
+            <td>{{i.name}}<a href="/project/parameter/edit/?id={{i.id}}"><i class="fa fa-edit" style="float:right"></i></a></td>
             <td>{{i.get_parameter_type_display}}</td>
             
             <td><a class="budget_button" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a>
