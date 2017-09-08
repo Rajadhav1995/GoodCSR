@@ -287,7 +287,6 @@ def edit_parameter(request):
     rem_id_list = []
     form = ProjectParameterForm()
     ids =  int(request.GET.get('id'))
-    # key =  request.GET.get('key')
     obj = ProjectParameter.objects.filter(active=2,parent=ids)
     parent_obj = ProjectParameter.objects.get_or_none(active=2,id=ids)
     if request.method == 'POST':
@@ -297,8 +296,10 @@ def edit_parameter(request):
         loop_count = request.POST.get('loop_count')
         name_count = request.POST.get('name_count')
         if rem_id != '':
+            import ipdb; ipdb.set_trace()
             rem_id_list = map(int,str(rem_id).split(','))
-            [ProjectParameter.objects.get(id=i).switch() for i in rem_id]
+            [ProjectParameter.objects.get(id=i).switch() for i in rem_id_list]
+
             # remove_values = ProjectParameterValue.objects.filter(keyparameter__in=rem_id)
             # for k in remove_values:
             #     k.switch()
@@ -306,7 +307,6 @@ def edit_parameter(request):
             if j.id not in rem_id_list:
                 name = 'name['+str(j)+']'
                 instruction = 'instruction['+str(j)+']'
-                # import ipdb; ipdb.set_trace()
                 modify = ProjectParameter.objects.get(id=j.id)
                 modify.name = request.POST.get(name)
                 modify.instructions = request.POST.get(instruction)
@@ -320,6 +320,7 @@ def edit_parameter(request):
                 create_parameter = ProjectParameter.objects.create(name=request.POST.get(name),project=parent_obj.project,\
                             parent=parent_obj,instructions=request.POST.get(instruction),aggregation_function=agg_type,\
                             parameter_type=parent_obj.parameter_type)
+        return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parent_obj.project.slug)
     return render(request,'project/edit_key_parameter.html',locals())
 
 from time import strptime
