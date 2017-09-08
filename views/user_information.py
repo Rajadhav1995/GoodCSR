@@ -10,12 +10,14 @@ class UserInformationStorage(APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
+        is_admin_user = True if str(request.data.get('is_admin_user')) == "True" else False
+        owner = True if str(request.data.get('owner')) == "True" else False
         user_data = {'user_reference_id':data.get('user_reference_id'),
                     'email':data.get('email'),
                     'organization':data.get('organization'),
                     'organization_type':data.get('organization_type'),
-                    'owner':data.get('owner'),
-                    'is_admin_user':data.get('is_admin_user'),
+                    'owner':owner,
+                    'is_admin_user':is_admin_user,
                     'name':data.get('name'),
                     'designation':data.get('designation'),
                     'active':data.get('active'),
