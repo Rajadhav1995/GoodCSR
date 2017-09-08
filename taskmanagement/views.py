@@ -322,6 +322,8 @@ def my_tasks_details(request):
     
     
 def task_comments(request):
+    application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
+    doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
     url=request.META.get('HTTP_REFERER')
     from media.models import Comment
     if request.method == 'POST':
@@ -330,7 +332,11 @@ def task_comments(request):
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
         if request.FILES:
+            upload_file = request.FILES.get('upload_attach')
+            file_type = upload_file.content_type.split('/')[0]
             attach = Attachment.objects.create(description = request.POST.get('comment'),
+                attachment_type = application_type.get('file_type'),
+                document_type = doc_type.get('file_type'),
                 attachment_file = request.FILES.get('upload_attach'),
                 created_by= user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
