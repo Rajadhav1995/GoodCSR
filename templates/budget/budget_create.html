@@ -2,7 +2,8 @@
 {% block section %}
 {% endblock %}
 {% block content %}
-
+<section class="content-part">
+            <div class = "row">
                 <div class="white-box">
                     <div class="col-md-12">
                         <div>
@@ -62,12 +63,12 @@
                         <input type="hidden" name="slug" value="{{project_slug}}">
                     {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
                     <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
-                                                                            <div class="col-md-12">
+                                                                            <div class="col-md-8">
                                                                                 <div class=" ">
                                                                                     <div class="">
                                                                                         <div class="form-group">
                                                                                             <label>Project</label>
-                                                                                            <input type="text" name="project" value="{{projectobj.name}}" readonly />
+                                                                                            <input class = 'form-control' type="text" name="project" value="{{projectobj.name}}" readonly />
                                                                                         </div>
                                                                                         <div class="form-group">
                                                                                             <div class="form-group">
@@ -110,47 +111,47 @@
                                                                                 <div class="">
                                                                                     <div class="form-group">
                                                                                         <label>Super Categories Label</label>
-                                                                                        <input type="text" name="super-category" required>
+                                                                                        <input class="form-control" type="text" name="super-category" required>
                                                                                     </div>
                                                                                     <div class="col-md-6 padding_left">
                                                                                         <div class="form-group">
                                                                                             <label>Category 1</label>
-                                                                                           <input type="text" name="category_1"  required />
+                                                                                           <input class="form-control" type="text" name="category_1"  required />
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6 padding_right">
                                                                                         <div class="form-group">
                                                                                             <label>Category 2</label>
-                                                                                            <input type="text" name="category_2"  >
+                                                                                            <input class="form-control" type="text" name="category_2"  >
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6 padding_left">
                                                                                         <div class="form-group">
                                                                                             <label>Category 3</label>
-                                                                                            <input type="text" name="category_3"  >
+                                                                                            <input class="form-control" type="text" name="category_3"  >
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6 padding_right">
                                                                                         <div class="form-group">
                                                                                             <label>Category 4</label>
-                                                                                            <input type="text" name="category_4"  >
+                                                                                            <input class="form-control" type="text" name="category_4"  >
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                            <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6 padding_left">
                                                                                         <div class="form-group">
                                                                                             <label>Category 5</label>
-                                                                                            <input type="text" name="category_5"  >
+                                                                                            <input class="form-control" type="text" name="category_5"  >
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6 padding_right">
                                                                                         <div class="form-group">
                                                                                             <label>Category 6</label>
-                                                                                            <input type="text" name="category_6" >
+                                                                                            <input class="form-control" type="text" name="category_6" >
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
@@ -160,11 +161,15 @@
                                                                             <div class="click_buttons">
                                                                                 <div class="link-right">
                                                                                                                         {% if key == "budget" %}
-                                        <input type="submit" class="btn btn-success" value="Save and add SuperCategory">
+                                    <div class="col-md-12">
+                                       <div class="form-group">
+                                        <input type="submit" class="budget_button" value="Save and add SuperCategory">
                                     {% else %}
-                                        <input type="submit" value="Save and add Budget Lineitems" class="btn btn-success">
+                                        <input type="submit" value="Save and add Budget Lineitems" class="budget_button">
                                     {% endif %}
-                                        <input class="btn btn-primary" type="button" value="Cancel" onClick="parent.location='/manage/project/budget/list/?slug={{project_slug}}'">
+                                        <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/manage/project/budget/list/?slug={{project_slug}}'">
+                                        </div>
+                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </form>
@@ -185,7 +190,8 @@
                         </div>
 
                     </div>
-
+      </div>
+</section>
 
 
 
