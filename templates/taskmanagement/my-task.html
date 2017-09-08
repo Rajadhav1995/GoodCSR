@@ -110,6 +110,7 @@
       </div>
       {% for i in task_listing %}
       <div class="right-task div-{{i.slug}}">
+       <div class="border-bottom">
          <div class="task-head-lft ">
             <h4>{{i.name}}<img src="/static/img/vender-icon.png" alt=""></h4>
             <h5>in <span class="under-line">{{i.activity.project.name}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
@@ -120,6 +121,7 @@
          <div class="task-head-rgt">
             <img src="/static/img/progress-icon.png" alt="">
             <p>in progress</p>
+         </div>
          </div>
          <div class="planned-date">
             <ul>
@@ -148,8 +150,8 @@
                 <input id = 'task_id' name = 'task_id' type='hidden' value = "{{i.id}}"/>
                <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;">Write a update...</textarea>
                <div>
-<!--               <i class="fa fa-file"></i>-->
-<!--               <input type='file' name ='attach' id='upload-photo'/> -->
+               <i class="fa fa-file"></i>
+               <input type='file' name ='upload_attach' id='upload-photo'/> 
                </div>
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>

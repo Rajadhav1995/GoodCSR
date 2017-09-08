@@ -327,9 +327,13 @@ def task_comments(request):
     if request.method == 'POST':
         user_id = request.session.get('user_id')
         user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-        comment = Attachment.objects.create(description = request.POST.get('comment'),
-            content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
-        comment.save()
+        try:
+            attach = Attachment.objects.create(description = request.POST.get('comment'),attachment_file = request.POST.get('upload_attach'),created_by= user,content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
+            attach.save()
+        except:
+            comment = Comment.objects.create(text = request.POST.get('comment'),
+                content_type = ContentType.objects.get(model=('task')),object_id = request.POST.get('task_id'))
+            comment.save()
         return HttpResponseRedirect(url)
     return HttpResponseRedirect(url)
 
