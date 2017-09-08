@@ -56,6 +56,7 @@ class Task(BaseContent):
     created_by = models.ForeignKey("projectmanagement.UserProfile",related_name ='task_created_user',**OPTIONAL)
     assigned_to = models.ForeignKey("projectmanagement.UserProfile",related_name ='task_assigned_user',blank=True,null=True)
     subscribers = models.ManyToManyField("projectmanagement.UserProfile",related_name = 'task_subscriber_user',blank=True )
+    task_progress = models.CharField(max_length=100,**OPTIONAL)
     history = HistoricalRecords()
 
     def __str__(self):
