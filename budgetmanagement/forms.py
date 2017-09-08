@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 
 
 class TrancheForm(forms.ModelForm):
-	utilized_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
+#	utilized_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	actual_disbursed_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	recommended_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	planned_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
@@ -19,7 +19,7 @@ class TrancheForm(forms.ModelForm):
 	class Meta:
 		model = Tranche
 		fields  = ('name','planned_amount','actual_disbursed_amount','recommended_amount',\
-					'recommended_by','utilized_amount','due_date','disbursed_date')
+					'recommended_by','due_date','disbursed_date')
 
 
 class ProjectBudgetForm(forms.ModelForm):

@@ -12,7 +12,7 @@ def admin_dashboard(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     if user_obj.is_admin_user == True:
-        obj_list = Project.objects.filter()
+        obj_list = Project.objects.filter(active=2)
     elif user_obj.owner == True and user_obj.organization_type == 1:
         project_ids = ProjectFunderRelation.objects.filter(funder = user_obj).values_list("project_id",flat=True)
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
