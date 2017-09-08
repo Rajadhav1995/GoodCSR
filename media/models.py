@@ -78,6 +78,8 @@ class ProjectLocation(BaseContent):
 
 class Comment(BaseContent):
     text = models.TextField(**OPTIONAL)
+    created_by = models.ForeignKey(
+        UserProfile, related_name='comment_created_user', **OPTIONAL)
     content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'),null=True,blank=True)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
