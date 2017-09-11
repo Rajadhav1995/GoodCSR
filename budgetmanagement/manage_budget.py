@@ -318,3 +318,56 @@ def budgetview(request):
         if not budget_period:
             return HttpResponseRedirect('/manage/project/budget/lineitem/add/?slug='+str(project_slug)+'&budget_id='+str(int(budgetobj.id)))
     return render(request,"budget/budget.html",locals())
+
+
+def budgetlineitemedit(request):
+    project_slug = request.GET.get('slug')
+    projectobj =  Project.objects.get_or_none(slug=project_slug)
+    budget_id = request.GET.get('budget_id')
+    budgetobj = Budget.objects.get_or_none(id = budget_id )
+    supercategory_list = SuperCategory.objects.filter(active=2,project =projectobj,budget = budgetobj).exclude(parent=None)
+    heading_list = MasterCategory.objects.filter(parent__slug="budget-heading",active=2)
+    quarter_list = get_budget_quarters(budgetobj)
+    if request.method == "POST":
+        count = request.POST.get('count')
+        project_slug = request.POST.get('slug')
+        projectobj =  Project.objects.get_or_none(slug=project_slug)
+        budget_id = request.POST.get('budget_id')
+        budgetobj = Budget.objects.get_or_none(id = budget_id)
+        quarter_list = get_budget_quarters(budgetobj)
+        for i in range(int(count)):
+            line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i+1))]
+            for quarter,value in quarter_list.items():
+                result = {}
+                for line in line_itemlist:
+                    line_list = line.split('_')
+                    if  len(line_list) >= 3:
+                        if str(quarter) in line.split('_'):
+                            name = line.split('_')[0]
+                            result.update({name:request.POST.get(line)})
+                    else:
+                        name = line.split('_')[0]
+                        result.update({name:request.POST.get(line)})
+                if result["subheading"]:
+                    budget_period = value
+                    start_date = budget_period.split('to')[0].rstrip()
+                    end_date = budget_period.split('to')[1].lstrip()
+                    budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(i))
+                    budget_dict = {'created_by':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))),
+                               'budget_period':budget_periodobj,
+                               'category':SuperCategory.objects.get_or_none(id = result['location']),
+                               'heading':MasterCategory.objects.get_or_none(id = result['heading']),
+                               'subheading':result['subheading'],
+                               'unit':result['unit'],
+                               'unit_type':result['unit-type'],
+                               'rate':result['rate'],
+                               'planned_unit_cost':result['planned-cost'],
+                               'utilized_unit_cost':result['utilized-cost'],
+                               'start_date':start_date,
+                               'end_date':end_date,
+                               'row_order':int(i),
+                               'quarter_order':int(quarter),
+                               }
+                    budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
+    return render(request,"budget/budget_lineitemedit.html",locals())
