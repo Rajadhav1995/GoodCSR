@@ -408,6 +408,9 @@ def manage_parameter_values(request):
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
+    '''
+    Function to do calculations as per user selection (for key parameter values)
+    '''
         ret={}
         aggr=0
         if param.aggregation_function=='ADD':
