@@ -29,7 +29,7 @@
                   {% endif %}
         </div>
        <div class="col-md-6 nopadding">
-            <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+            <form action="{{request.path}}" id= "ic_form" method='POST' enctype="multipart/form-data">{% csrf_token %}
                     {% for field in form %}
                          {{form.media}}
                         <div class="col-md-12">
@@ -282,9 +282,17 @@ $(function($) {
 <script>
 $(document).ready(function() {
     if ($("id_end_date").val()!=''){
-              var start_date = $("id_end_date").val();
+              var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
               console.log(start_date);
-              $("#id_end_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: start_date });
+              document.getElementById("id_end_date").value = start_date
+          }
+    if ($("id_actual_start_date").val()!=''){
+              var actual_start_date = "{{form.actual_start_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_actual_start_date").value = actual_start_date
+          }
+    if ($("id_actual_end_date").val()!=''){
+              var actual_end_date = "{{form.actual_end_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_actual_end_date").value = actual_end_date
           }
 });
 </script>
