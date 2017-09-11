@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import requests,ast
 import datetime
+from time import strptime
 from django.contrib import messages
 from calendar import monthrange
 from projectmanagement.models import *
@@ -19,6 +20,7 @@ from projectmanagement.utils import random_string_generator
 # Create your views here.
 
 def create_project(request):
+    #Create and edit project (with dynamic activities)
     user_id = request.session.get('user_id')
     try:
         slug =  request.GET.get('slug')
@@ -39,10 +41,6 @@ def create_project(request):
             form = ProjectForm(request.POST,request.FILES)
             instance = ''
         project_name = Project.objects.all()
-        # for j in project_name:
-        #     if j.name == request.POST.get('name'):
-        #         messages.error(request, 'Project Name already Exist')
-        #         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         if form.is_valid():
             obj = form.save(commit=False)
             obj.content_type = ContentType.objects.get(model="Program")
@@ -87,16 +85,15 @@ def create_project(request):
 
 def unique_slug_generator(instance, new_slug=None):
     """
-    This is for a Django project and it assumes your instance 
-    has a model with a slug field and a title character (char) field.
+    This function is for creating unique slug. Just pass object
     """
     if new_slug is not None:
         slug = new_slug
     else:
         slug = slugify(instance.name)
 
-    Klass = instance.__class__
-    qs_exists = Klass.objects.filter(slug=slug).exists()
+    class_obj = instance.__class__
+    qs_exists = class_obj.objects.filter(slug=slug).exists()
     if qs_exists:
         new_slug = "{slug}-{randstr}".format(
                     slug=slug,
@@ -127,6 +124,9 @@ def project_list(request):
     return render(request,'project/listing.html',locals())
 
 def project_detail(request):
+    '''
+    This function not in use
+    '''
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
@@ -134,6 +134,9 @@ def project_detail(request):
 
 
 def project_mapping(request):
+    '''
+    This function not in use
+    '''
     form = ProjectMappingForm()
     if request.method == 'POST':
         if form.is_valid():
@@ -142,6 +145,9 @@ def project_mapping(request):
     return render(request,'project/project_mapping.html',locals())
 
 def upload_attachment(request):
+    '''
+    This function is to upload Image/Document 
+    '''
     slug =  request.GET.get('slug')
     model =  request.GET.get('model')
     key = int(request.GET.get('key'))
@@ -171,12 +177,14 @@ def upload_attachment(request):
             keywords = add_keywords(keys,obj,key_model,0)
         except:
             pass
-        # url = 'upload/list/?slug=%s&model=Project' %slug
         return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
 
     return render(request,'attachment/doc_upload.html',locals())
 
 def edit_attachment(request):
+    '''
+    This function is to edit Image/Document
+    '''
     ids = request.GET.get('id')
     obj_id =  request.GET.get('obj_id')
     slug = Project.objects.get(id=obj_id).slug
@@ -208,6 +216,9 @@ def edit_attachment(request):
     return render(request,'attachment/doc_upload.html',locals())
 
 def add_keywords(keys,obj,model,edit):
+    '''
+    This function is to add/edit keywords for attachment file (pass 1 for 'edit' for edit keywords)
+    '''
     if edit==1:
         delete = FileKeywords.objects.filter(content_type=ContentType.objects.get(model=model),object_id=obj.id)
     key_list = Keywords.objects.filter(active=2)
@@ -221,11 +232,13 @@ def add_keywords(keys,obj,model,edit):
             key_obj = FileKeywords.objects.create(key=key_object,content_type=ContentType.objects.get(model=model),object_id=obj.id )
 
 def budget_tranche(request):
+    '''
+    This function is for Add budget tranche
+    '''
     form = TrancheForm()
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
     project = Project.objects.get_or_none(slug=slug)
-    # form.fields["project"].queryset = Project.objects.filter(created_by__id=user_id)
     form.fields["recommended_by"].queryset = UserProfile.objects.filter(is_admin_user=True)
     if request.method == 'POST':
         form = TrancheForm(request.POST, request.FILES)
@@ -259,6 +272,9 @@ def key_parameter(request):
     return render(request,'project/key_parameter.html',locals())
 
 def add_parameter(request):
+    '''
+    This function is add key parameter
+    '''
     form = ProjectParameterForm()
     slug =  request.GET.get('slug')
     key =  request.GET.get('key')
@@ -284,6 +300,9 @@ def add_parameter(request):
     return render(request,'project/add_key_parameter.html',locals())
 
 def edit_parameter(request):
+    '''
+    This function is to Edit(add parameter, remove parameter and modify existing paramter)
+    '''
     rem_id_list = []
     form = ProjectParameterForm()
     ids =  int(request.GET.get('id'))
@@ -296,12 +315,8 @@ def edit_parameter(request):
         loop_count = request.POST.get('loop_count')
         name_count = request.POST.get('name_count')
         if rem_id != '':
-            import ipdb; ipdb.set_trace()
             rem_id_list = map(int,str(rem_id).split(','))
             [ProjectParameter.objects.get(id=i).switch() for i in rem_id_list]
-            # remove_values = ProjectParameterValue.objects.filter(keyparameter__in=rem_id)
-            # for k in remove_values:
-            #     k.switch()
         for j in obj:
             if j.id not in rem_id_list:
                 name = 'name['+str(j)+']'
@@ -322,7 +337,6 @@ def edit_parameter(request):
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parent_obj.project.slug)
     return render(request,'project/edit_key_parameter.html',locals())
 
-from time import strptime
 def upload_parameter(request):
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
@@ -362,27 +376,6 @@ def manage_parameter(request):
     parameter = ProjectParameter.objects.filter(active= 2,project__slug=slug,parent=None)
     project_name = Project.objects.get(slug=slug).name
     return render(request,'project/parameter_list.html',locals())
-
-
-# def manage_parameter_values(request):
-#     ids =  request.GET.get('id')
-#     parameter1 = ProjectParameter.objects.get(id=ids)
-#     # key_parameter = ProjectParameter.objects.filter(parent=parameter)
-
-#     parameter = ProjectParameterValue.objects.filter(keyparameter__id=ids)
-#     coloumn = []
-#     coloumn.append('Month')
-
-#     for i in parameter:
-#         para_type = i.keyparameter.parameter_type
-#         if para_type == 'PIN' or para_type == 'PIP':
-#             key_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter1)
-#             coloumn.append(i.keyparameter.name)
-#         else:
-#             coloumn.append(i.keyparameter.name)
-#             key_parameter=''
-#     return render(request,'project/parameter_value_list.html',locals())
-
 
 def manage_parameter_values1(request):
     ids =  request.GET.get('id')
@@ -470,6 +463,7 @@ def timeline_listing(obj):
 
 def project_summary(request):
 # to display the project details in project summary page
+#Displaying pie chart detail
     image_url = PMU_URL
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
