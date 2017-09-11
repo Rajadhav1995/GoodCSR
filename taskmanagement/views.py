@@ -326,7 +326,8 @@ def task_comments(request):
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
     url=request.META.get('HTTP_REFERER')
-    MAX_UPLOAD_SIZE = "5242880"
+    MAX_UPLOAD_SIZE = "2621440"
+#    "5242880"
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
@@ -345,7 +346,7 @@ def task_comments(request):
                     object_id = request.POST.get('task_id'))
                 attach.save()
             else:
-                msg = "true"
+                msg = "yess"
         else:
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
