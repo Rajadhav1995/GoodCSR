@@ -322,31 +322,36 @@ def my_tasks_details(request):
     
     
 def task_comments(request):
+    msg =""
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
     url=request.META.get('HTTP_REFERER')
+    MAX_UPLOAD_SIZE = "5242880"
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
     if request.method == 'POST':
-        user_id = request.session.get('user_id')
-        user = UserProfile.objects.get_or_none(user_reference_id = user_id)
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
-            attach = Attachment.objects.create(description = request.POST.get('comment'),
-                attachment_type = application_type.get('file_type'),
-                document_type = doc_type.get('file_type'),
-                attachment_file = request.FILES.get('upload_attach'),
-                created_by= user,content_type = ContentType.objects.get(model=('task')),
-                object_id = request.POST.get('task_id'))
-            attach.save()
+            if upload_file <= MAX_UPLOAD_SIZE:
+                attach = Attachment.objects.create(description = request.POST.get('comment'),
+                    attachment_type = application_type.get('file_type'),
+                    document_type = doc_type.get('file_type'),
+                    attachment_file = request.FILES.get('upload_attach'),
+                    created_by= user,content_type = ContentType.objects.get(model=('task')),
+                    object_id = request.POST.get('task_id'))
+                attach.save()
+            else:
+                msg = "true"
         else:
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
             comment.save()
-        return HttpResponseRedirect(url+'&key='+task.slug)
+        return HttpResponseRedirect(url+'&key='+task.slug+'&msg='+msg)
     return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
