@@ -281,6 +281,7 @@ $(function($) {
 </script>
 <script>
 $(document).ready(function() {
+    if ("{{model_name}}"=="Task"){
     if ($("id_end_date").val()!=''){
               var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
               console.log(start_date);
@@ -294,6 +295,7 @@ $(document).ready(function() {
               var actual_end_date = "{{form.actual_end_date.value|date:'Y-m-d'}}"
               document.getElementById("id_actual_end_date").value = actual_end_date
           }
+    }
 });
 </script>
 
