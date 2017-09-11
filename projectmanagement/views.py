@@ -316,7 +316,10 @@ def edit_parameter(request):
         name_count = request.POST.get('name_count')
         if rem_id != '':
             rem_id_list = map(int,str(rem_id).split(','))
-            [ProjectParameter.objects.get(id=i).switch() for i in rem_id_list]
+            for i in rem_id_list:
+                rem_obj = ProjectParameter.objects.get(id=i)
+                rem_obj.switch()
+                value_obj = ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
         for j in obj:
             if j.id not in rem_id_list:
                 name = 'name['+str(j)+']'
@@ -361,9 +364,14 @@ def upload_parameter(request):
         submit_date = str(year)+'-'+str(now.month)+'-'+str(now.day)
         if key_parameter.exists():
             total_count = []
+            parameter_value_list = []
             for i in key_parameter:
                 value = 'value['+str(i.id)+']'
+                parameter_value_list.append(int(request.POST.get(value)))
                 obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value),\
+                                start_date=date,end_date=end_date,submit_date=submit_date)
+            parameter_value_list = sum(parameter_value_list)
+            create_parameter_values = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=parameter_value_list,\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
         else:
             obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
@@ -414,18 +422,20 @@ def aggregate_project_parameters(param, values):
         elif param.aggregation_function == "WAV":
             paggr=0
             for val in values:
-                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id)
-                aggr+=int(val)*int(parent.parameter_value)
-                paggr+=int(parent.parameter_value)
+                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter=param.parent_id)
+                parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
+                aggr+=int(val)*parent_parameter
+                paggr+=parent_parameter
             aggr=aggr/paggr
         elif param.aggregation_function == "WAP":
             paggr=0
             for val in values:
                 
                 parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
-                aggr+=int(val)*int(parent.parameter_value)
-                paggr+=int(parent.parameter_value)
-            aggr=aggr/paggr  
+                parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
+                aggr+=int(val)*parent_parameter
+                paggr+=parent_parameter
+            aggr=aggr/paggr
         
         ret['name']=param.name
         ret['parameter_type']= param.parameter_type

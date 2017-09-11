@@ -313,7 +313,7 @@ under 0 Milestones</h5>
    <div class="pop-content">
       <div class="img"> <img src="/static/img/GoodCSR_color_circle.png" alt="girl"> </div>
       <div class="course-dtl">
-        <h1>{{obj.name}} <sup>PGR</sup></h1>
+        <h1>{{obj.name}} <!-- <sup>PGR</sup> --></h1>
         <ul class="pop-list">
           <li> <img src="/static/img/pop-up/users.jpg">
             <p> No. of beneficiaries <span>{{obj.no_of_beneficiaries}}</span> </p>
@@ -331,7 +331,7 @@ under 0 Milestones</h5>
          <li class="fst">
             <h2>Target beneficiaries</h2>
             <p>{% if obj.target_beneficiaries.all %}
-                {% for i in obj.target_beneficiaries.all %}{{i}} {% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
+                {% for i in obj.target_beneficiaries.all %}{{i}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
                 {% else %}
                 <span class="col-md-7">N/A</span>
                 {% endif %}</p>
@@ -340,7 +340,7 @@ under 0 Milestones</h5>
        
             <h2>Cause area</h2>
             <p>{% if obj.cause_area.all %}
-                {% for i in obj.cause_area.all %}{{i}} {% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
+                {% for i in obj.cause_area.all %}{{i}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
                 {% else %}
                 <span class="col-md-7">N/A</span>
                 {% endif %}</p>
