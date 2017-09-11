@@ -298,6 +298,7 @@ def budgetview(request):
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+    super_categorylist = SuperCategory.objects.filter(budget = budgetobj)
     if budgetobj:
         quarter_list = get_budget_quarters(budgetobj)
         quarter_names = get_budget_quarter_names(budgetobj)
@@ -311,6 +312,9 @@ def budgetview(request):
         actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
         recommended_amount = tranche_amount['recommended_amount']
         utilized_amount = tranche_amount['utilized_amount']
-        
         final_project_category_list = budget_supercategory_value(projectobj,budgetobj)
+        if not super_categorylist:
+            return HttpResponseRedirect('/manage/project/budget/category/add/?slug='+str(project_slug)+'&budget_id='+str(int(budgetobj.id)))
+        if not budget_period:
+            return HttpResponseRedirect('/manage/project/budget/lineitem/add/?slug='+str(project_slug)+'&budget_id='+str(int(budgetobj.id)))
     return render(request,"budget/budget.html",locals())
