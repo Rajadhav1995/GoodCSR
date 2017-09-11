@@ -283,9 +283,9 @@ def corp_total_budget_disbursed(obj_list):
         for project in obj_list:
             try:
                 budget = project.project_budget_details()
-                planned_cost = float(budget.get('planned_cost') or 0)/10000000
-                utilized_cost = float(budget.get('utilized_cost') or 0)/10000000
-                disbursed_budget = float(budget.get('disbursed_cost') or 0)/10000000
+                planned_cost = budget.get('planned_cost') or 0 
+                utilized_cost = budget.get('utilized_cost') or 0
+                disbursed_budget = budget.get('disbursed_cost') or 0
                 total_budget.append(planned_cost)
                 utilized_budget.append(utilized_cost)
                 disbursed_amount.append(disbursed_budget)
@@ -299,7 +299,7 @@ def corp_total_budget_disbursed(obj_list):
             disbursed_percent =int((disbursed/total)*100) if int(disbursed) > 0 else 0
         except:
             disbursed_percent = 0
-        total_disbursed = {'total':total,'disbursed':disbursed,'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
+        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed),'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
     return total_disbursed 
 
 
@@ -534,3 +534,22 @@ class GanttChartData(APIView):
         taskdict['supercategories'] = SuperCategorySerializer(
             supercategories, many=True).data
         return Response(taskdict)
+        
+        
+def convert_budget(val):
+    """Convert the Values to Rs,Lakhs,Crores."""
+    import locale
+    import re
+    loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
+    val = float('{:.2f}'.format(float(val)))
+    if val <= 99999.99:
+        val = re.sub(u'\u20b9', ' ', locale.currency(val, grouping=True).decode('utf-8')).strip()
+        return re.sub(r'\.00', '', val)
+    elif val >= 100000.99 and val <= 9999999.99:
+        val = re.sub(u'\u20b9', ' ', locale.currency(val / 100000, grouping=True).decode('utf-8')).strip()
+        return str(float(val)) + ' ' + 'Lac'
+    else:
+        h = locale.format("%d", val)
+        val = float(h) * (0.0001 / 1000)
+        val = '{:.2f}'.format(val)
+        return str(float(val)) + ' ' + 'Cr'

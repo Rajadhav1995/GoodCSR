@@ -213,7 +213,7 @@
                            </li>
                             
                         </ul>
-                        <span>{{a.created.time}}</span>
+                        <span>{{a.created.time|date:"g:i a"}}</span>
                         {% endif %}
                      </div>
                      {% endfor %}
@@ -229,7 +229,7 @@
                         <ul>
                            <li>{% if c.text %}{{c.text}}{% endif %}</li>
                         </ul>
-                        <span>{{c.created.time}}</span>
+                        <span>{{c.created.time |date:"g:i a"}}</span>
                             
                      </div>
                      {% endfor %}

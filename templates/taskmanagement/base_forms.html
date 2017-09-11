@@ -275,8 +275,18 @@ $(function($) {
         e.stopImmediatePropagation();
         return false;
       });
+      
     }
     });
+</script>
+<script>
+$(document).ready(function() {
+    if ($("id_end_date").val()!=''){
+              var start_date = $("id_end_date").val();
+              console.log(start_date);
+              $("#id_end_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: start_date });
+          }
+});
 </script>
 
 {% endblock %}
