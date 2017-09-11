@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% load urs_tags %}
+{% block section %}
+{% endblock %}
+{% block content %}
+
+</br>
+
+<section class="content-part forms_section">
+<div class="row">
+
+	<div class="content-top margin-top">
+      <div class="select-area">
+      
+         <form id="filter_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "get" >
+                 <input type="hidden" name="slug" value="{{project_slug}}">
+                <input type="hidden" name="budget_id" value="{{budget_id}}">
+      	<label>See Data as </label>
+        <div class="small-select">
+                <select name="year" id="year" class = "form-control" style="margin-left:5px">
+                    <option value = "">Select Year </option>
+                    {% for i in years_list %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+        </div> &nbsp;&nbsp;
+         <div class="small-select" style="margin-left:10px">
+                <select name="quarter" id="quarter" class = "form-control" >
+                    <option value = "">Select Quarter </option>
+                    {% for i,j in quarter_selection_list.items %}
+                    <option value="{{i}}">{{j}}</option>
+                    {% endfor %}
+                </select>
+                </div>
+        <!--<select name="lang" class="select_box ">
+            <option>Select Quarters</option>
+            <option>Quarter1</option>
+            <option>Quarter2</option>
+        </select>-->
+        </form>
+         </div>
+    </div>
+    <div class="white-box">
+        <div class="budget_create">
+            <h3>Budget Lineitem Edit for {{projectobj.name|title}}</h3>
+            <p> Update Budget Line Items</p>
+
+{% if quarter_key %}
+<form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" >{% csrf_token %}
+<input type="hidden" name="count" value="{{span_length}}">
+
+        <div id="boxscroll1" class="table-scroll">
+                <input type="hidden" name="count" value="6">
+                <input type="hidden" name="slug" value="{{project_slug}}">
+                <input type="hidden" name="budget_id" value="{{budget_id}}">
+                <div class="table-wrap">
+                    <table class="tab-resp " cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                            <tr class="table-head-pad">
+                              <td colspan="5">&nbsp;</td>	
+                              {% for i,j in quarter_list.items %}
+                                    <td class="table-head" colspan="6">{{j}}</th>
+                            {% endfor %}
+                            </tr>
+                            <tr>
+                                <th class="fixed-side">&nbsp;</th>
+                                <th class="fixed-side">Super Category</th>
+                                <th class="fixed-side">Heading</th>
+                                <th class="fixed-side">Subheading</th>
+<!--                                <th class="fixed-side">Line Total</th>-->
+                                <th class="fixed-side">Unit Type</th>
+                                {% for i,j in quarter_list.items %}
+                                <th> No. of unit </th>
+                                <th> Rate </th>
+                                <th> Total Planned </th>
+                                <th> Total Utilized </th>
+                                <th> Variance </th>
+                                <th> Comment </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody class="budget_section">
+                        {% for j in budget_period %}
+                        {% with forloop.counter as rnum %}
+                        <tr class = "data_row">
+                            {% get_budget_lineitem j projectobj as lineitemobj %}
+                                {% for i,v in quarter_list.items %}
+                                {% get_quarter_details j i projectobj as line_itemobj %}
+                            <td class="fixed-side">{{rnum}}</td>
+                            
+                            <td class="fixed-side">
+                                    <select name="location_{{j}}_{{line_itemobj.id}}" id="location_{{j}}" class="location">
+                                        <option value = "">Select option </option>
+                                        {% for i in supercategory_list %}
+                                        <option value="{{i.id}}" {% if lineitemobj.category.id == i.id %} selected="selected" {% endif %} >{{i.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                            </td>
+                            <td class="fixed-side">
+                                    <select name="heading_{{j}}_{{line_itemobj.id}}" id="heading_{{j}}" class="heading">
+                                        <option value = "">Select Heading </option>
+                                        {% for i in heading_list %}
+                                        <option value="{{i.id}}" {% if lineitemobj.heading.id == i.id %} selected="selected" {% endif %}>{{i.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                            </td>
+                            
+                            
+<!--                            <td class="fixed-side"> {{lineitemobj.category.name}}</td>-->
+<!--                            <td class="fixed-side"> {{lineitemobj.heading.name}} </td>-->
+                            <td class="fixed-side"> <input type="text" class ="subheading" id="subheading_{{j}}_{{line_itemobj.id}}" name="subheading_{{j}}_{{line_itemobj.id}}" value="{{lineitemobj.subheading}}">  </td>
+                            <td> <input type="text" class="unit-type" name = "unit-type_{{j}}_{{line_itemobj.id}}" value="{{lineitemobj.unit_type}}"></td>
+                               <td> <input type="number" name = "unit_{{i}}_{{j}}_{{line_itemobj.id}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
+                                <td><input type="number" name = "rate_{{i}}_{{j}}_{{line_itemobj.id}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
+                                 <td> <input type="number" name = "planned-cost_{{i}}_{{j}}__{{line_itemobj.id}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
+                                 
+                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{j}}_{{line_itemobj.id}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>
+                                 <td> <input type="number" name ="variance_{{i}}_{{j}}_{{line_itemobj.id}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>
+                                 {% get_comment line_itemobj as comment %}
+                                  <td> <input type="text" name = "comment_{{i}}_{{j}}_{{line_itemobj.id}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
+                                 <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
+                                 {% endfor %}
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+        
+        <div class="click_buttons">
+            <div class="link-right">
+            <input type="submit" value="Save Budget Utilization" class="btn btn-success">
+            </div> 
+        </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+</section>
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+ <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+ 
+ <script type="text/javascript">
+   $(document).ready(function(){
+       $("#quarter").change(function(){
+       $("#filter_form").submit();
+       });
+   });
+</script>
+
+<script type = "text/javascript">
+   $(document).ready(function(){
+       var sts = "{{ quarter_key }}";
+       if (sts != "None"){
+           $("#quarter").val(sts);
+       }
+   });
+</script>
+
+
+<script type = "text/javascript">
+   $(document).ready(function(){
+       var sts = "{{ request.GET.year }}";
+       if (sts != "None"){
+           $("#year").val(sts);
+       }
+   });
+</script>
+
+<script>
+    $(document).ready(function()
+    {
+        function updatePrice()
+        {
+            nam = $(this).context.name.split('_')
+            i = nam[1]
+            j = nam[2]
+            
+            var rate = parseFloat($("#rate_"+i+"_"+j).val());
+            var unit = parseFloat($("#unit_"+i+"_"+j).val());
+            var total = (rate) * (unit);
+            //var total = total.toFixed(2);
+            if (total.toString() == 'NaN'){
+                $("#planned-cost_"+i+"_"+j).val('');
+            }
+            else{
+                $("#planned-cost_"+i+"_"+j).val(parseInt(total));
+            }
+            
+            var linetotal = 0
+            $("[id^=planned-cost_][id$=_"+parseInt(j)+"]").each(function(){
+                linetotal = +linetotal + +$(this).val()
+            })
+            
+            $("#linetotal_"+j).val(parseInt(linetotal));
+        }
+        $(document).on("change,blur, keyup", ".rate", updatePrice);
+        $(document).on("change,blur, keyup", ".unit", updatePrice);
+    });
+    
+</script>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+<script>
+$(document).ready(function(){
+            $('#year').change(function(){
+               var year = this.value;
+               $.ajax({
+                   url : '/manage/quarter/list/',
+                   type : 'GET',
+                   dataType : 'json',
+                   data: {'year':year,'budget_id':parseInt({{budgetobj.id}})},
+                   success : function(data) {
+                            var quarter_dict = data.quarter_list
+                            $('#quarter').find('option').remove().end();
+                            $('<option>', {value : "" }).html("---------").appendTo('#quarter');
+                          for (var key in quarter_dict) {
+                                if (quarter_dict.hasOwnProperty(key)) {
+                                    var value = quarter_dict[key];
+                                    $('select[id=quarter]').append("<option value='" + key + "'>" + value +"</option>");
+                                }
+        }
+        /*
+                      for(var i=0;i<data.quarter_list.length;i++){
+                           $('select[name=quarter]').append('<option value="' + data.quarter_list[i].id + '">' + data.quarter_list[i].name +'</option>');
+                       }
+                       */
+                   },
+                       error : function() {
+                       console.log('error');
+                   }
+                });
+    });
+    });
+
+</script>
+
+<script>
+//Toggle
+		
+	$('.user-menu').on('click',function(){
+		$('.dropdown-menu').slideDown(350);
+	
+	});
+	$('.select-down').on('click',function(){
+        $('.dropdown-menu1').slideDown(350);
+          
+    });
+	
+	$(document).ready(function(e) {	
+		/*Content Show/Hide */
+		$('.hide-cont').hide();
+		$('.close-cont').hide();
+		$('.view-cont').click(function(){
+			$('.hide-cont').slideDown(350);
+			$('.close-cont').show();
+			$('.view-cont').hide();
+		});
+		$('.close-cont').click(function(){
+			$('.hide-cont').slideUp(350);
+			$('.close-cont').hide();
+			$('.view-cont').show();
+		});	
+		$(document).trigger( "click" );
+	});
+	
+	$(document).click(function(){
+	
+		$('.user-menu, .select-down').click(function(event){
+			event.stopPropagation();
+		});
+	
+		$('.dropdown-menu, .dropdown-menu1').slideUp(350);	 
+	
+	});		 
+</script>
+
+
+<script>
+    $(document).ready(function() {
+   $(".main-table").clone(true).appendTo('#boxscroll1').addClass('clone');   
+ });
+    </script>
+    <script>
+  $(document).ready(function() {
+  
+    $("#boxscroll").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true,background:"#e3e5dd"}); // First scrollable DIV
+
+    
+  });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#horizontalTab').easyResponsiveTabs({
+            type: 'default', //Types: default, vertical, accordion           
+            width: 'auto', //auto or any width like 600px
+            fit: true,   // 100% fit in a container
+            closed: 'accordion', // Start closed if in accordion view
+            activate: function(event) { // Callback function if tab is switched
+                var $tab = $(this);
+                var $info = $('#tabInfo');
+                var $name = $('span', $info);
+
+                $name.text($tab.text());
+
+                $info.show();
+            }
+        });
+		});
+</script>
+
+<script>
+    $(document).ready(function()
+    {
+        function updateVariance()
+        {
+            nam = $(this).context.name.split('_')
+            i = nam[1]
+            j = nam[2]
+            
+            var planned_cost = parseFloat($("#planned-cost_"+i+"_"+j).val());
+            var utilized_cost = $(this).val();
+            var total = +planned_cost - +utilized_cost;
+            //var total = total.toFixed(2);
+            
+            if (total.toString() == 'NaN'){
+                $("#variance_"+i+"_"+j).val('');
+            }
+            else{
+                $("#variance_"+i+"_"+j).val(parseInt(total));
+                /*if (+planned_cost > +utilized_cost) {
+                    $("#variance_"+i+"_"+j).val('0');
+                }
+                else{
+                $("#variance_"+i+"_"+j).val(parseInt(total));
+                }
+                */
+            }
+            
+            
+        }
+        $(document).on("change, keyup", ".utilized-cost", updateVariance);
+        $(document).on("change,blur, keyup", ".rate", updateVariance);
+        $(document).on("change,blur, keyup", ".unit", updateVariance);
+    });
+    
+</script>
+
+
+{% endblock %}
