@@ -162,30 +162,38 @@
                <input type='file' name ='upload_attach' id='upload-photo'/> 
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
+               
+
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
-                  <div class="range-holder">
-                     <div id="pr-slider" class="dragdealer">
-                        <div class="stripe">
-                           <div class="handle">
-                              <div class="square">
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <ul>
-                        <li>10</li>
-                        <li>20</li>
-                        <li>30</li>
-                        <li>40</li>
-                        <li>50</li>
-                        <li>60</li>
-                        <li>70</li>
-                        <li>80</li>
-                        <li>90</li>
-                        <li>100</li>
-                     </ul>
-                  </div>
+<!--                  <div class="range-holder">-->
+<!--                     <div id="pr-slider" class="dragdealer">-->
+<!--                        <div class="stripe">-->
+<!--                           <div class="handle">-->
+<!--                              <div class="square">-->
+<!--                              </div>-->
+<!--                           </div>-->
+<!--                        </div>-->
+<!--                     </div>-->
+<!--                     <ul>-->
+<!--                        <li>10</li>-->
+<!--                        <li>20</li>-->
+<!--                        <li>30</li>-->
+<!--                        <li>40</li>-->
+<!--                        <li>50</li>-->
+<!--                        <li>60</li>-->
+<!--                        <li>70</li>-->
+<!--                        <li>80</li>-->
+<!--                        <li>90</li>-->
+<!--                        <li>100</li>-->
+<!--                     </ul>-->
+<!--                  </div>-->
+<div style="width:400px;">
+           
+            
+            <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="" />
+        </div>
+
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
@@ -198,13 +206,13 @@
                {% for dates,attach in task_attach.items %}
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
-                 {% if attach %}
                   <li>
                      {% for a in attach %}
+                     {% if a.attachment_type == 1 %}
                      <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
                      
                      <div class="right-li first-li">
-                     {% if a.attachment_file %}
+                            {% if a.attachment_file %}
                         <p>{% if a.description %}{{a.description|safe}} {% endif %}</p>
                         <ul>
                            <li>
@@ -218,9 +226,36 @@
                         <span>{{a.created.time|date:"g:i a"}}</span>
                         {% endif %}
                      </div>
-                     {% endfor %}
+                     
+                  </li>
+                  {% elif a.attachment_type == 2 %}
+                  <li>
+                     <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
+                     {% if a.created_by %}
+                     {{a.created_by.name}}{% else %}Unknown{% endif %} uploaded
+                     <div class="right-li second-li">
+                     
+                        <ul>
+                           {% if a.attachment_file %}
+                           
+                           <li>
+                                
+                              <a href="{{image_url}}{{a.attachment_file.url}}">
+                              {% if a.document_type == 3 %}
+                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{a.name}}</span></a>
+                              {% elif a.document_type == 1 %}
+                              <img src="/static/img/excel-icon.png" alt=""> <span>{{a.name}}</span></a>
+                              {% else %}
+                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{a.name}}</span></a>
+                              {% endif %}
+                           </li>
+                        </ul>
+                        <span>{{a.created.time|date:"g:i a"}}</span>
+                        {% endif %}
+                     </div>
                   </li>
                   {% endif %}
+                  {% endfor %}
                   {% task_comments dates i.id as comments %}
                   {%if comments %}
                   <li>
@@ -264,6 +299,13 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="/static/js/plugin.js" type="text/javascript"></script>
 <script src="/static/js/script.js" type="text/javascript"></script> 
+
+
+<link href="/static/css/sample.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/static/css/jquery.range-control.css" />
+    <script src="/static/js/jquery.range-control.js"></script>
 <!--<script>-->
 <!--$(document).ready(function() {-->
 <!--    $(".my-progress-bar").circularProgress({-->
@@ -432,11 +474,72 @@
         
 </script>
 
-<!--<script>-->
-<!--    $("#size_upload").hide();-->
-<!--    var msg = "{{request.GET.msg}}"-->
-<!--    if (msg == 'yess'){-->
-<!--    $("#size_upload").show();-->
-<!--    }-->
-<!--</script>-->
+
+<script>
+   $('.range').rangeControl({
+  min: 10,
+  max: 110,
+  step: 5,
+  delim: '',
+  orientation: 'horizontal',
+  disabled: false,
+  rangeType: 'single',
+  minHandles: 1,
+  maxHandles: 1,
+  allowPaging: true,
+  stepsPerPage: 11,
+  currentValue: {
+    position: 'top'
+  },
+  scale: {
+    position: 'bottom',
+    labels: true,
+    interval: 10
+  },
+  className: ''
+});
+
+    // $('#childAge').on({
+    //     'rangeControlAddHandle.rangeControlEvent rangeControlRemoveHandle.rangeControlEvent': function () {
+         
+    //         var index = (this.value.length == 0) ? 0 : this.value.split(' ').length;
+    //         $('#childCount')[0].selectedIndex = index;
+    //         $('#childCountView').text(index);
+           
+    //     },
+    //     'rangeControlChange.rangeControlEvent': function () {
+
+    //         alert(this.value);
+           
+    //         $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+    //     }
+    // });
+
+    // $('.range').on('rangeControlChange.rangeControlEvent', function () {
+
+        
+    //   // on change event
+    // });
+
+    $('.range').on('rangeControlSlide.rangeControlEvent', function () {
+      // on slide event
+
+         
+      
+
+     // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+      $('#slectedNumber').html($('.range-control-current-value').text());
+      
+    });
+
+    $('.range').on('rangeControlChange.rangeControlEvent', function () {
+         $('#slectedNumber').html($('.range-control-current-value').text());
+    });
+
+
+  
+
+</script>
+
+<!--ZZ-->
 {% endblock %}

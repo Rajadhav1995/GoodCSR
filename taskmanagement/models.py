@@ -88,7 +88,6 @@ class Task(BaseContent):
                 attach.append({date:inner_attach})
         else:
             attach=[]
-        print attach
         return attach
             
             
