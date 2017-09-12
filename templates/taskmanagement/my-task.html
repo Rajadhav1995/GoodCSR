@@ -162,7 +162,6 @@
                <input type='file' name ='upload_attach' id='upload-photo'/> 
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
-               </form>
                 
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
@@ -188,11 +187,9 @@
 <!--                        <li>100</li>-->
 <!--                     </ul>-->
 <!--                  </div>-->
-            <form action ='/managing/my-tasks/updates/' id = 'task_progress' method='POST' enctype="multipart/form-data">{% csrf_token %}
                 <div style="width:500px;">
                         <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="" />
                 </div>
-            </form>
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
