@@ -5,6 +5,7 @@
 <style>
     .error { color :red;}
     .errorlist li{color :red;}
+    #size_upload{color: red;}
     #date_error,#min_max {color : red;}
 </style>
 <section class="green-pad green-height">
@@ -159,7 +160,7 @@
                <div>
                <i class="fa fa-file"></i>
                <input type='file' name ='upload_attach' id='upload-photo'/> 
-               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>
+<!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
@@ -434,7 +435,6 @@
 <!--<script>-->
 <!--    $("#size_upload").hide();-->
 <!--    var msg = "{{request.GET.msg}}"-->
-<!--    alert(msg);-->
 <!--    if (msg == 'yess'){-->
 <!--    $("#size_upload").show();-->
 <!--    }-->
