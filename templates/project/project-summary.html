@@ -381,83 +381,57 @@ under 0 Milestones</h5>
          <h1>Pictures and files</h1>
             <!-- carousel starts -->
               <div id="con-carousel" class="owl-carousel">      
-                <!-- <div class="item"> 
-                    <img src="/static/img/pop-up/word-icon.jpg" alt=""> 
-                    <h2>Activities </h2>                          
-                </div>       
-                <div class="item"> 
-                    <img src="/static/img/pop-up/word-icon.jpg" alt="">  
-                    <h2>Activities </h2>                          
-                </div>
-                <div class="item"> 
-                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">                          
-                    <h2>Project Details</h2> 
-                </div> 
-                <div class="item"> 
-                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">                           
-                    <h2>Project Details</h2> 
-                </div>       
-                <div class="item"> 
-                    <img src="/static/img/pop-up/excel-incon.jpg" alt="">                           
-                    <h2>Project Details</h2> 
-                </div>
-                <div class="item"> 
-                    <img src="/static/img/pop-up/ppt-icon.jpg" alt="">                          
-                    <h2>Project Details</h2> 
-                </div> 
-                <div class="item"> 
-                    <img src="/static/img/pop-up/pdf-icon.jpg" alt="">                           
-                    <h2>Project Details</h2> 
-                </div>       
-                <div class="item"> 
-                    <img src="/static/img/pop-up/excel-incon.jpg" alt="">                           
-                    <h2>Project Details</h2> 
-                </div>
-                <div class="item"> 
-                    <img src="/static/img/pop-up/ppt-icon.jpg" alt="">                          
-                    <h2>Project Details</h2> 
-                </div>  -->                   
+              {% for i in attachment %}
+                {% if i.attachment_type == 2 %}
+        
+        {% if i.document_type == 1 %}<!-- excel -->
+        <div class="item">
+        <a href="{{image}}{{i.attachment_file}}" download><img src="/static/img/excell-color.jpg"  height=70 width=63px>
+        <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+
+        {% if i.document_type == 2 %}<!-- pdf -->
+        <div class="item">
+        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/pdf.jpg" height=70 width=63px> 
+        <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+        {% if i.document_type == 3 %}
+        <div class="item">
+        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/wordpress.jpg" height=70 width=63px>
+          <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+        {% if i.document_type == 4 %}<!-- doc -->
+        <div class="item">
+        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/excell-black.jpg" height=70 width=63px >
+          <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+
+
+        {% endif %}
+        {% endfor %}
+                
              </div>
             <!-- carousel ends -->
             
             <!-- carousel starts -->
 
 
-              <!-- <div id="img-carousel" class="owl-carousel">      
+              <div id="img-carousel" class="owl-carousel">      
+              {% for  i in attachment %}
+              {% if i.attachment_type == 1 %}
                 <div class="item"> 
-                    <img src="img/pop-up/student.jpg" alt=""> 
-                    <h2>Student</h2>                          
-                </div>       
-                <div class="item"> 
-                    <img src="img/pop-up/class-room.jpg" alt="">  
-                    <h2>Class Image</h2>                          
+                    <a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" alt="" height=97 width=156px>
+                    <h2>{{i.description}}</h2></a>
                 </div>
-                <div class="item"> 
-                    <img src="img/pop-up/student.jpg" alt="">                          
-                    <h2>Student</h2> 
-                </div> 
-                <div class="item"> 
-                    <img src="img/pop-up/class-room.jpg" alt="">                           
-                    <h2>Class Image</h2> 
-                </div>       
-                <div class="item"> 
-                    <img src="img/pop-up/student.jpg" alt=""> 
-                    <h2>Student</h2>                          
-                </div>       
-                <div class="item"> 
-                    <img src="img/pop-up/class-room.jpg" alt="">  
-                    <h2>Class Image</h2>                          
-                </div>
-                <div class="item"> 
-                    <img src="img/pop-up/student.jpg" alt="">                          
-                    <h2>Student</h2> 
-                </div> 
-                <div class="item"> 
-                    <img src="img/pop-up/class-room.jpg" alt="">                           
-                    <h2>Class Image</h2> 
-                </div>  
+              {% endif %}
+                {% endfor %}
+                  
                                    
-             </div> -->
+             </div>
             <!-- carousel ends -->
       </div>
 
@@ -777,7 +751,7 @@ $(document).ready(function(){
 		goToFirstSpeed :1500,
 		items:4,
 		margin:25,
-		loop:true,
+		loop:false,
 		autoplay:true,
 		singleItem: true,
 		autoplayTimeout:4000,
@@ -798,7 +772,7 @@ $(document).ready(function(){
 		goToFirstSpeed :1000,
 		items:6,
 		margin:25,
-		loop:true,
+		loop:false,
 		autoplay:true,
 		autoplayTimeout:4000,
 		autoplayHoverPause:true,

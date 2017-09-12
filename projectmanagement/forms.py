@@ -33,15 +33,16 @@ class ProjectForm(forms.ModelForm):
 
 	def clean(self):
 		cleaned_data = self.cleaned_data
+		# import ipdb; ipdb.set_trace()
+		if Project.objects.filter(name=cleaned_data['name']).exclude(pk=self.instance.id).count() > 0:
+			try:
+				Project.objects.get(name=cleaned_data['name'])
+			except Project.DoesNotExist:
+				pass
+			else:
+				raise ValidationError('Project with this Name already exists for this problem')
 
-		try:
-			Project.objects.get(name=cleaned_data['name'])
-		except Project.DoesNotExist:
-			pass
-		else:
-			raise ValidationError('Project with this Name already exists for this problem')
-
-		# Always return cleaned_data
+			# Always return cleaned_data
 		return cleaned_data
 
 

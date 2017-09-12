@@ -11,6 +11,7 @@ from budgetmanagement.models import Tranche
 from media.forms import AttachmentForm,ImageUpload
 from media.models import Attachment,Keywords,FileKeywords
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
@@ -273,7 +274,7 @@ def key_parameter(request):
 
 def add_parameter(request):
     '''
-    This function is add key parameter
+    This function is to add key parameter
     '''
     form = ProjectParameterForm()
     slug =  request.GET.get('slug')
@@ -382,6 +383,7 @@ def upload_parameter(request):
 def manage_parameter(request):
     slug =  request.GET.get('slug')
     parameter = ProjectParameter.objects.filter(active= 2,project__slug=slug,parent=None)
+    parameter_count = parameter.count()
     project_name = Project.objects.get(slug=slug).name
     return render(request,'project/parameter_list.html',locals())
 
@@ -400,6 +402,13 @@ def manage_parameter_values1(request):
     values = aggregate_project_parameters(parameter,child_parameter)
     return render(request,'project/parameter_value_list.html',locals())
 
+def remove_record(request):
+    url=request.META.get('HTTP_REFERER')
+    ids =  request.GET.get('id')
+    model =  eval(request.GET.get('model'))
+    deact = model.objects.get(id=ids).switch()
+    return HttpResponseRedirect(url)
+
 def manage_parameter_values(request):
     ids =  request.GET.get('id')
     op = ProjectParameter.objects.get(id=ids)
@@ -411,41 +420,41 @@ def aggregate_project_parameters(param, values):
     '''
     Function to do calculations as per user selection (for key parameter values)
     '''
-        ret={}
-        aggr=0
-        if param.aggregation_function=='ADD':
-            for val in values:
-                aggr+= int(val)
-        elif param.aggregation_function=='AVG' :
-            cnt=0
-            for val in values:
-                cnt+=1
-                aggr += int(val)
-            aggr=aggr/cnt
-        elif param.aggregation_function == "WAV":
-            paggr=0
-            for val in values:
-                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter=param.parent_id)
-                parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
-                aggr+=int(val)*parent_parameter
-                paggr+=parent_parameter
-            aggr=aggr/paggr
-        elif param.aggregation_function == "WAP":
-            paggr=0
-            for val in values:
-                
-                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
-                parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
-                aggr+=int(val)*parent_parameter
-                paggr+=parent_parameter
-            aggr=aggr/paggr
-        
-        ret['name']=param.name
-        ret['parameter_type']= param.parameter_type
-        ret['instructions'] = param.instructions
-        ret['aggregate_value'] = aggr
-        ret['parent_name'] = None if param.parent is None else param.parent.name
-        return aggr
+    ret={}
+    aggr=0
+    if param.aggregation_function=='ADD':
+        for val in values:
+            aggr+= int(val)
+    elif param.aggregation_function=='AVG' :
+        cnt=0
+        for val in values:
+            cnt+=1
+            aggr += int(val)
+        aggr=aggr/cnt
+    elif param.aggregation_function == "WAV":
+        paggr=0
+        for val in values:
+            parent=ProjectParameterValue.objects.filter(active= 2,keyparameter=param.parent_id)
+            parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
+            aggr+=int(val)*parent_parameter
+            paggr+=parent_parameter
+        aggr=aggr/paggr
+    elif param.aggregation_function == "WAP":
+        paggr=0
+        for val in values:
+            
+            parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
+            parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
+            aggr+=int(val)*parent_parameter
+            paggr+=parent_parameter
+        aggr=aggr/paggr
+    
+    ret['name']=param.name
+    ret['parameter_type']= param.parameter_type
+    ret['instructions'] = param.instructions
+    ret['aggregate_value'] = aggr
+    ret['parent_name'] = None if param.parent is None else param.parent.name
+    return aggr
 
 
 def project_total_budget(slug):
@@ -489,6 +498,8 @@ def project_summary(request):
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
+    attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
+    image = PMU_URL
 # key paramter function
     master_obj = []
     master_obj_pin=[]
@@ -497,8 +508,11 @@ def project_summary(request):
     parameter_count = parameter.count()
     for i in parameter:
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
+            
             parameter1 = ProjectParameter.objects.filter(active= 2,project=obj,parent=None).values_list('id',flat=True)
-            parent_paremeter = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=parameter1)
+            for j in parameter1:
+                parent_paremeter = ProjectParameterValue.objects.filter(keyparameter=j,active= 2)
+
         elif i.parameter_type == 'PIN':
             child_parameter_pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
             if child_parameter_pin.exists():
