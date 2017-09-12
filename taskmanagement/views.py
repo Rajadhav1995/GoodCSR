@@ -334,6 +334,11 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
+        try:
+            task.task_progress = request.POST.get('child2')
+            task.save()
+        except:
+            pass
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -347,7 +352,7 @@ def task_comments(request):
                 attach.save()
             else:
                 msg = "yess"
-        else:
+        elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))

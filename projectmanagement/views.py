@@ -553,3 +553,12 @@ def project_summary(request):
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     return render(request,'project/project-summary.html',locals())
+    
+def delete_upload_image(request):
+    url=request.META.get('HTTP_REFERER')
+    ids = request.GET.get('id')
+    attach = Attachment.objects.get_or_none(id=int(ids))
+    if attach :
+        attach.active = 0
+        attach.save()
+    return HttpResponseRedirect(url)

@@ -125,9 +125,9 @@
             </p>
          </div>
          <div class="task-head-rgt">
-<!--            <div class="my-progress-bar"></div>-->
-            <img src="/static/img/progress-icon.png" alt="">
-            <p>in progress</p>
+            <div class="my-progress-bar"></div>
+<!--            <img src="/static/img/progress-icon.png" alt="">-->
+            <p>{{i.task_progress}} in progress</p>
          </div>
          </div>
          <div class="planned-date">
@@ -162,8 +162,8 @@
                <input type='file' name ='upload_attach' id='upload-photo'/> 
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
-               
-
+               </form>
+                
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
 <!--                  <div class="range-holder">-->
@@ -188,12 +188,11 @@
 <!--                        <li>100</li>-->
 <!--                     </ul>-->
 <!--                  </div>-->
-<div style="width:400px;">
-           
-            
-            <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="" />
-        </div>
-
+            <form action ='/managing/my-tasks/updates/' id = 'task_progress' method='POST' enctype="multipart/form-data">{% csrf_token %}
+                <div style="width:500px;">
+                        <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="" />
+                </div>
+            </form>
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
@@ -479,7 +478,7 @@
    $('.range').rangeControl({
   min: 10,
   max: 110,
-  step: 5,
+  step: 2,
   delim: '',
   orientation: 'horizontal',
   disabled: false,
