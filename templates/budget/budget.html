@@ -164,7 +164,7 @@
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     <div class="link-right">
     	<a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Report Utilization</a>
-        <a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>
+        <a href="/manage/project/budget/lineitem/edit/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>
     </div>   
     {% endif %}
     <div class="white-box">
