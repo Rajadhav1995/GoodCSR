@@ -9,52 +9,20 @@
 <section class="content-part forms_section">
 <div class="row">
 
-	<div class="content-top margin-top">
-      <div class="select-area">
       
-         <form id="filter_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "get" >
-                 <input type="hidden" name="slug" value="{{project_slug}}">
-                <input type="hidden" name="budget_id" value="{{budget_id}}">
-      	<label>See Data as </label>
-        <div class="small-select">
-                <select name="year" id="year" class = "form-control" style="margin-left:5px">
-                    <option value = "">Select Year </option>
-                    {% for i in years_list %}
-                    <option value="{{i}}">{{i}}</option>
-                    {% endfor %}
-                </select>
-        </div> &nbsp;&nbsp;
-         <div class="small-select" style="margin-left:10px">
-                <select name="quarter" id="quarter" class = "form-control" >
-                    <option value = "">Select Quarter </option>
-                    {% for i,j in quarter_selection_list.items %}
-                    <option value="{{i}}">{{j}}</option>
-                    {% endfor %}
-                </select>
-                </div>
-        <!--<select name="lang" class="select_box ">
-            <option>Select Quarters</option>
-            <option>Quarter1</option>
-            <option>Quarter2</option>
-        </select>-->
-        </form>
-         </div>
-    </div>
     <div class="white-box">
         <div class="budget_create">
             <h3>Budget Lineitem Edit for {{projectobj.name|title}}</h3>
             <p> Update Budget Line Items</p>
 
-{% if quarter_key %}
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" >{% csrf_token %}
-<input type="hidden" name="count" value="{{span_length}}">
 
         <div id="boxscroll1" class="table-scroll">
-                <input type="hidden" name="count" value="6">
+                <input type="hidden" name="count" value="{{budget_period|length|add:'-1'}}">
                 <input type="hidden" name="slug" value="{{project_slug}}">
                 <input type="hidden" name="budget_id" value="{{budget_id}}">
                 <div class="table-wrap">
-                    <table class="tab-resp " cellpadding="0" cellspacing="0" border="0">
+                    <table class="tab-resp " id="example1" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <tr class="table-head-pad">
                               <td colspan="5">&nbsp;</td>	
@@ -84,12 +52,10 @@
                         {% with forloop.counter as rnum %}
                         <tr class = "data_row">
                             {% get_budget_lineitem j projectobj as lineitemobj %}
-                                {% for i,v in quarter_list.items %}
-                                {% get_quarter_details j i projectobj as line_itemobj %}
-                            <td class="fixed-side">{{rnum}}</td>
+                            <td class="fixed-side"><span class="init">{{rnum|add:'-1'}}<span></td>
                             
                             <td class="fixed-side">
-                                    <select name="location_{{j}}_{{line_itemobj.id}}" id="location_{{j}}" class="location">
+                                    <select name="location_{{j}}" id="location_{{j}}" class="location">
                                         <option value = "">Select option </option>
                                         {% for i in supercategory_list %}
                                         <option value="{{i.id}}" {% if lineitemobj.category.id == i.id %} selected="selected" {% endif %} >{{i.name}}</option>
@@ -97,7 +63,7 @@
                                     </select>
                             </td>
                             <td class="fixed-side">
-                                    <select name="heading_{{j}}_{{line_itemobj.id}}" id="heading_{{j}}" class="heading">
+                                    <select name="heading_{{j}}" id="heading_{{j}}" class="heading">
                                         <option value = "">Select Heading </option>
                                         {% for i in heading_list %}
                                         <option value="{{i.id}}" {% if lineitemobj.heading.id == i.id %} selected="selected" {% endif %}>{{i.name}}</option>
@@ -105,19 +71,20 @@
                                     </select>
                             </td>
                             
-                            
 <!--                            <td class="fixed-side"> {{lineitemobj.category.name}}</td>-->
 <!--                            <td class="fixed-side"> {{lineitemobj.heading.name}} </td>-->
-                            <td class="fixed-side"> <input type="text" class ="subheading" id="subheading_{{j}}_{{line_itemobj.id}}" name="subheading_{{j}}_{{line_itemobj.id}}" value="{{lineitemobj.subheading}}">  </td>
-                            <td> <input type="text" class="unit-type" name = "unit-type_{{j}}_{{line_itemobj.id}}" value="{{lineitemobj.unit_type}}"></td>
-                               <td> <input type="number" name = "unit_{{i}}_{{j}}_{{line_itemobj.id}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
-                                <td><input type="number" name = "rate_{{i}}_{{j}}_{{line_itemobj.id}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
-                                 <td> <input type="number" name = "planned-cost_{{i}}_{{j}}__{{line_itemobj.id}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
+                            <td class="fixed-side"> <input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}" value="{{lineitemobj.subheading}}">  </td>
+                            <td> <input type="text" class="unit-type" name = "unit-type_{{j}}" value="{{lineitemobj.unit_type}}"></td>
+                                {% for i,v in quarter_list.items %}
+                                {% get_quarter_details j i projectobj as line_itemobj %}
+                               <td> <input type="number" name = "unit_{{i}}_{{line_itemobj.id}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
+                                <td><input type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
+                                 <td> <input type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
                                  
-                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{j}}_{{line_itemobj.id}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>
-                                 <td> <input type="number" name ="variance_{{i}}_{{j}}_{{line_itemobj.id}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>
+                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{line_itemobj.id}}_{{j}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>
+                                 <td> <input type="number" name ="variance_{{i}}_{{line_itemobj.id}}_{{j}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>
                                  {% get_comment line_itemobj as comment %}
-                                  <td> <input type="text" name = "comment_{{i}}_{{j}}_{{line_itemobj.id}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
+                                  <td> <input type="text" name = "comment_{{i}}_{{line_itemobj.id}}_{{j}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
                                  <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
                                  {% endfor %}
                         </tr>
@@ -129,12 +96,20 @@
         </div>
         
         <div class="click_buttons">
+            <div class="link-left">
+                <input type="hidden"/>
+                <a href ="javascript:void(0);" class ="link-pad add_clone">+Add more Lines</a>
+            </div>
+            <div class="link-center">
+                <input type="hidden"/>
+                <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>
+            </div>
+
             <div class="link-right">
             <input type="submit" value="Save Budget Utilization" class="btn btn-success">
             </div> 
         </div>
         </form>
-        {% endif %}
     </div>
 </div>
 </section>
@@ -162,6 +137,26 @@
    });
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function () 
+    {
+        $("[id$=_1]").attr('required', 'required')
+        function mandatory_input()
+        {
+            sname = $(this).context.name.split('_');
+            if (sname.length == 2){
+                $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
+            }
+            else{
+                        $("[id$=_"+parseInt(sname[2])+"]").attr('required', 'required')
+            }
+            }
+            $(document).on("change, keyup", "#example1 tbody tr td input", mandatory_input);
+            $(document).on("change, keyup", "#example1 tbody tr td select", mandatory_input);
+    });
+    
+</script>
+
 
 <script type = "text/javascript">
    $(document).ready(function(){
@@ -179,7 +174,7 @@
         {
             nam = $(this).context.name.split('_')
             i = nam[1]
-            j = nam[2]
+            j = nam[3]
             
             var rate = parseFloat($("#rate_"+i+"_"+j).val());
             var unit = parseFloat($("#unit_"+i+"_"+j).val());
@@ -205,40 +200,53 @@
     
 </script>
 
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-<script>
-$(document).ready(function(){
-            $('#year').change(function(){
-               var year = this.value;
-               $.ajax({
-                   url : '/manage/quarter/list/',
-                   type : 'GET',
-                   dataType : 'json',
-                   data: {'year':year,'budget_id':parseInt({{budgetobj.id}})},
-                   success : function(data) {
-                            var quarter_dict = data.quarter_list
-                            $('#quarter').find('option').remove().end();
-                            $('<option>', {value : "" }).html("---------").appendTo('#quarter');
-                          for (var key in quarter_dict) {
-                                if (quarter_dict.hasOwnProperty(key)) {
-                                    var value = quarter_dict[key];
-                                    $('select[id=quarter]').append("<option value='" + key + "'>" + value +"</option>");
-                                }
-        }
-        /*
-                      for(var i=0;i<data.quarter_list.length;i++){
-                           $('select[name=quarter]').append('<option value="' + data.quarter_list[i].id + '">' + data.quarter_list[i].name +'</option>');
-                       }
-                       */
-                   },
-                       error : function() {
-                       console.log('error');
-                   }
-                });
+<!--/*script for add more functionality-->
+<script type="text/javascript">
+    $(document).ready(function(){
+                function clone(){
+                    var count = $('input[name=count]').val();
+                    
+                    var c = count;
+                    var tR = $('.data_row:last').clone();
+                    count++; /* To increase the count */
+                    alert(count)
+                    /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).find('td input, td select').each(function(){
+                      $(this).val('')
+                      if ($(this).attr('name')){
+                           if ($(this).attr('name').split('_').length == 3){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+" "+"_"+count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 2){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+count);
+                              $(this).attr('id', name[0]+"_"+count);
+                            }
+                      }
+                    });
+                    $('input[name=count]').val(count)
+                    $(tR).find('td span.init').text(count);
+                    $(tR).insertAfter('.data_row:last');
+                    }
+                function remove(){
+                    var count = $('input[name=count').val();
+                      if (count > 1) {
+                            $('tr.data_row:last').remove();
+                            count  = $('tr.data_row').length;
+                            $('input[name=count]').val(count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            $(".add_clone").on("click", clone);
+            $(".remove").on("click", remove);
+    
     });
-    });
-
 </script>
+
 
 <script>
 //Toggle
@@ -323,7 +331,7 @@ $(document).ready(function(){
         {
             nam = $(this).context.name.split('_')
             i = nam[1]
-            j = nam[2]
+            j = nam[3]
             
             var planned_cost = parseFloat($("#planned-cost_"+i+"_"+j).val());
             var utilized_cost = $(this).val();
