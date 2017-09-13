@@ -64,7 +64,7 @@
             
             <td><a class="budget_button" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a>
                 <a class="budget_button" href="/project/parameter/values/manage/?id={{i.id}}">Manage Values</button></a>
-                <a href="/project/remove/record/?id={{i.id}}&model=ProjectParameter" type="button" class="btn btn-danger">X</a>
+                <a href="/project/remove/record/?id={{i.id}}&model=ProjectParameter" type="button" class="btn btn-danger" onclick="return confirm('Are you sure you want to Delete')">X</a>
                 <!-- /project/parameter/values/manage/?id={{i.id}} -->
             </td>
 

@@ -16,6 +16,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
+from taskmanagement.models import Milestone
 from pmu.settings import PMU_URL
 from projectmanagement.utils import random_string_generator
 # Create your views here.
@@ -41,11 +42,11 @@ def create_project(request):
         except:
             form = ProjectForm(request.POST,request.FILES)
             instance = ''
-        project_name = Project.objects.all()
         if form.is_valid():
             obj = form.save(commit=False)
             obj.content_type = ContentType.objects.get(model="Program")
             obj.object_id = 0
+            obj.request_status = 4
             try:
                 obj.created_by = UserProfile.objects.get(id=user_id)
             except:
@@ -253,7 +254,7 @@ def budget_tranche(request):
 def tranche_list(request):
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
-    tranche_list = Tranche.objects.filter(project__slug=slug)
+    tranche_list = Tranche.objects.filter(project__slug=slug,active=2)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -482,7 +483,8 @@ def timeline_listing(obj):
         object_id = obj.id,active=2,attachment_type= 1).order_by('date')
     return attach
     
-
+from itertools import chain
+from operator import attrgetter
 def project_summary(request):
 # to display the project details in project summary page
 #Displaying pie chart detail
@@ -497,6 +499,8 @@ def project_summary(request):
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
+    milestone = Milestone.objects.filter(project__slug=slug)
+    result_list = sorted(chain(timeline, milestone),key=lambda instance: instance.created)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL

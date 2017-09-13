@@ -41,12 +41,16 @@
 {% block content %}
 <section class="content-part">
 	<div class="row">
+    
     <div class="white-box timeline-white">
     	<h2>Timeline Progress</h2>
     	    {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
     	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
     	{% endif %}
+      {% for i in result_list %}
+    {{i.name}}
+    {% endfor %}
         <div class="clear"></div>
         <div id="scrollbar1">
                 <div class="viewport">
@@ -55,9 +59,8 @@
             <div class="time-line">
                 <div class="time-line-bdr"></div>
                             
-                {% if timeline %}
-                    {% for i in timeline %}
-                    
+                {% if result_list %}
+                    {% for i in result_list %}
                         <ul>
                         {% if not forloop.counter|divisibleby:2 %}
                         <li class="event-up">
@@ -73,6 +76,7 @@
                             <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
                         </li>
                         {% else %}
+
                         <li class="event-down">
                          &nbsp;
                             <div class="event-img">
@@ -86,6 +90,7 @@
                             <div class="event-date">{{i.date | date:"d"}} <span>{{i.date | date:"M"}}</span></div>
                         </li>
                         {% endif %}
+                        
                         </ul>
                     {% endfor %}
                 {% endif %}
