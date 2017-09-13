@@ -339,7 +339,6 @@ def task_comments(request):
             task.save()
         except:
             pass
-            
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
