@@ -52,7 +52,7 @@ class ProjectMappingForm(forms.ModelForm):
 
 class ProjectUserRoleRelationshipForm(forms.ModelForm):
 
-    user = forms.ModelChoiceField(queryset=UserProfile.objects.filter(is_admin_user=False),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
+    user = forms.ModelChoiceField(queryset=UserProfile.objects.filter(),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
     role = forms.ModelChoiceField(queryset=RoleTypes.objects.filter(active=2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
