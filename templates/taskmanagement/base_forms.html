@@ -29,7 +29,7 @@
                   {% endif %}
         </div>
        <div class="col-md-6 nopadding">
-            <form action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+            <form action="{{request.path}}" id= "ic_form" method='POST' enctype="multipart/form-data">{% csrf_token %}
                     {% for field in form %}
                          {{form.media}}
                         <div class="col-md-12">
@@ -132,10 +132,10 @@ function showCheckboxes() {
 <script>
     $(document).ready(function() {
         $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        //$( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $(".hasDatepicker").keyup(function(e) {if(e.keyCode == 8 || e.keyCode == 46) { $.datepicker._clearDate(this); }});
         });
 </script>
 <!--  <script>-->
@@ -230,18 +230,17 @@ $(function($) {
             success:function(data){
                 if (data.project_start_date != ""){
                     document.getElementById("id_start_date").value = data.project_start_date;
+                    var date = data.project_start_date
+                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date });
+                    
+                    
                  }
                 else{
                     $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                    
+                    
                     }
-                //document.getElementById("id_task_dependency").value = data.tasks_dependency;
-                //$('#id_task_dependency')
-                  //  .find('option')
-                    //.remove()
-                    //for(var i=0;i<data.tasks_dependency.length;i++){
-                        
-                      //  $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
-                        //}
+                
             },
             error : function(){}
         });
@@ -276,9 +275,31 @@ $(function($) {
         e.stopImmediatePropagation();
         return false;
       });
+      
     }
     });
 </script>
+<script>
+$(document).ready(function() {
+    if ("{{model_name}}"=="Task"){
+    if ($("id_end_date").val()!=''){
+              var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
+              console.log(start_date);
+              document.getElementById("id_end_date").value = start_date
+          }
+    if ($("id_actual_start_date").val()!=''){
+              var actual_start_date = "{{form.actual_start_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_actual_start_date").value = actual_start_date
+          }
+    if ($("id_actual_end_date").val()!=''){
+              var actual_end_date = "{{form.actual_end_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_actual_end_date").value = actual_end_date
+          }
+    }
+});
+</script>
+
+
 
 {% endblock %}
 

@@ -283,9 +283,9 @@ def corp_total_budget_disbursed(obj_list):
         for project in obj_list:
             try:
                 budget = project.project_budget_details()
-                planned_cost = float(budget.get('planned_cost') or 0)/10000000
-                utilized_cost = float(budget.get('utilized_cost') or 0)/10000000
-                disbursed_budget = float(budget.get('disbursed_cost') or 0)/10000000
+                planned_cost = budget.get('planned_cost') or 0 
+                utilized_cost = budget.get('utilized_cost') or 0
+                disbursed_budget = budget.get('disbursed_cost') or 0
                 total_budget.append(planned_cost)
                 utilized_budget.append(utilized_cost)
                 disbursed_amount.append(disbursed_budget)
@@ -299,7 +299,7 @@ def corp_total_budget_disbursed(obj_list):
             disbursed_percent =int((disbursed/total)*100) if int(disbursed) > 0 else 0
         except:
             disbursed_percent = 0
-        total_disbursed = {'total':total,'disbursed':disbursed,'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
+        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed),'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
     return total_disbursed 
 
 
@@ -322,31 +322,42 @@ def my_tasks_details(request):
     
     
 def task_comments(request):
+    msg =""
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
     url=request.META.get('HTTP_REFERER')
+    MAX_UPLOAD_SIZE = "2621440"
+#    "5242880"
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
     if request.method == 'POST':
-        user_id = request.session.get('user_id')
-        user = UserProfile.objects.get_or_none(user_reference_id = user_id)
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
+        try:
+            task.task_progress = request.POST.get('child2')
+            task.save()
+        except:
+            pass
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
-            attach = Attachment.objects.create(description = request.POST.get('comment'),
-                attachment_type = application_type.get('file_type'),
-                document_type = doc_type.get('file_type'),
-                attachment_file = request.FILES.get('upload_attach'),
-                created_by= user,content_type = ContentType.objects.get(model=('task')),
-                object_id = request.POST.get('task_id'))
-            attach.save()
-        else:
+            if upload_file.size <= MAX_UPLOAD_SIZE:
+                attach = Attachment.objects.create(description = request.POST.get('comment'),
+                    attachment_type = application_type.get(file_type),
+                    document_type = doc_type.get(file_type),
+                    attachment_file = request.FILES.get('upload_attach'),
+                    created_by= user,content_type = ContentType.objects.get(model=('task')),
+                    object_id = request.POST.get('task_id'))
+                attach.save()
+            else:
+                msg = "yess"
+        elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
             comment.save()
-        return HttpResponseRedirect(url+'&key='+task.slug)
+        return HttpResponseRedirect(url+'&key='+task.slug+'&msg='+msg)
     return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
@@ -534,3 +545,22 @@ class GanttChartData(APIView):
         taskdict['supercategories'] = SuperCategorySerializer(
             supercategories, many=True).data
         return Response(taskdict)
+        
+        
+def convert_budget(val):
+    """Convert the Values to Rs,Lakhs,Crores."""
+    import locale
+    import re
+    loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
+    val = float('{:.2f}'.format(float(val)))
+    if val <= 99999.99:
+        val = re.sub(u'\u20b9', ' ', locale.currency(val, grouping=True).decode('utf-8')).strip()
+        return re.sub(r'\.00', '', val)
+    elif val >= 100000.99 and val <= 9999999.99:
+        val = re.sub(u'\u20b9', ' ', locale.currency(val / 100000, grouping=True).decode('utf-8')).strip()
+        return str(float(val)) + ' ' + 'Lac'
+    else:
+        h = locale.format("%d", val)
+        val = float(h) * (0.0001 / 1000)
+        val = '{:.2f}'.format(val)
+        return str(float(val)) + ' ' + 'Cr'

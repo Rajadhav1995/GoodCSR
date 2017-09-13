@@ -63,7 +63,7 @@
                         <li class="event-up">
                             &nbsp;
                             <div class="event-img">
-<!--                            <i class = "fa fa-remove remove_icon"></i>-->
+                            <a href="/project/delete/upload/image/?id={{i.id}}" onclick="return confirm('Are you sure you want to delete this item?');"><i class = "fa fa-remove remove_icon"></i></a>
                                 {% if i.attachment_file %}
                                 <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
                                 {% endif %}
@@ -76,7 +76,7 @@
                         <li class="event-down">
                          &nbsp;
                             <div class="event-img">
-<!--                            <i class = "fa fa-remove remove_icon" onclick =""></i>  -->
+                            <a href="/project/delete/upload/image/?id={{i.id}}" onclick="return confirm('Are you sure you want to delete this item?');"><i class = "fa fa-remove remove_icon"></i></a>
                                 <p class="trunc">{{i.description}}</p>
                                 {% if i.attachment_file %}
                                 <img src="{{image_url}}{{i.attachment_file.url}}" width="162" height="112" alt="">
@@ -220,17 +220,17 @@ under 0 Milestones</h5>
             {% if budget %}
               <p><span class="green-d-circle"></span> Utilized</p>
               <div class="budget-value">
-                  <div class="budget-left">{{budget.utilized}}cr </div>
+                  <div class="budget-left">{{budget.utilized}} </div>
                   <div class="budget-right">{{budget.utilized_percent}}%</div>
               </div>
               <p><span class="light-green-circle"></span> Disbursed</p>
               <div class="budget-value">
-                  <div class="budget-left">{{budget.disbursed}}cr</div>
+                  <div class="budget-left">{{budget.disbursed}}</div>
                   <div class="budget-right">{{budget.disbursed_percent}}%</div>
               </div>
               <p><span class="yellow-circle"></span> Total</p>
               <div class="budget-value budget-border">
-                  <div class="budget-left">{{budget.total}}cr</div>
+                  <div class="budget-left">{{budget.total}}</div>
                   <div class="budget-right">{{budget.total_percent}}%</div>
               </div>
             {% endif %}

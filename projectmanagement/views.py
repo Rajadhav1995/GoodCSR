@@ -444,19 +444,20 @@ def aggregate_project_parameters(param, values):
 
 def project_total_budget(slug):
 # to display the total budget ,disbursed,utilized percent in project summary page
+    from taskmanagement.views import convert_budget
     try:
         project = Project.objects.get(slug=slug)
         budget = project.project_budget_details()
-        planned_cost = float(budget.get('planned_cost') or 0)/10000000
-        utilized_cost = float(budget.get('utilized_cost') or 0)/10000000
-        disbursed_budget = float(budget.get('disbursed_cost') or 0)/10000000
+        planned_cost = budget.get('planned_cost') or 0
+        utilized_cost = budget.get('utilized_cost') or 0
+        disbursed_budget = budget.get('disbursed_cost') or 0
         total_percent = 100
         disbursed_percent = int((disbursed_budget/planned_cost)*100)
         utilized_percent = int((utilized_cost/planned_cost)*100)
     except:
         planned_cost= utilized_cost=disbursed_budget=total_percent= disbursed_percent=utilized_percent =0
 
-    budget =  {'total':planned_cost,'disbursed':disbursed_budget,'utilized':utilized_cost,
+    budget =  {'total':convert_budget(planned_cost),'disbursed':convert_budget(disbursed_budget),'utilized':convert_budget(utilized_cost),
     'total_percent':total_percent,'disbursed_percent':disbursed_percent,
     'utilized_percent':utilized_percent}
     return budget
@@ -552,3 +553,12 @@ def project_summary(request):
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     return render(request,'project/project-summary.html',locals())
+    
+def delete_upload_image(request):
+    url=request.META.get('HTTP_REFERER')
+    ids = request.GET.get('id')
+    attach = Attachment.objects.get_or_none(id=int(ids))
+    if attach :
+        attach.active = 0
+        attach.save()
+    return HttpResponseRedirect(url)

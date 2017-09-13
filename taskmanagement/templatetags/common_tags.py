@@ -31,3 +31,13 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
     
+@register.assignment_tag  
+def get_assigned_to(user_obj):
+    assigned="False"
+    try:
+        obj = Task.objects.get(assigned_to=user_obj)
+        assigned = "True"
+    except:
+        assigned = "False"
+        
+    return assigned
