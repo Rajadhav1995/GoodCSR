@@ -224,6 +224,11 @@
                               $(this).attr('name', name[0]+"_"+count);
                               $(this).attr('id', name[0]+"_"+count);
                             }
+                            else if ($(this).attr('name').split('_').length == 4){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+""+"_"+count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                            }
                       }
                     });
                     $('input[name=count]').val(count)
