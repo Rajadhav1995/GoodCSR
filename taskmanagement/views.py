@@ -67,7 +67,7 @@ def add_taskmanagement(request,model_name,m_form):
         else:
             form=form(user_id,project.id)
     else:
-        message = "Budget id not added"
+        message = "Budget is not added"
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
@@ -326,8 +326,8 @@ def task_comments(request):
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
     url=request.META.get('HTTP_REFERER')
-    MAX_UPLOAD_SIZE = "2621440"
-#    "5242880"
+    MAX_UPLOAD_SIZE = "5242880"
+#   "2621440" 
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
@@ -336,22 +336,24 @@ def task_comments(request):
         task = Task.objects.get_or_none(id=task_id)
         try:
             task.task_progress = request.POST.get('child2')
+            if request.POST.get('child2') == 100:
+                task.status = 2
             task.save()
         except:
             pass
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
-            if upload_file.size <= MAX_UPLOAD_SIZE:
-                attach = Attachment.objects.create(description = request.POST.get('comment'),
-                    attachment_type = application_type.get(file_type),
-                    document_type = doc_type.get(file_type),
-                    attachment_file = request.FILES.get('upload_attach'),
-                    created_by= user,content_type = ContentType.objects.get(model=('task')),
-                    object_id = request.POST.get('task_id'))
-                attach.save()
-            else:
-                msg = "yess"
+#            if upload_file.size <= MAX_UPLOAD_SIZE:
+            attach = Attachment.objects.create(description = request.POST.get('comment'),
+                attachment_type = application_type.get(file_type),
+                document_type = doc_type.get(file_type),
+                attachment_file = request.FILES.get('upload_attach'),
+                created_by= user,content_type = ContentType.objects.get(model=('task')),
+                object_id = request.POST.get('task_id'))
+            attach.save()
+#            else:
+#                msg = "yess"
         elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),

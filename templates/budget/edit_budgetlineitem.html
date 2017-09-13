@@ -209,7 +209,6 @@
                     var c = count;
                     var tR = $('.data_row:last').clone();
                     count++; /* To increase the count */
-                    alert(count)
                     /* further functionalitie to split the name and append row number to each input type */
                     $(tR).find('td input, td select').each(function(){
                       $(this).val('')
@@ -223,6 +222,11 @@
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+count);
                               $(this).attr('id', name[0]+"_"+count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 4){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+""+"_"+count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
                             }
                       }
                     });

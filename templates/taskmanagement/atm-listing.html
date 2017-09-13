@@ -88,7 +88,7 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
-                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}')"></i></span>
+                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}{% if task.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}')"></i>{% endif %}</span>
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
@@ -115,7 +115,7 @@
                <ul>
                   {% if milestone %}
                   {% for mile in milestone %}
-                  <li><a href="javascript:void(0);">{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}})<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}')"></i></span>
+                  <li><a href="javascript:void(0);">{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}')"></i>{% endif %}</span>
 <!--                  {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
@@ -275,18 +275,20 @@ $(document).ready(function(){
 <script>
     var jsonData = {{taskdict|safe}}
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
-    console.log(jsonData.tasks);
     $.each(jsonData.supercategories, function (i) {
       var superId = this.id;
       var superName = this.name;
       var superDesc = this.description;
       g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
         '', superDesc, g));
+      // console.log("Super");
+      // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+      //   '', superDesc);
     });
     $.each(jsonData.activities, function (i) {
       var activityId = this.id.toString();
       var superId = this.super_category;
-      activityId = activityId + superId;
+      activityId = this.super_category.toString() + activityId;
       // console.log("ActID", activityId);
       var activityName = this.name;
       var activitySuper = this.super_category;
@@ -294,6 +296,8 @@ $(document).ready(function(){
       g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
         1, '', '',
         activityDesc, g));
+      // console.log("Act");
+      // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
     });
     $.each(jsonData.tasks, function (i) {
       var taskId = this.id;
@@ -308,11 +312,9 @@ $(document).ready(function(){
           return this.super_category;
         }
       });
-      if (activityId && superId[0].super_category && taskId){
       taskId = superId[0].super_category.toString() + activityId.toString() + taskId.toString();
       activityId = superId[0].super_category.toString() + activityId.toString();
       activityId = parseInt(activityId);
-      }
       // console.log("TaskID", taskId);
       var taskName = this.name;
       var eStartDate = this.expected_start_date;
@@ -337,6 +339,9 @@ $(document).ready(function(){
       }
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
         '', 0, 0, activityId, 1, '', '', '', g));
+      // console.log("Task");
+      // console.log(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+      //   '', 0, 0, activityId, 1, '', '', '');
     });
     // g.AddTaskItem(new JSGantt.TaskItem(1, 'Nabarangpur School Project', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0,
     //   1, '', '', 'Some Notes text', g));
@@ -417,16 +422,15 @@ $(document).ready(function(){
         currParent = $(this).parent().parent().parent();
         if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
           .attr('id')) {
-          arrayTask.push($(this));
-          if (collide == true) {
-            $.each(arrayTask, function (index) {
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+            listParent = currParent.attr('id').replace('row', '');
+            console.log("PARENT",currParent.attr('id'));
+            $('#'+currParent.attr('id')+" .gtaskbarcontainer").each(function(){
+
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
               }
             });
-          }
-          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
-            listParent = currParent.attr('id').replace('row', '');
             collide = true;
             $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
             if (count == 0) {
