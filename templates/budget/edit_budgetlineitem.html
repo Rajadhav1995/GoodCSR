@@ -16,14 +16,13 @@
             <p> Update Budget Line Items</p>
 
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" >{% csrf_token %}
-<input type="hidden" name="count" value="{{span_length}}">
 
         <div id="boxscroll1" class="table-scroll">
-                <input type="hidden" name="count" value="{{budget_period|length}}">
+                <input type="hidden" name="count" value="{{budget_period|length|add:'-1'}}">
                 <input type="hidden" name="slug" value="{{project_slug}}">
                 <input type="hidden" name="budget_id" value="{{budget_id}}">
                 <div class="table-wrap">
-                    <table class="tab-resp " cellpadding="0" cellspacing="0" border="0">
+                    <table class="tab-resp " id="example1" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <tr class="table-head-pad">
                               <td colspan="5">&nbsp;</td>	
@@ -53,7 +52,7 @@
                         {% with forloop.counter as rnum %}
                         <tr class = "data_row">
                             {% get_budget_lineitem j projectobj as lineitemobj %}
-                            <td class="fixed-side">{{rnum}}</td>
+                            <td class="fixed-side"><span class="init">{{rnum|add:'-1'}}<span></td>
                             
                             <td class="fixed-side">
                                     <select name="location_{{j}}" id="location_{{j}}" class="location">
@@ -97,6 +96,15 @@
         </div>
         
         <div class="click_buttons">
+            <div class="link-left">
+                <input type="hidden"/>
+                <a href ="javascript:void(0);" class ="link-pad add_clone">+Add more Lines</a>
+            </div>
+            <div class="link-center">
+                <input type="hidden"/>
+                <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>
+            </div>
+
             <div class="link-right">
             <input type="submit" value="Save Budget Utilization" class="btn btn-success">
             </div> 
@@ -127,6 +135,26 @@
            $("#quarter").val(sts);
        }
    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () 
+    {
+        $("[id$=_1]").attr('required', 'required')
+        function mandatory_input()
+        {
+            sname = $(this).context.name.split('_');
+            if (sname.length == 2){
+                $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
+            }
+            else{
+                        $("[id$=_"+parseInt(sname[2])+"]").attr('required', 'required')
+            }
+            }
+            $(document).on("change, keyup", "#example1 tbody tr td input", mandatory_input);
+            $(document).on("change, keyup", "#example1 tbody tr td select", mandatory_input);
+    });
+    
 </script>
 
 
@@ -172,40 +200,53 @@
     
 </script>
 
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-<script>
-$(document).ready(function(){
-            $('#year').change(function(){
-               var year = this.value;
-               $.ajax({
-                   url : '/manage/quarter/list/',
-                   type : 'GET',
-                   dataType : 'json',
-                   data: {'year':year,'budget_id':parseInt({{budgetobj.id}})},
-                   success : function(data) {
-                            var quarter_dict = data.quarter_list
-                            $('#quarter').find('option').remove().end();
-                            $('<option>', {value : "" }).html("---------").appendTo('#quarter');
-                          for (var key in quarter_dict) {
-                                if (quarter_dict.hasOwnProperty(key)) {
-                                    var value = quarter_dict[key];
-                                    $('select[id=quarter]').append("<option value='" + key + "'>" + value +"</option>");
-                                }
-        }
-        /*
-                      for(var i=0;i<data.quarter_list.length;i++){
-                           $('select[name=quarter]').append('<option value="' + data.quarter_list[i].id + '">' + data.quarter_list[i].name +'</option>');
-                       }
-                       */
-                   },
-                       error : function() {
-                       console.log('error');
-                   }
-                });
+<!--/*script for add more functionality-->
+<script type="text/javascript">
+    $(document).ready(function(){
+                function clone(){
+                    var count = $('input[name=count]').val();
+                    
+                    var c = count;
+                    var tR = $('.data_row:last').clone();
+                    count++; /* To increase the count */
+                    alert(count)
+                    /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).find('td input, td select').each(function(){
+                      $(this).val('')
+                      if ($(this).attr('name')){
+                           if ($(this).attr('name').split('_').length == 3){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+" "+"_"+count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 2){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+count);
+                              $(this).attr('id', name[0]+"_"+count);
+                            }
+                      }
+                    });
+                    $('input[name=count]').val(count)
+                    $(tR).find('td span.init').text(count);
+                    $(tR).insertAfter('.data_row:last');
+                    }
+                function remove(){
+                    var count = $('input[name=count').val();
+                      if (count > 1) {
+                            $('tr.data_row:last').remove();
+                            count  = $('tr.data_row').length;
+                            $('input[name=count]').val(count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            $(".add_clone").on("click", clone);
+            $(".remove").on("click", remove);
+    
     });
-    });
-
 </script>
+
 
 <script>
 //Toggle

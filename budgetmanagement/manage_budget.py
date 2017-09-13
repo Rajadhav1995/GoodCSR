@@ -368,13 +368,24 @@ def budgetlineitemedit(request):
                            'end_date':end_date,
                            'variance':result['variance']
                            }
-                import ipdb;ipdb.set_trace();
-                budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
-#                    budget_lineitem_obj.__dict__.update(budget_dict)
-#                    budget_lineitem_obj.save()
-#                    commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_lineitem_obj),object_id=i)
-#                    commentobj.text = result['comment']
-#                    commentobj.save()
-#                    budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
+                if budgetperiodid:
+                    budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
+                    budget_lineitem_obj.__dict__.update(budget_dict)
+                    budget_lineitem_obj.save()
+                else:
+                    budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
+                    budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
+                    budget_extra_values = {
+                               'created_by_id':int(request.session.get('user_id')),
+                               'row_order':int(i),
+                               'quarter_order':int(quarter),
+                               'budget_period':budget_periodobj,
+                               }
+                    budget_lineitem_obj.__dict__.update(budget_extra_values)
+                    budget_lineitem_obj.save()
+                commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_lineitem_obj),object_id=budget_lineitem_obj.id)
+                commentobj.text = result['comment']
+                commentobj.save()
+
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/edit_budgetlineitem.html",locals())
