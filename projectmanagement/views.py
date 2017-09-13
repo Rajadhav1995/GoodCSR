@@ -500,7 +500,18 @@ def project_summary(request):
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
     milestone = Milestone.objects.filter(project__slug=slug)
-    result_list = sorted(chain(timeline, milestone),key=lambda instance: instance.created)
+    # result_list = sorted(chain(timeline, milestone),key=lambda instance: instance.created)
+    # result_list = sorted(chain(timeline, milestone),key=attrgetter('date','overdue'))
+    timeline_json = []
+    for i in timeline:
+        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url}
+        timeline_json.append(data)
+    for j in milestone:
+        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':''}
+        timeline_json.append(data)
+    timeline_json.sort(key=lambda item:item['date'], reverse=False)
+    import json
+    timeline_json = json.dumps(timeline_json)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
