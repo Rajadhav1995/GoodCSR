@@ -282,6 +282,11 @@ $(function($) {
 <script>
 $(document).ready(function() {
     if ("{{model_name}}"=="Task"){
+    if ($("id_start_date").val()!=''){
+              var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
+              console.log(start_date);
+              document.getElementById("id_start_date").value = start_date
+          }
     if ($("id_end_date").val()!=''){
               var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
               console.log(start_date);
