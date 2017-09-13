@@ -127,7 +127,7 @@
          <div class="task-head-rgt">
             <div class="my-progress-bar"></div>
 <!--            <img src="/static/img/progress-icon.png" alt="">-->
-            <p>{{i.task_progress}} in progress</p>
+            <p>{%if i.task_progress %}{{i.task_progress}}% {% else %}0%{% endif %} in progress</p>
          </div>
          </div>
          <div class="planned-date">
@@ -164,6 +164,8 @@
                </div>
                 
                <div class="task-details">
+               {% get_assigned_to user as assigned %}
+                {% if i.status != 2  and assigned == 'True'%}
                   <h4>Task Completion Status (%)</h4>
 <!--                  <div class="range-holder">-->
 <!--                     <div id="pr-slider" class="dragdealer">-->
@@ -187,9 +189,11 @@
 <!--                        <li>100</li>-->
 <!--                     </ul>-->
 <!--                  </div>-->
+                
                 <div style="width:500px;">
                         <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="" />
                 </div>
+                {% endif %}
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
