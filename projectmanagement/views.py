@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import requests,ast
 import datetime
+from time import strptime
 from django.contrib import messages
 from calendar import monthrange
 from projectmanagement.models import *
@@ -10,15 +11,18 @@ from budgetmanagement.models import Tranche
 from media.forms import AttachmentForm,ImageUpload
 from media.models import Attachment,Keywords,FileKeywords
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
+from taskmanagement.models import Milestone
 from pmu.settings import PMU_URL
 from projectmanagement.utils import random_string_generator
 # Create your views here.
 
 def create_project(request):
+    #Create and edit project (with dynamic activities)
     user_id = request.session.get('user_id')
     try:
         slug =  request.GET.get('slug')
@@ -38,15 +42,11 @@ def create_project(request):
         except:
             form = ProjectForm(request.POST,request.FILES)
             instance = ''
-        project_name = Project.objects.all()
-        # for j in project_name:
-        #     if j.name == request.POST.get('name'):
-        #         messages.error(request, 'Project Name already Exist')
-        #         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         if form.is_valid():
             obj = form.save(commit=False)
             obj.content_type = ContentType.objects.get(model="Program")
             obj.object_id = 0
+            obj.request_status = 4
             try:
                 obj.created_by = UserProfile.objects.get(id=user_id)
             except:
@@ -87,16 +87,15 @@ def create_project(request):
 
 def unique_slug_generator(instance, new_slug=None):
     """
-    This is for a Django project and it assumes your instance 
-    has a model with a slug field and a title character (char) field.
+    This function is for creating unique slug. Just pass object
     """
     if new_slug is not None:
         slug = new_slug
     else:
         slug = slugify(instance.name)
 
-    Klass = instance.__class__
-    qs_exists = Klass.objects.filter(slug=slug).exists()
+    class_obj = instance.__class__
+    qs_exists = class_obj.objects.filter(slug=slug).exists()
     if qs_exists:
         new_slug = "{slug}-{randstr}".format(
                     slug=slug,
@@ -127,6 +126,9 @@ def project_list(request):
     return render(request,'project/listing.html',locals())
 
 def project_detail(request):
+    '''
+    This function not in use
+    '''
     slug =  request.GET.get('slug')
     obj = Project.objects.get_or_none(slug=slug)
     activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
@@ -134,6 +136,9 @@ def project_detail(request):
 
 
 def project_mapping(request):
+    '''
+    This function not in use
+    '''
     form = ProjectMappingForm()
     if request.method == 'POST':
         if form.is_valid():
@@ -142,6 +147,9 @@ def project_mapping(request):
     return render(request,'project/project_mapping.html',locals())
 
 def upload_attachment(request):
+    '''
+    This function is to upload Image/Document 
+    '''
     slug =  request.GET.get('slug')
     model =  request.GET.get('model')
     key = int(request.GET.get('key'))
@@ -171,12 +179,14 @@ def upload_attachment(request):
             keywords = add_keywords(keys,obj,key_model,0)
         except:
             pass
-        # url = 'upload/list/?slug=%s&model=Project' %slug
         return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
 
     return render(request,'attachment/doc_upload.html',locals())
 
 def edit_attachment(request):
+    '''
+    This function is to edit Image/Document
+    '''
     ids = request.GET.get('id')
     obj_id =  request.GET.get('obj_id')
     slug = Project.objects.get(id=obj_id).slug
@@ -208,6 +218,9 @@ def edit_attachment(request):
     return render(request,'attachment/doc_upload.html',locals())
 
 def add_keywords(keys,obj,model,edit):
+    '''
+    This function is to add/edit keywords for attachment file (pass 1 for 'edit' for edit keywords)
+    '''
     if edit==1:
         delete = FileKeywords.objects.filter(content_type=ContentType.objects.get(model=model),object_id=obj.id)
     key_list = Keywords.objects.filter(active=2)
@@ -221,11 +234,13 @@ def add_keywords(keys,obj,model,edit):
             key_obj = FileKeywords.objects.create(key=key_object,content_type=ContentType.objects.get(model=model),object_id=obj.id )
 
 def budget_tranche(request):
+    '''
+    This function is for Add budget tranche
+    '''
     form = TrancheForm()
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
     project = Project.objects.get_or_none(slug=slug)
-    # form.fields["project"].queryset = Project.objects.filter(created_by__id=user_id)
     form.fields["recommended_by"].queryset = UserProfile.objects.filter(is_admin_user=True)
     if request.method == 'POST':
         form = TrancheForm(request.POST, request.FILES)
@@ -239,7 +254,7 @@ def budget_tranche(request):
 def tranche_list(request):
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
-    tranche_list = Tranche.objects.filter(project__slug=slug)
+    tranche_list = Tranche.objects.filter(project__slug=slug,active=2)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -259,6 +274,9 @@ def key_parameter(request):
     return render(request,'project/key_parameter.html',locals())
 
 def add_parameter(request):
+    '''
+    This function is to add key parameter
+    '''
     form = ProjectParameterForm()
     slug =  request.GET.get('slug')
     key =  request.GET.get('key')
@@ -284,6 +302,9 @@ def add_parameter(request):
     return render(request,'project/add_key_parameter.html',locals())
 
 def edit_parameter(request):
+    '''
+    This function is to Edit(add parameter, remove parameter and modify existing paramter)
+    '''
     rem_id_list = []
     form = ProjectParameterForm()
     ids =  int(request.GET.get('id'))
@@ -297,11 +318,10 @@ def edit_parameter(request):
         name_count = request.POST.get('name_count')
         if rem_id != '':
             rem_id_list = map(int,str(rem_id).split(','))
-            [ProjectParameter.objects.get(id=i).switch() for i in rem_id_list]
-
-            # remove_values = ProjectParameterValue.objects.filter(keyparameter__in=rem_id)
-            # for k in remove_values:
-            #     k.switch()
+            for i in rem_id_list:
+                rem_obj = ProjectParameter.objects.get(id=i)
+                rem_obj.switch()
+                value_obj = ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
         for j in obj:
             if j.id not in rem_id_list:
                 name = 'name['+str(j)+']'
@@ -322,7 +342,6 @@ def edit_parameter(request):
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parent_obj.project.slug)
     return render(request,'project/edit_key_parameter.html',locals())
 
-from time import strptime
 def upload_parameter(request):
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
@@ -347,9 +366,14 @@ def upload_parameter(request):
         submit_date = str(year)+'-'+str(now.month)+'-'+str(now.day)
         if key_parameter.exists():
             total_count = []
+            parameter_value_list = []
             for i in key_parameter:
                 value = 'value['+str(i.id)+']'
+                parameter_value_list.append(int(request.POST.get(value)))
                 obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value),\
+                                start_date=date,end_date=end_date,submit_date=submit_date)
+            parameter_value_list = sum(parameter_value_list)
+            create_parameter_values = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=parameter_value_list,\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
         else:
             obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
@@ -360,29 +384,9 @@ def upload_parameter(request):
 def manage_parameter(request):
     slug =  request.GET.get('slug')
     parameter = ProjectParameter.objects.filter(active= 2,project__slug=slug,parent=None)
+    parameter_count = parameter.count()
     project_name = Project.objects.get(slug=slug).name
     return render(request,'project/parameter_list.html',locals())
-
-
-# def manage_parameter_values(request):
-#     ids =  request.GET.get('id')
-#     parameter1 = ProjectParameter.objects.get(id=ids)
-#     # key_parameter = ProjectParameter.objects.filter(parent=parameter)
-
-#     parameter = ProjectParameterValue.objects.filter(keyparameter__id=ids)
-#     coloumn = []
-#     coloumn.append('Month')
-
-#     for i in parameter:
-#         para_type = i.keyparameter.parameter_type
-#         if para_type == 'PIN' or para_type == 'PIP':
-#             key_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=parameter1)
-#             coloumn.append(i.keyparameter.name)
-#         else:
-#             coloumn.append(i.keyparameter.name)
-#             key_parameter=''
-#     return render(request,'project/parameter_value_list.html',locals())
-
 
 def manage_parameter_values1(request):
     ids =  request.GET.get('id')
@@ -399,6 +403,13 @@ def manage_parameter_values1(request):
     values = aggregate_project_parameters(parameter,child_parameter)
     return render(request,'project/parameter_value_list.html',locals())
 
+def remove_record(request):
+    url=request.META.get('HTTP_REFERER')
+    ids =  request.GET.get('id')
+    model =  eval(request.GET.get('model'))
+    deact = model.objects.get(id=ids).switch()
+    return HttpResponseRedirect(url)
+
 def manage_parameter_values(request):
     ids =  request.GET.get('id')
     op = ProjectParameter.objects.get(id=ids)
@@ -407,39 +418,44 @@ def manage_parameter_values(request):
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
-        ret={}
-        aggr=0
-        if param.aggregation_function=='ADD':
-            for val in values:
-                aggr+= int(val)
-        elif param.aggregation_function=='AVG' :
-            cnt=0
-            for val in values:
-                cnt+=1
-                aggr += int(val)
-            aggr=aggr/cnt
-        elif param.aggregation_function == "WAV":
-            paggr=0
-            for val in values:
-                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id)
-                aggr+=int(val)*int(parent.parameter_value)
-                paggr+=int(parent.parameter_value)
-            aggr=aggr/paggr
-        elif param.aggregation_function == "WAP":
-            paggr=0
-            for val in values:
-                
-                parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
-                aggr+=int(val)*int(parent.parameter_value)
-                paggr+=int(parent.parameter_value)
-            aggr=aggr/paggr  
-        
-        ret['name']=param.name
-        ret['parameter_type']= param.parameter_type
-        ret['instructions'] = param.instructions
-        ret['aggregate_value'] = aggr
-        ret['parent_name'] = None if param.parent is None else param.parent.name
-        return aggr
+    '''
+    Function to do calculations as per user selection (for key parameter values)
+    '''
+    ret={}
+    aggr=0
+    if param.aggregation_function=='ADD':
+        for val in values:
+            aggr+= int(val)
+    elif param.aggregation_function=='AVG' :
+        cnt=0
+        for val in values:
+            cnt+=1
+            aggr += int(val)
+        aggr=aggr/cnt
+    elif param.aggregation_function == "WAV":
+        paggr=0
+        for val in values:
+            parent=ProjectParameterValue.objects.filter(active= 2,keyparameter=param.parent_id)
+            parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
+            aggr+=int(val)*parent_parameter
+            paggr+=parent_parameter
+        aggr=aggr/paggr
+    elif param.aggregation_function == "WAP":
+        paggr=0
+        for val in values:
+            
+            parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
+            parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
+            aggr+=int(val)*parent_parameter
+            paggr+=parent_parameter
+        aggr=aggr/paggr
+    
+    ret['name']=param.name
+    ret['parameter_type']= param.parameter_type
+    ret['instructions'] = param.instructions
+    ret['aggregate_value'] = aggr
+    ret['parent_name'] = None if param.parent is None else param.parent.name
+    return aggr
 
 
 def project_total_budget(slug):
@@ -468,9 +484,11 @@ def timeline_listing(obj):
         object_id = obj.id,active=2,attachment_type= 1).order_by('date')
     return attach
     
-
+from itertools import chain
+from operator import attrgetter
 def project_summary(request):
 # to display the project details in project summary page
+#Displaying pie chart detail
     image_url = PMU_URL
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
@@ -482,7 +500,11 @@ def project_summary(request):
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
+    milestone = Milestone.objects.filter(project__slug=slug)
+    result_list = sorted(chain(timeline, milestone),key=lambda instance: instance.created)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
+    attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
+    image = PMU_URL
 # key paramter function
     master_obj = []
     master_obj_pin=[]
@@ -491,8 +513,11 @@ def project_summary(request):
     parameter_count = parameter.count()
     for i in parameter:
         if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
+            
             parameter1 = ProjectParameter.objects.filter(active= 2,project=obj,parent=None).values_list('id',flat=True)
-            parent_paremeter = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=parameter1)
+            for j in parameter1:
+                parent_paremeter = ProjectParameterValue.objects.filter(keyparameter=j,active= 2)
+
         elif i.parameter_type == 'PIN':
             child_parameter_pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
             if child_parameter_pin.exists():
