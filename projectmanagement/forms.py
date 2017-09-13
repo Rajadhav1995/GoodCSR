@@ -33,7 +33,6 @@ class ProjectForm(forms.ModelForm):
 
 	def clean(self):
 		cleaned_data = self.cleaned_data
-		# import ipdb; ipdb.set_trace()
 		if Project.objects.filter(name=cleaned_data['name']).exclude(pk=self.instance.id).count() > 0:
 			try:
 				Project.objects.get(name=cleaned_data['name'])
