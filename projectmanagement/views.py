@@ -29,7 +29,7 @@ def create_project(request):
         obj = Project.objects.get(slug=slug)
         form = ProjectForm(instance = obj)
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
-        activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
+        # activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
@@ -55,20 +55,20 @@ def create_project(request):
                 obj.slug = unique_slug_generator(obj)
             obj.save()
             form.save_m2m()
-            activity_del = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project")).delete()
-            try:
-                activity_count = int(request.POST.get('activity_count'))
-                i=1
-                for i in range(activity_count):
-                    act = 'activity['+str(i+1)+']'
-                    dur = 'duration['+str(i+1)+']'
-                    activity = request.POST.get(act)
-                    duration = request.POST.get(dur)
-                    create_activity = PrimaryWork.objects.create(name=activity,types=0,number=i+1,\
-                                        activity_duration=duration,content_type=ContentType.objects.get(model="project"),\
-                                        object_id=obj.id)
-            except:
-                pass
+            # activity_del = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project")).delete()
+            # try:
+            #     activity_count = int(request.POST.get('activity_count'))
+            #     i=1
+            #     for i in range(activity_count):
+            #         act = 'activity['+str(i+1)+']'
+            #         dur = 'duration['+str(i+1)+']'
+            #         activity = request.POST.get(act)
+            #         duration = request.POST.get(dur)
+            #         create_activity = PrimaryWork.objects.create(name=activity,types=0,number=i+1,\
+            #                             activity_duration=duration,content_type=ContentType.objects.get(model="project"),\
+            #                             object_id=obj.id)
+            # except:
+            #     pass
             implementation_partner = request.POST.get('implementation_partner')
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
@@ -501,7 +501,18 @@ def project_summary(request):
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
     milestone = Milestone.objects.filter(project__slug=slug)
-    result_list = sorted(chain(timeline, milestone),key=lambda instance: instance.created)
+    # result_list = sorted(chain(timeline, milestone),key=lambda instance: instance.created)
+    # result_list = sorted(chain(timeline, milestone),key=attrgetter('date','overdue'))
+    timeline_json = []
+    for i in timeline:
+        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url}
+        timeline_json.append(data)
+    for j in milestone:
+        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':''}
+        timeline_json.append(data)
+    timeline_json.sort(key=lambda item:item['date'], reverse=False)
+    import json
+    timeline_json = json.dumps(timeline_json)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
