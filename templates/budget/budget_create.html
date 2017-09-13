@@ -73,7 +73,7 @@
                                                                                         <div class="form-group">
                                                                                             <div class="form-group">
                                                                                                 <label>Start Date</label>
-                                                                                                                                                   {{ form.actual_start_date }}
+                                                                                                                        <input type="text" name="actual_start_date" readonly="true" required="" class="form-control" id="id_actual_start_date" value = {{projectobj.start_date|date:"Y-m-d"}} />                           
 								{{ form.actual_start_date.errors }}
                                 <font color=#fc282f><b><span id="dateError1"></span></b></font>
                                                                                             </div>
@@ -167,7 +167,7 @@
                                     {% else %}
                                         <input type="submit" value="Save and add Budget Lineitems" class="budget_button">
                                     {% endif %}
-                                        <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/manage/project/budget/list/?slug={{project_slug}}'">
+                                        <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}'">
                                         </div>
                                     </div>
                                                                                 </div>
@@ -202,7 +202,7 @@
 <script src="/static/js/jquery-ui.min.js"></script>
 <script src="/static/js/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="/static/css/jquery.tag-editor.css">
- <script type="text/javascript" src="/static/js/wizard/jquery.smartWizard.js"></script>
+<!-- <script type="text/javascript" src="/static/js/wizard/jquery.smartWizard.js"></script>-->
 
 
 <style>
@@ -210,9 +210,9 @@
 </style>
 <script>
   $( function() {
-    $( "#id_actual_start_date" ).datepicker({
-        format: 'yyyy-mm'
-    });
+    var date = "{{projectobj.start_date|safe}}"
+    console.log(date);
+    $("#id_actual_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date });
     $( "#id_end_date" ).datepicker({
         format: 'yyyy-mm-dd'
     });
@@ -259,13 +259,14 @@
                 actual_start_date : {required : "Please Choose the Start Date"},
                 end_date : {required:"Please Choose the End Date"},
             },
-    });
+    
             highlight: function (element) {
                 $(element).parent().addClass('error')
             },
             unhighlight: function (element) {
                 $(element).parent().removeClass('error')
             },
+        });
         });
         
 </script>
@@ -299,9 +300,7 @@
     }
 
 });
-  $("#id_actual_start_date").datepicker({
-    dateFormat: 'yy-mm-dd',
-  });
+  
 </script>
 {% endblock %}
 

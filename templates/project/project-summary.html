@@ -47,7 +47,7 @@ var loc_url = '{{image}}'
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 $(document).ready(function() {
     //var loop_count = $('#loop_count').val()
-    var wrapper         = $(".aditya"); //Fields wrapper
+    var wrapper         = $(".timeline-slide"); //Fields wrapper
     for (var i = 0; i < lengths ; i++) 
     {
       var obj = ff[i]
@@ -103,8 +103,7 @@ $(document).ready(function() {
                        <div id="time-line-pad">
             <div class="time-line">
                 
-                    <div class="aditya"></div>
-                
+                    <div class="timeline-slide"></div>
 
             </div>
            </div>
@@ -236,17 +235,17 @@ under 0 Milestones</h5>
             {% if budget %}
               <p><span class="green-d-circle"></span> Utilized</p>
               <div class="budget-value">
-                  <div class="budget-left">{{budget.utilized}}cr </div>
+                  <div class="budget-left">{{budget.utilized}} </div>
                   <div class="budget-right">{{budget.utilized_percent}}%</div>
               </div>
               <p><span class="light-green-circle"></span> Disbursed</p>
               <div class="budget-value">
-                  <div class="budget-left">{{budget.disbursed}}cr</div>
+                  <div class="budget-left">{{budget.disbursed}}</div>
                   <div class="budget-right">{{budget.disbursed_percent}}%</div>
               </div>
               <p><span class="yellow-circle"></span> Total</p>
               <div class="budget-value budget-border">
-                  <div class="budget-left">{{budget.total}}cr</div>
+                  <div class="budget-left">{{budget.total}}</div>
                   <div class="budget-right">{{budget.total_percent}}%</div>
               </div>
             {% endif %}
@@ -475,6 +474,20 @@ under 0 Milestones</h5>
   <!-- jsGanttImproved App -->
   <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
   <script src="/static/js/jsgantt.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+/*
+function confirm_alert(node) {
+    var d1 = {{parameter_count}};
+    if (d1 > 3) {
+      alert("You cant add more than 4 Parameters")
+    };
+    
+}
+*/
+</script>
+
 
 
 <script>
