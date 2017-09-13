@@ -505,10 +505,10 @@ def project_summary(request):
     # result_list = sorted(chain(timeline, milestone),key=attrgetter('date','overdue'))
     timeline_json = []
     for i in timeline:
-        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url}
+        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url,'id':i.id}
         timeline_json.append(data)
     for j in milestone:
-        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':''}
+        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','id':''}
         timeline_json.append(data)
     timeline_json.sort(key=lambda item:item['date'], reverse=False)
     import json
