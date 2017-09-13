@@ -253,8 +253,9 @@ def budget_tranche(request):
 
 def tranche_list(request):
     slug =  request.GET.get('slug')
+    obj = Project.objects.get(slug=slug)
     user_id = request.session.get('user_id')
-    tranche_list = Tranche.objects.filter(project__slug=slug,active=2)
+    tranche_list = Tranche.objects.filter(project=obj,active=2)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -423,6 +424,7 @@ def aggregate_project_parameters(param, values):
     '''
     ret={}
     aggr=0
+    # import ipdb; ipdb.set_trace()
     if param.aggregation_function=='ADD':
         for val in values:
             aggr+= int(val)
@@ -555,9 +557,16 @@ def project_summary(request):
     para_name = {}
     pin_title_name = []
     pip_title_name = []
+    number_json = []
     main_list = []
     for i in tst:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
+            number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
+            number = map(int,number)
+            value = aggregate_project_parameters(i,number)
+            data = {'title':i.name,'value':value,'type':i.parameter_type}
+            number_json.append(data)
+            # import ipdb; ipdb.set_trace()
             pass
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
             main_list = []
@@ -588,6 +597,8 @@ def project_summary(request):
     data = {'project_id':int(obj.id)}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
+    number_json = json.dumps(number_json)
+
     return render(request,'project/project-summary.html',locals())
     
 def delete_upload_image(request):

@@ -86,6 +86,37 @@ $(document).ready(function() {
 })
 
 </script>
+
+
+
+<script type="text/javascript">
+var ff= {{number_json | safe}}
+var lengths = ff.length;
+var loc_url = '{{image}}'
+$(document).ready(function() {
+    //var loop_count = $('#loop_count').val()
+    var wrapper         = $(".aditya"); //Fields wrapper
+    for (var i = 0; i < lengths ; i++) 
+    {
+      var obj = ff[i]
+      var title = obj.title;
+      console.log(obj);
+      var value = obj.value
+      if (obj.type == 'CUR') {
+        var url = loc_url + "static/img/budget-icon.png";
+        }else{
+          var url = loc_url + "static/img/key-icon2.png";
+        };
+
+
+        $(wrapper).append('<div><li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li></div>');
+}
+})
+
+</script>
+
+
+
 <section class="content-part">
 	<div class="row">
     
@@ -167,18 +198,9 @@ $(document).ready(function() {
         {% endif %}
         </div>
         <ul>
-            {% for i in parent_paremeter %}
-        	<li>
-            	<h3>{{i.keyparameter.name}}</h3>
-
-                {% if i.keyparameter.parameter_type == 'CUR' %}
-                 <img class="key-image" src="/static/img/budget-icon.png" alt="">
-                 {% else %}
-                 <img class="key-image" src="/static/img/key-icon2.png" alt="">
-                 {% endif %}
-                <h4 class="title-pad">{{i.parameter_value}}</h4>
-            </li>
-            {% endfor %}
+            <div class='aditya'></div>
+        	
+            
             {% if master_obj_pin %}
             {% for lol in  master_pin %}
             <li>

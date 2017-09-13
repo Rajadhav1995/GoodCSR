@@ -1,4 +1,46 @@
 {% extends 'base.html' %}
+{% load urs_tags %}
+
+{% block section %}
+<style>
+.budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+</style>
+<div class="clear"></div>
+<!--Green pad starts-->
+<section class="green-pad green-height">
+    <div class="row">
+    <div class="image-pad logo-shadow">
+        <a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
+    </div>
+    <div class="title-left">
+    {% if obj %}
+    <h4><a href = '/project/detail/?slug={{obj.slug}}'><p class="trunc" style="width:620px;">{{obj.name}}</p></a></h4>
+    {% else %}
+    <h4><a href = '#'>Project Name</a></h4>
+    {% endif %}
+    <ul>
+        {% get_funder obj as project_funders %}
+        <li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% else %} Funder {% endif %}</a> </li>
+        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
+
+    </ul>    
+    </div>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+     <div class="menu-bottom">
+        <ul>
+          <li><a href="/project/summary/?slug={{obj.slug}}">Summary</a></li>
+          <li><a href="/managing/listing/?slug={{obj.slug}}">Task & Milestone</a></li>
+          <li><a href="/manage/project/budget/view/?slug={{obj.slug}}">Budget</a></li>
+          <li><a class="active" href="/upload/list/?slug={{obj.slug}}&model=Project">Files</a></li>
+          <li><a href="/project/tranche/list/?slug={{obj.slug}}"> Tranches</a></li>
+          <li><a href ="/managing/my-tasks/details/?slug={{obj.slug}}">My Tasks </ad></li>
+        </ul>
+     </div>
+    </div>
+</section>
+<!--Green pad Ends-->
+<!--Content part starts-->
+{% endblock %}
 
 {% block content %}
 <!--Green pad Ends-->
