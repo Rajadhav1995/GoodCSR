@@ -339,7 +339,7 @@ def budgetlineitemedit(request):
         budgetobj = Budget.objects.get_or_none(id = budget_id)
         quarter_list = get_budget_quarters(budgetobj)
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
-        for j in range(int(count)):
+        for j in range((int(count))):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(j))]
             for quarter,value in quarter_list.items():
                 start_date = value.split('to')[0].rstrip()
@@ -373,11 +373,12 @@ def budgetlineitemedit(request):
                     budget_lineitem_obj.__dict__.update(budget_dict)
                     budget_lineitem_obj.save()
                 else:
+#                    import ipdb;ipdb.set_trace();
                     budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
                     budget_extra_values = {
-                               'created_by_id':int(request.session.get('user_id')),
-                               'row_order':int(i),
+                               'created_by_id':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))).id,
+                               'row_order':int(j),
                                'quarter_order':int(quarter),
                                'budget_period':budget_periodobj,
                                }

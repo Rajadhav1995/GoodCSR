@@ -144,7 +144,7 @@ width:450px;
 
 
                 <div class="row">
-            <div class="col-md-6 nopadding">
+            <!-- <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
                     <label>Activities<font color="red">*</font></label>
@@ -160,7 +160,7 @@ width:450px;
                     </div>
                 </div>
             </div>
-        </div></div>
+        </div></div> -->
 
        <div class="row">
             <div class="col-md-6 nopadding">
@@ -234,7 +234,7 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
+                    <!-- <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/> -->
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
@@ -403,12 +403,7 @@ function funder_val() {
             {
                 //id_project : {required:true},
                 //program : {required:true},
-                id_name: {
-                        required: true,
-                        maxlength: 75,
-                        remote: "/propject/name/validation/"
-                        },
-                name : {required:true},
+                name : {required:true, maxlength: 300},
                 total_budget : {required:true},
                 no_of_beneficiaries : {required:true},
                 target_beneficiaries : {required:true},

@@ -16,8 +16,6 @@
 <section class="content-part">
     <div class='container' >
     <div class="white-box">
-        <section class="content">
-            <div class="row">
                 <div class="col-md-12">
                 
               <h3 class="border_line">Add Tranche</h3>
@@ -28,15 +26,19 @@
             
             <form action="/project/budget/tranche/?slug={{slug}}" class ="form-horizantal budget_form" id="tranche" method='POST' enctype="multipart/form-data">{% csrf_token %}
     
-                            <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    {{form.project.label_tag}}
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.project}}
-                                    {{ form.project.errors }}
+
+
+                        <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label>{{form.project.label_tag}}</label>
+                                {{form.project}}
+                                {{ form.project.errors }}
                                 </div>
                             </div>
+                        </div>
+                        </div>
 
 
                             <div class="row">
@@ -86,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <div class="row">
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
