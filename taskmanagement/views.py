@@ -344,16 +344,16 @@ def task_comments(request):
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
-            if upload_file.size <= MAX_UPLOAD_SIZE:
-                attach = Attachment.objects.create(description = request.POST.get('comment'),
-                    attachment_type = application_type.get(file_type),
-                    document_type = doc_type.get(file_type),
-                    attachment_file = request.FILES.get('upload_attach'),
-                    created_by= user,content_type = ContentType.objects.get(model=('task')),
-                    object_id = request.POST.get('task_id'))
-                attach.save()
-            else:
-                msg = "yess"
+#            if upload_file.size <= MAX_UPLOAD_SIZE:
+            attach = Attachment.objects.create(description = request.POST.get('comment'),
+                attachment_type = application_type.get(file_type),
+                document_type = doc_type.get(file_type),
+                attachment_file = request.FILES.get('upload_attach'),
+                created_by= user,content_type = ContentType.objects.get(model=('task')),
+                object_id = request.POST.get('task_id'))
+            attach.save()
+#            else:
+#                msg = "yess"
         elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
