@@ -95,7 +95,7 @@ var lengths = ff.length;
 var loc_url = '{{image}}'
 $(document).ready(function() {
     //var loop_count = $('#loop_count').val()
-    var wrapper         = $(".aditya"); //Fields wrapper
+    var wrapper         = $(".numeric_parameter"); //Fields wrapper
     for (var i = 0; i < lengths ; i++) 
     {
       var obj = ff[i]
@@ -107,8 +107,6 @@ $(document).ready(function() {
         }else{
           var url = loc_url + "static/img/key-icon2.png";
         };
-
-
         $(wrapper).append('<div><li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li></div>');
 }
 })
@@ -198,7 +196,7 @@ $(document).ready(function() {
         {% endif %}
         </div>
         <ul>
-            <div class='aditya'></div>
+            <div class='numeric_parameter'></div>
         	
             
             {% if master_obj_pin %}

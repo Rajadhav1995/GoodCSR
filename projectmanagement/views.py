@@ -289,6 +289,8 @@ def add_parameter(request):
         instruction = request.POST.get('instruction')
         name_count = int(request.POST.get('name_count'))
         agg_type = request.POST.get('agg_type')
+        if parameter_type == 'NUM' or parameter_type == 'PER' or parameter_type == 'CUR':
+            agg_type = 'ADD'
         parent_obj = ProjectParameter.objects.create(parameter_type=parameter_type,\
                                 project=project,aggregation_function=agg_type,name = name,\
                                 instructions=instruction)
@@ -424,7 +426,6 @@ def aggregate_project_parameters(param, values):
     '''
     ret={}
     aggr=0
-    # import ipdb; ipdb.set_trace()
     if param.aggregation_function=='ADD':
         for val in values:
             aggr+= int(val)
@@ -566,7 +567,6 @@ def project_summary(request):
             value = aggregate_project_parameters(i,number)
             data = {'title':i.name,'value':value,'type':i.parameter_type}
             number_json.append(data)
-            # import ipdb; ipdb.set_trace()
             pass
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
             main_list = []
