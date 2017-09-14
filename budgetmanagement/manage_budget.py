@@ -401,7 +401,9 @@ def budgetlineitemedit(request):
                     if budgetperiodid:
                         budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
                         budget_lineitem_obj.__dict__.update(budget_dict)
-                        budget_lineitem_obj.variance = int(result['planned-cost']) - int(budget_lineitem_obj.utilized_unit_cost)
+                        budget_lineitem_obj.save()
+                        utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
+                        budget_lineitem_obj.variance = int(result['planned-cost']) - int(utilized_amount)
                         budget_lineitem_obj.save()
                     else:
                         budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
