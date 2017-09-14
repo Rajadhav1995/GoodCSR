@@ -27,7 +27,7 @@
                             <tr class="table-head-pad">
                               <td colspan="5">&nbsp;</td>	
                               {% for i,j in quarter_list.items %}
-                                    <td class="table-head" colspan="6">{{j}}</th>
+                                    <td class="table-head" colspan="3">{{j}}</th>
                             {% endfor %}
                             </tr>
                             <tr>
@@ -52,7 +52,7 @@
                         {% with forloop.counter as rnum %}
                         <tr class = "data_row">
                             {% get_budget_lineitem j projectobj as lineitemobj %}
-                            <td class="fixed-side"><span class="init">{{rnum|add:'-1'}}<span></td>
+                            <td class="fixed-side"><span class="init">{{rnum}}<span></td>
                             
                             <td class="fixed-side">
                                     <select name="location_{{j}}" id="location_{{j}}" class="location">
@@ -146,7 +146,6 @@
             sname = $(this).context.name.split('_');
             
             if (sname.length == 2){
-                alert(sname);
                 $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
             }
             else{
@@ -233,14 +232,15 @@
                       }
                     });
                     $('input[name=count]').val(count)
-                    $(tR).find('td span.init').text(count);
+                    var ct = parseInt($('input[name=count]').val()) + parseInt(1)
+                    $(tR).find('td span.init').text(ct);
                     $(tR).insertAfter('.data_row:last');
                     }
                 function remove(){
                     var count = $('input[name=count').val();
                       if (count > 1) {
                             $('tr.data_row:last').remove();
-                            count  = $('tr.data_row').length;
+                            count  = parseInt($('tr.data_row').length) - parseInt(1);
                             $('input[name=count]').val(count);
                       }
                       else{

@@ -164,8 +164,8 @@
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     <div class="link-right">
     	<a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Report Utilization</a>
-    	    <a href="javascript:void(0);" class="link-pad1"> Edit/Update Budget</a>
-<!--        <a href="/manage/project/budget/lineitem/edit/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>-->
+<!--    	    <a href="javascript:void(0);" class="link-pad1"> Edit/Update Budget</a>-->
+        <a href="/manage/project/budget/lineitem/edit/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>
     </div>   
     {% endif %}
     <div class="white-box">
@@ -575,9 +575,9 @@ var gaugeOptions = {
 };
 
 
-var disbursed = {{projectobj.project_budget_details.disbursed_percent}}-{{projectobj.project_budget_details.utilized_percent}}
-var utilized = {{projectobj.project_budget_details.utilized_percent}}
-var total = 100 - (utilized + disbursed)
+var disbursed = parseInt({{projectobj.project_budget_details.disbursed_percent}})-parseInt({{projectobj.project_budget_details.utilized_percent}})
+var utilized = parseInt({{projectobj.project_budget_details.utilized_percent}})
+var total = parseInt(100 - (utilized + disbursed))
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
 
