@@ -79,7 +79,9 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         project = Project.objects.get(slug =request.GET.get('key') )
     except:
         project = Project.objects.get(slug = request.POST.get('slug_project'))
+    import ipdb;ipdb.set_trace();
     if request.method == 'POST':
+        
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
@@ -200,7 +202,7 @@ def updates(obj_list):
             attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
             for a in attach_lists:
                 task_uploads={'project_name':project.name,'task_name':'','attach':a.description,
-                'user_name':a.created_by.email if a.created_by else '','time':a.created.time(),'date':a.created.date(),'task_status':''}
+                'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''}
                 uploads.append(task_uploads)
         activity = Activity.objects.filter(project=project)
         task_list = Task.objects.filter(activity__project = project)
@@ -209,11 +211,11 @@ def updates(obj_list):
             if attach_list:
                 for attach in attach_list:
                     task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                    'user_name':attach.created_by.email if attach.created_by else '','time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
+                    'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()}
                     uploads.append(task_uploads)
             if task.status == 2 and task.history.latest():
                 task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
-                    'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
+                    'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest()}
                 uploads.append(task_uploads)
     try:
         uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)

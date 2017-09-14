@@ -2,6 +2,7 @@
 {% load common_tags %}
 {% load urs_tags %}
 {% block section %}
+{% load i18n %}
 <style>
     .error { color :red;}
     .errorlist li{color :red;}
@@ -250,7 +251,7 @@
                               {% endif %}
                            </li>
                         </ul>
-                        <span>{{a.created.time|date:"g:i a"}}</span>
+                        <span>{{a.created}}</span>
                         {% endif %}
                      </div>
                   </li>
@@ -266,7 +267,7 @@
                         <ul>
                            <li>{% if c.text %}{{c.text}}{% endif %}</li>
                         </ul>
-                        <span>{{c.created.time |date:"g:i a"}}</span>
+                        <span>{{c.created}}</span>
                             
                      </div>
                      {% endfor %}

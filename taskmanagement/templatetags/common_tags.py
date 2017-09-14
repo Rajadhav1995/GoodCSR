@@ -3,16 +3,19 @@ register = template.Library()
 from datetime import datetime
 from media.models import Comment
 from django.contrib.contenttypes.models import ContentType
+import pytz
 
 @register.assignment_tag
 def get_details(obj):
     closed_tasks = update = ''
-    formats = '%H:%M %p'
+    formats = '%I:%M %p'
     if obj:
         user = obj.get('user_name') or ''
         task_name = obj.get('task_name') or ''
         project = obj.get('project_name') or ''
-        time= obj.get('time').strftime(formats) if obj.get('time') else ''
+        time_zone= obj.get('time').replace(tzinfo = pytz.utc) if obj.get('time') else ''
+        convert_time = time_zone.astimezone(pytz.timezone('Asia/Kolkata'))
+        time = convert_time.strftime(formats)
         date = obj.get('date').strftime('%d %B %Y') if obj.get('date') else ''
         description = obj.get('attach') or ''
         task_status = obj.get('task_status') or ''
