@@ -420,6 +420,7 @@ def manage_parameter_values(request):
     names = ProjectParameter.objects.filter(active= 2,parent=op)
     return render(request,'project/parameter_value_list.html',locals())
 
+
 def aggregate_project_parameters(param, values):
     '''
     Function to do calculations as per user selection (for key parameter values)
