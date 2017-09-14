@@ -509,7 +509,7 @@ def project_summary(request):
     # result_list = sorted(chain(timeline, milestone),key=attrgetter('date','overdue'))
     timeline_json = []
     for i in timeline:
-        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url}
+        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url if i.attachment_file else ''}
         timeline_json.append(data)
     for j in milestone:
         data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':''}
@@ -600,7 +600,6 @@ def project_summary(request):
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     number_json = json.dumps(number_json)
-
     return render(request,'project/project-summary.html',locals())
     
 def delete_upload_image(request):

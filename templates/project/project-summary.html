@@ -413,26 +413,26 @@ under 0 Milestones</h5>
         
         {% if i.document_type == 1 %}<!-- excel -->
         <div class="item">
-        <a href="{{image}}/{{i.attachment_file}}" download><img src="/static/img/excell-color.jpg"  height=70 width=63px>
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file}}" {% else %} href="#" onClick="alert('File Not Found!')" {% endif %}{% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-color.jpg"  height=70 width=63px>
         <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
 
         {% if i.document_type == 2 %}<!-- pdf -->
         <div class="item">
-        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/pdf.jpg" height=70 width=63px> 
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/pdf.jpg" height=70 width=63px> 
         <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
         {% if i.document_type == 3 %}
         <div class="item">
-        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/wordpress.jpg" height=70 width=63px>
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/wordpress.jpg" height=70 width=63px>
           <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
         {% if i.document_type == 4 %}<!-- doc -->
         <div class="item">
-        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/excell-black.jpg" height=70 width=63px >
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-black.jpg" height=70 width=63px >
           <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
@@ -450,10 +450,16 @@ under 0 Milestones</h5>
               <div id="img-carousel" class="owl-carousel">
                 {{attachment}}
               {% for  i in attachment %}
+
               {% if i.attachment_type == 1 %}
                 <div class="item"> 
-                    <a href="{% if i.attachment_file %}{{image}}/{{i.attachment_file.url}}{% else %}#{% endif %}" download><img src="{{image}}/{{i.attachment_file.url}}" alt="" height=97 width=156px>
+                  {% if i.attachment_file %}
+                    <a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}/{{i.attachment_file.url}}" alt="" height=97 width=156px>
                     <h2>{{i.description}}</h2></a>
+                  {% else %}
+                  <a href="#"><img src="" onClick="alert('Image Not Found!')" alt="" height=97 width=156px>
+                    <h2>{{i.description}}</h2></a>
+                  {% endif %}
                 </div>
               {% endif %}
                 {% endfor %}

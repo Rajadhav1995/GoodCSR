@@ -339,6 +339,7 @@ def budgetlineitemedit(request):
         budgetobj = Budget.objects.get_or_none(id = budget_id)
         quarter_list = get_budget_quarters(budgetobj)
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
+        budgget_lineitem_ids = BudgetPeriodUnit.objects.filter()
         for j in range((int(count)+1)):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(j))]
             for quarter,value in quarter_list.items():
