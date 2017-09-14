@@ -451,8 +451,10 @@ under 0 Milestones</h5>
               {% for  i in attachment %}
               {% if i.attachment_type == 1 %}
                 <div class="item"> 
-                    <a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" alt="" height=97 width=156px>
+                    {% if i.attachment %}
+                    <a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" alt="" height=97 width=156px> 
                     <h2>{{i.description}}</h2></a>
+                    {% endif %}
                 </div>
               {% endif %}
                 {% endfor %}
