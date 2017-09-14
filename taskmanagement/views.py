@@ -120,16 +120,18 @@ def task_dependencies(request):
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
-        tasks = Task.objects.filter(active=2,activity = int(ids))
-        obj = Activity.objects.get_or_none(active=2,id= int(ids),activity_type = 1)
+        
+        obj = Activity.objects.get_or_none(active=2,id= int(ids))
         project = Project.objects.get_or_none(id = obj.project.id)
+        tasks = Task.objects.filter(active=2,activity__project=project)
         start_date = project.start_date.strftime('%Y-%m-%d')
+        
     except:
         obj = None
-    if not tasks:
-        tasks = []
+    if obj.activity_type == 2 :
+        tasks = ''
     else:
-        tasks = [{'id':i.id,'name':i.name} for i in tasks if i.is_dependent() != True]
+        tasks = [{'id':i.id,'name':i.name} for i in tasks]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
 
 # to compute start date of the tasks dependent
