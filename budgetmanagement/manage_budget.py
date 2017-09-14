@@ -412,6 +412,7 @@ def budgetlineitemedit(request):
                                    'row_order':int(j),
                                    'quarter_order':int(quarter),
                                    'budget_period_id':budget_periodobj.id,
+                                   'variance':int(budget_lineitem_obj.planned_unit_cost)
                                    }
                         budget_lineitem_obj.__dict__.update(budget_extra_values)
                         budget_lineitem_obj.save()
