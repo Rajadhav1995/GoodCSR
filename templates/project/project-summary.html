@@ -191,7 +191,7 @@ $(document).ready(function() {
             <div class='numeric_parameter'></div>
         	
             
-            {% if master_obj_pin %}
+            {% if master_pin %}
             {% for lol in  master_pin %}
             <li>
             	<!-- <h3>{{chart_name_pip}}</h3> -->
@@ -206,10 +206,9 @@ $(document).ready(function() {
                  <img class="key-image" src="/static/img/budget-icon.png" alt="">
                 <h4 class="title-pad">2.3cr</h4>
             </li> -->
-            {% if master_obj_pip %}
+            {% if master_pip %}
             {% for rofl in master_pip %}
              <li>
-            	<!-- <h3>{{chart_name_pin}}</h3> -->
                 <div class="right-budget beni-dist beni-dist1">
                 <div id="{{rofl}}" style="width: 100%;float: left;"></div>
             </div>

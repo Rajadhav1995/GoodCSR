@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import requests,ast
 import datetime
+import json
 from time import strptime
 from django.contrib import messages
 from calendar import monthrange
@@ -8,7 +9,6 @@ from projectmanagement.models import *
 from projectmanagement.forms import *
 from budgetmanagement.forms import TrancheForm
 from budgetmanagement.models import Tranche
-from media.forms import AttachmentForm,ImageUpload
 from media.models import Attachment,Keywords,FileKeywords
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -18,7 +18,7 @@ from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
 from taskmanagement.models import Milestone
 from pmu.settings import PMU_URL
-from projectmanagement.utils import random_string_generator
+from common_method import unique_slug_generator,add_keywords
 # Create your views here.
 
 def create_project(request):
@@ -29,12 +29,10 @@ def create_project(request):
         obj = Project.objects.get(slug=slug)
         form = ProjectForm(instance = obj)
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
-        # activity_view = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project"))
     except:
         form = ProjectForm()
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
-
     if request.method == 'POST':
         try:
             instance = get_object_or_404(Project, slug=slug)
@@ -55,20 +53,6 @@ def create_project(request):
                 obj.slug = unique_slug_generator(obj)
             obj.save()
             form.save_m2m()
-            # activity_del = PrimaryWork.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model="project")).delete()
-            # try:
-            #     activity_count = int(request.POST.get('activity_count'))
-            #     i=1
-            #     for i in range(activity_count):
-            #         act = 'activity['+str(i+1)+']'
-            #         dur = 'duration['+str(i+1)+']'
-            #         activity = request.POST.get(act)
-            #         duration = request.POST.get(dur)
-            #         create_activity = PrimaryWork.objects.create(name=activity,types=0,number=i+1,\
-            #                             activity_duration=duration,content_type=ContentType.objects.get(model="project"),\
-            #                             object_id=obj.id)
-            # except:
-            #     pass
             implementation_partner = request.POST.get('implementation_partner')
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
@@ -85,31 +69,11 @@ def create_project(request):
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_edit.html',locals())
 
-def unique_slug_generator(instance, new_slug=None):
-    """
-    This function is for creating unique slug. Just pass object
-    """
-    if new_slug is not None:
-        slug = new_slug
-    else:
-        slug = slugify(instance.name)
-
-    class_obj = instance.__class__
-    qs_exists = class_obj.objects.filter(slug=slug).exists()
-    if qs_exists:
-        new_slug = "{slug}-{randstr}".format(
-                    slug=slug,
-                    randstr=random_string_generator(size=4)
-                )
-        return unique_slug_generator(instance, new_slug=new_slug)
-    return slug
-
-
 def project_list(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     if user_obj.is_admin_user == True:
-        obj_list = Project.objects.filter()
+        obj_list = Project.objects.filter(active=2)
     elif user_obj.owner == True and user_obj.organization_type == 1:
         project_ids = ProjectFunderRelation.objects.filter(funder = user_obj).values_list("project_id",flat=True)
         user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
@@ -125,16 +89,6 @@ def project_list(request):
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
     return render(request,'project/listing.html',locals())
 
-def project_detail(request):
-    '''
-    This function not in use
-    '''
-    slug =  request.GET.get('slug')
-    obj = Project.objects.get_or_none(slug=slug)
-    activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
-    return render(request,'project/comany-profile.html',locals())
-
-
 def project_mapping(request):
     '''
     This function not in use
@@ -145,93 +99,6 @@ def project_mapping(request):
             form.save()
             return HttpResponseRedirect('/dashboard/')
     return render(request,'project/project_mapping.html',locals())
-
-def upload_attachment(request):
-    '''
-    This function is to upload Image/Document 
-    '''
-    slug =  request.GET.get('slug')
-    model =  request.GET.get('model')
-    key = int(request.GET.get('key'))
-    project_obj = Project.objects.get(slug=slug)
-    if key==1:
-        #key 1 for Document upload
-        form = AttachmentForm()
-    else:
-        form = ImageUpload()
-    if request.method == 'POST':
-        if key==1:
-            form = AttachmentForm(request.POST, request.FILES)
-        else:
-            form = ImageUpload(request.POST, request.FILES)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.content_type=ContentType.objects.get(model=model)
-            obj.object_id=project_obj.id
-            if key==1:
-                obj.attachment_type=2
-            else:
-                obj.attachment_type=1
-            obj.save()
-        try:
-            keys = request.POST.get('keywords').split(',')
-            key_model = 'Attachment'
-            keywords = add_keywords(keys,obj,key_model,0)
-        except:
-            pass
-        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
-
-    return render(request,'attachment/doc_upload.html',locals())
-
-def edit_attachment(request):
-    '''
-    This function is to edit Image/Document
-    '''
-    ids = request.GET.get('id')
-    obj_id =  request.GET.get('obj_id')
-    slug = Project.objects.get(id=obj_id).slug
-    model =  request.GET.get('model')
-    obj = Attachment.objects.get(id=ids)
-    if obj.attachment_type==2:
-        #key 1 for Document upload
-        form = AttachmentForm(instance = obj)
-        key=1
-    else:
-        form = ImageUpload(instance = obj)
-        key=2
-    if request.method == 'POST':
-        instance = get_object_or_404(Attachment, id=ids)
-        if key==1:
-            form = AttachmentForm(request.POST, request.FILES or None, instance=instance)
-        else:
-            form = ImageUpload(request.POST, request.FILES or None, instance=instance)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
-        try:
-            keys = request.POST.get('keywords').split(',')
-            attach_model = 'Attachment'
-            keywords = add_keywords(keys,obj,attach_model,1)
-        except:
-            pass
-            return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
-    return render(request,'attachment/doc_upload.html',locals())
-
-def add_keywords(keys,obj,model,edit):
-    '''
-    This function is to add/edit keywords for attachment file (pass 1 for 'edit' for edit keywords)
-    '''
-    if edit==1:
-        delete = FileKeywords.objects.filter(content_type=ContentType.objects.get(model=model),object_id=obj.id)
-    key_list = Keywords.objects.filter(active=2)
-    for i in keys:
-        key_obj = Keywords.objects.get_or_none(name__iexact=i.strip())
-        if key_obj:
-            if not key_obj.id in key_list.values_list('name',flat=True):
-                key_obj = FileKeywords.objects.create(key=key_obj,content_type=ContentType.objects.get(model=model),object_id=obj.id)
-        else:
-            key_object = Keywords.objects.create(name=i.strip())
-            key_obj = FileKeywords.objects.create(key=key_object,content_type=ContentType.objects.get(model=model),object_id=obj.id )
 
 def budget_tranche(request):
     '''
@@ -301,7 +168,6 @@ def add_parameter(request):
                 obj = ProjectParameter.objects.create(parameter_type=parameter_type,project=project,instructions=request.POST.get(instruction),\
                         name=request.POST.get(name),parent=parent_obj,aggregation_function=request.POST.get('agg_type'))
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %slug)
-        # return HttpResponseRedirect("/masterdata/component-question/?id=%s" % key)
     return render(request,'project/add_key_parameter.html',locals())
 
 def edit_parameter(request):
@@ -399,8 +265,6 @@ def manage_parameter_values1(request):
         ff = ProjectParameterValue.objects.filter(active= 2,keyparameter=parameter)
     else:
         child_parameter = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=parameter).order_by('-submit_date')
-        # child_parameter = ProjectParameterValue.objects.filter(keyparameter__parent=para)
-
     name_range = range(1,parameter_count)
     values_list = child_parameter.values_list('parameter_value',flat=True)
     values = aggregate_project_parameters(parameter,child_parameter)
@@ -419,7 +283,6 @@ def manage_parameter_values(request):
     rr = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=op).order_by('id')
     names = ProjectParameter.objects.filter(active= 2,parent=op)
     return render(request,'project/parameter_value_list.html',locals())
-
 
 def aggregate_project_parameters(param, values):
     '''
@@ -447,20 +310,17 @@ def aggregate_project_parameters(param, values):
     elif param.aggregation_function == "WAP":
         paggr=0
         for val in values:
-            
             parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
             parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
             aggr+=int(val)*parent_parameter
             paggr+=parent_parameter
         aggr=aggr/paggr
-    
     ret['name']=param.name
     ret['parameter_type']= param.parameter_type
     ret['instructions'] = param.instructions
     ret['aggregate_value'] = aggr
     ret['parent_name'] = None if param.parent is None else param.parent.name
     return aggr
-
 
 def project_total_budget(slug):
 # to display the total budget ,disbursed,utilized percent in project summary page
@@ -488,8 +348,6 @@ def timeline_listing(obj):
         object_id = obj.id,active=2,attachment_type= 1).order_by('date')
     return attach
     
-from itertools import chain
-from operator import attrgetter
 def project_summary(request):
 # to display the project details in project summary page
 #Displaying pie chart detail
@@ -505,8 +363,6 @@ def project_summary(request):
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
     milestone = Milestone.objects.filter(project__slug=slug)
-    # result_list = sorted(chain(timeline, milestone),key=lambda instance: instance.created)
-    # result_list = sorted(chain(timeline, milestone),key=attrgetter('date','overdue'))
     timeline_json = []
     for i in timeline:
         data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url if i.attachment_file else ''}
@@ -515,45 +371,13 @@ def project_summary(request):
         data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':''}
         timeline_json.append(data)
     timeline_json.sort(key=lambda item:item['date'], reverse=False)
-    import json
     timeline_json_length = len(timeline_json)
     timeline_json = json.dumps(timeline_json)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
-# key paramter function
-    master_obj = []
-    master_obj_pin=[]
-    master_obj_pip=[]
-    parameter = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
-    parameter_count = parameter.count()
-    for i in parameter:
-        if i.parameter_type == 'NUM' or i.parameter_type == 'PER' or i.parameter_type == 'CUR':
-            
-            parameter1 = ProjectParameter.objects.filter(active= 2,project=obj,parent=None).values_list('id',flat=True)
-            for j in parameter1:
-                parent_paremeter = ProjectParameterValue.objects.filter(keyparameter=j,active= 2)
-
-        elif i.parameter_type == 'PIN':
-            child_parameter_pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=i.id,keyparameter__parameter_type='PIN')
-            if child_parameter_pin.exists():
-                master_obj_pin = child_parameter_pin
-                chart_name_pin = child_parameter_pin[0].keyparameter.parent.name
-        elif i.parameter_type == 'PIP':
-            child_parameter_pip = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=i.id,keyparameter__parameter_type='PIP')
-            if child_parameter_pip.exists():
-                master_obj_pip = child_parameter_pip
-                chart_name_pip = child_parameter_pip[0].keyparameter.parent.name
-            pass
-    import json
-    list1=[]
-    aa = ProjectParameterValue.objects.filter(active= 2,keyparameter__project=obj,keyparameter__parent=None)
-    for i in aa:
-        if i.keyparameter.parameter_type=='PIN' or i.keyparameter.parameter_type=='PIP':
-            pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parameter_type='PIN',keyparameter__project=obj)
-        # for p in pin:
-    pin = ProjectParameterValue.objects.filter(active= 2,keyparameter__parameter_type='PIN',keyparameter__project=obj)
-    tst = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
+    parameter_count = ProjectParameter.objects.filter(active= 2,project=obj,parent=None).count()
+    parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     counter =0
     name_list = []
@@ -562,14 +386,13 @@ def project_summary(request):
     pip_title_name = []
     number_json = []
     main_list = []
-    for i in tst:
+    for i in parameter_obj:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
             number = map(int,number)
             value = aggregate_project_parameters(i,number)
             data = {'title':i.name,'value':value,'type':i.parameter_type}
             number_json.append(data)
-            pass
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
             main_list = []
             pie_object = ProjectParameter.objects.filter(active= 2,parent=i)

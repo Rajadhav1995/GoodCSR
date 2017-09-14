@@ -45,9 +45,7 @@
                 
                 <th>Status</th>
                 <th>Action</th>
-                <th>Manage Activites</th>
-                <th> </th>
-                <th></th>
+                <th>Manage</th>
             </tr>
         </thead>
         
@@ -59,14 +57,7 @@
             
             <td>{{i.get_active_display}}</td>
             <td><a class="budget_button" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
-            <td><a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a></td>
-            <td><a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a>
-
-            <!-- <td><a class="btn btn-primary" href="/project/parameter/manage/?slug={{i.slug}}"> Manage Parameters</a></td> -->
-
-<!--            <td><a class="btn btn-primary" href="/project/parameter/manage/?slug={{i.slug}}"> Manage Parameters</a></td>-->
-
-<!--            <td><a class="btn btn-primary" href="/manage/project/budget/list/?slug={{i.slug}}"> Manage Budget</a></td>-->
+            <td><a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>  <a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a>  <a href="/project/remove/record/?id={{i.id}}&model=Project" type="button" class="btn btn-danger" onclick="return confirm('Are you sure you want to Delete')"><b>x</b></a>
            
             </td>
         </tr>
