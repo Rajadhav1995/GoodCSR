@@ -282,6 +282,23 @@ def manage_parameter_values(request):
     op = ProjectParameter.objects.get(id=ids)
     rr = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=op).order_by('id')
     names = ProjectParameter.objects.filter(active= 2,parent=op)
+    title_list = []
+    title_list.append('Month')
+    newlist = sorted(rr, key=lambda x: x.submit_date, reverse=True)
+    tot_len = rr.count()
+    name_len = names.count()
+    month_len=tot_len/name_len
+    start = 1
+    for j in rr:
+        data=[]
+        if start > month_len:
+            data.append()
+            start=start+1
+    [title_list.append(str(i.name)) for i in names]
+
+    
+    lista = [['JAn','34','44','67'],['JAn','74','44','87']]
+
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
@@ -362,7 +379,10 @@ def project_summary(request):
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
-    milestone = Milestone.objects.filter(project__slug=slug)
+    today = datetime.datetime.today()
+    from datetime import timedelta
+
+    milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json = []
     for i in timeline:
         data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url if i.attachment_file else ''}
