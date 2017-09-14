@@ -41,9 +41,9 @@
                                 <th> No. of unit </th>
                                 <th> Rate </th>
                                 <th> Total Planned </th>
-                                <th> Total Utilized </th>
-                                <th> Variance </th>
-                                <th> Comment </th>
+<!--                                <th> Total Utilized </th>-->
+<!--                                <th> Variance </th>-->
+<!--                                <th> Comment </th>-->
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -81,10 +81,10 @@
                                 <td><input type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
                                  <td> <input type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
                                  
-                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{line_itemobj.id}}_{{j}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>
-                                 <td> <input type="number" name ="variance_{{i}}_{{line_itemobj.id}}_{{j}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>
-                                 {% get_comment line_itemobj as comment %}
-                                  <td> <input type="text" name = "comment_{{i}}_{{line_itemobj.id}}_{{j}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
+<!--                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{line_itemobj.id}}_{{j}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>-->
+<!--                                 <td> <input type="number" name ="variance_{{i}}_{{line_itemobj.id}}_{{j}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>-->
+<!--                                 {% get_comment line_itemobj as comment %}-->
+<!--                                  <td> <input type="text" name = "comment_{{i}}_{{line_itemobj.id}}_{{j}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>-->
                                  <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
                                  {% endfor %}
                         </tr>
@@ -144,7 +144,9 @@
         function mandatory_input()
         {
             sname = $(this).context.name.split('_');
+            
             if (sname.length == 2){
+                alert(sname);
                 $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
             }
             else{
@@ -328,42 +330,43 @@
 		});
 </script>
 
-<script>
-    $(document).ready(function()
-    {
-        function updateVariance()
-        {
-            nam = $(this).context.name.split('_')
-            i = nam[1]
-            j = nam[3]
-            
-            var planned_cost = parseFloat($("#planned-cost_"+i+"_"+j).val());
-            var utilized_cost = $(this).val();
-            var total = +planned_cost - +utilized_cost;
-            //var total = total.toFixed(2);
-            
-            if (total.toString() == 'NaN'){
-                $("#variance_"+i+"_"+j).val('');
-            }
-            else{
-                $("#variance_"+i+"_"+j).val(parseInt(total));
-                /*if (+planned_cost > +utilized_cost) {
-                    $("#variance_"+i+"_"+j).val('0');
-                }
-                else{
-                $("#variance_"+i+"_"+j).val(parseInt(total));
-                }
-                */
-            }
-            
-            
-        }
-        $(document).on("change, keyup", ".utilized-cost", updateVariance);
-        $(document).on("change,blur, keyup", ".rate", updateVariance);
-        $(document).on("change,blur, keyup", ".unit", updateVariance);
-    });
-    
-</script>
+<!--<script>-->
+
+<!--    $(document).ready(function()-->
+<!--    {-->
+<!--        function updateVariance()-->
+<!--        {-->
+<!--            nam = $(this).context.name.split('_')-->
+<!--            i = nam[1]-->
+<!--            j = nam[3]-->
+<!--            -->
+<!--            var planned_cost = parseFloat($("#planned-cost_"+i+"_"+j).val());-->
+<!--            var utilized_cost = $(this).val();-->
+<!--            var total = +planned_cost - +utilized_cost;-->
+<!--            //var total = total.toFixed(2);-->
+<!--            -->
+<!--            if (total.toString() == 'NaN'){-->
+<!--                $("#variance_"+i+"_"+j).val('');-->
+<!--            }-->
+<!--            else{-->
+<!--                $("#variance_"+i+"_"+j).val(parseInt(total));-->
+<!--                /*if (+planned_cost > +utilized_cost) {-->
+<!--                    $("#variance_"+i+"_"+j).val('0');-->
+<!--                }-->
+<!--                else{-->
+<!--                $("#variance_"+i+"_"+j).val(parseInt(total));-->
+<!--                }-->
+<!--                */-->
+<!--            }-->
+<!--            -->
+<!--            -->
+<!--        }-->
+<!--        $(document).on("change, keyup", ".utilized-cost", updateVariance);-->
+<!--        $(document).on("change,blur, keyup", ".rate", updateVariance);-->
+<!--        $(document).on("change,blur, keyup", ".unit", updateVariance);-->
+<!--    });-->
+<!--    -->
+<!--</script>-->
 
 
 {% endblock %}
