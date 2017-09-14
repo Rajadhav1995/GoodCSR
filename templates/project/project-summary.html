@@ -41,15 +41,16 @@
 
 {% block content %}
 <script type="text/javascript">
-var ff= {{timeline_json | safe}}
-var lengths = ff.length;
-var loc_url = '{{image}}'
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 $(document).ready(function() {
     //var loop_count = $('#loop_count').val()
     var wrapper         = $(".timeline-slide"); //Fields wrapper
+    var lengths = {{timeline_json_length}};
+    var ff= {{timeline_json | safe}}
+    var loc_url = '{{image}}'
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++) 
     {
+      alert("fdfd"); 
       var obj = ff[i]
       var name = obj.name;
       console.log(obj);
@@ -64,14 +65,11 @@ $(document).ready(function() {
         var nn = f.getMonth();
         var date1 = f.getDate()
         //alert(date1);
-      
-
-      
-
       if (i % 2) {
         if (obj.url) {
         $(wrapper).append('<div class="time-line-bdr"></div><li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
+          alert("dsadasad");
           $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       } else {
@@ -86,9 +84,6 @@ $(document).ready(function() {
 })
 
 </script>
-
-
-
 <script type="text/javascript">
 var ff= {{number_json | safe}}
 var lengths = ff.length;
