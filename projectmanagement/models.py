@@ -218,9 +218,9 @@ class Project(BaseContent):
         except:
             disbursed_percent = 0
             utilized_percent = 0
-        project_budget = {'planned_cost':planned_cost,
-                          'utilized_cost':utilized_cost,
-                          'disbursed_cost':disbursed_cost,
+        project_budget = {'planned_cost':int(planned_cost) if planned_cost else 0,
+                          'utilized_cost':int(utilized_cost) if utilized_cost else 0,
+                          'disbursed_cost':int(disbursed_cost) if disbursed_cost else 0,
                           'disbursed_percent':disbursed_percent,
                           'utilized_percent':utilized_percent,
                           }

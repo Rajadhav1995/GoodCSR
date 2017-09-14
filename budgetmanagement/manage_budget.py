@@ -368,7 +368,6 @@ def budgetlineitemedit(request):
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
         final_result = inactivatingthelineitems(projectobj,lineobj_list)
         for j in range((int(count)+1)):
-            print count
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(j))]
             for quarter,value in quarter_list.items():
                 start_date = value.split('to')[0].rstrip()
@@ -401,7 +400,9 @@ def budgetlineitemedit(request):
                     if budgetperiodid:
                         budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
                         budget_lineitem_obj.__dict__.update(budget_dict)
-                        budget_lineitem_obj.variance = int(result['planned-cost']) - int(budget_lineitem_obj.utilized_unit_cost)
+                        budget_lineitem_obj.save()
+                        utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
+                        budget_lineitem_obj.variance = int(result['planned-cost']) - int(utilized_amount)
                         budget_lineitem_obj.save()
                     else:
                         budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
@@ -411,6 +412,7 @@ def budgetlineitemedit(request):
                                    'row_order':int(j),
                                    'quarter_order':int(quarter),
                                    'budget_period_id':budget_periodobj.id,
+                                   'variance':int(budget_lineitem_obj.planned_unit_cost)
                                    }
                         budget_lineitem_obj.__dict__.update(budget_extra_values)
                         budget_lineitem_obj.save()
