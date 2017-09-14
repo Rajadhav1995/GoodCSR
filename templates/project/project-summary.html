@@ -54,9 +54,9 @@ $(document).ready(function() {
       var name = obj.name;
       console.log(obj);
       if (obj.url) {
-        var url = loc_url + obj.url;
+        var url = loc_url +'/'+ obj.url;
         }else{
-          var url = loc_url + "/static/img/milestone-icon.png";
+          var url = loc_url + '/' +"/static/img/milestone-icon.png";
         };
         var date = obj.date
         var f = new Date(date);
@@ -95,9 +95,9 @@ $(document).ready(function() {
       console.log(obj);
       var value = obj.value
       if (obj.type == 'CUR') {
-        var url = loc_url + "static/img/budget-icon.png";
+        var url = loc_url + '/' + "static/img/budget-icon.png";
         }else{
-          var url = loc_url + "static/img/key-icon2.png";
+          var url = loc_url + '/' + "static/img/key-icon2.png";
         };
         $(wrapper).append('<div><li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li></div>');
 }
@@ -413,26 +413,26 @@ under 0 Milestones</h5>
         
         {% if i.document_type == 1 %}<!-- excel -->
         <div class="item">
-        <a href="{{image}}{{i.attachment_file}}" download><img src="/static/img/excell-color.jpg"  height=70 width=63px>
+        <a href="{{image}}/{{i.attachment_file}}" download><img src="/static/img/excell-color.jpg"  height=70 width=63px>
         <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
 
         {% if i.document_type == 2 %}<!-- pdf -->
         <div class="item">
-        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/pdf.jpg" height=70 width=63px> 
+        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/pdf.jpg" height=70 width=63px> 
         <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
         {% if i.document_type == 3 %}
         <div class="item">
-        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/wordpress.jpg" height=70 width=63px>
+        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/wordpress.jpg" height=70 width=63px>
           <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
         {% if i.document_type == 4 %}<!-- doc -->
         <div class="item">
-        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/excell-black.jpg" height=70 width=63px >
+        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/excell-black.jpg" height=70 width=63px >
           <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
@@ -447,11 +447,12 @@ under 0 Milestones</h5>
             <!-- carousel starts -->
 
 
-              <div id="img-carousel" class="owl-carousel">      
+              <div id="img-carousel" class="owl-carousel">
+                {{attachment}}
               {% for  i in attachment %}
               {% if i.attachment_type == 1 %}
                 <div class="item"> 
-                    <a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" alt="" height=97 width=156px>
+                    <a href="{% if i.attachment_file %}{{image}}/{{i.attachment_file.url}}{% else %}#{% endif %}" download><img src="{{image}}/{{i.attachment_file.url}}" alt="" height=97 width=156px>
                     <h2>{{i.description}}</h2></a>
                 </div>
               {% endif %}
