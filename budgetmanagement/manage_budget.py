@@ -355,37 +355,38 @@ def budgetlineitemedit(request):
                     else:
                         name = line.split('_')[0]
                         result.update({name:request.POST.get(line)})
-                budget_dict = {
-                           'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
-                           'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
-                           'subheading':result['subheading'],
-                           'unit':result['unit'],
-                           'unit_type':result['unit-type'],
-                           'rate':result['rate'],
-                           'planned_unit_cost':result['planned-cost'],
-                           'utilized_unit_cost':result['utilized-unit-cost'],
-                           'start_date':start_date,
-                           'end_date':end_date,
-                           'variance':result['variance']
-                           }
-                if budgetperiodid:
-                    budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
-                    budget_lineitem_obj.__dict__.update(budget_dict)
-                    budget_lineitem_obj.save()
-                else:
-                    budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
-                    budget_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
-                    budget_extra_values = {
-                               'created_by_id':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))).id,
+                if result["subheading"]:
+                    budget_dict = {
+                               'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
+                               'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
+                               'subheading':result['subheading'],
+                               'unit':result['unit'],
+                               'unit_type':result['unit-type'],
+                               'rate':result['rate'],
+                               'planned_unit_cost':result['planned-cost'],
+                               'start_date':start_date,
+                               'end_date':end_date,
                                'row_order':int(j),
                                'quarter_order':int(quarter),
-                               'budget_period_id':budget_periodobj.id,
                                }
-                    budget_lineitem_obj.__dict__.update(budget_extra_values)
-                    budget_lineitem_obj.save()
-                commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_lineitem_obj),object_id=budget_lineitem_obj.id)
-                commentobj.text = result['comment']
-                commentobj.save()
+                    if budgetperiodid:
+                        budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
+                        budget_lineitem_obj.__dict__.update(budget_dict)
+                        budget_lineitem_obj.save()
+                    else:
+                        budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
+                        budget_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
+                        budget_extra_values = {
+                                   'created_by_id':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))).id,
+                                   'row_order':int(j),
+                                   'quarter_order':int(quarter),
+                                   'budget_period_id':budget_periodobj.id,
+                                   }
+                        budget_lineitem_obj.__dict__.update(budget_extra_values)
+                        budget_lineitem_obj.save()
+    #                commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_lineitem_obj),object_id=budget_lineitem_obj.id)
+    #                commentobj.text = result['comment']
+    #                commentobj.save()
 
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/edit_budgetlineitem.html",locals())
