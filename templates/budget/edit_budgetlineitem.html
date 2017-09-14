@@ -52,7 +52,7 @@
                         {% with forloop.counter as rnum %}
                         <tr class = "data_row">
                             {% get_budget_lineitem j projectobj as lineitemobj %}
-                            <td class="fixed-side"><span class="init">{{rnum|add:'-1'}}<span></td>
+                            <td class="fixed-side"><span class="init">{{rnum}}<span></td>
                             
                             <td class="fixed-side">
                                     <select name="location_{{j}}" id="location_{{j}}" class="location">
@@ -233,15 +233,16 @@
                       }
                     });
                     $('input[name=count]').val(count)
-                    $(tR).find('td span.init').text(count);
+                    var ct = parseInt($('input[name=count]').val()) + parseInt(1)
+                    $(tR).find('td span.init').text(ct);
                     $(tR).insertAfter('.data_row:last');
                     }
                 function remove(){
                     var count = $('input[name=count').val();
                       if (count > 1) {
                             $('tr.data_row:last').remove();
-                            count  = $('tr.data_row').length;
-                            $('input[name=count]').val(count--);
+                            count  = parseInt($('tr.data_row').length) - parseInt(1);
+                            $('input[name=count]').val(count);
                       }
                       else{
                         alert("Please add atleast one record")

@@ -368,7 +368,6 @@ def budgetlineitemedit(request):
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
         final_result = inactivatingthelineitems(projectobj,lineobj_list)
         for j in range((int(count)+1)):
-            print count
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(j))]
             for quarter,value in quarter_list.items():
                 start_date = value.split('to')[0].rstrip()
