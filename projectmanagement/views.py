@@ -253,8 +253,9 @@ def budget_tranche(request):
 
 def tranche_list(request):
     slug =  request.GET.get('slug')
+    obj = Project.objects.get(slug=slug)
     user_id = request.session.get('user_id')
-    tranche_list = Tranche.objects.filter(project__slug=slug,active=2)
+    tranche_list = Tranche.objects.filter(project=obj,active=2)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -288,6 +289,8 @@ def add_parameter(request):
         instruction = request.POST.get('instruction')
         name_count = int(request.POST.get('name_count'))
         agg_type = request.POST.get('agg_type')
+        if parameter_type == 'NUM' or parameter_type == 'PER' or parameter_type == 'CUR':
+            agg_type = 'ADD'
         parent_obj = ProjectParameter.objects.create(parameter_type=parameter_type,\
                                 project=project,aggregation_function=agg_type,name = name,\
                                 instructions=instruction)
@@ -417,6 +420,7 @@ def manage_parameter_values(request):
     names = ProjectParameter.objects.filter(active= 2,parent=op)
     return render(request,'project/parameter_value_list.html',locals())
 
+
 def aggregate_project_parameters(param, values):
     '''
     Function to do calculations as per user selection (for key parameter values)
@@ -505,13 +509,14 @@ def project_summary(request):
     # result_list = sorted(chain(timeline, milestone),key=attrgetter('date','overdue'))
     timeline_json = []
     for i in timeline:
-        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url,'id':i.id}
+        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
         timeline_json.append(data)
     for j in milestone:
         data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','id':''}
         timeline_json.append(data)
     timeline_json.sort(key=lambda item:item['date'], reverse=False)
     import json
+    timeline_json_length = len(timeline_json)
     timeline_json = json.dumps(timeline_json)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
@@ -555,9 +560,15 @@ def project_summary(request):
     para_name = {}
     pin_title_name = []
     pip_title_name = []
+    number_json = []
     main_list = []
     for i in tst:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
+            number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
+            number = map(int,number)
+            value = aggregate_project_parameters(i,number)
+            data = {'title':i.name,'value':value,'type':i.parameter_type}
+            number_json.append(data)
             pass
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
             main_list = []
@@ -588,6 +599,8 @@ def project_summary(request):
     data = {'project_id':int(obj.id)}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
+    number_json = json.dumps(number_json)
+
     return render(request,'project/project-summary.html',locals())
     
 def delete_upload_image(request):

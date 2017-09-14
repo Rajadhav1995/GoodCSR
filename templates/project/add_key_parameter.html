@@ -147,7 +147,7 @@ width:450px;
                     <div class="col-md-12">
                         <div class="form-group">
                         <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
-                        <a class="btn btn-success"style="margin-right:5px;float: right;" href="/project/list/">Back</button></a>
+                        <a class="btn btn-success"style="margin-right:5px;float: right;" href="/project/parameter/manage/?slug={{slug}}">Back</button></a>
                         </div>
                     </div>
                     </form>
@@ -255,7 +255,6 @@ $('#pie').hide();
 $("#para_type").change(function () {
   if($(this).val() == "NUM" || $(this).val() == "PER" || $(this).val() == "CUR")
     $('#agg_div').hide();
-    //$('#name').hide();
 });
 </script>
 

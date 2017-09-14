@@ -41,13 +41,13 @@
 
 {% block content %}
 <script type="text/javascript">
-var ff= {{timeline_json | safe}}
-var lengths = ff.length;
-var loc_url = '{{image}}'
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 $(document).ready(function() {
     //var loop_count = $('#loop_count').val()
     var wrapper         = $(".timeline-slide"); //Fields wrapper
+    var lengths = {{timeline_json_length}};
+    var ff= {{timeline_json | safe}}
+    var loc_url = '{{image}}'
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++) 
     {
       var obj = ff[i]
@@ -64,10 +64,13 @@ $(document).ready(function() {
         var nn = f.getMonth();
         var ids = obj.id
         var date1 = f.getDate()
+<<<<<<< HEAD
         //alert(date1);
       
 
 
+=======
+>>>>>>> 776e78422f854d97da51b4daec2fa75a2513b998
       if (i % 2) {
         if (obj.url) {
         $(wrapper).append('<div class="time-line-bdr"></div><li class="event-up">&nbsp;<div class="event-img"><a href="/project/delete/upload/image/?id='+ids+' onclick="return confirm(Are you sure you want to delete this item?);"><i class = "fa fa-remove remove_icon"></i></a><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
@@ -86,6 +89,32 @@ $(document).ready(function() {
 })
 
 </script>
+<script type="text/javascript">
+var ff= {{number_json | safe}}
+var lengths = ff.length;
+var loc_url = '{{image}}'
+$(document).ready(function() {
+    //var loop_count = $('#loop_count').val()
+    var wrapper         = $(".numeric_parameter"); //Fields wrapper
+    for (var i = 0; i < lengths ; i++) 
+    {
+      var obj = ff[i]
+      var title = obj.title;
+      console.log(obj);
+      var value = obj.value
+      if (obj.type == 'CUR') {
+        var url = loc_url + "static/img/budget-icon.png";
+        }else{
+          var url = loc_url + "static/img/key-icon2.png";
+        };
+        $(wrapper).append('<div><li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li></div>');
+}
+})
+
+</script>
+
+
+
 <section class="content-part">
 	<div class="row">
     
@@ -167,18 +196,9 @@ $(document).ready(function() {
         {% endif %}
         </div>
         <ul>
-            {% for i in parent_paremeter %}
-        	<li>
-            	<h3>{{i.keyparameter.name}}</h3>
-
-                {% if i.keyparameter.parameter_type == 'CUR' %}
-                 <img class="key-image" src="/static/img/budget-icon.png" alt="">
-                 {% else %}
-                 <img class="key-image" src="/static/img/key-icon2.png" alt="">
-                 {% endif %}
-                <h4 class="title-pad">{{i.parameter_value}}</h4>
-            </li>
-            {% endfor %}
+            <div class='numeric_parameter'></div>
+        	
+            
             {% if master_obj_pin %}
             {% for lol in  master_pin %}
             <li>
@@ -439,8 +459,10 @@ under 0 Milestones</h5>
               {% for  i in attachment %}
               {% if i.attachment_type == 1 %}
                 <div class="item"> 
-                    <a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" alt="" height=97 width=156px>
+                    {% if i.attachment %}
+                    <a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" alt="" height=97 width=156px> 
                     <h2>{{i.description}}</h2></a>
+                    {% endif %}
                 </div>
               {% endif %}
                 {% endfor %}
