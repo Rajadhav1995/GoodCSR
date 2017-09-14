@@ -418,7 +418,6 @@ def manage_parameter_values(request):
     op = ProjectParameter.objects.get(id=ids)
     rr = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=op).order_by('id')
     names = ProjectParameter.objects.filter(active= 2,parent=op)
-    import ipdb; ipdb.set_trace()
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
