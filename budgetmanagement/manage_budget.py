@@ -14,6 +14,12 @@ from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
 
+def diff(list1, list2):
+    c = set(list1).union(set(list2))
+    d = set(list1).intersection(set(list2))
+    return list(c - d)
+
+
 def projectbudgetlist(request):
     project_slug = request.GET.get("slug")
     budgetlist = Budget.objects.filter(project__slug=project_slug)
@@ -159,8 +165,8 @@ def projectbudgetdetail(request):
     budget_id = request.GET.get('budget_id')
     budgetobj = Budget.objects.get_or_none(id = budget_id)
     quarter_list = get_budget_quarters(budgetobj)
-    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
-    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
     span_length = len(budget_periodconflist)
     return render(request,"budget/budget_detail.html",locals())
 
@@ -209,8 +215,8 @@ def budgetutilization(request):
     years_list = list(set(years_list))
 #    quarter_selection_list = get_year_quarterlist(quarter_year,budgetobj.id)
     if quarter_key:
-        budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
-        budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+        budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+        budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
         span_length = len(budget_period)
         quarter_selection_list = get_year_quarterlist(quarter_year,budgetobj.id)
         quarter_list = {}
@@ -253,7 +259,7 @@ def budget_amount_list(budgetobj,projectobj,quarter_list):
     quarter_planned_amount = {}
     quarter_utilized_amount = {}
     for i in quarter_list.keys():
-        budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('id', flat=True)
+        budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('id', flat=True)
         budget_period_plannedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('planned_unit_cost', flat=True)
         budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('utilized_unit_cost', flat=True)
         budget_period_plannedamount = map(lambda x:x if x else 0,budget_period_plannedamount)
@@ -286,7 +292,7 @@ def budget_supercategory_value(projectobj,budgetobj):
     project_category_list = SuperCategory.objects.filter(project = projectobj,active=2).exclude(parent=None)
     final_project_category_list = []
     for i in project_category_list:
-        total_amount_list = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj,budget_period__project=projectobj,category=i).values_list('planned_unit_cost',flat=True)
+        total_amount_list = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj,budget_period__project=projectobj,category=i,active=2).values_list('planned_unit_cost',flat=True)
         total_amount_list = map(lambda x:x if x else 0,total_amount_list)
         total_amount_number = map(int,total_amount_list)
         total_amount = sum(total_amount_number)
@@ -302,8 +308,8 @@ def budgetview(request):
     if budgetobj:
         quarter_list = get_budget_quarters(budgetobj)
         quarter_names = get_budget_quarter_names(budgetobj)
-        budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
-        budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+        budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+        budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
         span_length = len(budget_period)
         budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj,quarter_list)
         tranche_list = Tranche.objects.filter(project = projectobj)
@@ -320,6 +326,27 @@ def budgetview(request):
     return render(request,"budget/budget.html",locals())
 
 
+def inactivatingthelineitems(projectobj,lineobj_list):
+    '''
+        inactivating the removed line items
+    '''
+    budget_lineitem_ids = BudgetPeriodUnit.objects.filter(budget_period__project = projectobj).values_list('id',flat=True)
+    budget_lineitem_ids = map(int,budget_lineitem_ids)
+    lineobj_list = map(int,lineobj_list)
+    final_list = diff(lineobj_list,budget_lineitem_ids)
+    if final_list:
+        for i in final_list:
+            periodobj = BudgetPeriodUnit.objects.get_or_none(id=i)
+            if periodobj:
+                periodobj.active = 0
+                periodobj.budget_period.active = 0
+                periodobj.save()
+                periodobj.budget_period.save()
+                
+                
+    ''' inactivating line items ends '''
+    return final_list
+
 def budgetlineitemedit(request):
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
@@ -328,8 +355,8 @@ def budgetlineitemedit(request):
     supercategory_list = SuperCategory.objects.filter(active=2,project =projectobj,budget = budgetobj).exclude(parent=None)
     heading_list = MasterCategory.objects.filter(parent__slug="budget-heading",active=2)
     quarter_list = get_budget_quarters(budgetobj)
-    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).values_list('row_order', flat=True).distinct()
-    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj).order_by("id")
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+    budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
     span_length = len(budget_period)
     if request.method == "POST":
         count = request.POST.get('count')
@@ -339,8 +366,9 @@ def budgetlineitemedit(request):
         budgetobj = Budget.objects.get_or_none(id = budget_id)
         quarter_list = get_budget_quarters(budgetobj)
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
-        budgget_lineitem_ids = BudgetPeriodUnit.objects.filter()
+        final_result = inactivatingthelineitems(projectobj,lineobj_list)
         for j in range((int(count)+1)):
+            print count
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(j))]
             for quarter,value in quarter_list.items():
                 start_date = value.split('to')[0].rstrip()
@@ -373,6 +401,7 @@ def budgetlineitemedit(request):
                     if budgetperiodid:
                         budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
                         budget_lineitem_obj.__dict__.update(budget_dict)
+                        budget_lineitem_obj.variance = int(result['planned-cost']) - int(budget_lineitem_obj.utilized_unit_cost)
                         budget_lineitem_obj.save()
                     else:
                         budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))

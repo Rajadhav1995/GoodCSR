@@ -241,7 +241,8 @@
                       if (count > 1) {
                             $('tr.data_row:last').remove();
                             count  = $('tr.data_row').length;
-                            $('input[name=count]').val(count);
+                            alert(count--)
+                            $('input[name=count]').val(count--);
                       }
                       else{
                         alert("Please add atleast one record")

@@ -44,10 +44,9 @@ def get_user_project(request):
 
 @register.assignment_tag
 def get_budget_lineitem(row,projectobj):
-#    import ipdb;ipdb.set_trace();
     budget_periodobj = ProjectBudgetPeriodConf.objects.latest_one(project = projectobj,row_order = int(row),active=2)
     try:
-        lineitem = BudgetPeriodUnit.objects.get(budget_period = budget_periodobj)
+        lineitem = BudgetPeriodUnit.objects.get(budget_period = budget_periodobj,active=2)
     except:
         lineitem = None
     return lineitem
@@ -62,6 +61,9 @@ def get_quarter_details(row,quarter,projectobj):
 
 @register.assignment_tag
 def get_comment(line_itemobj):
-    comment = Comment.objects.get_or_none(content_type=ContentType.objects.get_for_model(line_itemobj),object_id=int(line_itemobj.id))
+    try:
+        comment = Comment.objects.get_or_none(content_type=ContentType.objects.get_for_model(line_itemobj),object_id=int(line_itemobj.id))
+    except:
+        comment = None
     return comment
 
