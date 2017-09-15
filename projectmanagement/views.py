@@ -381,7 +381,6 @@ def project_summary(request):
     timeline = timeline_listing(obj)
     today = datetime.datetime.today()
     from datetime import timedelta
-
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json = []
     for i in timeline:
