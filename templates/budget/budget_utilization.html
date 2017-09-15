@@ -57,7 +57,7 @@
                     <table class="tab-resp main-table " cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <tr class="table-head-pad">
-                              <td colspan="5">&nbsp;</td>	
+                              <td colspan="6">&nbsp;</td>	
                               {% for i,j in quarter_list.items %}
                                     <td class="table-head" colspan="6">{{j}}</th>
                             {% endfor %}
@@ -67,7 +67,8 @@
                                 <th class="fixed-side">Super Category</th>
                                 <th class="fixed-side">Heading</th>
                                 <th class="fixed-side">Subheading</th>
-<!--                                <th class="fixed-side">Line Total</th>-->
+                                <th class="fixed-side">Line Total</th>
+<!--                                <th class="fixed-side">Line Total Utilized</th>-->
                                 <th class="fixed-side">Unit Type</th>
                                 {% for i,j in quarter_list.items %}
                                 <th> No. of unit </th>
@@ -88,12 +89,17 @@
                             <td class="fixed-side"> {{lineitemobj.category.name}}</td>
                             <td class="fixed-side"> {{lineitemobj.heading.name}} </td>
                             <td class="fixed-side"> {{lineitemobj.subheading}} </td>
+                            {% get_line_total j projectobj as line_total %}
+                            <td class="fixed-side"> {{line_total}} </td>
+<!--                            {% get_utlizedline_total j projectobj as utlized_line_total %}-->
+<!--                            <td class="fixed-side"><input type="number" class = "totalutlized" name = "utlized_{{j}}" id="utilized_{{j}}" readonly="readonly" value ="{{utlized_line_total}}"></td>-->
                              <td class="fixed-side"> {{lineitemobj.unit_type}}  </td>
                             {% for i,v in quarter_list.items %}
                             {% get_quarter_details j i projectobj as line_itemobj %}
                                <td> {{line_itemobj.unit}} </td>
                                 <td> {{line_itemobj.rate}} </td>
-                                 <td> <input type="number" name = "planned-cost_{{i}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
+                                <td name = "planned-cost_{{i}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}"> {{line_itemobj.planned_unit_cost}} </td>
+<!--                                 <td> <input type="number" name = "planned-cost_{{i}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>-->
                                  
                                  <td> <input type="number" name = "utilized_unit_cost_{{i}}_{{j}}_{{line_itemobj.id}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>
                                  <td> <input type="number" name ="variance_{{i}}_{{j}}_{{line_itemobj.id}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>
@@ -263,6 +269,8 @@ $(document).ready(function(){
 		});
 </script>
 
+
+
 <script>
     $(document).ready(function()
     {
@@ -272,7 +280,8 @@ $(document).ready(function(){
             i = nam[3]
             j = nam[4]
             
-            var planned_cost = parseFloat($("#planned-cost_"+i+"_"+j).val());
+            var planned_cost = parseFloat(document.getElementById("planned-cost_"+i+"_"+j).innerText);
+//            var planned_cost = parseFloat($("#planned-cost_"+i+"_"+j).val());
             var utilized_cost = $(this).val();
             var total = +planned_cost - +utilized_cost;
             //var total = total.toFixed(2);
@@ -290,8 +299,16 @@ $(document).ready(function(){
                 }
                 */
             }
-            
-            
+            /*
+            var utlizedtotal = 0
+            $("[id^=utilized_unit_cost_][id$=_"+parseInt(j)+"]").each(function(){
+                utlizedtotal = +utlizedtotal + +$(this).val()
+            })
+            utilized_unit_cost_0_0_120
+            alert(utlizedtotal);
+            //$('#td1').html('hello world');
+            $("#utilized_"+j).val(parseInt(utlizedtotal));
+            */
         }
         $(document).on("change, keyup", ".utilized-cost", updateVariance);
     });
