@@ -20,5 +20,5 @@ urlpatterns = [
     url(r'^parameter/edit/$',edit_parameter),
     url(r'^delete/upload/image/$',delete_upload_image),
     url(r'^remove/record/$',remove_record),
-    
+
 ]
