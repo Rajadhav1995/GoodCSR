@@ -402,7 +402,7 @@ def budgetlineitemedit(request):
                         budget_lineitem_obj.__dict__.update(budget_dict)
                         budget_lineitem_obj.save()
                         utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
-                        planned_cost = int(result['planned-cost']) if result['planned_cost'] else 0 
+                        planned_cost = int(result['planned-cost']) if result['planned-cost'] else 0 
                         budget_lineitem_obj.variance = planned_cost - int(utilized_amount)
                         budget_lineitem_obj.save()
                     else:
