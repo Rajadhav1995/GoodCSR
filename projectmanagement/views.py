@@ -385,10 +385,10 @@ def project_summary(request):
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json = []
     for i in timeline:
-        data = {'date':i.date.strftime("%Y-%m-%d"),'name':i.description,'url':i.attachment_file.url if i.attachment_file else ''}
+        data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else ''}
         timeline_json.append(data)
     for j in milestone:
-        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':''}
+        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone'}
         timeline_json.append(data)
     timeline_json.sort(key=lambda item:item['date'], reverse=False)
     timeline_json_length = len(timeline_json)
