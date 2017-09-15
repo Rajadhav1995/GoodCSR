@@ -72,8 +72,8 @@ def get_budget_quarters(budgetobj):
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     elif sd.day < 15:
-        year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month,year=year)
+#        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
@@ -93,8 +93,8 @@ def get_budget_quarter_names(budgetobj):
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     elif sd.day < 15:
-        year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month,year=year)
+#        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = []
@@ -179,8 +179,8 @@ def get_year_quarterlist(selected_year,budget_id):
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     elif sd.day < 15:
-        year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month,year=year)
+#        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
