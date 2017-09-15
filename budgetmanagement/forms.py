@@ -8,7 +8,6 @@ from django.contrib.contenttypes.models import ContentType
 
 
 class TrancheForm(forms.ModelForm):
-#	utilized_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	actual_disbursed_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	recommended_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	planned_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)

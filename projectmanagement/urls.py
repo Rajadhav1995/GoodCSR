@@ -4,7 +4,6 @@ from projectmanagement.views import (create_project,project_list,project_mapping
     budget_tranche,key_parameter,tranche_list,add_parameter,edit_parameter,
     upload_parameter,manage_parameter,manage_parameter_values,project_summary,
     delete_upload_image,remove_record,)
-#from views.dashboard import project_summary
 
 urlpatterns = [
     url(r'^add/$',create_project),

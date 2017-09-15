@@ -4,7 +4,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.admin import widgets
 from django.core.exceptions import ValidationError
-# from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
 from userprofile.models import (ProjectUserRoleRelationship,RoleTypes)
