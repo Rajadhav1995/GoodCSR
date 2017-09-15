@@ -977,7 +977,12 @@ console.log(data);
 //var utilized = data.utilized/(data.utilized + data.total)*100
 //var disbursed = data.disbursed/(data.disbursed + data.total)*100
 var utilized = data.utilized_percent
-var disbursed = data.disbursed_percent-data.utilized_percent
+if (data.disbursed_percent > data.utilized_percent ){
+    var disbursed = data.disbursed_percent-data.utilized_percent
+}
+else{
+    var disbursed = data.utilized_percent - data.disbursed_percent
+}
 var total = 100 - (utilized + disbursed)
 console.log(total , utilized , disbursed);
 var gaugeOptions = {

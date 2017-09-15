@@ -472,8 +472,8 @@ def project_total_budget(slug):
         utilized_cost = budget.get('utilized_cost') or 0
         disbursed_budget = budget.get('disbursed_cost') or 0
         total_percent = 100
-        disbursed_percent = int((disbursed_budget/planned_cost)*100)
-        utilized_percent = int((utilized_cost/planned_cost)*100)
+        disbursed_percent = int((float(disbursed_budget)/planned_cost)*100)
+        utilized_percent = int((float(utilized_cost)/planned_cost)*100)
     except:
         planned_cost= utilized_cost=disbursed_budget=total_percent= disbursed_percent=utilized_percent =0
 

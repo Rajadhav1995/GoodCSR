@@ -104,7 +104,7 @@
             <div class="clear"></div>
             {% get_user_permission request as user_obj %}
                     {% if user_obj.is_admin_user == True %}
-            <a class="add-task" href="/managing/Task/TaskForm/add/?slug={{project.slug}}">Add Task</a>
+            <a class="add-task" href="/managing/add/tasks/Task/TaskForm/?slug={{project.slug}}">Add Task</a>
                 {% endif %}
          </div>
       </div>

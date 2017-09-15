@@ -44,9 +44,11 @@ class ActivityForm(forms.ModelForm):
 
 
 
-class TaskForm(forms.ModelForm):
+class TaskForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
     activity = forms.ModelChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
+    task_dependency = forms.ModelMultipleChoiceField(queryset = Task.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     start_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
     end_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
     actual_start_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
@@ -54,10 +56,10 @@ class TaskForm(forms.ModelForm):
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
-    task_dependency = forms.ModelMultipleChoiceField(queryset = Task.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
-    class Meta:
-        model = Task
-        fields = ('name','activity','task_dependency','start_date','end_date','actual_start_date','actual_end_date','assigned_to','subscribers','status')
+    
+#    class Meta:
+#        model = Task
+#        fields = ('name','activity','task_dependency','start_date','end_date','actual_start_date','actual_end_date','assigned_to','subscribers','status')
 
     def __init__(self,user_id ,project_id,*args, **kwargs):
         self.user = user_id

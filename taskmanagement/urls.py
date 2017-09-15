@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^tasks/expected-date/caluclator/$',get_tasks_objects),
     url(r'^gantt-chart-data/$', GanttChartData.as_view()),
     url(r'^my-tasks/updates/$',task_comments),
+    url(r'add/tasks/(?P<model_name>[\w-]+)/(?P<m_form>[\w-]+)/$',add_task),
 ]
