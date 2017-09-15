@@ -54,9 +54,9 @@ $(document).ready(function() {
       var name = obj.name;
       console.log(obj);
       if (obj.url) {
-        var url = loc_url + obj.url;
+        var url = loc_url +'/'+ obj.url;
         }else{
-          var url = loc_url + "/static/img/milestone-icon.png";
+          var url = loc_url + '/' +"/static/img/milestone-icon.png";
         };
         var date = obj.date
         var f = new Date(date);
@@ -67,13 +67,14 @@ $(document).ready(function() {
         //alert(date1);
 
       if (i % 2) {
-        if (obj.url) {
+
+        if (obj.type == 'image') {
         $(wrapper).append('<div class="time-line-bdr"></div><li class="event-up">&nbsp;<div class="event-img"><a href="/project/delete/upload/image/?id='+ids+' onclick="return confirm(Are you sure you want to delete this item?);"><i class = "fa fa-remove remove_icon"></i></a><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
           $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       } else {
-        if (obj.url) {
+        if (obj.type == 'image') {
         $(wrapper).append('<div class="time-line-bdr"></div><li class="event-down">&nbsp;<div class="event-img"><a href="/project/delete/upload/image/?id='+ids+' onclick="return confirm(Are you sure you want to delete this item?);"><i class = "fa fa-remove remove_icon"></i></a><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
           $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
@@ -98,9 +99,9 @@ $(document).ready(function() {
       console.log(obj);
       var value = obj.value
       if (obj.type == 'CUR') {
-        var url = loc_url + "static/img/budget-icon.png";
+        var url = loc_url + '/' + "static/img/budget-icon.png";
         }else{
-          var url = loc_url + "static/img/key-icon2.png";
+          var url = loc_url + '/' + "static/img/key-icon2.png";
         };
         $(wrapper).append('<div><li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li></div>');
 }
@@ -194,7 +195,7 @@ $(document).ready(function() {
             <div class='numeric_parameter'></div>
         	
             
-            {% if master_obj_pin %}
+            {% if master_pin %}
             {% for lol in  master_pin %}
             <li>
             	<!-- <h3>{{chart_name_pip}}</h3> -->
@@ -209,10 +210,9 @@ $(document).ready(function() {
                  <img class="key-image" src="/static/img/budget-icon.png" alt="">
                 <h4 class="title-pad">2.3cr</h4>
             </li> -->
-            {% if master_obj_pip %}
+            {% if master_pip %}
             {% for rofl in master_pip %}
              <li>
-            	<!-- <h3>{{chart_name_pin}}</h3> -->
                 <div class="right-budget beni-dist beni-dist1">
                 <div id="{{rofl}}" style="width: 100%;float: left;"></div>
             </div>
@@ -416,26 +416,26 @@ under 0 Milestones</h5>
         
         {% if i.document_type == 1 %}<!-- excel -->
         <div class="item">
-        <a href="{{image}}{{i.attachment_file}}" download><img src="/static/img/excell-color.jpg"  height=70 width=63px>
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file}}" {% else %} href="#" onClick="alert('File Not Found!')" {% endif %}{% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-color.jpg"  height=70 width=63px>
         <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
 
         {% if i.document_type == 2 %}<!-- pdf -->
         <div class="item">
-        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/pdf.jpg" height=70 width=63px> 
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/pdf.jpg" height=70 width=63px> 
         <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
         {% if i.document_type == 3 %}
         <div class="item">
-        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/wordpress.jpg" height=70 width=63px>
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/wordpress.jpg" height=70 width=63px>
           <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
         {% if i.document_type == 4 %}<!-- doc -->
         <div class="item">
-        <a href="{{image}}{{i.attachment_file.url}}" download><img src="/static/img/excell-black.jpg" height=70 width=63px >
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-black.jpg" height=70 width=63px >
           <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
@@ -450,14 +450,19 @@ under 0 Milestones</h5>
             <!-- carousel starts -->
 
 
-              <div id="img-carousel" class="owl-carousel">      
+              <div id="img-carousel" class="owl-carousel">
+                {{attachment}}
               {% for  i in attachment %}
+
               {% if i.attachment_type == 1 %}
                 <div class="item"> 
-                    {% if i.attachment %}
-                    <a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" alt="" height=97 width=156px> 
+                  {% if i.attachment_file %}
+                    <a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}/{{i.attachment_file.url}}" alt="" height=97 width=156px>
                     <h2>{{i.description}}</h2></a>
-                    {% endif %}
+                  {% else %}
+                  <a href="#"><img src="" onClick="alert('Image Not Found!')" alt="" height=97 width=156px>
+                    <h2>{{i.description}}</h2></a>
+                  {% endif %}
                 </div>
               {% endif %}
                 {% endfor %}
@@ -510,6 +515,8 @@ function confirm_alert(node) {
 <script>
     var jsonData = {{taskdict|safe}}
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+    // console.log(jsonData.tasks);
+    // g.AddTaskItem(new JSGantt.TaskItem(1, 'Chart Object', '2017-07-28T18:30:00Z', '2017-07-31T18:30:00Z', 'gmilestone', '', 1, '', 100, 0, 4316, 1, '431725FF', '', '', g));
     $.each(jsonData.supercategories, function (i) {
       var superId = this.id;
       var superName = this.name;
@@ -541,14 +548,15 @@ function confirm_alert(node) {
       // activity = jsonData.activities.filter(function( i ) {
       //   if(i.id == activityId){return i.super_category;}
       // });
-      var superId = $.each(jsonData.activities, function () {
+      var superId;
+      $.each(jsonData.activities, function () {
         if (this.id == activityId) {
           activity_type = this.activity_type;
-          return this.super_category;
+          superId = this.super_category;
         }
       });
-      taskId = superId[0].super_category.toString() + activityId.toString() + taskId.toString();
-      activityId = superId[0].super_category.toString() + activityId.toString();
+      taskId = superId.toString() + activityId.toString() + taskId.toString();
+      activityId = superId.toString() + activityId.toString();
       activityId = parseInt(activityId);
       // console.log("TaskID", taskId);
       var taskName = this.name;
@@ -575,11 +583,9 @@ function confirm_alert(node) {
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
         '', 0, 0, activityId, 1, '', '', '', g));
       // console.log("Task");
-      // console.log(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+      // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
       //   '', 0, 0, activityId, 1, '', '', '');
     });
-    // g.AddTaskItem(new JSGantt.TaskItem(1, 'Nabarangpur School Project', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0,
-    //   1, '', '', 'Some Notes text', g));
     // g.AddTaskItem(new JSGantt.TaskItem(11, 'Paper Work', '', '', 'ggroupblack', '', 0, 'Shlomy', 40, 2, 1, 1, '', '',
     //   '', g));
     // g.AddTaskItem(new JSGantt.TaskItem(111, 'Constructor Proc', '2017-07-21', '2017-09-09', 'gtaskblue', '', 0,
@@ -646,7 +652,7 @@ function confirm_alert(node) {
       return true;
     }
     var count = 0,
-      padding = 30,
+      padding = 25,
       arrayTask = [],
       collide = false;
     $('.gselector').hide();
@@ -659,9 +665,8 @@ function confirm_alert(node) {
           .attr('id')) {
           if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
             listParent = currParent.attr('id').replace('row', '');
-            console.log("PARENT",currParent.attr('id'));
-            $('#'+currParent.attr('id')+" .gtaskbarcontainer").each(function(){
-
+            console.log("PARENT", currParent.attr('id'));
+            $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
               }

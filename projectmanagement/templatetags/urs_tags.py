@@ -75,3 +75,11 @@ def get_line_total(row,projectobj):
     total_planned_cost = int(total_planned_cost) if total_planned_cost else 0
     return total_planned_cost
 
+@register.assignment_tag
+def get_utlizedline_total(row,projectobj):
+    budget_periodunitlist = BudgetPeriodUnit.objects.filter(budget_period__project = projectobj,active=2,row_order=row)
+    total_utilized_cost = budget_periodunitlist.aggregate(Sum('utilized_unit_cost')).values()[0]
+    total_utilized_cost = int(total_utilized_cost) if total_utilized_cost else 0
+    return total_utilized_cost
+
+

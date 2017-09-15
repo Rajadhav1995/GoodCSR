@@ -8,6 +8,8 @@
 <title>Samhita GoodCSR</title>
 
 <!--CSS Srat-->
+
+<link rel="stylesheet" href="/static/css/AdminLTE.min.css" />
 <link rel="stylesheet" href="/static/css/bootstrap.css" />
 <link rel="stylesheet" href="/static/css/style.css" />
 <link rel="stylesheet" href="/static/css/jquery.stickytable.min.css">
@@ -100,7 +102,7 @@
                 Projects
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
-                  <ul>
+                  <ul class="project-scroll-bar">
                   {% get_user_project request as obj_list %}
                       {% for i in obj_list %}
                           <li><a href="/project/summary/?slug={{i.slug}}"><p class="trunc" style="width:180px;height:20px;margin-bottom:0px"> {{i.name}}</p></a></li>

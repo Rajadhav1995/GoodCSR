@@ -38,11 +38,18 @@
         <h3>Parameter Uploaded Values for {{op.name}}</h3>
         <div style="float: right;"><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}">Upload Values</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-
+        {% for j in lista %}
+        {% for k in j %}
+        {{k}}
+        {% endfor %}
+        <br>
+        {% endfor %}
         {% if rr %}
         <thead>
             <tr>
-                <th>Month</th>
+                {% for i in title_list %}
+                <th>{{i}}</th>
+                {% endfor %}
                 <!-- {% for i in child_parameter %} -->
                 <!-- <th>{{i.keyparameter.name}}</th> -->
                 <!-- {% endfor %} -->
@@ -55,12 +62,15 @@
             </tr>
         </thead>
         
-        {% for i in rr %}
+        {% for i in lista %}
         <tr>
-            <b><td>{{i.start_date | date:'F'}}</td></b>
+            <!-- <b><td>{{i.start_date | date:'F'}}</td></b>
             <td>{{i.keyparameter.name}}</td>
-            <td>{{i.parameter_value}}</td>
-            <td></td>
+            <td>{{i.parameter_value}}</td> -->
+            <td>{{i.0}}</td>
+            <td>{{i.1}}</td>
+            <td>{{i.2}}</td>
+            <td>{{i.3}}</td>
         </tr>{% endfor %}
 
         {% else %}
