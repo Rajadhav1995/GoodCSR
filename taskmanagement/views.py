@@ -70,37 +70,6 @@ def add_taskmanagement(request,model_name,m_form):
         message = "Budget is not added"
     return render(request,'taskmanagement/base_forms.html',locals())
 
-def add_task(request,model_name,m_form):
-    try:
-        project = Project.objects.get(slug = request.GET.get('slug'))
-    except:
-        project = Project.objects.get(slug= request.POST.get('slug_project'))
-    user_id = request.session.get('user_id')
-    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-    budget = Budget.objects.get_or_none(project = project)
-    form=eval(m_form)
-    if budget:
-        if request.method=='POST':
-            form=form(user_id,project.id,request.POST,request.FILES)
-            if form.is_valid():
-                import ipdb;ipdb.set_trace();
-                f=Task.objects.create()
-                from projectmanagement.views import unique_slug_generator
-                f.slug = unique_slug_generator(f)
-                f.save()
-                if model_name == 'Task':
-                    f.created_by = user
-                    f.save()
-                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-                else :
-                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-        else:
-            form=form(user_id,project.id)
-    else:
-        message = "Budget is not added"
-    return render(request,'taskmanagement/base_forms.html',locals())
-
-
 def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
@@ -218,6 +187,20 @@ def my_tasks_listing(project):
     tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).order_by('-start_date')
     return tasks_list
     
+def get_project_updates(project,uploads):
+    if project.history.latest():
+        attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
+        for a in attach_lists:
+            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,
+            'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''})
+    return uploads
+    
+def get_tasks_status(project,task,uploads):
+    if task.status == 2 and task.history.latest():
+        uploads.append({'project_name':project.name,'task_name':task.name,'attach':'',
+            'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest()})
+    return uploads
+ 
 def updates(obj_list):
 # to get the recent updates of the projects 
     formats = '%H:%M %p'
@@ -227,25 +210,15 @@ def updates(obj_list):
     task_uploads = {}
     for project in obj_list:
         project = Project.objects.get_or_none(id = int(project.id))
-        if project.history.latest():
-            attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
-            for a in attach_lists:
-                task_uploads={'project_name':project.name,'task_name':'','attach':a.description,
-                'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''}
-                uploads.append(task_uploads)
+        uploads = get_project_updates(project,uploads)
         activity = Activity.objects.filter(project=project)
         task_list = Task.objects.filter(activity__project = project)
         for task in task_list:
             attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
-            if attach_list:
-                for attach in attach_list:
-                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                    'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()}
-                    uploads.append(task_uploads)
-            if task.status == 2 and task.history.latest():
-                task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
-                    'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest()}
-                uploads.append(task_uploads)
+            for attach in attach_list:
+                uploads.append({'project_name':project.name,'task_name':task.name,'attach':attach.description,
+                'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()})
+            uploads = get_tasks_status(project,task,uploads)
     try:
         uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
     except:
@@ -401,6 +374,7 @@ from dateutil import parser
 from datetime import timedelta, time
 
 def get_tasks_objects(request):
+    import ipdb;ipdb.set_trace();
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
@@ -447,6 +421,7 @@ class ExpectedDatesCalculator():
             self.data = {}
 
     # Helper function gets next weekday if next day is weekend
+    @staticmethod
     def next_weekday(self, somedate):
         ret = somedate + timedelta(days=1)
         day = somedate.strftime('%a')
@@ -473,7 +448,6 @@ class ExpectedDatesCalculator():
             itask.expected_end_date = expected['expected_end_date']
             return itask
 
-        # main_task = Task.objects.get(pk=taskid)
 
         main_task = itask
 

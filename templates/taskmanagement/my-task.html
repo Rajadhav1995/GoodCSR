@@ -165,7 +165,6 @@
                 
                <div class="task-details">
                {% get_assigned_to user as assigned %}
-                {% if i.status != 2 %}
                   <h4>Task Completion Status (%)</h4>
 <!--                  <div class="range-holder">-->
 <!--                     <div id="pr-slider" class="dragdealer">-->
@@ -193,7 +192,6 @@
                 <div style="width:500px;">
                         <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="" />
                 </div>
-                {% endif %}
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
@@ -250,7 +248,7 @@
                               {% endif %}
                            </li>
                         </ul>
-                        <span>{{a.created|}}</span>
+                        <span>{{a.created.time|date:"g:i a"}}</span>
                         {% endif %}
                      </div>
                   </li>
@@ -266,7 +264,7 @@
                         <ul>
                            <li>{% if c.text %}{{c.text}}{% endif %}</li>
                         </ul>
-                        <span>{{c.created}}</span>
+                        <span>{{c.created.time|date:"g:i a"}}</span>
                             
                      </div>
                      {% endfor %}
