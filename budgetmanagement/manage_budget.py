@@ -72,8 +72,8 @@ def get_budget_quarters(budgetobj):
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     elif sd.day < 15:
-        year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month,year=year)
+#        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
@@ -93,8 +93,8 @@ def get_budget_quarter_names(budgetobj):
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     elif sd.day < 15:
-        year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month,year=year)
+#        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = []
@@ -178,8 +178,8 @@ def get_year_quarterlist(selected_year,budget_id):
         year = sd.year+1 if sd.month == 12 else sd.year
         sd = sd.replace(day=01,month = sd.month+1,year=year)
     elif sd.day < 15:
-        year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month,year=year)
+#        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = budgetobj.end_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
     quarter_list = {}
@@ -399,7 +399,8 @@ def budgetlineitemedit(request):
                         budget_lineitem_obj.__dict__.update(budget_dict)
                         budget_lineitem_obj.save()
                         utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
-                        budget_lineitem_obj.variance = int(result['planned-cost']) - int(utilized_amount)
+                        planned_cost = int(result['planned-cost']) if result['planned-cost'] else 0 
+                        budget_lineitem_obj.variance = planned_cost - int(utilized_amount)
                         budget_lineitem_obj.save()
                     else:
                         budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
@@ -409,7 +410,7 @@ def budgetlineitemedit(request):
                                    'row_order':int(j),
                                    'quarter_order':int(quarter),
                                    'budget_period_id':budget_periodobj.id,
-                                   'variance':int(budget_lineitem_obj.planned_unit_cost)
+                                   'variance':int(budget_lineitem_obj.planned_unit_cost) if budget_lineitem_obj.planned_unit_cost else 0
                                    }
                         budget_lineitem_obj.__dict__.update(budget_extra_values)
                         budget_lineitem_obj.save()

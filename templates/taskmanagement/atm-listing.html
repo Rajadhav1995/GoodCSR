@@ -275,6 +275,8 @@ $(document).ready(function(){
 <script>
     var jsonData = {{taskdict|safe}}
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+    // console.log(jsonData.tasks);
+    // g.AddTaskItem(new JSGantt.TaskItem(1, 'Chart Object', '2017-07-28T18:30:00Z', '2017-07-31T18:30:00Z', 'gmilestone', '', 1, '', 100, 0, 4316, 1, '431725FF', '', '', g));
     $.each(jsonData.supercategories, function (i) {
       var superId = this.id;
       var superName = this.name;
@@ -306,14 +308,15 @@ $(document).ready(function(){
       // activity = jsonData.activities.filter(function( i ) {
       //   if(i.id == activityId){return i.super_category;}
       // });
-      var superId = $.each(jsonData.activities, function () {
+      var superId;
+      $.each(jsonData.activities, function () {
         if (this.id == activityId) {
           activity_type = this.activity_type;
-          return this.super_category;
+          superId = this.super_category;
         }
       });
-      taskId = superId[0].super_category.toString() + activityId.toString() + taskId.toString();
-      activityId = superId[0].super_category.toString() + activityId.toString();
+      taskId = superId.toString() + activityId.toString() + taskId.toString();
+      activityId = superId.toString() + activityId.toString();
       activityId = parseInt(activityId);
       // console.log("TaskID", taskId);
       var taskName = this.name;
@@ -340,11 +343,9 @@ $(document).ready(function(){
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
         '', 0, 0, activityId, 1, '', '', '', g));
       // console.log("Task");
-      // console.log(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+      // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
       //   '', 0, 0, activityId, 1, '', '', '');
     });
-    // g.AddTaskItem(new JSGantt.TaskItem(1, 'Nabarangpur School Project', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0,
-    //   1, '', '', 'Some Notes text', g));
     // g.AddTaskItem(new JSGantt.TaskItem(11, 'Paper Work', '', '', 'ggroupblack', '', 0, 'Shlomy', 40, 2, 1, 1, '', '',
     //   '', g));
     // g.AddTaskItem(new JSGantt.TaskItem(111, 'Constructor Proc', '2017-07-21', '2017-09-09', 'gtaskblue', '', 0,
@@ -411,7 +412,7 @@ $(document).ready(function(){
       return true;
     }
     var count = 0,
-      padding = 30,
+      padding = 25,
       arrayTask = [],
       collide = false;
     $('.gselector').hide();
@@ -424,9 +425,8 @@ $(document).ready(function(){
           .attr('id')) {
           if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
             listParent = currParent.attr('id').replace('row', '');
-            console.log("PARENT",currParent.attr('id'));
-            $('#'+currParent.attr('id')+" .gtaskbarcontainer").each(function(){
-
+            console.log("PARENT", currParent.attr('id'));
+            $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
               }
