@@ -48,7 +48,7 @@
                  <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
                 	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="light-green-circle"></span> Disbuirsed <span class="right-li">Rs. {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">Rs. {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
                     <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}Rs.  {{projectobj.project_budget_details.utilized_cost}} {% else %} Rs.0 {% endif %} </span></li>
                 </ul>
             </div>
@@ -118,7 +118,7 @@
             <thead>
             <tr class="table-head-pad">
 
-              <td colspan="4">&nbsp;</td>	
+              <td colspan="5">&nbsp;</td>	
             {% for i,j in quarter_list.items %}
               <td class="table-head" colspan="5">{{j}}</td>
               {% endfor %}
@@ -127,6 +127,7 @@
               <th>Super Category</th>
               <th>Heading</th>
               <th>Subheading</th>
+              <th>Line Total</th>
               <th>Units Type</th>
                 {% for i,j in quarter_list.items %}
               <th>Units</th>
@@ -144,6 +145,8 @@
                 <td> {{lineitemobj.category.name}}</td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
+                {% get_line_total j projectobj as line_total %}
+                <td>{{line_total}}</td>
                  <td> {{lineitemobj.unit_type}}  </td>
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_details j i projectobj as line_itemobj %}
