@@ -1,4 +1,5 @@
 from django import template
+from django.db.models import Sum
 from itertools import chain
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
@@ -66,4 +67,11 @@ def get_comment(line_itemobj):
     except:
         comment = None
     return comment
+
+@register.assignment_tag
+def get_line_total(row,projectobj):
+    budget_periodunitlist = BudgetPeriodUnit.objects.filter(budget_period__project = projectobj,active=2,row_order=row)
+    total_planned_cost = budget_periodunitlist.aggregate(Sum('planned_unit_cost')).values()[0]
+    total_planned_cost = int(total_planned_cost) if total_planned_cost else 0
+    return total_planned_cost
 
