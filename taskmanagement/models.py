@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.encoding import smart_str, smart_unicode
 from projectmanagement.manager import ActiveQuerySet
 from django.template.defaultfilters import slugify
 from constants import  OPTIONAL
@@ -59,8 +60,8 @@ class Task(BaseContent):
     task_progress = models.CharField(max_length=100,**OPTIONAL)
     history = HistoricalRecords()
 
-    def __unicode__(self):
-        return str(self.name) or ''
+    def __str__(self):
+        return smart_str(self.name) or ''
 
     def is_dependent(self):
         task = Task.objects.filter(task_dependency = self.id)
@@ -102,5 +103,5 @@ class Milestone(BaseContent):
     subscribers = models.ManyToManyField("projectmanagement.UserProfile",related_name = 'milestone_subscriber_user',blank=True )
     history = HistoricalRecords()
     def __str__(self):
-        return str(self.name)
+        return smart_str(self.name)
 

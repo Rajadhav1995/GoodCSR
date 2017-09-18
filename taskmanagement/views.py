@@ -307,7 +307,7 @@ def corp_total_budget_disbursed(obj_list):
             disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
         except:
             disbursed_percent = 0
-        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed),'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
+        total_disbursed = {'total':convert_budget(total),'disbursed':int(convert_budget(disbursed)),'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
 }
     return total_disbursed 
 

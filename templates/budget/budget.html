@@ -582,9 +582,21 @@ var gaugeOptions = {
 };
 
 
-var disbursed = parseInt({{projectobj.project_budget_details.disbursed_percent}})-parseInt({{projectobj.project_budget_details.utilized_percent}})
+//var disbursed = parseInt({{projectobj.project_budget_details.disbursed_percent}})-parseInt({{projectobj.project_budget_details.utilized_percent}})
 var utilized = parseInt({{projectobj.project_budget_details.utilized_percent}})
+if ({{projectobj.project_budget_details.disbursed_percent}} == 0){
+    var disbursed = 0
+}
+else{
+    if ({{projectobj.project_budget_details.disbursed_percent}} > {{projectobj.project_budget_details.utilized_percent}} ){
+        var disbursed = {{projectobj.project_budget_details.disbursed_percent}}-{{projectobj.project_budget_details.utilized_percent}}
+    }
+    else{
+        var disbursed = {{projectobj.project_budget_details.utilized_percent}} - {{projectobj.project_budget_details.disbursed_percent}}
+    }
+}
 var total = parseInt(100 - (utilized + disbursed))
+console.log(total , utilized , disbursed);
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
 

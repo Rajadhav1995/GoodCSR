@@ -349,7 +349,7 @@ var projects = data.projects
 var total_budget = data.total_budget
 var max_budget = Math.max.apply(Math,total_budget)
 var utilized = data.utilized
-var disbursed_budget = data.disbursed
+var disbursed_budget = parseInt(data.disbursed)
 console.log(disbursed_budget);
 
 $(function(){
