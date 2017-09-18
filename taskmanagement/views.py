@@ -583,7 +583,8 @@ def get_activites_list(request):
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
-    activites=[]
+    activity=[]
     obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
+    activity.append({'id':'undefined','name':'-----'})
     activity = [{'id':i.id,'name':i.name} for i in obj_list]
     return JsonResponse({"activity":activity})

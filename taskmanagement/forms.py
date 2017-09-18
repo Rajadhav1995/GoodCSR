@@ -70,7 +70,6 @@ class TaskForm(forms.ModelForm):
         self.fields['status'].initial = 1
         self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
-        
         self.fields = OrderedDict([
             ('name',self.fields['name']),
             ('super_category',self.fields['super_category']),
