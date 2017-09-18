@@ -1,19 +1,19 @@
-from django.db import models
-from projectmanagement.manager import ActiveQuerySet
-from django.template.defaultfilters import slugify
-from constants import  OPTIONAL
 import six
 from django.contrib import admin
+from django.db import models
+from constants import  OPTIONAL
+from django.template.defaultfilters import slugify
 from django.views import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.fields import GenericForeignKey
-from simple_history.models import HistoricalRecords
+from django.contrib.auth.models import User
 from thumbs import ImageWithThumbsField
+from simple_history.models import HistoricalRecords
 from simple_history.admin import SimpleHistoryAdmin
 from ckeditor.fields import RichTextField
-from django.contrib.auth.models import User
 from projectmanagement.models import BaseContent
+from projectmanagement.manager import ActiveQuerySet
 
 #----------------------introduction------------------------------------------#
 # Budget Management is the application where database tables are related to Budget,Budget Category
