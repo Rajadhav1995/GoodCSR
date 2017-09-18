@@ -60,7 +60,7 @@ class Task(BaseContent):
     history = HistoricalRecords()
 
     def __unicode__(self):
-        return str(self.name) or ''
+        return str(self.id) or ''
 
     def is_dependent(self):
         task = Task.objects.filter(task_dependency = self.id)
