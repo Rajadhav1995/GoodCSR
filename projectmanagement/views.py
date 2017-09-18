@@ -45,12 +45,8 @@ def create_project(request):
             obj.content_type = ContentType.objects.get(model="Program")
             obj.object_id = 0
             obj.request_status = 4
-            try:
-                obj.created_by = UserProfile.objects.get(id=user_id)
-            except:
-                pass
-            if not instance:
-                obj.slug = unique_slug_generator(obj)
+            obj.created_by = UserProfile.objects.get(id=user_id)
+            obj.slug = unique_slug_generator(obj,instance)
             obj.save()
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
@@ -417,8 +413,7 @@ def parameter_pie_chart(parameter_obj):
             main_list = []
             pie_object = ProjectParameter.objects.filter(active= 2,parent=i)
             for y in pie_object:
-                ttp= ProjectParameterValue.objects.filter(active= 2,keyparameter=y)
-                values = list(ttp.values_list('parameter_value',flat=True))
+                values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y).values_list('parameter_value',flat=True))
                 value = aggregate_project_parameters(pie_object[0],values)
                 color = colors[counter]
                 counter+=1

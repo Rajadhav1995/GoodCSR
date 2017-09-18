@@ -1,23 +1,25 @@
 from projectmanagement.models import *
 from projectmanagement.utils import random_string_generator
 
-def unique_slug_generator(instance, new_slug=None):
+def unique_slug_generator(instance,edit, new_slug=None):
     """
     This function is for creating unique slug. Just pass object
     """
-    if new_slug is not None:
-        slug = new_slug
-    else:
-        slug = slugify(instance.name)
+    slug = instance.slug
+    if not edit:
+        if new_slug is not None:
+            slug = new_slug
+        else:
+            slug = slugify(instance.name)
 
-    class_obj = instance.__class__
-    qs_exists = class_obj.objects.filter(slug=slug).exists()
-    if qs_exists:
-        new_slug = "{slug}-{randstr}".format(
-                    slug=slug,
-                    randstr=random_string_generator(size=4)
-                )
-        return unique_slug_generator(instance, new_slug=new_slug)
+        class_obj = instance.__class__
+        qs_exists = class_obj.objects.filter(slug=slug).exists()
+        if qs_exists:
+            new_slug = "{slug}-{randstr}".format(
+                        slug=slug,
+                        randstr=random_string_generator(size=4)
+                    )
+            return unique_slug_generator(instance, new_slug=new_slug)
     return slug
 
 def add_keywords(keys,obj,model,edit):

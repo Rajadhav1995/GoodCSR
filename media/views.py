@@ -113,5 +113,5 @@ def edit_attachment(request):
             keywords = add_keywords(keys,obj,attach_model,1)
         except:
             pass
-            return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
+        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
     return render(request,'attachment/doc_upload.html',locals())
