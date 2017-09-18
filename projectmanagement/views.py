@@ -19,6 +19,7 @@ from taskmanagement.views import total_tasks_completed,updates
 from taskmanagement.models import Milestone,Activity
 from pmu.settings import PMU_URL
 from common_method import unique_slug_generator,add_keywords
+from projectmanagement.templatetags.urs_tags import userprojectlist
 # Create your views here.
 
 def create_project(request):
@@ -70,22 +71,8 @@ def create_project(request):
 
 def project_list(request):
     user_id = request.session.get('user_id')
-    user_obj = UserProfile.objects.get(user_reference_id = user_id )
-    if user_obj.is_admin_user == True:
-        obj_list = Project.objects.filter(active=2)
-    elif user_obj.owner == True and user_obj.organization_type == 1:
-        project_ids = ProjectFunderRelation.objects.filter(funder = user_obj).values_list("project_id",flat=True)
-        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
-        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
-        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
-    elif user_obj.owner == True and user_obj.organization_type == 2:
-        project_ids = ProjectFunderRelation.objects.filter(implementation_partner = user_obj).values_list("project_id",flat=True)
-        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
-        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
-        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
-    else:
-        project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
-        obj_list = Project.objects.filter(id__in = project_ids,active=2)
+    logged_user_obj = UserProfile.objects.get(user_reference_id = user_id )
+    obj_list = userprojectlist(logged_user_obj)
     return render(request,'project/listing.html',locals())
 
 def budget_tranche(request):
@@ -404,7 +391,7 @@ def project_summary(request):
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     ''' calling api to return the gantt chart format data '''
-    
+
     data = {'project_id':int(obj.id)}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
