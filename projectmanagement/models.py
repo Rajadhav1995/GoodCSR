@@ -210,7 +210,7 @@ class Project(BaseContent):
         budget_periodunitlist = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,active=2)
         planned_cost = budget_periodunitlist.aggregate(Sum('planned_unit_cost')).values()[0]
         utilized_cost = budget_periodunitlist.aggregate(Sum('utilized_unit_cost')).values()[0]
-        disbursed_cost = Tranche.objects.filter(project = self,active=2).aggregate(Sum('actual_disbursed_amount')).values()[0]
+        disbursed_cost = Tranche.objects.filter(project = self,active=2).aggregate(Sum('actual_disbursed_amount')).values()[0] or 0
         total_percent = 100
         try:
             disbursed_percent = int((disbursed_cost/planned_cost)*100)
