@@ -404,6 +404,7 @@ def project_summary(request):
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     ''' calling api to return the gantt chart format data '''
+    
     data = {'project_id':int(obj.id)}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
