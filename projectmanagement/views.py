@@ -402,7 +402,7 @@ def parameter_pie_chart(parameter_obj):
     pip_title_name = []
     number_json = []
     main_list = []
-    
+
     for i in parameter_obj:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
@@ -419,12 +419,11 @@ def parameter_pie_chart(parameter_obj):
                 color = colors[counter]
                 counter+=1
                 main_list.append({'name': str(y.name),'y':value,'color':color})
-        if main_list:
-            if i.parameter_type in para_name:
-                para_name[i.parameter_type].append(main_list)
-            else:
-                para_name.setdefault(i.parameter_type,[])
-                para_name[i.parameter_type].append(main_list)
+        if i.parameter_type in para_name:
+            para_name[i.parameter_type].append(main_list)
+        else:
+            para_name.setdefault(i.parameter_type,[])
+            para_name[i.parameter_type].append(main_list)
             name_list.append(str(i.name))
         if i.parameter_type == 'PIN':
             pin_title_name.append(str(i.name))
