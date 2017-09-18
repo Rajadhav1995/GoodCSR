@@ -16,10 +16,10 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
-from taskmanagement.models import Milestone
+from taskmanagement.models import Milestone,Activity
 from pmu.settings import PMU_URL
 from common_method import unique_slug_generator,add_keywords
-# Create your views here.
+from projectmanagement.templatetags.urs_tags import userprojectlist
 
 def create_project(request):
     #Create and edit project (with dynamic activities)
@@ -56,48 +56,23 @@ def create_project(request):
             implementation_partner = request.POST.get('implementation_partner')
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
-            if funder and implementation_partner:
-                mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
-                if mapping:
-                    mapping.funder=funder
-                    mapping.implementation_partner=implementation_partner
-                    mapping.total_budget=request.POST.get('total_budget')
-                    mapping.save()
-                else:
-                    mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
-                        implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
+            mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
+            if mapping:
+                mapping.funder=funder
+                mapping.implementation_partner=implementation_partner
+                mapping.total_budget=request.POST.get('total_budget')
+                mapping.save()
+            else:
+                mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
+                    implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
             return HttpResponseRedirect('/project/list/')
-    return render(request,'project/project_edit.html',locals())
+    return render(request,'project/project_add.html',locals())
 
 def project_list(request):
     user_id = request.session.get('user_id')
-    user_obj = UserProfile.objects.get(user_reference_id = user_id )
-    if user_obj.is_admin_user == True:
-        obj_list = Project.objects.filter(active=2)
-    elif user_obj.owner == True and user_obj.organization_type == 1:
-        project_ids = ProjectFunderRelation.objects.filter(funder = user_obj).values_list("project_id",flat=True)
-        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
-        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
-        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
-    elif user_obj.owner == True and user_obj.organization_type == 2:
-        project_ids = ProjectFunderRelation.objects.filter(implementation_partner = user_obj).values_list("project_id",flat=True)
-        user_project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list('project_id',flat=True)
-        final_project_ids = list(set(chain(project_ids, user_project_ids))) 
-        obj_list = Project.objects.filter(id__in = final_project_ids,active=2)
-    else:
-        project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
-        obj_list = Project.objects.filter(id__in = project_ids,active=2)
+    logged_user_obj = UserProfile.objects.get(user_reference_id = user_id )
+    obj_list = userprojectlist(logged_user_obj)
     return render(request,'project/listing.html',locals())
-
-def project_mapping(request):
-    '''
-    This function not in use
-    '''
-    form = ProjectMappingForm()
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return HttpResponseRedirect('/dashboard/')
-    return render(request,'project/project_mapping.html',locals())
 
 def budget_tranche(request):
     '''
@@ -118,6 +93,9 @@ def budget_tranche(request):
     return render(request,'budget/tranche.html',locals())
 
 def tranche_list(request):
+    '''
+    This function is for listing of project tranches
+    '''
     slug =  request.GET.get('slug')
     obj = Project.objects.get(slug=slug)
     user_id = request.session.get('user_id')
@@ -341,7 +319,7 @@ def aggregate_project_parameters(param, values):
     elif param.aggregation_function == "WAP":
         paggr=0
         for val in values:
-            parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id,period_id=val.period_id)
+            parent=ProjectParameterValue.objects.filter(active= 2,keyparameter_id=param.parent_id)
             parent_parameter = sum(map(int,parent.values_list('parameter_value',flat=True)))
             aggr+=int(val)*parent_parameter
             paggr+=parent_parameter
@@ -387,14 +365,13 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
-    activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
+    activity = Activity.objects.filter(project=obj)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)
     timeline = timeline_listing(obj)
     today = datetime.datetime.today()
-    from datetime import timedelta
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json = []
     for i in timeline:
@@ -411,6 +388,16 @@ def project_summary(request):
     image = PMU_URL
     parameter_count = ProjectParameter.objects.filter(active= 2,project=obj,parent=None).count()
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
+    master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
+    ''' calling api to return the gantt chart format data '''
+
+    data = {'project_id':int(obj.id)}
+    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
+    taskdict = ast.literal_eval(json.dumps(rdd.content))
+    number_json = json.dumps(number_json)
+    return render(request,'project/project-summary.html',locals())
+    
+def parameter_pie_chart(parameter_obj):
     colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     counter =0
     name_list = []
@@ -451,13 +438,8 @@ def project_summary(request):
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
-    ''' calling api to return the gantt chart format data '''
-    data = {'project_id':int(obj.id)}
-    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
-    taskdict = ast.literal_eval(json.dumps(rdd.content))
-    number_json = json.dumps(number_json)
-    return render(request,'project/project-summary.html',locals())
-    
+    return master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh
+
 def delete_upload_image(request):
     url=request.META.get('HTTP_REFERER')
     ids = request.GET.get('id')
