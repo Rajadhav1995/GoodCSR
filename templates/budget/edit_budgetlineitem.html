@@ -12,7 +12,7 @@
       
     <div class="white-box">
         <div class="budget_create">
-            <h3>Budget Lineitem Edit for {{projectobj.name|title}}</h3>
+            <h3>Budget Lineitem Edit for <a class="active" href="/manage/project/budget/view/?slug={{projectobj.slug}}"> {{projectobj.name|title}} </a></h3>
             <p> Update Budget Line Items</p>
 
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" >{% csrf_token %}
