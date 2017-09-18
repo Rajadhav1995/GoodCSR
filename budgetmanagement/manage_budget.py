@@ -133,10 +133,9 @@ def projectlineitemadd(request):
                 result = {}
                 for line in line_itemlist:
                     line_list = line.split('_')
-                    if  len(line_list) >= 3:
-                        if str(quarter) in line.split('_'):
-                            name = line.split('_')[0]
-                            result.update({name:request.POST.get(line)})
+                    if  len(line_list) >= 3 and str(quarter) in line.split('_'):
+                        name = line.split('_')[0]
+                        result.update({name:request.POST.get(line)})
                     else:
                         name = line.split('_')[0]
                         result.update({name:request.POST.get(line)})
