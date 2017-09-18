@@ -149,7 +149,6 @@ def projectlineitemadd(request):
                                'unit_type':result['unit-type'],
                                'rate':result['rate'],
                                'planned_unit_cost':result['planned-cost'],
-#                               'utilized_unit_cost':result['utilized-cost'],
                                'start_date':start_date,
                                'end_date':end_date,
                                'row_order':int(i),
@@ -213,7 +212,6 @@ def budgetutilization(request):
     sd = years_list.append(budgetobj.start_date.year)
     ed = years_list.append(budgetobj.end_date.year)
     years_list = list(set(years_list))
-#    quarter_selection_list = get_year_quarterlist(quarter_year,budgetobj.id)
     if quarter_key:
         budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
@@ -285,7 +283,6 @@ def tanchesamountlist(tranche_list):
      return tranche_amount
 
 def budget_supercategory_value(projectobj,budgetobj):
-#    budget_categorylist = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj).values_list('category_id', flat=True).distinct()
     colors= [
     '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
     ]
@@ -417,9 +414,6 @@ def budgetlineitemedit(request):
                                    }
                         budget_lineitem_obj.__dict__.update(budget_extra_values)
                         budget_lineitem_obj.save()
-    #                commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_lineitem_obj),object_id=budget_lineitem_obj.id)
-    #                commentobj.text = result['comment']
-    #                commentobj.save()
 
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/edit_budgetlineitem.html",locals())

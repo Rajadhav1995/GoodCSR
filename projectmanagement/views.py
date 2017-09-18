@@ -94,10 +94,9 @@ def project_mapping(request):
     This function not in use
     '''
     form = ProjectMappingForm()
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/dashboard/')
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/dashboard/')
     return render(request,'project/project_mapping.html',locals())
 
 def budget_tranche(request):
@@ -170,6 +169,12 @@ def add_parameter(request):
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %slug)
     return render(request,'project/add_key_parameter.html',locals())
 
+def delete_parameter(rem_id_list):
+    for i in rem_id_list:
+        rem_obj = ProjectParameter.objects.get(id=i)
+        rem_obj.switch()
+        value_obj = ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
+
 def edit_parameter(request):
     '''
     This function is to Edit(add parameter, remove parameter and modify existing paramter)
@@ -187,10 +192,7 @@ def edit_parameter(request):
         name_count = request.POST.get('name_count')
         if rem_id != '':
             rem_id_list = map(int,str(rem_id).split(','))
-            for i in rem_id_list:
-                rem_obj = ProjectParameter.objects.get(id=i)
-                rem_obj.switch()
-                value_obj = ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
+            del_para = delete_parameter(rem_id_list)
         for j in obj:
             if j.id not in rem_id_list:
                 name = 'name['+str(j)+']'
@@ -215,6 +217,9 @@ def upload_parameter(request):
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
+    project = parameter.project
+    strt = project.start_date.year
+    end = project.end_date.year
     key_parameter = ProjectParameter.objects.filter(active= 2,parent=parameter)
     key_parameter_list = [i.id for i in key_parameter]
     key_parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list)
@@ -279,26 +284,35 @@ def remove_record(request):
 
 def manage_parameter_values(request):
     ids =  request.GET.get('id')
-    op = ProjectParameter.objects.get(id=ids)
-    rr = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=op).order_by('id')
-    names = ProjectParameter.objects.filter(active= 2,parent=op)
+    parameter = ProjectParameter.objects.get(id=ids)
+    project = ProjectParameter.objects.get(id=ids).project
+    strt = project.start_date.year
+    end = project.end_date.year
+    parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=parameter).order_by('id')
+    names = ProjectParameter.objects.filter(active= 2,parent=parameter)
     title_list = []
     title_list.append('Month')
-    newlist = sorted(rr, key=lambda x: x.submit_date, reverse=True)
-    tot_len = rr.count()
-    name_len = names.count()
-    month_len=tot_len/name_len
-    start = 1
-    for j in rr:
-        data=[]
-        if start > month_len:
-            data.append()
-            start=start+1
+    import calendar
+    master_data = []
+    if parameter_value.exists():
+        for l in range(strt,end+1):
+            for k in range(1,13):
+                data = []
+                obj = parameter_value.filter(start_date__month=k,start_date__year=l)
+                if obj.exists():
+                    month_name = calendar.month_name[k] +' "'+ str(l)
+                    data.append(month_name)
+                    [ data.append(int(u.parameter_value)) for u in obj]
+                master_data.append(data)
+            master_data = filter(None, master_data)
+    else:
+        obj = ProjectParameterValue.objects.filter(keyparameter=parameter)
+        data = []
+        for j in obj:
+            month = calendar.month_name[j.start_date.month] + ' "' + str(j.start_date.year)
+            value = j.parameter_value
+            master_data.append([month,value])
     [title_list.append(str(i.name)) for i in names]
-
-    
-    lista = [['JAn','34','44','67'],['JAn','74','44','87']]
-
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):

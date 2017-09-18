@@ -9,68 +9,31 @@
 </style>
 <section class="content-part forms_section">
     <div class="row">
-    <div class="content-top">
-      
-        <!--<form>
-          <div class="multiselect">
-            <div class="selectBox" onclick="showCheckboxes()">
-              <select class="select_box">
-                <option>Sep-Dec</option>
-              </select>
-              <div class="overSelect"></div>
-            </div>
-            <div id="checkboxes">
-              <label for="one">
-                <input type="checkbox" id="one" />Jan-Mar</label>
-              <label for="two">
-                <input type="checkbox" id="two" />Apr-Jul</label>
-              <label for="three">
-                <input type="checkbox" id="three" />Aug-Sep</label>
-              <label for="three">
-                <input type="checkbox" id="three" />Oct-Dec</label>  
-            </div>
-          </div>
-        </form>-->
-       
+    <div class="content-top">       
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
-        <h3>Parameter Uploaded Values for {{op.name}}</h3>
+        <h3>Parameter Uploaded Values for {{parameter.name}}</h3>
         <div style="float: right;"><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}">Upload Values</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-        {% for j in lista %}
-        {% for k in j %}
-        {{k}}
-        {% endfor %}
-        <br>
-        {% endfor %}
-        {% if rr %}
+            
+        {% if parameter_value %}
         <thead>
-            <tr>
+            <tr >
                 {% for i in title_list %}
-                <th>{{i}}</th>
+                <th><b>{{i}}</b></th>
                 {% endfor %}
-                <!-- {% for i in child_parameter %} -->
-                <!-- <th>{{i.keyparameter.name}}</th> -->
-                <!-- {% endfor %} -->
-                
-                <!-- <th>Name2</th>
-                <th>Name3</th>
-                <th>Name4</th>
-                <th>Name5</th>
-                <th>Name6</th> -->
             </tr>
         </thead>
         
-        {% for i in lista %}
+        {% for i in master_data %}
         <tr>
-            <!-- <b><td>{{i.start_date | date:'F'}}</td></b>
-            <td>{{i.keyparameter.name}}</td>
-            <td>{{i.parameter_value}}</td> -->
-            <td>{{i.0}}</td>
+            <td><b>{{i.0}}</b></td>
             <td>{{i.1}}</td>
             <td>{{i.2}}</td>
             <td>{{i.3}}</td>
+            <td>{{i.4}}</td>
+            <td>{{i.5}}</td>
         </tr>{% endfor %}
 
         {% else %}
@@ -79,21 +42,14 @@
             <tr>
                 <th>Month</th>
                 <th>{{parameter.name}}</th>
-                <!-- {% for i in key_parameter %} -->
-                <th>{{i.name}}</th>
-                <!-- {% endfor %} -->
-                
-                <th>Action</th>
             </tr>
         </thead>
         
-        {% for i in ff %}
+        {% for i in master_data %}
         <tr>
             
-            <b><td>{{i.submit_date}}</td></b>
-            <td>{{i.parameter_value}}</td>
-            <td></td>
-           
+            <b><td>{{i.0}}</td></b>
+            <td>{{i.1}}</td>           
             </td>
         </tr>{% endfor %}
         {% endif %}
