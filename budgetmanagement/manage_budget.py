@@ -339,6 +339,42 @@ def inactivatingthelineitems(projectobj,lineobj_list):
     ''' inactivating line items ends '''
     return final_list
 
+def budget_lineitem_update(budget_parameters):
+    ''' function to update the line items '''
+    data_item  = budget_parameters
+    budgetperiodid = data_item['budgetperiodid']
+    budget_dict = data_item['budget_dict']
+    result = data_item['result']
+    if budgetperiodid:
+        budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
+        budget_lineitem_obj.__dict__.update(budget_dict)
+        budget_lineitem_obj.save()
+        utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
+        planned_cost = int(result['planned-cost']) if result['planned-cost'] else 0 
+        budget_lineitem_obj.variance = planned_cost - int(utilized_amount)
+        budget_lineitem_obj.save()
+    else:
+        start_date = data_item['start_date']
+        end_date = data_item['end_date']
+        j = data_item['j']
+        budgetobj = data_item['budgetobj']
+        projectobj = data_item['projectobj']
+        request = data_item['request']
+        quarter = data_item['quarter']
+        budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
+        budget_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
+        budget_extra_values = {
+                   'created_by_id':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))).id,
+                   'row_order':int(j),
+                   'quarter_order':int(quarter),
+                   'budget_period_id':budget_periodobj.id,
+                   'variance':int(budget_lineitem_obj.planned_unit_cost) if budget_lineitem_obj.planned_unit_cost else 0
+                   }
+        budget_lineitem_obj.__dict__.update(budget_extra_values)
+        budget_lineitem_obj.save()
+    return budget_lineitem_obj
+
+
 def budgetlineitemedit(request):
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
@@ -388,26 +424,12 @@ def budgetlineitemedit(request):
                                'row_order':int(j),
                                'quarter_order':int(quarter),
                                }
-                    if budgetperiodid:
-                        budget_lineitem_obj = BudgetPeriodUnit.objects.get_or_none(id=int(budgetperiodid))
-                        budget_lineitem_obj.__dict__.update(budget_dict)
-                        budget_lineitem_obj.save()
-                        utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
-                        planned_cost = int(result['planned-cost']) if result['planned-cost'] else 0 
-                        budget_lineitem_obj.variance = planned_cost - int(utilized_amount)
-                        budget_lineitem_obj.save()
-                    else:
-                        budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
-                        budget_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
-                        budget_extra_values = {
-                                   'created_by_id':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))).id,
-                                   'row_order':int(j),
-                                   'quarter_order':int(quarter),
-                                   'budget_period_id':budget_periodobj.id,
-                                   'variance':int(budget_lineitem_obj.planned_unit_cost) if budget_lineitem_obj.planned_unit_cost else 0
-                                   }
-                        budget_lineitem_obj.__dict__.update(budget_extra_values)
-                        budget_lineitem_obj.save()
-
+                    budget_parameters = {'budgetperiodid':budgetperiodid,
+                                        'budget_dict':budget_dict,
+                                        'result':result,'start_date':start_date,
+                                        'end_date':end_date,'j':j,'budgetobj':budgetobj,
+                                        'projectobj':projectobj,'request':request,
+                                        'quarter':quarter}
+                    budget_saving = budget_lineitem_update(budget_parameters)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/edit_budgetlineitem.html",locals())
