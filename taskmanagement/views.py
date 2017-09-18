@@ -120,16 +120,18 @@ def task_dependencies(request):
     url=request.META.get('HTTP_REFERER')
     obj = None
     try:
-        tasks = Task.objects.filter(active=2,activity = int(ids))
-        obj = Activity.objects.get_or_none(active=2,id= int(ids),activity_type = 1)
+        
+        obj = Activity.objects.get_or_none(active=2,id= int(ids))
         project = Project.objects.get_or_none(id = obj.project.id)
+        tasks = Task.objects.filter(active=2,activity__project=project)
         start_date = project.start_date.strftime('%Y-%m-%d')
+        
     except:
         obj = None
-    if not tasks:
-        tasks = []
+    if obj.activity_type == 2 :
+        tasks = ''
     else:
-        tasks = [{'id':i.id,'name':i.name} for i in tasks if i.is_dependent() != True]
+        tasks = [{'id':i.id,'name':i.name} for i in tasks]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
 
 # to compute start date of the tasks dependent
@@ -185,6 +187,22 @@ def my_tasks_listing(project):
     tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).order_by('-start_date')
     return tasks_list
     
+def get_project_updates(project,uploads):
+    #get project updates 
+    if project.history.latest():
+        attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
+        for a in attach_lists:
+            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,
+            'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''})
+    return uploads
+    
+def get_tasks_status(project,task,uploads):
+    #to get the task status updates 
+    if task.status == 2 and task.history.latest():
+        uploads.append({'project_name':project.name,'task_name':task.name,'attach':'',
+            'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest()})
+    return uploads
+ 
 def updates(obj_list):
 # to get the recent updates of the projects 
     formats = '%H:%M %p'
@@ -194,25 +212,15 @@ def updates(obj_list):
     task_uploads = {}
     for project in obj_list:
         project = Project.objects.get_or_none(id = int(project.id))
-        if project.history.latest():
-            attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
-            for a in attach_lists:
-                task_uploads={'project_name':project.name,'task_name':'','attach':a.description,
-                'user_name':a.created_by.email if a.created_by else '','time':a.created.time(),'date':a.created.date(),'task_status':''}
-                uploads.append(task_uploads)
+        uploads = get_project_updates(project,uploads)
         activity = Activity.objects.filter(project=project)
         task_list = Task.objects.filter(activity__project = project)
         for task in task_list:
             attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
-            if attach_list:
-                for attach in attach_list:
-                    task_uploads={'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                    'user_name':attach.created_by.email if attach.created_by else '','time':attach.created.time(),'date':attach.created.date(),'task_status':task.history.latest()}
-                    uploads.append(task_uploads)
-            if task.status == 2 and task.history.latest():
-                task_uploads={'project_name':project.name,'task_name':task.name,'attach':'',
-                    'user_name':task.created_by.email if task.created_by else '','time':task.modified.time(),'date':task.modified.date(),'task_status':task.history.latest()}
-                uploads.append(task_uploads)
+            for attach in attach_list:
+                uploads.append({'project_name':project.name,'task_name':task.name,'attach':attach.description,
+                'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()})
+            uploads = get_tasks_status(project,task,uploads)
     try:
         uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
     except:
@@ -296,10 +304,11 @@ def corp_total_budget_disbursed(obj_list):
         total_percentage = 100
         disbursed = sum(disbursed_amount)
         try:
-            disbursed_percent =int((disbursed/total)*100) if int(disbursed) > 0 else 0
+            disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
         except:
             disbursed_percent = 0
-        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed),'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
+        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed),'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
+}
     return total_disbursed 
 
 
@@ -440,7 +449,6 @@ class ExpectedDatesCalculator():
             itask.expected_end_date = expected['expected_end_date']
             return itask
 
-        # main_task = Task.objects.get(pk=taskid)
 
         main_task = itask
 

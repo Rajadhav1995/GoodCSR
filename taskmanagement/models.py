@@ -59,8 +59,8 @@ class Task(BaseContent):
     task_progress = models.CharField(max_length=100,**OPTIONAL)
     history = HistoricalRecords()
 
-    def __str__(self):
-        return str(self.name)
+    def __unicode__(self):
+        return str(self.name) or ''
 
     def is_dependent(self):
         task = Task.objects.filter(task_dependency = self.id)

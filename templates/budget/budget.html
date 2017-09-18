@@ -7,7 +7,8 @@
 <section class="green-pad green-height">
 	<div class="row">
 	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
+    	<a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='60px' width = '60px'></a><a href="javascript:void(0);">
+<!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
     </div>    
     <div class="title-left">
     <h4><a href = "/project/summary/?slug={{projectobj.slug}}"><p class="trunc" style="width:620px;">{{projectobj.name}}</p></a></h4>
@@ -17,7 +18,10 @@
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
     </ul>    
     </div>
-    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    <span style="position: absolute;
+    right: 30px;
+    top: 0px;">Comming Soon...</span>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
           <li><a href="/project/summary/?slug={{projectobj.slug}}">Summary</a></li>
@@ -127,13 +131,13 @@
               <th>Super Category</th>
               <th>Heading</th>
               <th>Subheading</th>
-              <th>Line Total</th>
+              <th>Total Planned</th>
               <th>Units Type</th>
                 {% for i,j in quarter_list.items %}
               <th>Units</th>
               <th>Rate</th>
-              <th>Total Planned</th>
-              <th>Total Utilized</th>
+              <th> Planned</th>
+              <th> Utilized</th>
               <th>Variance</th>
               {% endfor %}
             </tr>

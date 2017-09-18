@@ -363,8 +363,8 @@ def project_total_budget(slug):
         utilized_cost = budget.get('utilized_cost') or 0
         disbursed_budget = budget.get('disbursed_cost') or 0
         total_percent = 100
-        disbursed_percent = int((disbursed_budget/planned_cost)*100)
-        utilized_percent = int((utilized_cost/planned_cost)*100)
+        disbursed_percent = int((float(disbursed_budget)/planned_cost)*100)
+        utilized_percent = int((float(utilized_cost)/planned_cost)*100)
     except:
         planned_cost= utilized_cost=disbursed_budget=total_percent= disbursed_percent=utilized_percent =0
 
@@ -398,10 +398,10 @@ def project_summary(request):
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json = []
     for i in timeline:
-        data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else ''}
+        data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
         timeline_json.append(data)
     for j in milestone:
-        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone'}
+        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone','id':''}
         timeline_json.append(data)
     timeline_json.sort(key=lambda item:item['date'], reverse=False)
     timeline_json_length = len(timeline_json)

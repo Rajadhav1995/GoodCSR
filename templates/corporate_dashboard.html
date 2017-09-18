@@ -8,7 +8,7 @@
 <section class="green-pad">
 	<div class="row">
 	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img src="/static/img/logo-v.png" alt="" title="" ></a>
+    	<a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='60px' width = '60px'></a>
     </div>    
     <h3>{{user_obj.organization|title}}</h3>
     <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>
@@ -347,6 +347,7 @@ console.log(map_data[0]);
 var data = {{total_budget | safe}}
 var projects = data.projects
 var total_budget = data.total_budget
+var max_budget = Math.max.apply(Math,total_budget)
 var utilized = data.utilized
 var disbursed_budget = data.disbursed
 console.log(disbursed_budget);
@@ -433,7 +434,7 @@ $(function(){
                 gridLineWidth: 1,
                 gridLineColor: 'lightgrey',
                 min: -0.5,
-                max: 11.75,
+                max: max_budget+1,
                 endOnTick: false,
                 startOnTick: false,
                 plotLines: [{

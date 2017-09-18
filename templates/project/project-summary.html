@@ -9,7 +9,8 @@
 <section class="green-pad green-height">
 	<div class="row">
 	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/logo-v.png" alt="" title="" ></a><a href="javascript:void(0);"><img src="img/logo-n.png" alt="" title="" ></a>
+    	<a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='60px' width = '60px'></a><a href="javascript:void(0);">
+<!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
     </div>
     <div class="title-left">
     {% if obj %}
@@ -22,7 +23,10 @@
         <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.name %}{{project_funders.implementation_partner.name}} {% else %} {% endif %}</a></li>
     </ul>    
     </div>
-    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    <span style="position: absolute;
+    right: 30px;
+    top: 0px;">Comming Soon...</span>
+    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
           <li><a class="active" href="/project/summary/?slug={{slug}}">Summary</a></li>
@@ -47,14 +51,14 @@ $(document).ready(function() {
     var lengths = {{timeline_json_length}};
     var ff= {{timeline_json | safe}}
     var loc_url = '{{image}}'
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sfep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++) 
     {
       var obj = ff[i]
       var name = obj.name;
       console.log(obj);
       if (obj.url) {
-        var url = loc_url +'/'+ obj.url;
+        var url = loc_url + obj.url;
         }else{
           var url = loc_url + '/' +"/static/img/milestone-icon.png";
         };
@@ -62,7 +66,15 @@ $(document).ready(function() {
         var f = new Date(date);
         var month = months[f.getMonth()];
         var nn = f.getMonth();
+        var ids = obj.id
         var date1 = f.getDate()
+        //alert(date1);
+        function delete_upload()
+        {
+            //return confirm("Are you sure you want to delete this item?");
+            alert("Are you sure?");
+        }
+
       if (i % 2) {
         if (obj.type == 'image') {
         $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
@@ -79,7 +91,6 @@ $(document).ready(function() {
     // $(wrapper).append('<div><input class="form-control" placeholder="Enter Activity Name" type="text" name="activity['+x+']"/><input class="form-control" type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
 }
 })
-
 </script>
 <script type="text/javascript">
 var ff= {{number_json | safe}}
@@ -979,7 +990,12 @@ console.log(data);
 //var utilized = data.utilized/(data.utilized + data.total)*100
 //var disbursed = data.disbursed/(data.disbursed + data.total)*100
 var utilized = data.utilized_percent
-var disbursed = data.disbursed_percent-data.utilized_percent
+if (data.disbursed_percent > data.utilized_percent ){
+    var disbursed = data.disbursed_percent-data.utilized_percent
+}
+else{
+    var disbursed = data.utilized_percent - data.disbursed_percent
+}
 var total = 100 - (utilized + disbursed)
 console.log(total , utilized , disbursed);
 var gaugeOptions = {
