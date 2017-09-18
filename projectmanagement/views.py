@@ -402,7 +402,6 @@ def parameter_pie_chart(parameter_obj):
     pip_title_name = []
     number_json = []
     main_list = []
-
     for i in parameter_obj:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
