@@ -89,16 +89,6 @@ def project_list(request):
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
     return render(request,'project/listing.html',locals())
 
-def project_mapping(request):
-    '''
-    This function not in use
-    '''
-    form = ProjectMappingForm()
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return HttpResponseRedirect('/dashboard/')
-    return render(request,'project/project_mapping.html',locals())
-
 def budget_tranche(request):
     '''
     This function is for Add budget tranche
