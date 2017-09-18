@@ -256,6 +256,31 @@ $(function($) {
 ///managing/tasks/expected-date/caluclator/
     $(document).ready(function() {
     if ('{{model_name}}' == 'Task'){
+    
+    $('#id_super_category').on('change',function(e){
+        var dependency_id = $('#id_super_category').val();
+        $.ajax({
+            url:'/managing/activites/',
+            type:'GET',
+            data:{'id':JSON.stringify(dependency_id)},
+            dataType:"json",
+            success:function(data){
+            $('#id_activity option').remove();
+            if (data.activity){
+                activity = data.activity
+               for (var i=0;i<activity.length;i++){
+                $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+                }
+            } 
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    
+    
+    
     $('#id_task_dependency').on('change',function(e){
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({

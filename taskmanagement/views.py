@@ -307,8 +307,11 @@ def corp_total_budget_disbursed(obj_list):
             disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
         except:
             disbursed_percent = 0
-        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
-}
+        try:
+            total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
+    }
+        except:
+            total_disbursed = {'total':0,'disbursed':0,'total_percent':0,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
 
@@ -574,3 +577,13 @@ def convert_budget(val):
         val = float(h) * (0.0001 / 1000)
         val = '{:.2f}'.format(val)
         return str(float(val)) + ' ' + 'Cr'
+
+from django.http import JsonResponse        
+def get_activites_list(request):
+    ids = request.GET.get('id')
+    url=request.META.get('HTTP_REFERER')
+    obj = None
+    activites=[]
+    obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
+    activity = [{'id':i.id,'name':i.name} for i in obj_list]
+    return JsonResponse({"activity":activity})
