@@ -21,10 +21,7 @@ def get_funder(projectobj):
     funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
     return funderobj
 
-@register.assignment_tag
-def get_user_project(request):
-    user_id = request.session.get('user_id')
-    user_obj = UserProfile.objects.get(user_reference_id = user_id )
+def userprojectlist(user_obj):
     if user_obj.is_admin_user == True:
         obj_list = Project.objects.filter(active=2)
     elif user_obj.owner == True and user_obj.organization_type == 1:
@@ -40,6 +37,13 @@ def get_user_project(request):
     else:
         project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
+    return obj_list
+
+@register.assignment_tag
+def get_user_project(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get(user_reference_id = user_id )
+    obj_list = userprojectlist(user_obj)
     project_count = obj_list.count()
     return obj_list
 
