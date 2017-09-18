@@ -20,7 +20,6 @@ from taskmanagement.models import Milestone,Activity
 from pmu.settings import PMU_URL
 from common_method import unique_slug_generator,add_keywords
 from projectmanagement.templatetags.urs_tags import userprojectlist
-# Create your views here.
 
 def create_project(request):
     #Create and edit project (with dynamic activities)
