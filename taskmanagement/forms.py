@@ -136,7 +136,7 @@ class MilestoneForm(forms.ModelForm):
             ('overdue',self.fields['overdue']),
             ('subscribers',self.fields['subscribers']),
             ('status',self.fields['status']),
-            ('project',self.fields['project'])
+            ('project',self.fields['projects'])
             ])
         
         
