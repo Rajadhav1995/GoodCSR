@@ -47,14 +47,14 @@ $(document).ready(function() {
     var lengths = {{timeline_json_length}};
     var ff= {{timeline_json | safe}}
     var loc_url = '{{image}}'
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sfep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++) 
     {
       var obj = ff[i]
       var name = obj.name;
       console.log(obj);
       if (obj.url) {
-        var url = loc_url +'/'+ obj.url;
+        var url = loc_url + obj.url;
         }else{
           var url = loc_url + '/' +"/static/img/milestone-icon.png";
         };
@@ -65,17 +65,21 @@ $(document).ready(function() {
         var ids = obj.id
         var date1 = f.getDate()
         //alert(date1);
+        function delete_upload()
+        {
+            //return confirm("Are you sure you want to delete this item?");
+            alert("Are you sure?");
+        }
 
       if (i % 2) {
-
         if (obj.type == 'image') {
-        $(wrapper).append('<div class="time-line-bdr"></div><li class="event-up">&nbsp;<div class="event-img"><a href="/project/delete/upload/image/?id='+ids+' onclick="return confirm(Are you sure you want to delete this item?);"><i class = "fa fa-remove remove_icon"></i></a><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<div class="time-line-bdr"></div><li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
           $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       } else {
         if (obj.type == 'image') {
-        $(wrapper).append('<div class="time-line-bdr"></div><li class="event-down">&nbsp;<div class="event-img"><a href="/project/delete/upload/image/?id='+ids+' onclick="return confirm(Are you sure you want to delete this item?);"><i class = "fa fa-remove remove_icon"></i></a><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<div class="time-line-bdr"></div><li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
           $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
@@ -83,7 +87,6 @@ $(document).ready(function() {
     // $(wrapper).append('<div><input class="form-control" placeholder="Enter Activity Name" type="text" name="activity['+x+']"/><input class="form-control" type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
 }
 })
-
 </script>
 <script type="text/javascript">
 var ff= {{number_json | safe}}

@@ -188,6 +188,7 @@ def my_tasks_listing(project):
     return tasks_list
     
 def get_project_updates(project,uploads):
+    #get project updates 
     if project.history.latest():
         attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
         for a in attach_lists:
@@ -196,6 +197,7 @@ def get_project_updates(project,uploads):
     return uploads
     
 def get_tasks_status(project,task,uploads):
+    #to get the task status updates 
     if task.status == 2 and task.history.latest():
         uploads.append({'project_name':project.name,'task_name':task.name,'attach':'',
             'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest()})
@@ -302,10 +304,11 @@ def corp_total_budget_disbursed(obj_list):
         total_percentage = 100
         disbursed = sum(disbursed_amount)
         try:
-            disbursed_percent =int((disbursed/total)*100) if int(disbursed) > 0 else 0
+            disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
         except:
             disbursed_percent = 0
-        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed),'total_percent':total_percentage,'disbursed_percent':disbursed_percent}
+        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed),'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
+}
     return total_disbursed 
 
 
@@ -374,7 +377,6 @@ from dateutil import parser
 from datetime import timedelta, time
 
 def get_tasks_objects(request):
-    import ipdb;ipdb.set_trace();
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
@@ -421,7 +423,6 @@ class ExpectedDatesCalculator():
             self.data = {}
 
     # Helper function gets next weekday if next day is weekend
-    @staticmethod
     def next_weekday(self, somedate):
         ret = somedate + timedelta(days=1)
         day = somedate.strftime('%a')
