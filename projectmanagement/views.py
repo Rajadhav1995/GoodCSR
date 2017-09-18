@@ -16,7 +16,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
-from taskmanagement.models import Milestone
+from taskmanagement.models import Milestone,Activity
 from pmu.settings import PMU_URL
 from common_method import unique_slug_generator,add_keywords
 # Create your views here.
@@ -67,7 +67,7 @@ def create_project(request):
                     mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
                         implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
             return HttpResponseRedirect('/project/list/')
-    return render(request,'project/project_edit.html',locals())
+    return render(request,'project/project_add.html',locals())
 
 def project_list(request):
     user_id = request.session.get('user_id')
@@ -387,7 +387,7 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
-    activity = PrimaryWork.objects.filter(content_type=ContentType.objects.get(model="project"),object_id=obj.id)
+    activity = Activity.objects.filter(project=obj)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
