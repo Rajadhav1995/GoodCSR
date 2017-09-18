@@ -112,7 +112,22 @@ def get_budget_quarter_names(budgetobj):
         sd = ed + timedelta(days=1)
     return quarter_list
 
+def get_lineitem_result(line_itemlist,quarter,request):
+    ''' To get the results for each row and for each quarter '''
+    result = {}
+    for line in line_itemlist:
+        line_list = line.split('_')
+        if  len(line_list) >= 3:
+            if str(quarter) in line.split('_'):
+                name = line.split('_')[0]
+                result.update({name:request.POST.get(line)})
+        else:
+            name = line.split('_')[0]
+            result.update({name:request.POST.get(line)})
+    return result
+
 def projectlineitemadd(request):
+    ''' To add budget line items based on quarter and row '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
@@ -130,15 +145,7 @@ def projectlineitemadd(request):
         for i in range(int(count)):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i+1))]
             for quarter,value in quarter_list.items():
-                result = {}
-                for line in line_itemlist:
-                    line_list = line.split('_')
-                    if  len(line_list) >= 3 and str(quarter) in line.split('_'):
-                        name = line.split('_')[0]
-                        result.update({name:request.POST.get(line)})
-                    else:
-                        name = line.split('_')[0]
-                        result.update({name:request.POST.get(line)})
+                result = get_lineitem_result(line_itemlist,quarter,request)
                 if result["subheading"]:
                     budget_period = value
                     start_date = budget_period.split('to')[0].rstrip()
