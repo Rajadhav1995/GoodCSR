@@ -46,7 +46,6 @@ class ActivityForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
-#    super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
     activity = forms.ModelChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
     task_dependency = forms.ModelMultipleChoiceField(queryset = Task.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     start_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=True)
@@ -69,11 +68,9 @@ class TaskForm(forms.ModelForm):
         self.fields['name'].required = True
         self.fields['status'].initial = 1
         self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
-#        self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
         
         self.fields = OrderedDict([
             ('name',self.fields['name']),
-#            ('super_category',self.fields['super_category']),
             ('activity',self.fields['activity']),
             ('task_dependency',self.fields['task_dependency']),
             ('start_date',self.fields['start_date']),
@@ -102,8 +99,6 @@ class TaskForm(forms.ModelForm):
 
 class MilestoneForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
-#    super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
-#    activity =forms.ModelChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'})) 
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=False, widget = forms.SelectMultiple(attrs={'class' :'form-control'}))
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
@@ -126,12 +121,8 @@ class MilestoneForm(forms.ModelForm):
         self.fields['status'].initial = 1
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['task'].required = True
-#        self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
-#        self.fields['activity'].queryset = Activity.objects.filter(project_id = project_id)
         self.fields = OrderedDict([
             ('name',self.fields['name']),
-#            ('super_category',self.fields['super_category']),
-#            ('activity',self.fields['activity']),
             ('task',self.fields['task']),
             ('overdue',self.fields['overdue']),
             ('subscribers',self.fields['subscribers']),
