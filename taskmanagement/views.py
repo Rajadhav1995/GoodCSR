@@ -83,9 +83,6 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
-            from projectmanagement.views import unique_slug_generator
-            f.slug = unique_slug_generator(f)
-            f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
@@ -114,6 +111,7 @@ def active_change(request,model_name):
 
 from django.http import JsonResponse
 def task_dependencies(request):
+#to get the startdate as project start date on selecting the activity and list the tasks based on activities
     start_date = ''
     tasks = []
     ids = request.GET.get('id')
@@ -147,7 +145,8 @@ def task_auto_computation_date(request):
         end_date = ''
     return JsonResponse({"computation_date":end_date})
 
-def milestone_overdue(request):
+def milestone_overdue(request):     
+# to get the overdue of the milestone i.e getting the max end date of the tasks tagged to the milestone
     task_ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
@@ -181,6 +180,7 @@ def total_tasks_completed(slug):
 
 
 def my_tasks_listing(project):
+# to get the tasks which is overdue to today 
     today = datetime.today().date()
     task_lists=[]
     activities = Activity.objects.filter(project = project)
@@ -425,6 +425,7 @@ class ExpectedDatesCalculator():
             self.data = {}
 
     # Helper function gets next weekday if next day is weekend
+    @staticmethod
     def next_weekday(self, somedate):
         ret = somedate + timedelta(days=1)
         day = somedate.strftime('%a')
@@ -540,10 +541,6 @@ class GanttChartData(APIView):
         '''
         tasks = None
         i_project_id = request.data.get('project_id')
-        # i_task = request.query_params.get('task_id')
-
-        # tasks = related_tasks(i_project_id)
-
         tasks = Task.objects.filter(activity__project=i_project_id)
         activities = Activity.objects.filter(project=i_project_id)
         milestones = Milestone.objects.filter(project=i_project_id)
