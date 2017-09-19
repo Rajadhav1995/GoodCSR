@@ -361,8 +361,8 @@ $(document).ready(function() {
         var y = q.getFullYear();
         var date = new Date(y,m,d);
         if (date >= start) {
-            alert("'Deadline' should be before 'Event date'")
-            document.getElementById('dateError1').innerHTML="Event Date should be greater than Today's Date"
+            alert("Start Date should be greater than Today's Date")
+            document.getElementById('dateError1').innerHTML="Start Date should be greater than Today's Date"
         };
         if (date <= start) {
             document.getElementById('dateError1').innerHTML=""
