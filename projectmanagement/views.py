@@ -23,6 +23,7 @@ from projectmanagement.templatetags.urs_tags import userprojectlist
 
 def create_project(request):
     #Create and edit project (with dynamic activities)
+    
     user_id = request.session.get('user_id')
     try:
         slug =  request.GET.get('slug')
