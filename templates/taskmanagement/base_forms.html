@@ -261,6 +261,7 @@ $(function($) {
                 else{
                     $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
                     }
+                 //if ({{model_name}}== 'Milestone'){
                  //document.getElementById("id_task_dependency").value = data.tasks_dependency;
                    // $('#id_task_dependency')
                    // .find('option')
@@ -268,8 +269,8 @@ $(function($) {
                    // for(var i=0;i<data.tasks_dependency.length;i++){
                         
                     //    $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
-                        }
-
+                      //  }
+               // }
 
             },
             error : function(){}
@@ -294,6 +295,7 @@ $(function($) {
             dataType:"json",
             success:function(data){
             $('#id_activity option').remove();
+            $('#id_activity').append('<option value="" >-----</option>')
             if (data.activity){
                 activity = data.activity
                for (var i=0;i<activity.length;i++){
@@ -319,6 +321,8 @@ $(function($) {
             success:function(data){
             if (data.calculation != ""){
                 document.getElementById("id_start_date").value = data.calculation;
+                var date = data.calculation
+                $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date });
              }
             else {
                 $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -356,6 +360,7 @@ $(document).ready(function() {
               document.getElementById("id_actual_end_date").value = actual_end_date
           }
     }
+    $(".hasDatepicker").keyup(function(e) {if(e.keyCode == 8 || e.keyCode == 46) { $.datepicker._clearDate(this); }});
 });
 </script>
 
