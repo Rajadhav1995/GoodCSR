@@ -85,7 +85,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
-            from common_method import unique_slug_generator
+            from projectmanagement.common_method import unique_slug_generator
             f.slug = unique_slug_generator(f,key)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
@@ -291,28 +291,27 @@ def corp_total_budget_disbursed(obj_list):
     utilized_budget=[]
     total_disbursed={}
     disbursed_amount=[]
-    total =disbursed=0
-    if obj_list:
-        for project in obj_list:
-            try:
-                budget = project.project_budget_details()
-                planned_cost = budget.get('planned_cost') or 0 
-                utilized_cost = budget.get('utilized_cost') or 0
-                disbursed_budget = budget.get('disbursed_cost') or 0
-                total_budget.append(planned_cost)
-                utilized_budget.append(utilized_cost)
-                disbursed_amount.append(disbursed_budget)
-            except:
-                total = 0
-                disbursed=0
-        total = sum(total_budget)
-        total_percentage = 100
-        disbursed = sum(disbursed_amount)
+    total =disbursed=total_percentage =disbursed_percent =0
+    for project in obj_list:
         try:
-            disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
+            budget = project.project_budget_details()
+            planned_cost = budget.get('planned_cost') or 0 
+            utilized_cost = budget.get('utilized_cost') or 0
+            disbursed_budget = budget.get('disbursed_cost') or 0
+            total_budget.append(planned_cost)
+            utilized_budget.append(utilized_cost)
+            disbursed_amount.append(disbursed_budget)
         except:
-            disbursed_percent = 0
-        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
+            total = 0
+            disbursed=0
+    total = sum(total_budget)
+    total_percentage = 100
+    disbursed = sum(disbursed_amount)
+    try:
+        disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
+    except:
+        disbursed_percent = 0
+    total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
 
@@ -333,6 +332,18 @@ def my_tasks_details(request):
     
     return render(request,'taskmanagement/my-task.html',locals())
     
+def create_task_progress(request,task):
+    try:
+        task.task_progress = request.POST.get('child2')
+        task.status = 2 if request.POST.get('child2') == '100' else 3 
+        task.save()
+        task.actual_end_date = task.modified.date() if task.task_progress == 100 else task.actual_end_date
+        task.save()
+        task.actual_start_date = task.modified.date() if not task.actual_start_date else task.actual_start_date 
+        task.save()
+    except:
+        pass
+    return task
     
 def task_comments(request):
     msg =""
@@ -347,16 +358,7 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
-        try:
-            task.task_progress = request.POST.get('child2')
-            task.status = 2 if request.POST.get('child2') == 100 else 3 
-            task.save()
-            task.actual_end_date = task.modified.date() if task.task_progress == 100 else task.actual_end_date
-            task.save()
-            task.actual_start_date = task.modified.date() if not task.actual_start_date else task.actual_start_date 
-            task.save()
-        except:
-            pass
+        
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -375,6 +377,7 @@ def task_comments(request):
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
             comment.save()
+        progress_status = create_task_progress(request,task)
         return HttpResponseRedirect(url+'&key='+task.slug+'&msg='+msg)
     return HttpResponseRedirect(url)
 
@@ -486,14 +489,7 @@ class ExpectedDatesCalculator():
             expected_start_date = main_task.start_date
             expected_end_date = main_task.end_date
             if(len(dep_dates) > 0):
-                for dep in dep_dates:
-                    expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
-                        dep.expected_end_date) > expected_start_date) else expected_start_date
-                expected_end_date = expected_start_date + \
-                    (main_task.end_date - main_task.start_date)
-                expected_end_date = self.next_weekday(
-                    expected_end_date - timedelta(days=1))
-
+                expected_start_date,expected_end_date = self.get_expected_dates(dep_dates,main_task)
             ret = {'expected_start_date': expected_start_date,
                    'expected_end_date': expected_end_date}
             self.data[taskid] = ret
@@ -501,6 +497,17 @@ class ExpectedDatesCalculator():
             main_task.expected_end_date = ret['expected_end_date']
             return main_task
 
+    def get_expected_dates(self,dep_dates,main_task):
+        expected_start_date = main_task.start_date
+        expected_end_date = main_task.end_date
+        for dep in dep_dates:
+            expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
+                dep.expected_end_date) > expected_start_date) else expected_start_date
+        expected_end_date = expected_start_date + \
+            (main_task.end_date - main_task.start_date)
+        expected_end_date = self.next_weekday(
+            expected_end_date - timedelta(days=1))
+        return expected_start_date,expected_end_date
 
 def get_descendants(task):
     descendants = Task.objects.filter(task_dependency=task.id)
