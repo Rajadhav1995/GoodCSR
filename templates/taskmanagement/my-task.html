@@ -128,7 +128,7 @@
          <div class="task-head-rgt">
 <!--            <div class="my-progress-bar"></div>-->
 <!--            <img src="/static/img/progress-icon.png" alt="">-->
-            <p>{%if i.task_progress%}{{i.task_progress}}% {% else %}0%{% endif %}{%if i.task_progress == 100 %}completed {% else %} in progress{% endif %}</p>
+            <p>{%if i.task_progress%}{{i.task_progress}}% {% else %}0%{% endif %}{%if i.status == 2 %}completed {% else %} in progress{% endif %}</p>
          </div>
          </div>
          <div class="planned-date">
@@ -451,30 +451,30 @@
        });
 </script>
 
-<script>
-        
-    $(document).ready(function(){
+<!--<script>-->
+<!--        -->
+<!--    $(document).ready(function(){-->
 
-        $("#updation_form").validate({
-            rules :
-            {
-                comment : {required:true},
-                
-            },
-            messages:
-            {
-                comment : {required : "Please enter an update"},
-            },
-            highlight: function (element) {
-                $(element).addClass('error')
-            },
-            unhighlight: function (element) {
-                $(element).removeClass('error')
-            },
-        });
-        });
-        
-</script>
+<!--        $("#updation_form").validate({-->
+<!--            rules :-->
+<!--            {-->
+<!--                comment : {required:true},-->
+<!--                -->
+<!--            },-->
+<!--            messages:-->
+<!--            {-->
+<!--                comment : {required : "Please enter an update"},-->
+<!--            },-->
+<!--            highlight: function (element) {-->
+<!--                $(element).addClass('error')-->
+<!--            },-->
+<!--            unhighlight: function (element) {-->
+<!--                $(element).removeClass('error')-->
+<!--            },-->
+<!--        });-->
+<!--        });-->
+<!--        -->
+<!--</script>-->
 
 
 <script>

@@ -335,12 +335,17 @@ def my_tasks_details(request):
 def create_task_progress(request,task):
     try:
         task.task_progress = request.POST.get('child2')
-        task.status = 2 if request.POST.get('child2') == '100' else 3 
-        task.save()
-        task.actual_end_date = task.modified.date() if task.task_progress == 100 else task.actual_end_date
-        task.save()
-        task.actual_start_date = task.modified.date() if not task.actual_start_date else task.actual_start_date 
-        task.save()
+        if request.POST.get('child2') == '100':
+            task.status = 2  
+            task.actual_end_date = task.modified.date() 
+            task.save()
+        if task.status == 2 and not task.actual_start_date:
+            task.actual_end_date = task.modified.date() 
+            task.actual_start_date = task.start_date
+            task.save()
+        if task.status != 2 and not task.actual_start_date:
+            task.actual_start_date = task.modified.date() 
+            task.save()
     except:
         pass
     return task
