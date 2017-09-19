@@ -15,6 +15,7 @@ from projectmanagement.models import UserProfile,Project
 
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
 STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
+MILESTONE_CHOICES=((0,' '),(1, 'Open'), (3, 'Ongoing'),)
 
 class ActivityForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
@@ -104,7 +105,7 @@ class MilestoneForm(forms.ModelForm):
     super_category = forms.ModelMultipleChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     activity =forms.ModelMultipleChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=False, widget = forms.SelectMultiple(attrs={'class' :'form-control'}))
-    status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
+    status = forms.ChoiceField(choices = MILESTONE_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     overdue = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
     project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}),label='')
