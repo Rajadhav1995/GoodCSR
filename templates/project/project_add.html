@@ -387,9 +387,11 @@ function funder_val() {
             var implementation_partner = f.options[f.selectedIndex].value;
             if (funder == 0) {
                 document.getElementById('funder_error').innerHTML="<b>PLease select Funder</b>"
+                return false;
             }
             if (implementation_partner == 0) {
                 document.getElementById('partner_error').innerHTML="<b>Please select Implementation Partner</b>"
+                return false;
             }
         }
     </script>
