@@ -20,6 +20,12 @@ def diff(list1, list2):
     d = set(list1).intersection(set(list2))
     return list(c - d)
 
+def project_amount_difference(projectobj):
+    project_amount = projectobj.project_budget_details()
+    planned_amount = project_amount['planned_cost']
+    project_amount = int(projectobj.total_budget) if projectobj.total_budget else 0
+    final_budget_amount = planned_amount - project_amount if planned_amount > project_amount else 0
+    return final_budget_amount
 
 def projectbudgetlist(request):
     '''  for listing the budget '''
@@ -172,7 +178,8 @@ def projectlineitemadd(request):
                                'quarter_order':int(quarter),
                                }
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
-        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
+        final_budget_amount = project_amount_difference(projectobj)
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/budget_lineitem.html",locals())
 
 def projectbudgetdetail(request):
@@ -267,6 +274,7 @@ def budgetutilization(request):
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
         for i in lineobj_list:
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i))]
+            budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
             line_item_updated_values = upload_budget_utlized(line_itemlist,i,request,budget_periodobj)
             budget_periodobj.__dict__.update(line_item_updated_values)
             budget_periodobj.save()
@@ -349,7 +357,7 @@ def inactivatingthelineitems(projectobj,lineobj_list):
     '''
         inactivating the removed line items
     '''
-    budget_lineitem_ids = BudgetPeriodUnit.objects.filter(budget_period__project = projectobj).values_list('id',flat=True)
+    budget_lineitem_ids = BudgetPeriodUnit.objects.filter(budget_period__project = projectobj,active=2).values_list('id',flat=True)
     budget_lineitem_ids = map(int,budget_lineitem_ids)
     lineobj_list = map(int,lineobj_list)
     final_list = diff(lineobj_list,budget_lineitem_ids)
@@ -367,13 +375,13 @@ def inactivatingthelineitems(projectobj,lineobj_list):
 def get_budget_edit_result(line_itemlist,quarter,request):
     '''  Function to prepare the result list'''
     result = {}
-    budgetperiodid = 0
     for line in line_itemlist:
         line_list = line.split('_')
-        if  len(line_list) >= 3 and str(quarter) in line.split('_') :
-            name = line.split('_')[0]
-            budgetperiodid = line.split('_')[2]
-            result.update({name:request.POST.get(line)})
+        if  len(line_list) >= 3:
+            if str(quarter) == str(line.split('_')[1]) :
+                name = line.split('_')[0]
+                budgetperiodid = line.split('_')[2]
+                result.update({name:request.POST.get(line)})
         else:
             name = line.split('_')[0]
             result.update({name:request.POST.get(line)})
@@ -462,5 +470,6 @@ def budgetlineitemedit(request):
                                         'projectobj':projectobj,'request':request,
                                         'quarter':quarter}
                     budget_saving = budget_lineitem_update(budget_parameters)
-        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
+        final_budget_amount = project_amount_difference(projectobj)
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&edit=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/edit_budgetlineitem.html",locals())

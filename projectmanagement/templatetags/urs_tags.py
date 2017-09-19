@@ -59,7 +59,7 @@ def get_budget_lineitem(row,projectobj):
 @register.assignment_tag
 def get_quarter_details(row,quarter,projectobj):
     try:
-        line_itemobj = BudgetPeriodUnit.objects.get_or_none(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
+        line_itemobj = BudgetPeriodUnit.objects.get(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     except:
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj

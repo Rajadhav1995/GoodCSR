@@ -6,11 +6,17 @@ from .forms import(ProjectUserRoleRelationshipForm,)
 
 
 def projectuserslist(request):
+    '''
+    This function is to add show project list, created by logged in user and it will show all project list to admin
+    '''
     project_slug = request.GET.get('slug')
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project__slug=project_slug)
     return render(request,'project/project_user_list.html',locals())
 
 def projectuseradd(request):
+    '''
+    This function is to add user
+    '''
     key = "add"
     redirect_key = request.GET.get('key')
     project_slug = request.GET.get('slug')
@@ -34,6 +40,9 @@ def projectuseradd(request):
     return render(request,'project/manage_project_user.html',locals())
 
 def projectuseredit(request):
+    '''
+    This function is to edit user
+    '''
     key = "edit"
     redirect_key = request.GET.get('key')
     objid = request.GET.get('objid')

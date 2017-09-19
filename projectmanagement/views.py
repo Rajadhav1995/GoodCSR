@@ -23,6 +23,7 @@ from projectmanagement.templatetags.urs_tags import userprojectlist
 
 def create_project(request):
     #Create and edit project (with dynamic activities)
+    
     user_id = request.session.get('user_id')
     try:
         slug =  request.GET.get('slug')
@@ -65,6 +66,9 @@ def create_project(request):
     return render(request,'project/project_add.html',locals())
 
 def project_list(request):
+    '''
+    This function is to list all project created by logged in user
+    '''
     user_id = request.session.get('user_id')
     logged_user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(logged_user_obj)
@@ -99,6 +103,9 @@ def tranche_list(request):
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
+    '''
+    This function is to add new parameter for project
+    '''
     user_id = request.session.get('user_id')
     slug =  request.GET.get('slug')
     proj_obj = Project.objects.filter(created_by=UserProfile.objects.get(id=3))
@@ -144,6 +151,9 @@ def add_parameter(request):
     return render(request,'project/add_key_parameter.html',locals())
 
 def delete_parameter(rem_id_list):
+    '''
+    this function is to delete parameter. Pass parameter id in list
+    '''
     for i in rem_id_list:
         rem_obj = ProjectParameter.objects.get(id=i)
         rem_obj.switch()
@@ -188,6 +198,9 @@ def edit_parameter(request):
     return render(request,'project/edit_key_parameter.html',locals())
 
 def upload_parameter(request):
+    '''
+    This function is to add values to key parameter which are added by admin (parameters number is dynamic)
+    '''
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
@@ -230,6 +243,9 @@ def upload_parameter(request):
     return render(request,'project/key_parameter.html',locals())
 
 def manage_parameter(request):
+    '''
+    This function is to manange(list) all key parameter for perticular project
+    '''
     slug =  request.GET.get('slug')
     parameter = ProjectParameter.objects.filter(active= 2,project__slug=slug,parent=None)
     parameter_count = parameter.count()
@@ -237,6 +253,9 @@ def manage_parameter(request):
     return render(request,'project/parameter_list.html',locals())
 
 def manage_parameter_values1(request):
+    '''
+    This function not in use
+    '''
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
     parameter_count = ProjectParameter.objects.filter(active= 2,parent=parameter).count() + 1
@@ -250,6 +269,9 @@ def manage_parameter_values1(request):
     return render(request,'project/parameter_value_list.html',locals())
 
 def remove_record(request):
+    '''
+    This is common method to delete(deactivate) record from db. Pass model name and its id
+    '''
     url=request.META.get('HTTP_REFERER')
     ids =  request.GET.get('id')
     model =  eval(request.GET.get('model'))
@@ -257,6 +279,9 @@ def remove_record(request):
     return HttpResponseRedirect(url)
 
 def manage_parameter_values(request):
+    '''
+    This function is to get all parameter values for perticular key parameter
+    '''
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
     project = ProjectParameter.objects.get(id=ids).project
@@ -394,8 +419,9 @@ def project_summary(request):
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):
-    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
-    counter =0
+    '''
+    This function is to get pie chart information in json data (both pie chart type)
+    '''
     name_list = []
     para_name = {}
     pin_title_name = []
@@ -410,14 +436,7 @@ def parameter_pie_chart(parameter_obj):
             data = {'title':i.name,'value':value,'type':i.parameter_type}
             number_json.append(data)
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
-            main_list = []
-            pie_object = ProjectParameter.objects.filter(active= 2,parent=i)
-            for y in pie_object:
-                values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y).values_list('parameter_value',flat=True))
-                value = aggregate_project_parameters(pie_object[0],values)
-                color = colors[counter]
-                counter+=1
-                main_list.append({'name': str(y.name),'y':value,'color':color})
+            main_list = pie_chart_mainlist(i)
         if i.parameter_type in para_name:
             para_name[i.parameter_type].append(main_list)
         else:
@@ -433,6 +452,24 @@ def parameter_pie_chart(parameter_obj):
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
     return master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh
+
+
+def pie_chart_mainlist(obj):
+    '''
+    This function is to get pie chart information in json data (both pie chart type)
+    '''
+    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
+    main_list = []
+    counter =0
+    pie_object = ProjectParameter.objects.filter(active= 2,parent=obj)
+    for y in pie_object:
+        values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y).values_list('parameter_value',flat=True))
+        value = aggregate_project_parameters(pie_object[0],values)
+        color = colors[counter]
+        counter+=1
+        main_list.append({'name': str(y.name),'y':value,'color':color})
+    return main_list
+
 
 def delete_upload_image(request):
     url=request.META.get('HTTP_REFERER')

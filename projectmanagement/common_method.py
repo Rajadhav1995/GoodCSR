@@ -3,7 +3,7 @@ from projectmanagement.utils import random_string_generator
 
 def unique_slug_generator(instance,edit, new_slug=None):
     """
-    This function is for creating unique slug. Just pass object
+    This function is for creating unique slug. Just pass object and edit=0 or 1, where 1 is for edit
     """
     slug = instance.slug
     if not edit:
