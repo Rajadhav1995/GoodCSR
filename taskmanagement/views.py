@@ -57,7 +57,7 @@ def add_taskmanagement(request,model_name,m_form):
             if form.is_valid():
                 f=form.save()
                 from projectmanagement.common_method import unique_slug_generator
-                f.slug = unique_slug_generator(f,key)
+                f.slug = f.name.replace(' ','-')
                 f.save()
                 if model_name == 'Activity' or model_name == 'Task':
                     f.created_by = user
@@ -86,7 +86,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         if form.is_valid():
             f=form.save()
             from projectmanagement.common_method import unique_slug_generator
-            f.slug = unique_slug_generator(f,key)
+            f.slug = f.name.replace(' ','-')
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user

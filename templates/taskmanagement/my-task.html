@@ -156,7 +156,7 @@
             </div>
             <div class="task-completion-right">
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">{% csrf_token %}
-                <input id = 'task_id' name = 'task_id' type='hidden' value = "{{i.id}}"/>
+                <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
                <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
                <div>
                <i class="fa fa-file"></i>
@@ -191,7 +191,7 @@
 <!--                  </div>-->
                 
                 <div style="width: 375px;float: left;">
-                        <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="{{i.task_progress}}" />
+                        <input type="hidden" name="child2" class="range div-{{i.slug}}" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="{{i.task_progress}}" />
                 </div>
                 
                   <input class="task-link" type="submit" value="Add update"/>
@@ -479,7 +479,9 @@
 
 
 <script>
-   $('.range').rangeControl({
+for(i=0;i<task_listing.length;i++){
+   $(".div-"+key)
+   $('.range'+'.div'+).rangeControl({
   min: 10,
   max: 110,
   step: 2,
@@ -539,7 +541,7 @@
          $('#slectedNumber').html($('.range-control-current-value').text());
     });
 
-
+}
   
 
 </script>
