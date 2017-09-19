@@ -191,7 +191,7 @@
 <!--                  </div>-->
                 
                 <div style="width: 375px;float: left;">
-                        <input type="hidden" name="child2" class="range div-{{i.slug}}" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="{{i.task_progress}}" />
+                        <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="{{i.task_progress}}" />
                 </div>
                 
                   <input class="task-link" type="submit" value="Add update"/>
@@ -479,9 +479,7 @@
 
 
 <script>
-for(i=0;i<task_listing.length;i++){
-   $(".div-"+key)
-   $('.range'+'.div'+).rangeControl({
+   $('.range').rangeControl({
   min: 10,
   max: 110,
   step: 2,
@@ -541,7 +539,6 @@ for(i=0;i<task_listing.length;i++){
          $('#slectedNumber').html($('.range-control-current-value').text());
     });
 
-}
   
 
 </script>
