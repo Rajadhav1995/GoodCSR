@@ -349,7 +349,7 @@ def inactivatingthelineitems(projectobj,lineobj_list):
     '''
         inactivating the removed line items
     '''
-    budget_lineitem_ids = BudgetPeriodUnit.objects.filter(budget_period__project = projectobj).values_list('id',flat=True)
+    budget_lineitem_ids = BudgetPeriodUnit.objects.filter(budget_period__project = projectobj,active=2).values_list('id',flat=True)
     budget_lineitem_ids = map(int,budget_lineitem_ids)
     lineobj_list = map(int,lineobj_list)
     final_list = diff(lineobj_list,budget_lineitem_ids)
@@ -367,13 +367,13 @@ def inactivatingthelineitems(projectobj,lineobj_list):
 def get_budget_edit_result(line_itemlist,quarter,request):
     '''  Function to prepare the result list'''
     result = {}
-    budgetperiodid = 0
     for line in line_itemlist:
         line_list = line.split('_')
-        if  len(line_list) >= 3 and str(quarter) in line.split('_') :
-            name = line.split('_')[0]
-            budgetperiodid = line.split('_')[2]
-            result.update({name:request.POST.get(line)})
+        if  len(line_list) >= 3:
+            if str(quarter) == str(line.split('_')[1]) :
+                name = line.split('_')[0]
+                budgetperiodid = line.split('_')[2]
+                result.update({name:request.POST.get(line)})
         else:
             name = line.split('_')[0]
             result.update({name:request.POST.get(line)})

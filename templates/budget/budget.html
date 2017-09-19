@@ -159,9 +159,9 @@
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_details j i projectobj as line_itemobj %}
                    <td class=""> {{line_itemobj.unit}} </td>
-                    <td class=""> {{line_itemobj.rate}} </td>
-                     <td class=""> {{line_itemobj.planned_unit_cost}} </td>
-                     <td class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {%endif %}</td>
+                    <td class=""> {{line_itemobj.rate}}  </td>
+                     <td class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                     <td class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
                      <td class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                      {% endfor %}
             </tr>
