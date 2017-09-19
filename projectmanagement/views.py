@@ -46,7 +46,7 @@ def create_project(request):
             obj.content_type = ContentType.objects.get(model="Program")
             obj.object_id = 0
             obj.request_status = 4
-            obj.created_by = UserProfile.objects.get(id=user_id)
+            obj.created_by = UserProfile.objects.get(user_reference_id=user_id)
             obj.slug = unique_slug_generator(obj,instance)
             obj.save()
             form.save_m2m()
