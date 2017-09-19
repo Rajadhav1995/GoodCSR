@@ -87,6 +87,7 @@ class Task(BaseContent):
                 for i in attachments.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
                     inner_attach.append(i)
                 attach.append({date:inner_attach})
+            attach = sorted(attach, key=lambda key: key,reverse=True)
         else:
             attach=[]
         return attach
