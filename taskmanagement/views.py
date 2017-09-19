@@ -431,7 +431,7 @@ class ExpectedDatesCalculator():
 
     # Helper function gets next weekday if next day is weekend
     @staticmethod
-    def next_weekday(self, somedate):
+    def next_weekday(somedate):
         ret = somedate + timedelta(days=1)
         day = somedate.strftime('%a')
         if day == 'Fri':
