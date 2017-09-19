@@ -9,6 +9,7 @@ from projectmanagement.models import Project
 from media.forms import AttachmentForm,ImageUpload
 
 def list_document(request):
+    # this function will list documents of project
 	slug =  request.GET.get('slug')
 	model = eval(request.GET.get('model'))
 	try:
@@ -113,5 +114,5 @@ def edit_attachment(request):
             keywords = add_keywords(keys,obj,attach_model,1)
         except:
             pass
-            return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
+        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
     return render(request,'attachment/doc_upload.html',locals())

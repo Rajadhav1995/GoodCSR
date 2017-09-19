@@ -15,17 +15,20 @@ from .forms import(ProjectBudgetForm,)
 from datetime import datetime
 
 def diff(list1, list2):
+    ''' to get the difference of two list '''
     c = set(list1).union(set(list2))
     d = set(list1).intersection(set(list2))
     return list(c - d)
 
 
 def projectbudgetlist(request):
+    '''  for listing the budget '''
     project_slug = request.GET.get("slug")
     budgetlist = Budget.objects.filter(project__slug=project_slug)
     return render(request,"budget/budget_list.html",locals())
 
 def projectbudgetadd(request):
+    ''' to create budget (step 1) '''
     key = "budget"
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
@@ -45,6 +48,7 @@ def projectbudgetadd(request):
     return render(request,"budget/budget_create.html",locals())
 
 def projectbudgetcategoryadd(request):
+    ''' to create budget category (step 2) '''
     key = "category"
     project_slug = request.GET.get('slug')
     budget_id = request.GET.get('budget_id')
@@ -66,7 +70,7 @@ def projectbudgetcategoryadd(request):
     return render(request,"budget/budget_create.html",locals())
 
 def get_budget_logic(budgetobj):
-
+    ''' common functionality to get the start date,end date and no of quarter'''
     sd = budgetobj.actual_start_date
     budget_enddate = budgetobj.end_date
     if sd.day >= 15:
@@ -81,6 +85,7 @@ def get_budget_logic(budgetobj):
     return output_data
 
 def get_budget_quarters(budgetobj):
+    ''' To get the quarter list i this format 2017-10-01 to 2017-12-31 '''
     data = get_budget_logic(budgetobj)
     sd = data['sd']
     budget_enddate = data['budget_enddate']
@@ -97,6 +102,7 @@ def get_budget_quarters(budgetobj):
     return quarter_list
 
 def get_budget_quarter_names(budgetobj):
+    ''' To get the quarter list in jan - feb '''
     data = get_budget_logic(budgetobj)
     ed = data['ed']
     sd = data['sd']
@@ -112,7 +118,22 @@ def get_budget_quarter_names(budgetobj):
         sd = ed + timedelta(days=1)
     return quarter_list
 
+def get_lineitem_result(line_itemlist,quarter,request):
+    ''' To get the results for each row and for each quarter '''
+    result = {}
+    for line in line_itemlist:
+        line_list = line.split('_')
+        if  len(line_list) >= 3:
+            if str(quarter) in line.split('_'):
+                name = line.split('_')[0]
+                result.update({name:request.POST.get(line)})
+        else:
+            name = line.split('_')[0]
+            result.update({name:request.POST.get(line)})
+    return result
+
 def projectlineitemadd(request):
+    ''' To add budget line items based on quarter and row '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
@@ -130,15 +151,7 @@ def projectlineitemadd(request):
         for i in range(int(count)):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i+1))]
             for quarter,value in quarter_list.items():
-                result = {}
-                for line in line_itemlist:
-                    line_list = line.split('_')
-                    if  len(line_list) >= 3 and str(quarter) in line.split('_'):
-                        name = line.split('_')[0]
-                        result.update({name:request.POST.get(line)})
-                    else:
-                        name = line.split('_')[0]
-                        result.update({name:request.POST.get(line)})
+                result = get_lineitem_result(line_itemlist,quarter,request)
                 if result["subheading"]:
                     budget_period = value
                     start_date = budget_period.split('to')[0].rstrip()
@@ -163,6 +176,7 @@ def projectlineitemadd(request):
     return render(request,"budget/budget_lineitem.html",locals())
 
 def projectbudgetdetail(request):
+    '''  budget page details based on the project. (old function.)'''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
@@ -174,6 +188,7 @@ def projectbudgetdetail(request):
     return render(request,"budget/budget_detail.html",locals())
 
 def get_year_quarterlist(selected_year,budget_id):
+    ''' provide the qquarter list based on year choosen in report utlization'''
     data = get_budget_logic(budgetobj)
     no_of_quarters = data['no_of_quarters']
     ed = data['ed']
@@ -191,14 +206,39 @@ def get_year_quarterlist(selected_year,budget_id):
     return quarter_list
 
 def year_quarter_list(request):
+    ''' Ajax call function for utilization filter'''
     selected_year = request.GET.get('year')
     budget_id = request.GET.get('budget_id')
     quarter_list = get_year_quarterlist(selected_year,budget_id)
     response = {'quarter_list':quarter_list}
     return JsonResponse(response)
 
+
+def upload_budget_utlized(line_itemlist,i,request,budget_periodobj):
+    ''' function to upload the utlized amount based on row and quarter'''
+    line_item_updated_values = {}
+    for j in line_itemlist:
+        item_list = j.split("_")
+        if str(i) == item_list[-1]:
+            budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
+            if str(item_list[0]) == "utilized" :
+                line_item_updated_values.update({'utilized_unit_cost':request.POST.getlist(j)[0]})
+            elif str(item_list[0]) == "variance": 
+                line_item_updated_values.update({item_list[0]:request.POST.getlist(j)[0]})
+            else:
+                text =request.POST.getlist(j)[0]
+                commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
+                commentobj.text = text
+                commentobj.save()
+    return line_item_updated_values
+
+
 def budgetutilization(request):
     ''' Report utilization update based on the quarter selected '''
+    budget_period = []
+    budget_periodconflist = []
+    span_length = 0
+    quarter_selection_list = []
     quarter_key = request.GET.get('quarter')
     quarter_year = request.GET.get('year')
     project_slug = request.GET.get('slug')
@@ -216,11 +256,6 @@ def budgetutilization(request):
         quarter_selection_list = get_year_quarterlist(quarter_year,budgetobj.id)
         quarter_list = {}
         quarterobj = quarter_list.update(dict([(k,v) for k,v in quarter_selection_list.iteritems() if int(quarter_key) == k]))
-    else:
-        budget_period = []
-        budget_periodconflist = []
-        span_length = 0
-        quarter_selection_list = []
     if request.method == "POST":
         count = request.POST.get('count')
         project_slug = request.POST.get('slug')
@@ -231,26 +266,14 @@ def budgetutilization(request):
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
         for i in lineobj_list:
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i))]
-            line_item_updated_values = {}
-            for j in line_itemlist:
-                item_list = j.split("_")
-                if str(i) == item_list[-1]:
-                    budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
-                    if str(item_list[0]) == "utilized" :
-                        line_item_updated_values.update({'utilized_unit_cost':request.POST.getlist(j)[0]})
-                    elif str(item_list[0]) == "variance": 
-                        line_item_updated_values.update({item_list[0]:request.POST.getlist(j)[0]})
-                    else:
-                        text =request.POST.getlist(j)[0]
-                        commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
-                        commentobj.text = text
-                        commentobj.save()
+            line_item_updated_values = upload_budget_utlized(line_itemlist,i,request,budget_periodobj)
             budget_periodobj.__dict__.update(line_item_updated_values)
             budget_periodobj.save()
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/budget_utilization.html",locals())
 
 def budget_amount_list(budgetobj,projectobj,quarter_list):
+    ''' to get the overall budget amount '''
     quarter_planned_amount = {}
     quarter_utilized_amount = {}
     for i in quarter_list.keys():
@@ -268,6 +291,7 @@ def budget_amount_list(budgetobj,projectobj,quarter_list):
     return map(int,budget_period_plannedamount),map(int,budget_period_utilizedamount)
 
 def tanchesamountlist(tranche_list):
+     ''' to get the tranches detail amount'''
      planned_amount = tranche_list.aggregate(Sum('planned_amount')).values()[0]
      actual_disbursed_amount = tranche_list.aggregate(Sum('actual_disbursed_amount')).values()[0]
      recommended_amount = tranche_list.aggregate(Sum('recommended_amount')).values()[0]
@@ -294,7 +318,7 @@ def budget_supercategory_value(projectobj,budgetobj):
     return final_project_category_list
 
 def budgetview(request):
-
+    '''  Redirecting to the budget summary page '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
@@ -339,6 +363,21 @@ def inactivatingthelineitems(projectobj,lineobj_list):
     ''' inactivating line items ends '''
     return final_list
 
+def get_budget_edit_result(line_itemlist,quarter,request):
+    '''  Function to prepare the result list'''
+    result = {}
+    budgetperiodid = 0
+    for line in line_itemlist:
+        line_list = line.split('_')
+        if  len(line_list) >= 3 and str(quarter) in line.split('_') :
+            name = line.split('_')[0]
+            budgetperiodid = line.split('_')[2]
+            result.update({name:request.POST.get(line)})
+        else:
+            name = line.split('_')[0]
+            result.update({name:request.POST.get(line)})
+    return result,budgetperiodid
+
 def budget_lineitem_update(budget_parameters):
     ''' function to update the line items '''
     data_item  = budget_parameters
@@ -374,8 +413,8 @@ def budget_lineitem_update(budget_parameters):
         budget_lineitem_obj.save()
     return budget_lineitem_obj
 
-
 def budgetlineitemedit(request):
+    '''  Function to edit the budget line item'''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
@@ -400,16 +439,7 @@ def budgetlineitemedit(request):
             for quarter,value in quarter_list.items():
                 start_date = value.split('to')[0].rstrip()
                 end_date = value.split('to')[1].lstrip()
-                result = {}
-                for line in line_itemlist:
-                    line_list = line.split('_')
-                    if  len(line_list) >= 3 and str(quarter) in line.split('_') :
-                        name = line.split('_')[0]
-                        budgetperiodid = line.split('_')[2]
-                        result.update({name:request.POST.get(line)})
-                    else:
-                        name = line.split('_')[0]
-                        result.update({name:request.POST.get(line)})
+                result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
                 if result["subheading"]:
                     budget_dict = {
                                'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
