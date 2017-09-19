@@ -21,7 +21,7 @@
     {% endif %}
     <ul>
         {% get_funder obj as project_funders %}
-    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% else %} Funder {% endif %}</a> </li>
+    	<li><a href="">by {% if project_funders.funder.organization %} {{project_funders.funder.organization}} {% else %} Funder {% endif %}</a> </li>
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
 
     </ul>    

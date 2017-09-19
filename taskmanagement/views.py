@@ -335,6 +335,7 @@ def my_tasks_details(request):
 def create_task_progress(request,task):
     try:
         task.task_progress = request.POST.get('child2')
+        task.save()
         if request.POST.get('child2') == '100':
             task.status = 2  
             task.actual_end_date = task.modified.date() 
