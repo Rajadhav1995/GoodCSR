@@ -42,6 +42,7 @@ def listing(request):
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
+    key=''
     try:
         project = Project.objects.get(slug = request.GET.get('slug'))
     except:
@@ -55,8 +56,8 @@ def add_taskmanagement(request,model_name,m_form):
             form=form(user_id,project.id,request.POST,request.FILES)
             if form.is_valid():
                 f=form.save()
-                from projectmanagement.views import unique_slug_generator
-                f.slug = unique_slug_generator(f)
+                from projectmanagement.common_method import unique_slug_generator
+                f.slug = unique_slug_generator(f,key)
                 f.save()
                 if model_name == 'Activity' or model_name == 'Task':
                     f.created_by = user
@@ -71,6 +72,7 @@ def add_taskmanagement(request,model_name,m_form):
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
+    key=''
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     form=eval(m_form)
@@ -83,8 +85,8 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         if form.is_valid():
             f=form.save()
-            from projectmanagement.views import unique_slug_generator
-            f.slug = unique_slug_generator(f)
+            from projectmanagement.common_method import unique_slug_generator
+            f.slug = unique_slug_generator(f,key)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
@@ -114,8 +116,9 @@ def active_change(request,model_name):
 
 from django.http import JsonResponse
 def task_dependencies(request):
+#to get the startdate as project start date on selecting the activity and list the tasks based on activities
     start_date = ''
-    tasks = None
+    tasks = []
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
@@ -129,7 +132,7 @@ def task_dependencies(request):
     except:
         obj = None
     if obj.activity_type == 2 :
-        tasks = ''
+        tasks = []
     else:
         tasks = [{'id':i.id,'name':i.name} for i in tasks]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
@@ -147,7 +150,8 @@ def task_auto_computation_date(request):
         end_date = ''
     return JsonResponse({"computation_date":end_date})
 
-def milestone_overdue(request):
+def milestone_overdue(request):     
+# to get the overdue of the milestone i.e getting the max end date of the tasks tagged to the milestone
     task_ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
@@ -181,6 +185,7 @@ def total_tasks_completed(slug):
 
 
 def my_tasks_listing(project):
+# to get the tasks which is overdue to today 
     today = datetime.today().date()
     task_lists=[]
     activities = Activity.objects.filter(project = project)
@@ -286,32 +291,27 @@ def corp_total_budget_disbursed(obj_list):
     utilized_budget=[]
     total_disbursed={}
     disbursed_amount=[]
-    total =disbursed=0
-    if obj_list:
-        for project in obj_list:
-            try:
-                budget = project.project_budget_details()
-                planned_cost = budget.get('planned_cost') or 0 
-                utilized_cost = budget.get('utilized_cost') or 0
-                disbursed_budget = budget.get('disbursed_cost') or 0
-                total_budget.append(planned_cost)
-                utilized_budget.append(utilized_cost)
-                disbursed_amount.append(disbursed_budget)
-            except:
-                total = 0
-                disbursed=0
-        total = sum(total_budget)
-        total_percentage = 100
-        disbursed = sum(disbursed_amount)
+    total =disbursed=total_percentage =disbursed_percent =0
+    for project in obj_list:
         try:
-            disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
+            budget = project.project_budget_details()
+            planned_cost = budget.get('planned_cost') or 0 
+            utilized_cost = budget.get('utilized_cost') or 0
+            disbursed_budget = budget.get('disbursed_cost') or 0
+            total_budget.append(planned_cost)
+            utilized_budget.append(utilized_cost)
+            disbursed_amount.append(disbursed_budget)
         except:
-            disbursed_percent = 0
-        try:
-            total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
-    }
-        except:
-            total_disbursed = {'total':0,'disbursed':0,'total_percent':0,'disbursed_percent':int(disbursed_percent)}
+            total = 0
+            disbursed=0
+    total = sum(total_budget)
+    total_percentage = 100
+    disbursed = sum(disbursed_amount)
+    try:
+        disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
+    except:
+        disbursed_percent = 0
+    total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
 
@@ -332,6 +332,23 @@ def my_tasks_details(request):
     
     return render(request,'taskmanagement/my-task.html',locals())
     
+def create_task_progress(request,task):
+    try:
+        task.task_progress = request.POST.get('child2')
+        if request.POST.get('child2') == '100':
+            task.status = 2  
+            task.actual_end_date = task.modified.date() 
+            task.save()
+        if task.status == 2 and not task.actual_start_date:
+            task.actual_end_date = task.modified.date() 
+            task.actual_start_date = task.start_date
+            task.save()
+        if task.status != 2 and not task.actual_start_date:
+            task.actual_start_date = task.modified.date() 
+            task.save()
+    except:
+        pass
+    return task
     
 def task_comments(request):
     msg =""
@@ -346,31 +363,26 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
-        try:
-            task.task_progress = request.POST.get('child2')
-            if request.POST.get('child2') == 100:
-                task.status = 2
-            task.save()
-        except:
-            pass
+        
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
-#            if upload_file.size <= MAX_UPLOAD_SIZE:
-            attach = Attachment.objects.create(description = request.POST.get('comment'),
-                attachment_type = application_type.get(file_type),
-                document_type = doc_type.get(file_type),
-                attachment_file = request.FILES.get('upload_attach'),
-                created_by= user,content_type = ContentType.objects.get(model=('task')),
-                object_id = request.POST.get('task_id'))
-            attach.save()
-#            else:
-#                msg = "yess"
+            if upload_file.size <= MAX_UPLOAD_SIZE:
+                attach = Attachment.objects.create(description = request.POST.get('comment'),
+                    attachment_type = application_type.get(file_type),
+                    document_type = doc_type.get(file_type),
+                    attachment_file = request.FILES.get('upload_attach'),
+                    created_by= user,content_type = ContentType.objects.get(model=('task')),
+                    object_id = request.POST.get('task_id'))
+                attach.save()
+            else:
+                msg = "yess"
         elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
             comment.save()
+        progress_status = create_task_progress(request,task)
         return HttpResponseRedirect(url+'&key='+task.slug+'&msg='+msg)
     return HttpResponseRedirect(url)
 
@@ -426,7 +438,8 @@ class ExpectedDatesCalculator():
             self.data = {}
 
     # Helper function gets next weekday if next day is weekend
-    def next_weekday(self, somedate):
+    @staticmethod
+    def next_weekday(somedate):
         ret = somedate + timedelta(days=1)
         day = somedate.strftime('%a')
         if day == 'Fri':
@@ -481,14 +494,7 @@ class ExpectedDatesCalculator():
             expected_start_date = main_task.start_date
             expected_end_date = main_task.end_date
             if(len(dep_dates) > 0):
-                for dep in dep_dates:
-                    expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
-                        dep.expected_end_date) > expected_start_date) else expected_start_date
-                expected_end_date = expected_start_date + \
-                    (main_task.end_date - main_task.start_date)
-                expected_end_date = self.next_weekday(
-                    expected_end_date - timedelta(days=1))
-
+                expected_start_date,expected_end_date = self.get_expected_dates(dep_dates,main_task)
             ret = {'expected_start_date': expected_start_date,
                    'expected_end_date': expected_end_date}
             self.data[taskid] = ret
@@ -496,6 +502,17 @@ class ExpectedDatesCalculator():
             main_task.expected_end_date = ret['expected_end_date']
             return main_task
 
+    def get_expected_dates(self,dep_dates,main_task):
+        expected_start_date = main_task.start_date
+        expected_end_date = main_task.end_date
+        for dep in dep_dates:
+            expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
+                dep.expected_end_date) > expected_start_date) else expected_start_date
+        expected_end_date = expected_start_date + \
+            (main_task.end_date - main_task.start_date)
+        expected_end_date = self.next_weekday(
+            expected_end_date - timedelta(days=1))
+        return expected_start_date,expected_end_date
 
 def get_descendants(task):
     descendants = Task.objects.filter(task_dependency=task.id)
@@ -541,10 +558,6 @@ class GanttChartData(APIView):
         '''
         tasks = None
         i_project_id = request.data.get('project_id')
-        # i_task = request.query_params.get('task_id')
-
-        # tasks = related_tasks(i_project_id)
-
         tasks = Task.objects.filter(activity__project=i_project_id)
         activities = Activity.objects.filter(project=i_project_id)
         milestones = Milestone.objects.filter(project=i_project_id)
@@ -577,3 +590,14 @@ def convert_budget(val):
         val = float(h) * (0.0001 / 1000)
         val = '{:.2f}'.format(val)
         return str(float(val)) + ' ' + 'Cr'
+
+from django.http import JsonResponse        
+def get_activites_list(request):
+    ids = request.GET.get('id')
+    url=request.META.get('HTTP_REFERER')
+    obj = None
+    activity=[]
+    obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
+    activity.append({'id':'undefined','name':'-----'})
+    activity = [{'id':i.id,'name':i.name} for i in obj_list]
+    return JsonResponse({"activity":activity})
