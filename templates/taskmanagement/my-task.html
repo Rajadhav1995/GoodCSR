@@ -156,7 +156,7 @@
             </div>
             <div class="task-completion-right">
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">{% csrf_token %}
-                <input id = 'task_id' name = 'task_id' type='hidden' value = "{{i.id}}"/>
+                <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
                <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
                <div>
                <i class="fa fa-file"></i>
@@ -538,7 +538,6 @@
     $('.range').on('rangeControlChange.rangeControlEvent', function () {
          $('#slectedNumber').html($('.range-control-current-value').text());
     });
-
 
   
 

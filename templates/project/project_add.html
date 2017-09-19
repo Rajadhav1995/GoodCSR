@@ -355,18 +355,7 @@ $(document).ready(function() {
         months += end.getMonth() - start.getMonth();
         document.getElementById("id_duration").value = months;
         var start = new Date($('#id_start_date').val());
-        var q = new Date();
-        var m = q.getMonth();
-        var d = q.getDate();
-        var y = q.getFullYear();
-        var date = new Date(y,m,d);
-        if (date >= start) {
-            alert("'Deadline' should be before 'Event date'")
-            document.getElementById('dateError1').innerHTML="Event Date should be greater than Today's Date"
-        };
-        if (date <= start) {
-            document.getElementById('dateError1').innerHTML=""
-        }
+        
     }
 
 });

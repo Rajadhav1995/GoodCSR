@@ -42,7 +42,20 @@ class ActivityForm(forms.ModelForm):
         self.fields['project'].initial = Project.objects.get(id = int(project_id))
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
+    
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if Activity.objects.filter(name=cleaned_data['name']).exclude(pk=self.instance.id).count() > 0:
+            try:
+                Activity.objects.get(name=cleaned_data['name'])
+            except Activity.DoesNotExist:
+                pass
+            else:
+                self._errors["name"] = self.error_class(["Activity with this Name already exists for this project"])
+#				raise ValidationError('Activity with this Name already exists for this problem')
 
+			# Always return cleaned_data
+		return cleaned_data
 
 
 class TaskForm(forms.ModelForm):
@@ -138,5 +151,17 @@ class MilestoneForm(forms.ModelForm):
             ('status',self.fields['status']),
             ('project',self.fields['project'])
             ])
-        
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if Milestone.objects.filter(name=cleaned_data['name']).exclude(pk=self.instance.id).count() > 0:
+            try:
+                Milestone.objects.get(name=cleaned_data['name'])
+            except Milestone.DoesNotExist:
+                pass
+            else:
+                self._errors["name"] = self.error_class(["Milestone with this Name already exists for this project"])
+#				raise ValidationError('Activity with this Name already exists for this problem')
+
+			# Always return cleaned_data
+		return cleaned_data
         

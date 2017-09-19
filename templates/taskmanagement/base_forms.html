@@ -30,7 +30,9 @@
         </div>
        <div class="col-md-6 nopadding">
             <form action="{{request.path}}" id= "ic_form" method='POST' enctype="multipart/form-data">{% csrf_token %}
-            
+                {{form.non_fields_errors}}
+        
+                    {{form.media}}
                     {% for field in form %}
                          {{form.media}}
                         <div class="col-md-12">

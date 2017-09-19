@@ -15,3 +15,6 @@ def task_auto_updation_date(sender, **kwargs):
         tasks.start_date = task_obj.end_date
         tasks.save()
         
+#@receiver(post_save, sender=Task)
+#def milestone_completion_status(sender,**kwargs):
+#    
