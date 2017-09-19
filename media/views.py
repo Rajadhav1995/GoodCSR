@@ -22,6 +22,7 @@ def list_document(request):
 	return render(request,'attachment/listing.html',locals())
 	
 def timeline_upload(request):
+    # this function is to upload images in timeline (for project summary page)
     slug = request.GET.get('slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
