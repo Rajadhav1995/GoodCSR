@@ -20,6 +20,12 @@ def diff(list1, list2):
     d = set(list1).intersection(set(list2))
     return list(c - d)
 
+def project_amount_difference(projectobj):
+    project_amount = projectobj.project_budget_details()
+    planned_amount = project_amount['planned_cost']
+    project_amount = int(projectobj.total_budget) if projectobj.total_budget else 0
+    final_budget_amount = planned_amount - project_amount if planned_amount > project_amount else 0
+    return final_budget_amount
 
 def projectbudgetlist(request):
     '''  for listing the budget '''
@@ -172,7 +178,8 @@ def projectlineitemadd(request):
                                'quarter_order':int(quarter),
                                }
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
-        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
+        final_budget_amount = project_amount_difference(projectobj)
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/budget_lineitem.html",locals())
 
 def projectbudgetdetail(request):
@@ -267,6 +274,7 @@ def budgetutilization(request):
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
         for i in lineobj_list:
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i))]
+            budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
             line_item_updated_values = upload_budget_utlized(line_itemlist,i,request,budget_periodobj)
             budget_periodobj.__dict__.update(line_item_updated_values)
             budget_periodobj.save()
@@ -462,5 +470,6 @@ def budgetlineitemedit(request):
                                         'projectobj':projectobj,'request':request,
                                         'quarter':quarter}
                     budget_saving = budget_lineitem_update(budget_parameters)
-        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
+        final_budget_amount = project_amount_difference(projectobj)
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&edit=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/edit_budgetlineitem.html",locals())
