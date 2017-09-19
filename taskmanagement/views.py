@@ -115,7 +115,7 @@ def active_change(request,model_name):
 from django.http import JsonResponse
 def task_dependencies(request):
     start_date = ''
-    tasks = None
+    tasks = []
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
@@ -129,7 +129,7 @@ def task_dependencies(request):
     except:
         obj = None
     if obj.activity_type == 2 :
-        tasks = ''
+        tasks = []
     else:
         tasks = [{'id':i.id,'name':i.name} for i in tasks]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
@@ -307,11 +307,7 @@ def corp_total_budget_disbursed(obj_list):
             disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
         except:
             disbursed_percent = 0
-        try:
-            total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)
-    }
-        except:
-            total_disbursed = {'total':0,'disbursed':0,'total_percent':0,'disbursed_percent':int(disbursed_percent)}
+        total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
 
@@ -348,24 +344,27 @@ def task_comments(request):
         task = Task.objects.get_or_none(id=task_id)
         try:
             task.task_progress = request.POST.get('child2')
-            if request.POST.get('child2') == 100:
-                task.status = 2
+            task.status = 2 if request.POST.get('child2') == 100 else 3 
+            task.save()
+            task.actual_end_date = task.modified.date() if task.task_progress == 100 else task.actual_end_date
+            task.save()
+            task.actual_start_date = task.modified.date() if not task.actual_start_date else task.actual_start_date 
             task.save()
         except:
             pass
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
-#            if upload_file.size <= MAX_UPLOAD_SIZE:
-            attach = Attachment.objects.create(description = request.POST.get('comment'),
-                attachment_type = application_type.get(file_type),
-                document_type = doc_type.get(file_type),
-                attachment_file = request.FILES.get('upload_attach'),
-                created_by= user,content_type = ContentType.objects.get(model=('task')),
-                object_id = request.POST.get('task_id'))
-            attach.save()
-#            else:
-#                msg = "yess"
+            if upload_file.size <= MAX_UPLOAD_SIZE:
+                attach = Attachment.objects.create(description = request.POST.get('comment'),
+                    attachment_type = application_type.get(file_type),
+                    document_type = doc_type.get(file_type),
+                    attachment_file = request.FILES.get('upload_attach'),
+                    created_by= user,content_type = ContentType.objects.get(model=('task')),
+                    object_id = request.POST.get('task_id'))
+                attach.save()
+            else:
+                msg = "yess"
         elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),

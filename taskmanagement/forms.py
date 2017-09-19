@@ -101,8 +101,8 @@ class TaskForm(forms.ModelForm):
 
 class MilestoneForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
-    super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
-    activity =forms.ModelChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'})) 
+    super_category = forms.ModelMultipleChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
+    activity =forms.ModelMultipleChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=False, widget = forms.SelectMultiple(attrs={'class' :'form-control'}))
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))

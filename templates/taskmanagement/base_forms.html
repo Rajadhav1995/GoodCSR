@@ -193,6 +193,30 @@ $(function($) {
 <script>
     $(document).ready(function() {
     if ('{{model_name}}' == 'Milestone'){
+    
+    $('#id_super_category').on('change',function(e){
+        var dependency_id = $('#id_super_category').val();
+        $.ajax({
+            url:'/managing/activites/',
+            type:'GET',
+            data:{'id':JSON.stringify(dependency_id)},
+            dataType:"json",
+            success:function(data){
+            $('#id_activity option').remove();
+            if (data.activity){
+                activity = data.activity
+               for (var i=0;i<activity.length;i++){
+                $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+                }
+            } 
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    
+    
     $('#id_task').on('change',function(e){
         var tasks_ids = $('#id_task').val();
         $.ajax({
@@ -237,11 +261,15 @@ $(function($) {
                 else{
                     $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
                     }
-                if (data.tasks_dependency == ''){
-                        $('#id_task_dependency')
-                            .find('option')
-                            .remove()
-                }
+                 document.getElementById("id_task_dependency").value = data.tasks_dependency;
+                    $('#id_task_dependency')
+                    .find('option')
+                    .remove()
+                    for(var i=0;i<data.tasks_dependency.length;i++){
+                        
+                        $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
+                        }
+
 
             },
             error : function(){}

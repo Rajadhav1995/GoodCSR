@@ -11,7 +11,7 @@
 <section class="green-pad green-height">
    <div class="row">
       <div class="image-pad logo-shadow">
-         <a href="javascript:void(0);"><img src="/static/img/favicon.ico" alt="" title="" height='18px' width = '19px'></a><a href="javascript:void(0);">
+         <a href="javascript:void(0);"><img src="/static/img/favicon.ico" alt="" title="" height='60px' width = '60px'></a><a href="javascript:void(0);">
 <!--         <img src="img/logo-n.png" alt="" title="" ></a>-->
       </div>
       <div class="title-left">
@@ -128,7 +128,7 @@
          <div class="task-head-rgt">
 <!--            <div class="my-progress-bar"></div>-->
 <!--            <img src="/static/img/progress-icon.png" alt="">-->
-            <p>{%if i.task_progress %}{{i.task_progress}}% {% else %}0%{% endif %} in progress</p>
+            <p>{%if i.task_progress%}{{i.task_progress}}% {% else %}0%{% endif %}{%if i.task_progress == 100 %}completed {% else %} in progress{% endif %}</p>
          </div>
          </div>
          <div class="planned-date">
@@ -191,7 +191,7 @@
 <!--                  </div>-->
                 
                 <div style="width: 375px;float: left;">
-                        <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="" />
+                        <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 50, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="{{i.task_progress}}" />
                 </div>
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
@@ -542,6 +542,8 @@
   
 
 </script>
+
+
 
 <!--ZZ-->
 {% endblock %}
