@@ -189,6 +189,7 @@ def projectbudgetdetail(request):
 
 def get_year_quarterlist(selected_year,budget_id):
     ''' provide the qquarter list based on year choosen in report utlization'''
+    budgetobj = Budget.objects.get_or_none(id = budget_id)
     data = get_budget_logic(budgetobj)
     no_of_quarters = data['no_of_quarters']
     ed = data['ed']
