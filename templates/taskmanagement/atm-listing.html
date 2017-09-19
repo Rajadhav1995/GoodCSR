@@ -11,13 +11,13 @@
     </div>    
     <div class="title-left">
     {% if project %}
-    <h4><a><p class="trunc" style="width:620px;">{{project.name}}</p></a></h4>
+    <h4><a href = "/project/summary/?slug={{projectobj.slug}}"><p class="trunc" style="width:620px;">{{project.name}}</p></a></h4>
     {% else %}
     <h4><a href = '#'>Project Name</a></h4>
     {% endif %}
     <ul>
         {%if project_funders %}
-    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
+    	<li><a href="">by {% if project_funders.funder.organization %} {{project_funders.funder.organization}} {% endif %}</a> </li>
         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
         {% else %}
         <li><a href="">by Funder</a> </li>
