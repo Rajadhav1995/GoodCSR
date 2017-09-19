@@ -9,6 +9,7 @@ from projectmanagement.models import Project
 from media.forms import AttachmentForm,ImageUpload
 
 def list_document(request):
+    # this function will list documents of project
 	slug =  request.GET.get('slug')
 	model = eval(request.GET.get('model'))
 	try:
