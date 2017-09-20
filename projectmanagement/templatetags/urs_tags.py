@@ -100,4 +100,3 @@ def get_org_logo(projectobj):
     front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
     return org_logo
-
