@@ -4,21 +4,40 @@
 {% block section %}
 {% load humanize %}
 
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $('#popup').click(function(){
+	$('#pop1').simplePopup();
+    });
+});
+
+</script>
+<style>
+    .error { color :red;}
+    .errorlist li{color :red;}
+    #size_upload{color: red;}
+    #date_error,#min_max {color : red;}
+</style>
 <div class="clear"></div>
 <!--Green pad starts-->
 <section class="green-pad green-height">
 	<div class="row">
-	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='60px' width = '60px'></a><a href="javascript:void(0);">
+	<div class="image-pad logo-shadow"> 
+	    {% get_org_logo projectobj as org_logo %}
+    	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='60px' width = '60px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='60px' width = '60px'> {% endif %}</a><a href="javascript:void(0);">
 <!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
     </div>
     <div class="title-left">
-    {% if obj %}
-    <h4><a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">{{obj.name}} <p></a></h4>
+    {% get_funder projectobj as project_funders %}
+     {% if project_funders.project %}
+    <h4><a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">{{project_funders.project.name}} <p></a></h4>
     {% else %}
     <h4><a href = '#'>Project Name </a></h4>
     {% endif %}
     <ul>
+        
     	<li><a href="javascript:void(0)"> by: {% if project_funders.funder.organization %} {{project_funders.funder.organization}}  {% else %} {% endif %}</a></li>
         <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.name %}{{project_funders.implementation_partner.name}} {% else %} {% endif %}</a></li>
     </ul>    
@@ -29,15 +48,153 @@
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
-          <li><a class="active" href="/project/summary/?slug={{slug}}">Summary</a></li>
-          <li><a href="/managing/listing/?slug={{slug}}">Task & Milestone</a></li>
-          <li><a href="/manage/project/budget/view/?slug={{slug}}">Budget</a></li>
-          <li><a href="/upload/list/?slug={{slug}}&model=Project">Files</a></li>
-          <li><a href="/project/tranche/list/?slug={{slug}}">Tranches</a></li>
-          <li><a href = "/managing/my-tasks/details/?slug={{slug}}">My Tasks </ad></li>
+          <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
+          <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Task & Milestone</a></li>
+          <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
+          <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>
+          <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
+          <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks">My Tasks </ad></li>
         </ul>
      </div>
     </div>
+
+<div id="pop1" class="simplePopup">
+   <div class="pop-content">
+      <div class="img"> <img src="/static/img/GoodCSR_color_circle.png" alt="girl"> </div>
+      <div class="course-dtl">
+        <h1>{{projectobj.name}} <!-- <sup>PGR</sup> --></h1>
+        <ul class="pop-list">
+          <li> <img src="/static/img/pop-up/users.jpg">
+            <p> No. of beneficiaries <span>{{projectobj.no_of_beneficiaries}}</span> </p>
+          </li>
+          <li> <img src="/static/img/pop-up/dureation.jpg">
+            <p> Program duration <span>{{projectobj.duration}} months </span> </p>
+          </li>
+          <li> <img src="/static/img/pop-up/dureation.jpg">
+            <p> Total Budget <span>₹ {{projectobj.total_budget | intcomma}}</span> </p>
+          </li>
+        </ul>
+       
+        <div class="rht-content">
+         <ul>
+         <li class="fst">
+            <h2>Target beneficiaries</h2>
+            <p>{% if projectobj.target_beneficiaries.all %}
+                {% for i in projectobj.target_beneficiaries.all %}{{i}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}</p>
+         </li>
+         <li class="snd">
+       
+            <h2>Cause area</h2>
+            <p>{% if projectobj.cause_area.all %}
+                {% for i in projectobj.cause_area.all %}{{i}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
+                {% else %}
+                <span class="col-md-7">N/A</span>
+                {% endif %}</p>
+            </li>
+            </ul>
+       
+        </div>
+      </div>
+      
+      <div class="cont-det">
+         <h2>Location coverage</h2>
+         {% if lobj %}
+         <p>{% for i in lobj %}
+
+                                <div>
+                                <b>Category: </b>{{i.get_program_type_display}}<br>
+                                </div>
+                                <div>
+                                <b>State: </b>{{i.location.parent.name}}<br>
+                                </div>
+                                <div>
+                                <b>City: </b>{{i.location.name}}<br>
+                                </div><br>
+                {% endfor %}</p>
+                {% else %}
+                <p>N/A</p>
+                {% endif %}
+         <h2>About the Program</h2>
+<p dangerouslySetInnerHTML={{obj.summary}}>{{projectobj.summary | safe}}</p>
+<h2>Primary Activities </h2>
+<ul class="act-list">
+{% for i in activity %}
+  <li>{{i.name}}</li>
+{% endfor %}
+</ul>
+  
+   <div class="concepto-carousel">
+         <h1>Pictures and files</h1>
+            <!-- carousel starts -->
+              <div id="con-carousel" class="owl-carousel">      
+              {% for i in attachment %}
+                {% if i.attachment_type == 2 %}
+        
+        {% if i.document_type == 1 %}<!-- excel -->
+        <div class="item">
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file}}" {% else %} href="#" onClick="alert('File Not Found!')" {% endif %}{% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-color.jpg"  height=70 width=63px>
+        <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+
+        {% if i.document_type == 2 %}<!-- pdf -->
+        <div class="item">
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/pdf.jpg" height=70 width=63px> 
+        <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+        {% if i.document_type == 3 %}
+        <div class="item">
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/wordpress.jpg" height=70 width=63px>
+          <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+        {% if i.document_type == 4 %}<!-- doc -->
+        <div class="item">
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-black.jpg" height=70 width=63px >
+          <h2>{{i.name}} </h2></a>
+        </div>
+        {% endif %}
+
+
+        {% endif %}
+        {% endfor %}
+                
+             </div>
+            <!-- carousel ends -->
+            
+            <!-- carousel starts -->
+
+
+              <div id="img-carousel" class="owl-carousel">
+                {{attachment}}
+              {% for  i in attachment %}
+
+              {% if i.attachment_type == 1 %}
+                <div class="item"> 
+                  {% if i.attachment_file %}
+                    <a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}/{{i.attachment_file.url}}" alt="" height=97 width=156px>
+                    <h2>{{i.description}}</h2></a>
+                  {% else %}
+                  <a href="#"><img src="" onClick="alert('Image Not Found!')" alt="" height=97 width=156px>
+                    <h2>{{i.description}}</h2></a>
+                  {% endif %}
+                </div>
+              {% endif %}
+                {% endfor %}
+                  
+                                   
+             </div>
+            <!-- carousel ends -->
+      </div>
+
+      </div>
+    </div>
+</div>
+
 </section>
 <!--Green pad Ends-->
 <!--Content part starts-->
@@ -347,142 +504,7 @@ under 0 Milestones</h5>
 
 </div>
 
-<div id="pop1" class="simplePopup">
-   <div class="pop-content">
-      <div class="img"> <img src="/static/img/GoodCSR_color_circle.png" alt="girl"> </div>
-      <div class="course-dtl">
-        <h1>{{obj.name}} <!-- <sup>PGR</sup> --></h1>
-        <ul class="pop-list">
-          <li> <img src="/static/img/pop-up/users.jpg">
-            <p> No. of beneficiaries <span>{{obj.no_of_beneficiaries}}</span> </p>
-          </li>
-          <li> <img src="/static/img/pop-up/dureation.jpg">
-            <p> Program duration <span>{{obj.duration}} months </span> </p>
-          </li>
-          <li> <img src="/static/img/pop-up/dureation.jpg">
-            <p> Total Budget <span>₹ {{obj.total_budget | intcomma}}</span> </p>
-          </li>
-        </ul>
-       
-        <div class="rht-content">
-         <ul>
-         <li class="fst">
-            <h2>Target beneficiaries</h2>
-            <p>{% if obj.target_beneficiaries.all %}
-                {% for i in obj.target_beneficiaries.all %}{{i}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
-                {% else %}
-                <span class="col-md-7">N/A</span>
-                {% endif %}</p>
-         </li>
-         <li class="snd">
-       
-            <h2>Cause area</h2>
-            <p>{% if obj.cause_area.all %}
-                {% for i in obj.cause_area.all %}{{i}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
-                {% else %}
-                <span class="col-md-7">N/A</span>
-                {% endif %}</p>
-            </li>
-            </ul>
-       
-        </div>
-      </div>
-      
-      <div class="cont-det">
-         <h2>Location coverage</h2>
-         {% if lobj %}
-         <p>{% for i in lobj %}
 
-                                <div>
-                                <b>Category: </b>{{i.get_program_type_display}}<br>
-                                </div>
-                                <div>
-                                <b>State: </b>{{i.location.parent.name}}<br>
-                                </div>
-                                <div>
-                                <b>City: </b>{{i.location.name}}<br>
-                                </div><br>
-                {% endfor %}</p>
-                {% else %}
-                <p>N/A</p>
-                {% endif %}
-         <h2>About the Program</h2>
-<p dangerouslySetInnerHTML={{obj.summary}}>{{obj.summary | safe}}</p>
-<h2>Primary Activities </h2>
-<ul class="act-list">
-{% for i in activity %}
-  <li>{{i.name}}</li>
-{% endfor %}
-</ul>
-  
-   <div class="concepto-carousel">
-         <h1>Pictures and files</h1>
-            <!-- carousel starts -->
-              <div id="con-carousel" class="owl-carousel">      
-              {% for i in attachment %}
-                {% if i.attachment_type == 2 %}
-        
-        {% if i.document_type == 1 %}<!-- excel -->
-        <div class="item">
-        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file}}" {% else %} href="#" onClick="alert('File Not Found!')" {% endif %}{% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-color.jpg"  height=70 width=63px>
-        <h2>{{i.name}} </h2></a>
-        </div>
-        {% endif %}
-
-        {% if i.document_type == 2 %}<!-- pdf -->
-        <div class="item">
-        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/pdf.jpg" height=70 width=63px> 
-        <h2>{{i.name}} </h2></a>
-        </div>
-        {% endif %}
-        {% if i.document_type == 3 %}
-        <div class="item">
-        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/wordpress.jpg" height=70 width=63px>
-          <h2>{{i.name}} </h2></a>
-        </div>
-        {% endif %}
-        {% if i.document_type == 4 %}<!-- doc -->
-        <div class="item">
-        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-black.jpg" height=70 width=63px >
-          <h2>{{i.name}} </h2></a>
-        </div>
-        {% endif %}
-
-
-        {% endif %}
-        {% endfor %}
-                
-             </div>
-            <!-- carousel ends -->
-            
-            <!-- carousel starts -->
-
-
-              <div id="img-carousel" class="owl-carousel">
-                {{attachment}}
-              {% for  i in attachment %}
-
-              {% if i.attachment_type == 1 %}
-                <div class="item"> 
-                  {% if i.attachment_file %}
-                    <a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}/{{i.attachment_file.url}}" alt="" height=97 width=156px>
-                    <h2>{{i.description}}</h2></a>
-                  {% else %}
-                  <a href="#"><img src="" onClick="alert('Image Not Found!')" alt="" height=97 width=156px>
-                    <h2>{{i.description}}</h2></a>
-                  {% endif %}
-                </div>
-              {% endif %}
-                {% endfor %}
-                  
-                                   
-             </div>
-            <!-- carousel ends -->
-      </div>
-
-      </div>
-    </div>
-</div>
 
 {% endblock %}
 
@@ -836,15 +858,6 @@ $(document).ready(function(){
 
 
 	});
-</script>
-<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#popup').click(function(){
-	$('#pop1').simplePopup();
-    });
-});
-
 </script>
 
 <!---datepicker script-->
