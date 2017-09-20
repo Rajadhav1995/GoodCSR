@@ -97,7 +97,6 @@ def get_org_logo(projectobj):
     ''' calling function to return the company logo based on the project'''
     companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
     validation_data = json.loads(companyobj.content)
-#    validation_data = ast.literal_eval(json.dumps(companyobj.content))
     front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
     return org_logo
