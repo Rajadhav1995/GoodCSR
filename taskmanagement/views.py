@@ -39,6 +39,9 @@ def listing(request):
     data = {'project_id':int(project.id)}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
+    #    added by meghana
+    projectobj = project
+    key = request.GET.get('key')
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
@@ -329,7 +332,8 @@ def my_tasks_details(request):
     tasks_tomorrow = project.get_todays_tasks(tomorrow)
     remain_tasks = project.get_remaining_tasks(remain_days)
     task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
-    
+    projectobj = project
+    key = request.GET.get('key')
     return render(request,'taskmanagement/my-task.html',locals())
     
 def create_task_progress(request,task):

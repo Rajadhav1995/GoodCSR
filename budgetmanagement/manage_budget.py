@@ -332,6 +332,7 @@ def budgetview(request):
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     super_categorylist = SuperCategory.objects.filter(budget = budgetobj)
+    key = request.GET.get('key')
     if budgetobj:
         quarter_list = get_budget_quarters(budgetobj)
         quarter_names = get_budget_quarter_names(budgetobj)

@@ -19,6 +19,8 @@ def list_document(request):
 		obj = model.objects.get(id=ids)
 	attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model')))
 	image = PMU_URL
+	key = request.GET.get('key')
+	projectobj = obj
 	return render(request,'attachment/listing.html',locals())
 	
 def timeline_upload(request):
