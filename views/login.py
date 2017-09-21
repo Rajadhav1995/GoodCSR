@@ -39,3 +39,7 @@ def signout(request):
     session = request.session.get('user_id')
     request.session['user_id'] = ''
     return HttpResponseRedirect('/')
+
+def homepage(request):
+    
+    return render(request, 'home_page.html', locals())
