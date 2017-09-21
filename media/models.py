@@ -6,6 +6,7 @@ from django.views import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.fields import GenericForeignKey
+from ckeditor.fields import RichTextField
 from projectmanagement.models import (BaseContent,UserProfile)
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
@@ -83,3 +84,21 @@ class Comment(BaseContent):
     content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'),null=True,blank=True)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+
+class Article(BaseContent):
+    name = models.CharField("Name", max_length=300, **OPTIONAL)
+    description = models.TextField(**OPTIONAL)
+    listing_order = models.IntegerField(default=0, **OPTIONAL)
+    parent = models.ForeignKey('self', **OPTIONAL)
+    slug = models.SlugField(_("Slug"), blank=True)
+
+class Section(BaseContent):
+    name = models.CharField("Name", max_length=300, **OPTIONAL)
+    description = RichTextField(**OPTIONAL)
+    summary = RichTextField(**OPTIONAL)
+    article = models.ForeignKey('Article', **OPTIONAL)
+    cover_image = ImageWithThumbsField(upload_to='static/%Y/%m/%d', sizes=((90,120),(360,480)),blank=True,null=True,help_text="Image size should be 930x300 pixels")
+    image = ImageWithThumbsField(upload_to='static/%Y/%m/%d', sizes=((90,120),(360,480)),blank=True,null=True,help_text="Image size should be 930x300 pixels")
+    listing_order = models.IntegerField(default=0, blank=True, null=True)
+    slug = models.SlugField(_("Slug"), blank=True)
+
