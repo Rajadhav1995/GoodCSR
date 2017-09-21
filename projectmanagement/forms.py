@@ -21,7 +21,7 @@ class ProjectForm(forms.ModelForm):
 	total_budget = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	no_of_beneficiaries = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	budget_type = forms.ChoiceField(choices = BUDGET_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))
-	project_status = forms.ChoiceField(choices = STATUS_CHOICES,required=True,widget = forms.Select(attrs={'class': 'form-control'}))
+	project_status = forms.ChoiceField(choices = STATUS_CHOICES,initial="1",required=True,widget = forms.Select(attrs={'class': 'form-control'}))
 	start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	duration = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control','readonly':'true'}), required=True)
