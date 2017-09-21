@@ -380,25 +380,6 @@ function funder_val() {
 </script>
 
 <script type="text/javascript">
-        function ddlValidate() {
-            var e = document.getElementById("funder");
-            var f = document.getElementById("implementation_partner");
-            var funder = e.options[e.selectedIndex].value;
-            var implementation_partner = f.options[f.selectedIndex].value;
-            if (funder == 0) {
-                document.getElementById('funder_error').innerHTML="<b>PLease select Funder</b>"
-                return false;
-            }
-            if (implementation_partner == 0) {
-                document.getElementById('partner_error').innerHTML="<b>Please select Implementation Partner</b>"
-                return false;
-            }
-        }
-    </script>
-
-
-
-<script type="text/javascript">
     $(document).ready(function(){
         $('select[multiple=multiple]').multiSelect()
         $("#prog_edit").validate({
@@ -413,6 +394,7 @@ function funder_val() {
                 cause_area : {required:true},
                 duration : {required:true},
                 funder: {required:true},
+                implementation_partner: {required:true},
             },
             messages:
             {
@@ -423,8 +405,9 @@ function funder_val() {
                 no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
                 target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
                 cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
-                duration : {required : "<font color=#fc282f>Please Start date and End date</font>"},
+                duration : {required : "<font color=#fc282f>Please select project Start date and End date</font>"},
                 funder : {required : "<font color=#fc282f>Please select funder</font>"},
+                implementation_partner : {required : "<font color=#fc282f>Please select IMplementation Partner</font>"},
 
 
             },
@@ -434,7 +417,28 @@ function funder_val() {
             unhighlight: function (element) {
                 $(element).parent().removeClass('error')
             },
+
+
         });
-        });
+        
+});
+</script>
+
+<script type="text/javascript">
+        function ddlValidate() {
+            var e = document.getElementById("funder");
+            var f = document.getElementById("implementation_partner");
+            var funder = e.options[e.selectedIndex].value;
+            var implementation_partner = f.options[f.selectedIndex].value;
+            if (funder == 0) {
+                document.getElementById('funder_error').innerHTML="<b>PLease select Funder</b>"
+                //return true;
+            }
+            if (implementation_partner == 0) {
+                document.getElementById('partner_error').innerHTML="<b>Please select Implementation Partner</b>"
+                
+            }
+            return true;
+        }
 </script>
 {% endblock %}

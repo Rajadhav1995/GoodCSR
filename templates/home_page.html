@@ -4,7 +4,7 @@
    <link rel="stylesheet" type="text/css" href="/static/slick/slick.css">
     <link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css">
 <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/homepage.css">
 
 
 </head>
@@ -14,86 +14,58 @@
 <div class="container">
   <div class="header_home">
    <img src="/static/img/logo-goodcsr.png">
-      <button type="button"><a href="/log-in/"><img src="/static/img/user-icon.png">Login</button>
+      <a href="/log-in/"><button type="button"><img src="/static/img/user-icon.png">Login</button></a>
     </div>
     </div>
     </header>
     <div>
+      {% for i in banner_images %}
     <div class="text_banner">
-       <img src="/static/img/bannerimage-home.jpg" style="width:100%"> 
+       <img src="{{ i.cover_image }}" style="width:100%"> 
        <div class="banner_text">
           <div>
-           <h1>Create Impact with Intelligence and Precision</h1>
-           <p>GoodCSR Direct is an intuitive Project Management Platform, carefully crafted based on insights from CSR teams and imaplementation organisations. It reduces the probability of miscommunication, keeps projects on track and budgets in check.  </p>
+           <h1>{{i.name}}</h1>
+           <p>{{i.description | safe}}  </p>
            </div>
         </div>
         </div>
+        {% endfor %}
     </div>
     <div class="container">
     <div class="features_section">
        
         <h1>Features</h1>
        <hr> 
+       {% for i in features %}
         <div class="col-md-4">
             <div class="feature_valuetext">
-                <h4>Connect-Plan-Execute-Monitor (CPEM)</h4>
+                <h4>{{i.name}}</h4>
                 <div>
-                <img src="/static/img/feature01.png" >
-                <p>Connect with implementation partners, plan your tasks, monitor progress and modify any aspect of the programme in response to implementation hurdles – under one roof! </p>
+                <img src="{{i.cover_image}}" >
+                <p>{{i.description | safe}} </p>
                 </div>
-
             </div>
         </div>
-       <div class="col-md-4">
-            <div class="feature_valuetext">
-                <h4>CSR Report in two clicks</h4>
-                <div>
-                <img src="/static/img/feature02.png" >
-                <p>Customise data views for creation of exportable, quantitative and qualitative reports to communicate impact and archive progress in just two clicks. </p>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="feature_valuetext">
-                <h4>Single login to the world of CSR</h4>
-                <div>
-                <img src="/static/img/feature03.png" >
-                    <p>Funders and implementation partners using other Samhita GoodCSR features can easily upload their programme onto GoodCSR Direct and into their portfolio without hassle. </p>
-                </div>
-
-            </div>
-        </div>
+        {% endfor %}
         </div>
     </div>
     <div>
     <div class="background_slider">
       <div class="container">
        <article class="center slider arow col-lg-12 col-sm-12 nopadding">
+           {% for i in midpart_image %}
            <div>
            <div class="col-lg-12 text_carousel nopadding">
                <div class="col-md-8">
-                <img src="/static/img/slider-image01.jpg" style="width:100%;">
+                <img src="{{i.cover_image}}" style="width:100%;">
                </div>
                <div class="col-md-4 advatage_slider">
-                <h3>The GoodCSR Advantage</h3>
-                <p>Manage each element of your CSR through dashboards, which give you access to analyze the data across projects and report real time progress to all stakeholders.</p>
+                <h3>{{i.name}}</h3>
+                <p>{{i.description | safe}}</p>
                </div>
            </div>
            </div>
-           <div>
-           <div class="col-lg-12 text_carousel">
-                <div class="col-md-8">
-                <img src="/static/img/slider-image01.jpg" style="width:100%;">
-               </div>
-               <div class="col-md-4 advatage_slider">
-                <h3>The GoodCSR Advantage</h3>
-                <p>Manage each element of your CSR through dashboards, which give you access to analyze the data across projects and report real time progress to all stakeholders.</p>
-               </div>
-           </div>
-           </div>
-          
-    
+           {% endfor %}
             </article>
         </div>
         </div>
@@ -102,10 +74,10 @@
    <div class="training_building">
    <div class="container">
    <div class="knoweledge">
-   <img src="/static/img/building-img.png" >
+   <img src="{{capacity.cover_image}}" >
       <div class="training">
-          <h3>Capacity Building and Training</h3>
-          <p>Samhita will provide capacity building support to CSR teams and implementation partners, handhold them through the features of the Project Management tool, and guide them on how to use the platform effectively. </p>
+          <h3>{{capacity.name}}</h3>
+          <p>{{capacity.description | safe}} </p>
           
        </div>
        </div>

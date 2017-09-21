@@ -6,6 +6,7 @@ from  django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from pmu.settings import (SAMITHA_URL,)
 from projectmanagement.models import UserProfile
+from media.models import Section,Article
 
 def signin(request):
     next = request.GET.get('next')
@@ -41,5 +42,8 @@ def signout(request):
     return HttpResponseRedirect('/')
 
 def homepage(request):
-    
+    banner_images = Section.objects.filter(article__slug='banner-images')
+    features = Section.objects.filter(article__slug='features')
+    midpart_image = Section.objects.filter(article__slug='midpart')
+    capacity = Section.objects.get(article__slug='capacity-building')
     return render(request, 'home_page.html', locals())
