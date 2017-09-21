@@ -566,7 +566,7 @@ class GanttChartData(APIView):
         tasks = Task.objects.filter(activity__project=i_project_id)
         activities = Activity.objects.filter(project=i_project_id)
         milestones = Milestone.objects.filter(project=i_project_id)
-        supercategories = SuperCategory.objects.filter(project=i_project_id)
+        supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
         ExpectedDatesCalculator(task_list=tasks)
         taskdict = {}
         taskdict['tasks'] = TaskSerializer(tasks, many=True).data
