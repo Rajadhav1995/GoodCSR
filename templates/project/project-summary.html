@@ -131,6 +131,7 @@ $(document).ready(function(){
          <h1>Pictures and files</h1>
             <!-- carousel starts -->
               <div id="con-carousel" class="owl-carousel">      
+                {% get_attachments projectobj as attachment %}
               {% for i in attachment %}
                 {% if i.attachment_type == 2 %}
         

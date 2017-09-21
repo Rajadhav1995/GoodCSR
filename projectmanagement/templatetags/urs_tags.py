@@ -12,6 +12,7 @@ from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriod
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
+from media.models import Attachment
 
 register = template.Library()
 
@@ -93,16 +94,22 @@ def get_utlizedline_total(row,projectobj):
 
 @register.assignment_tag
 def get_org_logo(projectobj):
-    funderobj = get_funder(projectobj)
-    data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
-    ''' calling function to return the company logo based on the project'''
-    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
-    validation_data = json.loads(companyobj.content)
-    front_image = validation_data.get('organization_logo')
-    org_logo = validation_data.get('front_image')
+    # funderobj = get_funder(projectobj)
+    # data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
+    # ''' calling function to return the company logo based on the project'''
+    # companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
+    # validation_data = json.loads(companyobj.content)
+    # front_image = validation_data.get('organization_logo')
+    # org_logo = validation_data.get('front_image')
+    org_logo =''
     return org_logo
 
 @register.assignment_tag
 def get_activities(projectobj):
     activity = Activity.objects.filter(project=projectobj,active=2)
     return activity
+
+@register.assignment_tag
+def get_attachments(projectobj):
+    attachment = Attachment.objects.filter(object_id=projectobj.id,content_type=ContentType.objects.get(model='project'))
+    return attachment

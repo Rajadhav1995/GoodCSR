@@ -433,12 +433,31 @@ function funder_val() {
             if (funder == 0) {
                 document.getElementById('funder_error').innerHTML="<b>PLease select Funder</b>"
                 //return true;
+            } else {
+                document.getElementById('funder_error').innerHTML="0"
             }
             if (implementation_partner == 0) {
                 document.getElementById('partner_error').innerHTML="<b>Please select Implementation Partner</b>"
                 
+            } else {
+                document.getElementById('partner_error').innerHTML="0"
             }
-            return true;
+            var funder = document.getElementById('funder_error').innerHTML
+            var partner = document.getElementById('partner_error').innerHTML
+            alert(funder);
+            if (partner=='' && funder=='') {
+                alert("first");
+                return false;
+            };
+            if (partner=='0' && funder=='0') {
+                alert("second");
+                return true;
+            };
+            if (partner=='<b>Please select Implementation Partner</b>' || funder=='<b>PLease select Funder</b>') {
+                alert("sasa");
+                return true;
+            };
+//            return false;
         }
 </script>
 {% endblock %}
