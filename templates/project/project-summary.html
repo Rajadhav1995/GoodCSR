@@ -44,7 +44,7 @@ $(document).ready(function(){
     </div>
     <span style="position: absolute;
     right: 30px;
-    top: 0px;">Comming Soon...</span>
+    top: 0px;">Coming Soon...</span>
     <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
@@ -121,6 +121,7 @@ $(document).ready(function(){
 <p dangerouslySetInnerHTML={{obj.summary}}>{{projectobj.summary | safe}}</p>
 <h2>Primary Activities </h2>
 <ul class="act-list">
+{% get_activities projectobj as  activity %}
 {% for i in activity %}
   <li>{{i.name}}</li>
 {% endfor %}

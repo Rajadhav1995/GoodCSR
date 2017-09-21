@@ -11,6 +11,7 @@ from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
+from taskmanagement.models import Activity
 
 register = template.Library()
 
@@ -100,3 +101,8 @@ def get_org_logo(projectobj):
     front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
     return org_logo
+
+@register.assignment_tag
+def get_activities(projectobj):
+    activity = Activity.objects.filter(project=projectobj,active=2)
+    return activity
