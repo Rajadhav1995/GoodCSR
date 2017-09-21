@@ -204,7 +204,7 @@ width:450px;
                     <div class="form-group">
                         <br>
                     <label>Funder<font color="red">*</font></label>
-                    <select class="form-control" name="funder" id="funder"><option value="0">Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                    <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
                     
                     <p style="color: red;">
                         
@@ -220,7 +220,7 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                     <label>Implementation partner<font color="red">*</font></label>
-                    <select class="form-control" name="implementation_partner" id="implementation_partner"><option value="0">Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                    <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
                                 <p style="color: red;">
                                     
                                 <font color=#fc282f><span id="partner_error"></span></font>
@@ -407,7 +407,7 @@ function funder_val() {
                 cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
                 duration : {required : "<font color=#fc282f>Please select project Start date and End date</font>"},
                 funder : {required : "<font color=#fc282f>Please select funder</font>"},
-                implementation_partner : {required : "<font color=#fc282f>Please select IMplementation Partner</font>"},
+                implementation_partner : {required : "<font color=#fc282f>Please select Implementation Partner</font>"},
 
 
             },
@@ -422,42 +422,5 @@ function funder_val() {
         });
         
 });
-</script>
-
-<script type="text/javascript">
-        function ddlValidate() {
-            var e = document.getElementById("funder");
-            var f = document.getElementById("implementation_partner");
-            var funder = e.options[e.selectedIndex].value;
-            var implementation_partner = f.options[f.selectedIndex].value;
-            if (funder == 0) {
-                document.getElementById('funder_error').innerHTML="<b>PLease select Funder</b>"
-                //return true;
-            } else {
-                document.getElementById('funder_error').innerHTML="0"
-            }
-            if (implementation_partner == 0) {
-                document.getElementById('partner_error').innerHTML="<b>Please select Implementation Partner</b>"
-                
-            } else {
-                document.getElementById('partner_error').innerHTML="0"
-            }
-            var funder = document.getElementById('funder_error').innerHTML
-            var partner = document.getElementById('partner_error').innerHTML
-            alert(funder);
-            if (partner=='' && funder=='') {
-                alert("first");
-                return false;
-            };
-            if (partner=='0' && funder=='0') {
-                alert("second");
-                return true;
-            };
-            if (partner=='<b>Please select Implementation Partner</b>' || funder=='<b>PLease select Funder</b>') {
-                alert("sasa");
-                return true;
-            };
-//            return false;
-        }
 </script>
 {% endblock %}
