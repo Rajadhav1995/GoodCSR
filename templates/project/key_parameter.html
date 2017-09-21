@@ -135,8 +135,11 @@ var monthNames = [ "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December" ];
 var arr = [];
 var year = []
-var gg = [{2017: 11}, {2018: 7}, {2017: 11}, {2018: 7}, {2017: 11}, {2018: 7}, {2018: 7}]
+var month_no = Number({{start_date.month}});
 var datFrom = new Date({{start_date.year}}, {{start_date.month}}, {{start_date.day}});
+if (month_no==12) {
+   var datFrom = new Date({{start_date.year}},11, {{start_date.day}});
+};
 var datTo = new Date({{end_date.year}}, {{end_date.month}}, {{end_date.day}});
 var fromYear =  datFrom.getFullYear();
 var toYear =  datTo.getFullYear();
