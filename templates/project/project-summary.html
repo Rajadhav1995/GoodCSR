@@ -121,6 +121,7 @@ $(document).ready(function(){
 <p dangerouslySetInnerHTML={{obj.summary}}>{{projectobj.summary | safe}}</p>
 <h2>Primary Activities </h2>
 <ul class="act-list">
+{% get_activities projectobj as  activity %}
 {% for i in activity %}
   <li>{{i.name}}</li>
 {% endfor %}
