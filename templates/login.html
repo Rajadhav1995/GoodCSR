@@ -48,7 +48,8 @@ ga('send', 'pageview');
     <p class="login-box-msg">Sign in to start your session</p>
     <p class="login-box-msg"><font size="3" color="red">{{message}}</font></p>
 
-    <form action="." method="post">{% csrf_token %}
+    <form action=".{% for i in request.GET.items %}{% if forloop.counter == 1 %}?{% else %}&{% endif %}{{i.0}}={{i.1}}{% endfor %}" method="post">{% csrf_token %}
+    <input type="hidden" name="next" value="{{request.GET.items}}">
       <div class="form-group has-feedback">
         <input required='True' name="username" type="username" class="form-control" placeholder="Username">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
