@@ -45,7 +45,7 @@ def listing(request):
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
-    key=''
+    edit=''
     try:
         project = Project.objects.get(slug = request.GET.get('slug'))
     except:
@@ -60,7 +60,7 @@ def add_taskmanagement(request,model_name,m_form):
             if form.is_valid():
                 f=form.save()
                 from projectmanagement.common_method import unique_slug_generator
-                f.slug = f.name.replace(' ','-')
+                f.slug = unique_slug_generator(f,edit)
                 f.save()
                 if model_name == 'Activity' or model_name == 'Task':
                     f.created_by = user
@@ -75,7 +75,7 @@ def add_taskmanagement(request,model_name,m_form):
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
-    key=''
+    edit=''
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     form=eval(m_form)
@@ -89,7 +89,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         if form.is_valid():
             f=form.save()
             from projectmanagement.common_method import unique_slug_generator
-            f.slug = f.name.replace(' ','-')
+            f.slug = unique_slug_generator(f,edit)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
