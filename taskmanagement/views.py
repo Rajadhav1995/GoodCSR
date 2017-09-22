@@ -187,12 +187,15 @@ def total_tasks_completed(slug):
     return data
 
 
-def my_tasks_listing(project):
+def my_tasks_listing(project,user,status):
 # to get the tasks which is overdue to today 
     today = datetime.today().date()
     task_lists=[]
     activities = Activity.objects.filter(project = project)
-    tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).order_by('-start_date')
+    if status == '0':
+        tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today,assigned_to=user).order_by('-start_date')
+    else:
+        tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).order_by('-start_date')
     return tasks_list
     
 def get_project_updates(project,uploads):
@@ -320,6 +323,7 @@ def corp_total_budget_disbursed(obj_list):
 
 def my_tasks_details(request):
     image_url = PMU_URL
+    status=request.GET.get('status')
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
     remain_days = today + timedelta(days=2)
@@ -327,20 +331,22 @@ def my_tasks_details(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
-    over_due = my_tasks_listing(project)
-    tasks_today = project.get_todays_tasks(today)
-    tasks_tomorrow = project.get_todays_tasks(tomorrow)
-    remain_tasks = project.get_remaining_tasks(remain_days)
+    over_due = my_tasks_listing(project,user,status)
+    tasks_today = project.get_todays_tasks(today,user,status)
+    tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
+    remain_tasks = project.get_remaining_tasks(remain_days,user,status)
     task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
+    task_ids = [i.id for i in task_listing]
     projectobj = project
+    user_obj = user
     key = request.GET.get('key')
     return render(request,'taskmanagement/my-task.html',locals())
     
 def create_task_progress(request,task):
     try:
-        task.task_progress = request.POST.get('child2')
+        task.task_progress = request.POST.get('tea1')
         task.save()
-        if request.POST.get('child2') == '100':
+        if request.POST.get('tea1') == '100':
             task.status = 2  
             task.actual_end_date = task.modified.date() 
             task.save()
@@ -388,7 +394,7 @@ def task_comments(request):
                 object_id = request.POST.get('task_id'))
             comment.save()
         progress_status = create_task_progress(request,task)
-        return HttpResponseRedirect(url+'&key='+task.slug+'&msg='+msg)
+        return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
     return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
@@ -606,3 +612,4 @@ def get_activites_list(request):
     activity.append({'id':'undefined','name':'-----'})
     activity = [{'id':i.id,'name':i.name} for i in obj_list]
     return JsonResponse({"activity":activity})
+    

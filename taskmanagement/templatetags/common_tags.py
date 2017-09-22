@@ -4,6 +4,7 @@ from datetime import datetime
 from media.models import Comment
 from django.contrib.contenttypes.models import ContentType
 import pytz
+from taskmanagement.models import Task
 
 @register.assignment_tag
 def get_details(obj):
@@ -39,9 +40,17 @@ def task_comments(date,task_id):
 def get_assigned_to(user_obj):
     assigned="False"
     try:
-        obj = Task.objects.get(assigned_to=user_obj)
-        assigned = "True"
+        obj = Task.objects.filter(assigned_to=user_obj)
+        assigned = "True" if obj else "False"
+        task_obj = Task.objects.filter(created_by = user_obj)
+        if obj and task_obj :
+            assigned = 'True&True'
+        elif obj and not task_obj :
+            assigned = 'True&False'
+        elif not obj and task_obj:
+            assigned = 'False'
+        else :
+            assigned = 'False'
     except:
         assigned = "False"
-        
     return assigned

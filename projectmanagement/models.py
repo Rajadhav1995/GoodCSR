@@ -239,14 +239,20 @@ class Project(BaseContent):
     #     )
     #     super(Project, self).save()'
     
-    def get_todays_tasks(self,today):
+    def get_todays_tasks(self,today,user,status):
         from taskmanagement.models import Task
-        tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date = today).order_by('-id')
+        if status == '1':
+            tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date = today).order_by('-id')
+        else:   
+            tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date = today,assigned_to=user).order_by('-id')
         return tasks
 
-    def get_remaining_tasks(self,remain_days):
+    def get_remaining_tasks(self,remain_days,user,status):
         from taskmanagement.models import Task
-        tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days).order_by('-id')
+        if status == '1':
+            tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days).order_by('-id')
+        else:
+            tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
         return tasks
 
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))

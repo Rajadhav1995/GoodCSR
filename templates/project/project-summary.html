@@ -53,7 +53,16 @@ $(document).ready(function(){
           <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
           <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>
           <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
-          <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks">My Tasks </a></li>
+          {% get_assigned_to user_obj as users %}
+<!--          {{users}}-->
+          {% if users == 'True&True' %}
+          <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
+          <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
+          {% elif users == 'True&False' %}
+          <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
+          {% else %}
+           <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
+          {% endif %}
         </ul>
      </div>
     </div>

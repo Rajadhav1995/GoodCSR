@@ -11,6 +11,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from taskmanagement.models import *
 from budgetmanagement.models import *
 from projectmanagement.models import UserProfile,Project
+from userprofile.models import (ProjectUserRoleRelationship,)
 
 
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
@@ -42,6 +43,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['project'].initial = Project.objects.get(id = int(project_id))
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
+        self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = ProjectUserRoleRelationship.objects.filter(project__id=project_id).values_list("id",flat=True))
     
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -83,6 +85,7 @@ class TaskForm(forms.ModelForm):
         self.fields['status'].initial = 1
         self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
+        self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = ProjectUserRoleRelationship.objects.filter(project__id=project_id).values_list("id",flat=True))
         self.fields = OrderedDict([
             ('name',self.fields['name']),
             ('super_category',self.fields['super_category']),
