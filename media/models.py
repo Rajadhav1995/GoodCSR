@@ -102,3 +102,9 @@ class Section(BaseContent):
     listing_order = models.IntegerField(default=0, blank=True, null=True)
     slug = models.SlugField(_("Slug"), blank=True)
 
+class ContactPersonInformation(BaseContent):
+    name = models.CharField("Name", max_length=300, **OPTIONAL)
+    email = models.CharField("Email", max_length=500, **OPTIONAL)
+    organization_name = models.CharField("Organization Name", max_length=600, **OPTIONAL)
+    mobile_number = models.CharField("Mobile Number", max_length=50, **OPTIONAL)
+    message = models.TextField(**OPTIONAL)
