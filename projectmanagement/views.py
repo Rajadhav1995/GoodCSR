@@ -20,6 +20,7 @@ from taskmanagement.models import Milestone,Activity
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from common_method import unique_slug_generator,add_keywords
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
+from menu_decorators import check_loggedin_access
 
 def create_project(request):
     #Create and edit project (with dynamic activities)
@@ -379,7 +380,8 @@ def timeline_listing(obj):
     attach = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(obj),
         object_id = obj.id,active=2,attachment_type= 1).order_by('date')
     return attach
-    
+
+@check_loggedin_access
 def project_summary(request):
 # to display the project details in project summary page
 #Displaying pie chart detail

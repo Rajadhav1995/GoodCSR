@@ -9,13 +9,14 @@ from projectmanagement.models import UserProfile
 from media.models import Section,Article
 
 def signin(request):
-    next = request.GET.get('next')
 #    if request.session.get('user_id') or request.session.get('user_id') != '':
 #        if next:
 #            return HttpResponseRedirect(next)
 #        else:
 #            return HttpResponseRedirect('/dashboard/')
+    
     if request.method == 'POST':
+        next = request.POST.get('next')
         data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
         try:
             r = requests.post(SAMITHA_URL + '/pmu/login/', data=data)

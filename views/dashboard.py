@@ -5,9 +5,11 @@ from projectmanagement.models import (UserProfile,Project,ProjectFunderRelation)
 from userprofile.models import (ProjectUserRoleRelationship,)
 from taskmanagement.views import (updates,corp_task_completion_chart,
     total_tasks_completed,corp_total_budget,corp_total_budget_disbursed)
+from menu_decorators import check_loggedin_access
 
 #create views of dashboard
 
+@check_loggedin_access
 def admin_dashboard(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
