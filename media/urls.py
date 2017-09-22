@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^edit/$',edit_attachment),
     url(r'^list/$',list_document),
     url(r'^images/$',timeline_upload),
+    
 ]

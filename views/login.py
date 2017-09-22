@@ -6,15 +6,17 @@ from  django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from pmu.settings import (SAMITHA_URL,)
 from projectmanagement.models import UserProfile
+from media.models import Section,Article
 
 def signin(request):
-    next = request.GET.get('next')
 #    if request.session.get('user_id') or request.session.get('user_id') != '':
 #        if next:
 #            return HttpResponseRedirect(next)
 #        else:
 #            return HttpResponseRedirect('/dashboard/')
+    
     if request.method == 'POST':
+        next = request.POST.get('next')
         data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
         try:
             r = requests.post(SAMITHA_URL + '/pmu/login/', data=data)
@@ -39,3 +41,10 @@ def signout(request):
     session = request.session.get('user_id')
     request.session['user_id'] = ''
     return HttpResponseRedirect('/')
+
+def homepage(request):
+    banner_images = Section.objects.filter(article__slug='banner-images')
+    features = Section.objects.filter(article__slug='features')
+    midpart_image = Section.objects.filter(article__slug='midpart')
+    capacity = Section.objects.get(article__slug='capacity-building')
+    return render(request, 'home_page.html', locals())

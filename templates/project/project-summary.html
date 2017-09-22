@@ -19,12 +19,15 @@ $(document).ready(function(){
     .errorlist li{color :red;}
     #size_upload{color: red;}
     #date_error,#min_max {color : red;}
+    .orglogo img {
+    object-fit: contain;
+}
 </style>
 <div class="clear"></div>
 <!--Green pad starts-->
 <section class="green-pad green-height">
 	<div class="row">
-	<div class="image-pad "> 
+	<div class="image-pad orglogo "> 
 	    {% get_org_logo projectobj as org_logo %}
     	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
 <!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
@@ -140,6 +143,7 @@ $(document).ready(function(){
          <h1>Pictures and files</h1>
             <!-- carousel starts -->
               <div id="con-carousel" class="owl-carousel">      
+                {% get_attachments projectobj as attachment %}
               {% for i in attachment %}
                 {% if i.attachment_type == 2 %}
         
@@ -180,7 +184,7 @@ $(document).ready(function(){
 
 
               <div id="img-carousel" class="owl-carousel">
-                {{attachment}}
+                {% get_attachments projectobj as attachment %}
               {% for  i in attachment %}
 
               {% if i.attachment_type == 1 %}

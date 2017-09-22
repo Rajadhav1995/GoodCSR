@@ -16,7 +16,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from views import (dashboard,user_information)
 from views.user_information import (UserInformationStorage,)
-from views.login import (signin,signout)
+from views.login import (signin,signout,homepage)
+from views.homepage import (feedback)
 from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
                                             projectuseredit)
 from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
@@ -49,7 +50,9 @@ urlpatterns = [
     url(r'^dashboard/$',dashboard.admin_dashboard),
     url(r'^project/',include('projectmanagement.urls')),
     url(r'^upload/',include('media.urls')),
-    url(r'^$',signin),
+    url(r'^log-in/$',signin),
+    url(r'^$',homepage),
+    url(r'^feedback/$',feedback),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^dashboard/$',dashboard.admin_dashboard),
     url(r'^managing/',include('taskmanagement.urls')),

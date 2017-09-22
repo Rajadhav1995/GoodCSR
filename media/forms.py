@@ -5,7 +5,7 @@ from media.models import Attachment
 from django.contrib.admin import widgets
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
-
+from media.models import ContactPersonInformation
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
 class AttachmentForm(forms.ModelForm):
     '''
@@ -29,3 +29,17 @@ class ImageUpload(forms.ModelForm):
     class Meta:
         model = Attachment
         fields  = ('date','description','attachment_file')
+
+class ContactPersonForm(forms.ModelForm):
+    '''
+    This is model form is to save contact information of visitor 
+    '''
+    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    organization_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    mobile_number = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    message = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=True)
+
+    class Meta:
+        model = ContactPersonInformation
+        fields  = ('name','email','organization_name','mobile_number','message')

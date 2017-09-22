@@ -13,6 +13,7 @@ from media.models import (Comment,)
 from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
+from menu_decorators import check_loggedin_access
 
 def diff(list1, list2):
     ''' to get the difference of two list '''
@@ -326,6 +327,7 @@ def budget_supercategory_value(projectobj,budgetobj):
         final_project_category_list.append({'name':i.name,'y':int(total_amount),'color':random.choice(colors)})
     return final_project_category_list
 
+@check_loggedin_access
 def budgetview(request):
     '''  Redirecting to the budget summary page '''
     project_slug = request.GET.get('slug')

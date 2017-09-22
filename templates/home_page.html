@@ -1,0 +1,200 @@
+
+<html>
+<head>
+   <link rel="stylesheet" type="text/css" href="/static/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css">
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/homepage.css">
+
+
+</head>
+
+<body>
+<header>
+<div class="container">
+  <div class="header_home">
+   <img src="/static/img/logo-goodcsr.png">
+      <a href="/log-in/"><button type="button"><img src="/static/img/user-icon.png">Login</button></a>
+    </div>
+    </div>
+    </header>
+    <div>
+      {% for i in banner_images %}
+    <div class="text_banner">
+       <img src="{{ i.cover_image }}" style="width:100%"> 
+       <div class="banner_text">
+          <div>
+           <h1>{{i.name}}</h1>
+           <p>{{i.description | safe}}  </p>
+           </div>
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="container">
+    <div class="features_section">
+       
+        <h1>Features</h1>
+       <hr> 
+       {% for i in features %}
+        <div class="col-md-4">
+            <div class="feature_valuetext">
+                <h4>{{i.name}}</h4>
+                <div>
+                <img src="{{i.cover_image}}" >
+                <p>{{i.description | safe}} </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+    <div>
+    <div class="background_slider">
+      <div class="container">
+       <article class="center slider arow col-lg-12 col-sm-12 nopadding">
+           {% for i in midpart_image %}
+           <div>
+           <div class="col-lg-12 text_carousel nopadding">
+               <div class="col-md-8">
+                <img src="{{i.cover_image}}" style="width:100%;">
+               </div>
+               <div class="col-md-4 advatage_slider">
+                <h3>{{i.name}}</h3>
+                <p>{{i.description | safe}}</p>
+               </div>
+           </div>
+           </div>
+           {% endfor %}
+            </article>
+        </div>
+        </div>
+    </div>
+<div>
+   <div class="training_building">
+   <div class="container">
+   <div class="knoweledge">
+   <img src="{{capacity.cover_image}}" >
+      <div class="training">
+          <h3>{{capacity.name}}</h3>
+          <p>{{capacity.description | safe}} </p>
+          
+       </div>
+       </div>
+       
+       
+       </div>
+    </div>
+    <div class="container">
+    <div class="signup_modal">
+    <a href="/feedback/" class="iframe"><button type="button" >Sign up for a demo</button></a>
+        </div>
+    </div>
+    <div class="container">
+    <div class="demo_section">
+     <p>Ask for a demo to see how GoodCSR can help you transform the way you implement your CSR</p>
+    </div>
+    </div>
+         <footer class="footer_section">
+         <div class="container">
+         <p>Privacy Policy </p>
+         <p>Terms of Service</p>
+         <p>&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</p>
+             </div>
+        </footer>
+          
+<script src="/static/js/jquery.min.js"></script> 
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/slick/slick.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).on('ready', function() {
+      $(".regular").slick({
+        autoplay: true,
+        infinite: true,
+        dots:true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        responsive: [
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: false,
+                dots: true
+              }
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                  infinite: false,
+              }
+            },
+            {
+              breakpoint: 767,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                  infinite: false,
+              }
+            }
+          ]
+      });
+        $(".center").slick({
+        autoplay: true,
+       /* dots: true,*/
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        responsive: [
+            {
+              breakpoint: 1190,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                  infinite: true,
+              }
+            },
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: true,
+              }
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                  infinite: true,
+              }
+            },
+            {
+              breakpoint: 767,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                  infinite: true,
+              }
+            }
+          ]
+      });
+    });
+</script>
+<link rel="stylesheet" href="http://fancyapps.com/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="http://fancyapps.com/fancybox/source/jquery.fancybox.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".iframe").fancybox({
+        type: 'iframe'
+    });
+});
+</script>
+
+</body>
+</html>
