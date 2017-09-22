@@ -1,4 +1,7 @@
 from django.db import models
+from jsonfield import JSONField
+
+#from django_mysql.models import JSONField
 from django.db.models import Sum
 from .manager import ActiveQuerySet
 from django.template.defaultfilters import slugify
@@ -130,6 +133,9 @@ class MasterCategory(BaseContent):
     def __str__(self):
         return str(self.id)
 
+def my_default():
+    return {'first_name': '','last_name':''}
+
 class UserProfile(BaseContent):
     user_reference_id = models.IntegerField(default=0)
     user = models.ForeignKey("auth.User",**OPTIONAL)
@@ -140,6 +146,7 @@ class UserProfile(BaseContent):
     organization_type = models.IntegerField(default=0)
     owner = models.BooleanField(default=False)
     is_admin_user = models.BooleanField(default=False)
+    attrs = JSONField(default=my_default)
 
     def __unicode__(self):
         return str(self.email) or ''

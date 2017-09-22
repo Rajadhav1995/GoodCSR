@@ -1,43 +1,7 @@
 
-{% extends 'base.html' %}
+{% extends 'project/project-summary.html' %}
 {% load urs_tags %}
-{% block section %}
 
-<div class="clear"></div>
-<!--Green pad starts-->
-<section class="green-pad green-height">
-	<div class="row">
-	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='60px' width = '60px'></a><a href="javascript:void(0);">
-<!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
-    </div>    
-    <div class="title-left">
-    <h4><a href = "/project/summary/?slug={{projectobj.slug}}"><p class="trunc" style="width:620px;">{{projectobj.name}}</p></a></h4>
-    <ul>
-        {% get_funder projectobj as project_funders %}
-    	<li><a href="">by {% if project_funders.funder.organization %} {{project_funders.funder.organization}} {% else %} Funder {% endif %}</a> </li>
-        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
-    </ul>    
-    </div>
-    <span style="position: absolute;
-    right: 30px;
-    top: 0px;">Comming Soon...</span>
-    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
-     <div class="menu-bottom">
-        <ul>
-          <li><a href="/project/summary/?slug={{projectobj.slug}}">Summary</a></li>
-          <li><a href="/managing/listing/?slug={{projectobj.slug}}">Task & Milestone</a></li>
-          <li><a class="active" href="/manage/project/budget/view/?slug={{projectobj.slug}}">Budget</a></li>
-          <li><a href="/upload/list/?slug={{projectobj.slug}}&model=Project">Files</a></li>
-          <li><a href="/project/tranche/list/?slug={{projectobj.slug}}"> Tranches</a></li>
-          <li><a href ="/managing/my-tasks/details/?slug={{projectobj.slug}}">My Tasks </a></li>
-        </ul>
-     </div>
-    </div>
-</section>
-<!--Green pad Ends-->
-<!--Content part starts-->
-{% endblock %}
 
 {% block content %}
 <!--Content part starts-->

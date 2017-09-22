@@ -355,18 +355,7 @@ $(document).ready(function() {
         months += end.getMonth() - start.getMonth();
         document.getElementById("id_duration").value = months;
         var start = new Date($('#id_start_date').val());
-        var q = new Date();
-        var m = q.getMonth();
-        var d = q.getDate();
-        var y = q.getFullYear();
-        var date = new Date(y,m,d);
-        if (date >= start) {
-            alert("'Deadline' should be before 'Event date'")
-            document.getElementById('dateError1').innerHTML="Event Date should be greater than Today's Date"
-        };
-        if (date <= start) {
-            document.getElementById('dateError1').innerHTML=""
-        }
+        
     }
 
 });
@@ -386,6 +375,7 @@ function date_validate() {
 function funder_val() {
     var e = document.getElementById("funder");
     var str = e.options[e.selectedIndex].value;
+
 }
 </script>
 
@@ -397,13 +387,14 @@ function funder_val() {
             var implementation_partner = f.options[f.selectedIndex].value;
             if (funder == 0) {
                 document.getElementById('funder_error').innerHTML="<b>PLease select Funder</b>"
+                return false;
             }
             if (implementation_partner == 0) {
                 document.getElementById('partner_error').innerHTML="<b>Please select Implementation Partner</b>"
+                return false;
             }
         }
     </script>
-
 
 
 
@@ -432,7 +423,7 @@ function funder_val() {
                 no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
                 target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
                 cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
-                duration : {required : "<font color=#fc282f>Please Start date and End date</font>"},
+                duration : {required : "<font color=#fc282f>Please Select Start date and End date</font>"},
                 funder : {required : "<font color=#fc282f>Please select funder</font>"},
 
 

@@ -80,7 +80,7 @@
         	<ul>
                   {% get_user_project request as obj_list %}
                       {% for i in obj_list %}
-                          <li><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></li>
+                          <li><a href="/project/summary/?slug={{i.slug}}&key=summary">{{i.name}}</a></li>
                       {% endfor %}
             </ul>
         </li>
@@ -105,7 +105,7 @@
                   <ul class="project-scroll-bar">
                   {% get_user_project request as obj_list %}
                       {% for i in obj_list %}
-                          <li><a href="/project/summary/?slug={{i.slug}}"><p class="trunc" style="width:180px;height:20px;margin-bottom:0px"> {{i.name}}</p></a></li>
+                          <li><a href="/project/summary/?slug={{i.slug}}&key=summary"><p class="trunc" style="width:180px;height:20px;margin-bottom:0px"> {{i.name}}</p></a></li>
                       {% endfor %}
                   </ul>
                 <!--</div>-->
@@ -185,43 +185,7 @@
 {% endblock %}
 
 {% block section %}
-<div class="clear"></div>
-<!--Green pad starts-->
-<section class="green-pad green-height">
-	<div class="row">
-	<div class="image-pad logo-shadow">
-    	<a href="javascript:void(0);"><img class="border-pad" src="/static/img/GoodCSR_color_circle.png" alt="" title="" ></a><a href="javascript:void(0);">
-<!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
-    </div>    
-    <div class="title-left">
-    {% if obj %}
-    <h4><a href = '/project/detail/?slug={{obj.slug}}'>{{obj.name}}</a></h4>
-    {% else %}
-    <h4><a href = '#'>Project Name</a></h4> 
-    {% endif %}
-    <ul>
-        {%if project_funders %}
-    	<li><a href="">by {% if project_funders.funder.name %} {{project_funders.funder.name}} {% endif %}</a> </li>
-        <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}}{% endif %}</a></li>
-        {% else %}
-        <li><a href="">by Funder</a> </li>
-        <li><a href="">NGO Partner: </a></li>
-        {% endif %}
-    </ul>    
-    </div>
-    <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
-     <div class="menu-bottom">
-        <ul>
-          <li><a class="active" href="/project/summary/?slug={{slug}}">Summary</a></li>
-          <li><a href="/managing/listing/?slug={{slug}}">Task & Milestone</a></li>
-          <li><a href="/manage/project/budget/view/?slug={{slug}}">Budget</a></li>
-          <li><a href="/upload/list/?slug={{slug}}&model=Project">Files</a></li>
-          <li><a href="/project/tranche/list/?slug={{slug}}">Tranches</a></li>
-          <li><a href = "/managing/my-tasks/details/?slug={{slug}}">My Tasks </a></li>
-        </ul>
-     </div>         
-    </div>
-</section>
+
 <!--Green pad Ends-->
 {% endblock %}
 {% block content %}

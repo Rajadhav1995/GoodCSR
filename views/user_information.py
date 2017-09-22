@@ -21,6 +21,7 @@ class UserInformationStorage(APIView):
                     'name':data.get('name'),
                     'designation':data.get('designation'),
                     'active':data.get('active'),
+                    'attrs':eval(data.get('attrs')),
                     }
         userprofileobj = UserProfile.objects.get_or_none(user_reference_id = data.get('user_reference_id'))
         if not userprofileobj:

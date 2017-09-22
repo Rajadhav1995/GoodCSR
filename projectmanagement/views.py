@@ -17,9 +17,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
 from taskmanagement.models import Milestone,Activity
-from pmu.settings import PMU_URL
+from pmu.settings import (SAMITHA_URL,PMU_URL)
 from common_method import unique_slug_generator,add_keywords
-from projectmanagement.templatetags.urs_tags import userprojectlist
+from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 
 def create_project(request):
     #Create and edit project (with dynamic activities)
@@ -46,7 +46,7 @@ def create_project(request):
             obj.content_type = ContentType.objects.get(model="Program")
             obj.object_id = 0
             obj.request_status = 4
-            obj.created_by = UserProfile.objects.get(id=user_id)
+            obj.created_by = UserProfile.objects.get(user_reference_id=user_id)
             obj.slug = unique_slug_generator(obj,instance)
             obj.save()
             form.save_m2m()
@@ -100,6 +100,8 @@ def tranche_list(request):
     obj = Project.objects.get(slug=slug)
     user_id = request.session.get('user_id')
     tranche_list = Tranche.objects.filter(project=obj,active=2)
+    key = request.GET.get('key')
+    projectobj = obj
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -386,6 +388,7 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
+    projectobj = obj
     activity = Activity.objects.filter(project=obj)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
     tasks = total_tasks_completed(obj.slug)
@@ -395,6 +398,7 @@ def project_summary(request):
     today = datetime.datetime.today()
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json = []
+    key = request.GET.get('key')
     for i in timeline:
         data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
         timeline_json.append(data)
@@ -411,11 +415,12 @@ def project_summary(request):
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     ''' calling api to return the gantt chart format data '''
-
-    data = {'project_id':int(obj.id)}
+    funderobj = get_funder(obj)
+    data = {'project_id':int(obj.id),'company_name':str(funderobj.funder.organization) if funderobj else ''}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     number_json = json.dumps(number_json)
+
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):

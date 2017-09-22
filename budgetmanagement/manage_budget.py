@@ -332,6 +332,7 @@ def budgetview(request):
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     super_categorylist = SuperCategory.objects.filter(budget = budgetobj)
+    key = request.GET.get('key')
     if budgetobj:
         quarter_list = get_budget_quarters(budgetobj)
         quarter_names = get_budget_quarter_names(budgetobj)
@@ -339,7 +340,7 @@ def budgetview(request):
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
         span_length = len(budget_period)
         budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj,quarter_list)
-        tranche_list = Tranche.objects.filter(project = projectobj)
+        tranche_list = Tranche.objects.filter(project = projectobj,active=2)
         tranche_amount = tanchesamountlist(tranche_list)
         planned_amount = tranche_amount['planned_amount']
         actual_disbursed_amount = tranche_amount['actual_disbursed_amount']

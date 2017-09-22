@@ -52,7 +52,6 @@ class ActivityForm(forms.ModelForm):
                 pass
             else:
                 self._errors["name"] = self.error_class(["Activity with this Name already exists for this project"])
-#				raise ValidationError('Activity with this Name already exists for this problem')
 
 			# Always return cleaned_data
 		return cleaned_data
@@ -160,7 +159,6 @@ class MilestoneForm(forms.ModelForm):
                 pass
             else:
                 self._errors["name"] = self.error_class(["Milestone with this Name already exists for this project"])
-#				raise ValidationError('Activity with this Name already exists for this problem')
 
 			# Always return cleaned_data
 		return cleaned_data

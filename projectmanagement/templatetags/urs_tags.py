@@ -1,12 +1,17 @@
+import requests,ast
+import datetime
+import json
 from django import template
 from django.db.models import Sum
 from itertools import chain
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
+from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
+from taskmanagement.models import Activity
 
 register = template.Library()
 
@@ -86,4 +91,18 @@ def get_utlizedline_total(row,projectobj):
     total_utilized_cost = int(total_utilized_cost) if total_utilized_cost else 0
     return total_utilized_cost
 
+@register.assignment_tag
+def get_org_logo(projectobj):
+    funderobj = get_funder(projectobj)
+    data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
+    ''' calling function to return the company logo based on the project'''
+    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
+    validation_data = json.loads(companyobj.content)
+    front_image = validation_data.get('organization_logo')
+    org_logo = validation_data.get('front_image')
+    return org_logo
 
+@register.assignment_tag
+def get_activities(projectobj):
+    activity = Activity.objects.filter(project=projectobj,active=2)
+    return activity

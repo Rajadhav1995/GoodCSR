@@ -1,49 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'project/project-summary.html' %}
 {% load common_tags %}
 {% load urs_tags %}
-{% block section %}
-<style>
-    .error { color :red;}
-    .errorlist li{color :red;}
-    #size_upload{color: red;}
-    #date_error,#min_max {color : red;}
-</style>
-<section class="green-pad green-height">
-   <div class="row">
-      <div class="image-pad logo-shadow">
-         <a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='60px' width = '60px'></a><a href="javascript:void(0);">
-<!--         <img src="img/logo-n.png" alt="" title="" ></a>-->
-      </div>
-      <div class="title-left">
-         <h4>
-         {% if project %}
-            <a href = "/project/summary/?slug={{project.slug}}"><p class="trunc" style="width:620px;">
-               {{project.name}}
-               </p></a>
-               {% else %} <a href = '#'>Project Name</a>
-         </h4>
-         {% endif %}
-         <ul>
-         {% get_funder project as project_funders %}
-         <li><a href="">by {% if project_funders.funder.organization %} {{project_funders.funder.organization}} {% else %} Funder {% endif %}</a> </li>
-         <li><a href="">NGO Partner: {% if project_funders.implementation_partner.name %} {{project_funders.implementation_partner.name}} {%else %}{% endif %}</a></li>
-         </ul>
-      </div>
-      <a id="myBtn1" class="green-link green-link1" href="javascript:void(0);"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
-      <div class="menu-bottom">
-         <ul>
-            <li><a  href="/project/summary/?slug={{project.slug}}">Summary</a></li>
-            <li><a href="/managing/listing/?slug={{project.slug}}">Task & Milestone</a></li>
-            <li><a href="/manage/project/budget/view/?slug={{project.slug}}">Budget</a></li>
-            <li><a href="/upload/list/?slug={{project.slug}}&model=Project">Files</a></li>
-            <li><a href="/project/tranche/list/?slug={{project.slug}}">Tranches</a></li>
-            <li><a class="active" href = '/managing/my-tasks/details/?slug={{project.slug}}'>My Tasks </a></li>
-         </ul>
-      </div>
-   </div>
-</section>
-<!--Green pad Ends-->
-{% endblock %}
 {% block content %}
 <div class="clear"></div>
 <!--Content part starts-->
