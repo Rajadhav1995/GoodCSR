@@ -1,7 +1,5 @@
 from django.db import models
 from jsonfield import JSONField
-
-#from django_mysql.models import JSONField
 from django.db.models import Sum
 from .manager import ActiveQuerySet
 from django.template.defaultfilters import slugify
