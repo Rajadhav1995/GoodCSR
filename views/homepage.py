@@ -3,7 +3,12 @@ from django.shortcuts import render
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from media.models import Article,Section
+from media.models import Article,Section,ContactPersonInformation
+from media.forms import ContactPersonForm
+from django.template import loader
+from pmu.settings import BASE_DIR
+from django.contrib import messages
+from django.core.mail import send_mail
 
 def add_section(request):
     key=''
@@ -37,4 +42,27 @@ def add_section(request):
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def feedback(request):
+    form = ContactPersonForm()
+    if request.method=='POST':
+        form = ContactPersonForm(request.POST)
+        email = request.POST.get('email')
+        email_list = [i.email for i in ContactPersonInformation.objects.all()]
+        if email in email_list:
+            messages.info(request, 'You have already requested for demo. Our executive will contact you soon ')
+            return HttpResponseRedirect('/feedback/')
+        if form.is_valid():
+            obj = form.save()
+            obj.save()
+            html_message = loader.render_to_string(
+                      BASE_DIR+'/templates/send_program.html',
+                      {
+                          'fname': obj.name,
+                          'email': obj.email,
+                          'mobile': obj.mobile_number,
+                          'org_name' : obj.organization_name,
+                          'msg': obj.message,
+                       })
+            send_mail('GoodCSR Demo Request','', 'adityanraut@gmail.com', ['aditya.raut@mahiti.org'],html_message=html_message)
+        messages.success(request, 'Thank you for Requesting Demo')
+        return HttpResponseRedirect('/feedback/')
     return render(request,'feedback.html',locals())
