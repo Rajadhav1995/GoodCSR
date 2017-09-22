@@ -366,6 +366,27 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+    $(document).ready(function() {  
+        var activity = $('id_activity').val();
+        $.ajax({
+            url:'/managing/supercategories/selected/',
+            type:'GET',
+            data:{'id':activity},
+            dataType:"json",
+            success:function(data){
+            document.getElementById("id_super_category").value = data.super_categories
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+      
+    });
+    
+    
+
 
 
 {% endblock %}

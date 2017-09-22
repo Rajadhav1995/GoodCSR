@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^gantt-chart-data/$', GanttChartData.as_view()),
     url(r'^my-tasks/updates/$',task_comments),
     url(r'^activites/$',get_activites_list),
+    url(r'supercategories/selected/$',get_super_selected),
 ]

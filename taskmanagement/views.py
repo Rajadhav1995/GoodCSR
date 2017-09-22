@@ -613,3 +613,13 @@ def get_activites_list(request):
     activity = [{'id':i.id,'name':i.name} for i in obj_list]
     return JsonResponse({"activity":activity})
     
+from django.http import JsonResponse        
+def get_super_selected(request):
+    import ipdb;ipdb.set_trace();
+    ids = request.GET.get('id')
+    url=request.META.get('HTTP_REFERER')
+    activity=[]
+    obj_list = Activity.objects.filter(active=2,id__in = eval(ids))
+    super_categories = [i.id for i in obj_list]
+    return JsonResponse({"super_categories":super_categories})
+    
