@@ -1,0 +1,18 @@
+<div class="col-md-12 nopadding">
+            <div class="col-md-4 ">
+               <div class="cm_profile text_align_ceter">
+               <h2>Drop a Message</h2>
+                  <div class="box">
+                  
+                   <form action="." method="POST">
+                   {% csrf_token %}
+                   
+                Name: <input type="text" name="fname" value=""><br><br>
+                Mobile: <input type="text" name="mobile" value="" readonly><br><br>
+                
+                <input type="submit" value="Submit">
+</form>
+
+                  </div>
+               </div>
+            </div>

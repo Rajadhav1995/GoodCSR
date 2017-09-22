@@ -172,7 +172,7 @@ $(document).ready(function(){
 
 
               <div id="img-carousel" class="owl-carousel">
-                {{attachment}}
+                {% get_attachments projectobj as attachment %}
               {% for  i in attachment %}
 
               {% if i.attachment_type == 1 %}
