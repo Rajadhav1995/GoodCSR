@@ -5,7 +5,13 @@ from media.models import Attachment
 from django.contrib.admin import widgets
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from media.models import ContactPersonInformation
+from captcha.fields import ReCaptchaField
+from django.utils.translation import gettext as _
+from django.conf import settings
+import requests
+
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
 class AttachmentForm(forms.ModelForm):
     '''
@@ -39,7 +45,18 @@ class ContactPersonForm(forms.ModelForm):
     organization_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     mobile_number = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     message = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=True)
+    captcha = ReCaptchaField(attrs={'theme' : 'clean'}, required=True)
 
     class Meta:
         model = ContactPersonInformation
-        fields  = ('name','email','organization_name','mobile_number','message')
+        fields  = ('name','email','organization_name','mobile_number','message')\
+
+    # def clean(self):
+    #     cleaned_data = self.cleaned_data
+    #     if self.errors.get('captcha'):
+    #         print "shfjdkshfdjskfhjksdhsdjkshfkj"
+    #         raise ValidationError('Invalid Captcha! please try againnnnn')
+    #         # Always return cleaned_data
+    #     import ipdb; ipdb.set_trace()
+    #     return cleaned_data
+

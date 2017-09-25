@@ -50,6 +50,10 @@ def feedback(request):
         if email in email_list:
             messages.info(request, 'You have already requested for demo. Our executive will contact you soon ')
             return HttpResponseRedirect('/feedback/')
+        # import ipdb; ipdb.set_trace()
+        # if form.errors.get('captcha'):
+        #     messages.info(request, 'Invalid Captcha, PLease Try Again ')
+        #     return HttpResponseRedirect('/feedback/')
         if form.is_valid():
             obj = form.save()
             obj.save()

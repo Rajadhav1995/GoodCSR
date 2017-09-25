@@ -131,7 +131,26 @@ ul li {
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <div class="row">
+                                    
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Enter Captcha</label><br>
+                                            {{form.captcha}}
+                                            
+                                            </div>
+                                        </div>
+                                        {% if form.captcha.errors %}
+                                            <p style="color: red;">
+                                                Incorrect, please try again.
+                                            </p>
+                                            {% endif %}
+                                    
+                                </div> -->
 
+
+                                
+                                <!-- <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div> -->
                         
                         <!-- <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
@@ -165,6 +184,8 @@ ul li {
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -191,6 +212,7 @@ ul li {
                 organization_name : {required:true},
                 mobile_number : {required:true},
                 message : {required:true},
+                recaptcha_response_field : {required:true},
                 
             },
             messages:
@@ -200,7 +222,7 @@ ul li {
                 organization_name:{required:"<font color=#fc282f>Please enter Organization name</font>"},
                 mobile_number : {required : "<font color=#fc282f>Mobile Number</font>"},
                 message : {required : "<font color=#fc282f>Please enter message</font>"},
-                
+                recaptcha_response_field : {required : "<font color=#fc282f>Please enter captcha</font>"},
 
 
             },
@@ -238,12 +260,18 @@ ul li {
 });
 </script>
 <script type="text/javascript">
+
 function email_valid() {
     var email_valid = document.getElementById('email_error').innerHTML;
+    var response = document.getElementById('recaptcha_response_field').value
+
     if (email_valid == '') {
         return true;
     } else {
         return false;
+    };
+    if (response == '') {
+        alert('Please Enter captcha');
     };
 }
 </script>
