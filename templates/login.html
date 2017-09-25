@@ -49,7 +49,9 @@ ga('send', 'pageview');
     <p class="login-box-msg"><font size="3" color="red">{{message}}</font></p>
 
     <form action=".{% for i in request.GET.items %}{% if forloop.counter == 1 %}?{% else %}&{% endif %}{{i.0}}={{i.1}}{% endfor %}" method="post">{% csrf_token %}
+    {% if request.GET.items %}
     <input type="hidden" name="next" value="{{request.GET.items}}">
+    {% endif %}
       <div class="form-group has-feedback">
         <input required='True' name="username" type="username" class="form-control" placeholder="Username">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
