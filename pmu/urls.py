@@ -55,9 +55,10 @@ urlpatterns = [
     url(r'^feedback/$',feedback),
     url(r'^email-valid/$',email_validation),
     url(r'^managing/$',include('taskmanagement.urls')),
+    url(r'^managing/',include('taskmanagement.urls')),
     url(r'^manage/user-access/$',UserInformationStorage.as_view()),
     url(r'^logout/$',signout),
-    url(r'^manage/$', include(roles_patterns)),
+    url(r'^manage/', include(roles_patterns)),
 
 ]
 
