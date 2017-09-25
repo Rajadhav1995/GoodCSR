@@ -137,6 +137,19 @@
        if (sts != "None"){
            $("#quarter").val(sts);
        }
+       
+       $( "#ic_form" ).submit(function( event ) {
+            var linetotal_amount = 0
+            var total_amount = "{{project_amount}}"
+            $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            if (linetotal_amount >= total_amount){
+                var remaining_amount = linetotal_amount - total_amount
+                alert("Amount exceeded by: "+ remaining_amount.toString())
+            }
+            
+        });
    });
 </script>
 
