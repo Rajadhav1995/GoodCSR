@@ -38,7 +38,7 @@
            <div class="col-md-12">
                 <div class="form-group">
               <input class="budget_button" type="submit" value="Save" onclick="return RemoveProduct();" />
-              <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}" style="margin-right:5px;float: right;">Back</button></a>
+              <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}&key=summary" style="margin-right:5px;float: right;">Back</button></a>
            </div>
            </div>
         </div>
@@ -61,10 +61,10 @@
 
 <script>
     $(document).ready(function() {
-        $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
        // $( "#id_overdue" ).datepicker({ dateFormat: 'yy-mm-dd' });
     });
 </script>

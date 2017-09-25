@@ -19,7 +19,7 @@ def unique_slug_generator(instance,edit, new_slug=None):
                         slug=slug,
                         randstr=random_string_generator(size=4)
                     )
-            return unique_slug_generator(instance, new_slug=new_slug)
+            return unique_slug_generator(instance,edit,new_slug=new_slug)
     return slug
 
 def add_keywords(keys,obj,model,edit):

@@ -1,7 +1,6 @@
 {% extends 'project/project-summary.html' %}
 {% load common_tags %}
 {% load urs_tags %}
-
 {% block content %}
 <div class="clear"></div>
 <!--Content part starts-->
@@ -123,35 +122,10 @@
                </div>
                 
                <div class="task-details">
-               {% get_assigned_to user as assigned %}
                   <h4>Task Completion Status (%)</h4>
-<!--                  <div class="range-holder">-->
-<!--                     <div id="pr-slider" class="dragdealer">-->
-<!--                        <div class="stripe">-->
-<!--                           <div class="handle">-->
-<!--                              <div class="square">-->
-<!--                              </div>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                     <ul>-->
-<!--                        <li>10</li>-->
-<!--                        <li>20</li>-->
-<!--                        <li>30</li>-->
-<!--                        <li>40</li>-->
-<!--                        <li>50</li>-->
-<!--                        <li>60</li>-->
-<!--                        <li>70</li>-->
-<!--                        <li>80</li>-->
-<!--                        <li>90</li>-->
-<!--                        <li>100</li>-->
-<!--                     </ul>-->
-<!--                  </div>-->
-                
-                <div style="width: 375px;float: left;">
-                        <input type="hidden" name="child2" class="range" id="childAge" data-options='{"max": 100, "rangeType": "multiple", "minHandles": 0, "maxHandles": 0, "scale": {"labels": true, "interval": 10}}' value="{{i.task_progress}}" />
+                <div  class = 'task_bar' style="width: 375px;float: left;">
+                         <input type="hidden" name="tea1" class="range" id="{{i.id}}" value="{{i.task_progress}}"   />
                 </div>
-                
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
@@ -397,7 +371,7 @@
 </script>
 <script>
     $(function(){
-        var key = "{{request.GET.key}}"
+        var key = "{{request.GET.task_slug}}"
         console.log(key);
         if (key !=''){
         $('.right-task').hide();
@@ -435,71 +409,61 @@
 <!--        -->
 <!--</script>-->
 
-
 <script>
-   $('.range').rangeControl({
-  min: 10,
-  max: 110,
-  step: 2,
-  delim: '',
-  orientation: 'horizontal',
-  disabled: false,
-  rangeType: 'single',
-  minHandles: 1,
-  maxHandles: 1,
-  allowPaging: true,
-  stepsPerPage: 11,
-  currentValue: {
-    position: 'top'
-  },
+$(document).ready(function(){
+
+// $("input[type=range]").val(6);
+var tasks = {{task_ids|safe}}
+for (j=0;j<tasks.length;j++){
+
+   $('#'+tasks[j]).rangeControl({
+
+  max: 100,
+ 
+  delim: '', 
+ 
   scale: {
     position: 'bottom',
     labels: true,
-    interval: 10
+   // interval:1
   },
   className: ''
 });
 
-    // $('#childAge').on({
-    //     'rangeControlAddHandle.rangeControlEvent rangeControlRemoveHandle.rangeControlEvent': function () {
-         
-    //         var index = (this.value.length == 0) ? 0 : this.value.split(' ').length;
-    //         $('#childCount')[0].selectedIndex = index;
-    //         $('#childCountView').text(index);
-           
-    //     },
-    //     'rangeControlChange.rangeControlEvent': function () {
 
-    //         alert(this.value);
-           
-    //         $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
-    //     }
-    // });
 
-    // $('.range').on('rangeControlChange.rangeControlEvent', function () {
 
-        
-    //   // on change event
-    // });
-
-    $('.range').on('rangeControlSlide.rangeControlEvent', function () {
+    $('#'+tasks[j]).on('rangeControlSlide.rangeControlEvent', function () {
       // on slide event
 
-         
-      
+        
+     
 
      // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
       $('#slectedNumber').html($('.range-control-current-value').text());
-      
+     
     });
 
-    $('.range').on('rangeControlChange.rangeControlEvent', function () {
+    $('#'+tasks[j]).on('rangeControlChange.rangeControlEvent', function () {
          $('#slectedNumber').html($('.range-control-current-value').text());
     });
 
-  
+    $('#'+tasks[j]).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+    });
+
+
+    var progress = $('#'+tasks[j]).val();
+    console.log(progress);
+    $('.range-control-handle').css('left',progress+'%');
+
+}
+
+  });
 
 </script>
+
 
 
 

@@ -167,7 +167,7 @@
                                     {% else %}
                                         <input type="submit" value="Save and add Budget Lineitems" class="budget_button">
                                     {% endif %}
-                                        <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}'">
+                                        <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}&key=summary'">
                                         </div>
                                     </div>
                                                                                 </div>
@@ -212,7 +212,7 @@
   $( function() {
     var date = "{{projectobj.start_date|safe}}"
     console.log(date);
-    $("#id_actual_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date });
+    $("#id_actual_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
     $( "#id_end_date" ).datepicker({
         format: 'yyyy-mm-dd'
     });

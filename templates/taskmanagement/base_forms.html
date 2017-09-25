@@ -48,7 +48,7 @@
            <div class="col-md-12">
             <div class="form-group">
               <input class="budget_button" type="submit" value="Submit" onclick="return RemoveProduct();" />
-              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}" style="margin-right:5px;float: right;">Back</button></a>
+              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}&key=task-milestone" style="margin-right:5px;float: right;">Back</button></a>
             </div>
            </div>
         </div>
@@ -134,10 +134,10 @@ function showCheckboxes() {
   
 <script>
     $(document).ready(function() {
-        $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true});
+        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
         $(".hasDatepicker").keyup(function(e) {if(e.keyCode == 8 || e.keyCode == 46) { $.datepicker._clearDate(this); }});
         });
 </script>
@@ -217,7 +217,7 @@ $(function($) {
         e.stopImmediatePropagation();
         return false;
       });
-    
+      
     
     $('#id_task').on('change',function(e){
         var tasks_ids = $('#id_task').val();
@@ -232,7 +232,7 @@ $(function($) {
                 document.getElementById("id_overdue").value = data.milestone_overdue_date;
              }
             else{
-                $( "#id_overdue_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                $( "#id_overdue_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
                 }
             },
             error : function(){}
@@ -258,10 +258,10 @@ $(function($) {
                 if (data.project_start_date != ""){
                     document.getElementById("id_start_date").value = data.project_start_date;
                     var date = data.project_start_date
-                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date });
+                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date,changeMonth: true,changeYear: true });
                  }
                 else{
-                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
                     }
                  //if ({{model_name}}== 'Milestone'){
                  //document.getElementById("id_task_dependency").value = data.tasks_dependency;
@@ -324,10 +324,10 @@ $(function($) {
             if (data.calculation != ""){
                 document.getElementById("id_start_date").value = data.calculation;
                 var date = data.calculation
-                $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date });
+                $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
              }
             else {
-                $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+                $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
                 }
                 
             },
@@ -345,12 +345,10 @@ $(document).ready(function() {
     if ("{{model_name}}"=="Task"){
     if ($("id_start_date").val()!=''){
               var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
-              console.log(start_date);
               document.getElementById("id_start_date").value = start_date
           }
     if ($("id_end_date").val()!=''){
               var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
-              console.log(start_date);
               document.getElementById("id_end_date").value = start_date
           }
     if ($("id_actual_start_date").val()!=''){
@@ -366,6 +364,46 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+    $(document).ready(function() {  
+    alert('hi');
+        var activity = $('id_activity').val();
+        $.ajax({
+            url:'/managing/supercategories/selected/',
+            type:'GET',
+            data:{'id':activity},
+            dataType:"json",
+            success:function(data){
+            document.getElementById("id_super_category").value = data.super_categories
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+      
+    });
+</script>
+    
+<script>
+    $(document).ready(function() {  
+        var tasks = $('id_task').val();
+        $.ajax({
+            url:'/managing/supercategories/selected/',
+            type:'GET',
+            data:{'id':tasks},
+            dataType:"json",
+            success:function(data){
+            document.getElementById("id_activity").value = data.activity
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+      
+    });
+</script>
 
 
 {% endblock %}

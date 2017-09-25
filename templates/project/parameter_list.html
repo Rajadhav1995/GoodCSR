@@ -37,7 +37,7 @@
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
-        <h3><a href="/project/summary/?slug={{slug}}">{{project_name}}</a></h3>
+        <h3><a href="/project/summary/?slug={{slug}}&key=summary">{{project_name}}</a></h3>
         
         {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}

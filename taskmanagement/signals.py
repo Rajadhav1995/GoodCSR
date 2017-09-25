@@ -15,6 +15,16 @@ def task_auto_updation_date(sender, **kwargs):
         tasks.start_date = task_obj.end_date
         tasks.save()
         
-#@receiver(post_save, sender=Task)
-#def milestone_completion_status(sender,**kwargs):
-#    
+@receiver(post_save, sender=Task)
+def milestone_completion_status(sender,**kwargs):
+    task_obj = kwargs['instance']
+    task = Task.objects.latest_one(id=task_obj.id,status=2)
+    miles = Milestone.objects.filter(task = task)
+    for i in miles:
+        mile_obj = Milestone.objects.get(id = i.id)
+        tasks = mile_obj.task
+        if tasks.filter(status =2).count()==tasks.count():
+            mile_obj.status=2
+            mile_obj.save()
+        
+            
