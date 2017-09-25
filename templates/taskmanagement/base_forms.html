@@ -345,12 +345,10 @@ $(document).ready(function() {
     if ("{{model_name}}"=="Task"){
     if ($("id_start_date").val()!=''){
               var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
-              console.log(start_date);
               document.getElementById("id_start_date").value = start_date
           }
     if ($("id_end_date").val()!=''){
               var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
-              console.log(start_date);
               document.getElementById("id_end_date").value = start_date
           }
     if ($("id_actual_start_date").val()!=''){
@@ -368,6 +366,7 @@ $(document).ready(function() {
 
 <script>
     $(document).ready(function() {  
+    alert('hi');
         var activity = $('id_activity').val();
         $.ajax({
             url:'/managing/supercategories/selected/',
@@ -384,9 +383,27 @@ $(document).ready(function() {
       });
       
     });
+</script>
     
-    
-
+<script>
+    $(document).ready(function() {  
+        var tasks = $('id_task').val();
+        $.ajax({
+            url:'/managing/supercategories/selected/',
+            type:'GET',
+            data:{'id':tasks},
+            dataType:"json",
+            success:function(data){
+            document.getElementById("id_activity").value = data.activity
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+      
+    });
+</script>
 
 
 {% endblock %}

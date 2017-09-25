@@ -609,16 +609,22 @@ def get_activites_list(request):
     obj = None
     activity=[]
     obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
-    activity.append({'id':'undefined','name':'-----'})
     activity = [{'id':i.id,'name':i.name} for i in obj_list]
     return JsonResponse({"activity":activity})
     
-from django.http import JsonResponse        
+from django.http import JsonResponse
 def get_super_selected(request):
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     activity=[]
     obj_list = Activity.objects.filter(active=2,id__in = eval(ids))
-    super_categories = [i.id for i in obj_list]
+    super_categories = [i.super_category__id for i in obj_list]
     return JsonResponse({"super_categories":super_categories})
     
+from django.http import JsonResponse
+def get_activity_selected(request):
+    ids = request.GET.get('id')
+    url=request.META.get('HTTP_REFERER')
+    obj_list = Task.objects.filter(id__in = eval(ids))
+    activity = [i.activity__id for i in obj_list]
+    return JsonResponse({"activity":activity})
