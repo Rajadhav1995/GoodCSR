@@ -137,6 +137,22 @@
        if (sts != "None"){
            $("#quarter").val(sts);
        }
+       
+       $( "#ic_form" ).submit(function( event ) {
+            var linetotal_amount = 0
+            var total_amount = "{{project_amount}}"
+            $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            if (linetotal_amount >= total_amount){
+                var remaining_amount = linetotal_amount - total_amount
+                alert("Budget is higher than the budget mentioned earlier by: Rs."+ remaining_amount.toString())
+            }
+            else{
+                var remaining_amount = total_amount - linetotal_amount
+                alert("Budget is lower than the budget mentioned earlier")
+            }
+        });
    });
 </script>
 

@@ -143,6 +143,7 @@ def projectlineitemadd(request):
     ''' To add budget line items based on quarter and row '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
+    project_amount = int(projectobj.total_budget) if projectobj.total_budget else 0
     budget_id = request.GET.get('budget_id')
     budgetobj = Budget.objects.get_or_none(id = budget_id )
     supercategory_list = SuperCategory.objects.filter(active=2,project =projectobj,budget = budgetobj).exclude(parent=None)
@@ -431,6 +432,7 @@ def budgetlineitemedit(request):
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budget_id = request.GET.get('budget_id')
     budgetobj = Budget.objects.get_or_none(id = budget_id )
+    project_amount = int(projectobj.total_budget) if projectobj.total_budget else 0
     supercategory_list = SuperCategory.objects.filter(active=2,project =projectobj,budget = budgetobj).exclude(parent=None)
     heading_list = MasterCategory.objects.filter(parent__slug="budget-heading",active=2)
     quarter_list = get_budget_quarters(budgetobj)
