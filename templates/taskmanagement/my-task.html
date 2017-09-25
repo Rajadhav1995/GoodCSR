@@ -123,11 +123,9 @@
                 
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
-                {% for j in task_ids%}
                 <div  class = 'task_bar' style="width: 375px;float: left;">
-                         <input type="hidden" name="tea1" class="range" id="{{j}}" value="{{i.task_progress}}"   />
+                         <input type="hidden" name="tea1" class="range" id="{{i.id}}" value="{{i.task_progress}}"   />
                 </div>
-                {% endfor %}
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
@@ -417,7 +415,6 @@ $(document).ready(function(){
 // $("input[type=range]").val(6);
 var tasks = {{task_ids|safe}}
 for (j=0;j<tasks.length;j++){
-    alert(tasks[j]);
 
    $('#'+tasks[j]).rangeControl({
 
@@ -457,7 +454,8 @@ for (j=0;j<tasks.length;j++){
     });
 
 
-    var progress = $("#tea1").val();
+    var progress = $('#'+tasks[j]).val();
+    console.log(progress);
     $('.range-control-handle').css('left',progress+'%');
 
 }
