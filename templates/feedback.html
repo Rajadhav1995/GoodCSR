@@ -69,7 +69,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group demo_div">
-                                            <label class="demo_label">{{form.name.label_tag}}</label><br>
+                                            <label class="demo_label">{{form.name.label_tag}}<font color="red">*</font></label><br>
                                             {{form.name}}
                                 {% if form.name.errors %}
                                 <p style="color: red;">
@@ -84,7 +84,7 @@ ul li {
                                         <div class="col-md-6 nopadding">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                <label>Email</label><br>
+                                                <label>Email<font color="red">*</font></label><br>
                                                 {{form.email}}
                                                 {{ form.email.errors }}
                                                 <b><font color=#fc282f><span id="email_error"></span></font></b>
@@ -96,7 +96,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Organisation Name</label><br>
+                                            <label>Organisation Name<font color="red">*</font></label><br>
                                             {{form.organization_name}}
                                             {{ form.organization_name.errors }}
                                             </div>
@@ -108,7 +108,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Mobile Number</label><br>
+                                            <label>Mobile Number<font color="red">*</font></label><br>
                                             {{form.mobile_number}}
                                             {{ form.mobile_number.errors }}
                                             </div>
@@ -120,7 +120,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>{{form.message.label_tag}}</label><br>
+                                            <label>{{form.message.label_tag}}<font color="red">*</font></label><br>
                                             {{form.message}}
                                             {% if form.message.errors %}
                                             <p style="color: red;">
