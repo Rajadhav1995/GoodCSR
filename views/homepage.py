@@ -79,3 +79,4 @@ def email_validation(request):
         'is_taken': ContactPersonInformation.objects.filter(email__iexact=email).exists()
     }
     return JsonResponse(data)
+    
