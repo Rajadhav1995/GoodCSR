@@ -45,19 +45,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
         self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = ProjectUserRoleRelationship.objects.filter(project__id=project_id).values_list("id",flat=True))
     
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        if Activity.objects.filter(name=cleaned_data['name']).exclude(pk=self.instance.id).count() > 0:
-            try:
-                Activity.objects.get(name=cleaned_data['name'])
-            except Activity.DoesNotExist:
-                pass
-            else:
-                self._errors["name"] = self.error_class(["Activity with this Name already exists for this project"])
-
-			# Always return cleaned_data
-		return cleaned_data
-
+    
 
 class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
@@ -153,16 +141,3 @@ class MilestoneForm(forms.ModelForm):
             ('status',self.fields['status']),
             ('project',self.fields['project'])
             ])
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        if Milestone.objects.filter(name=cleaned_data['name']).exclude(pk=self.instance.id).count() > 0:
-            try:
-                Milestone.objects.get(name=cleaned_data['name'])
-            except Milestone.DoesNotExist:
-                pass
-            else:
-                self._errors["name"] = self.error_class(["Milestone with this Name already exists for this project"])
-
-			# Always return cleaned_data
-		return cleaned_data
-        
