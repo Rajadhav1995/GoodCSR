@@ -123,10 +123,11 @@
                 
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
-                
+                {% for j in task_ids%}
                 <div  class = 'task_bar' style="width: 375px;float: left;">
-                         <input type="hidden" name="tea1" class="range" id="tea1" value="{{i.task_progress}}"   />
+                         <input type="hidden" name="tea1" class="range" id="{{j}}" value="{{i.task_progress}}"   />
                 </div>
+                {% endfor %}
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
@@ -414,8 +415,11 @@
 $(document).ready(function(){
 
 // $("input[type=range]").val(6);
+var tasks = {{task_ids|safe}}
+for (j=0;j<tasks.length;j++){
+    alert(tasks[j]);
 
-   $('.range').rangeControl({
+   $('#'+tasks[j]).rangeControl({
 
   max: 100,
  
@@ -432,7 +436,7 @@ $(document).ready(function(){
 
 
 
-    $('.range').on('rangeControlSlide.rangeControlEvent', function () {
+    $('#'+tasks[j]).on('rangeControlSlide.rangeControlEvent', function () {
       // on slide event
 
         
@@ -443,11 +447,11 @@ $(document).ready(function(){
      
     });
 
-    $('.range').on('rangeControlChange.rangeControlEvent', function () {
+    $('#'+tasks[j]).on('rangeControlChange.rangeControlEvent', function () {
          $('#slectedNumber').html($('.range-control-current-value').text());
     });
 
-    $('.range').on('rangeControlAddHandle.rangeControlEvent', function () {
+    $('#'+tasks[j]).on('rangeControlAddHandle.rangeControlEvent', function () {
 
 
     });
@@ -456,7 +460,7 @@ $(document).ready(function(){
     var progress = $("#tea1").val();
     $('.range-control-handle').css('left',progress+'%');
 
-
+}
 
   });
 

@@ -336,7 +336,7 @@ def my_tasks_details(request):
     tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
     remain_tasks = project.get_remaining_tasks(remain_days,user,status)
     task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
-    task_ids = [i.id for i in task_listing]
+    task_ids = [int(i.id) for i in task_listing]
     projectobj = project
     user_obj = user
     key = request.GET.get('key')
