@@ -3,7 +3,7 @@
 <title>Samhita GoodCSR</title>
 
 <!--CSS Srat-->
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
 <link rel="stylesheet" href="/static/css/AdminLTE.min.css" />
 <link rel="stylesheet" href="/static/css/bootstrap.css" />
 <link rel="stylesheet" href="/static/css/style.css" />
@@ -24,7 +24,7 @@ ul li {
     border-color: #d0e9c6;
     /*color: #3c763d;*/
     height: 80;
-  }
+}
 </style>
 
 
@@ -63,7 +63,7 @@ ul li {
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            <form autocomplete="off" id="feedback" action="/feedback/" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="feedback1" name="feedback" action="/feedback/" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6 nopadding">
@@ -110,7 +110,7 @@ ul li {
                                             <div class="form-group">
                                             <label>Mobile Number</label><br>
                                             {{form.mobile_number}}
-                                    {{ form.mobile_number.errors }}
+                                            {{ form.mobile_number.errors }}
                                             </div>
                                         </div>
                                     </div>
@@ -154,45 +154,5 @@ ul li {
   </div>
 
 
-
-  <script type="text/javascript">
-    $(document).ready(function(){
-        $("#feedback").validate({
-            rules :
-            {
-                //id_project : {required:true},
-                //program : {required:true},
-                name : {required:true, maxlength: 300},
-                email : {required:true},
-                organization_name : {required:true},
-                mobile_number : {required:true},
-                message : {required:true},
-                
-            },
-            messages:
-            {
-                //id_project : {required : "<font color=#fc282f>Please enter the name</font>"},
-                //program:{required:"<font color=#fc282f>Please select the program</font>"},
-                name:{required:"<font color=#fc282f>Please enter name"},
-                email : {required:"<font color=#fc282f>Please enter Email id</font>"},
-                organization_name:{required:"<font color=#fc282f>Please enter Organization name</font>"},
-                mobile_number : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
-                message : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
-                
-
-
-            },
-            highlight: function (element) {
-                $(element).parent().addClass('error')
-            },
-            unhighlight: function (element) {
-                $(element).parent().removeClass('error')
-            },
-
-
-        });
-        
-});
-</script>
 {% endif %}
   
