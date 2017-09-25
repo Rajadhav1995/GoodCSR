@@ -50,7 +50,7 @@ ul li {
     <h3><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></h3><br></div>
     {% endfor %}
 </ul><br>
-<a href="javascript:parent.jQuery.fancybox.close();">Close Window</a>
+<div align='center'><a href="javascript:parent.jQuery.fancybox.close();">Close Window</a></div>
 {% else %}
         <div class="col-xs-12">
           <div class="box demo_popup">
@@ -69,7 +69,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group demo_div">
-                                            <label class="demo_label">{{form.name.label_tag}}</label><br>
+                                            <label class="demo_label">{{form.name.label_tag}}<font color="red">*</font></label><br>
                                             {{form.name}}
                                 {% if form.name.errors %}
                                 <p style="color: red;">
@@ -84,10 +84,10 @@ ul li {
                                         <div class="col-md-6 nopadding">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                <label>Email</label><br>
+                                                <label>Email<font color="red">*</font></label><br>
                                                 {{form.email}}
                                                 {{ form.email.errors }}
-                                                <br><b><font color=#fc282f><span id="file_error"></span></font></b>
+                                                <b><font color=#fc282f><span id="email_error"></span></font></b>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,7 +96,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Organisation Name</label><br>
+                                            <label>Organisation Name<font color="red">*</font></label><br>
                                             {{form.organization_name}}
                                             {{ form.organization_name.errors }}
                                             </div>
@@ -108,7 +108,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Mobile Number</label><br>
+                                            <label>Mobile Number<font color="red">*</font></label><br>
                                             {{form.mobile_number}}
                                             {{ form.mobile_number.errors }}
                                             </div>
@@ -120,7 +120,7 @@ ul li {
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>{{form.message.label_tag}}</label><br>
+                                            <label>{{form.message.label_tag}}<font color="red">*</font></label><br>
                                             {{form.message}}
                                             {% if form.message.errors %}
                                             <p style="color: red;">
@@ -131,7 +131,26 @@ ul li {
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <div class="row">
+                                    
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Enter Captcha</label><br>
+                                            {{form.captcha}}
+                                            
+                                            </div>
+                                        </div>
+                                        {% if form.captcha.errors %}
+                                            <p style="color: red;">
+                                                Incorrect, please try again.
+                                            </p>
+                                            {% endif %}
+                                    
+                                </div> -->
 
+
+                                
+                                <!-- <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div> -->
                         
                         <!-- <div class="row">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
@@ -144,8 +163,9 @@ ul li {
                             </div>
                         </div> -->
 
-                        <input class="budget_button" type="submit" value="Save" />  
-                        <div align='right'><a href="javascript:parent.jQuery.fancybox.close();">Cancel</a></div>
+                        <input class="budget_button" type="submit" value="Save" onclick="return email_valid();" />  
+                        
+                        <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Back</a>
 
                     </form>
   </div>
@@ -153,6 +173,107 @@ ul li {
   </div>
   </div>
 
+<script type="text/javascript" src="/static/js/respond.js"></script>
+<script type="text/javascript" src="/static/js/html5.js"></script>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+<script src='https://www.google.com/recaptcha/api.js'></script>
 
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#feedback1").validate({
+            framework: 'bootstrap',
+            icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            email: {
+                validators: {
+                    emailAddress: {
+                        message: 'The value is not a valid email address'
+                    }
+                }
+            }
+        },
+            rules :
+            {
+                name : {required:true, maxlength: 300},
+                email : {required:true},
+                organization_name : {required:true},
+                mobile_number : {required:true},
+                message : {required:true},
+                recaptcha_response_field : {required:true},
+                
+            },
+            messages:
+            {
+                name:{required:"<font color=#fc282f>Please enter name"},
+                email : {required:"<font color=#fc282f>Please enter Email id</font>"},
+                organization_name:{required:"<font color=#fc282f>Please enter Organization name</font>"},
+                mobile_number : {required : "<font color=#fc282f>Mobile Number</font>"},
+                message : {required : "<font color=#fc282f>Please enter message</font>"},
+                recaptcha_response_field : {required : "<font color=#fc282f>Please enter captcha</font>"},
+
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+
+
+        });
+});
+</script>
+<script type="text/javascript">
+ $(document).ready(function () {
+ $("#id_email").blur(function () {
+ var email = $(this).val();
+ if (email == '') {
+ $("#availability").html("");
+ }else{
+ $.ajax({
+ url: "/email-valid/?uname="+email
+ }).done(function( data ) {
+    if (data.is_taken== true) {
+        document.getElementById('email_error').innerHTML="Email id already present"
+    } else{
+        document.getElementById('email_error').innerHTML=''
+    };
+    
+ //$("#availability").html(data);
+ }); 
+ } 
+ });
+});
+</script>
+<script type="text/javascript">
+
+function email_valid() {
+    var email_valid = document.getElementById('email_error').innerHTML;
+    var response = document.getElementById('recaptcha_response_field').value
+
+    if (email_valid == '') {
+        return true;
+    } else {
+        return false;
+    };
+    if (response == '') {
+        alert('Please Enter captcha');
+    };
+}
+</script>
 {% endif %}
   

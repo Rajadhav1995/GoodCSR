@@ -17,7 +17,7 @@ from django.contrib import admin
 from views import (dashboard,user_information)
 from views.user_information import (UserInformationStorage,)
 from views.login import (signin,signout,homepage)
-from views.homepage import (feedback)
+from views.homepage import (feedback,email_validation)
 from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
                                             projectuseredit)
 from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
@@ -53,6 +53,8 @@ urlpatterns = [
     url(r'^login/$',signin),
     url(r'^$',homepage),
     url(r'^feedback/$',feedback),
+    url(r'^email-valid/$',email_validation),
+    url(r'^managing/$',include('taskmanagement.urls')),
     url(r'^managing/',include('taskmanagement.urls')),
     url(r'^manage/user-access/$',UserInformationStorage.as_view()),
     url(r'^logout/$',signout),

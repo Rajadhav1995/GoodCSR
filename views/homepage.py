@@ -50,6 +50,10 @@ def feedback(request):
         if email in email_list:
             messages.info(request, 'You have already requested for demo. Our executive will contact you soon ')
             return HttpResponseRedirect('/feedback/')
+        # import ipdb; ipdb.set_trace()
+        # if form.errors.get('captcha'):
+        #     messages.info(request, 'Invalid Captcha, PLease Try Again ')
+        #     return HttpResponseRedirect('/feedback/')
         if form.is_valid():
             obj = form.save()
             obj.save()
@@ -66,3 +70,13 @@ def feedback(request):
         messages.success(request, 'Thank you for Requesting Demo')
         return HttpResponseRedirect('/feedback/')
     return render(request,'feedback.html',locals())
+
+from django.http import JsonResponse
+def email_validation(request):
+    email = request.GET.get('uname', None)
+    print "aditya"
+    data = {
+        'is_taken': ContactPersonInformation.objects.filter(email__iexact=email).exists()
+    }
+    return JsonResponse(data)
+    
