@@ -50,15 +50,13 @@ urlpatterns = [
     url(r'^dashboard/$',dashboard.admin_dashboard),
     url(r'^project/',include('projectmanagement.urls')),
     url(r'^upload/',include('media.urls')),
-    url(r'^log-in/$',signin),
+    url(r'^login/$',signin),
     url(r'^$',homepage),
     url(r'^feedback/$',feedback),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^dashboard/$',dashboard.admin_dashboard),
-    url(r'^managing/',include('taskmanagement.urls')),
+    url(r'^managing/$',include('taskmanagement.urls')),
     url(r'^manage/user-access/$',UserInformationStorage.as_view()),
     url(r'^logout/$',signout),
-    url(r'^manage/', include(roles_patterns)),
+    url(r'^manage/$', include(roles_patterns)),
 
 ]
 

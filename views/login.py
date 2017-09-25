@@ -47,4 +47,4 @@ def homepage(request):
     features = Section.objects.filter(article__slug='features')
     midpart_image = Section.objects.filter(article__slug='midpart')
     capacity = Section.objects.get_or_none(article__slug='capacity-building')
-    return render(request, 'home_page.html', locals())
+    return render(request,'home_page.html', locals())
