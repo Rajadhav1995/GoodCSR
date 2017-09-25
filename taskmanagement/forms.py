@@ -39,7 +39,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['name'].required = True
         self.fields['activity_type'].required = True
         self.fields['status'].initial = 1
-        self.fields['subscribers'].required = True
+        self.fields['assigned_to'].required = True
         self.fields['project'].initial = Project.objects.get(id = int(project_id))
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
@@ -83,6 +83,7 @@ class TaskForm(forms.ModelForm):
         self.fields['activity'].queryset = Activity.objects.filter(project_id = project_id)
         self.fields['name'].required = True
         self.fields['status'].initial = 1
+        self.fields['assigned_to'].required = True
         self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
         self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = ProjectUserRoleRelationship.objects.filter(project__id=project_id).values_list("id",flat=True))
@@ -136,8 +137,8 @@ class MilestoneForm(forms.ModelForm):
         self.fields['project'].initial = Project.objects.get(id=int(project_id))
         self.fields['name'].required = True
         self.fields['overdue'].required = False
+        self.fields['assigned_to'].required = True
         self.fields['task'].queryset = Task.objects.filter(active=2,activity__project_id=project_id)
-        self.fields['subscribers'].required = True
         self.fields['status'].initial = 1
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['task'].required = True
