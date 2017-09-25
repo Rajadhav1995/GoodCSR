@@ -615,7 +615,6 @@ def get_activites_list(request):
     
 from django.http import JsonResponse        
 def get_super_selected(request):
-    import ipdb;ipdb.set_trace();
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     activity=[]
