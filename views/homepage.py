@@ -66,3 +66,12 @@ def feedback(request):
         messages.success(request, 'Thank you for Requesting Demo')
         return HttpResponseRedirect('/feedback/')
     return render(request,'feedback.html',locals())
+
+from django.http import JsonResponse
+def email_validation(request):
+    email = request.GET.get('uname', None)
+    print "aditya"
+    data = {
+        'is_taken': ContactPersonInformation.objects.filter(email__iexact=email).exists()
+    }
+    return JsonResponse(data)

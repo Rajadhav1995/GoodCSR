@@ -50,7 +50,7 @@ ul li {
     <h3><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></h3><br></div>
     {% endfor %}
 </ul><br>
-<a href="javascript:parent.jQuery.fancybox.close();">Close Window</a>
+<div align='center'><a href="javascript:parent.jQuery.fancybox.close();">Close Window</a></div>
 {% else %}
         <div class="col-xs-12">
           <div class="box demo_popup">
@@ -87,7 +87,7 @@ ul li {
                                                 <label>Email</label><br>
                                                 {{form.email}}
                                                 {{ form.email.errors }}
-                                                <br><b><font color=#fc282f><span id="file_error"></span></font></b>
+                                                <b><font color=#fc282f><span id="email_error"></span></font></b>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,8 +144,9 @@ ul li {
                             </div>
                         </div> -->
 
-                        <input class="budget_button" type="submit" value="Save" />  
-                        <div align='right'><a href="javascript:parent.jQuery.fancybox.close();">Cancel</a></div>
+                        <input class="budget_button" type="submit" value="Save" onclick="return email_valid();" />  
+                        
+                        <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Back</a>
 
                     </form>
   </div>
@@ -168,6 +169,21 @@ ul li {
 <script type="text/javascript">
     $(document).ready(function(){
         $("#feedback1").validate({
+            framework: 'bootstrap',
+            icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            email: {
+                validators: {
+                    emailAddress: {
+                        message: 'The value is not a valid email address'
+                    }
+                }
+            }
+        },
             rules :
             {
                 name : {required:true, maxlength: 300},
@@ -197,8 +213,39 @@ ul li {
 
 
         });
-        
 });
+</script>
+<script type="text/javascript">
+ $(document).ready(function () {
+ $("#id_email").blur(function () {
+ var email = $(this).val();
+ if (email == '') {
+ $("#availability").html("");
+ }else{
+ $.ajax({
+ url: "/email-valid/?uname="+email
+ }).done(function( data ) {
+    if (data.is_taken== true) {
+        document.getElementById('email_error').innerHTML="Email id already present"
+    } else{
+        document.getElementById('email_error').innerHTML=''
+    };
+    
+ //$("#availability").html(data);
+ }); 
+ } 
+ });
+});
+</script>
+<script type="text/javascript">
+function email_valid() {
+    var email_valid = document.getElementById('email_error').innerHTML;
+    if (email_valid == '') {
+        return true;
+    } else {
+        return false;
+    };
+}
 </script>
 {% endif %}
   
