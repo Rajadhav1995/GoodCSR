@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from pmu.settings import PMU_URL
 from projectmanagement.models import Project
 from media.forms import AttachmentForm,ImageUpload
+from projectmanagement.common_method import unique_slug_generator,add_keywords
 
 def list_document(request):
     # this function will list documents of project
@@ -77,6 +78,7 @@ def upload_attachment(request):
                 obj.attachment_type=1
             obj.save()
         try:
+            import ipdb; ipdb.set_trace()
             keys = request.POST.get('keywords').split(',')
             key_model = 'Attachment'
             keywords = add_keywords(keys,obj,key_model,0)

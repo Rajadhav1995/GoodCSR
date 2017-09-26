@@ -33,7 +33,7 @@ ul li {
     color: red;
 }
 .success {
-    color: green;
+    color: white;
 }
 </style>
 
@@ -223,7 +223,7 @@ ul li {
                 name : {required:true, maxlength: 300},
                 email : {required:true},
                 organization_name : {required:true},
-                mobile_number : {required:true},
+                mobile_number : {required:true, minlength:9,maxlength:12,},
                 message : {required:true},
                 recaptcha_response_field : {required:true},
                 
