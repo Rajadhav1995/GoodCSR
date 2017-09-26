@@ -48,12 +48,8 @@ def feedback(request):
         email = request.POST.get('email')
         email_list = [i.email for i in ContactPersonInformation.objects.all()]
         if email in email_list:
-            messages.info(request, 'You have already requested for demo. Our executive will contact you soon ')
+            messages.error(request, 'You have already requested for demo. Our executive will contact you soon ')
             return HttpResponseRedirect('/feedback/')
-        # import ipdb; ipdb.set_trace()
-        # if form.errors.get('captcha'):
-        #     messages.info(request, 'Invalid Captcha, PLease Try Again ')
-        #     return HttpResponseRedirect('/feedback/')
         if form.is_valid():
             obj = form.save()
             obj.save()
@@ -67,8 +63,8 @@ def feedback(request):
                           'msg': obj.message,
                        })
             send_mail('GoodCSR Demo Request','', 'adityanraut@gmail.com', ['aditya.raut@mahiti.org'],html_message=html_message)
-        messages.success(request, 'Thank you for Requesting Demo')
-        return HttpResponseRedirect('/feedback/')
+            messages.success(request, 'Thank you for Requesting Demo')
+            return HttpResponseRedirect('/feedback/')
     return render(request,'feedback.html',locals())
 
 from django.http import JsonResponse
@@ -79,4 +75,3 @@ def email_validation(request):
         'is_taken': ContactPersonInformation.objects.filter(email__iexact=email).exists()
     }
     return JsonResponse(data)
-    

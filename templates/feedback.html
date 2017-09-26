@@ -25,6 +25,16 @@ ul li {
     /*color: #3c763d;*/
     height: 80;
 }
+
+.msg {
+    display: none;
+}
+.error {
+    color: red;
+}
+.success {
+    color: white;
+}
 </style>
 
 
@@ -87,6 +97,7 @@ ul li {
                                                 <label>Email<font color="red">*</font></label><br>
                                                 {{form.email}}
                                                 {{ form.email.errors }}
+                                                <span class="msg error">Not a valid email address</span>
                                                 <b><font color=#fc282f><span id="email_error"></span></font></b>
                                                 </div>
                                             </div>
@@ -131,25 +142,27 @@ ul li {
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="row">
+                                <div class="row">
                                     
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>Enter Captcha</label><br>
                                             {{form.captcha}}
-                                            
+                                            {% if form.errors %}<p style="color: red;"><b>Invalid Captcha! Please try again</b></p>{% endif %}
+                                             <!-- <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div>
+                                            <input type="hidden" name="recaptcha" data-rule-recaptcha="true"> -->
                                             </div>
                                         </div>
-                                        {% if form.captcha.errors %}
+                                        <!-- {% if form.captcha.errors %}
                                             <p style="color: red;">
                                                 Incorrect, please try again.
                                             </p>
-                                            {% endif %}
+                                            {% endif %} -->
                                     
-                                </div> -->
+                                </div>
 
 
-                                
+
                                 <!-- <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div> -->
                         
                         <!-- <div class="row">
@@ -210,7 +223,7 @@ ul li {
                 name : {required:true, maxlength: 300},
                 email : {required:true},
                 organization_name : {required:true},
-                mobile_number : {required:true},
+                mobile_number : {required:true, minlength:9,maxlength:12,},
                 message : {required:true},
                 recaptcha_response_field : {required:true},
                 
@@ -234,6 +247,7 @@ ul li {
             },
 
 
+
         });
 });
 </script>
@@ -241,6 +255,14 @@ ul li {
  $(document).ready(function () {
  $("#id_email").blur(function () {
  var email = $(this).val();
+ var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+if (re.test(email)) {
+    $('.msg').hide();
+    $('.success').show();
+} else {
+    $('.msg').hide();
+    $('.error').show();
+}
  if (email == '') {
  $("#availability").html("");
  }else{
@@ -275,5 +297,15 @@ function email_valid() {
     };
 }
 </script>
+<script type="text/javascript">
+function capcha_filled () {
+    allowSubmit = true;
+}
+function capcha_expired () {
+    allowSubmit = false;
+}
+
+</script>
+
 {% endif %}
   
