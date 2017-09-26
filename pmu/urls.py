@@ -50,6 +50,7 @@ urlpatterns = [
     url(r'^dashboard/$',dashboard.admin_dashboard),
     url(r'^project/',include('projectmanagement.urls')),
     url(r'^upload/',include('media.urls')),
+    url(r'^report/',include('budgetmanagement.report_urls')),
     url(r'^login/$',signin),
     url(r'^$',homepage),
     url(r'^feedback/$',feedback),
