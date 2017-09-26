@@ -28,7 +28,7 @@ width:450px;
 
 
             
-            <form autocomplete="off" id="prog_edit" class ="form-horizantal budget_form" action="/project/add/?slug={{slug}}" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off" id="prog_edit" class ="form-horizantal budget_form" action="/report/detail/" method="POST" enctype="multipart/form-data">
             
             {% csrf_token %}
 
@@ -58,8 +58,8 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>Donor</label>
-                    <input type="text" name="name" value="{{project.name}}" id="id_name" required="" class="form-control" maxlength="200">
+                    <label>Funder<font color="red">*</font></label>
+                    <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
                         </div>
                 </div>
             </div>
@@ -69,8 +69,8 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>{{form.total_budget.label_tag}}</label>
-                    {{form.total_budget}}
+                    <label>Project Budget</label>
+                    <input type="text" name="total_budget" value="{{project.total_budget}}" id="total_budget" required="" class="form-control" maxlength="200">
                     </div>
                 </div>
             </div>
@@ -80,50 +80,8 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>{{form.no_of_beneficiaries.label_tag}}</label>
-                    {{form.no_of_beneficiaries}}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>{{form.summary.label_tag}}</label>
-                    {{form.summary}}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>{{form.target_beneficiaries.label_tag}}<font color="red">*</font></label>
-                    {{form.target_beneficiaries}}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>{{form.cause_area.label_tag}}<font color="red">*</font></label>
-                    {{form.cause_area}}
-                    {% if form.cause_area.errors %}
-                    <p style="color: red;">
-                        Please Select.
-                    </p>
-                    {% endif %}
+                    <label>Duration (Months.)</label>
+                    <input type="text" name="duration" value="{{project.duration}}" id="duration" required="" class="form-control" maxlength="200">
                     </div>
                 </div>
             </div>
@@ -133,13 +91,8 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label> Budget Type:<font color="red">*</font></label>
-                    {{form.budget_type}}
-                    {% if form.budget_type.errors %}
-                    <p style="color: red;">
-                        Please enter Budget Type.
-                    </p>
-                    {% endif %}
+                    <label>Number of Beneficiaries</label>
+                    <input type="text" name="beneficiaries_no" value="{{project.no_of_beneficiaries}}" id="beneficiaries_no" required="" class="form-control" maxlength="200">
                     </div>
                 </div>
             </div>
@@ -149,18 +102,35 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>{{form.project_status.label_tag}}<font color="red">*</font></label>
-                    {{form.project_status}}
-                    {% if form.project_status.errors %}
-                    <p style="color: red;">
-                        Please Select.
-                    </p>
-                    {% endif %}
+                    <label>Implementation partner<font color="red">*</font></label>
+                    <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 nopadding">
+                <div class="col-md-12">
+                    <div class="form-group">
+                    <label>Project Description</label>
+                    <textarea class="form-control" rows="5" value="{{project.summary}}" id="description" name="description"></textarea>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-6 nopadding">
+                <div class="col-md-12">
+                    <div class="form-group">
+                    <label>Objective of the project</label>
+                    <textarea class="form-control" rows="5" name="objective" id="objective"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
 
                 <div class="row">
             <!-- <div class="col-md-6 nopadding">
@@ -180,75 +150,6 @@ width:450px;
                 </div>
             </div>
         </div></div> -->
-
-       <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>{{form.start_date.label_tag}}<font color="red">*</font></label>
-                    {{form.start_date}}
-                    <font color=#fc282f><b><span id="dateError1"></span></b></font>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>{{form.end_date.label_tag}}<font color="red">*</font></label>
-                    {{form.end_date}}
-                    <font color=#fc282f><b><span id="dateError"></span></b></font>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Duration<font color="red">*</font></label>
-                    {{form.duration}}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <br>
-                    <label>Funder<font color="red">*</font></label>
-                    <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
-                    
-                    <p style="color: red;">
-                        
-                    <font color=#fc282f><span id="funder_error"></span></font>
-                    </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Implementation partner<font color="red">*</font></label>
-                    <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
-                                <p style="color: red;">
-                                    
-                                <font color=#fc282f><span id="partner_error"></span></font>
-                                </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
