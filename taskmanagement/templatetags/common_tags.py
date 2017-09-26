@@ -36,21 +36,3 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
     
-@register.assignment_tag  
-def get_assigned_to(user_obj):
-    assigned="False"
-    try:
-        obj = Task.objects.filter(assigned_to=user_obj)
-        assigned = "True" if obj else "False"
-        task_obj = Task.objects.filter(created_by = user_obj)
-        if obj and task_obj :
-            assigned = 'True&True'
-        elif obj and not task_obj :
-            assigned = 'True&False'
-        elif not obj and task_obj:
-            assigned = 'False'
-        else :
-            assigned = 'False'
-    except:
-        assigned = "False"
-    return assigned

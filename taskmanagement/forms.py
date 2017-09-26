@@ -48,6 +48,7 @@ class ActivityForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(ActivityForm,self).clean()
         super_category= cleaned_data.get("super_category")
+        
         if not super_category:
             msg = u"Please select super category"
             self._errors["super_category"] = self.error_class([msg])
