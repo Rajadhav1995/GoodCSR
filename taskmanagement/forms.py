@@ -43,7 +43,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['project'].initial = Project.objects.get(id = int(project_id))
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
-        self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = ProjectUserRoleRelationship.objects.filter(project__id=project_id).values_list("id",flat=True))
+        self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2)
     
     
 
@@ -74,7 +74,7 @@ class TaskForm(forms.ModelForm):
         self.fields['assigned_to'].required = True
         self.fields['task_dependency'].queryset = Task.objects.filter(active=2,activity__project__id=project_id)
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
-        self.fields['assigned_to'].queryset = UserProfile.objects.filter(id__in = ProjectUserRoleRelationship.objects.filter(project__id=project_id).values_list("id",flat=True))
+        self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2)
         self.fields = OrderedDict([
             ('name',self.fields['name']),
             ('super_category',self.fields['super_category']),
@@ -141,3 +141,4 @@ class MilestoneForm(forms.ModelForm):
             ('status',self.fields['status']),
             ('project',self.fields['project'])
             ])
+        
