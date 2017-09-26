@@ -54,7 +54,14 @@ def feedback(request):
             obj = form.save()
             obj.save()
             html_message = loader.render_to_string(
-                      BASE_DIR+'/templates/send_program.html',
+                      BASE_DIR+'/templates/homepage/send_program.html',
+                      {
+                          'full_name': obj.name,
+                       })
+            send_mail('Samhita GoodCSRs Project Management Module- DEMO','', 'adityanraut@gmail.com', ['aditya.raut@mahiti.org'],html_message=html_message)
+
+            html_message = loader.render_to_string(
+                      BASE_DIR+'/templates/homepage/email_template_admin.html',
                       {
                           'fname': obj.name,
                           'email': obj.email,
@@ -62,10 +69,11 @@ def feedback(request):
                           'org_name' : obj.organization_name,
                           'msg': obj.message,
                        })
-            send_mail('GoodCSR Demo Request','', 'adityanraut@gmail.com', ['aditya.raut@mahiti.org'],html_message=html_message)
+            send_mail('Request for PMU DEMO','', 'adityanraut@gmail.com', ['aditya.raut@mahiti.org'],html_message=html_message)
+
             messages.success(request, 'Thank you for Requesting Demo')
             return HttpResponseRedirect('/feedback/')
-    return render(request,'feedback.html',locals())
+    return render(request,'homepage/feedback.html',locals())
 
 from django.http import JsonResponse
 def email_validation(request):
