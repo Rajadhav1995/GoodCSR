@@ -1,5 +1,6 @@
 from projectmanagement.models import *
 from projectmanagement.utils import random_string_generator
+from media.models import Keywords,FileKeywords
 
 def unique_slug_generator(instance,edit, new_slug=None):
     """
