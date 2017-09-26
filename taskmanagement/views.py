@@ -35,6 +35,7 @@ def listing(request):
     task_list = Task.objects.filter(activity__project=project).order_by('-id')
     milestone = Milestone.objects.filter(project=project).order_by('-id')
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
+    status = get_assigned_users(user,project)
     import json
     data = {'project_id':int(project.id)}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
@@ -628,3 +629,12 @@ def get_activity_selected(request):
     obj_list = Task.objects.filter(id__in = eval(ids))
     activity = [i.activity__id for i in obj_list]
     return JsonResponse({"activity":activity})
+
+def get_assigned_users(user,project):
+    tasks = Task.objects.filter(activity__project = project,assigned_to = user)
+    if tasks:
+        assigned = "0"
+    else :
+        assigned = "1"
+    return assigned
+        
