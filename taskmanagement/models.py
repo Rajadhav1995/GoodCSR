@@ -91,8 +91,6 @@ class Task(BaseContent):
         else:
             attach=[]
         return attach
-            
-            
 
 class Milestone(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)

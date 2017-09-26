@@ -16,7 +16,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
-from taskmanagement.models import Milestone,Activity
+from taskmanagement.models import Milestone,Activity,Task
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from common_method import unique_slug_generator,add_keywords
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
@@ -101,6 +101,9 @@ def tranche_list(request):
     obj = Project.objects.get(slug=slug)
     user_id = request.session.get('user_id')
     tranche_list = Tranche.objects.filter(project=obj,active=2)
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    from taskmanagement.views import get_assigned_users
+    status = get_assigned_users(user,obj)
     key = request.GET.get('key')
     projectobj = obj
     return render(request,'budget/listing.html',locals())
@@ -400,6 +403,8 @@ def project_summary(request):
     today = datetime.datetime.today()
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json = []
+    from taskmanagement.views import get_assigned_users
+    status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
     for i in timeline:
         data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}

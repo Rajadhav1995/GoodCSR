@@ -36,6 +36,7 @@ class ActivityForm(forms.ModelForm):
         self.project = project_id
         super(ActivityForm, self).__init__(*args, **kwargs)
         self.fields['description'].required = True
+#        self.fields['super_category'].required = True
         self.fields['name'].required = True
         self.fields['activity_type'].required = True
         self.fields['status'].initial = 1
@@ -44,8 +45,13 @@ class ActivityForm(forms.ModelForm):
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
         self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2)
-    
-    
+    def clean(self):
+        cleaned_data = super(ActivityForm,self).clean()
+        super_category= cleaned_data.get("super_category")
+        
+        if not super_category:
+            msg = u"Please select super category"
+            self._errors["super_category"] = self.error_class([msg])
 
 class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
@@ -95,8 +101,11 @@ class TaskForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
         actual_start_date = cleaned_data.get("actual_start_date")
         actual_end_date = cleaned_data.get("actual_end_date")
-
-        if end_date < start_date:
+        
+        if start_date and end_date == '' :
+            msg = u"Please enter the end date"
+            self._errors["end_date"] = self.error_class([msg])
+        if start_date and end_date and end_date < start_date:
             msg = u"End date should be greater than start date."
             self._errors["end_date"] = self.error_class([msg])
 
