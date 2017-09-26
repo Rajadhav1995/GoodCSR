@@ -98,3 +98,15 @@ class BudgetPeriodUnit(BaseContent):
 
     def __str__(self):
         return str(self.id)
+
+#REPORT_TYPE = ((1,'Quarterly'),(2,'Monthly'))
+#class ProjectReport(BaseContent):
+#    project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
+#    created_by = models.ForeignKey("projectmanagement.UserProfile",**OPTIONAL)
+#    report_type = models.IntegerField(choices=REPORT_TYPE,**OPTIONAL)
+#    name = models.CharField(max_length = 500,**OPTIONAL)
+#    start_date = models.DateTimeField(**OPTIONAL)
+#    end_date = models.DateTimeField(**OPTIONAL)
+#    description = models.TextField()
+#    objective = models.TextField()
+
