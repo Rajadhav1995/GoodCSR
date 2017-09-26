@@ -335,6 +335,10 @@ def budgetview(request):
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     super_categorylist = SuperCategory.objects.filter(budget = budgetobj)
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    from taskmanagement.views import get_assigned_users
+    status = get_assigned_users(user,projectobj)
     key = request.GET.get('key')
     if budgetobj:
         quarter_list = get_budget_quarters(budgetobj)

@@ -11,18 +11,22 @@ from projectmanagement.common_method import unique_slug_generator,add_keywords
 
 def list_document(request):
     # this function will list documents of project
-	slug =  request.GET.get('slug')
-	model = eval(request.GET.get('model'))
-	try:
-		obj = model.objects.get(slug=slug)
-	except:
-		ids = request.GET.get('id')
-		obj = model.objects.get(id=ids)
-	attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model')))
-	image = PMU_URL
-	key = request.GET.get('key')
-	projectobj = obj
-	return render(request,'attachment/listing.html',locals())
+    slug =  request.GET.get('slug')
+    model = eval(request.GET.get('model'))
+    try:
+        obj = model.objects.get(slug=slug)
+    except:
+        ids = request.GET.get('id')
+        obj = model.objects.get(id=ids)
+    attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model')))
+    image = PMU_URL
+    key = request.GET.get('key')
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    from taskmanagement.views import get_assigned_users
+    status = get_assigned_users(user,obj)
+    projectobj = obj
+    return render(request,'attachment/listing.html',locals())
 	
 def timeline_upload(request):
     # this function is to upload images in timeline (for project summary page)
