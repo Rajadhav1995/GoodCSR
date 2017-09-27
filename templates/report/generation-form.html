@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block section %}
+
 <style>
     .right {
     padding-top: 50px;
@@ -22,6 +23,7 @@
 {% block content %}
 <div class="clear"></div>
 <section class="content-part">
+
 <div class='container'>
     <div class="white-box" >
         <div class="col-md-12">
@@ -35,104 +37,141 @@
         <!-- <div class="box-body"> -->
         <form autocomplete="off" id="prog_edit" class ="form-horizantal budget_form" action="/report/detail/" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-        <div style="width:50%">
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Report Name</label>
-                            <input type="text" name="name"  id="report_name" required="" class="form-control" maxlength="200">
+            
+
+        <div class="col-md-12">
+                    <h3 class="border_line">Section 1</h3><br>
+        
+                    <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
+                        <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label>Report Type</label>
+                                <select class="form-control" name="report_type" id="report_type" required>
+                                <option selected disabled>Select Report type</option>
+                                <option  value="1" >Quarterly</option>
+                                <option  value="2" >Monthly</option>
+                                </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
+
+
+                        <div class="row">
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>Report Duration</label>
+                                        <br>Start Date : <input type="text" name="start_date" readonly="true" required="" class="form-control" id="id_start_date">
+                                        End Date : <input type="text" name="end_date" readonly="true" required="" class="form-control" id="id_end_date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+        </div>
+
+         <div class="col-md-12">
+                    <h3 class="border_line">Section 2</h3><br>
+        
+                    <div class="row">
+                    <div class="col-md-6 nopadding">
+                        <div class="col-md-12">
+                            <div class="form-group">
                             <label>Project Title</label>
-                            <input type="text" name="name" value="{{project.name}}" id="id_name" required="" class="form-control" maxlength="200">
+                            <input class = 'form-control' type="text" name="project_title" value="{{project.name}}" readonly=True />
+                                </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Funder<font color="red">*</font></label>
-                            <select class="form-control" name="funder" id="funder">
-                                <option selected disabled>Select Funder</option>
-                                {% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
-                            </select>
+
+                    <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label>Funder<font color="red">*</font></label>
+                                <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}</select>
+                                    </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Project Budget</label>
-                            <input type="text" name="total_budget" value="{{project.total_budget}}" id="total_budget" required="" class="form-control" maxlength="200">
+
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Project Budget</label>
+                                    <input type="text" name="total_budget" value="{{project.total_budget}}" id="total_budget" readonly="true" required="" class="form-control" maxlength="200">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Duration (Months.)</label>
+                                    <input type="text" name="duration" value="{{project.duration}}" id="duration" readonly="true" required="" class="form-control" maxlength="200">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Number of Beneficiaries</label>
+                                    <input type="text" name="beneficiaries_no" value="{{project.no_of_beneficiaries}}" readonly="true" id="beneficiaries_no" required="" class="form-control" maxlength="200">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+ 
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Implementation partner<font color="red">*</font></label>
+                                    <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}</select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+        </div>
+
+        <div class="col-md-12">
+                    <h3 class="border_line">Section 3</h3><br>
+        
+                    <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label>Project Description</label>
+                                <textarea type="text" name="description" value="{{project.summary}}" id="description" required="" class="form-control text_area"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Duration (Months.)</label>
-                            <input type="text" name="duration" value="{{project.duration}}" id="duration" required="" class="form-control" maxlength="200">
+
+                    <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label>Objective of the project</label>
+                                <textarea type="text" name="objective" id="objective" required="" class="form-control text_area"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Number of Beneficiaries</label>
-                            <input type="text" name="beneficiaries_no" value="{{project.no_of_beneficiaries}}" id="beneficiaries_no" required="" class="form-control" maxlength="200">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Implementation partner<font color="red">*</font></label>
-                            <select class="form-control" name="implementation_partner" id="implementation_partner" required>
-                                <option selected disabled>Select Implementation Partner</option>
-                                {% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Project Description</label>
-                            <textarea type="text" name="description" value="{{project.summary}}" id="description" required="" class="form-control text_area"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Objective of the project</label>
-                            <textarea type="text" name="objective" id="objective" required="" class="form-control text_area"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--                <div class="row">-->
+
+       </div>
+
+
             <!-- <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -150,9 +189,7 @@
                 </div>
                 </div>
                 </div></div> -->
-         <div class="right" style = "width:50%">
-                fgbfgbfd
-         </div>
+         
             <div class="row">
                 <div class="col-md-6 nopadding">
                     <div class="col-md-12">
@@ -174,18 +211,24 @@
 </div>
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script>
-    $( function() {
-      $( "#id_start_date").datepicker({
-      dateFormat: 'yy-mm-dd'});
-      $( "#id_end_date").datepicker();
-    } );
-</script>
+  $(document).ready(function() {
+    $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+    $("#id_end_date").datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+    var start_date = "{{project.start_date|date:'Y-m-d'}}"
+    if (start_date != ''){
+        document.getElementById("id_start_date").value = start_date
+        $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',minDate: start_date,changeMonth: true,changeYear: true });
+    }
+  } );
+  </script>
+
+
 <script type="text/javascript">
     $(document).ready(function() {
         //var loop_count = $('#loop_count').val()
@@ -333,3 +376,4 @@
     });
 </script>
 {% endblock %}
+

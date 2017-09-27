@@ -36,7 +36,6 @@ class ActivityForm(forms.ModelForm):
         self.project = project_id
         super(ActivityForm, self).__init__(*args, **kwargs)
         self.fields['description'].required = True
-#        self.fields['super_category'].required = True
         self.fields['name'].required = True
         self.fields['activity_type'].required = True
         self.fields['status'].initial = 1
