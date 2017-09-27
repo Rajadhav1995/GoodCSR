@@ -21,4 +21,4 @@ def report_form(request):
 
 def report_detail(request):
 	name = request.POST.get('name')
-	return render(request,'report/generation-form.html',locals())
+	return render(request,'project/project_details.html',locals())

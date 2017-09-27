@@ -59,7 +59,7 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                     <label>Funder<font color="red">*</font></label>
-                    <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                    <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}</select>
                         </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                     <label>Implementation partner<font color="red">*</font></label>
-                    <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                    <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}</select>
                     </div>
                 </div>
             </div>
