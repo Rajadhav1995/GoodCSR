@@ -99,14 +99,40 @@ class BudgetPeriodUnit(BaseContent):
     def __str__(self):
         return str(self.id)
 
-#REPORT_TYPE = ((1,'Quarterly'),(2,'Monthly'))
-#class ProjectReport(BaseContent):
-#    project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
-#    created_by = models.ForeignKey("projectmanagement.UserProfile",**OPTIONAL)
-#    report_type = models.IntegerField(choices=REPORT_TYPE,**OPTIONAL)
-#    name = models.CharField(max_length = 500,**OPTIONAL)
-#    start_date = models.DateTimeField(**OPTIONAL)
-#    end_date = models.DateTimeField(**OPTIONAL)
-#    description = models.TextField()
-#    objective = models.TextField()
+REPORT_TYPE = ((1,'Quarterly'),(2,'Monthly'))
+class ProjectReport(BaseContent):
+    project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
+    created_by = models.ForeignKey("projectmanagement.UserProfile",**OPTIONAL)
+    report_type = models.IntegerField(choices=REPORT_TYPE,**OPTIONAL)
+    name = models.CharField(max_length = 500,**OPTIONAL)
+    start_date = models.DateTimeField(**OPTIONAL)
+    end_date = models.DateTimeField(**OPTIONAL)
+    description = models.TextField()
+    objective = models.TextField()
+
+    def __str__(self):
+        return str(self.id)
+
+class QuarterReportSection(BaseContent):
+    project = models.ForeignKey(ProjectReport,**OPTIONAL)
+    description = models.TextField(**OPTIONAL)
+    budget_utilization = models.TextField(**OPTIONAL)
+    about_budget = models.TextField(**OPTIONAL)
+    risks_mitigation = models.TextField(**OPTIONAL)
+    start_date = models.DateField(**OPTIONAL)
+    end_date = models.DateField(**OPTIONAL)
+    duration = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.id)
+
+class ReportMilestoneActivity(BaseContent):
+    quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
+    name = models.TextField(**OPTIONAL)
+    description = models.TextField(**OPTIONAL)
+
+class ReportParameter(BaseContent):
+    quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
+    keyparameter = models.ForeignKey('projectmanagement.ProjectParameter',**OPTIONAL)
+    description = models.TextField(**OPTIONAL)
 
