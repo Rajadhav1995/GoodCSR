@@ -20,5 +20,14 @@ def report_form(request):
     return render(request,'report/generation-form.html',locals())
 
 def report_detail(request):
-    name = request.POST.get('name')
-    return render(request,'project/project_details.html',locals())
+	name = request.POST.get('name')
+	report_name = request.POST.get('report_name')
+	funder = request.POST.get('funder')
+	total_budget = request.POST.get('total_budget')
+	duration = request.POST.get('duration')
+	beneficiaries_no = request.POST.get('beneficiaries_no')
+	implementation_partner = request.POST.get('implementation_partner')
+	description = request.POST.get('description')
+	objective = request.POST.get('objective')
+	
+	return render(request,'project/project_details.html',locals())

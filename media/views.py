@@ -82,7 +82,6 @@ def upload_attachment(request):
                 obj.attachment_type=1
             obj.save()
         try:
-            import ipdb; ipdb.set_trace()
             keys = request.POST.get('keywords').split(',')
             key_model = 'Attachment'
             keywords = add_keywords(keys,obj,key_model,0)
