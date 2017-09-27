@@ -146,7 +146,7 @@ ul li {
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>Enter Captcha</label><br>
-                                            {{form.captcha}}
+                                            {{form.captcha}}<br>
                                             {% if form.errors %}<p style="color: red;"><b>Invalid Captcha! Please try again</b></p>{% endif %}
                                              <!-- <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div>
                                             <input type="hidden" name="recaptcha" data-rule-recaptcha="true"> -->
@@ -232,7 +232,7 @@ ul li {
                 name:{required:"<font color=#fc282f>Please enter name"},
                 email : {required:"<font color=#fc282f>Please enter Email id</font>"},
                 organization_name:{required:"<font color=#fc282f>Please enter Organization name</font>"},
-                mobile_number : {required : "<font color=#fc282f>Mobile Number</font>"},
+                mobile_number : {required : "<font color=#fc282f>Please enter Mobile Number</font>"},
                 message : {required : "<font color=#fc282f>Please enter message</font>"},
                 recaptcha_response_field : {required : "<font color=#fc282f>Please enter captcha</font>"},
 
