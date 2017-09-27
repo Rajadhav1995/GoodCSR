@@ -102,6 +102,7 @@ def get_org_logo(projectobj):
     front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
     # org_logo =''
+    
     return org_logo
 
 @register.assignment_tag
