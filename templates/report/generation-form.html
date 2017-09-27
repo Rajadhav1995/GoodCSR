@@ -97,7 +97,7 @@ width:450px;
                 </div>
             </div>
         </div>
-
+ 
         <div class="row">
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
@@ -113,7 +113,7 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                     <label>Project Description</label>
-                    <textarea class="form-control" rows="5" value="{{project.summary}}" id="description" name="description"></textarea>
+                    <textarea type="text" name="description" value="{{project.summary}}" id="description" required="" class="form-control text_area"></textarea>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                     <label>Objective of the project</label>
-                    <textarea class="form-control" rows="5" name="objective" id="objective"></textarea>
+                    <textarea type="text" name="objective" id="objective" required="" class="form-control text_area"></textarea>
                     </div>
                 </div>
             </div>
@@ -182,7 +182,6 @@ width:450px;
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
-
 <script>
   $( function() {
     $( "#id_start_date").datepicker({
