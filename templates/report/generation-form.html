@@ -1,138 +1,138 @@
 {% extends 'base.html' %}
-
 {% block section %}
+<style>
+    .right {
+    padding-top: 50px;
+    float: right;
+    width: 300px;
+    border: 3px solid #73AD21;
+    padding: 10px;
+    }
+</style>
 <div> </div>
 {% endblock %}
-    <!-- Content Header (Page header) -->
+<!-- Content Header (Page header) -->
 <!--<style>
-form { 
-margin: 0 auto; 
-width:450px;
-}
-</style>-->
-    <!-- Main content -->
+    form { 
+    margin: 0 auto; 
+    width:450px;
+    }
+    </style>-->
+<!-- Main content -->
 {% block content %}
 <div class="clear"></div>
 <section class="content-part">
-    <div class='container' >
-    <div class="white-box">
-        
-              <div class="col-md-12">
-      <h3 class="border_line">{{project.name}}sfdsfsd</h3><br>
+<div class='container'>
+    <div class="white-box" >
+        <div class="col-md-12">
+            <h3 class="border_line">{{project.name}}</h3>
+            <br>
         </div>
-              <!-- <div align="right">
-             <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
-         </div> -->
-            <!-- /.box-header -->
-            <!-- <div class="box-body"> -->
-
-
-            
-            <form autocomplete="off" id="prog_edit" class ="form-horizantal budget_form" action="/report/detail/" method="POST" enctype="multipart/form-data">
-            
+        <!-- <div align="right">
+            <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" />
+            </div> -->
+        <!-- /.box-header -->
+        <!-- <div class="box-body"> -->
+        <form autocomplete="off" id="prog_edit" class ="form-horizantal budget_form" action="/report/detail/" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-
+        <div style="width:50%">
             <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Report Name</label>
-                    <input type="text" name="name"  id="report_name" required="" class="form-control" maxlength="200">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Report Name</label>
+                            <input type="text" name="name"  id="report_name" required="" class="form-control" maxlength="200">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
             <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Project Title</label>
-                    <input type="text" name="name" value="{{project.name}}" id="id_name" required="" class="form-control" maxlength="200">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Project Title</label>
+                            <input type="text" name="name" value="{{project.name}}" id="id_name" required="" class="form-control" maxlength="200">
                         </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Funder<font color="red">*</font></label>
-                    <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}</select>
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Funder<font color="red">*</font></label>
+                            <select class="form-control" name="funder" id="funder">
+                                <option selected disabled>Select Funder</option>
+                                {% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
+                            </select>
                         </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Project Budget</label>
-                    <input type="text" name="total_budget" value="{{project.total_budget}}" id="total_budget" required="" class="form-control" maxlength="200">
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Duration (Months.)</label>
-                    <input type="text" name="duration" value="{{project.duration}}" id="duration" required="" class="form-control" maxlength="200">
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Project Budget</label>
+                            <input type="text" name="total_budget" value="{{project.total_budget}}" id="total_budget" required="" class="form-control" maxlength="200">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Number of Beneficiaries</label>
-                    <input type="text" name="beneficiaries_no" value="{{project.no_of_beneficiaries}}" id="beneficiaries_no" required="" class="form-control" maxlength="200">
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Duration (Months.)</label>
+                            <input type="text" name="duration" value="{{project.duration}}" id="duration" required="" class="form-control" maxlength="200">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
- 
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Implementation partner<font color="red">*</font></label>
-                    <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}</select>
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Number of Beneficiaries</label>
+                            <input type="text" name="beneficiaries_no" value="{{project.no_of_beneficiaries}}" id="beneficiaries_no" required="" class="form-control" maxlength="200">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Project Description</label>
-                    <textarea type="text" name="description" value="{{project.summary}}" id="description" required="" class="form-control text_area"></textarea>
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Implementation partner<font color="red">*</font></label>
+                            <select class="form-control" name="implementation_partner" id="implementation_partner" required>
+                                <option selected disabled>Select Implementation Partner</option>
+                                {% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label>Objective of the project</label>
-                    <textarea type="text" name="objective" id="objective" required="" class="form-control text_area"></textarea>
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Project Description</label>
+                            <textarea type="text" name="description" value="{{project.summary}}" id="description" required="" class="form-control text_area"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-       
-
-                <div class="row">
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Objective of the project</label>
+                            <textarea type="text" name="objective" id="objective" required="" class="form-control text_area"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--                <div class="row">-->
             <!-- <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -148,33 +148,30 @@ width:450px;
                             {% endif %}
                     </div>
                 </div>
-            </div>
-        </div></div> -->
-        <div class="row">
-            <div class="col-md-6 nopadding">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <!-- <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/> -->
-
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
-                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                </div>
+                </div></div> -->
+         <div class="right" style = "width:50%">
+                fgbfgbfd
+         </div>
+            <div class="row">
+                <div class="col-md-6 nopadding">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <!-- <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/> -->
+                            <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
+                            <a class="btn btn-success" href="/project/list/">Back</button></a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-
-        
-                        
+    </form>
 </div>
-</form>
 </div>
-  </div>
+</div>
 </br>
 <input type="hidden" name="loop_count" id="loop_count" value="{{activity_view.count}}">
-  </div>
-  </div>
-
+</div>
+</div>
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -183,121 +180,114 @@ width:450px;
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script>
-  $( function() {
-    $( "#id_start_date").datepicker({
-    dateFormat: 'yy-mm-dd'});
-    $( "#id_end_date").datepicker();
-  } );
-  </script>
-
+    $( function() {
+      $( "#id_start_date").datepicker({
+      dateFormat: 'yy-mm-dd'});
+      $( "#id_end_date").datepicker();
+    } );
+</script>
 <script type="text/javascript">
-$(document).ready(function() {
-    //var loop_count = $('#loop_count').val()
-    var max_fields      = 10; //maximum input boxes allowed
-    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
-    var add_button      = $(".add_field_button"); //Add button ID
-    
-    var loop_count = $('#loop_count').val()
-    var loop_count = Number(loop_count);
-    if (loop_count > 0) {
-        var x =Number(loop_count);
-    } else {
-        var x =Number(loop_count)+1
-    }
-    //var x =Number(loop_count)+1;
-    $(add_button).click(function(e){ //on add input button click
-        e.preventDefault();
-        if(x < max_fields){ //max input box allowed
-            x++; //text box increment
-            // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            $(wrapper).append('<div><input class="form-control" placeholder="Enter Activity Name" type="text" name="activity['+x+']"/><input class="form-control" type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
-
-            // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
-        }
-        document.getElementById("activity_count").value = x;
-
-    });
-    
-    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-        e.preventDefault(); $(this).parent('div').remove(); x--;
-    })
-});
-</script>
-
-
-<style>
-.error{color:red; min-width: 200px;}
-</style>
-  <div class="control-sidebar-bg"></div>
-
-<script>
-  $("#id_end_date").datepicker({
-    dateFormat: 'yy-mm-dd',
-    onSelect: function(dateText, inst) {
-        var start = new Date($('#id_start_date').val());
-        var end = new Date($('#id_end_date').val());
-        if (end <= start) {
-            alert("'End date' should be greater than 'Start date'")
-            document.getElementById('dateError').innerHTML="End date should be greater than Start date"
-        };
-        if (end > start) {
-            document.getElementById('dateError').innerHTML=""
-            document.getElementById('dateError1').innerHTML=""
-        };
-
-        var months = (end.getFullYear() - start.getFullYear()) * 12;
-        months += end.getMonth() - start.getMonth();
-        document.getElementById("id_duration").value = months;
-
-    }
-
-});
-</script>
-
-<script>
-  $("#id_start_date").datepicker({
-    dateFormat: 'yy-mm-dd',
-    onSelect: function(dateText, inst) {
-        var start = new Date($('#id_start_date').val());
-        var end = new Date($('#id_end_date').val());
-        end.setDate(end.getDate() + 1);
-        if (end <= start) {
-            alert("'End date' should be greater than 'Start date'")
-            document.getElementById('dateError').innerHTML="End date should be greater than Start date"
-        };
-        if (end > start) {
-            document.getElementById('dateError').innerHTML=""
-            document.getElementById('dateError1').innerHTML=""
-        };
-
-        var months = (end.getFullYear() - start.getFullYear()) * 12;
-        months += end.getMonth() - start.getMonth();
-        document.getElementById("id_duration").value = months;
-        var start = new Date($('#id_start_date').val());
+    $(document).ready(function() {
+        //var loop_count = $('#loop_count').val()
+        var max_fields      = 10; //maximum input boxes allowed
+        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+        var add_button      = $(".add_field_button"); //Add button ID
         
-    }
-
-});
-</script>
-<script>
-function date_validate() {
-    if ($('#id_start_date').val()>$('#id_end_date').val()){
-        alert("'End date' should be greater than 'Start date'");
-        return false;
+        var loop_count = $('#loop_count').val()
+        var loop_count = Number(loop_count);
+        if (loop_count > 0) {
+            var x =Number(loop_count);
         } else {
-            return true;
+            var x =Number(loop_count)+1
         }
+        //var x =Number(loop_count)+1;
+        $(add_button).click(function(e){ //on add input button click
+            e.preventDefault();
+            if(x < max_fields){ //max input box allowed
+                x++; //text box increment
+                // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+                $(wrapper).append('<div><input class="form-control" placeholder="Enter Activity Name" type="text" name="activity['+x+']"/><input class="form-control" type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
+    
+                // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            }
+            document.getElementById("activity_count").value = x;
+    
+        });
+        
+        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+    });
+</script>
+<style>
+    .error{color:red; min-width: 200px;}
+</style>
+<div class="control-sidebar-bg"></div>
+<script>
+    $("#id_end_date").datepicker({
+      dateFormat: 'yy-mm-dd',
+      onSelect: function(dateText, inst) {
+          var start = new Date($('#id_start_date').val());
+          var end = new Date($('#id_end_date').val());
+          if (end <= start) {
+              alert("'End date' should be greater than 'Start date'")
+              document.getElementById('dateError').innerHTML="End date should be greater than Start date"
+          };
+          if (end > start) {
+              document.getElementById('dateError').innerHTML=""
+              document.getElementById('dateError1').innerHTML=""
+          };
+    
+          var months = (end.getFullYear() - start.getFullYear()) * 12;
+          months += end.getMonth() - start.getMonth();
+          document.getElementById("id_duration").value = months;
+    
+      }
+    
+    });
+</script>
+<script>
+    $("#id_start_date").datepicker({
+      dateFormat: 'yy-mm-dd',
+      onSelect: function(dateText, inst) {
+          var start = new Date($('#id_start_date').val());
+          var end = new Date($('#id_end_date').val());
+          end.setDate(end.getDate() + 1);
+          if (end <= start) {
+              alert("'End date' should be greater than 'Start date'")
+              document.getElementById('dateError').innerHTML="End date should be greater than Start date"
+          };
+          if (end > start) {
+              document.getElementById('dateError').innerHTML=""
+              document.getElementById('dateError1').innerHTML=""
+          };
+    
+          var months = (end.getFullYear() - start.getFullYear()) * 12;
+          months += end.getMonth() - start.getMonth();
+          document.getElementById("id_duration").value = months;
+          var start = new Date($('#id_start_date').val());
+          
+      }
+    
+    });
+</script>
+<script>
+    function date_validate() {
+        if ($('#id_start_date').val()>$('#id_end_date').val()){
+            alert("'End date' should be greater than 'Start date'");
+            return false;
+            } else {
+                return true;
+            }
+        }
+</script>
+<script>
+    function funder_val() {
+        var e = document.getElementById("funder");
+        var str = e.options[e.selectedIndex].value;
+    
     }
 </script>
-
-<script>
-function funder_val() {
-    var e = document.getElementById("funder");
-    var str = e.options[e.selectedIndex].value;
-
-}
-</script>
-
 <script type="text/javascript">
     $(document).ready(function(){
         $('select[multiple=multiple]').multiSelect()
@@ -327,8 +317,8 @@ function funder_val() {
                 duration : {required : "<font color=#fc282f>Please select project Start date and End date</font>"},
                 funder : {required : "<font color=#fc282f>Please select funder</font>"},
                 implementation_partner : {required : "<font color=#fc282f>Please select Implementation Partner</font>"},
-
-
+    
+    
             },
             highlight: function (element) {
                 $(element).parent().addClass('error')
@@ -336,10 +326,10 @@ function funder_val() {
             unhighlight: function (element) {
                 $(element).parent().removeClass('error')
             },
-
-
+    
+    
         });
         
-});
+    });
 </script>
 {% endblock %}
