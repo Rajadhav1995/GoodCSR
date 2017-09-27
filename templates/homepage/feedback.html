@@ -15,7 +15,7 @@
 <style>
 ul li {
     list-style-type: none;
-    line-height: 18px;
+    line-height: 26px;
     color: white;
   }
 
@@ -23,7 +23,7 @@ ul li {
     /*background-color: #dff0d8;*/
     border-color: #d0e9c6;
     /*color: #3c763d;*/
-    height: 80;
+    height: 110;
 }
 .msg {
     display: none;
@@ -33,7 +33,7 @@ ul li {
 }
 .success {
     color: white;
-}
+}`
 </style>
 
 
@@ -177,7 +177,7 @@ ul li {
 
                         <input class="budget_button" type="submit" value="Save" onclick="return email_valid();" />  
                         
-                        <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Back</a>
+                        <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
                     </form>
   </div>
@@ -266,11 +266,11 @@ if (re.test(email)) {
  $.ajax({
  url: "/email-valid/?uname="+email
  }).done(function( data ) {
-    if (data.is_taken== true) {
-        document.getElementById('email_error').innerHTML="Email id already present"
-    } else{
-        document.getElementById('email_error').innerHTML=''
-    };
+    // if (data.is_taken== true) {
+    //     document.getElementById('email_error').innerHTML="Email id already present"
+    // } else{
+    //     document.getElementById('email_error').innerHTML=''
+    // };
     
  //$("#availability").html(data);
  }); 
