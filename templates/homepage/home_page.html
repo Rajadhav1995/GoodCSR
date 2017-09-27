@@ -78,7 +78,7 @@
                <div class="col-md-8">
                 <img src="{{i.cover_image}}" style="width:100%;">
                </div>
-               <div class="col-md-4 advatage_slider">
+               <div class="col-md-4 advatage_slider slider_wrapper" >
                 <h3>{{i.name}}</h3>
                 <p>{{i.description | safe}}</p>
                </div>
@@ -162,7 +162,7 @@
           ]
       });
         $(".center").slick({
-        autoplay: true,
+        autoplay: false,
        /* dots: true,*/
         infinite: true,
         slidesToShow: 1,

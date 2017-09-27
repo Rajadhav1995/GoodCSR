@@ -48,7 +48,7 @@ $(document).ready(function(){
     <span style="position: absolute;
     right: 30px;
     top: 0px;">Coming Soon...</span>
-    <a id="myBtn1" class="green-link green-link1" href="/report/generation-form/?slug={{obj.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    <a id="myBtn1" class="green-link green-link1" href="" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
           <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
@@ -553,26 +553,41 @@ function confirm_alert(node) {
 
 <script>
     var jsonData = {{taskdict|safe}}
-    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
-    // g.AddTaskItem(new JSGantt.TaskItem(1, 'Chart Object', '2017-07-28T18:30:00Z', '2017-07-31T18:30:00Z', 'gmilestone', '', 1, '', 100, 0, 4316, 1, '431725FF', '', '', g));
+    // g.AddTaskItem(new JSGantt.TaskItem(58331, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z', 'gmilestone', '', 1, '', 10, 0, 5833, 1, '583370FS', '', '', g));
+    // Get today and tomorrows date
+    var cur = new Date();
+    var tom = new Date();
+    tom.setDate(tom.getDate() + 1);
+    var curDate = cur.getFullYear() + '-' +
+        ((''+(cur.getMonth()+1)).length<2 ? '0' : '') + (cur.getMonth()+1) + '-' +
+        ((''+cur.getDate()).length<2 ? '0' : '') + cur.getDate();
+
+    var tomDate = tom.getFullYear() + '-' +
+        ((''+(tom.getMonth()+1)).length<2 ? '0' : '') + (tom.getMonth()+1) + '-' +
+        ((''+tom.getDate()).length<2 ? '0' : '') + tom.getDate();
+    // Get today and tomorrows date
     $.each(jsonData.supercategories, function (i) {
-      var superId = this.id;
-      var superName = this.name;
+      superId = 1,activity_type = 'Core',taskCompletion = 0,superName = 'Super Category';
+      if(this.id!=null)superId = this.id;
+      if(this.name!=null) superName = this.name;
       var superDesc = this.description;
+      if(superName.toLowerCase()!="location"){
       g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
         '', superDesc, g));
+      }
       // console.log("Super");
       // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
       //   '', superDesc);
     });
     $.each(jsonData.activities, function (i) {
-      var activityId = this.id.toString();
-      var superId = this.super_category;
-      activityId = this.super_category.toString() + activityId;
+      var activityId = 11, superId = 1,activity_type = 'Core',taskCompletion = 0,activityName = 'Activity';
+      if(this.id!=null) activityId = this.id.toString();
+      if(this.super_category!=null) superId = this.super_category;
+      if(this.super_category!=null && this.id!=null) activityId = this.super_category.toString() + activityId;
       // console.log("ActID", activityId);
-      var activityName = this.name;
-      var activitySuper = this.super_category;
+      if(this.name!=null) activityName = this.name;
       var activityDesc = this.description;
       g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
         1, '', '',
@@ -581,28 +596,25 @@ function confirm_alert(node) {
       // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
     });
     $.each(jsonData.tasks, function (i) {
-      var taskId = this.id;
-      var activityId = this.activity;
-      var activity_type = 'Core';
+      var taskId = 111, activityId = 11, superId = 1,activity_type = 'Core',taskCompletion = 0,taskName = 'Task',taskStatus = 'gtaskred',eStartDate = curDate, eEndDate = tomDate;
+      if(this.id=null) taskId = this.id;
+      if(this.activity!=null) activityId = this.activity;
       // activity = jsonData.activities.filter(function( i ) {
       //   if(i.id == activityId){return i.super_category;}
       // });
-      var superId;
       $.each(jsonData.activities, function () {
         if (this.id == activityId) {
           activity_type = this.activity_type;
           superId = this.super_category;
         }
       });
-      taskId = superId.toString() + activityId.toString() + taskId.toString();
-      activityId = superId.toString() + activityId.toString();
+      if(superId!=null && activityId!=null && taskId!=null) taskId = superId.toString() + activityId.toString() + taskId.toString();
+      if(superId!=null && activityId!=null) activityId = superId.toString() + activityId.toString();
       activityId = parseInt(activityId);
       // console.log("TaskID", taskId);
-      var taskName = this.name;
-      var eStartDate = this.expected_start_date;
-      var eEndDate = this.expected_end_date;
-      var taskCompletion = 0;
-      var taskStatus = 'gtaskred';
+      if(this.name!=null) taskName = this.name;
+      if(this.expected_start_date!=null) eStartDate = this.expected_start_date;
+      if(this.expected_end_date) eEndDate = this.expected_end_date;
       if (activity_type == "Core") {
         switch (this.status) {
           case "Ongoing":
@@ -625,42 +637,6 @@ function confirm_alert(node) {
       // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
       //   '', 0, 0, activityId, 1, '', '', '');
     });
-    // g.AddTaskItem(new JSGantt.TaskItem(11, 'Paper Work', '', '', 'ggroupblack', '', 0, 'Shlomy', 40, 2, 1, 1, '', '',
-    //   '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(111, 'Constructor Proc', '2017-07-21', '2017-09-09', 'gtaskblue', '', 0,
-    //   'Brian T.', 60, 0, 11, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(112, 'Task Variables', '2017-09-06', '2017-09-11', 'gtaskred', '', 0, 'Brian',
-    //   0, 0, 11, 1, 121, '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(113, 'Task by Minute/Hour', '2017-09-09', '2017-09-14 12:00', 'gtaskyellow', '',
-    //   0, 'Ilan', 60, 0, 11, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(114, '4th task', '2017-09-12', '2017-09-20 12:00', 'gtaskblue', '',
-    //   0, 'Ilan', 60, 0, 11, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(115, '5th task', '2017-09-14', '2017-09-27 12:00', 'gtaskblue', '',
-    //   0, 'Ilan', 20, 0, 11, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(13, 'Education', '2017-09-09', '2017-09-29', 'gtaskred', '', 0, 'Anyone', 60, 0,
-    //   1, 1, '123SS', 'This is a caption', null, g));
-    // g.AddTaskItem(new JSGantt.TaskItem(2, 'Create HTML Shell', '2017-09-24', '2017-09-28', 'gtaskyellow', '', 0,
-    //   'Brian', 20, 0, 0, 1, 122, '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(3, 'Code Javascript', '', '', 'ggroupblack', '', 0, 'Brian', 0, 1, 0, 1, '', '',
-    //   '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(31, 'Define Variables', '2017-09-25', '2017-09-29', 'gtaskgreen', '', 0, 'Brian',
-    //   30, 0, 2, 1, '', 'Caption 1', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(32, 'Calculate Chart Size', '2017-09-15', '2017-09-24', 'gtaskgreen', '', 0,
-    //   'Shlomy', 40, 0, 3, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(33, 'Draw Task Items', '', '', 'ggroupblack', '', 0, 'Someone', 40, 2, 3, 1, '',
-    //   '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(332, 'Task Label Table', '2017-09-06', '2017-09-09', 'gtaskblue', '', 0, 'Brian',
-    //   60, 0, 33, 1, '331', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(333, 'Task Scrolling Grid', '2017-09-11', '2017-09-20', 'gtaskblue', '', 0,
-    //   'Brian', 0, 0, 33, 1, '332', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(34, 'Draw Task Bars', '', '', 'ggroupblack', '', 0, 'Anybody', 60, 2, 3, 0, '',
-    //   '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(341, 'Loop each Task', '2017-09-26', '2017-09-30', 'gtaskred', '', 0, 'Brian',
-    //   60, 0, 34, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(342, 'Calculate Start/Stop', '2017-04-12', '2017-05-18', 'gtaskred', '', 0, 'Brian', 60, 0, 34, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(343, 'Draw Task Div', '2017-05-13', '2017-05-17', 'gtaskred', '', 0, 'Brian', 60, 0, 34, 1, '', '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(344, 'Draw Completion Div', '2017-05-17', '2017-07-04', 'gtaskred', '', 0, 'Brian', 60, 0, 34, 1, "342,343", '', '', g));
-    // g.AddTaskItem(new JSGantt.TaskItem(35, 'Make Updates', '2017-09-17', '2017-09-04', 'gtaskblue', '', 0, 'Brian', 30, 0, 3, 1, '333', '', '', g));
     g.setShowStartDate(0);
     g.setShowEndDate(0);
     g.setShowRes(0);
@@ -698,13 +674,20 @@ function confirm_alert(node) {
     $(document).ready(function () {
       var previous = null;
       var prePrevious = null;
+        var mile = false;
       $(".gtaskbarcontainer").each(function (index) {
         currParent = $(this).parent().parent().parent();
+            listParent = currParent.attr('id').replace('row', '');
+        if($(this).hasClass('gmilecontainer')){
+          mile = true;
+        }
         if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
           .attr('id')) {
+            console.log("This ID", $(this).attr('id'), mile);
+            if(mile){
+
+            }
           if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
-            listParent = currParent.attr('id').replace('row', '');
-            console.log("PARENT", currParent.attr('id'));
             $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
@@ -715,10 +698,8 @@ function confirm_alert(node) {
             if (count == 0) {
               $(previous).css('top', '0px');
               count++;
-              padding = 25;
             }
             listParentDiv = $('#' + listParent);
-            // console.log('Heights', $(this).css('top'), parseInt(currParent.css('height')));
             if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
               listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
               currParent.css({
@@ -734,6 +715,7 @@ function confirm_alert(node) {
           $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
             top: '-5px'
           });
+          mile = false;
         }
         prePrevious = previous;
         previous = this;
