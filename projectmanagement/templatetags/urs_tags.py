@@ -110,6 +110,5 @@ def get_activities(projectobj):
 
 @register.assignment_tag
 def get_attachments(projectobj):
-    print projectobj
     attachment = Attachment.objects.filter(object_id=projectobj.id,content_type=ContentType.objects.get(model='project'))
     return attachment

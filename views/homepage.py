@@ -15,10 +15,6 @@ def feedback(request):
     if request.method=='POST':
         form = ContactPersonForm(request.POST)
         email = request.POST.get('email')
-        # email_list = [i.email for i in ContactPersonInformation.objects.all()]
-        # if email in email_list:
-            # messages.error(request, 'You have already requested for demo. Our executive will contact you soon ')
-            # return HttpResponseRedirect('/feedback/')
         if form.is_valid():
             obj = form.save()
             obj.save()
@@ -46,7 +42,6 @@ def feedback(request):
 from django.http import JsonResponse
 def email_validation(request):
     email = request.GET.get('uname', None)
-    print "aditya"
     data = {
         'is_taken': ContactPersonInformation.objects.filter(email__iexact=email).exists()
     }
