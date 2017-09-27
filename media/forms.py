@@ -50,12 +50,3 @@ class ContactPersonForm(forms.ModelForm):
     class Meta:
         model = ContactPersonInformation
         fields  = ('name','email','organization_name','mobile_number','message')
-
-    # def clean(self):
-    #     cleaned_data = self.cleaned_data
-    #     if self.errors.get('captcha'):
-    #         print "shfjdkshfdjskfhjksdhsdjkshfkj"
-    #         raise ValidationError('Invalid Captcha! please try againnnnn')
-    #         # Always return cleaned_data
-    #     import ipdb; ipdb.set_trace()
-    #     return cleaned_data
