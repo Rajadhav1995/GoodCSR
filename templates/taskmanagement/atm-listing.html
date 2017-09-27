@@ -236,7 +236,7 @@ $(document).ready(function(){
   <script src="/static/js/jsgantt.js" type="text/javascript"></script>
 <script>
     var jsonData = {{taskdict|safe}}
-     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // g.AddTaskItem(new JSGantt.TaskItem(58331, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z', 'gmilestone', '', 1, '', 10, 0, 5833, 1, '583370FS', '', '', g));
     // Get today and tomorrows date
@@ -253,8 +253,8 @@ $(document).ready(function(){
     // Get today and tomorrows date
     $.each(jsonData.supercategories, function (i) {
       superId = 1,activity_type = 'Core',taskCompletion = 0,superName = 'Super Category';
-      if(this.id!=null)superId = this.id;
-      if(this.name!=null) superName = this.name;
+      if(this.id!=null){superId = this.id;}
+      superName = this.name;
       var superDesc = this.description;
       if(superName.toLowerCase()!="location"){
       g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
@@ -266,11 +266,14 @@ $(document).ready(function(){
     });
     $.each(jsonData.activities, function (i) {
       var activityId = 11, superId = 1,activity_type = 'Core',taskCompletion = 0,activityName = 'Activity';
-      if(this.id!=null) activityId = this.id.toString();
-      if(this.super_category!=null) superId = this.super_category;
-      if(this.super_category!=null && this.id!=null) activityId = this.super_category.toString() + activityId;
+      if(this.id!=null){
+        activityId = this.id.toString();}
+      if(this.super_category!=null){
+      superId = this.super_category;
+      if(this.id!=null){
+      activityId = this.super_category.toString() + activityId;}}
       // console.log("ActID", activityId);
-      if(this.name!=null) activityName = this.name;
+      activityName = this.name;
       var activityDesc = this.description;
       g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
         1, '', '',
@@ -280,24 +283,24 @@ $(document).ready(function(){
     });
     $.each(jsonData.tasks, function (i) {
       var taskId = 111, activityId = 11, superId = 1,activity_type = 'Core',taskCompletion = 0,taskName = 'Task',taskStatus = 'gtaskred',eStartDate = curDate, eEndDate = tomDate;
-      if(this.id=null) taskId = this.id;
-      if(this.activity!=null) activityId = this.activity;
+      if(this.id!=null){taskId = this.id;}
+      if(this.activity!=null) {activityId = this.activity;}
       // activity = jsonData.activities.filter(function( i ) {
       //   if(i.id == activityId){return i.super_category;}
       // });
       $.each(jsonData.activities, function () {
         if (this.id == activityId) {
           activity_type = this.activity_type;
-          superId = this.super_category;
+          if(this.super_category!=null){superId = this.super_category;}
         }
       });
-      if(superId!=null && activityId!=null && taskId!=null) taskId = superId.toString() + activityId.toString() + taskId.toString();
-      if(superId!=null && activityId!=null) activityId = superId.toString() + activityId.toString();
+      if(superId!=null && activityId!=null && taskId!=null) { taskId = superId.toString() + activityId.toString() + taskId.toString();}
+      if(superId!=null && activityId!=null){activityId = superId.toString() + activityId.toString();}
       activityId = parseInt(activityId);
       // console.log("TaskID", taskId);
-      if(this.name!=null) taskName = this.name;
-      if(this.expected_start_date!=null) eStartDate = this.expected_start_date;
-      if(this.expected_end_date) eEndDate = this.expected_end_date;
+      taskName = this.name;
+      eStartDate = this.expected_start_date;
+      eEndDate = this.expected_end_date;
       if (activity_type == "Core") {
         switch (this.status) {
           case "Ongoing":
