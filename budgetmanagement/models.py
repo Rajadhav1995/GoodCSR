@@ -110,3 +110,12 @@ class BudgetPeriodUnit(BaseContent):
 #    description = models.TextField()
 #    objective = models.TextField()
 
+#class QuarterReportSection(BaseContent):
+#    project = models.ForeignKey(QuarterReportSection,**OPTIONAL)
+#    description = models.TextField(**OPTIONAL)
+#    budget_utilization = models.TextField(**OPTIONAL)
+#    about_budget = models.TextField(**OPTIONAL)
+#    risks_mitigation = models.TextField(**OPTIONAL)
+#    start_date = models.DateField(**OPTIONAL)
+#    end_date = models.DateField(**OPTIONAL)
+#    duration = models.IntegerField(default=0)
