@@ -43,7 +43,7 @@ def signout(request):
     return HttpResponseRedirect('/')
 
 def homepage(request):
-    banner_images = Section.objects.filter(article__slug='banner-images')
+    banner_images = Section.objects.filter(article__slug='banner-images', active=2)
     features = Section.objects.filter(article__slug='features')
     midpart_image = Section.objects.filter(article__slug='midpart')
     capacity = Section.objects.get_or_none(article__slug='capacity-building')
