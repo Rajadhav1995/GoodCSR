@@ -38,7 +38,7 @@ def feedback(request):
                           'org_name' : obj.organization_name,
                           'msg': obj.message,
                        })
-            send_mail('Request for PMU DEMO','', 'care@goodcsr.in', ['care@goodcsr.in'],html_message=html_message)
+            send_mail('Request for PMU DEMO','', 'care@goodcsr.in', ['care@goodcsr.in', 'jagpreet.p@samhita.org', 'anirudhan.t@collectivegood.in', 'shahzarin@goodcsr.in', 'namrata@goodcsr.in' ],html_message=html_message)
             messages.success(request, "Thank you for expressing interest in Samhita GoodCSR's Project Management Module. Our project management consultant will get in touch with you shortly.")
             return HttpResponseRedirect('/feedback/')
     return render(request,'homepage/feedback.html',locals())
