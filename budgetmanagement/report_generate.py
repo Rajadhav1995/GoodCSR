@@ -8,6 +8,7 @@ from media.forms import ContactPersonForm
 from django.template import loader
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation
 from budgetmanagement.models import *
+from budgetmanagement.manage_budget import get_budget_logic
 
 
 def report_form(request):
@@ -40,3 +41,52 @@ def report_detail(request):
     implementation_partner = request.POST.get('implementation_partner')
     
     return render(request,'project/project_details.html',locals())
+
+def get_quarter_report_logic(projectobj):
+    ''' common functionality to get the start date,end date and no of quarter'''
+    sd = projectobj.start_date
+    projectobj_enddate = projectobj.end_date
+    if sd.day >= 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        sd = sd.replace(day=01,month = sd.month+1,year=year)
+    elif sd.day < 15:
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
+    ed = projectobj.end_date
+    no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/3)
+    output_data = {'sd':sd,'projectobj_enddate':projectobj_enddate,
+                   'ed':ed,'no_of_quarters':no_of_quarters}
+    return output_data
+
+def get_quarters(projectobj):
+    ''' To get the quarter list i this format 2017-10-01 to 2017-12-31 '''
+    data = get_quarter_report_logic(projectobj)
+    sd = data['sd']
+    projectobj_enddate = data['projectobj_enddate']
+    no_of_quarters = data['no_of_quarters']
+    ed = data['ed']
+    previousquarter_list = {}
+    currentquarter_list = {}
+    futurequarter_list = {}
+    for i in range(int(no_of_quarters)):
+        ed = sd+relativedelta.relativedelta(months=3)
+        ed = ed - timedelta(days=1)
+        if ed > projectobj_enddate:
+            ed = projectobj_enddate
+        current_date = date.now()
+        if sd > current_date and ed < current_date:
+            currentquarter_list.update({i:str(sd)+" to "+str(ed)})
+        elif sd > current_date and ed >current_date:
+            futurequarter_list.update({i:str(sd)+" to "+str(ed)})
+        elif sd < current_date and ed < current_date:
+            previousquarter_list.update({i:str(sd)+" to "+str(ed)})
+        sd = ed + timedelta(days=1)
+    return previousquarter_list,currentquarter_list,futurequarter_list
+
+def genearte_report(request):
+    slug = request.GET.get('slug')
+    projectobj = ProjectReport.objects.get_or_none(project__slug=slug)
+    previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
+    if projectobj:
+        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
+        print previousquarter_list,currentquarter_list,futurequarter_list
+    return render(request,'report/quarter-update.html',locals())
