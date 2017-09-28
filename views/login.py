@@ -48,3 +48,8 @@ def homepage(request):
     midpart_image = Section.objects.filter(article__slug='midpart')
     capacity = Section.objects.get_or_none(article__slug='capacity-building')
     return render(request,'homepage/home_page.html', locals())
+
+def login_popup(request):
+    if request.method=='POST':
+        import ipdb; ipdb.set_trace()
+    return render(request,'homepage/login_popup.html',locals())
