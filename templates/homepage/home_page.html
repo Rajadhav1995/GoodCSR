@@ -11,10 +11,24 @@
 
 <body>
 <header>
+  <script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery.ui.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#popup').click(function(){
+  $('#pop1').simplePopup();
+    });
+});
+</script>
 <div class="container">
   <div class="header_home">
-   <img src="/static/img/logo-goodcsr.png">
-      <a href="/login/"><button type="button"><img src="/static/img/user-icon.png">Login</button></a>
+   <img src="/static/img/logo1.png">
+
+      <a href="/login/"><button type="button">Login</button></a>&
+      <!-- <a href="javascript:void(0);" id="popup"><button type="button">Login</button></a> -->
+      <a href="/feedback/" class="iframe"><button type="button" class="singup">Sign up for a demo</button></a>
     </div>
     </div>
     </header>
@@ -116,12 +130,15 @@
     </div>
          <footer class="footer_section">
          <div class="container">
-         <p>Privacy Policy </p>
-         <p>Terms of Service</p>
-         <p>&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</p>
+<!--          <p>Privacy Policy </p>
+         <p>Terms of Service</p> -->
+         <div align='center'>
+         <p>&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</p></div>
+             </div>
              </div>
         </footer>
-          
+  
+
 <script src="/static/js/jquery.min.js"></script> 
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/slick/slick.js" type="text/javascript" charset="utf-8"></script>
