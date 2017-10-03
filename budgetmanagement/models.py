@@ -131,8 +131,13 @@ class ReportMilestoneActivity(BaseContent):
     name = models.TextField(**OPTIONAL)
     description = models.TextField(**OPTIONAL)
 
+    def __str__(self):
+        return str(self.id)
+
 class ReportParameter(BaseContent):
     quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
     keyparameter = models.ForeignKey('projectmanagement.ProjectParameter',**OPTIONAL)
     description = models.TextField(**OPTIONAL)
 
+    def __str__(self):
+        return str(self.id)

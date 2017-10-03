@@ -363,17 +363,17 @@ function numberWithCommas(x) {
         </div>
         <ul>
           <div class='numeric_parameter'></div>
-        <li>
             {% if master_pin %}
             {% for lol in  master_pin %}
+            <li>
             	<!-- <h3>{{chart_name_pip}}</h3> -->
                 <div class="right-budget beni-dist">
                  <div id="{{lol}}" style="width: 100%;float: left;"></div>
             </div>
-            
+            </li>
             {% endfor %}
             {% endif %}
-            </li>
+            
 
             {% if master_pip %}
             {% for rofl in master_pip %}
