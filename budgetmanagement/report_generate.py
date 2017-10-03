@@ -1,5 +1,9 @@
 import requests,ast
+import math
+import datetime
+from datetime import timedelta,datetime
 from django.shortcuts import render
+from dateutil import relativedelta
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -68,11 +72,16 @@ def get_quarters(projectobj):
     currentquarter_list = {}
     futurequarter_list = {}
     for i in range(int(no_of_quarters)):
+
         ed = sd+relativedelta.relativedelta(months=3)
         ed = ed - timedelta(days=1)
+        sd = datetime.strptime(str(sd), '%Y-%m-%d %H:%M:%S')
+        ed = datetime.strptime(str(ed), '%Y-%m-%d %H:%M:%S')
+        projectobj_enddate = datetime.strptime(str(projectobj_enddate), '%Y-%m-%d %H:%M:%S')
         if ed > projectobj_enddate:
             ed = projectobj_enddate
-        current_date = date.now()
+        current_date = datetime.strptime(str(datetime.now()), '%Y-%m-%d %H:%M:%S')
+        print current_date, sd, ed
         if sd > current_date and ed < current_date:
             currentquarter_list.update({i:str(sd)+" to "+str(ed)})
         elif sd > current_date and ed >current_date:
