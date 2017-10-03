@@ -361,7 +361,7 @@ function numberWithCommas(x) {
         <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
         </div>
-        <ul>
+        <ul class="parameter">
           <div class='numeric_parameter'></div>
             {% if master_pin %}
             {% for lol in  master_pin %}
@@ -374,7 +374,6 @@ function numberWithCommas(x) {
             {% endfor %}
             {% endif %}
             
-
             {% if master_pip %}
             {% for rofl in master_pip %}
              <li>
