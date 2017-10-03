@@ -126,14 +126,7 @@ $(document).ready(function(){
                 {% endif %}
          <h2>About the Program</h2>
 <p dangerouslySetInnerHTML={{obj.summary}}>{{projectobj.summary | safe}}</p>
-<h2>Primary Activities </h2>
-<ul class="act-list">
-{% get_activities projectobj as  activity %}
-{% for i in activity %}
-  <li>{{i.name}}</li>
-{% endfor %}
-</ul>
-  
+
    <div class="concepto-carousel">
          <h1>Pictures and files</h1>
             <!-- carousel starts -->
@@ -270,15 +263,18 @@ $(document).ready(function() {
       var obj = ff[i]
       var title = obj.title;
       console.log(obj);
-      var value = obj.value
+      var value = numberWithCommas(obj.value);
       if (obj.type == 'CUR') {
         var url = loc_url + '/' + "static/img/budget-icon.png";
         }else{
           var url = loc_url + '/' + "static/img/key-icon2.png";
         };
-        $(wrapper).append('<div><li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li></div>');
+        $(wrapper).append('<li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li>');
 }
 })
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 </script>
 
@@ -366,11 +362,11 @@ $(document).ready(function() {
         {% endif %}
         </div>
         <ul>
-            <div class='numeric_parameter'></div>
-        	
-            
+          <div class='numeric_parameter'></div>
+        
             {% if master_pin %}
             {% for lol in  master_pin %}
+            
             <li>
             	<!-- <h3>{{chart_name_pip}}</h3> -->
                 <div class="right-budget beni-dist">
@@ -379,11 +375,7 @@ $(document).ready(function() {
             </li>
             {% endfor %}
             {% endif %}
-            <!-- <li>
-            	<h3>Total Budget</h3>
-                 <img class="key-image" src="/static/img/budget-icon.png" alt="">
-                <h4 class="title-pad">2.3cr</h4>
-            </li> -->
+
             {% if master_pip %}
             {% for rofl in master_pip %}
              <li>

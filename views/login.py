@@ -51,5 +51,5 @@ def homepage(request):
 
 def login_popup(request):
     if request.method=='POST':
-        import ipdb; ipdb.set_trace()
+        pass
     return render(request,'homepage/login_popup.html',locals())
