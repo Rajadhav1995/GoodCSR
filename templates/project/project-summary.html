@@ -48,7 +48,7 @@ $(document).ready(function(){
     <span style="position: absolute;
     right: 30px;
     top: 0px;">Coming Soon...</span>
-    <a id="myBtn1" class="green-link green-link1" href="#" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    <a id="myBtn1" class="green-link green-link1" href="/report/generation-form/?slug={{obj.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
      <div class="menu-bottom">
         <ul>
           <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
@@ -547,40 +547,48 @@ function confirm_alert(node) {
     var jsonData = {{taskdict|safe}}
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
-    // g.AddTaskItem(new JSGantt.TaskItem(58331, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z', 'gmilestone', '', 1, '', 10, 0, 5833, 1, '583370FS', '', '', g));
     // Get today and tomorrows date
     var cur = new Date();
     var tom = new Date();
     tom.setDate(tom.getDate() + 1);
     var curDate = cur.getFullYear() + '-' +
-        ((''+(cur.getMonth()+1)).length<2 ? '0' : '') + (cur.getMonth()+1) + '-' +
-        ((''+cur.getDate()).length<2 ? '0' : '') + cur.getDate();
+      (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
+      (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
 
     var tomDate = tom.getFullYear() + '-' +
-        ((''+(tom.getMonth()+1)).length<2 ? '0' : '') + (tom.getMonth()+1) + '-' +
-        ((''+tom.getDate()).length<2 ? '0' : '') + tom.getDate();
+      (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
+      (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
     // Get today and tomorrows date
     $.each(jsonData.supercategories, function (i) {
-      superId = 1,activity_type = 'Core',taskCompletion = 0,superName = 'Super Category';
-      if(this.id!=null){superId = this.id;}
+      superId = 1, activity_type = 'Core', taskCompletion = 0, superName = 'Super Category';
+      if (this.id != null) {
+        superId = this.id;
+      }
       superName = this.name;
       var superDesc = this.description;
-      if(superName.toLowerCase()!="location"){
-      g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-        '', superDesc, g));
+      if (superName.toLowerCase() != "location") {
+        g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+          '', superDesc, g));
       }
       // console.log("Super");
       // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
       //   '', superDesc);
     });
     $.each(jsonData.activities, function (i) {
-      var activityId = 11, superId = 1,activity_type = 'Core',taskCompletion = 0,activityName = 'Activity';
-      if(this.id!=null){
-        activityId = this.id.toString();}
-      if(this.super_category!=null){
-      superId = this.super_category;
-      if(this.id!=null){
-      activityId = this.super_category.toString() + activityId;}}
+      var activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0,
+        activityName = 'Activity';
+      if (this.id != null) {
+        activityId = this.id.toString();
+      }
+      if (this.super_category != null) {
+        superId = this.super_category;
+        if (this.id != null) {
+          activityId = this.super_category.toString() + activityId;
+        }
+      }
       // console.log("ActID", activityId);
       activityName = this.name;
       var activityDesc = this.description;
@@ -591,20 +599,40 @@ function confirm_alert(node) {
       // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
     });
     $.each(jsonData.tasks, function (i) {
-      var taskId = 111, activityId = 11, superId = 1,activity_type = 'Core',taskCompletion = 0,taskName = 'Task',taskStatus = 'gtaskred',eStartDate = curDate, eEndDate = tomDate;
-      if(this.id!=null){taskId = this.id;}
-      if(this.activity!=null) {activityId = this.activity;}
+      var taskId = 111,
+        tempId = 1,
+        activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0,
+        taskName = 'Task',
+        taskStatus = 'gtaskred',
+        eStartDate = curDate,
+        eEndDate = tomDate;
+      if (this.id != null) {
+        taskId = this.id;
+        tempId = this.id;
+      }
+      if (this.activity != null) {
+        activityId = this.activity;
+      }
       // activity = jsonData.activities.filter(function( i ) {
       //   if(i.id == activityId){return i.super_category;}
       // });
       $.each(jsonData.activities, function () {
         if (this.id == activityId) {
           activity_type = this.activity_type;
-          if(this.super_category!=null){superId = this.super_category;}
+          if (this.super_category != null) {
+            superId = this.super_category;
+          }
         }
       });
-      if(superId!=null && activityId!=null && taskId!=null) { taskId = superId.toString() + activityId.toString() + taskId.toString();}
-      if(superId!=null && activityId!=null){activityId = superId.toString() + activityId.toString();}
+      if (superId != null && activityId != null && taskId != null) {
+        taskId = superId.toString() + activityId.toString() + taskId.toString();
+      }
+      if (superId != null && activityId != null) {
+        activityId = superId.toString() + activityId.toString();
+      }
       activityId = parseInt(activityId);
       // console.log("TaskID", taskId);
       taskName = this.name;
@@ -626,12 +654,89 @@ function confirm_alert(node) {
             break;
         };
       }
+      // For Milestones
+      var completionDate = this.actual_end_date;
+      console.log('Complete date', completionDate);
+      $.each(jsonData.milestones, function (i) {
+        var mileId = 111, mileStatus = 'gmilestone redmile '
+        depTask = [];
+        depTask = this.task;
+        mileName = this.name;
+        if (this.id != null) {
+          mileId = this.id;
+        }
+        // if (depTask.length == 1) {
+        var ln = depTask.length;
+        ln--;
+        console.log('depTask', depTask[0]);
+        if (depTask[ln] == tempId) {
+          var d1 = new Date(eEndDate);
+          var d2 = new Date(eEndDate);
+          d1.setDate(d1.getDate() + 1);
+          d2.setDate(d2.getDate() + 11);
+          var mileStart = d1.getFullYear() + '-' +
+            (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
+            (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
+
+          var mileEnd = d2.getFullYear() + '-' +
+            (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
+            (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
+          //Check for milestone complete or calculate delay
+          if (completionDate == null) {
+            mileStatus = 'gmilestone redmile '
+          } else {
+            var d3 = new Date(this.overdue);
+            var d4 = new Date(completionDate);
+            var timeDiff = (d3.getTime() + 86400) - d4.getTime();
+            var diffDays = Math.ceil(timeDiff / 86400000);
+            console.log('DiffDays', diffDays);
+            if (diffDays < 0) {
+              var dur = Math.abs(diffDays);
+              if (dur < 8) { mileName += " - Delayed by " + dur + " day(s)" };
+              if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Delayed by " + dur + "+ week(s)" };
+              if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Delayed by " + dur + "+ month(s)" };
+              if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Delayed by " + dur + "+ year(s)" };
+              console.log('Diff days', mileName);
+            } else {
+              mileStatus = 'gmilestone greenmile '
+              var dur = Math.abs(diffDays);
+              if (dur == 0) { mileName += " - On track" };
+              if (dur < 8) { mileName += " - Ahead by " + dur + " day(s)" };
+              if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Ahead by " + dur + "+ week(s)" };
+              if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Ahead by " + dur + "+ month(s)" };
+              if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Ahead by " + dur + "+ year(s)" };
+              console.log('Diff days', mileName);
+            }
+          }
+          g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
+            mileStatus, '', 1, '', null, 0, activityId, 1, '', '', '', g));
+        }
+        // } else {
+        //   var prevDate, maxDate;
+        //   $.each(depTask, function () {
+        //     var depValue = this.valueOf();
+        //     $.each(jsonData.tasks,function(){
+        //       if(this.id == depValue){
+
+        //       }
+        //     });
+        //     console.log('Dep', this.valueOf(), depTask);
+        //   });
+        // }
+        // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
+        //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
+      });
+
+
+      //Draw task after drawing milestone
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
         '', 0, 0, activityId, 1, '', '', '', g));
       // console.log("Task");
       // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
       //   '', 0, 0, activityId, 1, '', '', '');
+
     });
+
     g.setShowStartDate(0);
     g.setShowEndDate(0);
     g.setShowRes(0);
@@ -669,19 +774,19 @@ function confirm_alert(node) {
     $(document).ready(function () {
       var previous = null;
       var prePrevious = null;
-        var mile = false;
+      var mile = false;
       $(".gtaskbarcontainer").each(function (index) {
         currParent = $(this).parent().parent().parent();
-            listParent = currParent.attr('id').replace('row', '');
-        if($(this).hasClass('gmilecontainer')){
+        listParent = currParent.attr('id').replace('row', '');
+        if ($(this).hasClass('gmilecontainer')) {
           mile = true;
         }
         if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
           .attr('id')) {
-            console.log("This ID", $(this).attr('id'), mile);
-            if(mile){
+          // console.log("This ID", $(this).attr('id'), mile);
+          if (mile) {
 
-            }
+          }
           if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
             $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
               if ($(this).css('top') == '-5px') {
