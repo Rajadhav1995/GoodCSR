@@ -18,4 +18,6 @@ urlpatterns = [
     url(r'^my-tasks/updates/$',task_comments),
     url(r'^activites/$',get_activites_list),
     url(r'supercategories/selected/$',get_super_selected),
+    url(r'activities/selected/$',get_activity_selected),
+    url(r'^activity/related/tasks/$',get_activity_tasks),
 ]

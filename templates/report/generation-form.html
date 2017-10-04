@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% load common_tags %}
+{% load urs_tags %}
+
 {% block section %}
 
 <style>
@@ -35,7 +38,7 @@
             </div> -->
         <!-- /.box-header -->
         <!-- <div class="box-body"> -->
-        <form autocomplete="off" id="prog_edit" class ="form-horizantal budget_form" action="/report/detail/" method="POST" enctype="multipart/form-data">
+        <form autocomplete="off" id="report" class ="form-horizantal budget_form" action="/report/detail/" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             
 
@@ -43,7 +46,8 @@
                     <h3 class="border_line">Section 1</h3><br>
                     
                     <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
-                        <div class="row">
+                    
+                    <div class="row">
                         <div class="col-md-6 nopadding">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -70,6 +74,41 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                       <div class="row">
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>Client Name</label>
+                                        <div><b>{{client_name}}</b></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                     <div class="row">
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>Prepared By</label>
+                                        <div><b>{{user.name}}</b></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                     
+                     <div class="row">
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>Logo</label>
+                                        {% get_org_logo project as org_logo %}
+                                        {% if org_logo %}
+                                        {{org_logo}} {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'>{% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
         </div>
 <a href= "/report/quarter/update/?slug={{slug}}"> Generate Quarter Updates </a> 
@@ -82,7 +121,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                             <label>Project Title</label>
-                            <input class = 'form-control' type="text" name="project_title" value="{{project.name}}" readonly=True />
+                            <div><b>{{project.name}}</b></div>
                                 </div>
                         </div>
                     </div>
@@ -104,7 +143,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label>Project Budget</label>
-                                    <input type="text" name="total_budget" value="{{project.total_budget}}" id="total_budget" readonly="true" required="" class="form-control" maxlength="200">
+                                    <div><b>{{project.total_budget}}</b></div>
                                     </div>
                                 </div>
                             </div>
@@ -115,7 +154,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label>Duration (Months.)</label>
-                                    <input type="text" name="duration" value="{{project.duration}}" id="duration" readonly="true" required="" class="form-control" maxlength="200">
+                                    <div><b>{{project.duration}}</b></div>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +165,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label>Number of Beneficiaries</label>
-                                    <input type="text" name="beneficiaries_no" value="{{project.no_of_beneficiaries}}" readonly="true" id="beneficiaries_no" required="" class="form-control" maxlength="200">
+                                    <div><b>{{project.no_of_beneficiaries}}</b></div>
                                     </div>
                                 </div>
                             </div>
@@ -190,18 +229,12 @@
                 </div>
                 </div>
                 </div></div> -->
+           <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
+                <a class="btn btn-success" href="/project/list/">Back</button></a>
+     
+           
          
-            <div class="">
-                <div class="col-md-6 nopadding">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <!-- <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/> -->
-                            <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
-                            <a class="btn btn-success" href="/project/list/">Back</button></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
     </form>
 </div>
 </div>
@@ -212,9 +245,10 @@
 </div>
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script>
@@ -335,7 +369,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('select[multiple=multiple]').multiSelect()
-        $("#prog_edit").validate({
+        $("#report").validate({
             rules :
             {
                 //id_project : {required:true},

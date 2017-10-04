@@ -46,6 +46,8 @@ def listing(request):
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def add_taskmanagement(request,model_name,m_form):
+    url=request.META.get('HTTP_REFERER')
+    add = "True"
     edit=''
     try:
         project = Project.objects.get(slug = request.GET.get('slug'))
@@ -76,6 +78,8 @@ def add_taskmanagement(request,model_name,m_form):
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def edit_taskmanagement(request,model_name,m_form,slug):
+    url=request.META.get('HTTP_REFERER')
+    add = "False"
     edit=''
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
@@ -135,7 +139,7 @@ def task_dependencies(request):
         
     except:
         obj = None
-    if obj.activity_type == 2 :
+    if not tasks:
         tasks = []
     else:
         tasks = [{'id':i.id,'name':i.name} for i in tasks]
@@ -616,10 +620,15 @@ def get_activites_list(request):
 from django.http import JsonResponse
 def get_super_selected(request):
     ids = request.GET.get('id')
+    form = request.GET.get('form')
     url=request.META.get('HTTP_REFERER')
     activity=[]
-    obj_list = Activity.objects.filter(active=2,id__in = eval(ids))
-    super_categories = [i.super_category__id for i in obj_list]
+    if form == 'TaskForm':
+        obj_list = Activity.objects.filter(active=2,id = ids)
+    else :
+        obj_list = Activity.objects.filter(active=2,id__in = eval(ids))
+        
+    super_categories = [i.super_category.id for i in obj_list]
     return JsonResponse({"super_categories":super_categories})
     
 from django.http import JsonResponse
@@ -627,7 +636,7 @@ def get_activity_selected(request):
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj_list = Task.objects.filter(id__in = eval(ids))
-    activity = [i.activity__id for i in obj_list]
+    activity = [i.activity.id for i in obj_list]
     return JsonResponse({"activity":activity})
 
 def get_assigned_users(user,project):
@@ -638,3 +647,11 @@ def get_assigned_users(user,project):
         assigned = "1"
     return assigned
         
+from django.http import JsonResponse
+def get_activity_tasks(request):
+    ids = request.GET.get('id')
+    url=request.META.get('HTTP_REFERER')
+    obj_list = Activity.objects.filter(id__in = eval(ids)).values_list('id',flat=True)
+    task_list = Task.objects.filter(activity__id__in = obj_list)
+    tasks = [{'id':i.id,'name':i.name} for i in task_list]
+    return JsonResponse({"task":tasks})
