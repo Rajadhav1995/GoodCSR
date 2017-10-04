@@ -2,16 +2,6 @@
 {% block section %}
 {% endblock %}
 {% block content %}
-Previous Quarter Updates : 
-{{previousquarter_list}}
-
-Current Quarter:
-{{currentquarter_list}}
-
-
-future Quarter:
-
-{{futurequarter_list}}
 
 <div class="row">
     <div class="white-box">
@@ -27,27 +17,27 @@ future Quarter:
                 <input type="hidden" name="count" value="6">
                 <input type="hidden" name="slug" value="{{slug}}">
                 <input type="hidden" name="project-report" value="{{projectobj.id}}">
-                <input type="hidden" name="previousquarter_length" value="previousquarter_list.items|length">
+<!--                <input type="hidden" name="previousquarter_length" value="previousquarter_list.items|length">-->
             {% for i,v in previousquarter_list.items %}
             {% with forloop.counter as j %}
             <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
                 <div style="margin-left: 9px;margin-right:9px;margin-bottom:5px;" >
                     <input type="hidden" name="quarter-date_1_j" value="{{v}}">
                     Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
-                    Duration :  <input type="text" class ="subheading" id="duration_1_{{j}}" name="duration_{{j}}">
+                    Duration :  <input type="text" class ="subheading" id="duration_1_{{i}}_{{j}}" name="duration_1_{{i}}_{{j}}">
                     </br>Key Achievements in this Quarter
                     </br>Snapshot of the Timeline
                     <div style="border:2px solid black;" >
-                        Milestone Name : <textarea rows="4" cols="50" wrap="hard" class ="subheading" id="milestone-name_1_{{j}}" name="_{{j}}"> </textarea>
-                        </br>About the milestone : <textarea rows="4" cols="50" class ="subheading" id="activity-description_1_{{j}}" name="activity-description_1_{{j}}"></textarea>
+                        Milestone Name : <textarea rows="4" cols="50" wrap="hard" class ="subheading" id="milestone-name_1_{{i}}_{{j}}" name="milestone-name_1_{{i}}_{{j}}"> </textarea>
+                        </br>About the milestone : <textarea rows="4" cols="50" class ="subheading" id="milestone-description_1_{{i}}_{{j}}" name="milestone-description_1_{{i}}_{{j}}"></textarea>
                         </br>Upload Picture
-                        </br>Picutre Description. :<textarea rows="4" cols="50" class ="subheading" id="pic-description_1_{{j}}" name="pic-description_1_{{j}}"></textarea></br>
+                        </br>Picutre Description. :<textarea rows="4" cols="50" class ="subheading" id="pic-description_1_{{i}}_{{j}}" name="pic-description_1_{{i}}_{{j}}"></textarea></br>
                     </div>
                     <div style="border:2px solid black;" >
-                    </br>About Paramter :<textarea rows="4" cols="50" class ="subheading" id="about-parameter_1_{{j}}" name="about-parameter_1_{{j}}"></textarea>
+                    </br>About Paramter :<textarea rows="4" cols="50" class ="subheading" id="about-parameter_1_{{i}}_{{j}}" name="about-parameter_1_{{i}}_{{j}}"></textarea>
                     </br>Parameter Selection
                     </div>
-                    </br>Budget Utlization and tranches :<input type="text" class ="subheading" id="budget-tranches_1_{{j}}" name="budget-tranches_1_{{j}}"> &nbsp;</br>
+                    </br>Budget Utlization and tranches :<input type="text" class ="subheading" id="budget-tranches_1_{{i}}_{{j}}" name="budget-tranches_1_{{i}}_{{j}}"> &nbsp;</br>
                 </div>
             </div>
             {% endwith %}
@@ -61,23 +51,23 @@ future Quarter:
                 <div style="border:3px solid black; margin-left: 9px;margin-right:9px;margin-bottom:5px;" > 
                     <div style="margin-left: 9px;margin-right:9px;" >
                     Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
-                    Duration : <input type="text" class ="subheading" id="duration_2_{{j}}" name="duration_2_{{j}}">
+                    Duration : <input type="text" class ="subheading" id="duration_2_{{i}}_{{j}}" name="duration_2_{{i}}_{{j}}">
                     </br>Key Achievements in this Quarter
                     </br>Snapshot of the Gantt Chart
-                    </br>About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about-quarter_2_{{j}}" name="about-quarter_2_{{j}}"></textarea></br>
+                    </br>About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about-quarter_2_{{i}}_{{j}}" name="about-quarter_2_{{i}}_{{j}}"></textarea></br>
                     <div style="border:2px solid black;" >
-                        </br>Activity Name : <textarea rows="4" cols="50" class ="subheading" id="activity-name_2_{{j}}" name="activity-name_2_{{j}}"></textarea>
-                        </br>About the Activity : <textarea rows="4" cols="50" class ="subheading" id="activity-description_2_{{j}}" name="activity-description_2_{{j}}"></textarea>
+                        </br>Activity Name : <textarea rows="4" cols="50" class ="subheading" id="activity-name_2_{{i}}_{{j}}" name="activity-name_2_{{i}}_{{j}}"></textarea>
+                        </br>About the Activity : <textarea rows="4" cols="50" class ="subheading" id="activity-description_2_{{i}}_{{j}}" name="activity-description_2_{{i}}_{{j}}"></textarea>
                         </br>Upload Picture
-                        </br>Picutre Description. : <input type="text" class ="subheading" id="pic-description_2_{{j}}" name="pic-description_2_{{j}}">
+                        </br>Picutre Description. : <input type="text" class ="subheading" id="pic-description_2_{{i}}_{{j}}" name="pic-description_2_{{i}}_{{j}}">
                     </div>
                     <div style="border:2px solid black;" >
-                    </br>About Paramter : <textarea rows="4" cols="50" class ="subheading" id="about-parameter_2_{{j}}" name="about-parameter_2_{{j}}"></textarea>
+                    </br>About Paramter : <textarea rows="4" cols="50" class ="subheading" id="about-parameter_2_{{i}}_{{j}}" name="about-parameter_2_{{i}}_{{j}}"></textarea>
                     </br>Parameter Selection
                     </div>
-                    </br>About the Budget : <textarea rows="4" cols="50" class ="subheading" id="about-budget_2_{{j}}" name="about-budget_2_{{j}}"></textarea>
-                    </br>Budget Utlization and tranches : <input type="text" class ="subheading" id="budget-tranches_2_{{j}}" name="budget-tranches_2_{{j}}">
-                    </br>Risk and Mitigation : <textarea rows="4" cols="50" class ="subheading" id="risk-mitigation_2_{{j}}" name="risk-mitigation_2_{{j}}"></textarea>&nbsp;</br>
+                    </br>About the Budget : <textarea rows="4" cols="50" class ="subheading" id="about-budget_2_{{i}}_{{j}}" name="about-budget_2_{{i}}_{{j}}"></textarea>
+                    </br>Budget Utlization and tranches : <input type="text" class ="subheading" id="budget-tranches_2_{{i}}_{{j}}" name="budget-tranches_2_{{i}}_{{j}}">
+                    </br>Risk and Mitigation : <textarea rows="4" cols="50" class ="subheading" id="risk-mitigation_2_{{i}}_{{j}}" name="risk-mitigation_2_{{i}}_{{j}}"></textarea>&nbsp;</br>
                     </div>
                     </div>
                     {% endwith %}
@@ -92,11 +82,11 @@ future Quarter:
                 <div style="border:3px solid black;margin-left: 9px;margin-right:9px;margin-bottom:5px;" >
                     <div style="margin-left: 9px;margin-right:9px;" >
                     Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
-                    Duration :<input type="text" class ="subheading" id="duration_3_{{j}}" name="duration_3_{{j}}">&nbsp;</br>
+                    Duration :<input type="text" class ="subheading" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}">&nbsp;</br>
                     Snapshot of the GanttChart &nbsp;</br>
-                    About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about-quarter_2_{{j}}" name="about-quarter_2_{{j}}"> </textarea>&nbsp;</br>
-                    Budget Utlization and tranches :  <input type="text" class ="subheading" id="budget-tranches_2_{{j}}" name="budget-tranches_2_{{j}}">&nbsp;</br>
-                    About the Budget :<textarea rows="4" cols="50" class ="subheading" id="budget_2_{{j}}" name="budget_2_{{j}}"> </textarea>&nbsp;</br>
+                    About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about-quarter_3_{{i}}_{{j}}" name="about-quarter_3_{{i}}_{{j}}"> </textarea>&nbsp;</br>
+                    Budget Utlization and tranches :  <input type="text" class ="subheading" id="budget-tranches_3_{{i}}_{{j}}" name="budget-tranches_3_{{i}}_{{j}}">&nbsp;</br>
+                    About the Budget :<textarea rows="4" cols="50" class ="subheading" id="about-budget_3_{{i}}_{{j}}" name="about-budget_3_{{i}}_{{j}}"> </textarea>&nbsp;</br>
                     </div>
                 </div>
                 &nbsp;

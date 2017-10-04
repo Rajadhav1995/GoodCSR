@@ -124,6 +124,7 @@ class QuarterReportSection(BaseContent):
     start_date = models.DateField(**OPTIONAL)
     end_date = models.DateField(**OPTIONAL)
     duration = models.IntegerField(default=0)
+    quarter_order = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.id)
