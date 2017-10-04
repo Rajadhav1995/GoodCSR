@@ -278,8 +278,8 @@ $(document).ready(function() {
 }
 })
 function numDifferentiation(val) {
-    if(val >= 10000000) val = '<small>₹</small>'+ (val/10000000).toFixed(0) + ' <small>Cr</small>';
-    else if(val >= 100000) val = '<small>₹</small>'+ (val/100000).toFixed(0) + '<small>Lac</small>';
+    if(val >= 10000000) val = '<small>₹</small>'+ (val/10000000).toFixed(1) + ' <small>Cr</small>';
+    else if(val >= 100000) val = '<small>₹</small>'+ (val/100000).toFixed(1) + '<small>Lac</small>';
     else if(val >= 1000) val = '<small>₹</small>'+ numberWithCommas(val);
     return val;
 }
