@@ -91,6 +91,36 @@ def get_quarters(projectobj):
         sd = ed + timedelta(days=1)
     return previousquarter_list,currentquarter_list,futurequarter_list
 
+def get_quarter_report(request,itemlist,quarter):
+    result = {}
+    for line in itemlist:
+        if str(quarter) == line.split('_')[2]:
+            line_list = line.split('_')
+            name = line.split('_')[0]
+            result.update({name:request.POST.get(line)})
+    return result
+
+def get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,itemlist):
+    for quarter,value in quarter_list.items():
+        budget_period = value
+        start_date = budget_period.split('to')[0].rstrip()
+        end_date = budget_period.split('to')[1].lstrip()
+        result = get_quarter_report(request,itemlist,quarter)
+        quarter_report_dict = {
+                        'project':projectreportobj,
+                        'quarter_type':quarter_type,
+                        'description':result.get("about-quarter",""),
+                        'budget_utilization':result.get('budget-tranches',""),
+                        'about_budget':result.get("about-budget",""),
+                        'risks_mitigation':result.get("risk-mitigation",""),
+                        'start_date':start_date,
+                        'end_date':end_date,
+                        'duration':result['duration'],
+                        'quarter_order':quarter,
+        }
+        quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
+    return quarterreportobj,result
+
 def genearte_report(request):
     slug = request.GET.get('slug')
     projectobj = ProjectReport.objects.get_or_none(project__slug=slug)
@@ -100,36 +130,31 @@ def genearte_report(request):
     if request.method == "POST":
         slug = request.POST.get('slug')
         projectreportobj = ProjectReport.objects.get_or_none(project__slug = slug)
-#        to save the previous quarter updates:
-        import ipdb;ipdb.set_trace();
+        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
+#    to save the previous quarter updates:
         quarter_type = 1
+        quarter_list = previousquarter_list
         previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
-        result = {}
-        for line in previous_itemlist:
-            line_list = line.split('_')
-            name = line.split('_')[0]
-            result.update({name:request.POST.get(line)})
-        quarter_report_dict = {
-                        project:projectreportobj,
-                        quarter_type:quarter_type,
-                        description:"abc",
-                        budget_utilization:result['budget-tranches'],
-                        about_budget:"abc",
-                        risks_mitigation:"abc",
-#                        start_date:,
-#                        end_date:,
-                        duration:result['duration'],
-        }
-        print "Previous",previous_itemlist
-        
-#        to save the Current quarter updates:
+        quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,previous_itemlist)
+        print "Previous",result
+        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=result['milestone-name'],description=result['milestone-description'])
+        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,description = result['about-parameter'])
+
+
+#    to save the Current quarter updates:
         current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
-        
-        print "Current",current_itemlist
-        
-        #        to save the Future quarter updates:
+        quarter_list = currentquarter_list
+        quarter_type = 2
+        quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,current_itemlist)
+        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=result['activity-name'],description=result['activity-description'])
+        print "current",result
+        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,description = result['about-parameter'])
+
+#    to save the Future quarter updates:
         future_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
-        
-        print "Future",future_itemlist
-        
+        quarter_list = futurequarter_list
+        quarter_type = 3
+        quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,future_itemlist)
+        print "future",result
+        return HttpResponseRedirect('/project/summary/?slug='+str(slug)+'&key=summary')
     return render(request,'report/quarter-update.html',locals())
