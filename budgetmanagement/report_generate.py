@@ -75,19 +75,19 @@ def get_quarters(projectobj):
 
         ed = sd+relativedelta.relativedelta(months=3)
         ed = ed - timedelta(days=1)
-        sd = datetime.strptime(str(sd), '%Y-%m-%d %H:%M:%S')
-        ed = datetime.strptime(str(ed), '%Y-%m-%d %H:%M:%S')
-        projectobj_enddate = datetime.strptime(str(projectobj_enddate), '%Y-%m-%d %H:%M:%S')
+        sd = datetime.strptime(str(sd)[:19], '%Y-%m-%d %H:%M:%S')
+        ed = datetime.strptime(str(ed)[:19], '%Y-%m-%d %H:%M:%S')
+        projectobj_enddate = datetime.strptime(str(projectobj_enddate)[:19], '%Y-%m-%d %H:%M:%S')
         if ed > projectobj_enddate:
             ed = projectobj_enddate
-        current_date = datetime.strptime(str(datetime.now()), '%Y-%m-%d %H:%M:%S')
+        current_date = datetime.strptime(str(datetime.now())[:19], '%Y-%m-%d %H:%M:%S')
         print current_date, sd, ed
-        if sd > current_date and ed < current_date:
-            currentquarter_list.update({i:str(sd)+" to "+str(ed)})
+        if current_date > sd and current_date < ed:
+            currentquarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
         elif sd > current_date and ed >current_date:
-            futurequarter_list.update({i:str(sd)+" to "+str(ed)})
+            futurequarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
         elif sd < current_date and ed < current_date:
-            previousquarter_list.update({i:str(sd)+" to "+str(ed)})
+            previousquarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
         sd = ed + timedelta(days=1)
     return previousquarter_list,currentquarter_list,futurequarter_list
 
@@ -97,5 +97,6 @@ def genearte_report(request):
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
     if projectobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
-        print previousquarter_list,currentquarter_list,futurequarter_list
+    if request.method == "POST":
+        print request.POST
     return render(request,'report/quarter-update.html',locals())
