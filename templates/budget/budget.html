@@ -116,17 +116,17 @@
                 <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
                 <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
                 {% get_line_total j projectobj as line_total %}
-                <td class="sticky-cell">{{line_total}}</td>
+                <td align="right" class="sticky-cell">{{line_total}}</td>
                 {% get_utlizedline_total j projectobj as utilized_amount %}
-                <td class="sticky-cell">{{utilized_amount}}</td>
+                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_details j i projectobj as line_itemobj %}
-                   <td class=""> {{line_itemobj.unit}} </td>
-                    <td class=""> {{line_itemobj.rate}}  </td>
-                     <td class=""> {{line_itemobj.planned_unit_cost}}  </td>
-                     <td class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
-                     <td class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                      {% endfor %}
             </tr>
             {% endfor %}

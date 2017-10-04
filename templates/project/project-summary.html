@@ -22,6 +22,9 @@ $(document).ready(function(){
     .orglogo img {
     object-fit: contain;
 }
+.key-image-budget {
+    margin-top: 81px;
+}
 </style>
 <div class="clear"></div>
 <!--Green pad starts-->
@@ -263,15 +266,23 @@ $(document).ready(function() {
       var obj = ff[i]
       var title = obj.title;
       console.log(obj);
-      var value = numberWithCommas(obj.value);
+      var value = numDifferentiation(obj.value);
       if (obj.type == 'CUR') {
         var url = loc_url + '/' + "static/img/budget-icon.png";
+        var class_name = "key-image";
         }else{
+          var class_name = "key-image-budget";
           var url = loc_url + '/' + "static/img/key-icon2.png";
         };
-        $(wrapper).append('<li><h3>'+title+'</h3><img class="key-image" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li>');
+        $(wrapper).append('<li><h3>'+title+'</h3><img class="'+class_name+'" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li>');
 }
 })
+function numDifferentiation(val) {
+    if(val >= 10000000) val = '<small>₹</small>'+ (val/10000000).toFixed(0) + ' <small>Cr</small>';
+    else if(val >= 100000) val = '<small>₹</small>'+ (val/100000).toFixed(0) + '<small>Lac</small>';
+    else if(val >= 1000) val = '<small>₹</small>'+ numberWithCommas(val);
+    return val;
+}
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
