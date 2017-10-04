@@ -203,7 +203,6 @@ function showCheckboxes() {
             dataType:"json",
             success:function(data){
             var act = $('#id_activity').val();
-            if (act == '' || act == null){
                 $('#id_activity option').remove();
                 $('#id_activity').fSelect('destroy');
                 if (data.activity){
@@ -211,8 +210,8 @@ function showCheckboxes() {
                    for (var i=0;i<activity.length;i++){
                     $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
                     }
-                 $('#id_activity').fSelect('create'); 
-                } 
+                 $('#id_activity').val(act);
+                 $('#id_activity').fSelect('create');
              }
             //setTimeout(function(){ $('.test').fSelect();},3000)
             },
@@ -258,14 +257,13 @@ $(document).ready(function() {
             dataType:"json",
             success:function(data){
                     var act = $('#id_task').val();
-                    if (act == '' || act == null){
                         $('#id_task option').remove();
                         $('#id_task').fSelect('destroy');
                         for(var i=0;i<data.task.length;i++){
                             $('#id_task').append('<option value='+data.task[i]['id']+'>'+data.task[i]['name']+'</option>')
                             }
+                        $('#id_task').val(act);
                         $('#id_task').fSelect('create');
-                    } 
             },
         });
      });
@@ -318,7 +316,6 @@ $(document).ready(function() {
             dataType:"json",
             success:function(data){
             var act = $('#id_activity').val();
-            if (act == '' || act == null){
                 $('#id_activity option').remove();
                 $('#id_activity').append('<option value="" >-----</option>')
                 if (data.activity){
@@ -326,8 +323,8 @@ $(document).ready(function() {
                    for (var i=0;i<activity.length;i++){
                     $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
                     }
+                    $('#id_activity').val(act);
                 }
-            }
             
             },
             error : function(){}
@@ -421,7 +418,6 @@ $(document).ready(function() {
             dataType:"json",
             success:function(data){
                 $("#id_activity").val(data.activity);
-                localStorage.setItem('activity_id',data.activity)
                 var activity = $("#id_activity").val();
                 $.ajax({
                 url:'/managing/supercategories/selected/',

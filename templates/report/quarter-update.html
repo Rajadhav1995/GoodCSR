@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block section %}
+{% endblock %}
+{% block content %}
+Previous Quarter Updates : 
+{{previousquarter_list}}
+
+Current Quarter:
+{{currentquarter_list}}
+
+
+future Quarter:
+
+{{futurequarter_list}}
+
+<div class="row">
+    <div class="white-box">
+        <div class="budget_create">
+        <form id="ic_form" action=".?slug={{slug}}" method = "post">
+            <h3>Section 5</h3>
+            
+        </div>
+
+            {% csrf_token %}
+            <div style="border:4px solid black;" >
+                <p>1. Previous Quarter Updates </p>
+                <input type="hidden" name="count" value="6">
+                <input type="hidden" name="slug" value="{{slug}}">
+            {% for i,v in previousquarter_list.items %}
+            {% with forloop.counter as j %}
+            <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
+                <div style="margin-left: 9px;margin-right:9px;margin-bottom:5px;" >
+                    Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
+                    Duration :  <input type="text" class ="subheading" id="duration_{{j}}" name="duration_{{j}}">
+                    </br>Key Achievements in this Quarter
+                    </br>Snapshot of the Timeline
+                    <div style="border:2px solid black;" >
+                        Milestone Name : <textarea rows="4" cols="50" wrap="hard" class ="subheading" id="milestone-name_{{j}}" name="_{{j}}"> </textarea>
+                        </br>About the milestone : <textarea rows="4" cols="50" class ="subheading" id="activity-description_{{j}}" name="activity-description_{{j}}"></textarea>
+                        </br>Upload Picture
+                        </br>Picutre Description. :<textarea rows="4" cols="50" class ="subheading" id="pic-description_{{j}}" name="pic-description_{{j}}"></textarea></br>
+                    </div>
+                    <div style="border:2px solid black;" >
+                    </br>About Paramter :<textarea rows="4" cols="50" class ="subheading" id="about-parameter_{{j}}" name="about-parameter_{{j}}"></textarea>
+                    </br>Parameter Selection
+                    </div>
+                    </br>Budget Utlization and tranches :<input type="text" class ="subheading" id="budget-tranches_{{j}}" name="budget-tranches_{{j}}"> &nbsp;</br>
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+
+            </div>
+            <div style="border:4px solid black;">
+            <p>2. Current Quarter Updates </p>
+                {% for i,v in currentquarter_list.items %}
+                {% with forloop.counter as j %}
+                <div style="border:3px solid black; margin-left: 9px;margin-right:9px;margin-bottom:5px;" > 
+                    <div style="margin-left: 9px;margin-right:9px;" >
+                    Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
+                    Duration : <input type="text" class ="subheading" id="duration_{{j}}" name="duration_{{j}}">
+                    </br>Key Achievements in this Quarter
+                    </br>Snapshot of the Gantt Chart
+                    </br>About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about-quarter_{{j}}" name="about-quarter_{{j}}"></textarea></br>
+                    <div style="border:2px solid black;" >
+                        </br>Activity Name : <textarea rows="4" cols="50" class ="subheading" id="activity-name_{{j}}" name="activity-name_{{j}}"></textarea>
+                        </br>About the Activity : <textarea rows="4" cols="50" class ="subheading" id="activity-description_{{j}}" name="activity-description_{{j}}"></textarea>
+                        </br>Upload Picture
+                        </br>Picutre Description. : <input type="text" class ="subheading" id="pic-description_{{j}}" name="pic-description_{{j}}">
+                    </div>
+                    <div style="border:2px solid black;" >
+                    </br>About Paramter : <textarea rows="4" cols="50" class ="subheading" id="about-parameter_{{j}}" name="about-parameter_{{j}}"></textarea>
+                    </br>Parameter Selection
+                    </div>
+                    </br>About the Budget : <textarea rows="4" cols="50" class ="subheading" id="about-budget_{{j}}" name="about-budget_{{j}}"></textarea>
+                    </br>Budget Utlization and tranches : <input type="text" class ="subheading" id="budget-tranches_{{j}}" name="_{{j}}">
+                    </br>Risk and Mitigation : <textarea rows="4" cols="50" class ="subheading" id="risk-mitigation_{{j}}" name="risk-mitigation_{{j}}"></textarea>&nbsp;</br>
+                    </div>
+                    </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+            
+            <div style="border:4px solid black;">
+            <p>3. Future Quarter Updates </p>
+            {% for i,v in futurequarter_list.items %}
+            {% with forloop.counter as j %}
+                </br>
+                <div style="border:3px solid black;margin-left: 9px;margin-right:9px;margin-bottom:5px;" >
+                    <div style="margin-left: 9px;margin-right:9px;" >
+                    Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
+                    Duration :<input type="text" class ="subheading" id="duration_{{j}}" name="duration_{{j}}">&nbsp;</br>
+                    Snapshot of the GanttChart &nbsp;</br>
+                    About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about_quarter_{{j}}" name="about_quarter_{{j}}"> </textarea>&nbsp;</br>
+                    Budget Utlization and tranches :  <input type="text" class ="subheading" id="budget-tranches_{{j}}" name="budget-tranches_{{j}}">&nbsp;</br>
+                    About the Budget :<textarea rows="4" cols="50" class ="subheading" id="budget_{{j}}" name="budget_{{j}}"> </textarea>&nbsp;</br>
+                    </div>
+                </div>
+                &nbsp;
+                {% endwith %}
+            {% endfor %}
+            </div>
+            
+            <div class="click_buttons">
+                <div class="link-left">
+<!--                    <input type="hidden"/>-->
+<!--                    <a href ="javascript:void(0);" class ="link-pad add_clone">+Add more Lines</a>-->
+<!--                </div>-->
+<!--                <div class="link-center">-->
+<!--                    <input type="hidden"/>-->
+<!--                    <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>-->
+<!--                </div>-->
+                <div class="link-right">
+                    <input type="submit" value="Save Budget Lineitems" class="btn btn-success">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

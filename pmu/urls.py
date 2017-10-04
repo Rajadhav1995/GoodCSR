@@ -16,7 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from views import (dashboard,user_information)
 from views.user_information import (UserInformationStorage,)
-from views.login import (signin,signout,homepage)
+from views.login import (signin,signout,homepage,login_popup)
 from views.homepage import (feedback,email_validation)
 from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
                                             projectuseredit)
@@ -53,6 +53,7 @@ urlpatterns = [
     url(r'^report/',include('budgetmanagement.report_urls')),
     url(r'^login/$',signin),
     url(r'^$',homepage),
+    url(r'^login-popup/$',login_popup),
     url(r'^feedback/$',feedback),
     url(r'^email-valid/$',email_validation),
     url(r'^managing/',include('taskmanagement.urls')),

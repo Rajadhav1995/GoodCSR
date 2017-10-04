@@ -15,10 +15,6 @@ def feedback(request):
     if request.method=='POST':
         form = ContactPersonForm(request.POST)
         email = request.POST.get('email')
-        # email_list = [i.email for i in ContactPersonInformation.objects.all()]
-        # if email in email_list:
-            # messages.error(request, 'You have already requested for demo. Our executive will contact you soon ')
-            # return HttpResponseRedirect('/feedback/')
         if form.is_valid():
             obj = form.save()
             obj.save()
@@ -38,7 +34,7 @@ def feedback(request):
                           'org_name' : obj.organization_name,
                           'msg': obj.message,
                        })
-            send_mail('Request for PMU DEMO','', 'care@goodcsr.in', ['care@goodcsr.in'],html_message=html_message)
+            send_mail('Request for PMU DEMO','', 'care@goodcsr.in', ['care@goodcsr.in', 'jagpreet.p@samhita.org', 'anirudhan.t@collectivegood.in', 'shahzarin@goodcsr.in', 'namrata@goodcsr.in' ],html_message=html_message)
             messages.success(request, "Thank you for expressing interest in Samhita GoodCSR's Project Management Module. Our project management consultant will get in touch with you shortly.")
             return HttpResponseRedirect('/feedback/')
     return render(request,'homepage/feedback.html',locals())
@@ -46,7 +42,6 @@ def feedback(request):
 from django.http import JsonResponse
 def email_validation(request):
     email = request.GET.get('uname', None)
-    print "aditya"
     data = {
         'is_taken': ContactPersonInformation.objects.filter(email__iexact=email).exists()
     }
