@@ -25,7 +25,7 @@ class ActivityForm(forms.ModelForm):
     super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
-    subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
+    subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=False,max_length=200)
     class Meta:
         model = Activity
@@ -63,7 +63,7 @@ class TaskForm(forms.ModelForm):
     actual_end_date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
     status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
-    subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
+    subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     
     class Meta:
         model = Task
@@ -118,7 +118,7 @@ class MilestoneForm(forms.ModelForm):
     activity =forms.ModelMultipleChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=False, widget = forms.SelectMultiple(attrs={'class' :'test'}))
     status = forms.ChoiceField(choices = MILESTONE_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
-    subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
+    subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     overdue = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
     project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}),label='')
     class Meta:
