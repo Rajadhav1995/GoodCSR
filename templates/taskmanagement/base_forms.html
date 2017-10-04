@@ -68,6 +68,7 @@
 
 {% block script %}
 <!-- jQuery (necessary for JavaScript plugins) -->
+<link href="/static/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
 <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
 <script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
@@ -75,7 +76,8 @@
 <script src="/static/js/fSelect.js"></script>
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <script src="/static/js/jquery.nicescroll.min.js"></script>
-
+<script src = "/static/js/jquery.multi-select.js"></script>
+<script src="/static/js/bootstrap-multiselect.js"></script>
 <script>
 //Toggle
 		
@@ -175,28 +177,24 @@ function showCheckboxes() {
 <!--  } );-->
 <!--</script>-->
 
-<script>
-$(function($) {
-    $(function() {
-        $('.test').fSelect();
-    });
-});
-</script>
+
 <script>
     $(document).ready(function() {
-        $('#is_subscribers').addClass('test');
-        $('#id_task').addClass('test');
-        $("#id_task_dependency").addClass('test');
+        var add = '{{add}}'
+        if (add == 'True'){
+            $('.test').fSelect();
+        }
         $("#id_description").addClass('form-control text_area');
     });
 </script>
+
 
 
 <script>
     $(document).ready(function() {
     if ('{{model_name}}' == 'Milestone'){
     
-    $('#id_super_category').on('change',function(e){
+    $('#id_super_category').on('change',function(){
         var dependency_id = $('#id_super_category').val();
         $.ajax({
             url:'/managing/activites/',
@@ -204,21 +202,25 @@ $(function($) {
             data:{'id':JSON.stringify(dependency_id)},
             dataType:"json",
             success:function(data){
-            $('#id_activity option').remove();
-            if (data.activity){
-                activity = data.activity
-               for (var i=0;i<activity.length;i++){
-                $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
-                }
-            } 
+            var act = $('#id_activity').val();
+            if (act == '' || act == null){
+                $('#id_activity option').remove();
+                $('#id_activity').fSelect('destroy');
+                if (data.activity){
+                    activity = data.activity
+                   for (var i=0;i<activity.length;i++){
+                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+                    }
+                 $('#id_activity').fSelect('create'); 
+                } 
+             }
+            //setTimeout(function(){ $('.test').fSelect();},3000)
             },
             error : function(){}
         });
-        e.stopImmediatePropagation();
         return false;
       });
       
-    
     $('#id_task').on('change',function(e){
         var tasks_ids = $('#id_task').val();
         $.ajax({
@@ -245,6 +247,35 @@ $(function($) {
 </script>
 
 <script>
+$(document).ready(function() {
+    if ('{{model_name}}' == 'Milestone'){
+        $('#id_activity').on('change',function(){
+        var activity = $('#id_activity').val();
+        $.ajax({
+            url: '/managing/activity/related/tasks/',
+            type:'GET',
+            data:{'id':JSON.stringify(activity)},
+            dataType:"json",
+            success:function(data){
+                    var act = $('#id_task').val();
+                    if (act == '' || act == null){
+                        $('#id_task option').remove();
+                        $('#id_task').fSelect('destroy');
+                        for(var i=0;i<data.task.length;i++){
+                            $('#id_task').append('<option value='+data.task[i]['id']+'>'+data.task[i]['name']+'</option>')
+                            }
+                        $('#id_task').fSelect('create');
+                    } 
+            },
+        });
+     });
+     }
+      });
+
+
+</script>
+
+<script>
     $(document).ready(function() {
     $('#id_activity').on('change',function(e){
         
@@ -263,16 +294,6 @@ $(function($) {
                 else{
                     $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
                     }
-                 //if ({{model_name}}== 'Milestone'){
-                 //document.getElementById("id_task_dependency").value = data.tasks_dependency;
-                   // $('#id_task_dependency')
-                   // .find('option')
-                   // .remove()
-                   // for(var i=0;i<data.tasks_dependency.length;i++){
-                        
-                    //    $('#id_task_dependency').append('<option value='+data.tasks_dependency[i]['id']+'>'+data.tasks_dependency[i]['name']+'</option>')
-                      //  }
-               // }
 
             },
             error : function(){}
@@ -296,14 +317,18 @@ $(function($) {
             data:{'id':JSON.stringify(dependency_id)},
             dataType:"json",
             success:function(data){
-            $('#id_activity option').remove();
-            $('#id_activity').append('<option value="" >-----</option>')
-            if (data.activity){
-                activity = data.activity
-               for (var i=0;i<activity.length;i++){
-                $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+            var act = $('#id_activity').val();
+            if (act == '' || act == null){
+                $('#id_activity option').remove();
+                $('#id_activity').append('<option value="" >-----</option>')
+                if (data.activity){
+                    activity = data.activity
+                   for (var i=0;i<activity.length;i++){
+                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+                    }
                 }
-            } 
+            }
+            
             },
             error : function(){}
         });
@@ -365,45 +390,59 @@ $(document).ready(function() {
 </script>
 
 <script>
-    $(document).ready(function() {  
-    alert('hi');
-        var activity = $('id_activity').val();
+    $(document).ready(function() { 
+        var activity = $('#id_activity').val();
         $.ajax({
             url:'/managing/supercategories/selected/',
             type:'GET',
-            data:{'id':activity},
+            data:{'id':activity,'form':'TaskForm'},
             dataType:"json",
             success:function(data){
-            document.getElementById("id_super_category").value = data.super_categories
+            
+            var categories = data.super_categories
+            $("#id_super_category").val(categories);
+            $('.test').fSelect();
+            $("#id_activity").val(activity);
+            
             },
-            error : function(){}
         });
-        e.stopImmediatePropagation();
         return false;
-      });
       
     });
 </script>
     
 <script>
     $(document).ready(function() {  
-        var tasks = $('id_task').val();
+        var tasks = $('#id_task').val();
         $.ajax({
-            url:'/managing/supercategories/selected/',
+            url:'/managing/activities/selected/',
             type:'GET',
-            data:{'id':tasks},
+            data:{'id':JSON.stringify(tasks)},
             dataType:"json",
             success:function(data){
-            document.getElementById("id_activity").value = data.activity
+                $("#id_activity").val(data.activity);
+                localStorage.setItem('activity_id',data.activity)
+                var activity = $("#id_activity").val();
+                $.ajax({
+                url:'/managing/supercategories/selected/',
+                type:'GET',
+                data:{'id':JSON.stringify(activity),'form':'MilestoneForm'},
+                dataType:"json",
+                success:function(data){
+                        var categories = data.super_categories
+                        $("#id_super_category").val(categories);
+                        $('.test').fSelect();
+                        },
+                    });
+                    return false;
             },
-            error : function(){}
         });
-        e.stopImmediatePropagation();
         return false;
-      });
       
     });
 </script>
+
+
 
 
 {% endblock %}
