@@ -98,5 +98,38 @@ def genearte_report(request):
     if projectobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
     if request.method == "POST":
-        print request.POST
+        slug = request.POST.get('slug')
+        projectreportobj = ProjectReport.objects.get_or_none(project__slug = slug)
+#        to save the previous quarter updates:
+        import ipdb;ipdb.set_trace();
+        quarter_type = 1
+        previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
+        result = {}
+        for line in previous_itemlist:
+            line_list = line.split('_')
+            name = line.split('_')[0]
+            result.update({name:request.POST.get(line)})
+        quarter_report_dict = {
+                        project:projectreportobj,
+                        quarter_type:quarter_type,
+                        description:"abc",
+                        budget_utilization:result['budget-tranches'],
+                        about_budget:"abc",
+                        risks_mitigation:"abc",
+#                        start_date:,
+#                        end_date:,
+                        duration:result['duration'],
+        }
+        print "Previous",previous_itemlist
+        
+#        to save the Current quarter updates:
+        current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
+        
+        print "Current",current_itemlist
+        
+        #        to save the Future quarter updates:
+        future_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
+        
+        print "Future",future_itemlist
+        
     return render(request,'report/quarter-update.html',locals())
