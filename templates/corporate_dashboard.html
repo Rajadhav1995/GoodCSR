@@ -363,7 +363,7 @@ var total_budget = data.total_budget
 var max_budget = Math.max.apply(Math,total_budget)
 var utilized = data.utilized
 var disbursed_budget = (data.disbursed)
-lRange = 0, hRange = 9, lnRange = data.projects.length;
+lRange = 0, hRange = 10, lnRange = data.projects.length;
 console.log("hello");
 console.log(disbursed_budget);
 
@@ -544,7 +544,7 @@ $(function(){
 });//]]> 
 
 //To show 10 rows at a time and next and previous buttons
-$('#pageNo').text((lRange+1) + "-" + (hRange+1) + " of " + lnRange);
+$('#pageNo').text((lRange+1) + "-" + (hRange) + " of " + lnRange);
 function updateChart() {
         //Update Task Completion widget
             prgComp.update({
@@ -579,7 +579,7 @@ function updateChart() {
             if (hRange >= lnRange) {
                 $('#pageNo').text((lRange + 1) + "-" + lnRange + " of " + lnRange);
             } else {
-                $('#pageNo').text((lRange + 1) + "-" + (hRange + 1) + " of " + lnRange);
+                $('#pageNo').text((lRange + 1) + "-" + (hRange ) + " of " + lnRange);
             }
         }
         $('#btn1').on('click', function () {
