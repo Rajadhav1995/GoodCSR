@@ -416,8 +416,10 @@ def get_tasks_objects(request):
     task_list = Task.objects.filter(active=2,id__in = eval(ids))
     populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
     expected_dates = populated_dates.data
+    task_ids = task_list.values_list('id',flat=True)
     for key,value in expected_dates.items():
-        start_dates.append(value.get('expected_end_date'))
+        if key in task_ids:
+            start_dates.append(value.get('expected_end_date'))
     expected_end_date = max(start_dates).strftime('%Y-%m-%d')
     return JsonResponse({"calculation":expected_end_date})
 
