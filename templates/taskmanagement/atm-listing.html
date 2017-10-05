@@ -514,6 +514,17 @@ $(document).ready(function(){
     });
   </script>
 
-<script>
+</script>
+
+<link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".iframe").fancybox({
+        type: 'iframe'
+    });
+});
+</script>
 {% endblock %}
 

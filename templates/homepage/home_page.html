@@ -12,10 +12,13 @@
 <header>
 <div class="container">
   <div class="header_home">
-   <img src="/static/img/white-logo.png">
-
+    <div class="first_logo">
+   <img src="/static/img/white-logo.png" >
+</div>
+<div class="middle_align">
       <a href="/login/"><button type="button">Login</button></a>
       <a href="/feedback/" class="iframe"><button type="button" class="singup">Sign up for a demo</button></a>
+    </div>
     </div>
     </div>
     </header>
@@ -76,10 +79,10 @@
            {% for i in midpart_image %}
            <div>
            <div class="col-lg-12 text_carousel nopadding">
-               <div class="col-md-8">
+               <div class="col-md-8 col-sm-8 col-xs-12">
                 <img src="{{i.cover_image}}" style="width:100%;">
                </div>
-               <div class="col-md-4 advatage_slider slider_wrapper" >
+               <div class="col-md-4 col-sm-4 col-xs-12 advatage_slider slider_wrapper" >
                 <h3>{{i.name}}</h3>
                 <p>{{i.description | safe}}</p>
                </div>

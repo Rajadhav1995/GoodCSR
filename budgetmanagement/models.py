@@ -113,8 +113,10 @@ class ProjectReport(BaseContent):
     def __str__(self):
         return str(self.id)
 
+QUARTER_TYPE = ((1,'Previous Quarter Updates'),(2,'Current Quarter Updates'),(3,'Future Quarter Updates'))
 class QuarterReportSection(BaseContent):
     project = models.ForeignKey(ProjectReport,**OPTIONAL)
+    quarter_type = models.IntegerField(choices=QUARTER_TYPE,**OPTIONAL)
     description = models.TextField(**OPTIONAL)
     budget_utilization = models.TextField(**OPTIONAL)
     about_budget = models.TextField(**OPTIONAL)
@@ -122,6 +124,7 @@ class QuarterReportSection(BaseContent):
     start_date = models.DateField(**OPTIONAL)
     end_date = models.DateField(**OPTIONAL)
     duration = models.IntegerField(default=0)
+    quarter_order = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.id)

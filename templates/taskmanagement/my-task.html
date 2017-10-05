@@ -107,6 +107,7 @@
                <img src="/static/img/default_profile_image.png" alt="">{%endfor%}</li>{%if i.subscribers.all|length >= 3 %}. . . .{% endif %}
             </ul>
          </div>
+         {% if request.GET.status == '0' %}
          <div class="task-completion">
             <div class="task-completion-left">
                <img class="user-image" src="/static/img/default_profile_image.png" alt="">
@@ -131,6 +132,7 @@
                </div>
             </div>
          </div>
+         {% endif %}
          <div class="user-timeline">
          {% if i.task_attachments %}
             <div id="boxscroll-timeline">
@@ -463,7 +465,18 @@ for (j=0;j<tasks.length;j++){
   });
 
 </script>
+</script>
 
+<link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".iframe").fancybox({
+        type: 'iframe'
+    });
+});
+</script>
 
 
 
