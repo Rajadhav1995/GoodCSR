@@ -25,7 +25,7 @@ def admin_dashboard(request):
         project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
     project_count = obj_list.count()
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__created_by = user_obj)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2, project__created_by = user_obj)
     total_beneficiaries = obj_list.aggregate(Sum('no_of_beneficiaries')).values()[0]
     updates_list = updates(obj_list)
     tasks_progress = corp_task_completion_chart(obj_list)

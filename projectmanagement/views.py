@@ -395,7 +395,7 @@ def project_summary(request):
     obj = Project.objects.get(slug = slug)
     projectobj = obj
     activity = Activity.objects.filter(project=obj)
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj,active=2)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)

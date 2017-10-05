@@ -272,7 +272,7 @@ $(document).ready(function() {
         var class_name = "key-image";
         }else{
           var class_name = "key-image-budget";
-          var value = obj.value;
+          var value = numberWithCommas(obj.value);
           var url = loc_url + '/' + "static/img/key-icon2.png";
         };
         $(wrapper).append('<li><h3>'+title+'</h3><img class="'+class_name+'" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li>');
@@ -328,7 +328,7 @@ function numberWithCommas(x) {
         <div class="dropdown user select-down select-width">
             <a href="javascript:void(0);" class="dropdown-toggle" >
               <p>By Year</p>
-              <i class="fa fa-angle-down"></i>
+              <!-- <i class="fa fa-angle-down"></i> -->
             </a>
             <ul class="dropdown-menu1" style="display:none;">
 
@@ -346,17 +346,11 @@ function numberWithCommas(x) {
               </li>
               <li>
                 <input class="check-box" type="checkbox" id="four" />
-                <label for="four"><span><span></span></span> 2017</label>
+                <label for="four"><span><span></span></span> 2018</label>
               </li>
 
             </ul>
           </div>
-          <div class="small-select">
-        <select name="lang" class="select_box ">
-            <option>2016</option>
-            <option>2017</option>
-        </select>
-        </div>
 
         <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
@@ -374,7 +368,7 @@ function numberWithCommas(x) {
         <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
         </div>
-        <ul class="key_parameter">
+        <ul class="key_parameter parameter">
           <div class='numeric_parameter'></div>
             {% if master_pin %}
             {% for lol in  master_pin %}
@@ -497,7 +491,7 @@ under 0 Milestones</h5>
             
          {% if updates_list %}
              {% for obj in updates_list %}
-             <ul>
+             <ul class="section_updates">
                     {% get_details obj as update %}
                         {% for i in update %}
                            {{i | safe}}
@@ -538,6 +532,12 @@ under 0 Milestones</h5>
   <!-- jsGanttImproved App -->
   <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
   <script src="/static/js/jsgantt.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+ <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 
 
 <script type="text/javascript">
