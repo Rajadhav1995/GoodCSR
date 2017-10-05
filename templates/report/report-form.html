@@ -1,0 +1,263 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="icon" type="image/png" href="/static/img/favicon.ico">
+<title>Samhita GoodCSR</title>
+
+<!--CSS Srat-->
+
+<link rel="stylesheet" href="/static/css/AdminLTE.min.css" />
+<link rel="stylesheet" href="/static/css/bootstrap.css" />
+<link rel="stylesheet" href="/static/css/style.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/easy-responsive-tabs.css" />
+<link rel="stylesheet" href="/static/css/popup.css">
+<link href="/static/css/materialize.min.css" rel="stylesheet" >
+<link rel="stylesheet" href="/static/css/style-new.css" />
+
+<style>
+ul li {
+    list-style-type: none;
+    line-height: 26px;
+    color: white;
+  }
+
+.alert-success {
+    /*background-color: #dff0d8;*/
+    border-color: #d0e9c6;
+    color: #a73f5c;
+    height: 110;
+}
+.msg {
+    display: none;
+}
+.error {
+    color: red;
+}
+.success {
+    color: white;
+    font-family: 'work_sansregular';
+}
+
+.h1, h1 {
+    font-size: 2.7rem;
+}
+.bg-green, .callout.callout-success, .alert-success, .label-success, .modal-success .modal-body {
+    background-color: #a73f5c !important;
+}
+</style>
+
+
+<!--Common Script-->
+<!-- IE less than 9 -->
+<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
+
+<!--  Responsive CSS  -->
+<link rel="stylesheet" href="/static/css/media.css" /><!-- /*<style>
+.demo_div label.demo_label { width: 50%; float: left;}
+.demo_div input { width: 50%; height: 34px; padding-left:10px;}
+.demo_popup .border_line{font-weight: normal;}
+</style>*/ -->
+<div class="clear"></div>
+<section class="content-part">
+    <div class='container' >
+    <div class="white-box">
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div class="alert alert-success">
+    <h3><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></h3><br></div>
+    {% endfor %}
+</ul><br>
+<div align='center'><a href="javascript:parent.jQuery.fancybox.close();">Close Window</a></div>
+{% else %}
+        <div class="col-xs-12">
+          <div class="box demo_popup">
+            <div class="box-header">
+              <h3 class="border_line"><a href="/project/summary/?slug={{request.GET.slug}}&key=summary"><u>{{project.name}}</u></a> Report Generation</h3>
+
+              <div align="right">
+             <!-- <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" /> -->
+         </div><br>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+                        <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
+                            <div class="row">
+                            <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label>Report Type</label>
+                                <select class="form-control" name="report_type" id="report_type" required>
+                                <option selected disabled>Select Report type</option>
+                                <option  value="1" >Quarterly</option>
+                                <option  value="2" >Monthly</option>
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                <div class="row">
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label>Report Duration</label>
+                                        <br>Start Date : <input type="text" name="start_date" readonly="true" required="" class="form-control" id="id_start_date">
+                                        End Date : <input type="text" name="end_date" readonly="true" required="" class="form-control" id="id_end_date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                       
+
+                        <input class="budget_button" type="submit" value="Submit" onclick="return email_valid();" /></a>  
+                        
+                        <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
+
+                    </form>
+  </div>
+  </div>
+  </div>
+  </div>
+<script type="text/javascript" src="/static/js/respond.js"></script>
+<script type="text/javascript" src="/static/js/html5.js"></script>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+<script>
+  $(document).ready(function() {
+    $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+    $("#id_end_date").datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+    var start_date = "{{project.start_date|date:'Y-m-d'}}"
+    var end_date = "{{project.end_date|date:'Y-m-d'}}"
+    if (start_date != ''){
+        document.getElementById("id_start_date").value = start_date
+        $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',minDate: start_date,changeMonth: true,changeYear: true });
+    }
+    if (end_date != ''){
+        document.getElementById("id_end_date").value = end_date
+        $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',minDate: end_date,changeMonth: true,changeYear: true });
+    }
+  } );
+  </script>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#report-form").validate({
+            framework: 'bootstrap',
+            icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            email: {
+                validators: {
+                    emailAddress: {
+                        message: 'The value is not a valid email address'
+                    }
+                }
+            }
+        },
+            rules :
+            {
+                name : {required:true, maxlength: 300},
+                email : {required:true},
+                organization_name : {required:true},
+                mobile_number : {required:true, minlength:9,maxlength:12,},
+                message : {required:true},
+                recaptcha_response_field : {required:true},
+                
+            },
+            messages:
+            {
+                name:{required:"<font color=#fc282f>Please enter name"},
+                email : {required:"<font color=#fc282f>Please enter Email id</font>"},
+                organization_name:{required:"<font color=#fc282f>Please enter Organization name</font>"},
+                mobile_number : {required : "<font color=#fc282f>Please enter Mobile Number</font>"},
+                message : {required : "<font color=#fc282f>Please enter message</font>"},
+                recaptcha_response_field : {required : "<font color=#fc282f>Please enter captcha</font>"},
+
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+
+
+
+        });
+});
+</script>
+<script type="text/javascript">
+ $(document).ready(function () {
+ $("#id_email").blur(function () {
+ var email = $(this).val();
+ var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+if (re.test(email)) {
+    document.getElementById('email_error1').innerHTML=""
+} else {
+    document.getElementById('email_error1').innerHTML="Please enter valid email id"
+}
+ if (email == '') {
+ $("#availability").html("");
+ }else{
+ $.ajax({
+ url: "/email-valid/?uname="+email
+ }).done(function( data ) {
+    // if (data.is_taken== true) {
+    //     document.getElementById('email_error').innerHTML="Email id already present"
+    // } else{
+    //     document.getElementById('email_error').innerHTML=''
+    // };
+    
+ //$("#availability").html(data);
+ }); 
+ } 
+ });
+});
+</script>
+<script type="text/javascript">
+
+function email_valid() {
+    var email_valid = document.getElementById('email_error').innerHTML;
+    var email_valid1 = document.getElementById('email_error1').innerHTML;
+    var response = document.getElementById('recaptcha_response_field').value
+
+    if (email_valid == '' && email_valid1 == '') {
+        return true;
+    } else {
+        alert("Please enter valid email id");
+        return false;
+    };
+    if (response == '') {
+        alert('Please Enter captcha');
+    };
+}
+</script>
+<script type="text/javascript">
+function capcha_filled () {
+    allowSubmit = true;
+}
+function capcha_expired () {
+    allowSubmit = false;
+}
+
+</script>
+
+{% endif %}
+  

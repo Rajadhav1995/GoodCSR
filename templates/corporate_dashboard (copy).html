@@ -214,10 +214,7 @@
             </div>
         </div>
         <div class="right-white">
-            <h2>Total Budget</h2>
-            <button class="updateChart" id="btn1" style="width: 2%; display: none; position: absolute; right: 12%; background: none; font-size: 25px; height: 40px; border: none; font-weight: bold;  background: url('/static/img/left_arrow.png') no-repeat center center;color: #0b6861; background-size: contain;"></button>
-            <span id="pageNo" style="width: auto; padding: 10px 0px; height: 40px; position: absolute; right: 5.5%; background: none; font-size: 14px;  border: none; font-weight: bold; color: #0b6861;"></span>
-            <button class="updateChart" id="btn2" style="width:2%; position: absolute; right: 3%; background: none; border: none; font-size: 25px; height: 40px;font-weight: bold; background: url('/static/img/right_arrow.png') no-repeat center center; color: #0b6861; background-size: contain;"></button>
+        	<h2>Total Budget</h2>
             <div id="bwContainer" style="width:570px;"></div> 
         </div>
         <div class="hide-cont">
@@ -238,34 +235,28 @@
     </div>   
     <div class="white-box-left">
     <div class="table-responsive">
-    <table class="table-resp wrapper_tablescroll" cellpadding="0" cellspacing="0" border="0">
+    <table class="table-resp" cellpadding="0" cellspacing="0" border="0">
       <thead>
       <tr>
-        <th style="width:27%;">Users</th>
-        <th style="width:18%;">Organization</th>
-        <th style="width:25%;">Designation</th>
-        <th style="width:20%;">PMU Role</th>
+        <th style="width:28%;">Users</th>
+        <th style="width:19%;">Organization</th>
+        <th style="width:26%;">Designation</th>
+        <th style="width:19%;">PMU Role</th>
       </tr>
       </thead>
       <tbody>
       {% if projectuserlist %}
       {% for i in projectuserlist %}
       <tr>
-
-            <td style="width:27%;"><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
-            <td style="width:18%;">{{i.user.organization}}</td>
-            <td style="width:25%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
-            <td style="width:20%;">{{i.role.name}}
+            <td style="width:28%;"><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
+            <td style="width:19%;">{{i.user.organization}}</td>
+            <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
+            <td style="width:19%;">{{i.role.name}}
 <!--            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>-->
       </tr>
       {% endfor %}
       {% else %}
-      <tr>
-        <td style="width:27%;"><h6>Users not tagged</h6></td>
-        <td style="width:18%;"></td>
-        <td style="width:25%;"></td>
-        <td style="width:20%;"></td>
-      </tr>
+        <h5>Users not tagged</h5>
       {% endif %}
       </tbody>
   </table>  
@@ -274,7 +265,7 @@
     </div>
     <div class="white-box-right">
       <h2>Recent Updates</h2>
-        <div id="boxscroll" class="updates-scroll recent_updatescroll">
+        <div id="boxscroll" class="updates-scroll ">
         <p><span>Today</span> - {% now "jS F Y" %}</p>
             
          {% if updates_list %}
@@ -303,10 +294,6 @@
 <script src="/static/code/highcharts-more.js"></script>
 <!-- <script src="code/modules/exporting.js"></script> -->
 <script src="/static/code/modules/solid-gauge.js"></script>
-
-
-<script src="/static/js/jquery.nicescroll.min.js"></script>
- <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 <script>
 //Toggle
 		
@@ -363,7 +350,6 @@ var total_budget = data.total_budget
 var max_budget = Math.max.apply(Math,total_budget)
 var utilized = data.utilized
 var disbursed_budget = (data.disbursed)
-lRange = 0, hRange = 9, lnRange = data.projects.length;
 console.log("hello");
 console.log(disbursed_budget);
 
@@ -373,7 +359,7 @@ $(function(){
             return ['M', x, y + width / 2, 'L', x + height, y + width / 2];
         };
         //-------------------------------------------------------
-        bwContainer = new Highcharts.Chart({
+        var bwContainer = new Highcharts.Chart({
             chart: {
                 renderTo: 'bwContainer',
                 type: 'bar',
@@ -392,12 +378,11 @@ $(function(){
             title: {
                 text: 'Projects',
                 align: 'left',
-                x: 5,
+                x: 23,
                 padding: '50',
                 style: {
                     fontSize: '1.2em',
-                    fontWeight: 'bold',
-                    color: '#666666'
+                    fontWeight: 'bold'
                 }
             },
             legend: {
@@ -414,7 +399,7 @@ $(function(){
                 }
             },
             xAxis: {
-                tickLength: 90,
+                tickLength: 100,
                 tickColor: 'rgba(0,0,0,0)',
                 gridLineWidth: 0,
                 gridLineColor: 'lightgrey',
@@ -433,7 +418,7 @@ $(function(){
                 }],
                 lineColor: 'lightgrey',
                 lineWidth: 0,
-                categories: projects.slice(lRange, hRange)
+                categories: projects
             },
             yAxis: {
                 tickInterval: 1,
@@ -450,7 +435,7 @@ $(function(){
                 gridLineWidth: 1,
                 gridLineColor: 'lightgrey',
                 min: -0.5,
-                max: max_budget+0.5,
+                max: max_budget+1,
                 endOnTick: false,
                 startOnTick: false,
                 plotLines: [{
@@ -519,7 +504,7 @@ $(function(){
                 tooltip: {
                     valueSuffix: ' cr'
                 },
-                data: total_budget.slice(lRange, hRange)
+                data: total_budget
             }, {
                 name: 'Disbursed',
                 color: '#00998b',
@@ -528,7 +513,7 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 8,
-                data: disbursed_budget.slice(lRange, hRange)
+                data: disbursed_budget
             }, {
                 name: 'Utilized',
                 color: '#0b6861',
@@ -537,81 +522,12 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 10,
-                data: utilized.slice(lRange, hRange)
+                data: utilized
             }]
         });
 
 });//]]> 
 
-//To show 10 rows at a time and next and previous buttons
-$('#pageNo').text((lRange+1) + "-" + (hRange+1) + " of " + lnRange);
-function updateChart() {
-        //Update Task Completion widget
-            prgComp.update({
-                xAxis: {
-                    categories: category.slice(lRange, hRange),
-                },
-                series: [{
-                    data: remaining.slice(lRange, hRange)
-                }, {
-                    data: progress.slice(lRange, hRange)
-                }]
-            }
-
-            );
-        //Update Total Budget widget
-            bwContainer.update({
-                xAxis: {
-                    categories: projects.slice(lRange, hRange)
-                },
-                series: [{
-                    data: total_budget.slice(lRange, hRange)
-                }, {
-                    data: disbursed_budget.slice(lRange, hRange)
-                }, {
-                    data: utilized.slice(lRange, hRange)
-                }]
-            }
-
-            );
-            bwContainer.redraw();
-            prgComp.redraw();
-            if (hRange >= lnRange) {
-                $('#pageNo').text((lRange + 1) + "-" + lnRange + " of " + lnRange);
-            } else {
-                $('#pageNo').text((lRange + 1) + "-" + (hRange + 1) + " of " + lnRange);
-            }
-        }
-        $('#btn1').on('click', function () {
-            if (lRange > 0) {
-                lRange -= 10;
-                hRange -= 10;
-            }
-            updateChart();
-        })
-
-        $('#btn2').on('click', function () {
-            if (hRange < lnRange) {
-                lRange += 10;
-                hRange += 10;
-            }
-            updateChart();
-        })
-
-        $('.updateChart').on('click', function () {
-            if (lRange > 0) {
-                $('#btn1').show();
-            }
-            if (lRange <= 0) {
-                $('#btn1').hide();
-            }
-            if (hRange >= lnRange) {
-                $('#btn2').hide();
-            }
-            if (hRange < lnRange) {
-                $('#btn2').show();
-            }
-        })
 </script>    
 
     <script type="text/javascript">
@@ -657,80 +573,57 @@ var progress = []
 for (i=0;i<completed_status.length;i++){
        progress.push( { 'y': completed_status[i], 'color': '#2E9776' })
 } 
-prgComp = Highcharts.chart('Progress_Completion',{
-    chart: {
-        type: 'bar',
-        backgroundColor: null,
-        height: 320,
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0)',
-        margin: [30, 10, 50, 150],
-        backgroundColor: '#F1F3E8'
-    },
-    credits: {
-     enabled: false
-    },
-    title: {
-        text: null,
-    },
-    xAxis: {
-    categories: category.slice(lRange, hRange) ,
-    labels: {
-        style: {
-            fontWeight: '600',
-            fontSize: '1em',
-            whiteSpace: 'normal',
-            textOverflow: 'ellipsis',
-        }
-    },
-    },
-    yAxis: {
-        visible: true,
-    min: 0,
-    max: 100,
-    title: {
-        text: '% completion',
-    },       
-    },
-    plotOptions: {
-        series: {
-            stacking: 'normal',
-
-             pointWidth: 15
+Highcharts.chart('Progress_Completion',{
+        chart: {
+            type: 'bar',
+            backgroundColor: null,
+            height: 320
         },
-        bar: {
-            grouping: false,
-            dataLabels: {
-                enabled: false
-            }
-        }
-    },
-    legend: {
-        enabled: false
+        credits: {
+         enabled: false
+        },
+        title: {
+            text: null,
+        },
+        xAxis: {
+
+        categories: category ,
+        
+        },
+        yAxis: {
+            visible: false,
+        min: 0,
        
-    },
-    series: [ {
-        name: 'Remaining',
-        data: remaining.slice(lRange, hRange),
-        borderWidth: 0,
-        color: "#D0D0D0"
-    }, {
-    name: 'Completed',
-    data: progress.slice(lRange, hRange),
-    dataLabels: {
-                enabled: true,
-                inside: false,
-                format: '{y}%',
-                style: {
-                    fontSize: '0.75em',
-                    fontWeight: 'normal',
-                    color: 'black',
-                    backgroundColor: 'transparent',
-                }
+        },
+        plotOptions: {
+            series: {
+                stacking: 'normal',
+
+                 pointWidth: 15
             },
-}]
-    
-});
+            bar: {
+                grouping: false,
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+        legend: {
+            enabled: false
+           
+        },
+        series: [ {
+            name: 'Remaining',
+
+            data: remaining,
+            borderWidth: 0,
+            color: "#D0D0D0"
+        }, {
+        name: 'Completed',
+        data: progress
+    }]
+        
+    });
 </script>
 {% endif %}
 <script>

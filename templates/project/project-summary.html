@@ -51,7 +51,8 @@ $(document).ready(function(){
     <span style="position: absolute;
     right: 30px;
     top: 0px;">Coming Soon...</span>
-    <a id="myBtn1" class="green-link green-link1" href="/report/generation-form/?slug={{request.GET.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    <a id="myBtn1" class="green-link green-link1 iframe" href="/report/generation-form/?slug={{request.GET.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+
      <div class="menu-bottom">
         <ul>
           <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
@@ -61,8 +62,11 @@ $(document).ready(function(){
           <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
           {% if status == '0' %}
           <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
-          {% else %}
+          {% elif status == '1' %}
           <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
+          {% else %}
+            <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
+            <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
           {% endif %}
         </ul>
      </div>
@@ -462,7 +466,7 @@ under 0 Milestones</h5>
       {% if projectuserlist %}
       {% for i in projectuserlist %}
       <tr>
-            <td style="width:28%;"><img src="/static/img/user-img.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
+            <td style="width:28%;"><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
             <td style="width:19%;">{{i.user.organization}}</td>
             <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:19%;">{{i.role.name}}
@@ -1324,6 +1328,18 @@ function isEllipsisActive(e) {
     return (e.offsetWidth < e.scrollWidth);
 }
 </script>
+
+<link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".iframe").fancybox({
+        type: 'iframe'
+    });
+});
+</script>
+
 <style type="text/css">
  #total_budget .highcharts-container {
        border-bottom: 1px solid;

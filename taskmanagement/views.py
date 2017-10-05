@@ -344,6 +344,7 @@ def my_tasks_details(request):
     task_ids = [int(i.id) for i in task_listing]
     projectobj = project
     user_obj = user
+    status = get_assigned_users(user_obj,projectobj)
     key = request.GET.get('key')
     return render(request,'taskmanagement/my-task.html',locals())
     
@@ -415,8 +416,10 @@ def get_tasks_objects(request):
     task_list = Task.objects.filter(active=2,id__in = eval(ids))
     populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
     expected_dates = populated_dates.data
+    task_ids = task_list.values_list('id',flat=True)
     for key,value in expected_dates.items():
-        start_dates.append(value.get('expected_end_date'))
+        if key in task_ids:
+            start_dates.append(value.get('expected_end_date'))
     expected_end_date = max(start_dates).strftime('%Y-%m-%d')
     return JsonResponse({"calculation":expected_end_date})
 
@@ -640,8 +643,11 @@ def get_activity_selected(request):
     return JsonResponse({"activity":activity})
 
 def get_assigned_users(user,project):
+    project_obj = Project.objects.filter(created_by=user)
     tasks = Task.objects.filter(activity__project = project,assigned_to = user)
-    if tasks:
+    if project_obj and tasks:
+        assigned = "2"
+    elif tasks:
         assigned = "0"
     else :
         assigned = "1"
