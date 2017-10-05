@@ -137,9 +137,17 @@ class ReportMilestoneActivity(BaseContent):
     def __str__(self):
         return str(self.id)
 
+
+
+PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
+                          ('PIP', 'Pie Chart Percent'),
+                          ('NUM','Number'),
+                          ('PER','Percent'),
+                          ('CUR','Currency'))
 class ReportParameter(BaseContent):
     quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
     keyparameter = models.ForeignKey('projectmanagement.ProjectParameter',**OPTIONAL)
+    parameter_type = models.TextField(choices=PARAMETER_TYPE_CHOICES,default='NUM',)
     description = models.TextField(**OPTIONAL)
 
     def __str__(self):
