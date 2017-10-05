@@ -167,3 +167,5 @@ def genearte_report(request):
         print "future",result
         return HttpResponseRedirect('/project/summary/?slug='+str(slug)+'&key=summary')
     return render(request,'report/quarter-update.html',locals())
+    
+    
