@@ -50,7 +50,7 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
-                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}{% if task.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}')"></i>{% endif %}</span>
+                  <li><a href="javascript:void(0);">{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}')"></i></span>
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->

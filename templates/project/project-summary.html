@@ -30,7 +30,7 @@ $(document).ready(function(){
 <!--Green pad starts-->
 <section class="green-pad green-height">
 	<div class="row">
-	<div class="image-pad orglogo "> 
+	<div class="image-pad orglogo ">
 	    {% get_org_logo projectobj as org_logo %}
     	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
 <!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
@@ -43,10 +43,10 @@ $(document).ready(function(){
     <h4><a href = '#'>Project Name </a></h4>
     {% endif %}
     <ul>
-        
+
     	<li><a href="javascript:void(0)"> by: {% if project_funders.funder.organization %} {{project_funders.funder.organization}}  {% else %} {% endif %}</a></li>
         <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.attrs.first_name %}{{project_funders.implementation_partner.attrs.first_name}} {{project_funders.implementation_partner.attrs.last_name}} {% else %} {{project_funders.implementation_partner.name}}  {% endif %}</a></li>
-    </ul>    
+    </ul>
     </div>
     <span style="position: absolute;
     right: 30px;
@@ -88,7 +88,7 @@ $(document).ready(function(){
             <p> Total Budget <span>₹ {{projectobj.total_budget | intcomma}}</span> </p>
           </li>
         </ul>
-       
+
         <div class="rht-content">
          <ul>
          <li class="fst">
@@ -100,7 +100,7 @@ $(document).ready(function(){
                 {% endif %}</p>
          </li>
          <li class="snd">
-       
+
             <h2>Cause area</h2>
             <p>{% if projectobj.cause_area.all %}
                 {% for i in projectobj.cause_area.all %}{{i}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
@@ -109,10 +109,10 @@ $(document).ready(function(){
                 {% endif %}</p>
             </li>
             </ul>
-       
+
         </div>
       </div>
-      
+
       <div class="cont-det">
          <h2>Location coverage</h2>
          {% if lobj %}
@@ -137,11 +137,11 @@ $(document).ready(function(){
    <div class="concepto-carousel">
          <h1>Pictures and files</h1>
             <!-- carousel starts -->
-              <div id="con-carousel" class="owl-carousel">      
+              <div id="con-carousel" class="owl-carousel">
                 {% get_attachments projectobj as attachment %}
               {% for i in attachment %}
                 {% if i.attachment_type == 2 %}
-        
+
         {% if i.document_type == 1 %}<!-- excel -->
         <div class="item">
         <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file}}" {% else %} href="#" onClick="alert('File Not Found!')" {% endif %}{% if i.attachment_file %}download{% endif %}><img src="/static/img/excell-color.jpg"  height=70 width=63px>
@@ -151,7 +151,7 @@ $(document).ready(function(){
 
         {% if i.document_type == 2 %}<!-- pdf -->
         <div class="item">
-        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/pdf.jpg" height=70 width=63px> 
+        <a {% if i.attachment_file %} href="{{image}}/{{i.attachment_file.url}}{% else %} href="#" onClick="alert('File Not Found!')" {% endif %}" {% if i.attachment_file %}download{% endif %}><img src="/static/img/pdf.jpg" height=70 width=63px>
         <h2>{{i.name}} </h2></a>
         </div>
         {% endif %}
@@ -171,10 +171,10 @@ $(document).ready(function(){
 
         {% endif %}
         {% endfor %}
-                
+
              </div>
             <!-- carousel ends -->
-            
+
             <!-- carousel starts -->
 
 
@@ -183,7 +183,7 @@ $(document).ready(function(){
               {% for  i in attachment %}
 
               {% if i.attachment_type == 1 %}
-                <div class="item"> 
+                <div class="item">
                   {% if i.attachment_file %}
                     <a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}/{{i.attachment_file.url}}" alt="" height=97 width=156px>
                     <h2>{{i.description}}</h2></a>
@@ -194,8 +194,8 @@ $(document).ready(function(){
                 </div>
               {% endif %}
                 {% endfor %}
-                  
-                                   
+
+
              </div>
             <!-- carousel ends -->
       </div>
@@ -218,7 +218,7 @@ $(document).ready(function() {
     var ff= {{timeline_json | safe}}
     var loc_url = '{{image}}'
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    for (var i = 0; i < lengths ; i++) 
+    for (var i = 0; i < lengths ; i++)
     {
       var obj = ff[i]
       var name = obj.name;
@@ -265,7 +265,7 @@ var loc_url = '{{image}}'
 $(document).ready(function() {
     //var loop_count = $('#loop_count').val()
     var wrapper         = $(".numeric_parameter"); //Fields wrapper
-    for (var i = 0; i < lengths ; i++) 
+    for (var i = 0; i < lengths ; i++)
     {
       var obj = ff[i]
       var title = obj.title;
@@ -299,31 +299,8 @@ function numberWithCommas(x) {
 
 <section class="content-part">
 	<div class="row">
-    
-    <div class="white-box timeline-white">
-    	<h2>Timeline Progress</h2>
-    	    {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
-    	{% endif %}
-        <div class="clear"></div>
-<!-- timeline slider -->
-        <div id="scrollbar1">
-                <div class="viewport">
-                     <div class="overview">
-                       <div id="time-line-pad">
-            <div class="time-line">
-              <div class="time-line-bdr"></div>
-                <ul>
-                    <div class="timeline-slide"></div>
-                </ul>
-            </div>
-           </div>
-                    </div>
-                </div>
-                <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-       </div>
-    </div>
+
+
     <div class="clear"></div>
 	<div class="content-top margin-top">
       <div class="select-area">
@@ -384,7 +361,7 @@ function numberWithCommas(x) {
             </li>
             {% endfor %}
             {% endif %}
-            
+
             {% if master_pip %}
             {% for rofl in master_pip %}
              <li>
@@ -395,6 +372,34 @@ function numberWithCommas(x) {
             {% endfor %}
             {% endif %}
         </ul>
+    </div>
+    <div class="white-box timeline-white">
+    	<h2>Timeline Progress</h2>
+    	    {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
+    	{% endif %}
+        <div class="clear"></div>
+<!-- timeline slider -->
+        <div id="scrollbar1">
+                {% if timeline_json %}
+                <div class="viewport">
+                     <div class="overview">
+                       <div id="time-line-pad">
+            <div class="time-line">
+              <div class="time-line-bdr"></div>
+                <ul>
+
+                    <div class="timeline-slide"></div>
+
+                </ul>
+            </div>
+           </div>
+                    </div>
+                </div>
+                <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                {% endif %}
+       </div>
     </div>
     <div class="white-box">
     	<div class="left-white-pad">
@@ -445,7 +450,7 @@ under 0 Milestones</h5>
           </div>
         </div>
     </div>
-    
+
     <div class=" white-box ">
 <!--    	<img src="/static/img/wip-img.jpg" alt="">-->
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
@@ -492,7 +497,7 @@ under 0 Milestones</h5>
     	<h2>Recent Updates</h2>
          <div id="boxscroll" class="updates-scroll ">
         <p><span>Today</span> - {% now "jS F Y" %}</p>
-            
+
          {% if updates_list %}
              {% for obj in updates_list %}
              <ul class="section_updates">
@@ -551,7 +556,7 @@ function confirm_alert(node) {
     if (d1 > 3) {
       alert("You cant add more than 4 Parameters")
     };
-    
+
 }
 */
 </script>
@@ -1320,7 +1325,7 @@ $(function() {
    $('.trunc').each(function(i) {
        if (isEllipsisActive(this)) {
            $(this).attr("title", $(this).text());
-       }        
+       }
    });
 });
 

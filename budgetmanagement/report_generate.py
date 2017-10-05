@@ -18,9 +18,6 @@ from budgetmanagement.manage_budget import get_budget_logic
 def report_form(request):
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
-    funder_user = UserProfile.objects.filter(active=2,organization_type=1)
-    partner = UserProfile.objects.filter(active=2,organization_type=2)
-    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     if request.method == 'POST':
@@ -40,6 +37,9 @@ def report_detail(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
+    funder_user = UserProfile.objects.filter(active=2,organization_type=1)
+    partner = UserProfile.objects.filter(active=2,organization_type=2)
+    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     if request.method == 'POST':
         data = request.POST
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))

@@ -220,7 +220,14 @@ function showCheckboxes() {
         return false;
       });
       
-    $('#id_task').on('change',function(e){
+    
+    }
+    });
+</script>
+
+<script>
+$(document).ready(function() {
+$('#id_task').on('change',function(e){
         var tasks_ids = $('#id_task').val();
         $.ajax({
             url:'/managing/milestone/overdue/',
@@ -241,8 +248,7 @@ function showCheckboxes() {
         e.stopImmediatePropagation();
         return false;
       });
-    }
-    });
+      });
 </script>
 
 <script>
@@ -335,7 +341,11 @@ $(document).ready(function() {
     
     
     
-    $('#id_task_dependency').on('change',function(e){
+</script>
+
+<script>
+$(document).ready(function(){
+$('#id_task_dependency').on('change',function(e){
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({
             url:'/managing/tasks/expected-date/caluclator/',
@@ -359,9 +369,11 @@ $(document).ready(function() {
         return false;
       });
       
-    }
     });
+
 </script>
+
+
 <script>
 $(document).ready(function() {
     if ("{{model_name}}"=="Task"){
