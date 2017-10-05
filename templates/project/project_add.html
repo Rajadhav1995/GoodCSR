@@ -342,7 +342,7 @@ $(document).ready(function() {
   $("#id_start_date").datepicker({
     dateFormat: 'yy-mm-dd',
     onSelect: function(dateText, inst) {
-        var start = new Date($('#id_start_date').val());
+        //var start = new Date($('#id_start_date').val());
         var end = new Date($('#id_end_date').val());
         end.setDate(end.getDate() + 1);
         if (end <= start) {
