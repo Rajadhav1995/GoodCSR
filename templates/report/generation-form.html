@@ -45,35 +45,9 @@
         <div class="col-md-12">
                     <h3 class="border_line">Section 1</h3><br>
                     
-                    <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
+                    <input type="hidden" name="project_slug" value="{{project_slug}}" id="{{project_slug}}" required="" class="form-control" maxlength="200">
                     
-                    <div class="row">
-                        <div class="col-md-6 nopadding">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                <label>Report Type</label>
-                                <select class="form-control" name="report_type" id="report_type" required>
-                                <option selected disabled>Select Report type</option>
-                                <option  value="1" >Quarterly</option>
-                                <option  value="2" >Monthly</option>
-                                </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-
-                        <div class="row">
-                                <div class="col-md-6 nopadding">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                        <label>Report Duration</label>
-                                        <br>Start Date : <input type="text" name="start_date" readonly="true" required="" class="form-control" id="id_start_date">
-                                        End Date : <input type="text" name="end_date" readonly="true" required="" class="form-control" id="id_end_date">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             
                        <div class="row">
                                 <div class="col-md-6 nopadding">
@@ -111,7 +85,7 @@
                             </div>
 
         </div>
-<a href= "/report/quarter/update/?slug={{slug}}"> Generate Quarter Updates </a> 
+        <a href= "/report/quarter/update/?slug={{slug}}"> Generate Quarter Updates </a> 
 
          <div class="col-md-12">
                     <h3 class="border_line">Section 2</h3><br>
@@ -232,7 +206,7 @@
            <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                 <a class="btn btn-success" href="/project/list/">Back</button></a>
      
-           
+           </div>
          
 
     </form>

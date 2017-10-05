@@ -387,7 +387,8 @@ $(document).ready(function() {
 </script>
 
 <script>
-    $(document).ready(function() { 
+    $(document).ready(function() {
+        if ('{{m_form}}' != 'ActivityForm'){ 
         var activity = $('#id_activity').val();
         $.ajax({
             url:'/managing/supercategories/selected/',
@@ -404,12 +405,14 @@ $(document).ready(function() {
             },
         });
         return false;
-      
+      }
     });
 </script>
     
 <script>
-    $(document).ready(function() {  
+    $(document).ready(function() { 
+        $('#id_subscribers').fSelect(); 
+        if ('{{m_form}}' != 'ActivityForm'){
         var tasks = $('#id_task').val();
         $.ajax({
             url:'/managing/activities/selected/',
@@ -434,7 +437,7 @@ $(document).ready(function() {
             },
         });
         return false;
-      
+      }
     });
 </script>
 
