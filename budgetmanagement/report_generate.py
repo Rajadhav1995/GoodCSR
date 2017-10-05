@@ -113,6 +113,7 @@ def genearte_report(request):
     slug = request.GET.get('slug')
     projectobj = ProjectReport.objects.get_or_none(project__slug=slug)
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
+    
     if projectobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
     if request.method == "POST":
