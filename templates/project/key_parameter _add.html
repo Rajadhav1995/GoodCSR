@@ -175,6 +175,31 @@ $("#para_type").change(function () {
 });
 </script>
 
+<script>
+//Toggle
+        
+         $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+         $(document).ready(function(e) {    
+    /*Content Show/Hide */
+    $('.hide-cont').hide();
+    $('.close-cont').hide();
+    $('.view-cont').click(function(){
+        $('.hide-cont').slideDown(350);
+        $('.close-cont').show();
+        $('.view-cont').hide();
+    });
+    $('.close-cont').click(function(){
+        $('.hide-cont').slideUp(350);
+        $('.close-cont').hide();
+        $('.view-cont').show();
+    }); 
+ });
+    
+</script>
+
 <script type="text/javascript">
     $(document).ready(function(){
         //$('select[multiple=multiple]').multiSelect()
