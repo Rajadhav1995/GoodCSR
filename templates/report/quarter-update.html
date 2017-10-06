@@ -6,12 +6,12 @@
 <div class="row">
     <div class="white-box">
         <div class="budget_create">
-        <form id="ic_form" action=".?slug={{slug}}" method = "post">
+        <form id="ic_form" action=".?slug={{slug}}" method = "post">{% csrf_token %}
             <h3>Section 5</h3>
             
         </div>
 
-            {% csrf_token %}
+            
             <div style="border:4px solid black;" >
                 <p>1. Previous Quarter Updates </p>
                 <input type="hidden" name="count" value="6">
@@ -30,11 +30,17 @@
                     <div style="border:2px solid black;" >
                         Milestone Name : <textarea rows="4" cols="50" wrap="hard" class ="subheading" id="milestone-name_1_{{i}}_{{j}}" name="milestone-name_1_{{i}}_{{j}}"> </textarea>
                         </br>About the milestone : <textarea rows="4" cols="50" class ="subheading" id="milestone-description_1_{{i}}_{{j}}" name="milestone-description_1_{{i}}_{{j}}"></textarea>
-                        </br>Upload Picture : <input type="file" id = "img_2_{{i}}_{{j}}" name = "img_2_{{i}}_{{j}}">
+                        </br>Upload Picture : <input type="file" id = "img_1_{{i}}_{{j}}" name = "img_1_{{i}}_{{j}}">
                         </br>Picutre Description. :<textarea rows="4" cols="50" class ="subheading" id="pic-description_1_{{i}}_{{j}}" name="pic-description_1_{{i}}_{{j}}"></textarea></br>
                     </div>
                     <div style="border:2px solid black;" >
                     </br>Parameter Selection
+                     <select name="paramter-selection_1_{{i}}_{{j}}" id="paramter-selection_1_{{i}}_{{j}}" class="location">
+                                        <option value = "">Select option </option>
+                                        {% for i in project_paramterlist %}
+                                        <option value="{{i.id}}">{{i.name}}</option>
+                                        {% endfor %}
+                                    </select>
                     </br>About Paramter :<textarea rows="4" cols="50" class ="subheading" id="about-parameter_1_{{i}}_{{j}}" name="about-parameter_1_{{i}}_{{j}}"></textarea>
                     </div>
                     </br>Budget Utlization and tranches :<input type="text" class ="subheading" id="budget-tranches_1_{{i}}_{{j}}" name="budget-tranches_1_{{i}}_{{j}}"> &nbsp;</br>
@@ -65,11 +71,9 @@
                     </br>Parameter Selection 
                      <select name="paramter-selection_2_{{i}}_{{j}}" id="paramter-selection_2_{{i}}_{{j}}" class="location">
                                         <option value = "">Select option </option>
-                                        <option value="PIN">Pie chart Numbers</option>
-                                        <option value="PIP">Pie Chart Percent</option>
-                                        <option value="NUM">Number</option>
-                                        <option value="PER">Percent</option>
-                                        <option value="CUR">Currency</option>
+                                        {% for i in project_paramterlist %}
+                                        <option value="{{i.id}}">{{i.name}}</option>
+                                        {% endfor %}
                                     </select>
                     </br>About Paramter : <textarea rows="4" cols="50" class ="subheading" id="about-parameter_2_{{i}}_{{j}}" name="about-parameter_2_{{i}}_{{j}}"></textarea>
                     </div>

@@ -1,6 +1,7 @@
 import requests,ast
 import math
 import datetime
+from django.contrib.contenttypes.models import ContentType
 from datetime import timedelta,datetime
 from django.shortcuts import render
 from dateutil import relativedelta
@@ -8,9 +9,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from media.models import Article,Section,ContactPersonInformation
-from media.forms import ContactPersonForm
+from media.forms import ContactPersonForm,Attachment
 from django.template import loader
-from projectmanagement.models import Project,UserProfile,ProjectFunderRelation
+from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
 from budgetmanagement.models import *
 from budgetmanagement.manage_budget import get_budget_logic
 
@@ -130,42 +131,66 @@ def get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,
         quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
     return quarterreportobj,result
 
+def milestone_activity_save(request,name,description,result,quarterreportobj):
+#    Common function to save the milestone and activities
+    milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
+    if result['paramter-selection']:
+        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(result['paramter-selection'])),description = result['about-parameter'])
+    return milestoneobj
+
+def image_save(request,milestoneobj,projectobj,result):
+#    Common functionality to save the images
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
+    image_dict = {
+            'created_by' : user_obj,
+            'attachment_file':result['img'],
+            'description' : result['pic-description'], 
+            'name' : projectobj.name,
+            'attachment_type' : 1,
+            'content_type' : ContentType.objects.get_for_model(milestoneobj),
+            'object_id' : milestoneobj.id
+    }
+    imageobj = Attachment.objects.create(**image_dict)
+    return imageobj
+
 def genearte_report(request):
     slug = request.GET.get('slug')
-    projectobj = ProjectReport.objects.get_or_none(project__slug=slug)
+    projectobj = ProjectReport.objects.filter(project__slug=slug)[0]
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
+    project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     
     if projectobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
     if request.method == "POST":
         slug = request.POST.get('slug')
-        projectreportobj = ProjectReport.objects.get_or_none(project__slug = slug)
+        projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
 #    to save the previous quarter updates:
         quarter_type = 1
         quarter_list = previousquarter_list
         previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
         quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,previous_itemlist)
-        print "Previous",result
-        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=result['milestone-name'],description=result['milestone-description'])
-        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,description = result['about-parameter'])
-
+        if result['milestone-name']:
+            name = result['milestone-name']
+            description = result['milestone-description']
+            milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
+            imageobj = image_save(request,milestoneobj,projectobj,result)
 
 #    to save the Current quarter updates:
         current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
         quarter_list = currentquarter_list
         quarter_type = 2
         quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,current_itemlist)
-        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=result['activity-name'],description=result['activity-description'])
-        print "current",result
-        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,description = result['about-parameter'])
-
+        if result['activity-name']:
+            name = result['activity-name']
+            description = result['activity-description']
+            milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
+            imageobj = image_save(request,milestoneobj,projectobj,result)
 #    to save the Future quarter updates:
         future_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
         quarter_list = futurequarter_list
         quarter_type = 3
         quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,future_itemlist)
-        print "future",result
         return HttpResponseRedirect('/project/summary/?slug='+str(slug)+'&key=summary')
     return render(request,'report/quarter-update.html',locals())
     
