@@ -376,8 +376,9 @@ function numberWithCommas(x) {
     	{% endif %}
         <div class="clear"></div>
 <!-- timeline slider -->
+        {% if timeline_json != '[]' %}
         <div id="scrollbar1">
-                {% if timeline_json %}
+                
                 <div class="viewport">
                      <div class="overview">
                        <div id="time-line-pad">
@@ -395,6 +396,7 @@ function numberWithCommas(x) {
                 <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
                 {% endif %}
        </div>
+       
     </div>
     <div class="white-box">
     	<div class="left-white-pad">

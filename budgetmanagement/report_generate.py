@@ -17,6 +17,7 @@ from budgetmanagement.manage_budget import get_budget_logic
 
 
 def report_form(request):
+    #to save the report type and duration
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     user_id = request.session.get('user_id')
@@ -33,6 +34,7 @@ def report_form(request):
     return render(request,'report/report-form.html',locals())
 
 def report_detail(request):
+    import ipdb;ipdb.set_trace();
     report_id = request.GET.get('report_id')
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
@@ -44,7 +46,7 @@ def report_detail(request):
     if request.method == 'POST':
         data = request.POST
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
-        project_report = ProjectReport.objects.get_or_none(id = int(report_id))
+        project_report = ProjectReport.objects.get_or_none(id = data.get('report_id'))
         project_report.description = data.get('description')
         project_report.objective = data.get('objective')
         project_report.save()
