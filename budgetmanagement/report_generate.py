@@ -34,7 +34,6 @@ def report_form(request):
     return render(request,'report/report-form.html',locals())
 
 def report_detail(request):
-    import ipdb;ipdb.set_trace();
     report_id = request.GET.get('report_id')
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
