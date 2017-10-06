@@ -341,7 +341,7 @@ function numberWithCommas(x) {
         <h2>Key Program Info</h2>
         {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
-        <a class="link-pad" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
+        <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
         </div>
         <ul class="key_parameter parameter">
@@ -398,7 +398,7 @@ function numberWithCommas(x) {
        </div>
        
     </div>
-    <div class="row">
+    
     <div class="white-box">
     	<div class="left-white-pad">
         	<h3>Total Task Completed</h3>
