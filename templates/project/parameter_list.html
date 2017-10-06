@@ -59,12 +59,16 @@
         
         {% for i in parameter %}
         <tr>
-            <td>{{i.name}}<a href="/project/parameter/edit/?id={{i.id}}"><i class="fa fa-edit" style="float:right"></i></a></td>
+            <td>{{i.name}}</td>
             <td>{{i.get_parameter_type_display}}</td>
             
             <td><a class="budget_button" href="/project/upload/parameter/value/?id={{i.id}}">Upload Values</button></a>
                 <a class="budget_button" href="/project/parameter/values/manage/?id={{i.id}}">Manage Values</button></a>
-                <a href="/project/remove/record/?id={{i.id}}&model=ProjectParameter" type="button" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a>
+                <a class="budget_button" href="/project/parameter/edit/?id={{i.id}}"><i class="fa fa-edit"></i> Edit</button></a>
+                <a href="/project/remove/record/?id={{i.id}}&model=ProjectParameter" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a>
+
+                <!-- <a href="/project/parameter/edit/?id={{i.id}}"><i class="fa fa-edit"></i></a> -->
+<!--  -->
                 <!-- /project/parameter/values/manage/?id={{i.id}} -->
             </td>
 
