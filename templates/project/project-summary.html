@@ -459,7 +459,10 @@ under 0 Milestones</h5>
         <th style="width:19%;">Organization</th>
         <th style="width:26%;">Designation</th>
         <th style="width:19%;">PMU Role</th>
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
         <th style="width:10%;">&nbsp;</th>
+        {% endif %}
       </tr>
       </thead>
       <tbody>
