@@ -170,28 +170,31 @@ def genearte_report(request):
         quarter_type = 1
         quarter_list = previousquarter_list
         previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
-        quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,previous_itemlist)
-        if result['milestone-name']:
-            name = result['milestone-name']
-            description = result['milestone-description']
-            milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
-            imageobj = image_save(request,milestoneobj,projectobj,result)
+        if previous_itemlist:
+            quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,previous_itemlist)
+            if result['milestone-name']:
+                name = result['milestone-name']
+                description = result['milestone-description']
+                milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
+                imageobj = image_save(request,milestoneobj,projectobj,result)
 
 #    to save the Current quarter updates:
         current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
         quarter_list = currentquarter_list
         quarter_type = 2
-        quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,current_itemlist)
-        if result['activity-name']:
-            name = result['activity-name']
-            description = result['activity-description']
-            milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
-            imageobj = image_save(request,milestoneobj,projectobj,result)
+        if current_itemlist:
+            quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,current_itemlist)
+            if result['activity-name']:
+                name = result['activity-name']
+                description = result['activity-description']
+                milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
+                imageobj = image_save(request,milestoneobj,projectobj,result)
 #    to save the Future quarter updates:
         future_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
         quarter_list = futurequarter_list
         quarter_type = 3
-        quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,future_itemlist)
+        if future_itemlist:
+            quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,future_itemlist)
         return HttpResponseRedirect('/project/summary/?slug='+str(slug)+'&key=summary')
     return render(request,'report/quarter-update.html',locals())
     
