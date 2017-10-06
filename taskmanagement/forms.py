@@ -19,11 +19,11 @@ STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 MILESTONE_CHOICES=((0,' '),(1, 'Open'), (3, 'Ongoing'),)
 
 class ActivityForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
     project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}),label='')
     activity_type = forms.ChoiceField(choices = ACTIVITY_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=False)
     super_category = forms.ModelChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.Select(attrs={'class': 'form-control'}))
-    status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
+    status = forms.ChoiceField(choices = STATUS_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=False)
     assigned_to = forms.ModelChoiceField(queryset = UserProfile.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}))
     subscribers = forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=False,max_length=200)
@@ -36,7 +36,6 @@ class ActivityForm(forms.ModelForm):
         self.project = project_id
         super(ActivityForm, self).__init__(*args, **kwargs)
         self.fields['description'].required = True
-        self.fields['name'].required = True
         self.fields['activity_type'].required = True
         self.fields['status'].initial = 1
         self.fields['assigned_to'].required = True
@@ -44,10 +43,14 @@ class ActivityForm(forms.ModelForm):
         self.fields['project'].widget = forms.HiddenInput()
         self.fields['super_category'].queryset = SuperCategory.objects.filter(active=2,project__id=project_id).exclude(parent = None)
         self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2)
+    
     def clean(self):
         cleaned_data = super(ActivityForm,self).clean()
         super_category= cleaned_data.get("super_category")
-        
+        name = cleaned_data.get("name")
+        if name == '' :
+            msg = u"Please enter the name"
+            self._errors["name"] = self.error_class([msg])
         if not super_category:
             msg = u"Please select super category"
             self._errors["super_category"] = self.error_class([msg])
@@ -100,6 +103,10 @@ class TaskForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
         actual_start_date = cleaned_data.get("actual_start_date")
         actual_end_date = cleaned_data.get("actual_end_date")
+        name = cleaned_data.get("name")
+        if name == '' :
+            msg = u"Please enter the name"
+            self._errors["name"] = self.error_class([msg])
         
         if start_date and end_date == '' :
             msg = u"Please enter the end date"
@@ -113,9 +120,9 @@ class TaskForm(forms.ModelForm):
             self._errors["actual_end_date"] = self.error_class([msg])
 
 class MilestoneForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
     super_category = forms.ModelMultipleChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
-    activity =forms.ModelMultipleChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
+    activity =forms.ModelMultipleChoiceField(queryset= Activity.objects.filter(active = 2),required=False, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     task = forms.ModelMultipleChoiceField(queryset= Task.objects.filter(active = 2),required=False, widget = forms.SelectMultiple(attrs={'class' :'test'}))
     status = forms.ChoiceField(choices = MILESTONE_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=True)
     subscribers  =forms.ModelMultipleChoiceField(queryset = UserProfile.objects.filter(active=2),required=False,widget = forms.SelectMultiple(attrs = {'class': 'test'}))
@@ -131,7 +138,6 @@ class MilestoneForm(forms.ModelForm):
         self.project = project_id
         super(MilestoneForm, self).__init__(*args, **kwargs)
         self.fields['project'].initial = Project.objects.get(id=int(project_id))
-        self.fields['name'].required = True
         self.fields['overdue'].required = False
         self.fields['task'].queryset = Task.objects.filter(active=2,activity__project_id=project_id)
         self.fields['status'].initial = 1
@@ -149,4 +155,13 @@ class MilestoneForm(forms.ModelForm):
             ('status',self.fields['status']),
             ('project',self.fields['project'])
             ])
-        
+    def clean(self):
+        cleaned_data = super(MilestoneForm,self).clean()
+        name = cleaned_data.get("name")
+        task = cleaned_data.get("task")
+        if name == '' :
+            msg = u"Please enter the name"
+            self._errors["name"] = self.error_class([msg])
+        if not task:
+            msg = u"This field is required"
+            self._errors["task"] = self.error_class([msg])
