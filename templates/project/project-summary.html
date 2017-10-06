@@ -51,6 +51,7 @@ $(document).ready(function(){
     <span style="position: absolute;
     right: 30px;
     top: 0px;">Coming Soon...</span>
+<!--    <a id="myBtn1" class="green-link green-link1" href="#" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>-->
     <a id="myBtn1" class="green-link green-link1 iframe" href="/report/generation-form/?slug={{request.GET.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
 
      <div class="menu-bottom">
@@ -60,14 +61,8 @@ $(document).ready(function(){
           <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
           <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>
           <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
-          {% if status == '0' %}
-          <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
-          {% elif status == '1' %}
-          <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
-          {% else %}
             <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
             <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
-          {% endif %}
         </ul>
      </div>
     </div>

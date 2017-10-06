@@ -217,11 +217,11 @@
 	$(document).ready(function(e) {	
 		/*Content Show/Hide */
 		if ("{{request.GET.added}}" == 'true'){
-		    alert("Added successfully.Budget planned amount is exceeded by {{request.GET.final_budget_amount}}")
+		    alert("Budget Added successfully. Budget planned amount is exceeded by {{request.GET.final_budget_amount}}")
 		    window.location.href="/manage/project/budget/view/?slug={{project_slug}}"
 		}
 		if ("{{request.GET.edit}}" == 'true'){
-		    alert("Budget Updated successfully.Budget planned amount is exceeded by {{request.GET.final_budget_amount}}")
+		    alert("Budget Updated successfully. Budget planned amount is exceeded by {{request.GET.final_budget_amount}}")
 		    window.location.href="/manage/project/budget/view/?slug={{project_slug}}"
 		}
 		$('.hide-cont').hide();
