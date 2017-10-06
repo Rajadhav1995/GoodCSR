@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
+{% load common_tags %}
+{% load urs_tags %}
 {% block section %}
 {% endblock %}
 {% block content %}
 
-<div class="row">
-    <div class="white-box">
-        <div class="budget_create">
-        <form id="ic_form" action=".?slug={{slug}}" method = "post">{% csrf_token %}
-            <h3>Section 5</h3>
-            
-        </div>
+<div class="clear"></div>
+<section class="content-part">
+<div class='container'>
+   <div class="white-box" >
+        <div class="col-md-12">
+         <h3 class="border_line"> Section 5 </h3>
+         <br>
+      </div>
+    <form id="ic_form" class ="form-horizantal budget_form" action=".?slug={{slug}}" method = "post">{% csrf_token %}
+     <div class="col-md-12">
 
-            
-            <div style="border:4px solid black;" >
                 <p>1. Previous Quarter Updates </p>
                 <input type="hidden" name="count" value="6">
                 <input type="hidden" name="slug" value="{{slug}}">
@@ -21,91 +24,326 @@
             {% for i,v in previousquarter_list.items %}
             {% with forloop.counter as j %}
             <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
-                <div style="margin-left: 9px;margin-right:9px;margin-bottom:5px;" >
                     <input type="hidden" name="quarter-date_1_j" value="{{v}}">
-                    Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
-                    Duration :  <input type="text" class ="subheading" id="duration_1_{{i}}_{{j}}" name="duration_1_{{i}}_{{j}}">
-                    </br>Key Achievements in this Quarter
-                    </br>Snapshot of the Timeline
-                    <div style="border:2px solid black;" >
-                        Milestone Name : <textarea rows="4" cols="50" wrap="hard" class ="subheading" id="milestone-name_1_{{i}}_{{j}}" name="milestone-name_1_{{i}}_{{j}}"> </textarea>
-                        </br>About the milestone : <textarea rows="4" cols="50" class ="subheading" id="milestone-description_1_{{i}}_{{j}}" name="milestone-description_1_{{i}}_{{j}}"></textarea>
-                        </br>Upload Picture : <input type="file" id = "img_1_{{i}}_{{j}}" name = "img_1_{{i}}_{{j}}">
-                        </br>Picutre Description. :<textarea rows="4" cols="50" class ="subheading" id="pic-description_1_{{i}}_{{j}}" name="pic-description_1_{{i}}_{{j}}"></textarea></br>
-                    </div>
-                    <div style="border:2px solid black;" >
-                    </br>Parameter Selection
-                     <select name="paramter-selection_1_{{i}}_{{j}}" id="paramter-selection_1_{{i}}_{{j}}" class="location">
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Quarter Name : <span style="font-size-adjust: 0.58;"> {{v}} </span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Duration</label>
+                                 <input type="text" class="form-control" id="duration_1_{{i}}_{{j}}" name="duration_1_{{i}}_{{j}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </br>
+<!--                    <div class="row">-->
+<!--                            <div class="col-md-6 nopadding">-->
+<!--                                <div class="col-md-12">-->
+<!--                                    <div class="form-group">-->
+                                        <label>Key Achievements in this Quarter</label>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                    </div>-->
+                    </br><label>Snapshot of the Timeline</label>
+                    </br>
+                    <div style="border:2px solid black;margin-left: 9px;margin-right:9px;">
+                    
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label> Milestone Name </label> 
+                                        <textarea rows="4" cols="50" class="form-control text_area" id="milestone-name_1_{{i}}_{{j}}" name="milestone-name_1_{{i}}_{{j}}"> </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> About the milestone </label>
+                                    <textarea rows="4" cols="50" class="form-control text_area" id="milestone-description_1_{{i}}_{{j}}" name="milestone-description_1_{{i}}_{{j}}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Upload Picture </label>
+                                    <input type="file" class="form-control" id = "img_1_{{i}}_{{j}}" name = "img_1_{{i}}_{{j}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Picutre Description </label>
+                                <textarea rows="4" cols="50" class="form-control text_area" id="pic-description_1_{{i}}_{{j}}" name="pic-description_1_{{i}}_{{j}}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- div style for milestone ends -->
+                    </br>
+                    <div style="border:2px solid black;margin-left: 9px;margin-right:9px;" >
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label>Parameter Selection </label>
+                                        <select class="form-control" name="paramter-selection_1_{{i}}_{{j}}" id="paramter-selection_1_{{i}}_{{j}}" class="location">
                                         <option value = "">Select option </option>
                                         {% for i in project_paramterlist %}
                                         <option value="{{i.id}}">{{i.name}}</option>
                                         {% endfor %}
                                     </select>
-                    </br>About Paramter :<textarea rows="4" cols="50" class ="subheading" id="about-parameter_1_{{i}}_{{j}}" name="about-parameter_1_{{i}}_{{j}}"></textarea>
-                    </div>
-                    </br>Budget Utlization and tranches :<input type="text" class ="subheading" id="budget-tranches_1_{{i}}_{{j}}" name="budget-tranches_1_{{i}}_{{j}}"> &nbsp;</br>
-                </div>
-            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> About Paramter </label>
+                                        <textarea rows="4" cols="50" class="form-control text_area" id="about-parameter_1_{{i}}_{{j}}" name="about-parameter_1_{{i}}_{{j}}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- paramter selection div ends -->
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Budget Utlization and tranches </label>
+                                    <input type="text" class="form-control" id="budget-tranches_1_{{i}}_{{j}}" name="budget-tranches_1_{{i}}_{{j}}"> &nbsp;  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </div> </br>
             {% endwith %}
             {% endfor %}
 
-            </div>
-            <div style="border:4px solid black;">
-            <p>2. Current Quarter Updates </p>
+            <p> 2. Current Quarter Updates </p>
                 {% for i,v in currentquarter_list.items %}
                 {% with forloop.counter as j %}
-                <div style="border:3px solid black; margin-left: 9px;margin-right:9px;margin-bottom:5px;" > 
-                    <div style="margin-left: 9px;margin-right:9px;" >
-                    Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
-                    Duration : <input type="text" class ="subheading" id="duration_2_{{i}}_{{j}}" name="duration_2_{{i}}_{{j}}">
-                    </br>Key Achievements in this Quarter
-                    </br>Snapshot of the Gantt Chart
-                    </br>About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about-quarter_2_{{i}}_{{j}}" name="about-quarter_2_{{i}}_{{j}}"></textarea></br>
-                    <div style="border:2px solid black;" >
-                        </br>Activity Name : <textarea rows="4" cols="50" class ="subheading" id="activity-name_2_{{i}}_{{j}}" name="activity-name_2_{{i}}_{{j}}"></textarea>
-                        </br>About the Activity : <textarea rows="4" cols="50" class ="subheading" id="activity-description_2_{{i}}_{{j}}" name="activity-description_2_{{i}}_{{j}}"></textarea>
-                        </br>Upload Picture : <input type="file" id = "img_2_{{i}}_{{j}}" name = "img_2_{{i}}_{{j}}">
-                        </br>Picutre Description. : <input type="text" class ="subheading" id="pic-description_2_{{i}}_{{j}}" name="pic-description_2_{{i}}_{{j}}">
+            <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span> </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div style="border:2px solid black;" >
-                    </br>Parameter Selection 
-                     <select name="paramter-selection_2_{{i}}_{{j}}" id="paramter-selection_2_{{i}}_{{j}}" class="location">
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Duration </label>
+                                    <input type="text" class="form-control" id="duration_2_{{i}}_{{j}}" name="duration_2_{{i}}_{{j}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    Key Achievements in this Quarter
+                    </br>
+                   Snapshot of the Gantt Chart
+                   </br>
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> About the Quarter </label>
+                                     <textarea rows="4" cols="50" class="form-control text_area" id="about-quarter_2_{{i}}_{{j}}" name="about-quarter_2_{{i}}_{{j}}"></textarea>
+                                     </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="border:2px solid black;margin-left: 9px;margin-right:9px;" >
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Activity Name </label>
+                                    <textarea rows="4" cols="50" class="form-control text_area" id="activity-name_2_{{i}}_{{j}}" name="activity-name_2_{{i}}_{{j}}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> About the Activity  </label>
+                                    <textarea rows="4" cols="50" class="form-control text_area" id="activity-description_2_{{i}}_{{j}}" name="activity-description_2_{{i}}_{{j}}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label> Upload Picture  </label>
+                                    <input type="file" class="form-control" id = "img_2_{{i}}_{{j}}" name = "img_2_{{i}}_{{j}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Picutre Description  </label>
+                                     <input type="text" class="form-control text_area" id="pic-description_2_{{i}}_{{j}}" name="pic-description_2_{{i}}_{{j}}">
+                                     </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div><!-- Activity div ends -->
+                    </br>
+                    <div style="border:2px solid black;margin-left: 9px;margin-right:9px;" >
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Parameter Selection   </label>
+                                        <select class="form-control" name="paramter-selection_2_{{i}}_{{j}}" id="paramter-selection_2_{{i}}_{{j}}" class="location">
                                         <option value = "">Select option </option>
                                         {% for i in project_paramterlist %}
                                         <option value="{{i.id}}">{{i.name}}</option>
                                         {% endfor %}
                                     </select>
-                    </br>About Paramter : <textarea rows="4" cols="50" class ="subheading" id="about-parameter_2_{{i}}_{{j}}" name="about-parameter_2_{{i}}_{{j}}"></textarea>
+                                 </div>
+                            </div>
+                        </div>
                     </div>
-                    </br>About the Budget : <textarea rows="4" cols="50" class ="subheading" id="about-budget_2_{{i}}_{{j}}" name="about-budget_2_{{i}}_{{j}}"></textarea>
-                    </br>Budget Utlization and tranches : <input type="text" class ="subheading" id="budget-tranches_2_{{i}}_{{j}}" name="budget-tranches_2_{{i}}_{{j}}">
-                    </br>Risk and Mitigation : <textarea rows="4" cols="50" class ="subheading" id="risk-mitigation_2_{{i}}_{{j}}" name="risk-mitigation_2_{{i}}_{{j}}"></textarea>&nbsp;</br>
+                    <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label> About Paramter  </label>
+                                     <textarea rows="4" cols="50" class="form-control text_area" id="about-parameter_2_{{i}}_{{j}}" name="about-parameter_2_{{i}}_{{j}}"></textarea>
+                                  </div>
+                            </div>
+                        </div>
                     </div>
+                     
+                </div> <!--  parameter selction div ends -->
+                </br>
+                <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label> About the Budget  </label>
+                                         <textarea rows="4" cols="50" class="form-control text_area" id="about-budget_2_{{i}}_{{j}}" name="about-budget_2_{{i}}_{{j}}"></textarea>
+                               </div>
+                            </div>
+                        </div>
                     </div>
+                 <div class="row">
+                    <div class="col-md-6 nopadding">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label> Budget Utlization and tranches  </label>
+                                <input type="text" class="form-control" id="budget-tranches_2_{{i}}_{{j}}" name="budget-tranches_2_{{i}}_{{j}}">
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-6 nopadding">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                            <label> Risk and Mitigation  </label>
+                                <textarea rows="4" cols="50" class="form-control text_area" id="risk-mitigation_2_{{i}}_{{j}}" name="risk-mitigation_2_{{i}}_{{j}}"></textarea>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+        </div></br>
                     {% endwith %}
                 {% endfor %}
             </div>
-            
-            <div style="border:4px solid black;">
             <p>3. Future Quarter Updates </p>
             {% for i,v in futurequarter_list.items %}
             {% with forloop.counter as j %}
-                </br>
-                <div style="border:3px solid black;margin-left: 9px;margin-right:9px;margin-bottom:5px;" >
-                    <div style="margin-left: 9px;margin-right:9px;" >
-                    Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span></br>
-                    Duration :<input type="text" class ="subheading" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}">&nbsp;</br>
-                    Snapshot of the GanttChart &nbsp;</br>
-                    About the Quarter : <textarea rows="4" cols="50" class ="subheading" id="about-quarter_3_{{i}}_{{j}}" name="about-quarter_3_{{i}}_{{j}}"> </textarea>&nbsp;</br>
-                    Budget Utlization and tranches :  <input type="text" class ="subheading" id="budget-tranches_3_{{i}}_{{j}}" name="budget-tranches_3_{{i}}_{{j}}">&nbsp;</br>
-                    About the Budget :<textarea rows="4" cols="50" class ="subheading" id="about-budget_3_{{i}}_{{j}}" name="about-budget_3_{{i}}_{{j}}"> </textarea>&nbsp;</br>
+                <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
+                        <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Quarter Name :<span style="font-size-adjust: 0.58;"> {{v}} </span>  </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Duration </label>
+                                <input type="text" class="form-control" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}">&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    Snapshot of the GanttChart
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> About the Quarter </label>
+                                     <textarea rows="4" cols="50" class="form-control text_area"  id="about-quarter_3_{{i}}_{{j}}" name="about-quarter_3_{{i}}_{{j}}"> </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Budget Utlization and tranches </label>
+                                     <input type="text" class="form-control" id="budget-tranches_3_{{i}}_{{j}}" name="budget-tranches_3_{{i}}_{{j}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-md-6 nopadding">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label> About the Budget </label>
+                                <textarea rows="4" cols="50" class="form-control text_area" id="about-budget_3_{{i}}_{{j}}" name="about-budget_3_{{i}}_{{j}}"> </textarea>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
-                </div>
-                &nbsp;
-                {% endwith %}
-            {% endfor %}
+                    
+            </div></br>
+            {% endwith %}
+        {% endfor %}
             </div>
-            
             <div class="click_buttons">
                 <div class="link-left">
 <!--                    <input type="hidden"/>-->
@@ -119,6 +357,7 @@
                     <input type="submit" value="Save Budget Lineitems" class="btn btn-success">
                 </div>
             </div>
+        </div> <!-- after form div ends -->
         </form>
     </div>
 </div>
