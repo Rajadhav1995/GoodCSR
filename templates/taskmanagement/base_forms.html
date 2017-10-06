@@ -34,7 +34,6 @@
         
                     {{form.media}}
                     {% for field in form %}
-                         {{form.media}}
                         <div class="col-md-12">
                             <div class="form-group">
                                 
@@ -227,7 +226,7 @@ function showCheckboxes() {
 
 <script>
 $(document).ready(function() {
-$('#id_task').on('change',function(e){
+$('#id_task').on('change',function(){
         var tasks_ids = $('#id_task').val();
         $.ajax({
             url:'/managing/milestone/overdue/',
@@ -245,7 +244,6 @@ $('#id_task').on('change',function(e){
             },
             error : function(){}
         });
-        e.stopImmediatePropagation();
         return false;
       });
       });
@@ -347,6 +345,7 @@ $(document).ready(function() {
 <script>
 $(document).ready(function(){
 $('#id_task_dependency').on('change',function(e){
+        event.preventDefault();
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({
             url:'/managing/tasks/expected-date/caluclator/',
@@ -457,6 +456,7 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
     var start_date = $('#id_start_date').val();
+    var end_date = $('#id_end_date').val();
     if (start_date == null || start_date == ''){
         $('#id_activity').trigger('change');
         $('#id_task_dependency').trigger('change');
