@@ -38,8 +38,9 @@
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                    <label>Duration</label>
-                                 <input type="text" class="form-control" id="duration_1_{{i}}_{{j}}" name="duration_1_{{i}}_{{j}}">
+                                    {% get_duration_month v as duration %}
+                                    <label> Duration </label>
+                                <input type="text" class="form-control" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}" value="{{duration}}" readonly>&nbsp;
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +133,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label> Budget Utlization and tranches </label>
-                                    <input type="text" class="form-control" id="budget-tranches_1_{{i}}_{{j}}" name="budget-tranches_1_{{i}}_{{j}}"> &nbsp;  
+<!--                                    <input type="text" class="form-control" id="budget-tranches_1_{{i}}_{{j}}" name="budget-tranches_1_{{i}}_{{j}}"> &nbsp;  -->
                                     </div>
                                 </div>
                             </div>
@@ -158,8 +159,9 @@
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                    {% get_duration_month v as duration %}
                                     <label> Duration </label>
-                                    <input type="text" class="form-control" id="duration_2_{{i}}_{{j}}" name="duration_2_{{i}}_{{j}}">
+                                <input type="text" class="form-control" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}" value="{{duration}}" readonly>&nbsp;
                                 </div>
                             </div>
                         </div>
@@ -167,7 +169,17 @@
                     
                     Key Achievements in this Quarter
                     </br>
-                   Snapshot of the Gantt Chart
+                   
+                   <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Snapshot of the Gantt Chart </label>
+<!--                                    <input type="text" class="form-control" id="duration_2_{{i}}_{{j}}" name="duration_2_{{i}}_{{j}}">-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                    </br>
                     <div class="row">
                             <div class="col-md-6 nopadding">
@@ -266,7 +278,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label> Budget Utlization and tranches  </label>
-                                <input type="text" class="form-control" id="budget-tranches_2_{{i}}_{{j}}" name="budget-tranches_2_{{i}}_{{j}}">
+<!--                                <input type="text" class="form-control" id="budget-tranches_2_{{i}}_{{j}}" name="budget-tranches_2_{{i}}_{{j}}">-->
                               </div>
                             </div>
                         </div>
@@ -302,13 +314,23 @@
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                    {% get_duration_month v as duration %}
                                     <label> Duration </label>
-                                <input type="text" class="form-control" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}">&nbsp;
+                                <input type="text" class="form-control" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}" value="{{duration}}" readonly>&nbsp;
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    Snapshot of the GanttChart
+                    <div class="row">
+                            <div class="col-md-6 nopadding">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                    <label> Snapshot of the GanttChart </label>
+<!--                                <input type="text" class="form-control" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}">&nbsp;-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
@@ -324,7 +346,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label> Budget Utlization and tranches </label>
-                                     <input type="text" class="form-control" id="budget-tranches_3_{{i}}_{{j}}" name="budget-tranches_3_{{i}}_{{j}}">
+<!--                                     <input type="text" class="form-control" id="budget-tranches_3_{{i}}_{{j}}" name="budget-tranches_3_{{i}}_{{j}}">-->
                                     </div>
                                 </div>
                             </div>

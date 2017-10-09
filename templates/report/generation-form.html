@@ -159,9 +159,9 @@
                </div>
             </div>
          </div>
-         <div><a href= "/report/quarter/update/?slug={{project_slug}}"><u><b> Generate Quarter Updates </u></b></a></div>
-         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
-         <a class="btn btn-success" href="/project/list/">Back</button></a>
+          <input class="btn btn-primary" name = 'quarter_updates' type="submit" value="Save and Generate Quarter Updates" onclick="return ddlValidate();" />
+         <input class="btn btn-primary" name = 'report_save' type="submit" value="Save" onclick="return ddlValidate();" />
+         <a class="btn btn-success" href="/project/summary/?slug={{project_slug}}&key=summary"">Back</button></a>
          </form>
    </div>
 
