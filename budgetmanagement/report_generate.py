@@ -14,13 +14,15 @@ from django.template import loader
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
 from budgetmanagement.models import *
 from budgetmanagement.manage_budget import get_budget_logic
-
+from django.shortcuts import redirect
 
 def report_form(request):
     #to save the report type and duration
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    report_obj = ProjectReport.objects.get_or_none(project=project)
     user_id = request.session.get('user_id')
+    import ipdb; ipdb.set_trace()
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     if request.method == 'POST':
         data = request.POST
@@ -33,12 +35,24 @@ def report_form(request):
         return HttpResponseRedirect('report/detail/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
     return render(request,'report/report-form.html',locals())
 
+def report_section(request):
+    slug =  request.GET.get('slug')
+    project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    report_obj = ProjectReport.objects.get_or_none(project=project)
+    # import ipdb; ipdb.set_trace()
+    if report_obj:
+        print "goodcsr"
+        # return redirect('/some/url/')
+        return redirect('/report/detail/?slug=rabri-devi')
+    return render(request,'report/report-form.html',locals())
+
 def report_detail(request):
     report_id = request.GET.get('report_id')
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
+    report_obj = ProjectReport.objects.get_or_none(project=project)
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
@@ -56,6 +70,12 @@ def report_detail(request):
         implementation_partner = request.POST.get('implementation_partner')
         return HttpResponseRedirect('/report/detail/')
     return render(request,'report/generation-form.html',locals())
+
+def report_create(request):
+    project_slug = request.GET.get('project_slug')
+    project = Project.objects.get_or_none(slug = project_slug)
+    report_obj = ProjectReport.objects.get_or_none(project=project)
+    return render(request,'report/report-detail.html',locals())
 
 def get_quarter_report_logic(projectobj):
     ''' common functionality to get the start date,end date and no of quarter'''

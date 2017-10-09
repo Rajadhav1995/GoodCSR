@@ -66,6 +66,30 @@
     
     </div>
 </section>
+<script>
+//Toggle
+        
+         $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+         $(document).ready(function(e) {    
+    /*Content Show/Hide */
+    $('.hide-cont').hide();
+    $('.close-cont').hide();
+    $('.view-cont').click(function(){
+        $('.hide-cont').slideDown(350);
+        $('.close-cont').show();
+        $('.view-cont').hide();
+    });
+    $('.close-cont').click(function(){
+        $('.hide-cont').slideUp(350);
+        $('.close-cont').hide();
+        $('.view-cont').show();
+    }); 
+ });
+    
+</script>
 <!--Content part Ends-->
 {% endblock %}
 
@@ -159,8 +183,9 @@ $(function(){
 });
 </script>
 
+
     
-    <script src="/static/js/fm.tagator.jquery.js"></script>
+<script src="/static/js/fm.tagator.jquery.js"></script>
     <script>
         $(function () {
             var $input_tagator1 = $('#input_tagator1');
