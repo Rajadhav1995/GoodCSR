@@ -20,7 +20,6 @@ def report_form(request):
     #to save the report type and duration
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
-    report_obj = ProjectReport.objects.get_or_none(project=project)
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     if request.method == 'POST':
@@ -33,6 +32,12 @@ def report_form(request):
         project_report.save()
         return HttpResponseRedirect('report/detail/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
     return render(request,'report/report-form.html',locals())
+
+def report_listing(request):
+    slug =  request.GET.get('slug')
+    project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    report_obj = ProjectReport.objects.filter(project=project)
+    return render(request,'report/listing.html',locals())
 
 def report_section(request):
     slug =  request.GET.get('slug')
@@ -51,7 +56,7 @@ def report_detail(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
-    report_obj = ProjectReport.objects.get_or_none(project=project)
+    # report_obj = ProjectReport.objects.get_or_none(project=project)
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
@@ -74,9 +79,10 @@ def report_detail(request):
     return render(request,'report/generation-form.html',locals())
 
 def report_create(request):
-    project_slug = request.GET.get('project_slug')
-    project = Project.objects.get_or_none(slug = project_slug)
-    report_obj = ProjectReport.objects.latest_one(project=project)
+    slug = request.GET.get('slug')
+    report_id = request.GET.get('report_id')
+    project = Project.objects.get_or_none(slug = slug)
+    report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     return render(request,'report/report-detail.html',locals())
 
