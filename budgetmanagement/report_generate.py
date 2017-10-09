@@ -22,7 +22,6 @@ def report_form(request):
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     report_obj = ProjectReport.objects.get_or_none(project=project)
     user_id = request.session.get('user_id')
-    import ipdb; ipdb.set_trace()
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     if request.method == 'POST':
         data = request.POST
@@ -78,6 +77,7 @@ def report_create(request):
     project_slug = request.GET.get('project_slug')
     project = Project.objects.get_or_none(slug = project_slug)
     report_obj = ProjectReport.objects.latest_one(project=project)
+    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     return render(request,'report/report-detail.html',locals())
 
 def get_quarter_report_logic(projectobj):
