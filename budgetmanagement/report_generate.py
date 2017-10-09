@@ -54,7 +54,10 @@ def report_detail(request):
         duration = request.POST.get('duration')
         beneficiaries_no = request.POST.get('beneficiaries_no')
         implementation_partner = request.POST.get('implementation_partner')
-        return HttpResponseRedirect('/report/detail/')
+        if data.get('quarter_updates'):
+            return HttpResponseRedirect('/report/quarter/update/?slug='+data.get('project_slug'))
+        else:
+            return HttpResponseRedirect('/project/summary/?slug='+data.get('project_slug')+'&key='+'summary')
     return render(request,'report/generation-form.html',locals())
 
 def get_quarter_report_logic(projectobj):

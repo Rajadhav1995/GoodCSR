@@ -54,6 +54,7 @@ class ActivityForm(forms.ModelForm):
         if not super_category:
             msg = u"Please select super category"
             self._errors["super_category"] = self.error_class([msg])
+        
 
 class TaskForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
@@ -104,9 +105,14 @@ class TaskForm(forms.ModelForm):
         actual_start_date = cleaned_data.get("actual_start_date")
         actual_end_date = cleaned_data.get("actual_end_date")
         name = cleaned_data.get("name")
+        assigned_to=cleaned_data.get('assigned_to')
         if name == '' :
             msg = u"Please enter the name"
             self._errors["name"] = self.error_class([msg])
+        
+        if assigned_to == '':
+            msg = u"Please select assigned to"
+            self._errors["assigned_to"] = self.error_class([msg])
         
         if start_date and end_date == '' :
             msg = u"Please enter the end date"
