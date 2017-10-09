@@ -30,7 +30,7 @@ def report_form(request):
         project_report.start_date = data.get('start_date')
         project_report.end_date = data.get('end_date')
         project_report.save()
-        return HttpResponseRedirect('report/detail/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
+        return HttpResponseRedirect('/report/detail/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
     return render(request,'report/report-form.html',locals())
 
 def report_detail(request):

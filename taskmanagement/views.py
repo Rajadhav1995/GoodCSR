@@ -105,7 +105,10 @@ def edit_taskmanagement(request,model_name,m_form,slug):
                 return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)
-    return render(request,'taskmanagement/base_forms.html',locals())
+    if model_name == 'Task':
+        return render(request,'taskmanagement/edit_task.html',locals())
+    else:
+        return render(request,'taskmanagement/base_forms.html',locals())
 
 def active_change(request,model_name):
     ids = request.GET.get('id')
