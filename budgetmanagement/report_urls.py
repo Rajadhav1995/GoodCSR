@@ -6,6 +6,6 @@ urlpatterns = [
     url(r'generation-form/$',report_form),
     url(r'detail/$',report_detail),
     url(r'quarter/update/$',genearte_report),
-    url(r'create/$',report_create),
+    url(r'generate/$',report_create),
 
 ]
