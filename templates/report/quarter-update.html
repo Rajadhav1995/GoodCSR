@@ -57,7 +57,7 @@
 <!--                    </div>-->
                     </br><label>Snapshot of the Timeline</label>
                     </br>
-                    <div style="border:2px solid black;margin-left: 9px;margin-right:9px;">
+                    <div class ="data_row" style="border:2px solid black;margin-left: 9px;margin-right:9px;">
                     
                         <div class="row">
                             <div class="col-md-6 nopadding">
@@ -100,7 +100,21 @@
                             </div>
                         </div>
                     </div> <!-- div style for milestone ends -->
+                    
+<!--                    add more functionality-->
+                        <div class="click_buttons">
+                            <div class="link-left">
+                                <input type="hidden"/>
+                                <a href ="javascript:void(0);" class ="link-pad add_clone">+Add more Lines</a>
+                            </div>
+                            <div class="link-center">
+                                <input type="hidden"/>
+                                <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>
+                            </div>
+                        </div>
+<!--                        add more functionality ends -->
                     </br>
+                    <div style="float:left;width:100%" >
                     <div style="border:2px solid black;margin-left: 9px;margin-right:9px;" >
                         <div class="row">
                             <div class="col-md-6 nopadding">
@@ -128,6 +142,7 @@
                             </div>
                         </div>
                     </div> <!-- paramter selection div ends -->
+                    </div>
                         <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
@@ -383,4 +398,50 @@
         </form>
     </div>
 </div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+                function clone(){
+                    var count = $('input[name=count]').val();
+                    var c = count;
+                    var tR = $('.data_row:last').clone();
+                    count++; /* To increase the count */
+                    /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).find('input, select').each(function(){
+                      if ($(this).attr('name')){
+                           if ($(this).attr('name').split('_').length == 3){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 2){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+count);
+                              $(this).attr('id', name[0]+"_"+count);
+                            }
+                      }
+                    });
+                    $('input[name=count]').val(count)
+                    $(tR).find('td span.init').text(count);
+                    $(tR).insertAfter('.data_row:last');
+                    }
+                function remove(){
+                    var count = $('input[name=count').val();
+                      if (count > 1) {
+                            $('tr.data_row:last').remove();
+                            count  = $('tr.data_row').length;
+                            $('input[name=count]').val(count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            $(".add_clone").on("click", clone);
+            $(".remove").on("click", remove);
+    
+    });
+</script>
+
 {% endblock %}
