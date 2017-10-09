@@ -77,7 +77,7 @@ def report_detail(request):
 def report_create(request):
     project_slug = request.GET.get('project_slug')
     project = Project.objects.get_or_none(slug = project_slug)
-    report_obj = ProjectReport.objects.get_or_none(project=project)
+    report_obj = ProjectReport.objects.latest_one(project=project)
     return render(request,'report/report-detail.html',locals())
 
 def get_quarter_report_logic(projectobj):
@@ -115,7 +115,6 @@ def get_quarters(projectobj):
         if ed > projectobj_enddate:
             ed = projectobj_enddate
         current_date = datetime.strptime(str(datetime.now())[:19], '%Y-%m-%d %H:%M:%S')
-        print current_date, sd, ed
         if current_date > sd and current_date < ed:
             currentquarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
         elif sd > current_date and ed >current_date:
