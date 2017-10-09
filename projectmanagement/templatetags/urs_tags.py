@@ -3,6 +3,8 @@ import datetime
 import json
 from django import template
 from django.db.models import Sum
+from datetime import datetime
+from dateutil import relativedelta
 from itertools import chain
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
@@ -13,6 +15,7 @@ from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
 from media.models import Attachment
+
 
 register = template.Library()
 
@@ -112,3 +115,23 @@ def get_activities(projectobj):
 def get_attachments(projectobj):
     attachment = Attachment.objects.filter(object_id=projectobj.id,content_type=ContentType.objects.get(model='project'))
     return attachment
+
+
+def diff_month(d1, d2):
+    duration = (d1.year - d2.year) * 12 + d1.month - d2.month
+    if d2.day < 15:
+        duration = duration + 1
+    return duration
+
+@register.assignment_tag
+def get_duration_month(date):
+    duration = 0
+    try:
+        start_date = date.split('to')[0].rstrip()
+        end_date = date.split('to')[1].lstrip()
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        duration = diff_month(end_date,start_date)
+    except:
+        pass
+    return duration
