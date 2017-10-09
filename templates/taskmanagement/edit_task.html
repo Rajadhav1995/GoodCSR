@@ -35,7 +35,7 @@
                     {{form.media}}
                     {% for field in form %}
                         <div class="col-md-12">
-                            <div class="form-group">
+                            <div class="form-group" id= "{{field.name}}">
                                 
                                 <label>{{field.label_tag}}</label>
                                 {{field}}
@@ -142,39 +142,6 @@ function showCheckboxes() {
         $(".hasDatepicker").keyup(function(e) {if(e.keyCode == 8 || e.keyCode == 46) { $.datepicker._clearDate(this); }});
         });
 </script>
-<!--  <script>-->
-<!--  $( function() {-->
-<!--    var dateFormat = "mm/dd/yy",-->
-<!--      from = $( "#id_start_date" )-->
-<!--        .datepicker({-->
-<!--          defaultDate: "+1w",-->
-<!--          changeMonth: true,-->
-<!--          numberOfMonths: 1-->
-<!--        })-->
-<!--        .on( "change", function() {-->
-<!--          to.datepicker( "option", "minDate", getDate( this ) );-->
-<!--        }),-->
-<!--      to = $( "#id_end_date" ).datepicker({-->
-<!--        defaultDate: "+1w",-->
-<!--        changeMonth: true,-->
-<!--        numberOfMonths: 1-->
-<!--      })-->
-<!--      .on( "change", function() {-->
-<!--        from.datepicker( "option", "maxDate", getDate( this ) );-->
-<!--      });-->
-<!-- -->
-<!--    function getDate( element ) {-->
-<!--      var date;-->
-<!--      try {-->
-<!--        date = $.datepicker.parseDate( dateFormat, element.value );-->
-<!--      } catch( error ) {-->
-<!--        date = null;-->
-<!--      }-->
-<!-- -->
-<!--      return date;-->
-<!--    }-->
-<!--  } );-->
-<!--</script>-->
 
 
 <script>
@@ -189,93 +156,11 @@ function showCheckboxes() {
 
 
 
-<script>
-    $(document).ready(function() {
-    if ('{{model_name}}' == 'Milestone'){
-    
-    $('#id_super_category').on('change',function(){
-        var dependency_id = $('#id_super_category').val();
-        $.ajax({
-            url:'/managing/activites/',
-            type:'GET',
-            data:{'id':JSON.stringify(dependency_id)},
-            dataType:"json",
-            success:function(data){
-            var act = $('#id_activity').val();
-                $('#id_activity option').remove();
-                $('#id_activity').fSelect('destroy');
-                if (data.activity){
-                    activity = data.activity
-                   for (var i=0;i<activity.length;i++){
-                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
-                    }
-                 $('#id_activity').val(act);
-                 $('#id_activity').fSelect('create');
-             }
-            //setTimeout(function(){ $('.test').fSelect();},3000)
-            },
-            error : function(){}
-        });
-        return false;
-      });
-      
-    
-    }
-    });
-</script>
-
-<script>
-$(document).ready(function() {
-$('#id_task').on('change',function(){
-        var tasks_ids = $('#id_task').val();
-        $.ajax({
-            url:'/managing/milestone/overdue/',
-            type:'GET',
-            data:{'id':JSON.stringify(tasks_ids)},
-            async: true,
-            dataType:"json",
-            success:function(data){
-            if (data.milestone_overdue_date != ""){
-                document.getElementById("id_overdue").value = data.milestone_overdue_date;
-             }
-            else{
-                $( "#id_overdue_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-                }
-            },
-            error : function(){}
-        });
-        return false;
-      });
-      });
-</script>
-
-<script>
-$(document).ready(function() {
-    if ('{{model_name}}' == 'Milestone'){
-        $('#id_activity').on('change',function(){
-        var activity = $('#id_activity').val();
-        $.ajax({
-            url: '/managing/activity/related/tasks/',
-            type:'GET',
-            data:{'id':JSON.stringify(activity)},
-            dataType:"json",
-            success:function(data){
-                    var act = $('#id_task').val();
-                        $('#id_task option').remove();
-                        $('#id_task').fSelect('destroy');
-                        for(var i=0;i<data.task.length;i++){
-                            $('#id_task').append('<option value='+data.task[i]['id']+'>'+data.task[i]['name']+'</option>')
-                            }
-                        $('#id_task').val(act);
-                        $('#id_task').fSelect('create');
-            },
-        });
-     });
-     }
-      });
 
 
-</script>
+
+
+
 
 <script>
     $(document).ready(function() {
@@ -344,33 +229,61 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function(){
-$('#id_task_dependency').on('change',function(e){
+var count=0;
+    $('#id_task_dependency').on('change',function(){
+    alert(count)
+    if(count==0){
         event.preventDefault();
         var dependency_id = $('#id_task_dependency').val();
         $.ajax({
-            url:'/managing/tasks/expected-date/caluclator/',
+            url:'/managing/tasks/maximum/end_date/',
             type:'GET',
             data:{'id':JSON.stringify(dependency_id)},
             dataType:"json",
             success:function(data){
-            if (data.calculation != ""){
-                document.getElementById("id_start_date").value = data.calculation;
-                var date = data.calculation
+            if (data.expected_start_date != ""){
+                document.getElementById("id_start_date").value = data.expected_start_date;
+                var date = data.expected_start_date
                 $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
              }
             else {
                 $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
                 }
-                
+               count=1; 
             },
             error : function(){}
         });
-        e.stopImmediatePropagation();
         return false;
-      });
+        }
+    else{
+        var dependency_id = $('#id_task_dependency').val();
+            $.ajax({
+                url:'/managing/tasks/expected-date/caluclator/',
+                type:'GET',
+                data:{'id':JSON.stringify(dependency_id)},
+                dataType:"json",
+                success:function(data){
+                if (data.calculation != ""){
+                    document.getElementById("id_start_date").value = data.calculation;
+                    var date = data.calculation
+                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
+                 }
+                else {
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+                    }
+                    
+                },
+                error : function(){}
+            });
       
+      }
     });
-
+      
+      
+});
+</script>
+<script>
+ 
 </script>
 
 
@@ -466,12 +379,6 @@ $(document).ready(function() {
 
 </script>
 
-<script>
-$(document).ready(function() {
-    var end_date = '{{end_date}}'
-    $('#id_end_date').val(end_date);
-    });
-</script>
 
 {% endblock %}
 
