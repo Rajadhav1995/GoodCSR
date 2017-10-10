@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load urs_tags %}
 {% block section %}
 
 <style>
@@ -27,6 +28,8 @@
 <div class='container'>
     <div class="white-box" >
         <div class="col-md-12">
+            
+            {% if report_obj %}
             <h3 class="border_line"> {{project.name}} </h3> 
             <br>
         </div>
@@ -48,7 +51,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                 <label>Report Type</label>
-                                
+                                <h6>{{report_obj.get_report_type_display}}</h6>
                                 </div>
                             </div>
                         </div>
@@ -60,15 +63,15 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                         <label>Report Duration</label>
-                                        <br>Start Date : 
-                                        <br>End Date : 
+                                        <br>Start Date : {{report_obj.start_date | date:"d/m/Y"}}
+                                        <br>End Date : {{report_obj.end_date | date:"d/m/Y"}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
         </div>
-<a href= "/report/quarter/update/?slug={{slug}}"> Generate Quarter Updates </a> 
+<!-- <a href= "/report/quarter/update/?slug={{slug}}"> Generate Quarter Updates </a>  -->
 
          <div class="col-md-12">
                     <h3 class="border_line">Section 2</h3><br>
@@ -78,7 +81,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                             <label>Project Title: </label>
-                           <b>{{project_obj.name}}</b>
+                           <b>{{project.name}}</b>
                                 </div>
                         </div>
                     </div>
@@ -89,7 +92,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                 <label>Funder<font color="red">*</font></label>
-                                {{funder.funder.name}}
+                                {{mapping_view.funder.name}}
                                     </div>
                             </div>
                         </div>
@@ -100,7 +103,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label>Project Budget</label>
-                                    {{project_obj.total_budget}}
+                                    {{project.total_budget}}
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +114,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label>Duration (Months.)</label>
-                                    {{project_obj.duration}}
+                                    {{project.duration}}
                                     </div>
                                 </div>
                             </div>
@@ -122,7 +125,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label>Number of Beneficiaries</label>
-                                    {{project_obj.no_of_beneficiaries}}
+                                    {{project.no_of_beneficiaries}}
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +136,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label>Implementation partner<font color="red">*</font></label>
-                                    {{funder.implementation_partner.name}}
+                                    {{mapping_view.implementation_partner.name}}
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +152,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                 <label>Project Description</label>
-                                
+                                <p>{{report_obj.description}}</p>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +163,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                 <label>Objective of the project</label>
-                                
+                                <p>{{report_obj.objective}}</p>
                                 </div>
                             </div>
                         </div>
@@ -186,19 +189,26 @@
                 </div>
                 </div>
                 </div></div> -->
-         
+            
+            
             <div class="">
                 <div class="col-md-6 nopadding">
                     <div class="col-md-12">
                         <div class="form-group">
                             <!-- <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/> -->
-                            <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
-                            <a class="btn btn-success" href="/project/list/">Back</button></a>
+                            
+                            <a class="btn btn-success" href="/project/summary/?slug={{project_slug}}">Back</button></a>
                         </div>
                     </div>
                 </div>
             </div>
     </form>
+    {% else %}
+            {% get_user_permission request as user_obj %}
+                {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
+                <h3 style="text-align:center">Click here to create <a id="myBtn1" style="text-decoration:underline;color:#169776" href="/report/generation-form/?slug={{project_slug}}" class="iframe">PROJECT REPORT </a></h3>
+                {% endif %}
+         {% endif %}
 </div>
 </div>
 </div>
@@ -213,18 +223,15 @@
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
-<script>
-  $(document).ready(function() {
-    $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-    $("#id_end_date").datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-    var start_date = "{{project.start_date|date:'Y-m-d'}}"
-    if (start_date != ''){
-        document.getElementById("id_start_date").value = start_date
-        $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',minDate: start_date,changeMonth: true,changeYear: true });
-    }
-  } );
-  </script>
-
+<link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".iframe").fancybox({
+        type: 'iframe'
+    });
+});
+</script>
 
 <script type="text/javascript">
     $(document).ready(function() {

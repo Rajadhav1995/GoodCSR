@@ -8,7 +8,7 @@ from calendar import monthrange
 from projectmanagement.models import *
 from projectmanagement.forms import *
 from budgetmanagement.forms import TrancheForm
-from budgetmanagement.models import Tranche
+from budgetmanagement.models import Tranche,ProjectReport
 from media.models import Attachment,Keywords,FileKeywords
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -393,6 +393,7 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
+#    report_obj = ProjectReport.objects.get_or_none(project=obj)
     projectobj = obj
     activity = Activity.objects.filter(project=obj)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
