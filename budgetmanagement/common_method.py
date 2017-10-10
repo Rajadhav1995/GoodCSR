@@ -28,3 +28,7 @@ def key_parameter_chart(start_date,end_date):
             pin_title_name.append(str(i.name))
         if i.parameter_type == 'PIP':
             pip_title_name.append(str(i.name))
+    master_sh = para_name
+    master_sh_len = {key:len(values) for key,values in master_sh.items()}
+    master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
+    master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
