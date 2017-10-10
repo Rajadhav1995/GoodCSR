@@ -30,7 +30,7 @@ def report_form(request):
         project_report.start_date = data.get('start_date')
         project_report.end_date = data.get('end_date')
         project_report.save()
-        return HttpResponseRedirect('/report/detail/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
+        return HttpResponseRedirect('/report/section-form/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
     return render(request,'report/report-form.html',locals())
 
 def report_listing(request):
@@ -39,7 +39,7 @@ def report_listing(request):
     report_obj = ProjectReport.objects.filter(project=project)
     return render(request,'report/listing.html',locals())
 
-def report_detail(request):
+def report_section_form(request):
     report_id = request.GET.get('report_id')
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
@@ -67,7 +67,7 @@ def report_detail(request):
             return HttpResponseRedirect('/project/summary/?slug='+data.get('project_slug')+'&key='+'summary')
     return render(request,'report/generation-form.html',locals())
 
-def report_create(request):
+def report_detail(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
