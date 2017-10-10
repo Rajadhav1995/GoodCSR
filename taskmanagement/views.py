@@ -677,7 +677,6 @@ from django.http import JsonResponse
 def tasks_max_end_date(request):
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
-    import ipdb;ipdb.set_trace();
     tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})
