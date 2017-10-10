@@ -17,8 +17,8 @@
     <title>Goodcsr</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/report-bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/report-style.css">
   
 
 </head>
@@ -45,7 +45,7 @@
    
     </div>
     <div class="text-head">
-        <h1>Nabarangpur School Project</h1>
+        <h1>{{project.name}}</h1>
         <h5 style="float:left">by OVP venture partners</h5>
         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
         <hr>
@@ -118,18 +118,18 @@
     <div class="school_project">
     <div>
         <p class="color-red">PROJECT</p>
-        <h1>Nabarangpur School Project</h1>
+        <h1>{{project.name}}</h1>
     </div>
     <div class="col-md-6">
     <div class="row">
         <p class="color-red">DONOR</p>
-        <p>OVP venture partners</p>
+        <p>{{mapping_view.funder.name}}</p>
         </div>
     </div>
     <div class="col-md-6">
     <div class="row">
         <p class="color-red">IMPLEMENTATION NGO</p>
-        <p>OVP venture partners</p>
+        <p>{{mapping_view.implementation_partner.name}}</p>
         </div>
     </div>
     <img src="/static/img/report/budget_banner.png" style="width:100%; margin:20px 0px">
@@ -146,9 +146,7 @@
     </div>
     <div class="location">
         <p>About the Program</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth.</h5>
-<h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes and skill development program too. </h5>
+        <h5>{{report_obj.description}}</h5>
     </div>
   
     
@@ -162,7 +160,7 @@
     <!--Index page 04 html starts-->
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -173,8 +171,7 @@
    
     <div class="location margin-top40">
         <p>Objective of the project</p>
-        <h5>The success of the St. Jude model hinges on utmost hygiene and sanitation in every aspect of the families’ and staff’s daily lives at the centres. This includes keeping all the areas – family units, community area, washrooms, kitchen and dining area – clinically clean and upholding utmost standards in hygiene and sanitation. The organisation takes this responsibility very seriously and is taking it to a new level by installing incinerators for sanitary napkins in the ladies washrooms at all the 33 centres across India.</h5>
-<h5>The installation of incinerators at 22 centres at Cotton Green Campus, Parel and Kharghar in Mumbai is complete. We plan to take the drive to our centres in Delhi, Kolkata, Hyderabad and Jaipur in the coming months, after successful implementation in Mumbai.</h5>
+        <h5>{{report_obj.objective}}</h5>
     </div>
   
     
@@ -188,7 +185,7 @@
     <!--Index page 05 html starts-->
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -236,7 +233,7 @@ development programs.</p>
     
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -307,7 +304,7 @@ development programs.</p>
     <!--Index page 07 html starts-->
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -363,7 +360,7 @@ development programs.</p>
     
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -419,7 +416,7 @@ development programs.</p>
     
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -480,7 +477,7 @@ development programs.</p>
     
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -514,7 +511,7 @@ development programs.</p>
     
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">
@@ -556,7 +553,7 @@ development programs.</p>
     <!--Index page 12 html-->
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">
        <img src="/static/img/report/akanksha.jpg">

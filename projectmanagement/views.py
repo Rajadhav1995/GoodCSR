@@ -428,7 +428,7 @@ def project_summary(request):
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     number_json = json.dumps(number_json)
-
+    import ipdb; ipdb.set_trace()
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):
