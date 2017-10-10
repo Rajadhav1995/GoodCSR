@@ -55,30 +55,6 @@ width:450px;
                             </div>
                         </div>
 
-
-<!-- 
-                            <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Parameter Type<font color="red">*</font>
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <select class="form-control" name="para_type" id="para_type" required>
-                                    <option selected value="0">Select</option>
-                                    
-                                    <option value="PIN" >Pie chart Numbers</option>
-                                     <option value="PIP">Pie Chart Percent</option>
-                                    <option value="NUM">Number</option>
-                                    <option value="PER">Percent</option>
-                                    <option value="CUR">Currency</option>
-                                </select>
-                                <p style="color: red;">
-                                    
-                                <font color=#fc282f><span id="funder_error"></span></font>
-                                </p>
-                            </div>
-                        </div> -->
-
-
                         <div class="row" id='agg_div'>
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
@@ -107,27 +83,13 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                                     <label>Name</label>
-                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required="True">
+                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required>
                                 <br>
-                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
+                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction" required></b>
                             </div>
                                     </div>
                                 </div>
                             </div>
-                        
-
-
-                        <!-- <div id="name" class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                Name
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required="True">
-
-                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction"></b>
-                            </div>
-                        </div> -->
-
 
                         <div class="row" id="pie">
             <div class="col-md-6 nopadding">
@@ -135,8 +97,8 @@ width:450px;
                     <div class="form-group">
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More</button>
-                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name">
-                                <b><input class="form-control" type="text" name="instruction[1]" id="name" placeholder="Instruction"></b>
+                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name" required>
+                                <b><input class="form-control" type="text" name="instruction[1]" id="name" placeholder="Instruction" required></b>
                             </div>
                         </div>
                         </div>
@@ -218,7 +180,7 @@ $(document).ready(function() {
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            $(wrapper).append('<div><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/><b><input class="form-control" type="text" name="instruction['+x+']" id="name" placeholder="Instruction"></b><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/ required><b><input class="form-control" type="text" name="instruction['+x+']" id="name" placeholder="Instruction" required></b><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
         document.getElementById("activity_count").value = x;
 

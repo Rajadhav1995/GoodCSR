@@ -39,17 +39,6 @@ def report_listing(request):
     report_obj = ProjectReport.objects.filter(project=project)
     return render(request,'report/listing.html',locals())
 
-def report_section(request):
-    slug =  request.GET.get('slug')
-    project = Project.objects.get_or_none(slug = request.GET.get('slug'))
-    report_obj = ProjectReport.objects.get_or_none(project=project)
-    # import ipdb; ipdb.set_trace()
-    if report_obj:
-        print "goodcsr"
-        # return redirect('/some/url/')
-        return redirect('/report/detail/?slug=rabri-devi')
-    return render(request,'report/report-form.html',locals())
-
 def report_detail(request):
     report_id = request.GET.get('report_id')
     project_slug = request.GET.get('project_slug')
@@ -84,7 +73,7 @@ def report_create(request):
     project = Project.objects.get_or_none(slug = slug)
     report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    return render(request,'report/report-detail.html',locals())
+    return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
     ''' common functionality to get the start date,end date and no of quarter'''
