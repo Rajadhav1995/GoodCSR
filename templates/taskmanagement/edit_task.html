@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+
+{% block section %}
+<div> </div>
+{% endblock %}
+
+
+
+
+{% block content %}
+<style>
+    .error li{ color :red;}
+    .errorlist li{color :red;}
+    #date_error,#min_max {color : red;}
+</style>
+<div class="clear"></div>
+<section class="content-part">
+    <div class='container' >
+	<div class="white-box">
+	{%if message %}
+	    <h3 class border_linr">Please add <a style="text-decoration:underline;color:#169776" href= '/manage/project/budget/create/?slug={{project.slug}}'>Budget</a>  for the project before proceeding with adding Activities / Tasks or Milestone </h3>
+	{% else %}
+    <form class="form-horizantal budget_form" action="{{request.path}}" method='POST' enctype="multipart/form-data" novalidate>{% csrf_token %}
+     <div class="col-md-12">
+        {% if slug %}
+                   <h3 class="border_line">Edit {{model_name}}</h3>
+                  {% else %}
+                     <h3 class="border_line">Add {{model_name}}</h3>
+                  {% endif %}
+        </div>
+       <div class="col-md-6 nopadding">
+            <form action="{{request.path}}" id= "ic_form" method='POST' enctype="multipart/form-data">{% csrf_token %}
+                {{form.non_fields_errors}}
+        
+                    {{form.media}}
+                    {% for field in form %}
+                        <div class="col-md-12">
+                            <div class="form-group" id= "{{field.name}}">
+                                
+                                <label>{{field.label_tag}}</label>
+                                {{field}}
+                                {{field.errors}}
+                            </div>
+                        </div>
+                    {% endfor %}
+            <input id = 'slug' name = 'slug_project' type='hidden' value = "{{project.slug}}"/>
+           <div class="col-md-12">
+            <div class="form-group">
+              <input class="budget_button" type="submit" value="Submit"/>
+              <a class="btn btn-success" href="/managing/listing/?slug={{project.slug}}&key=task-milestone" style="margin-right:5px;float: right;">Back</button></a>
+            </div>
+           </div>
+        </div>
+    </form>
+    {% endif %}
+    
+    </div>
+    </div>
+</section>
+<!--Content part Ends-->
+{% endblock %}
+<!--Footer starts-->
+
+
+</div>
+
+
+{% block script %}
+<!-- jQuery (necessary for JavaScript plugins) -->
+<link href="/static/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+<script src="/static/js/fSelect.js"></script>
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+<script src = "/static/js/jquery.multi-select.js"></script>
+<script src="/static/js/bootstrap-multiselect.js"></script>
+<script>
+//Toggle
+		
+		 $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+		 $(document).ready(function(e) {	
+	/*Content Show/Hide */
+	$('.hide-cont').hide();
+	$('.close-cont').hide();
+	$('.view-cont').click(function(){
+		$('.hide-cont').slideDown(350);
+		$('.close-cont').show();
+		$('.view-cont').hide();
+	});
+	$('.close-cont').click(function(){
+		$('.hide-cont').slideUp(350);
+		$('.close-cont').hide();
+		$('.view-cont').show();
+	});	
+ });
+	
+</script>
+
+    <script type="text/javascript">
+   
+	
+	var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+    <script>
+  $(document).ready(function() {
+  
+	var nice = $("html").niceScroll();  // The document page (body)
+	
+	$("#div1").html($("#div1").html()+' '+nice.version);
+    
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+    
+  });
+</script>
+<script src="/static/js/bootstrap.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+<script>
+    $(document).ready(function() {
+        $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true});
+        $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+        $(".hasDatepicker").keyup(function(e) {if(e.keyCode == 8 || e.keyCode == 46) { $.datepicker._clearDate(this); }});
+        });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        var add = '{{add}}'
+        if (add == 'True'){
+            $('.test').fSelect();
+        }
+        $("#id_description").addClass('form-control text_area');
+    });
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+    $('#id_activity').on('change',function(e){
+        
+        var select_id = $('#id_activity').val();
+        $.ajax({
+            url:'/managing/task/dependencies/',
+            type:'GET',
+            data:{id:select_id},
+            dataType:"json",
+            success:function(data){
+                if (data.project_start_date != ""){
+                    document.getElementById("id_start_date").value = data.project_start_date;
+                    var date = data.project_start_date
+                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date,changeMonth: true,changeYear: true });
+                 }
+                else{
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+                    }
+
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    });
+</script>
+
+<script>
+///managing/tasks/expected-date/caluclator/
+    $(document).ready(function() {
+    if ('{{model_name}}' == 'Task'){
+    
+    $('#id_super_category').on('change',function(e){
+        var dependency_id = $('#id_super_category').val();
+        $.ajax({
+            url:'/managing/activites/',
+            type:'GET',
+            data:{'id':JSON.stringify(dependency_id)},
+            dataType:"json",
+            success:function(data){
+            var act = $('#id_activity').val();
+                $('#id_activity option').remove();
+                $('#id_activity').append('<option value="" >-----</option>')
+                if (data.activity){
+                    activity = data.activity
+                   for (var i=0;i<activity.length;i++){
+                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+                    }
+                    $('#id_activity').val(act);
+                }
+            
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+    }
+    });
+    
+    
+</script>
+
+<script>
+$(document).ready(function(){
+var count=0;
+    $('#id_task_dependency').on('change',function(){
+    alert(count)
+    if(count==0){
+        event.preventDefault();
+        var dependency_id = $('#id_task_dependency').val();
+        $.ajax({
+            url:'/managing/tasks/maximum/end_date/',
+            type:'GET',
+            data:{'id':JSON.stringify(dependency_id)},
+            dataType:"json",
+            success:function(data){
+            if (data.expected_start_date != ""){
+                document.getElementById("id_start_date").value = data.expected_start_date;
+                var date = data.expected_start_date
+                $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
+             }
+            else {
+                $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+                }
+               count=1; 
+            },
+            error : function(){}
+        });
+        return false;
+        }
+    else{
+        var dependency_id = $('#id_task_dependency').val();
+            $.ajax({
+                url:'/managing/tasks/expected-date/caluclator/',
+                type:'GET',
+                data:{'id':JSON.stringify(dependency_id)},
+                dataType:"json",
+                success:function(data){
+                if (data.calculation != ""){
+                    document.getElementById("id_start_date").value = data.calculation;
+                    var date = data.calculation
+                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
+                 }
+                else {
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
+                    }
+                    
+                },
+                error : function(){}
+            });
+      
+      }
+    });
+      
+      
+});
+</script>
+<script>
+ 
+</script>
+
+
+<script>
+$(document).ready(function() {
+    if ("{{model_name}}"=="Task"){
+    if ($("id_start_date").val()!=''){
+              var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_start_date").value = start_date
+          }
+    if ($("id_end_date").val()!=''){
+              var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_end_date").value = start_date
+          }
+    if ($("id_actual_start_date").val()!=''){
+              var actual_start_date = "{{form.actual_start_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_actual_start_date").value = actual_start_date
+          }
+    if ($("id_actual_end_date").val()!=''){
+              var actual_end_date = "{{form.actual_end_date.value|date:'Y-m-d'}}"
+              document.getElementById("id_actual_end_date").value = actual_end_date
+          }
+    }
+    $(".hasDatepicker").keyup(function(e) {if(e.keyCode == 8 || e.keyCode == 46) { $.datepicker._clearDate(this); }});
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+        if ('{{m_form}}' != 'ActivityForm'){ 
+        var activity = $('#id_activity').val();
+        $.ajax({
+            url:'/managing/supercategories/selected/',
+            type:'GET',
+            data:{'id':activity,'form':'TaskForm'},
+            dataType:"json",
+            success:function(data){
+            
+            var categories = data.super_categories
+            $("#id_super_category").val(categories);
+            $('.test').fSelect();
+            $("#id_activity").val(activity);
+            
+            },
+        });
+        return false;
+      }
+    });
+</script>
+    
+<script>
+    $(document).ready(function() { 
+        $('#id_subscribers').fSelect(); 
+        if ('{{m_form}}' != 'ActivityForm'){
+        var tasks = $('#id_task').val();
+        $.ajax({
+            url:'/managing/activities/selected/',
+            type:'GET',
+            data:{'id':JSON.stringify(tasks)},
+            dataType:"json",
+            success:function(data){
+                $("#id_activity").val(data.activity);
+                var activity = $("#id_activity").val();
+                $.ajax({
+                url:'/managing/supercategories/selected/',
+                type:'GET',
+                data:{'id':JSON.stringify(activity),'form':'MilestoneForm'},
+                dataType:"json",
+                success:function(data){
+                        var categories = data.super_categories
+                        $("#id_super_category").val(categories);
+                        $('.test').fSelect();
+                        },
+                    });
+                    return false;
+            },
+        });
+        return false;
+      }
+    });
+</script>
+
+<script>
+$(document).ready(function() {
+    var start_date = $('#id_start_date').val();
+    var end_date = $('#id_end_date').val();
+    if (start_date == null || start_date == ''){
+        $('#id_activity').trigger('change');
+        $('#id_task_dependency').trigger('change');
+    }
+  });
+
+
+</script>
+
+
+{% endblock %}
+
+
