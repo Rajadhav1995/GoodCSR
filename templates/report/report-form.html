@@ -79,6 +79,11 @@ ul li {
          </div><br>
             </div>
             <!-- /.box-header -->
+            {% if msg %}
+                <h3 class border_linr">Please add <a style="text-decoration:underline;color:#169776" href= '/manage/project/budget/create/?slug={{project.slug}}'>Budget</a>  for the project before proceeding with generation of the report </h3>
+                
+                <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
+            {% else %}
             <div class="box-body">
             <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -118,7 +123,8 @@ ul li {
                         <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
                     </form>
-  </div>
+                </div>
+                {% endif %}
   </div>
   </div>
   </div>
