@@ -60,10 +60,6 @@ def add_taskmanagement(request,model_name,m_form):
     if budget:
         if request.method=='POST':
             form=form(user_id,project.id,request.POST,request.FILES)
-            try:
-                end_date = form.data['end_date']
-            except:
-                pass
             if form.is_valid():
                 f=form.save()
                 from projectmanagement.common_method import unique_slug_generator
