@@ -2,10 +2,12 @@ from django.shortcuts import render
 from media.models import *
 from budgetmanagement.models import Tranche
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+import json
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from pmu.settings import PMU_URL
-from projectmanagement.models import Project
+from projectmanagement.models import Project,Boundary
 from media.forms import AttachmentForm,ImageUpload
 from projectmanagement.common_method import unique_slug_generator,add_keywords
 
@@ -124,3 +126,11 @@ def edit_attachment(request):
             pass
         return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
     return render(request,'attachment/doc_upload.html',locals())
+
+def city_list(request):
+    results ={}
+    if request.is_ajax():
+        ids =  request.GET.get('state_id')
+        city_obj = Boundary.objects.filter(boundary_level=3,parent__id=ids).order_by('name').values('id','name')
+        results['res']=list(city_obj)
+        return HttpResponse(json.dumps(results), content_type='application/json')

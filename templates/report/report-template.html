@@ -198,6 +198,8 @@
        
     </div>
     <hr>
+  {% for i in report_quarter %}
+  {% if i.quarter_type == 2 %}
    <div class="quarter_updates">
        <h4 style="margin:0px">Previous Quarter Updates</h4>
        <p>First Quarter (12 Jan to 30 Mar 2017)</p>
@@ -254,35 +256,67 @@ development programs.</p>
     </div>
     <div class="col-md-12">
     <div class="row">
+        {% if master_pin %}
+        {% for lol in  master_pin %}
     <div class="margin_30 prev_banner">
+      
         <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">Beneficiary Distribution</h5>
+        <h5 class="color_green">{{pin_title_name.0}}{{forloop.counter0}}</h5>
         <div>
-       <div class="col-md-4">
+        <div class="col-md-4">
        <div class="row">
-       <img src="/static/img/report/parameter01.jpg" style="width:100%">
+        <ul class="key_parameter parameter">
+          <!-- <div class='numeric_parameter'></div> -->
+            
+            <li>
+              <!-- <h3>{{chart_name_pip}}</h3> -->
+                <div class="right-budget beni-dist">
+                 <div id="{{lol}}" style="width: 100%;float: left;"></div>
+            </div>
+            </li>
+            
+
+            
+        </ul>
+       <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
        </div>
         </div>
         <div class="col-md-8">
        <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
+           <h4 class="color_green">About This Parameter</h4>
            <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
            </div>
         </div>
     </div>
-    
     </div>
+      {% endfor %}
+      {% endif %}
     </div>
     </div>
     <div class="col-md-12">
     <div class="row">
+      {% if master_pip %}
+        {% for lol in  master_pip %}
     <div class="margin_30 prev_banner">
         <h5 class="color-red">PARAMETER 2</h5>
         <h5 class="color_green">Batch Size</h5>
         <div>
        <div class="col-md-4">
        <div class="row">
-       <img src="/static/img/report/parameter02.jpg" style="width:100%">
+         <ul class="key_parameter parameter">
+          <!-- <div class='numeric_parameter'></div> -->
+            
+            <li>
+              <!-- <h3>{{chart_name_pip}}</h3> -->
+                <div class="right-budget beni-dist">
+                 <div id="{{lol}}" style="width: 100%;float: left;"></div>
+            </div>
+            </li>
+            
+
+            
+        </ul>
+       <!-- <img src="/static/img/report/parameter02.jpg" style="width:100%"> -->
        </div>
         </div>
         <div class="col-md-8">
@@ -294,6 +328,8 @@ development programs.</p>
     </div>
     
     </div>
+    {% endfor %}
+    {% endif %}
         </div>
     </div>
     
@@ -323,7 +359,7 @@ development programs.</p>
        <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
        
     </div>
-    <div class="col-md-12">
+    <!-- <div class="col-md-12">
     <div class="row">
     <div class="margin_30 prev_banner">
         <h5 class="color-red">PARAMETER 1</h5>
@@ -344,15 +380,15 @@ development programs.</p>
     
     </div>
     </div>
-    </div>
+    </div> -->
     
     <div class="margin_top30">
-    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches1</P>
     <img src="/static/img/report/table01.png" style="width:100%; ">
     <br>
     <img src="/static/img/report/table02.jpg" style="width:100%" class="margin_top30">
     </div>
-  
+    {% endif %}
     
     <footer>
       <hr>
@@ -372,8 +408,9 @@ development programs.</p>
        </div>
        
     </div>
+
     <hr>
-    
+    {% if i.quarter_type == 3 %}
    <div class="quarter_updates">
        <h4 style="margin:0px">Current Quarter Updates</h4>
        <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -505,6 +542,7 @@ development programs.</p>
 <h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
 5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.</h5>
     </div>
+    {% endif %}
     <footer>
       <hr>
     <img src="/static/img/report/logo.png" style="float:left">
@@ -524,7 +562,7 @@ development programs.</p>
        
     </div>
     <hr>
-    
+    {% if i.quarter_type == 2 %}
    <div class="quarter_updates">
        <h4 style="margin:0px">Next Quarter Updates</h4>
        <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -548,6 +586,8 @@ development programs.</p>
         <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h5>
 
     </div>
+    {% endif %}
+    {% endfor %}
     <footer>
       <hr>
     <img src="/static/img/report/logo.png" style="float:left">
@@ -585,8 +625,134 @@ development programs.</p>
     
     
     
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/code/highcharts.js"></script>
+<script src="/static/code/highcharts-more.js"></script>
+
+<script src="/static/code/modules/solid-gauge.js"></script>
+<script type="text/javascript">
+    var new_data_pin = 0;
+    var new_data_pip = 0;
+</script>
+<!--/* Pie Chat Number */-->
+<script type="text/javascript">
+{% for pin in master_sh.PIN %}
+//alert(pin);
+var data1 = {{pin | safe}};
+var values = "Batch_size_" + (new_data_pin).toString()
+var pin_title = {{pin_title_name | safe}}
+var pin_title = pin_title[new_data_pin]
+new_data_pin++;
+Highcharts.chart(values, {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: pin_title},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                height:300,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+
+                margin: 12
+
+
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+
+                },
+                data: data1
+
+            }]
+        });
+{% endfor %}
+</script>
+
+<!--/* Pie Chart Percentage */-->
+<script type="text/javascript">
+{% for pip in master_sh.PIP %}
+var data2 = {{pip | safe}};
+var values = "Beneficary_distribution_" + (new_data_pip).toString()
+var pip_title = {{pip_title_name | safe}}
+var pip_title = pip_title[new_data_pip]
+new_data_pip++;
+Highcharts.chart(values, {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: pip_title},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                height:300,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+
+                margin: 12
+
+
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+
+                },
+                data: data2
+
+            }]
+        });
+{% endfor %}
+</script>
 
 
 </body>

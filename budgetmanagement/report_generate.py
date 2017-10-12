@@ -82,12 +82,17 @@ def report_section_form(request):
             return HttpResponseRedirect('/project/summary/?slug='+data.get('project_slug')+'&key='+'summary')
     return render(request,'report/generation-form.html',locals())
 
+from budgetmanagement.common_method import key_parameter_chart
+from projectmanagement.views import parameter_pie_chart
 def report_detail(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
     report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
+    report_quarter = QuarterReportSection.objects.filter(project=report_obj)
+    parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
+    master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
@@ -116,7 +121,6 @@ def get_quarters(projectobj):
     currentquarter_list = {}
     futurequarter_list = {}
     for i in range(int(no_of_quarters)):
-
         ed = sd+relativedelta.relativedelta(months=3)
         ed = ed - timedelta(days=1)
         sd = datetime.strptime(str(sd)[:19], '%Y-%m-%d %H:%M:%S')
