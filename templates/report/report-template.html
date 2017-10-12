@@ -45,12 +45,13 @@
    
     </div>
     <div class="text-head">
+
         <h1>{{project.name}}</h1>
         <h5 style="float:left">by OVP venture partners</h5>
         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
         <hr>
      </div>
-     <p style="float:left; width:auto">Prepared by Akanksha</p>
+     <p style="float:left; width:auto">Prepared by {{report_obj.created_by}}</p>
      <p style="text-align:right;width:auto; float:right">Jan 2017 to Mar 2017</p>
     </div>
    
@@ -118,6 +119,7 @@
     <div class="school_project">
     <div>
         <p class="color-red">PROJECT</p>
+
         <h1>{{project.name}}</h1>
     </div>
     <div class="col-md-6">
@@ -146,6 +148,7 @@
     </div>
     <div class="location">
         <p>About the Program</p>
+
         <h5>{{report_obj.description}}</h5>
     </div>
   
@@ -171,6 +174,7 @@
    
     <div class="location margin-top40">
         <p>Objective of the project</p>
+
         <h5>{{report_obj.objective}}</h5>
     </div>
   
@@ -185,6 +189,7 @@
     <!--Index page 05 html starts-->
     <div class="container">
    <div class="margin_25">
+
        <h1 style="font-size:20px">{{project.name}}</h1>
        <div class="float_right">
        <img src="/static/img/report/ovp.jpg">

@@ -231,7 +231,6 @@ function showCheckboxes() {
 $(document).ready(function(){
 var count=0;
     $('#id_task_dependency').on('change',function(){
-    alert(count)
     if(count==0){
         event.preventDefault();
         var dependency_id = $('#id_task_dependency').val();

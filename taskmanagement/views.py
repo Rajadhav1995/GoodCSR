@@ -60,10 +60,6 @@ def add_taskmanagement(request,model_name,m_form):
     if budget:
         if request.method=='POST':
             form=form(user_id,project.id,request.POST,request.FILES)
-            try:
-                end_date = form.data['end_date']
-            except:
-                pass
             if form.is_valid():
                 f=form.save()
                 from projectmanagement.common_method import unique_slug_generator
@@ -72,9 +68,7 @@ def add_taskmanagement(request,model_name,m_form):
                 if model_name == 'Activity' or model_name == 'Task':
                     f.created_by = user
                     f.save()
-                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-                else :
-                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
         else:
             form=form(user_id,project.id)
     else:
@@ -107,9 +101,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-            else:
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)
     if model_name == 'Task':
