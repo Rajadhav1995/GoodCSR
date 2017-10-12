@@ -35,7 +35,9 @@ def create_project(request):
         form = ProjectForm()
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
+    state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
     if request.method == 'POST':
+        
         try:
             instance = get_object_or_404(Project, slug=slug)
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
@@ -53,6 +55,7 @@ def create_project(request):
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
+            location_count = int(request.POST.get('activity_count'))
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
             mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
             if mapping:
@@ -63,6 +66,15 @@ def create_project(request):
             else:
                 mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
                     implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
+            for i in range(location_count):
+                city = 'city1_'+str(i)
+                location_type = 'type_'+str(i)
+                import ipdb; ipdb.set_trace()
+                boundary_obj = Boundary.objects.get(id=request.POST.get(city))
+                location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+                obj = ProjectLocation.objects.create(parameter_type=parameter_type,project=project,instructions=request.POST.get(instruction),\
+                        name=request.POST.get(name),parent=parent_obj,aggregation_function=request.POST.get('agg_type'))
+
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
@@ -463,6 +475,7 @@ def parameter_pie_chart(parameter_obj):
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
+    
     return master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh
 
 
