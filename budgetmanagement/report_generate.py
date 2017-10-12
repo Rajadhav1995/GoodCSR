@@ -14,7 +14,7 @@ from django.template import loader
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
 from budgetmanagement.models import *
 from budgetmanagement.manage_budget import get_budget_logic
-
+from django.shortcuts import redirect
 
 def report_form(request):
     #to save the report type and duration
@@ -30,15 +30,22 @@ def report_form(request):
         project_report.start_date = data.get('start_date')
         project_report.end_date = data.get('end_date')
         project_report.save()
-        return HttpResponseRedirect('report/detail/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
+        return HttpResponseRedirect('/report/section-form/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
     return render(request,'report/report-form.html',locals())
 
-def report_detail(request):
+def report_listing(request):
+    slug =  request.GET.get('slug')
+    project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    report_obj = ProjectReport.objects.filter(project=project)
+    return render(request,'report/listing.html',locals())
+
+def report_section_form(request):
     report_id = request.GET.get('report_id')
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
+    # report_obj = ProjectReport.objects.get_or_none(project=project)
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
@@ -59,6 +66,14 @@ def report_detail(request):
         else:
             return HttpResponseRedirect('/project/summary/?slug='+data.get('project_slug')+'&key='+'summary')
     return render(request,'report/generation-form.html',locals())
+
+def report_detail(request):
+    slug = request.GET.get('slug')
+    report_id = request.GET.get('report_id')
+    project = Project.objects.get_or_none(slug = slug)
+    report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
+    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
+    return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
     ''' common functionality to get the start date,end date and no of quarter'''
@@ -95,7 +110,6 @@ def get_quarters(projectobj):
         if ed > projectobj_enddate:
             ed = projectobj_enddate
         current_date = datetime.strptime(str(datetime.now())[:19], '%Y-%m-%d %H:%M:%S')
-        print current_date, sd, ed
         if current_date > sd and current_date < ed:
             currentquarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
         elif sd > current_date and ed >current_date:
