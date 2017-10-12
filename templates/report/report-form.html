@@ -101,8 +101,11 @@ ul li {
                                     <div class="col-md-12">
                                         <div class="form-group">
                                         <label>Report Duration<font color="red">*</font></label>
-                                        <br>Start Date : <input type="text" name="start_date" readonly="true" required="" class="form-control" id="id_start_date">
-                                        End Date : <input type="text" name="end_date" readonly="true" required="" class="form-control" id="id_end_date">
+                                        <select class="form-control" name="quarter_type" id="quarter_type" required>
+                                        {% for k,v in budget_quarters.iteritems %}
+                                            <option  value="{{k}}" >Quarterly {{forloop.counter}}</option>
+                                        {% endfor %}
+                                        </select>
                                         </div>
                                     </div>
                                 </div>

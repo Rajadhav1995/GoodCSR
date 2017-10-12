@@ -8,7 +8,7 @@ from dateutil import relativedelta
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from media.models import Article,Section,ContactPersonInformation
+from media.models import Article,Section,ContactPersonInformation,Attachment
 from media.forms import ContactPersonForm,Attachment
 from django.template import loader
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
@@ -20,15 +20,23 @@ def report_form(request):
     #to save the report type and duration
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    if not project:
+        project = Project.objects.get_or_none(slug = request.POST.get('project_slug'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    budget_obj = Budget.objects.get_or_none(project=project)
+    from budgetmanagement.manage_budget import get_budget_quarters
+    budget_quarters = get_budget_quarters(budget_obj) 
     if request.method == 'POST':
         data = request.POST
+        budget_start_date = budget_quarters.get(0).split(' to ')[0] 
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
         project_report = ProjectReport.objects.create(project = project_obj,created_by = user,\
-            report_type = data.get('report_type'),name = project_obj.name)
-        project_report.start_date = data.get('start_date')
-        project_report.end_date = data.get('end_date')
+            report_type = data.get('report_type'),start_date  = budget_start_date)
+        quarter_ids = data.get('quarter_type')
+        dates = budget_quarters[int(quarter_ids)]
+        dates_list = dates.split(' to ')
+        project_report.end_date = dates_list[1] if dates_list else ''
         project_report.save()
         return HttpResponseRedirect('/report/section-form/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
     return render(request,'report/report-form.html',locals())
@@ -45,17 +53,24 @@ def report_section_form(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
-    # report_obj = ProjectReport.objects.get_or_none(project=project)
+    report_obj = ProjectReport.objects.get_or_none(id = report_id)
+    if not report_obj:
+        report_obj = ProjectReport.objects.get_or_none(id = request.POST.get('report_id'))
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    if request.method == 'POST':
+    if request.method == 'POST' or request.method == 'FILES':
         data = request.POST
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
         project_report = ProjectReport.objects.get_or_none(id = data.get('report_id'))
+        project_report.name = data.get('report_name')
         project_report.description = data.get('description')
         project_report.objective = data.get('objective')
         project_report.save()
+        cover_image = Attachment.objects.create(description = "cover image",attachment_type = 1,
+            attachment_file = request.FILES.get('upload_cover_image'),
+            content_type = ContentType.objects.get_for_model(project_report),
+            object_id = project_report.id,created_by = user)
         funder = request.POST.get('funder')
         total_budget = request.POST.get('total_budget')
         duration = request.POST.get('duration')
