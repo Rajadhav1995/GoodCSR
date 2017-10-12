@@ -30,7 +30,7 @@
 <img src="/static/img/report/header-img.jpg" style="width:100%">
     </div>
     <div>
-<img src="/static/img/report/banner-cover.jpg" style="width:100%">
+<img src="{% if cover_image %}{{image_url}}{{cover_image.attachment_file.url}}{% endif %}" style="width:100%">
     </div>
     <div>
 <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
@@ -52,7 +52,7 @@
         <hr>
      </div>
      <p style="float:left; width:auto">Prepared by {{report_obj.created_by}}</p>
-     <p style="text-align:right;width:auto; float:right">Jan 2017 to Mar 2017</p>
+     <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
     </div>
    
 </header>

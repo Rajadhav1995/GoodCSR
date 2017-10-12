@@ -15,6 +15,7 @@ from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,P
 from budgetmanagement.models import *
 from budgetmanagement.manage_budget import get_budget_logic
 from django.shortcuts import redirect
+from pmu.settings import PMU_URL
 
 def report_form(request):
     #to save the report type and duration
@@ -86,6 +87,7 @@ from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
 def report_detail(request):
     slug = request.GET.get('slug')
+    image_url = PMU_URL
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
     report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
@@ -93,6 +95,8 @@ def report_detail(request):
     report_quarter = QuarterReportSection.objects.filter(project=report_obj)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
+    cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',
+        content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):

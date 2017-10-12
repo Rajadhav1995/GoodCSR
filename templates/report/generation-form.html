@@ -44,7 +44,7 @@
                   <div class="col-md-12">
                      <div class="form-group">
                         <label>Report Name</label>
-                        <input type="text" name="report_name" value="{{report_obj.name}}" id="id_report_name" required="" class="form-control"></input>
+                        <input type="text" name="report_name" value="{% if report_obj.name %}{{report_obj.name}}{% endif %}"id="id_report_name" required="" class="form-control"></input>
                      </div>
                   </div>
                </div>
