@@ -55,7 +55,7 @@
                   <div class="col-md-12">
                      <div class="form-group">
                         <label>Cover Image</label>
-                        <input type="file" name="upload_cover_image" id="id_cover_image" required=""></input>
+                        <input type="file" name="upload_cover_image" id="id_cover_image" required=""><img src="{{image_url}}{{cover_image.attachment_file.url}}" height=100px width = 100px></img></input>
                      </div>
                   </div>
                </div>
@@ -125,10 +125,11 @@
                   <div class="col-md-12">
                      <div class="form-group">
                         <label>Funder<font color="red">*</font></label>
-                        <select class="form-control" name="funder" id="funder">
-                           <option selected disabled>Select Funder</option>
-                           {% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
-                        </select>
+                            {{mapping_view.funder.organization}}
+<!--                        <select class="form-control" name="funder" id="funder">-->
+<!--                           <option selected disabled>Select Funder</option>-->
+<!--                           {% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}-->
+<!--                        </select>-->
                      </div>
                   </div>
                </div>
@@ -168,10 +169,11 @@
                   <div class="col-md-12">
                      <div class="form-group">
                         <label>Implementation partner<font color="red">*</font></label>
-                        <select class="form-control" name="implementation_partner" id="implementation_partner" required>
-                           <option selected disabled>Select Implementation Partner</option>
-                           {% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
-                        </select>
+                            {{mapping_view.implementation_partner.organization}}
+<!--                        <select class="form-control" name="implementation_partner" id="implementation_partner" required>-->
+<!--                           <option selected disabled>Select Implementation Partner</option>-->
+<!--                           {% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}-->
+<!--                        </select>-->
                      </div>
                   </div>
                </div>
@@ -180,8 +182,8 @@
                <div class="col-md-6 nopadding">
                   <div class="col-md-12">
                      <div class="form-group">
-                        <label>Project Description<font color="red">*</font></label>
-                        <textarea type="text" name="description" value="{{project.summary}}" id="description" required="" class="form-control text_area"></textarea>
+                        <label>Project Description<font color="red">*</font></label>{{report_obj.description}}
+                        <textarea type="text" name="description" value="{{report_obj.description}}" id="description" required="" class="form-control text_area"></textarea>
                      </div>
                   </div>
                </div>
@@ -191,8 +193,8 @@
                <div class="col-md-6 nopadding">
                   <div class="col-md-12">
                      <div class="form-group">
-                        <label>Objective of the project<font color="red">*</font></label>
-                        <textarea type="text" name="objective" id="objective" required="" class="form-control text_area"></textarea>
+                        <label>Objective of the project<font color="red">*</font></label>{{report_obj.objective}}
+                        <textarea type="text" name="objective" value="{{report_obj.objective}}" id="objective" required="" class="form-control text_area"></textarea>
                      </div>
                   </div>
                </div>

@@ -33,7 +33,10 @@ def report_form(request):
             data = request.POST
             budget_start_date = budget_quarters.get(0).split(' to ')[0] 
             project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
-            project_report = ProjectReport.objects.create(project = project_obj,created_by = user,\
+            import ipdb;ipdb.set_trace();
+            project_report = ProjectReport.objects.get_or_none(id=data.get('report_id'))
+            if not project_report:
+                project_report = ProjectReport.objects.create(project = project_obj,created_by = user,\
                 report_type = data.get('report_type'),start_date  = budget_start_date)
             quarter_ids = data.get('quarter_type')
             dates = budget_quarters[int(quarter_ids)]
@@ -52,7 +55,9 @@ def report_listing(request):
     return render(request,'report/listing.html',locals())
 
 def report_section_form(request):
+    # to save report name,project description ,objective and cover image
     report_id = request.GET.get('report_id')
+    image_url = PMU_URL
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
@@ -63,6 +68,9 @@ def report_section_form(request):
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
+    cover_image = Attachment.objects.get_or_none(description__iexact = "cover image",attachment_type = 1,
+            content_type = ContentType.objects.get_for_model(report_obj),
+            object_id = report_obj.id,created_by = user)
     if request.method == 'POST' or request.method == 'FILES':
         data = request.POST
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
@@ -71,10 +79,11 @@ def report_section_form(request):
         project_report.description = data.get('description')
         project_report.objective = data.get('objective')
         project_report.save()
-        cover_image = Attachment.objects.create(description = "cover image",attachment_type = 1,
-            attachment_file = request.FILES.get('upload_cover_image'),
+        cover_image , created = Attachment.objects.get_or_create(description = "cover image",attachment_type = 1,
             content_type = ContentType.objects.get_for_model(project_report),
             object_id = project_report.id,created_by = user)
+        cover_image.attachment_file = request.FILES.get('upload_cover_image')
+        cover_image.save()
         funder = request.POST.get('funder')
         total_budget = request.POST.get('total_budget')
         duration = request.POST.get('duration')
@@ -241,4 +250,24 @@ def genearte_report(request):
         return HttpResponseRedirect('/project/summary/?slug='+str(slug)+'&key=summary')
     return render(request,'report/quarter-update.html',locals())
     
-    
+def report_edit_form(request):
+    budget_dates = {}
+    import ipdb;ipdb.set_trace();
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    report_id = request.GET.get('report_id')
+    slug =  request.GET.get('slug')
+    project = Project.objects.get_or_none(slug = request.GET.get('slug'))
+    if not project:
+        project = Project.objects.get_or_none(slug = request.POST.get('project_slug'))
+    report_obj = ProjectReport.objects.get_or_none(id=report_id)
+    end_date = report_obj.end_date.strftime('%Y-%m-%d')
+    budget_obj = Budget.objects.get_or_none(project=project)
+    from budgetmanagement.manage_budget import get_budget_quarters
+    budget_quarters = get_budget_quarters(budget_obj) 
+    for k,v in budget_quarters.iteritems():
+        budget_dates[k] = budget_quarters.get(k).split(' to ')
+        if end_date in budget_dates[k]:
+            quarter_no = k
+    print budget_dates
+    return render(request,'report/report-form.html',locals())

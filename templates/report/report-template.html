@@ -53,8 +53,9 @@
      </div>
      <p style="float:left; width:auto">Prepared by {{report_obj.created_by}}</p>
      <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+     <a href= "/report/edit/form/?slug={{project.slug}}&report_id={{report_obj.id}}">Edit the report</a>
     </div>
-   
+    
 </header>
 <header style="margin-top:50px">
    <div>
