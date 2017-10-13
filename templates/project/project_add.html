@@ -10,6 +10,12 @@ margin: 0 auto;
 width:450px;
 }
 </style>-->
+<style>
+.error {
+    color: red !important;
+    min-width: 200px;
+}
+</style>
     <!-- Main content -->
 {% block content %}
 
@@ -170,8 +176,64 @@ width:450px;
                     <div class="form-group">
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More</button>
+                            {% if obj %}
+                            {% for i in location %}
+                            <label>Location {{forloop.counter}}<font color="red">*</font></label>
+                            <div class = "con_{{i.id}}">
+                                
+                                <select class="form-control" onchange="get_city(this.value,{{forloop.counter}});" name="state_{{forloop.counter}}" id="state_{{forloop.counter}}" required>
+                                    
+                                    <option disabled selected value> Select State </option>
+                                    
+                                    {% for j in state_list %}
+                                    {% if j.id == i.location.parent.id %}
+                                    
+                                    <option value="{{i.location.parent.id}}" selected>{{i.location.parent.name}}</option>
+                                    {% else %}
+                                    <option value="{{j.id}}">{{j.name}}</option>
+                                    {% endif %}
+                                    {{i.location}}
+                                    {% endfor %}
+                                  </select>
+                                  <select class="form-control" name="city1_{{forloop.counter}}" id="city1_{{forloop.counter}}" required>
+                                    {% for j in city_list %}
+                                    {% if j.id == i.location.id %}
+                                    <option value="{{i.location.id}}" selected>{{i.location.name}}</option>
+                                    {% else %}
+                                    <option value="{{j.id}}">{{j.name}}</option>
+                                    {% endif %}
+                                    {{i.location}}
+                                    {% endfor %}
+                                  </select>
+
+                                  <select class="form-control" name="type_{{forloop.counter}}" required>
+                                    {% if not obj %}
+                                    <option disabled selected value> Select Location Type </option>
+                                    {% endif %}
+                                    {% if i.program_type == 0 %}
+                                    <option value="0" slected>Urban</option>
+                                    {% else %}
+                                    <option value="0">Urban</option>
+                                    {% endif %}
+                                    {% if i.program_type == 1 %}
+                                    <option value="1" selected>Semi-Urban</option>
+                                    {% else %}
+                                    <option value="1">Semi-Urban</option>
+                                    {% endif %}
+                                    {% if i.program_type == 2 %}
+                                    <option value="2" selected>Rural</option>
+                                    {% else %}
+                                    <option value="2">Rural</option>
+                                    {% endif %}
+                                  </select>
+                            <input type="button" class="btnRemove" name="city1_{{forloop.counter}}" id="{{i.id}}" value="Remove"/>
+                            </div>
+                            <br>
+                            {% endfor %}
+                            {% else %}
+                            <label>Location {{forloop.counter}}<font color="red">*</font></label>
                             <div>
-                                <select class="form-control" onchange="get_city(this.value,1);" name="state" id="state" required>
+                                <select class="form-control" onchange="get_city(this.value,1);" name="state_1" id="state" required>
                                     {% if not ids %}
                                     <option disabled selected value> Select State </option>
                                     {% endif %}
@@ -195,7 +257,7 @@ width:450px;
                                     {{i.location}}
                                     {% endfor %}
                                   </select>
-                                  <select class="form-control" name="type" required>
+                                  <select class="form-control" name="type_1" required>
                                     {% if not ids %}
                                     <option disabled selected value> Select Location Type </option>
                                     {% endif %}
@@ -215,8 +277,8 @@ width:450px;
                                     <option value="2">Rural</option>
                                     {% endif %}
                                   </select>
-
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -294,7 +356,9 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <input style="width: 0px;" value="{{activity_view.count}}" name="activity_count" id="activity_count" type="text"/>
+                    <input style="width: 10px;" value="{{location.count}}" name="name_count" id="activity_count" type="hidden"/>
+                    <input style="width: 0px;" value="" name="rem_id" id="rem_id" type="hidden"/>
+                    <input style="width: 0px;" value="" name="city_var" id="city_var" type="hidden"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Back</button></a>
@@ -321,8 +385,19 @@ width:450px;
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 
 
-
-
+<script type="text/javascript">
+var rem_id = []
+var city_var = []
+$('body').on('click','.btnRemove',function() {
+    $(this).parent('div.con_'+ this.id +'').remove();
+    city_var.push(this.name);
+    rem_id.push(this.id);
+    
+    document.getElementById("rem_id").value = [rem_id];
+    document.getElementById("city_var").value = [city_var];
+});
+document.getElementById("rem_id").value = [rem_id];
+</script>
 <script>
 function get_city(value,index){
 //$(document).ready(function(){
@@ -365,7 +440,11 @@ $(document).ready(function() {
     var wrapper         = $(".input_fields_wrap"); //Fields wrapper
     var add_button      = $(".add_field_button"); //Add button ID
     
-    var loop_count = $('#loop_count').val()
+    {% if location %}
+    var loop_count = {{location.count}}
+    {% else %}
+    var loop_count = 0
+    {% endif %}
     var loop_count = Number(loop_count);
     if (loop_count > 0) {
         var x =Number(loop_count);
@@ -377,11 +456,7 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            
-            //$(wrapper).append('<div><input class="form-control" placeholder="Enter Activity Name" type="text" name="activity['+x+']"/><input class="form-control" type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            //alert(x);
-            $(wrapper).append('<br><div><select class="form-control" onchange="get_city(this.value,'+x +');" name="state" id="state" required>{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'" required>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
+            $(wrapper).append('<br><label>Location '+ x +'<font color="red">*</font></label><div><select class="form-control" onchange="get_city(this.value,'+x +');" name="state_'+ x +'" id="state" required>{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'" required>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
 
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
@@ -428,28 +503,10 @@ $(document).ready(function() {
 <script>
   $("#id_start_date").datepicker({
     dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true,
-    onSelect: function(dateText, inst) {
-        //var start = new Date($('#id_start_date').val());
-        var end = new Date($('#id_end_date'));//.val());
-        alert(end);
-        end.setDate(end.getDate() + 1);
-        if (end <= start) {
-            alert("'End date' should be greater than 'Start date'")
-            document.getElementById('dateError').innerHTML="End date should be greater than Start date"
-        };
-        if (end > start) {
-            document.getElementById('dateError').innerHTML=""
-            document.getElementById('dateError1').innerHTML=""
-        };
+    
+    })
 
-        var months = (end.getFullYear() - start.getFullYear()) * 12;
-        months += end.getMonth() - start.getMonth();
-        document.getElementById("id_duration").value = months;
-        var start = new Date($('#id_start_date').val());
-        
-    }
 
-});
 </script>
 <script>
 function date_validate() {

@@ -9,7 +9,7 @@ from projectmanagement.models import *
 from projectmanagement.forms import *
 from budgetmanagement.forms import TrancheForm
 from budgetmanagement.models import Tranche,ProjectReport
-from media.models import Attachment,Keywords,FileKeywords
+from media.models import Attachment,Keywords,FileKeywords,ProjectLocation
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -31,8 +31,11 @@ def create_project(request):
         obj = Project.objects.get(slug=slug)
         form = ProjectForm(instance = obj)
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
+        location = ProjectLocation.objects.filter(object_id=obj.id,active=2)
+        city_list = Boundary.objects.filter(boundary_level=3).order_by('name')
     except:
         form = ProjectForm()
+        location = ''
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
@@ -55,7 +58,7 @@ def create_project(request):
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
-            location_count = int(request.POST.get('activity_count'))
+            
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
             mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
             if mapping:
@@ -66,15 +69,27 @@ def create_project(request):
             else:
                 mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
                     implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
+            rem_id = request.POST.get('rem_id')
+            city_var = request.POST.get('city_var')
+            if rem_id != '':
+                rem_id_list = map(int,str(rem_id).split(','))
+            else:
+                rem_id_list=[]
+            if city_var != '':
+                city_var_list = map(str,str(city_var).split(','))
+            else:
+                city_var_list = []
+            if location:
+                [ i.switch() for i in location]
+            location_count = int(request.POST.get('name_count'))
             for i in range(location_count):
-                city = 'city1_'+str(i)
-                location_type = 'type_'+str(i)
-                import ipdb; ipdb.set_trace()
-                boundary_obj = Boundary.objects.get(id=request.POST.get(city))
-                location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
-                obj = ProjectLocation.objects.create(parameter_type=parameter_type,project=project,instructions=request.POST.get(instruction),\
-                        name=request.POST.get(name),parent=parent_obj,aggregation_function=request.POST.get('agg_type'))
-
+                city = 'city1_'+str(i+1)
+                location_type = 'type_'+str(i+1)
+                
+                if city not in city_var_list:
+                    boundary_obj = Boundary.objects.get(id=request.POST.get(city))
+                    location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+            del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
