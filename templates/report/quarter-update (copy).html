@@ -13,18 +13,16 @@
          <h3 class="border_line"> Section 5 </h3>
          <br>
       </div>
-
+    <form id="ic_form" class ="form-horizantal budget_form" action=".?slug={{slug}}" method = "post">{% csrf_token %}
      <div class="col-md-12">
 
-                
+                <p>1. Previous Quarter Updates </p>
                 <input type="hidden" name="count" value="6">
                 <input type="hidden" name="slug" value="{{slug}}">
                 <input type="hidden" name="project-report" value="{{projectobj.id}}">
 <!--                <input type="hidden" name="previousquarter_length" value="previousquarter_list.items|length">-->
             {% for i,v in previousquarter_list.items %}
             {% with forloop.counter as j %}
-            <form id="ic_form" class ="form-horizantal budget_form" action=".?slug={{slug}}" method = "post">{% csrf_token %}
-            <p>{{j}} . Previous Quarter Updates :{{v}} </p>
             <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
                     <input type="hidden" name="quarter-date_1_j" value="{{v}}">
                     <input type="hidden" name="milestone_count" value="{{j}}">
@@ -157,28 +155,12 @@
                             </div>
                         </div>
             </div> </br>
-            <div class="click_buttons">
-                <div class="link-left">
-<!--                    <input type="hidden"/>-->
-<!--                    <a href ="javascript:void(0);" class ="link-pad add_clone">+Add more Lines</a>-->
-<!--                </div>-->
-<!--                <div class="link-center">-->
-<!--                    <input type="hidden"/>-->
-<!--                    <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>-->
-<!--                </div>-->
-                <div class="link-right">
-                    <input type="submit" value="Save Budget Lineitems" class="btn btn-success">
-                </div>
-            </div>
-        </div> <!-- after form div ends -->
-        </form>
             {% endwith %}
             {% endfor %}
-           
 
-            {% for i,v in currentquarter_list.items %}
-            {% with forloop.counter as j %}
-                <p> {{j}}. Current Quarter Updates:{{v}} </p>
+            <p> 2. Current Quarter Updates </p>
+                {% for i,v in currentquarter_list.items %}
+                {% with forloop.counter as j %}
             <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
                     <div class="row">
                             <div class="col-md-6 nopadding">
@@ -331,9 +313,9 @@
                     {% endwith %}
                 {% endfor %}
             </div>
+            <p>3. Future Quarter Updates </p>
             {% for i,v in futurequarter_list.items %}
             {% with forloop.counter as j %}
-                <p>{{j}}. Future Quarter Updates:{{v}} </p>
                 <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
                         <div class="row">
                             <div class="col-md-6 nopadding">
