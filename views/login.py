@@ -50,6 +50,4 @@ def homepage(request):
     return render(request,'homepage/home_page.html', locals())
 
 def login_popup(request):
-    if request.method=='POST':
-        pass
     return render(request,'homepage/login_popup.html',locals())

@@ -141,19 +141,21 @@ def get_duration_month(date):
 
 @register.assignment_tag
 def get_parameter(obj):
-    
-    
-    
     report_parameter = ReportParameter.objects.filter(quarter=obj.id)
     parameter_ids =[i.keyparameter.id for i in report_parameter]
     parameter_obj = ProjectParameter.objects.filter(id__in=parameter_ids)
-    from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist
+    from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
     # master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     main_list =[]
     master_list = []
-    for i in parameter_obj:    
-        main_list = pie_chart_mainlist(i)
+    master_names = []
+    for i in parameter_obj:
+        main_list = pie_chart_mainlist_report(i,obj.start_date,obj.end_date)
         master_list.append(main_list)
-    
-    return master_list
+        master_names.append(i.name)
+    return master_list,master_names
     # return master_sh,pin_title_name,pip_title_name,master_pip,master_pin
+
+@register.filter
+def get_at_index(list, index):
+    return list[index]

@@ -202,7 +202,7 @@
   {% for i in report_quarter %}
   {% get_parameter i as pie_data %}
   {{pie_data.0.PIN}}adsadasdas
-  {% if i.quarter_type == 2 %}
+  {% if i.quarter_type == 1 %}
 
 
    <div class="quarter_updates">
@@ -263,14 +263,14 @@ development programs.</p>
     <div class="row">
       {% get_parameter i as pie_data %}
         
-      {% if pie_data %}
-        {% for lol in  pie_data %}
+      {% if pie_data.0 %}
+        {% for lol in  pie_data.0 %}
         
         
     <div class="margin_30 prev_banner">
       
         <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">{{pin_title_name.0}}{{forloop.counter0}}</h5>
+        <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
         <div>
         <div class="col-md-4">
        <div class="row">
@@ -314,13 +314,7 @@ development programs.</p>
 <script type="text/javascript">
 {% get_parameter i as pie_data %}
 var new_data_pin = 0;
-console.log({{pie_data | safe}});
-var data1 = {{pie_data | safe}}[{{forloop.counter0}}];
-
-//var khk = data1.{{forloop.counter}};
-var khk = data1;
-console.log(khk);
-alert(khk);
+var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
 var values = "coll{{forloop.counter}}"
 var pin_title = {{pin_title_name | safe}}
 var pin_title = pin_title[new_data_pin]
@@ -331,7 +325,7 @@ Highcharts.chart(values, {
             colors:[
                 '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
                 ],
-            title:{text: pin_title},
+            title:{text: ''},
             tooltip:{
                 enabled: true,
                 animation: true
@@ -497,9 +491,8 @@ Highcharts.chart(values, {
     </div>
 
     <hr>
-    {% if i.quarter_type == 3 %}
+    {% if i.quarter_type == 2 %}
     {% get_parameter i as pie_data %}
-  {{pie_data}}fgffgdgdf
 
 
    <div class="quarter_updates">
@@ -565,24 +558,111 @@ Highcharts.chart(values, {
     </div>
     <div class="col-md-12">
     <div class="row">
+      {% get_parameter i as pie_data %}
+        {{pie_data.0}}
+      {% if pie_data.0 %}
+        {% for lol in  pie_data.0 %}
+        
+        
     <div class="margin_30 prev_banner">
+      
         <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">Beneficiary Distribution</h5>
+        <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
         <div>
-       <div class="col-md-4">
+        <div class="col-md-4">
        <div class="row">
-       <img src="/static/img/report/parameter01.jpg" style="width:100%">
+        <ul class="key_parameter parameter">
+          <!-- <div class='numeric_parameter'></div> -->
+            
+            <li>
+              <!-- <h3>{{chart_name_pip}}</h3> -->
+              comm{{forloop.counter}}
+                <div class="right-budget beni-dist">
+                 <div id="comm{{forloop.counter}}" style="width: 100%;float: left;"></div>
+            </div>
+            </li>
+            
+
+            
+        </ul>
+       <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
        </div>
         </div>
         <div class="col-md-8">
        <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
+           <h4 class="color_green">About This Parameter</h4>
            <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
            </div>
         </div>
     </div>
-    
     </div>
+
+<script type="text/javascript">
+    var new_data_pin = 0;
+    var new_data_pip = 0;
+</script>
+<!--/* Pie Chat Number */-->
+<script type="text/javascript">
+{% get_parameter i as pie_data %}
+var new_data_pin = 0;
+var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+console.log(data1);
+var values = "comm{{forloop.counter}}"
+var pin_title = {{pin_title_name | safe}}
+var pin_title = pin_title[new_data_pin]
+new_data_pin++;
+alert("dssd");
+Highcharts.chart(values, {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: 'sdfsdfsdfsdfsdf'},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                height:300,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+
+                margin: 12
+
+
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+
+                },
+                data: data11
+
+            }]
+        });
+</script>
+      {% endfor %}
+      {% endif %}
     </div>
     </div>
     
@@ -629,9 +709,7 @@ Highcharts.chart(values, {
   
     <div class="location margin_top_50">
         <p>Risks and mitigation</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-<h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.</h5>
+        <h5>{{i.risks_mitigation}} </h5>
     </div>
     {% endif %}
     <footer>
@@ -653,7 +731,7 @@ Highcharts.chart(values, {
        
     </div>
     <hr>
-    {% if i.quarter_type == 2 %}
+    {% if i.quarter_type == 3 %}
     {{i.id}}464564564554
     {% get_parameter i as pie_data,title,tile %}
   {{pie_data.0}}{{title}}ff{{tile}}
@@ -712,17 +790,6 @@ Highcharts.chart(values, {
     </footer>
     </div>
     
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
 </body>
 
 </html>

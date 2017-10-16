@@ -420,7 +420,6 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
-#    report_obj = ProjectReport.objects.get_or_none(project=obj)
     projectobj = obj
     activity = Activity.objects.filter(project=obj)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
@@ -493,42 +492,6 @@ def parameter_pie_chart(parameter_obj):
     
     return master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh
 
-def parameter_pie_chart_report(parameter_obj):
-    '''
-    This function is to get pie chart information in json data (both pie chart type)
-    '''
-    name_list = []
-    para_name = {}
-    pin_title_name = []
-    pip_title_name = []
-    number_json = []
-    main_list = []
-    for i in parameter_obj:
-        if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
-            number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
-            number = map(int,number)
-            value = aggregate_project_parameters(i,number)
-            data = {'title':i.name,'value':value,'type':i.parameter_type}
-            number_json.append(data)
-        elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
-            main_list = pie_chart_mainlist(i)
-        if i.parameter_type in para_name:
-            para_name[i.parameter_type].append(main_list)
-        else:
-            para_name.setdefault(i.parameter_type,[])
-            para_name[i.parameter_type].append(main_list)
-            name_list.append(str(i.name))
-        if i.parameter_type == 'PIN':
-            pin_title_name.append(str(i.name))
-        if i.parameter_type == 'PIP':
-            pip_title_name.append(str(i.name))
-    master_sh = para_name
-    master_sh_len = {key:len(values) for key,values in master_sh.items()}
-    master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
-    master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
-    
-    return master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh
-
 def pie_chart_mainlist(obj):
     '''
     This function is to get pie chart information in json data (both pie chart type)
@@ -543,6 +506,24 @@ def pie_chart_mainlist(obj):
         color = colors[counter]
         counter+=1
         main_list.append({'name': str(y.name),'y':value,'color':color})
+
+    return main_list
+
+def pie_chart_mainlist_report(obj,start_date,end_date):
+    '''
+    This function is to get pie chart information in json data (both pie chart type)
+    '''
+    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
+    main_list = []
+    counter =0
+    pie_object = ProjectParameter.objects.filter(active= 2,parent=obj)
+    for y in pie_object:
+        values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y, submit_date__gte=start_date,submit_date__lte=end_date).values_list('parameter_value',flat=True))
+        value = aggregate_project_parameters(pie_object[0],values)
+        color = colors[counter]
+        counter+=1
+        main_list.append({'name': str(y.name),'y':value,'color':color})
+
     return main_list
 
 
