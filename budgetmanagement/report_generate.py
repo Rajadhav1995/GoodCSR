@@ -8,7 +8,7 @@ from dateutil import relativedelta
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from media.models import Article,Section,ContactPersonInformation
+from media.models import Article,Section,ContactPersonInformation,ProjectLocation
 from media.forms import ContactPersonForm,Attachment
 from django.template import loader
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
@@ -77,6 +77,7 @@ def report_detail(request):
     report_quarter = QuarterReportSection.objects.filter(project=report_obj)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
+    location = ProjectLocation.objects.filter(object_id=project.id)    
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):

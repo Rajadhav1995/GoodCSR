@@ -141,10 +141,9 @@
     <div class="location">
         <p>Location Coverage</p>
         <ul>
-        <li><span> West Bengal, North 24 Parganas Rural</span></li>
-        <li><span>West Bengal, East Midnapore Urban</span></li>
-        <li><span>West Bengal, Kolkata Semi-urban</span></li>
-            <li><span>West Bengal, Hooghly</span></li>
+          {% for i in location %}
+        <li><span> {{i.location.parent.name}}, {{i.location.name}}, {{i.get_program_type_display}}</span></li>
+        {% endfor %}
         </ul>
     </div>
     <div class="location">
