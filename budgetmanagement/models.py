@@ -210,6 +210,9 @@ class Answer(BaseContent):
     text = models.TextField(**OPTIONAL)
     inline_answer = models.CharField(max_length=600,**OPTIONAL) #this is to tag milestone and paramters'id.
     attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
+    object_id = models.IntegerField(_('object ID'),**OPTIONAL)
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
 
 OPTION_TYPE = ((1,"Question Type"),(2,"Block type"),(3,"invite"))
 class RemoveQuestion(BaseContent):
