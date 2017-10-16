@@ -279,7 +279,6 @@ development programs.</p>
             
             <li>
               <!-- <h3>{{chart_name_pip}}</h3> -->
-              coll{{forloop.counter}}
                 <div class="right-budget beni-dist">
                  <div id="coll{{forloop.counter}}" style="width: 100%;float: left;"></div>
             </div>
@@ -559,7 +558,6 @@ Highcharts.chart(values, {
     <div class="col-md-12">
     <div class="row">
       {% get_parameter i as pie_data %}
-        {{pie_data.0}}
       {% if pie_data.0 %}
         {% for lol in  pie_data.0 %}
         
@@ -576,7 +574,6 @@ Highcharts.chart(values, {
             
             <li>
               <!-- <h3>{{chart_name_pip}}</h3> -->
-              comm{{forloop.counter}}
                 <div class="right-budget beni-dist">
                  <div id="comm{{forloop.counter}}" style="width: 100%;float: left;"></div>
             </div>
@@ -611,14 +608,13 @@ var values = "comm{{forloop.counter}}"
 var pin_title = {{pin_title_name | safe}}
 var pin_title = pin_title[new_data_pin]
 new_data_pin++;
-alert("dssd");
 Highcharts.chart(values, {
    chart:{type:'pie', backgroundColor: null,height:288},
             credits:{enabled: false},
             colors:[
                 '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
                 ],
-            title:{text: 'sdfsdfsdfsdfsdf'},
+            title:{text: ''},
             tooltip:{
                 enabled: true,
                 animation: true
