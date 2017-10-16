@@ -2,6 +2,7 @@ from django.db import models
 from jsonfield import JSONField
 from django.db.models import Sum
 from .manager import ActiveQuerySet
+from django.utils.encoding import smart_str, smart_unicode
 from django.template.defaultfilters import slugify
 from constants import levels, OPTIONAL
 import six
@@ -186,7 +187,7 @@ class Project(BaseContent):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.name
+        return smart_str(self.name) or ''
 
     def total_tasks(self):
         from taskmanagement.models import Activity,Task

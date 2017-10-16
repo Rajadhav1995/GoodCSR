@@ -152,3 +152,70 @@ class ReportParameter(BaseContent):
 
     def __str__(self):
         return str(self.id)
+
+# Survey kind of strucutre
+class Survey(BaseContent):
+    name = models.CharField(max_length=300,**OPTIONAL)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    order = models.IntegerField(default=0)
+
+class Block(BaseContent):
+
+    BLOCK_TYPE_CHOICES = (
+        (0, 'Basic Survey'),
+        (1, 'Inline Assessment'),
+    )
+
+    survey = models.ForeignKey(Survey,**OPTIONAL)
+    name = models.CharField(max_length=300,**OPTIONAL)
+    slug = models.SlugField(_("Slug"), blank=True)
+    block_type = models.IntegerField(choices = BLOCK_TYPE_CHOICES, default = 0)
+    order = models.IntegerField(default=0)
+    code = models.CharField(max_length=100,**OPTIONAL)
+
+class Question(BaseContent):
+
+    QTYPE_CHOICES = (
+        ('T', 'Text Input'), ('S', 'Select One Choice'), ('R', 'Radio List'),
+        ('C', 'Checkbox List'), ('D', 'Date'),('M','Master'),('F','File Field'),
+        ('Q','API Question'),('DD','Drop Down'),('OT','Other type'),
+        ('MC','Multi-Checkbox'),('ck','CKeditor'),('APT','Auto Populate Text'),('API','Auto Populate Image')
+    )
+    VALIDATION_CHOICES = (
+        (0, 'Digit'), (1, 'Number'), (2, 'Alphabet'),
+        (3, 'Alpha Numeric'), (4, 'No Validation'),
+    )
+
+    block = models.ForeignKey(Block, verbose_name=_('Blocks'))
+    qtype = models.CharField(_('question type'), max_length=10,
+                             choices=QTYPE_CHOICES)
+    text = models.CharField(max_length=300,**OPTIONAL)
+    validation = models.IntegerField(choices=VALIDATION_CHOICES,
+                                     blank=True, null=True)
+    order = models.IntegerField(default = 0)
+    code = models.IntegerField(default = 0)
+    help_text = models.TextField(**OPTIONAL)
+    slug = models.SlugField(_("Slug"), blank=True)
+    parent = models.ForeignKey('self', blank=True, null=True)
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
+    object_id = models.IntegerField(_('object ID'),**OPTIONAL)
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+
+class Answer(BaseContent):
+    user = models.ForeignKey(
+        "projectmanagement.UserProfile", related_name='report_user', **OPTIONAL)
+    quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
+    question = models.ForeignKey(Question,**OPTIONAL)
+    text = models.TextField(**OPTIONAL)
+    inline_answer = models.CharField(max_length=600,**OPTIONAL) #this is to tag milestone and paramters'id.
+    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
+    object_id = models.IntegerField(_('object ID'),**OPTIONAL)
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+
+OPTION_TYPE = ((1,"Question Type"),(2,"Block type"),(3,"invite"))
+class RemoveQuestion(BaseContent):
+    quarter_report = models.ForeignKey(ProjectReport,**OPTIONAL)
+    text = models.TextField(**OPTIONAL) #to tag the removed question or section id's'
+    
