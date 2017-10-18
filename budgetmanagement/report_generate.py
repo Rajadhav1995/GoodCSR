@@ -56,7 +56,6 @@ def report_listing(request):
 def report_section_form(request):
     # to save report name,project description ,objective and cover image
     report_id = request.GET.get('report_id')
-    block_ids = {''}
     image_url = PMU_URL
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
@@ -66,7 +65,7 @@ def report_section_form(request):
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    quest_list = Question.objects.filter(active=2,block__in = [1])
+    quest_list = Question.objects.filter(active=2)
     quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)
     if not report_obj:
         report_obj = ProjectReport.objects.get_or_none(id = request.POST.get('report_id'))
