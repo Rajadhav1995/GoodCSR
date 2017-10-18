@@ -1,3 +1,4 @@
+{% load urs_tags %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      
 <html class="no-js lt-ie9 lt-ie8 lt-ie7">
@@ -30,7 +31,7 @@
 <img src="/static/img/report/header-img.jpg" style="width:100%">
     </div>
     <div>
-<img src="/static/img/report/banner-cover.jpg" style="width:100%">
+<img src="{% if cover_image %}{{image_url}}{{cover_image.attachment_file.url}}{% endif %}" style="width:100%">
     </div>
     <div>
 <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
@@ -52,9 +53,10 @@
         <hr>
      </div>
      <p style="float:left; width:auto">Prepared by {{report_obj.created_by}}</p>
-     <p style="text-align:right;width:auto; float:right">Jan 2017 to Mar 2017</p>
+     <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+     <a href= "/report/edit/form/?slug={{project.slug}}&report_id={{report_obj.id}}">Edit the report</a>
     </div>
-   
+    
 </header>
 <header style="margin-top:50px">
    <div>
@@ -140,10 +142,9 @@
     <div class="location">
         <p>Location Coverage</p>
         <ul>
-        <li><span> West Bengal, North 24 Parganas Rural</span></li>
-        <li><span>West Bengal, East Midnapore Urban</span></li>
-        <li><span>West Bengal, Kolkata Semi-urban</span></li>
-            <li><span>West Bengal, Hooghly</span></li>
+          {% for i in location %}
+        <li><span> {{i.location.parent.name}}, {{i.location.name}}, {{i.get_program_type_display}}</span></li>
+        {% endfor %}
         </ul>
     </div>
     <div class="location">
@@ -198,6 +199,12 @@
        
     </div>
     <hr>
+  {% for i in report_quarter %}
+  {% get_parameter i as pie_data %}
+  {{pie_data.0.PIN}}adsadasdas
+  {% if i.quarter_type == 1 %}
+
+
    <div class="quarter_updates">
        <h4 style="margin:0px">Previous Quarter Updates</h4>
        <p>First Quarter (12 Jan to 30 Mar 2017)</p>
@@ -254,35 +261,142 @@ development programs.</p>
     </div>
     <div class="col-md-12">
     <div class="row">
+      {% get_parameter i as pie_data %}
+        
+      {% if pie_data.0 %}
+        {% for lol in  pie_data.0 %}
+        
+        
     <div class="margin_30 prev_banner">
+      
         <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">Beneficiary Distribution</h5>
+        <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
         <div>
-       <div class="col-md-4">
+        <div class="col-md-4">
        <div class="row">
-       <img src="/static/img/report/parameter01.jpg" style="width:100%">
+        <ul class="key_parameter parameter">
+          <!-- <div class='numeric_parameter'></div> -->
+            
+            <li>
+              <!-- <h3>{{chart_name_pip}}</h3> -->
+                <div class="right-budget beni-dist">
+                 <div id="coll{{forloop.counter}}" style="width: 100%;float: left;"></div>
+            </div>
+            </li>
+            
+
+            
+        </ul>
+       <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
        </div>
         </div>
         <div class="col-md-8">
        <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
+           <h4 class="color_green">About This Parameter</h4>
            <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
            </div>
         </div>
     </div>
-    
     </div>
+    <script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/code/highcharts.js"></script>
+<script src="/static/code/highcharts-more.js"></script>
+
+<script src="/static/code/modules/solid-gauge.js"></script>
+<script type="text/javascript">
+    var new_data_pin = 0;
+    var new_data_pip = 0;
+</script>
+<!--/* Pie Chat Number */-->
+
+<script type="text/javascript">
+{% get_parameter i as pie_data %}
+var new_data_pin = 0;
+var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+var values = "coll{{forloop.counter}}"
+var pin_title = {{pin_title_name | safe}}
+var pin_title = pin_title[new_data_pin]
+new_data_pin++;
+Highcharts.chart(values, {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: ''},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                height:300,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+
+                margin: 12
+
+
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+
+                },
+                data: data1
+
+            }]
+        });
+</script>
+      {% endfor %}
+      {% endif %}
     </div>
     </div>
     <div class="col-md-12">
     <div class="row">
+      {% get_parameter i as pie_data %}
+        {{pie_data.3}}
+      {% if pie_data.3 %}
+        {% for lol in  pie_data.3 %}
     <div class="margin_30 prev_banner">
         <h5 class="color-red">PARAMETER 2</h5>
         <h5 class="color_green">Batch Size</h5>
         <div>
        <div class="col-md-4">
        <div class="row">
-       <img src="/static/img/report/parameter02.jpg" style="width:100%">
+         <ul class="key_parameter parameter">
+          <!-- <div class='numeric_parameter'></div> -->
+            
+            <li>
+              <!-- <h3>{{chart_name_pip}}</h3> -->
+                <div class="right-budget beni-dist">
+                 <div id="coll" style="width: 100%;float: left;"></div>
+            </div>
+            </li>
+            
+
+            
+        </ul>
+       <!-- <img src="/static/img/report/parameter02.jpg" style="width:100%"> -->
        </div>
         </div>
         <div class="col-md-8">
@@ -294,6 +408,8 @@ development programs.</p>
     </div>
     
     </div>
+    {% endfor %}
+    {% endif %}
         </div>
     </div>
     
@@ -323,7 +439,7 @@ development programs.</p>
        <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
        
     </div>
-    <div class="col-md-12">
+    <!-- <div class="col-md-12">
     <div class="row">
     <div class="margin_30 prev_banner">
         <h5 class="color-red">PARAMETER 1</h5>
@@ -344,15 +460,15 @@ development programs.</p>
     
     </div>
     </div>
-    </div>
+    </div> -->
     
     <div class="margin_top30">
-    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches1</P>
     <img src="/static/img/report/table01.png" style="width:100%; ">
     <br>
     <img src="/static/img/report/table02.jpg" style="width:100%" class="margin_top30">
     </div>
-  
+    {% endif %}
     
     <footer>
       <hr>
@@ -372,8 +488,12 @@ development programs.</p>
        </div>
        
     </div>
+
     <hr>
-    
+    {% if i.quarter_type == 2 %}
+    {% get_parameter i as pie_data %}
+
+
    <div class="quarter_updates">
        <h4 style="margin:0px">Current Quarter Updates</h4>
        <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -437,24 +557,108 @@ development programs.</p>
     </div>
     <div class="col-md-12">
     <div class="row">
+      {% get_parameter i as pie_data %}
+      {% if pie_data.0 %}
+        {% for lol in  pie_data.0 %}
+        
+        
     <div class="margin_30 prev_banner">
+      
         <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">Beneficiary Distribution</h5>
+        <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
         <div>
-       <div class="col-md-4">
+        <div class="col-md-4">
        <div class="row">
-       <img src="/static/img/report/parameter01.jpg" style="width:100%">
+        <ul class="key_parameter parameter">
+          <!-- <div class='numeric_parameter'></div> -->
+            
+            <li>
+              <!-- <h3>{{chart_name_pip}}</h3> -->
+                <div class="right-budget beni-dist">
+                 <div id="comm{{forloop.counter}}" style="width: 100%;float: left;"></div>
+            </div>
+            </li>
+            
+
+            
+        </ul>
+       <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
        </div>
         </div>
         <div class="col-md-8">
        <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
+           <h4 class="color_green">About This Parameter</h4>
            <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
            </div>
         </div>
     </div>
-    
     </div>
+
+<script type="text/javascript">
+    var new_data_pin = 0;
+    var new_data_pip = 0;
+</script>
+<!--/* Pie Chat Number */-->
+<script type="text/javascript">
+{% get_parameter i as pie_data %}
+var new_data_pin = 0;
+var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+console.log(data1);
+var values = "comm{{forloop.counter}}"
+var pin_title = {{pin_title_name | safe}}
+var pin_title = pin_title[new_data_pin]
+new_data_pin++;
+Highcharts.chart(values, {
+   chart:{type:'pie', backgroundColor: null,height:288},
+            credits:{enabled: false},
+            colors:[
+                '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                ],
+            title:{text: ''},
+            tooltip:{
+                enabled: true,
+                animation: true
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    animation: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
+                    dataLabels: {
+                        enabled: false,
+                        formatter: function() {
+                            return this.percentage.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                width: 250,
+                height:300,
+                verticalAlign: 'bottom',
+                borderWidth: 0,
+                useHTML: true,
+
+                margin: 12
+
+
+            },
+            series: [{
+                type: 'pie',
+                dataLabels:{
+
+                },
+                data: data11
+
+            }]
+        });
+</script>
+      {% endfor %}
+      {% endif %}
     </div>
     </div>
     
@@ -501,10 +705,9 @@ development programs.</p>
   
     <div class="location margin_top_50">
         <p>Risks and mitigation</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-<h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.</h5>
+        <h5>{{i.risks_mitigation}} </h5>
     </div>
+    {% endif %}
     <footer>
       <hr>
     <img src="/static/img/report/logo.png" style="float:left">
@@ -524,7 +727,11 @@ development programs.</p>
        
     </div>
     <hr>
-    
+    {% if i.quarter_type == 3 %}
+    {{i.id}}464564564554
+    {% get_parameter i as pie_data,title,tile %}
+  {{pie_data.0}}{{title}}ff{{tile}}
+
    <div class="quarter_updates">
        <h4 style="margin:0px">Next Quarter Updates</h4>
        <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -548,6 +755,8 @@ development programs.</p>
         <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h5>
 
     </div>
+    {% endif %}
+    {% endfor %}
     <footer>
       <hr>
     <img src="/static/img/report/logo.png" style="float:left">
@@ -577,18 +786,6 @@ development programs.</p>
     </footer>
     </div>
     
-    
-    
-    
-    
-    
-    
-    
-    
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-
-
 </body>
 
 </html>

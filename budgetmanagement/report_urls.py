@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'quarter/update/$',genearte_report),
     url(r'detail/$',report_detail),
     url(r'listing/$',report_listing),
+    url(r'display/blocks/$',display_blocks),
 
 ]
