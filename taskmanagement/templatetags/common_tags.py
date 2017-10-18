@@ -75,7 +75,7 @@ def get_auto_populated_questions(ques_id,project,project_report):
     keys = details.keys()
     for sub in sub_questions:
         data = {'q_id':sub.id,'q_text':sub.text,'q_type':sub.qtype,'q_name':sub.slug}
-        if data.get('q_name') == 'logos':
+        if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
             from projectmanagement.templatetags import urs_tags
             org_logo = urs_tags.get_org_logo(project)
             if org_logo:
