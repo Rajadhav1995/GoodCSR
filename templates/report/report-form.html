@@ -85,7 +85,7 @@ ul li {
                 <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
             {% else %}
             <div class="box-body">
-            <form target="_top" autocomplete="off" id="report-form" name="feedback" action="/report/generation-form/?slug={{project.slug}}&report_id={{report_id}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
                         <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
                         <input type="hidden" name="report_id" value="{{report_id}}" class="form-control" maxlength="200">
