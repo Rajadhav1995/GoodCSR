@@ -8,7 +8,8 @@ from dateutil import relativedelta
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from media.models import Article,Section,ContactPersonInformation,Attachment
+from media.models import (Article,Section,ContactPersonInformation,
+            ProjectLocation,Attachment)
 from media.forms import ContactPersonForm,Attachment
 from django.template import loader
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
@@ -62,6 +63,8 @@ def report_section_form(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
     report_obj = ProjectReport.objects.get_or_none(id = report_id)
+    funder_user = UserProfile.objects.filter(active=2,organization_type=1)
+    partner = UserProfile.objects.filter(active=2,organization_type=2)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     quest_list = Question.objects.filter(active=2,block__in = [1])
     quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)
@@ -106,6 +109,7 @@ def report_detail(request):
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',
         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
+    location = ProjectLocation.objects.filter(object_id=project.id)    
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):

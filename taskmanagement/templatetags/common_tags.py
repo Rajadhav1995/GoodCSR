@@ -67,7 +67,7 @@ def get_auto_populated_questions(ques_id,project,project_report):
     details = {'report_type':project_report.get_report_type_display(),
         'report_duration':project_report.start_date.strftime('%Y-%m-%d')+' TO '+project_report.end_date.strftime('%Y-%m-%d'),'prepared_by':project_report.created_by.name,'client_name':mapping_view.funder.organization,
         'report_name': project_report.name if project_report.name else '',
-        'cover_image': cover_image.attachment.url if cover_image else '',
+        'cover_image': cover_image.attachment_file.url if cover_image else '',
         'project_title':project.name,'project_budget':project.total_budget,
         'donor':mapping_view.funder.organization,
         'implement_ngo':mapping_view.implementation_partner.organization,

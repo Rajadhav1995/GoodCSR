@@ -1,3 +1,4 @@
+# from budgetmanagement.common_method import key_parameter_chart
 import requests,ast
 import datetime
 import json
@@ -9,8 +10,9 @@ from itertools import chain
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
-from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation)
-from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit)
+from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation,ProjectParameter)
+from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
+                                ReportParameter)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
@@ -104,7 +106,6 @@ def get_org_logo(projectobj):
     validation_data = json.loads(companyobj.content)
     front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
-    
     return org_logo
 
 @register.assignment_tag
@@ -136,3 +137,24 @@ def get_duration_month(date):
     except:
         pass
     return duration
+
+@register.assignment_tag
+def get_parameter(obj):
+    report_parameter = ReportParameter.objects.filter(quarter=obj.id)
+    parameter_ids =[i.keyparameter.id for i in report_parameter]
+    parameter_obj = ProjectParameter.objects.filter(id__in=parameter_ids)
+    from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
+    # master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
+    main_list =[]
+    master_list = []
+    master_names = []
+    for i in parameter_obj:
+        main_list = pie_chart_mainlist_report(i,obj.start_date,obj.end_date)
+        master_list.append(main_list)
+        master_names.append(i.name)
+    return master_list,master_names
+    # return master_sh,pin_title_name,pip_title_name,master_pip,master_pin
+
+@register.filter
+def get_at_index(list, index):
+    return list[index]
