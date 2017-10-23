@@ -42,7 +42,7 @@ def report_form(request):
             dates_list = dates.split(' to ')
             project_report.end_date = dates_list[1] if dates_list else ''
             project_report.save()
-            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
+            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug')+'&key=add')
     else :
         msg = "Budget is not created"
     return render(request,'report/report-form.html',locals())
@@ -62,10 +62,7 @@ def report_section_form(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
     report_obj = ProjectReport.objects.get_or_none(id = report_id)
-    funder_user = UserProfile.objects.filter(active=2,organization_type=1)
-    partner = UserProfile.objects.filter(active=2,organization_type=2)
-    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    quest_list = Question.objects.filter(active=2)
+    quest_list = Question.objects.filter(active=2,block__block_type = 0)
     quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)
     if not report_obj:
         report_obj = ProjectReport.objects.get_or_none(id = request.POST.get('report_id'))
@@ -89,14 +86,18 @@ def report_section_form(request):
                     answer.text = data.get(question.slug+'_'+str(question.id))
                     answer.save()
         if data.get('cover_image_save'):
+            msg = "Cover Page is saved successfully"
             return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
         else:
-            return HttpResponseRedirect('/project/summary/?slug='+data.get('project_slug')+'&key='+'summary')
+            msg = "Project Summary Page is saved successfully"
+            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
     return render(request,'report/report-display-section.html',locals())
 
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
 def report_detail(request):
+    answer_list ={}
+    answer = ''
     slug = request.GET.get('slug')
     image_url = PMU_URL
     report_id = request.GET.get('report_id')
@@ -108,7 +109,18 @@ def report_detail(request):
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',
         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
-    location = ProjectLocation.objects.filter(object_id=project.id)    
+    location = ProjectLocation.objects.filter(object_id=project.id)
+    quest_list = Question.objects.filter(active=2,block__block_type = 0)
+    for question in quest_list:
+        answer_obj = Answer.objects.get_or_none(question =question,
+                        content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
+        if answer_obj and (question.qtype == 'T' or question.qtype == 'APT'):
+            answer = answer_obj.text 
+        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API'):
+            answer = answer_obj.attachment_file.url 
+        else:
+            answer = ''
+        answer_list[str(question.slug)] = answer
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
@@ -256,8 +268,8 @@ def display_blocks(request):
     report_id = request.GET.get('report_id')
     survey = Survey.objects.get(id=1)
     image_url = PMU_URL
-    block1 = Block.objects.get_or_none(survey=survey,name__iexact = 'Cover Page')
-    block2 = Block.objects.get_or_none(survey=survey,name__iexact = 'Project Summary Sheet')
+    block1 = Block.objects.get_or_none(survey=survey,name__iexact = 'Cover Page',block_type=0)
+    block2 = Block.objects.get_or_none(survey=survey,name__iexact = 'Project Summary Sheet',block_type=0)
     project_report = ProjectReport.objects.get_or_none(id=report_id)
     project = Project.objects.get_or_none(slug=project_slug)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
