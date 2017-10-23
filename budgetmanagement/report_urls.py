@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'detail/$',report_detail),
     url(r'listing/$',report_listing),
     url(r'display/blocks/$',display_blocks),
+    url(r'^download/pdf/$',download_report_generation),
 
 ]
