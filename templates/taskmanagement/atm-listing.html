@@ -77,7 +77,7 @@
                <ul>
                   {% if milestone %}
                   {% for mile in milestone %}
-                  <li><a href="javascript:void(0);">{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','{% for i in mile.task.all %}{{i.id}}{% endfor %}')"></i>{% endif %}</span>
+                  <li><a href="javascript:void(0);">{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>
 <!--                  {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
