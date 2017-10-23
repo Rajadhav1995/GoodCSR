@@ -33,6 +33,9 @@
 
       <form autocomplete="off" id="report" class ="form-horizantal budget_form" action="/report/section-form/" method="POST" enctype="multipart/form-data">
          {% csrf_token %}
+         {% if msg %}
+            <h3>{{msg}}</h3>
+         {% endif %}
          {% if block1 %}
          <div class="col-md-12">
             <div class = "block_name"><h3 class="border_line">{{block1.name}}</h3>
@@ -69,8 +72,8 @@
                                                 {% if i.q_type == 'T' %}
                                                     <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" ></input>
                                                 {% elif i.q_type == 'F' %}
-                                                    <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}"></input>
-<!--                                                    <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px'>-->
+                                                    <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
+                                                    <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" ></input>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
@@ -85,6 +88,9 @@
          
 <form autocomplete="off" id="report" class ="form-horizantal budget_form" action="/report/section-form/" method="POST" enctype="multipart/form-data">
          {% csrf_token %}
+         {% if msg %}
+            <h3>{{msg}}</h3>
+         {% endif %}
          {% if block2 %}
          <div class="col-md-12">
             <div class = "block_name"><h3 class="border_line"><br>{{block2.name}}</h3>

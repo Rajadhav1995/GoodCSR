@@ -109,7 +109,7 @@ ul li {
                                         <label>Report Duration<font color="red">*</font></label>
                                         <select class="form-control" name="quarter_type" id="quarter_type" required>
                                         {% for k,v in budget_quarters.iteritems %}
-                                            <option  value="{{k}}" {% if quarter_no == k %}selected="selected" {% endif %}>Quarterly {{forloop.counter}}</option>
+                                            <option  value="{{k}}" {% if quarter_no == k %}selected="selected" {% endif %}>Quarter {{forloop.counter}}</option>
                                         {% endfor %}
                                         </select>
                                         </div>

@@ -255,7 +255,17 @@ class Project(BaseContent):
         else:
             tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
         return tasks
-
+        
+    
+    def get_locations(self):
+        from media.models import ProjectLocation
+        project = Project.objects.get_or_none(id=self.id)
+        locations = ProjectLocation.objects.filter(content_type= ContentType.objects.get_for_model(project),object_id=project.id)
+        loc_list = [i.name for i in locations] if locations else []
+        loc = ','.join(loc_list)
+        return loc
+        
+        
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 
 class PrimaryWork(BaseContent):
