@@ -30,8 +30,8 @@
             <!-- <td><a href="/project/summary/?slug={{i.slug}}">{{i.start_date}}</a></td> -->
             <td>{{i.start_date | date:"d-m-Y"}} - {{i.end_date | date:"d-m-Y"}}</td>
             <!-- <td>{{i.get_active_display}}</td> -->
-            <td><a class="budget_button" href="/report/detail/?slug={{project.slug}}&report_id={{i.id}}">View Report</button></a></td>
-            
+            <td><a class="budget_button" href="/report/download/pdf/?slug={{project.slug}}&report_id={{i.id}}">View Report</button></a></td>
+<!--            <td><a class="budget_button" href="/report/download/pdf/?slug={{project.slug}}&report_id={{i.id}}">Download Report</button></a></td>-->
         </tr>
         {% endfor %}
 
