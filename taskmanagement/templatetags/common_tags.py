@@ -77,23 +77,8 @@ def get_auto_populated_questions(ques_id,project,project_report):
         'implement_ngo':mapping_view.implementation_partner.organization,
         'no_of_beneficiaries':project.no_of_beneficiaries,'project_duration':project.start_date.strftime('%Y-%m-%d')+' TO '+project.end_date.strftime('%Y-%m-%d'),
         'location':project.get_locations()}
-    keys = details.keys()
-    for sub in sub_questions:
-        data = {'q_id':sub.id,'q_text':sub.text,'q_type':sub.qtype,'q_name':sub.slug}
-        answer_obj = Answer.objects.get_or_none(question=sub,content_type=ContentType.objects.get_for_model(project_report),object_id=project_report.id)
-        if answer_obj:
-            data['answer']= answer_obj.text if sub.qtype == 'T' or sub.qtype == 'APT' else answer_obj.attachment_file.url
-        else:
-            if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
-                from projectmanagement.templatetags import urs_tags
-                org_logo = urs_tags.get_org_logo(project)
-                if org_logo:
-                    data['answer'] = org_logo
-                else :
-                    data['answer'] = "/static/img/GoodCSR_color_circle.png"
-            if sub.slug in keys:
-                data['answer'] = details[sub.slug]
-        sub_quest_list.append(data)
+    
+    sub_quest_list = get_sub_answers(details,sub_questions,project_report,project)
     return sub_quest_list
     
 @register.assignment_tag 
@@ -119,3 +104,25 @@ def get_mile_images(mile_id):
         data['image']=image_
         image_miles.append(data)
     return image_miles
+    
+def get_sub_answers(details,sub_questions,project_report,project):
+    data = {}
+    sub_quest_list = []
+    keys = details.keys()
+    for sub in sub_questions:
+        data = {'q_id':sub.id,'q_text':sub.text,'q_type':sub.qtype,'q_name':sub.slug}
+        answer_obj = Answer.objects.get_or_none(question=sub,content_type=ContentType.objects.get_for_model(project_report),object_id=project_report.id)
+        if answer_obj:
+            data['answer']= answer_obj.text if sub.qtype == 'T' or sub.qtype == 'APT' else answer_obj.attachment_file.url
+        else:
+            if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
+                from projectmanagement.templatetags import urs_tags
+                org_logo = urs_tags.get_org_logo(project)
+                if org_logo:
+                    data['answer'] = org_logo
+                else :
+                    data['answer'] = "/static/img/GoodCSR_color_circle.png"
+            if sub.slug in keys:
+                data['answer'] = details[sub.slug]
+        sub_quest_list.append(data)
+    return sub_quest_list
