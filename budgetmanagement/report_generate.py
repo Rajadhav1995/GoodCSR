@@ -304,6 +304,7 @@ def download_report_generation(request):
         answer_list[str(question.slug)] = answer
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     location = ProjectLocation.objects.filter(object_id=project.id)
+    
 #    from django.template.loader import get_template
 #    input_filename = 'report/report-pdf-download.html'
 #    output_filename = 'README.pdf'
