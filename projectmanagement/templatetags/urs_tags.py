@@ -1,4 +1,3 @@
-# from budgetmanagement.common_method import key_parameter_chart
 import requests,ast
 import datetime
 import json
@@ -99,13 +98,14 @@ def get_utlizedline_total(row,projectobj):
 
 @register.assignment_tag
 def get_org_logo(projectobj):
-    funderobj = get_funder(projectobj)
-    data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
-    ''' calling function to return the company logo based on the project'''
-    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
-    validation_data = json.loads(companyobj.content)
-    front_image = validation_data.get('organization_logo')
-    org_logo = validation_data.get('front_image')
+    # funderobj = get_funder(projectobj)
+    # data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
+    # ''' calling function to return the company logo based on the project'''
+    # companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
+    # validation_data = json.loads(companyobj.content)
+    # front_image = validation_data.get('organization_logo')
+    # org_logo = validation_data.get('front_image')
+    org_logo = ''
     return org_logo
 
 @register.assignment_tag
@@ -144,7 +144,6 @@ def get_parameter(obj):
     parameter_ids =[i.keyparameter.id for i in report_parameter]
     parameter_obj = ProjectParameter.objects.filter(id__in=parameter_ids)
     from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
-    # master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     main_list =[]
     master_list = []
     master_names = []
@@ -153,7 +152,6 @@ def get_parameter(obj):
         master_list.append(main_list)
         master_names.append(i.name)
     return master_list,master_names
-    # return master_sh,pin_title_name,pip_title_name,master_pip,master_pin
 
 @register.filter
 def get_at_index(list, index):
