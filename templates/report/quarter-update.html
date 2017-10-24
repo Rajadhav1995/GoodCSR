@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load common_tags %}
 {% load urs_tags %}
+{% load question_tags %}
 {% block section %}
 {% endblock %}
 {% block content %}
@@ -21,89 +22,103 @@
                 <input type="hidden" name="slug" value="{{slug}}">
                 <input type="hidden" name="project-report" value="{{projectobj.id}}">
 <!--                <input type="hidden" name="previousquarter_length" value="previousquarter_list.items|length">-->
-            {% for i,v in previousquarter_list.items %}
+            {% for i,v in previousquarter_list.items|slice:"1" %}
             {% with forloop.counter as j %}
+            
+          
             <form id="ic_form" class ="form-horizantal budget_form" action=".?slug={{slug}}" method = "post">{% csrf_token %}
             <p>{{j}} . Previous Quarter Updates :{{v}} </p>
             <div style="border:3px solid black;margin-left: 9px;margin-right:9px;" >
                     <input type="hidden" name="quarter-date_1_j" value="{{v}}">
-                    <input type="hidden" name="milestone_count" value="{{j}}">
+                    <input type="hidden" name="count" value="{{j}}">
+                    {% for quest in previous_questionlist %}
+                        {% if quest.qtype == "APT" %}
                         <div class="row">
                             <div class="col-md-6 nopadding">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                    <label>Quarter Name : <span style="font-size-adjust: 0.58;"> {{v}} </span></label>
+                                    <label>{{quest.text|title}}</label>
+                                    {% get_previous_question_value quest v i as text %}
+                                    <input type="text" class="form-control" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly>&nbsp;
                                     </div>
                                 </div>
                             </div>
                         </div>
-                     <div class="row">
+                        {% endif %}
+                    {% if quest.qtype == "API" %}
+                    <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                    {% get_duration_month v as duration %}
-                                    <label> Duration </label>
-                                <input type="text" class="form-control" id="duration_3_{{i}}_{{j}}" name="duration_3_{{i}}_{{j}}" value="{{duration}}" readonly>&nbsp;
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </br>
-<!--                    <div class="row">-->
-<!--                            <div class="col-md-6 nopadding">-->
-<!--                                <div class="col-md-12">-->
-<!--                                    <div class="form-group">-->
                                         <label>Key Achievements in this Quarter</label>
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                    </div>-->
-                    </br><label>Snapshot of the Timeline</label>
-                    </br>
-                    <div class="data_row" style="border:2px solid black;margin-left: 9px;margin-right:9px;">
-                    
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <label>Snapshot of the Timeline</label>
+                    {% endif %}
+                    {% if quest.slug == "milestone-section" %}
+                    <input type="hidden" name="milestone_count_1" value="1">
+                    <input type="hidden" name="milestone-pic-count_1" value="1">
+                    <div class="data_row_1" id="data_row_1" style="border:2px solid black;margin-left: 9px;margin-right:9px;">
+                    {% get_previous_subquestions quest as milestone_questions %}
+                        {% for mile_quest in milestone_questions %}
+                        {% if mile_quest.qtype == "T" and mile_quest.slug != "picture-description" %}
                         <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label> Milestone Name </label> 
-                                        <textarea rows="4" cols="50" class="form-control text_area" id="milestone-name_1_{{i}}_{{j}}" name="milestone-name_1_{{i}}_{{j}}"> </textarea>
+                                        <label> {{mile_quest.text|title}} </label> 
+                                        <textarea rows="4" cols="50" class="form-control text_area" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1"> </textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                    {% if mile_quest.qtype == "F" %}
+                    <div class="data_picture_1" id="data_picture_1" style="border:2px solid black;margin-left: 9px;margin-right:9px;">
+                    {% endif %}
+                        {% if mile_quest.slug == "picture-description" %}
                         <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                    <label> About the milestone </label>
-                                    <textarea rows="4" cols="50" class="form-control text_area" id="milestone-description_1_{{i}}_{{j}}" name="milestone-description_1_{{i}}_{{j}}"></textarea>
+                                        <label> {{mile_quest.text|title}} </label> 
+                                        <textarea rows="4" cols="50" class="form-control text_area" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1"> </textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 nopadding">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                    <label> Upload Picture </label>
-                                    <input type="file" class="form-control" id = "img_1_{{i}}_{{j}}" name = "img_1_{{i}}_{{j}}">
+                        {% endif %}
+                        {% if mile_quest.qtype == "F" %}
+                            <div class="row">
+                                <div class="col-md-6 nopadding">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label> Upload Picture </label>
+                                        <input type="file" class="form-control" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 nopadding">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                    <label> Picutre Description </label>
-                                <textarea rows="4" cols="50" class="form-control text_area" id="pic-description_1_{{i}}_{{j}}" name="pic-description_1_{{i}}_{{j}}"></textarea>
-                                    </div>
+                            {% endif %}
+                {% if mile_quest.slug == "picture-description" %}
+                    </div> <!--  div style for picture ends -->
+                    <div class="click_buttons">
+                                <div class="link-left">
+                                    <input type="hidden"/>
+                                    <a href ="javascript:void(0);" class ="add_picture_{{j}}">+Add more Picture</a>
+                                </div>
+                                <div class="link-center">
+                                    <input type="hidden"/>
+                                    <a href ="javascript:void(0);" class ="remove_picture_{{j}}">Remove</a>
                                 </div>
                             </div>
-                        </div>
+                                {% endif %}
+                                                
+                        {% endfor %}
                     </div> <!-- div style for milestone ends -->
-                    
+                    </br>
 <!--                    add more functionality-->
                         <div class="click_buttons">
                             <div class="link-left">
@@ -116,15 +131,22 @@
                             </div>
                         </div>
 <!--                        add more functionality ends -->
-                    </br>
-                    <div style="float:left;width:100%" >
-                    <div style="border:2px solid black;margin-left: 9px;margin-right:9px;" >
+                    
+                    {% endif %}
+                    
+                    <div style="width:100%" >
+                    <div >
+                    {% if quest.slug == "parameter-section" %}
+                    <input type="hidden" name="parameter_count_1" value="1">
+                    {% get_previous_subquestions quest as parameter_questions %}
+                        {% for param_quest in parameter_questions %}
+                        {% if param_quest.slug == "parameter-selection" %}
                         <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                    <label>Parameter Selection </label>
-                                        <select class="form-control" name="paramter-selection_1_{{i}}_{{j}}" id="paramter-selection_1_{{i}}_{{j}}" class="location">
+                                    <label>{{param_quest.text|title}} </label>
+                                        <select class="form-control" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" >
                                         <option value = "">Select option </option>
                                         {% for i in project_paramterlist %}
                                         <option value="{{i.id}}">{{i.name}}</option>
@@ -134,29 +156,28 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                    {% if param_quest.slug == "about-parameter" %}
                         <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     <label> About Paramter </label>
-                                        <textarea rows="4" cols="50" class="form-control text_area" id="about-parameter_1_{{i}}_{{j}}" name="about-parameter_1_{{i}}_{{j}}"></textarea>
+                                        <textarea rows="4" cols="50" class="form-control text_area" id="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter"></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
                     </div> <!-- paramter selection div ends -->
                     </div>
-                        <div class="row">
-                            <div class="col-md-6 nopadding">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                    <label> Budget Utlization and tranches </label>
-<!--                                    <input type="text" class="form-control" id="budget-tranches_1_{{i}}_{{j}}" name="budget-tranches_1_{{i}}_{{j}}"> &nbsp;  -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-            </div> </br>
+                    
+                    {% endfor %}
+                    
+            </div>
+            
             <div class="click_buttons">
                 <div class="link-left">
 <!--                    <input type="hidden"/>-->
@@ -170,12 +191,14 @@
                     <input type="submit" value="Save Budget Lineitems" class="btn btn-success">
                 </div>
             </div>
+            
         </div> <!-- after form div ends -->
         </form>
+        
             {% endwith %}
             {% endfor %}
            
-
+            {% comment %}
             {% for i,v in currentquarter_list.items %}
             {% with forloop.counter as j %}
                 <p> {{j}}. Current Quarter Updates:{{v}} </p>
@@ -399,6 +422,7 @@
             </div></br>
             {% endwith %}
         {% endfor %}
+        {% endcomment %}
             </div>
             <div class="click_buttons">
                 <div class="link-left">
@@ -419,45 +443,47 @@
 </div>
 
 
+<!--this add more functionlity is for activity milestone add more section -->
+
 
 <script type="text/javascript">
     $(document).ready(function(){
                 function clone(){
-                    alert("hi mr.gube")
-                    nam = $(this).context.name.split('_')
-                    alert(nam);
-                    debugger
-                    var count = $('input[name=milestone_count]').val();
-                    var c = count;
+                    nam = $(this).context.className.split('_')
+                    var milestone_count = $('input[name=milestone_count_'+nam[2]+']').val();
+                    var c = milestone_count;
                     alert(c)
-                    debugger
-                    var tR = $('.data_row:last').clone();
-                    count++; /* To increase the count */
+                    var tR = $('.data_row_'+c+':last').clone();
+                    milestone_count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
-                    $(tR).find('div input, div select').each(function(){
+                    debugger;
+                    $(tR).find('textarea, select, input').each(function(){
                       if ($(this).attr('name')){
-                           if ($(this).attr('name').split('_').length == 3){
+                            
+                           if ($(this).attr('name').split('_').length == 6){
                               var name = $(this).attr('name').split('_');
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+count);
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
                             }
-                            else if ($(this).attr('name').split('_').length == 2){
-                              var name = $(this).attr('name').split('_');
-                              $(this).attr('name', name[0]+"_"+count);
-                              $(this).attr('id', name[0]+"_"+count);
+                            else if ($(this).attr('name').split('_').length == 7){
+                              var name = $(this).attr('name').split('_')
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+1);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+1);
                             }
                       }
                     });
-                    $('input[name=milestone_count]').val(count)
+                    $('input[name=milestone_count_1]').val(milestone_count)
                     //$(tR).find('td span.init').text(count);
-                    $(tR).insertAfter('.data_row:last');
+                    $(tR).insertAfter('.data_row_'+c+':last');
+                    tR.removeClass().addClass('data_row_'+milestone_count).attr("id",'data_row_'+milestone_count)
+                    
                     }
                 function remove(){
-                    var count = $('input[name=milestone_count').val();
+                    var count = $('input[name=milestone_count'+nam[2]+']').val();
                       if (count > 1) {
-                            $('input.data_row:last').remove();
-                            count  = $('tr.data_row').length;
-                            $('input[name=milestone_count]').val(count);
+                            $('input.data_row_'+nam[2]+':last').remove();
+                            count  = $('tr.data_row_'+nam[2]).length;
+                            $('input[name=milestone_count'+nam[2]+']').val(milestone_count);
                       }
                       else{
                         alert("Please add atleast one record")
@@ -465,9 +491,61 @@
                 }
             //$(".add_clone").on("click", clone);
             $("[class^=add_clone_]").on("click", clone);
-            $(".remove").on("click", remove);
+            $("[class^=remove_]").on("click", remove);
     
     });
 </script>
+
+<!--this script is for add more functionality for pictures-->
+<script type="text/javascript">
+    $(document).ready(function(){
+                function pic_clone(){
+                    nam = $(this).context.className.split('_')
+                    var pic_count = $('input[name=milestone-pic-count_'+nam[2]+']').val();
+                    var c = pic_count;
+                    alert(c)
+                    var tR = $('.data_picture_'+c+':last').clone();
+                    pic_count++; /* To increase the count */
+                    /* further functionalitie to split the name and append row number to each input type */
+                    debugger;
+                    $(tR).find('textarea, select, input').each(function(){
+                      if ($(this).attr('name')){
+                            
+                           if ($(this).attr('name').split('_').length == 6){
+                              var name = $(this).attr('name').split('_')
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+pic_count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+pic_count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 7){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+ name[5]+"_"+pic_count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+pic_count);
+                            }
+                      }
+                    });
+                    $('input[name=milestone-pic-count_1]').val(pic_count)
+                    //$(tR).find('td span.init').text(count);
+                    $(tR).insertAfter('.data_picture_'+c+':last');
+                    tR.removeClass().addClass('data_picture_'+pic_count).attr("id",'data_picture_'+pic_count)
+                    
+                    }
+                function pic_remove(){
+                    var count = $('input[name=data_picture_'+nam[2]+']').val();
+                      if (count > 1) {
+                            $('input.data_picture_'+nam[2]+':last').remove();
+                            count  = $('tr.data_picture_'+nam[2]).length;
+                            $('input[name=milestone-pic-count_'+nam[2]+']').val(pic_count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            //$(".add_clone").on("click", clone);
+            $("[class^=add_picture_]").on("click", pic_clone);
+            $("[class^=remove_picture_]").on("click", pic_remove);
+    
+    });
+</script>
+
 
 {% endblock %}
