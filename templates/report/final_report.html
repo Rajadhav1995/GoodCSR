@@ -1,223 +1,254 @@
 {% extends 'project/project-summary.html' %}
+{% load common_tags %}
+{% load urs_tags %}
 {% load question_tags %}
 <!--{% load urs_tags %}-->
 {% block content %}
 <link rel="stylesheet" href="/static/css/aria-accordion.css" />
 <link rel="stylesheet" href="/static/css/style-accordion.css" />
 <link rel="stylesheet" href="/static/css/jquery-ui.css">
-                        <input type="hidden" name="count" value="6">
-                        <input type="hidden" name="slug" value="{{slug}}">
-                        <input type="hidden" name="project-report" value="{{projectreportobj.id}}">
+<input type="hidden" name="count" value="6">
+<input type="hidden" name="slug" value="{{slug}}">
+<input type="hidden" name="project-report" value="{{projectreportobj.id}}">
 <section class="content-part">
     <div class=" company_listing">
     <div class="col-md-12 col-xs-12 nopadding company_listing">
-        <div class="row">
-            <div class="generate_boxbg">
-                <div class="general_report">
-                    <h2>Generate Report</h2>
-                    <div>
-                        <p align="right" class="edit_templete"><a href="forms-single.html" target="_self">Edit Templete</a></p>
+    <div class="row">
+        <div class="generate_boxbg">
+            <div class="general_report">
+                <h2>Generate Report</h2>
+                <div>
+                    <p align="right" class="edit_templete"><a href="forms-single.html" target="_self">Edit Templete</a></p>
+                </div>
+                <div id="accordion">
+                    <h3>Cover Page</h3>
+                    <div class="text_accordion">
+                        <div class="col-md-6 report_text">
+                            <p>Report Name</p>
+                            <button>Nabarangpur School Project</button>
+                            <h5><a href="#">Remove</a></h5>
+                        </div>
+                        <div class="col-md-6 report_text">
+                            <p>Cover Image</p>
+                            <button>Upload image</button>
+                            <h5><a href="#">Remove</a></h5>
+                        </div>
+                        <div class="col-md-6 report_text">
+                            <p>Report Type</p>
+                            <button>Quarterly</button>
+                            <h5><a href="#">Remove</a></h5>
+                        </div>
+                        <div class="col-md-6 report_text">
+                            <p>Report Duration</p>
+                            <button style="width:45%">05/09/16</button> To <button style="width:45%">24/02/17</button>
+                            <h5><a href="#">Remove</a></h5>
+                        </div>
+                        <div class="col-md-6 report_text">
+                            <p>Client Name</p>
+                            <button>OVP venture partners</button>
+                            <h5><a href="#">Remove</a></h5>
+                        </div>
+                        <div class="col-md-6 report_text">
+                            <p>Prepared by</p>
+                            <button>Akanksha</button>
+                            <h5><a href="#">Remove</a></h5>
+                        </div>
+                        <div class="col-md-12 report_text">
+                            <p>Logos</p>
+                            <div class="logo-partner">
+                                <h6>Implementation Partner </h6>
+                                <img src="img/akanksha.jpg" style="">
+                                <div class="form-group addpicture">
+                                    <img src="img/browse.png">
+                                    <input type="file" id="imge01">
+                                </div>
+                            </div>
+                            <div class="logo-partner">
+                                <h6>Client </h6>
+                                <img src="img/ovp-logo.jpg" style="">
+                                <div class="form-group addpicture">
+                                    <img src="img/browse.png">
+                                    <input type="file" id="imge02">
+                                </div>
+                            </div>
+                            <div class="logo-partner">
+                                <h6>PMO</h6>
+                                <img src="img/logo.png" style="">
+                                <div class="form-group addpicture">
+                                    <img src="img/browse.png">
+                                    <input type="file" id="imge03">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="report_save">Save</button>
                     </div>
-                    <div id="accordion">
-                        <h3>Cover Page</h3>
+                    <h3>Project Summery sheet</h3>
+                    <div>
                         <div class="text_accordion">
                             <div class="col-md-6 report_text">
-                                <p>Report Name</p>
+                                <p>Project Title</p>
                                 <button>Nabarangpur School Project</button>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             <div class="col-md-6 report_text">
-                                <p>Cover Image</p>
-                                <button>Upload image</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Report Type</p>
-                                <button>Quarterly</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Report Duration</p>
-                                <button style="width:45%">05/09/16</button> To <button style="width:45%">24/02/17</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Client Name</p>
+                                <p>Donor</p>
                                 <button>OVP venture partners</button>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             <div class="col-md-6 report_text">
-                                <p>Prepared by</p>
-                                <button>Akanksha</button>
+                                <p>Location</p>
+                                <button>Kanpur, Satara, Pin </button>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            <div class="col-md-6 report_text">
+                                <p>Project Budget</p>
+                                <button>65 Lakhs</button>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            <div class="col-md-6 report_text">
+                                <p>Project Duration</p>
+                                <button>Jan 2015 - Nov 2017</button>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            <div class="col-md-6 report_text">
+                                <p>Number of Beneficiaries</p>
+                                <button>20,000</button>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            <div class="col-md-6 report_text">
+                                <p>Implementation NGO</p>
+                                <button>Akansha</button>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             <div class="col-md-12 report_text">
-                                <p>Logos</p>
-                                <div class="logo-partner">
-                                    <h6>Implementation Partner </h6>
-                                    <img src="img/akanksha.jpg" style="">
-                                    <div class="form-group addpicture">
-                                        <img src="img/browse.png">
-                                        <input type="file" id="imge01">
-                                    </div>
+                                <p>Program Description</p>
+                                <div class="logo-partner-scroll ">
+                                    <p>This project seeks to raise funds for over 700 children who can be enrolled in our kindergarten programs in 400 villages in Karnataka in 2016. These children are either orphans or belong to very poor families some of them with family incomes as low as $15 per month. </p>
                                 </div>
-                                <div class="logo-partner">
-                                    <h6>Client </h6>
-                                    <img src="img/ovp-logo.jpg" style="">
-                                    <div class="form-group addpicture">
-                                        <img src="img/browse.png">
-                                        <input type="file" id="imge02">
-                                    </div>
+                                <h5><a href="#">Remove</a></h5>
+                                <p>Objective of the project</p>
+                                <div class="logo-partner-scroll ">
+                                    <p>This project seeks to raise funds for over 700 children who can be enrolled in our kindergarten programs in 400 villages in Karnataka in 2016. These children are either orphans or belong to very poor families some of them with family incomes as low as $15 per month. </p>
                                 </div>
-                                <div class="logo-partner">
-                                    <h6>PMO</h6>
-                                    <img src="img/logo.png" style="">
-                                    <div class="form-group addpicture">
-                                        <img src="img/browse.png">
-                                        <input type="file" id="imge03">
-                                    </div>
-                                </div>
+                                <h5><a href="#">Remove</a></h5>
                             </div>
                             <button class="report_save">Save</button>
                         </div>
-                        <h3>Project Summery sheet</h3>
+                    </div>
+
+
+
+                    <!--Previous Quarter updates div starts here-->
+                    {% for i,v in previousquarter_list.items %}
+                    {% with forloop.counter as j %}
+                    <h3> Previous Quarter Updates :{{v}}</h3>
+                        <form action=".?slug={{slug}}" method = "post">
+                        {% csrf_token %}
                         <div>
-                            <div class="text_accordion">
-                                <div class="col-md-6 report_text">
-                                    <p>Project Title</p>
-                                    <button>Nabarangpur School Project</button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Donor</p>
-                                    <button>OVP venture partners</button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Location</p>
-                                    <button>Kanpur, Satara, Pin </button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Project Budget</p>
-                                    <button>65 Lakhs</button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Project Duration</p>
-                                    <button>Jan 2015 - Nov 2017</button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Number of Beneficiaries</p>
-                                    <button>20,000</button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Implementation NGO</p>
-                                    <button>Akansha</button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-12 report_text">
-                                    <p>Program Description</p>
-                                    <div class="logo-partner-scroll ">
-                                        <p>This project seeks to raise funds for over 700 children who can be enrolled in our kindergarten programs in 400 villages in Karnataka in 2016. These children are either orphans or belong to very poor families some of them with family incomes as low as $15 per month. </p>
-                                    </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                    <p>Objective of the project</p>
-                                    <div class="logo-partner-scroll ">
-                                        <p>This project seeks to raise funds for over 700 children who can be enrolled in our kindergarten programs in 400 villages in Karnataka in 2016. These children are either orphans or belong to very poor families some of them with family incomes as low as $15 per month. </p>
-                                    </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <button class="report_save">Save</button>
+                            {% for quest in previous_questionlist %}
+                            {% if quest.qtype == "APT" %}
+                            <div class="col-md-6 report_text">
+                                <p>{{quest.text|title}}</p>
+                                {% get_previous_question_value quest v i as text %}
+                                <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly>
+                                <h5><a href="#">Remove</a></h5>
                             </div>
-                        </div>
-                        <!--Previous Quarter updates div starts here-->
-                        {% for i,v in previousquarter_list.items %}
-                        {% with forloop.counter as j %}
-                            <h3> Previous Quarter Updates :{{v}}</h3>
-                            <form action=".?slug={{slug}}" method = "post">{% csrf_token %}
-                            <div>
+                            {% endif %}
+                            {% if quest.slug == "key-achievements-in-this-quarter" %}
+                            <div class="col-md-12 report_text " style="padding:0px">
+                                <p>Key Achievements in this quarter</p>
+                                <img src="/static/img/image_slideshow.jpg" style="width:100%">
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            {% endif %}
+                            {% if quest.slug == "milestone-section" %}
+                            <div class="milestone">
+                                <div class="col-md-12"></div>
+                                
+                                {% get_previous_subquestions quest as milestone_questions %}
+                                {% for mile_quest in milestone_questions %}
                                 <div class="col-md-6 report_text">
-                                    <p>Heading</p>
-                                    <button>Previous Quarter Updates</button>
+                                
+                                {% if mile_quest.slug == "milestone-name" %}
+                                    <p>{{mile_quest.text|title}}</p>
+                                    <input type="text " class="form_section">
                                     <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Sub-heading</p>
-                                    <button>First Quarter</button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <p>Duration</p>
-                                    <button>Jan 2015 - Nov 2017 </button>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-12 report_text " style="padding:0px">
-                                    <p>Key Achievements in this quarter</p>
-                                    <img src="img/image_slideshow.jpg" style="width:100%">
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="milestone">
-                                    <div class="col-md-12"></div>
-                                    <div class="col-md-6 report_text">
-                                        <p>Milestone 1</p>
-                                        <button>Jan 2015 - Nov 2017 </button>
-                                        <h5><a href="#">Remove</a></h5>
-                                        <div class=" report_text">
-                                            <p>Upload Picture</p>
-                                            <div class="form-group upload_text">
-                                                <input type="file" id="input02">
-                                            </div>
-                                            <h5><a href="#">Remove</a></h5>
-                                        </div>
-                                        <div class=" report_text">
-                                            <p>Picture Description</p>
-                                            <div class="form-group">
-                                                <input type="text " class="form_section">
-                                            </div>
-                                            <h5><a href="#">Remove</a></h5>
-                                            <h5><a href="#">Remove</a></h5>
-                                            <div class="form-group addpicture">
-                                                <input type="file" id="input05">
-                                            </div>
-                                            <h5><a href="#">Remove</a></h5>
-                                        </div>
+                                {% endif %}
+                                
+                                {% if mile_quest.qtype == "F" %}
+                                <div class=" report_text">
+                                    <p>{{mile_quest.text|title}}</p>
+                                    <div class="form-group upload_text">
+                                        <input type="file" id="input02">
                                     </div>
-                                    <div class="col-md-6 report_text">
-                                        <p>Add Milestone</p>
-                                        <div class="logo-partner-scroll">
-                                            <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
-                                        </div>
-                                        <h5><a href="#">Remove</a></h5>
-                                    </div>
+                                    <h5><a href="#">Remove</a></h5>
                                 </div>
+                                {% endif %}
+                                
+                                {% if mile_quest.slug == "picture-description" %}
+                                <div class=" report_text">
+                                    <p>{{mile_quest.text|title}}</p>
+                                    <div class="form-group">
+                                        <input type="text " class="form_section">
+                                    </div>
+                                    <h5><a href="#">Remove</a></h5>
+                                          <div class="form-group addpicture">
+                                            <input type="file" id="input05">
+                                        </div>
+                                </div>
+                                {% endif %}
+                                </div>
+                                {% if mile_quest.slug == "milestone-description" %}
+                                <div class="col-md-6 report_text">
+                                    <p>{{mile_quest.text|title}}</p>
+                                    <div class="logo-partner-scroll">
+                                        <p> </p>
+                                    </div>
+                                    <h5><a href="#">Remove</a></h5>
+                                </div>
+                                {% endif %}
+                                
                                 <div class="form-group addmilestone">
                                     <p>+ add Milestone</p>
                                 </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">
+                                {% get_previous_subquestions quest as parameter_questions %}
                                 <div class="milestone">
+                                    {% for param_quest in parameter_questions %}
+                                    {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
-                                        <p>Parameter Selection</p>
+                                        <p>{{param_quest.text|title}}</p>
                                         <select>
                                             <option>Select</option>
-                                            <option>1</option>
-                                            <option>2</option>
+                                            {% for i in project_paramterlist %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
                                         </select>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
+                                    {% endif %}
+                                    
+                                    
+                                    {% if param_quest.slug == "about-parameter" %}
                                     <div class="col-md-12 report_text ">
-                                        <p>About parameter</p>
+                                        <p>{{param_quest.text|title}}</p>
                                         <div class="logo-partner-scroll">
-                                            <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
+                                            <p></p>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
+                                    {% endif %}
+                                
+                                    {% endfor %}
                                 </div>
                                 <div class="form-group addmilestone">
-                                    <p>+ add More</p>
+                                    <p>+ add More Parameter</p>
                                 </div>
+                                {% endif %}
+                                {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>Budget Utilisation and tranches</p>
                                     <div class="table-responsive">
@@ -242,569 +273,29 @@
                                                 <td>1000</td>
                                                 <td>0</td>
                                             </tr>
-                                            <tr>
-                                                <td>Programmatic</td>
-                                                <td>Construction</td>
-                                                <td>Materials Purchase</td>
-                                                <td>2</td>
-                                                <td>500</td>
-                                                <td>1000</td>
-                                                <td>1200</td>
-                                                <td>-200</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Programmatic</td>
-                                                <td>Salaries</td>
-                                                <td>Project Manager Salary</td>
-                                                <td>1</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="total_budget">
-                                                <td>Total Programmatic</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>4400</td>
-                                                <td>4400</td>
-                                                <td>-200</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Non Programmatic</td>
-                                                <td></td>
-                                                <td>Utilization Fees</td>
-                                                <td>1</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Non Programmatic</td>
-                                                <td></td>
-                                                <td>Utilization Fees</td>
-                                                <td>2</td>
-                                                <td>500</td>
-                                                <td>1000</td>
-                                                <td>1200</td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="total_budget">
-                                                <td>Total Non Programmatic</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>2000</td>
-                                                <td>2000</td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="total_budget">
-                                                <td>Total Budget</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>3000</td>
-                                                <td>3200</td>
-                                                <td>-200</td>
-                                            </tr>
+                                            
                                         </table>
                                     </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                    <br>
-                                    <div class="table-responsive">
-                                        <table class="table table-boardered budget_table">
-                                            <tr>
-                                                <th>Tranche No.</th>
-                                                <th>Due Date</th>
-                                                <th>Planned Amount</th>
-                                                <th>Actual Disbursement</th>
-                                                <th>Recommended Disbursement</th>
-                                                <th>Utilized</th>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>1-Jan-18</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>1-Jun-18</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                            </tr>
-                                            <tr>
-                                                <td>13</td>
-                                                <td>1-Nov-17</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                                <td>Rs. 100</td>
-                                            </tr>
-                                            <tr class="total_budget">
-                                                <td>Total </td>
-                                                <td></td>
-                                                <td>Rs. 300</td>
-                                                <td>Rs. 300</td>
-                                                <td>Rs. 305</td>
-                                                <td>Rs. 230</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <!--<img src="img/table01.png" style="width:100%">-->
                                     <h5><a href="#">Remove</a></h5>
                                 </div>
+                                {% endif %}
+                                
+                                {% endfor %}
                                 <br>
                                 <button class="report_save">Save</button>
+                                
                             </div>
-                        </form>
-                        {% endwith %}
-                        {% endfor %}
-                        <!--previous quarters div ends here-->
-                        <!--Current Quarter Updates starts here -->
-                        <h3>Current Quarter Updates</h3>
-                        <div>
-                            <div class="col-md-6 report_text">
-                                <p>Heading</p>
-                                <button>Previous Quarter Updates</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Sub-heading</p>
-                                <button>First Quarter</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Duration</p>
-                                <button>Jan 2015 - Nov 2017 </button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-12 report_text " style="padding:0px">
-                                <p>Milestones & Activites Snapshot</p>
-                                <img src="img/imgpage0802.jpg" style="width:100%">
-                            </div>
-                            <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px">
-                                <h5><a href="#">Remove</a></h5>
-                                <p>About the Quarter</p>
-                                <button>Jan 2015 - Nov 2017 </button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="milestone">
-                                <div class="col-md-6 report_text ">
-                                    <p>Activity 1</p>
-                                    <input type="text " class="form_section">
-                                    <h5><a href="#">Remove</a></h5>
-                                    <div class=" report_text">
-                                        <p>About the Activity</p>
-                                        <div class="logo-partner-scroll">
-                                            <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
-                                        </div>
-                                        <h5><a href="#">Remove</a></h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 report_text">
-                                    <div class=" report_text">
-                                        <p>Upload Picture</p>
-                                        <div class="form-group upload_text">
-                                            <input type="file" id="file01">
-                                        </div>
-                                        <h5><a href="#">Remove</a></h5>
-                                    </div>
-                                    <div class=" report_text">
-                                        <p>Picture Description</p>
-                                        <div class="form-group">
-                                            <input type="text " class="form_section">
-                                        </div>
-                                        <h5><a href="#">Remove</a></h5>
-                                        <div class="form-group addpicture">
-                                            <input type="file" id="file02">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group addmilestone">
-                                <p>+ add Milestone</p>
-                            </div>
-                            <hr class="border_line">
-                            <div class="milestone">
-                                <div class="col-md-6 report_text parameter_section">
-                                    <p>Parameter Selection</p>
-                                    <select>
-                                        <option>Select</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                    </select>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                <div class="col-md-12 report_text ">
-                                    <p>About parameter</p>
-                                    <div class="logo-partner-scroll">
-                                        <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
-                                    </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                            </div>
-                            <div class="form-group addmilestone">
-                                <p>+ add More</p>
-                            </div>
-                            <div class="col-md-12 report_text " style="padding:0px">
-                                <p>Budget Utilisation and tranches</p>
-                                <
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>Heading</th>
-                                            <th>Subheading</th>
-                                            <th>Units</th>
-                                            <th>Rate</th>
-                                            <th>Total Planned</th>
-                                            <th>Total Utikized</th>
-                                            <th>Variance</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Salaries</td>
-                                            <td>Project Manager Salary</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Construction</td>
-                                            <td>Materials Purchase</td>
-                                            <td>2</td>
-                                            <td>500</td>
-                                            <td>1000</td>
-                                            <td>1200</td>
-                                            <td>-200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Salaries</td>
-                                            <td>Project Manager Salary</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total Programmatic</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>4400</td>
-                                            <td>4400</td>
-                                            <td>-200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Non Programmatic</td>
-                                            <td></td>
-                                            <td>Utilization Fees</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Non Programmatic</td>
-                                            <td></td>
-                                            <td>Utilization Fees</td>
-                                            <td>2</td>
-                                            <td>500</td>
-                                            <td>1000</td>
-                                            <td>1200</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total Non Programmatic</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>2000</td>
-                                            <td>2000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total Budget</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>3000</td>
-                                            <td>3200</td>
-                                            <td>-200</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                                <br>
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Tranche No.</th>
-                                            <th>Due Date</th>
-                                            <th>Planned Amount</th>
-                                            <th>Actual Disbursement</th>
-                                            <th>Recommended Disbursement</th>
-                                            <th>Utilized</th>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>1-Jan-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>1-Jun-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr>
-                                            <td>13</td>
-                                            <td>1-Nov-17</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total </td>
-                                            <td></td>
-                                            <td>Rs. 300</td>
-                                            <td>Rs. 300</td>
-                                            <td>Rs. 305</td>
-                                            <td>Rs. 230</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <!--<img src="img/table01.png" style="width:100%">-->
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-12 report_text current_quarter">
-                                <p>About parameter</p>
-                                <div class="logo-partner-scroll">
-                                    <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-12 report_text current_quarter">
-                                <p>About parameter</p>
-                                <div class="logo-partner-scroll">
-                                    <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <br>
-                            <button class="report_save">Save</button>
-                        </div>
-                        <!-- ends Current Quarter Updates-->
-                        <!--starts Next Quarter Plan -->
-                        <h3>Next Quarter Plan</h3>
-                        <div>
-                            <div class="col-md-6 report_text">
-                                <p>Heading</p>
-                                <button>Previous Quarter Updates</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Sub-heading</p>
-                                <button>First Quarter</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Duration</p>
-                                <button>Jan 2015 - Nov 2017 </button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-12 report_text " style="padding:0px">
-                                <p>Milestones & Activites Snapshot</p>
-                                <img src="img/imgpage0802.jpg" style="width:100%">
-                            </div>
-                            <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px">
-                                <p>About the Quarter</p>
-                                <div class="logo-partner-scroll">
-                                    <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-12 report_text " style="padding:0px">
-                                <p>Budget Utilisation and tranches</p>
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>Heading</th>
-                                            <th>Subheading</th>
-                                            <th>Units</th>
-                                            <th>Rate</th>
-                                            <th>Total Planned</th>
-                                            <th>Total Utikized</th>
-                                            <th>Variance</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Salaries</td>
-                                            <td>Project Manager Salary</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Construction</td>
-                                            <td>Materials Purchase</td>
-                                            <td>2</td>
-                                            <td>500</td>
-                                            <td>1000</td>
-                                            <td>1200</td>
-                                            <td>-200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Salaries</td>
-                                            <td>Project Manager Salary</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total Programmatic</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>4400</td>
-                                            <td>4400</td>
-                                            <td>-200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Non Programmatic</td>
-                                            <td></td>
-                                            <td>Utilization Fees</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Non Programmatic</td>
-                                            <td></td>
-                                            <td>Utilization Fees</td>
-                                            <td>2</td>
-                                            <td>500</td>
-                                            <td>1000</td>
-                                            <td>1200</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total Non Programmatic</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>2000</td>
-                                            <td>2000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total Budget</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>3000</td>
-                                            <td>3200</td>
-                                            <td>-200</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                                <br>
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Tranche No.</th>
-                                            <th>Due Date</th>
-                                            <th>Planned Amount</th>
-                                            <th>Actual Disbursement</th>
-                                            <th>Recommended Disbursement</th>
-                                            <th>Utilized</th>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>1-Jan-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>1-Jun-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr>
-                                            <td>13</td>
-                                            <td>1-Nov-17</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr class="total_budget">
-                                            <td>Total </td>
-                                            <td></td>
-                                            <td>Rs. 300</td>
-                                            <td>Rs. 300</td>
-                                            <td>Rs. 305</td>
-                                            <td>Rs. 230</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <!--<img src="img/table01.png" style="width:100%">-->
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-12 report_text current_quarter">
-                                <p>About parameter</p>
-                                <div class="logo-partner-scroll">
-                                    <p>Lorem ipsum dolor sit amet, impetus vivendum reprimique et nam, clita maiestatis complectitur cu pri, purto omnesque accusata at sed. Vis ne tempor atomorum. Discere pertinax an cum, oratio voluptatum posidonium at est, quo id quem vocibus detracto. Ad eos quod alii referrentur.</p>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <br>
-                            <button class="report_save">Save</button>
-                        </div>
-                        <!--ends nexrt quarter updates -->
+                            </form>
+                    {% endwith %}
+                    {% endfor %}
+                    <!--previous quarters div ends here-->
+
+
+
+
+
+
+
                     </div>
                     <div class="below_buttons">
                         <hr>
@@ -928,4 +419,30 @@
         text : 'Upload'
     });
 </script>
+   <script type="text/javascript">
+        $('#input05').filestyle({
+            text : '+ add Picture'
+        });
+       
+        $('#input04').filestyle({
+            text : '+ add Milestone'
+        });
+       $('#file01').filestyle({
+            text : '+ Upload Image'
+        });
+       
+        $('#file02').filestyle({
+            text : '+ add more picture'
+        });
+        $('#imge01').filestyle({
+            text : '+ add more picture'
+        });
+        $('#imge02').filestyle({
+            text : '+ add more picture'
+        });
+        $('#imge03').filestyle({
+            text : '+ add more picture'
+        });
+   </script>
+    
 {% endblock %}

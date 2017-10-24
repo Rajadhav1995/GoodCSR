@@ -107,7 +107,8 @@ def report_detail(request):
     report_quarter = QuarterReportSection.objects.filter(project=report_obj)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-    cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',
+
+    cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
     location = ProjectLocation.objects.filter(object_id=project.id)
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
@@ -121,6 +122,7 @@ def report_detail(request):
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
+    import ipdb; ipdb.set_trace()
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
