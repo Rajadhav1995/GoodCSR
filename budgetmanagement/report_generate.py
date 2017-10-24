@@ -122,7 +122,6 @@ def report_detail(request):
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
-    import ipdb; ipdb.set_trace()
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
@@ -279,46 +278,6 @@ def display_blocks(request):
     
     return render(request,'report/report-display-section.html',locals())
     
-
-#import pdfkit
-
-def download_report_generation(request):
-    answer_list ={}
-    answer = ''
-    slug = request.GET.get('slug')
-    image_url = PMU_URL
-    report_id = request.GET.get('report_id')
-    project = Project.objects.get_or_none(slug = slug)
-    report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
-    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    report_quarter = QuarterReportSection.objects.filter(project=report_obj)
-    parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
-    quest_list = Question.objects.filter(active=2,block__block_type = 0)
-    for question in quest_list:
-        answer_obj = Answer.objects.get_or_none(question =question,
-                        content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
-        if answer_obj and (question.qtype == 'T' or question.qtype == 'APT'):
-            answer = answer_obj.text 
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API'):
-            answer = answer_obj.attachment_file.url 
-        else:
-            answer = ''
-        answer_list[str(question.slug)] = answer
-    master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-    location = ProjectLocation.objects.filter(object_id=project.id)
-    
-#    from django.template.loader import get_template
-#    input_filename = 'report/report-pdf-download.html'
-#    output_filename = 'README.pdf'
-#    template = get_template('report/report-pdf-download.html')
-#    with open(template.origin.name, 'r') as f:
-#        html_text = f.read()
-
-#    pdfkit.from_string(html_text, output_filename)
-
-    
-    return render(request,'report/report-pdf-download.html',locals())
-
 
 def quarter_image_save(request,milestoneobj,projectobj,milestone_images):
 #    Common functionality to save the images

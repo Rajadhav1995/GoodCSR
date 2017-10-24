@@ -29,30 +29,31 @@
 <header>
 <div class="">   
 <div>
-<img src="img/header-img.jpg" style="width:100%">
+<img src="/static/img/header-img.jpg" style="width:100%">
     </div>
     <div>
-<img src="img/banner-cover.jpg" style="width:100%">
+<img src="{{image_url}}{{cover_image}}" style="width:100%">
     </div>
     <div>
-<img src="img/bottomslider.jpg" style="width:100%;margin-top: -1px;">
+<img src="/static/img/bottomslider.jpg" style="width:100%;margin-top: -1px;">
     </div>
 </div>
  <div class="container">
   <div class="margin_top_50">
   <ul>
-      <li><img src="img/ovp.jpg"></li>
-      <li> <img src="img/akanksha.jpg"></li>
+      <li><img src="{{image_url}}{{client_logo}}"></li>
+      <li> <img src="{{image_url}}{{logos}}"></li>
       </ul>
    
     </div>
     <div class="text-head">
-        <h1>Nabarangpur School Project</h1>
-        <h5 style="float:left">by OVP venture partners</h5>
+        
+        <h1>{{report_name}}</h1>
+        <h5 style="float:left">by {{client_name}}</h5>
         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
         <hr>
      </div>
-     <p style="float:left; width:auto">Prepared by Akanksha</p>
+     <p style="float:left; width:auto">Prepared by {{prepared_by}}</p>
      <p style="text-align:right;width:auto; float:right">Jan 2017 to Mar 2017</p>
     </div>
    
