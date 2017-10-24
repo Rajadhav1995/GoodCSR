@@ -10,8 +10,6 @@ def key_parameter_chart(obj,parameter_id):
     pip_title_name = []
     pin_title_name = []
     counter =0
-    # kj = QuarterReportSection.objects.filter()
-    # report_parameter = ReportParameter.objects.get_or_none(keyparameter=)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     # pie_object = ProjectParameter.objects.filter(active= 2,parent=parameter_obj)
     pie_object = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
@@ -19,7 +17,6 @@ def key_parameter_chart(obj,parameter_id):
     
     for y in pie_object:
         if y.parameter_type=='PIN' or y.parameter_type=='PIP':
-            # values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y,start_date__gte=start_date, end_date__lte=end_date ).values_list('parameter_value',flat=True))
             values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y).values_list('parameter_value',flat=True))
             value = aggregate_project_parameters(pie_object[0],values)
             color = colors[counter]
