@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from budgetmanagement.report_generate import *
-
+from budgetmanagement.report_download_pdf import download_report_generation
 
 urlpatterns = [
     url(r'generation-form/$',report_form),
