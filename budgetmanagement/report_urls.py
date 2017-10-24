@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'detail/$',report_detail),
     url(r'^section-form/$',report_section_form),
     url(r'quarter/update/$',generate_report),
-    url(r'generate/$',report_create),
+#    url(r'generate/$',report_create),
     url(r'listing/$',report_listing),
     url(r'display/blocks/$',display_blocks),
     url(r'^download/pdf/$',download_report_generation),
