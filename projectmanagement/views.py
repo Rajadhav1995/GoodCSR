@@ -9,7 +9,7 @@ from projectmanagement.models import *
 from projectmanagement.forms import *
 from budgetmanagement.forms import TrancheForm
 from budgetmanagement.models import Tranche,ProjectReport
-from media.models import Attachment,Keywords,FileKeywords
+from media.models import Attachment,Keywords,FileKeywords,ProjectLocation
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -31,11 +31,16 @@ def create_project(request):
         obj = Project.objects.get(slug=slug)
         form = ProjectForm(instance = obj)
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
+        location = ProjectLocation.objects.filter(object_id=obj.id,active=2)
+        city_list = Boundary.objects.filter(boundary_level=3).order_by('name')
     except:
         form = ProjectForm()
+        location = ''
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
+    state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
     if request.method == 'POST':
+        
         try:
             instance = get_object_or_404(Project, slug=slug)
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
@@ -53,6 +58,7 @@ def create_project(request):
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
+            
             implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
             mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
             if mapping:
@@ -63,6 +69,27 @@ def create_project(request):
             else:
                 mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
                     implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
+            rem_id = request.POST.get('rem_id')
+            city_var = request.POST.get('city_var')
+            if rem_id != '':
+                rem_id_list = map(int,str(rem_id).split(','))
+            else:
+                rem_id_list=[]
+            if city_var != '':
+                city_var_list = map(str,str(city_var).split(','))
+            else:
+                city_var_list = []
+            if location:
+                [ i.switch() for i in location]
+            location_count = int(request.POST.get('name_count'))
+            for i in range(location_count):
+                city = 'city1_'+str(i+1)
+                location_type = 'type_'+str(i+1)
+                
+                if city not in city_var_list:
+                    boundary_obj = Boundary.objects.get(id=request.POST.get(city))
+                    location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+            del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
@@ -393,7 +420,6 @@ def project_summary(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id)
     obj = Project.objects.get(slug = slug)
-#    report_obj = ProjectReport.objects.get_or_none(project=obj)
     projectobj = obj
     activity = Activity.objects.filter(project=obj)
     projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
@@ -428,7 +454,6 @@ def project_summary(request):
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     number_json = json.dumps(number_json)
-
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):
@@ -464,8 +489,8 @@ def parameter_pie_chart(parameter_obj):
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
+    
     return master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh
-
 
 def pie_chart_mainlist(obj):
     '''
@@ -481,6 +506,24 @@ def pie_chart_mainlist(obj):
         color = colors[counter]
         counter+=1
         main_list.append({'name': str(y.name),'y':value,'color':color})
+
+    return main_list
+
+def pie_chart_mainlist_report(obj,start_date,end_date):
+    '''
+    This function is to get pie chart information in json data (both pie chart type)
+    '''
+    colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
+    main_list = []
+    counter =0
+    pie_object = ProjectParameter.objects.filter(active= 2,parent=obj)
+    for y in pie_object:
+        values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y, submit_date__gte=start_date,submit_date__lte=end_date).values_list('parameter_value',flat=True))
+        value = aggregate_project_parameters(pie_object[0],values)
+        color = colors[counter]
+        counter+=1
+        main_list.append({'name': str(y.name),'y':value,'color':color})
+
     return main_list
 
 

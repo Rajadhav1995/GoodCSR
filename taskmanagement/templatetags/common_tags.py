@@ -1,10 +1,12 @@
 from django import template
 register = template.Library()
 from datetime import datetime
-from media.models import Comment
+from media.models import Comment,Attachment
 from django.contrib.contenttypes.models import ContentType
 import pytz
 from taskmanagement.models import Task
+from budgetmanagement.models import *
+from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
 
 @register.assignment_tag
 def get_details(obj):
@@ -36,3 +38,91 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
     
+    
+@register.assignment_tag 
+def get_questions(block,project_report):
+    # to get the questions that are tagged in that particular section
+    question_list = []
+    question_dict={} 
+    report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
+    questions = Question.objects.filter(block=block,parent=None,block__block_type=0)
+    for i in questions:
+        answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+        question_dict = {'q_id':i.id,'q_text':i.text,
+            'q_type':i.qtype,'q_name':i.slug}
+        if i.qtype == 'T':
+            question_dict['answer'] = answer.text if answer else ''
+        question_list.append(question_dict)
+    return question_list
+    
+    
+@register.assignment_tag 
+def get_auto_populated_questions(ques_id,project,project_report):
+    # to get the auto populated questions that are tagged to that particular section
+    data = {}
+    question = Question.objects.get_or_none(id=ques_id)
+    sub_quest_list = []
+    sub_questions = Question.objects.filter(parent = question,block__block_type=0)
+    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
+    cover_image = Attachment.objects.get_or_none(description__iexact = "cover image",attachment_type = 1,
+            content_type = ContentType.objects.get_for_model(project_report),
+            object_id = project_report.id)
+    details = {'report_type':project_report.get_report_type_display(),
+        'report_duration':project_report.start_date.strftime('%Y-%m-%d')+' TO '+project_report.end_date.strftime('%Y-%m-%d'),
+        'prepared_by':project_report.created_by.name,'client_name':mapping_view.funder.organization,
+        'report_name': project_report.name if project_report.name else '',
+        'cover_image': cover_image.attachment_file.url if cover_image else '',
+        'project_title':project.name,'project_budget':project.total_budget,
+        'donor':mapping_view.funder.organization,
+        'implement_ngo':mapping_view.implementation_partner.organization,
+        'no_of_beneficiaries':project.no_of_beneficiaries,'project_duration':project.start_date.strftime('%Y-%m-%d')+' TO '+project.end_date.strftime('%Y-%m-%d'),
+        'location':project.get_locations()}
+    
+    sub_quest_list = get_sub_answers(details,sub_questions,project_report,project)
+    return sub_quest_list
+    
+@register.assignment_tag 
+def get_milestones(quarter,report_obj):
+    report_miles = []
+    data = {}
+    answer = Answer.objects.filter(quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+    milestones = answer.inline_answer if answer else ''
+    miles_list = ReportMilestoneActivity.objects.filter(id__in = list(milestones))
+    for i in miles_list:
+        data = {'name':i.name,'description':i.description,'id':i.id}
+        report_miles.append(data)
+    return report_miles
+
+@register.assignment_tag 
+def get_mile_images(mile_id):
+    data = {}
+    image_miles= []
+    miles_obj =  ReportMilestoneActivity.objects.get_or_none(id=mile_id)
+    images= Attachment.objects.filter(content_type = ContentType.objects.get_for_model(miles_obj),object_id = miles_obj.id)
+    for img in images:
+        image_ = {'img_source':img.attachment_file.url,'img_description':img.decsription}
+        data['image']=image_
+        image_miles.append(data)
+    return image_miles
+    
+def get_sub_answers(details,sub_questions,project_report,project):
+    data = {}
+    sub_quest_list = []
+    keys = details.keys()
+    for sub in sub_questions:
+        data = {'q_id':sub.id,'q_text':sub.text,'q_type':sub.qtype,'q_name':sub.slug}
+        answer_obj = Answer.objects.get_or_none(question=sub,content_type=ContentType.objects.get_for_model(project_report),object_id=project_report.id)
+        if answer_obj:
+            data['answer']= answer_obj.text if sub.qtype == 'T' or sub.qtype == 'APT' else answer_obj.attachment_file.url
+        else:
+            if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
+                from projectmanagement.templatetags import urs_tags
+                org_logo = urs_tags.get_org_logo(project)
+                if org_logo:
+                    data['answer'] = org_logo
+                else :
+                    data['answer'] = "/static/img/GoodCSR_color_circle.png"
+            if sub.slug in keys:
+                data['answer'] = details[sub.slug]
+        sub_quest_list.append(data)
+    return sub_quest_list

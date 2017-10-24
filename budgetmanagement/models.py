@@ -201,6 +201,10 @@ class Question(BaseContent):
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
     object_id = models.IntegerField(_('object ID'),**OPTIONAL)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    
+    def __unicode__(self):
+        return str(self.text) or str(self.id)
+
 
 class Answer(BaseContent):
     user = models.ForeignKey(
@@ -213,6 +217,9 @@ class Answer(BaseContent):
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
     object_id = models.IntegerField(_('object ID'),**OPTIONAL)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    
+    def __unicode__(self):
+        return str(self.id)
 
     def __str__(self):
         return str(self.id)
@@ -222,3 +229,5 @@ class RemoveQuestion(BaseContent):
     quarter_report = models.ForeignKey(ProjectReport,**OPTIONAL)
     text = models.TextField(**OPTIONAL) #to tag the removed question or section id's'
     
+    def __unicode__(self):
+        return str(self.text) or str(self.id)

@@ -79,10 +79,16 @@ ul li {
          </div><br>
             </div>
             <!-- /.box-header -->
+            {% if msg %}
+                <h3 class border_linr">Please add <a style="text-decoration:underline;color:#169776" href= '/manage/project/budget/create/?slug={{project.slug}}'>Budget</a>  for the project before proceeding with generation of the report </h3>
+                
+                <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
+            {% else %}
             <div class="box-body">
             <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
                         <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
+                        <input type="hidden" name="report_id" value="{{report_id}}" class="form-control" maxlength="200">
                             <div class="row">
                             <div class="col-md-6 nopadding">
                             <div class="col-md-12">
@@ -101,8 +107,11 @@ ul li {
                                     <div class="col-md-12">
                                         <div class="form-group">
                                         <label>Report Duration<font color="red">*</font></label>
-                                        <br>Start Date : <input type="text" name="start_date" readonly="true" required="" class="form-control" id="id_start_date">
-                                        End Date : <input type="text" name="end_date" readonly="true" required="" class="form-control" id="id_end_date">
+                                        <select class="form-control" name="quarter_type" id="quarter_type" required>
+                                        {% for k,v in budget_quarters.iteritems %}
+                                            <option  value="{{k}}" {% if quarter_no == k %}selected="selected" {% endif %}>Quarter {{forloop.counter}}</option>
+                                        {% endfor %}
+                                        </select>
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +124,8 @@ ul li {
                         <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
                     </form>
-  </div>
+                </div>
+                {% endif %}
   </div>
   </div>
   </div>
@@ -133,130 +143,10 @@ ul li {
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
 <script>
-  $(document).ready(function() {
-    $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-    $("#id_end_date").datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-    var start_date = "{{project.start_date|date:'Y-m-d'}}"
-    var end_date = "{{project.end_date|date:'Y-m-d'}}"
-    if (start_date != ''){
-        document.getElementById("id_start_date").value = start_date
-        $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',minDate: start_date,changeMonth: true,changeYear: true });
-    }
-    if (end_date != ''){
-        document.getElementById("id_end_date").value = end_date
-        $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd',minDate: end_date,changeMonth: true,changeYear: true });
-    }
-  } );
-  </script>
-
-
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        $("#report-form").validate({
-            framework: 'bootstrap',
-            icon: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            email: {
-                validators: {
-                    emailAddress: {
-                        message: 'The value is not a valid email address'
-                    }
-                }
-            }
-        },
-            rules :
-            {
-                name : {required:true, maxlength: 300},
-                email : {required:true},
-                organization_name : {required:true},
-                mobile_number : {required:true, minlength:9,maxlength:12,},
-                message : {required:true},
-                recaptcha_response_field : {required:true},
-                
-            },
-            messages:
-            {
-                name:{required:"<font color=#fc282f>Please enter name"},
-                email : {required:"<font color=#fc282f>Please enter Email id</font>"},
-                organization_name:{required:"<font color=#fc282f>Please enter Organization name</font>"},
-                mobile_number : {required : "<font color=#fc282f>Please enter Mobile Number</font>"},
-                message : {required : "<font color=#fc282f>Please enter message</font>"},
-                recaptcha_response_field : {required : "<font color=#fc282f>Please enter captcha</font>"},
-
-
-            },
-            highlight: function (element) {
-                $(element).parent().addClass('error')
-            },
-            unhighlight: function (element) {
-                $(element).parent().removeClass('error')
-            },
-
-
-
-        });
-});
-</script>
-<script type="text/javascript">
- $(document).ready(function () {
- $("#id_email").blur(function () {
- var email = $(this).val();
- var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
-if (re.test(email)) {
-    document.getElementById('email_error1').innerHTML=""
-} else {
-    document.getElementById('email_error1').innerHTML="Please enter valid email id"
-}
- if (email == '') {
- $("#availability").html("");
- }else{
- $.ajax({
- url: "/email-valid/?uname="+email
- }).done(function( data ) {
-    // if (data.is_taken== true) {
-    //     document.getElementById('email_error').innerHTML="Email id already present"
-    // } else{
-    //     document.getElementById('email_error').innerHTML=''
-    // };
     
- //$("#availability").html(data);
- }); 
- } 
- });
-});
+    
 </script>
-<script type="text/javascript">
 
-function email_valid() {
-    var email_valid = document.getElementById('email_error').innerHTML;
-    var email_valid1 = document.getElementById('email_error1').innerHTML;
-    var response = document.getElementById('recaptcha_response_field').value
-
-    if (email_valid == '' && email_valid1 == '') {
-        return true;
-    } else {
-        alert("Please enter valid email id");
-        return false;
-    };
-    if (response == '') {
-        alert('Please Enter captcha');
-    };
-}
-</script>
-<script type="text/javascript">
-function capcha_filled () {
-    allowSubmit = true;
-}
-function capcha_expired () {
-    allowSubmit = false;
-}
-
-</script>
 
 {% endif %}
   

@@ -60,10 +60,6 @@ def add_taskmanagement(request,model_name,m_form):
     if budget:
         if request.method=='POST':
             form=form(user_id,project.id,request.POST,request.FILES)
-            try:
-                end_date = form.data['end_date']
-            except:
-                pass
             if form.is_valid():
                 f=form.save()
                 from projectmanagement.common_method import unique_slug_generator
@@ -72,9 +68,7 @@ def add_taskmanagement(request,model_name,m_form):
                 if model_name == 'Activity' or model_name == 'Task':
                     f.created_by = user
                     f.save()
-                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-                else :
-                    return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
         else:
             form=form(user_id,project.id)
     else:
@@ -95,6 +89,10 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         project = Project.objects.get(slug = request.POST.get('slug_project'))
     if request.method == 'POST':
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
+        try:
+            end_date = form.data['end_date']
+        except:
+            pass
         if form.is_valid():
             f=form.save()
             from projectmanagement.common_method import unique_slug_generator
@@ -103,12 +101,13 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-            else:
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)
-    return render(request,'taskmanagement/base_forms.html',locals())
+    if model_name == 'Task':
+        return render(request,'taskmanagement/edit_task.html',locals())
+    else:
+        return render(request,'taskmanagement/base_forms.html',locals())
 
 def active_change(request,model_name):
     ids = request.GET.get('id')
@@ -665,3 +664,11 @@ def get_activity_tasks(request):
     task_list = Task.objects.filter(activity__id__in = obj_list)
     tasks = [{'id':i.id,'name':i.name} for i in task_list]
     return JsonResponse({"task":tasks})
+
+from django.http import JsonResponse
+def tasks_max_end_date(request):
+    ids = request.GET.get('id')
+    url=request.META.get('HTTP_REFERER')
+    tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)
+    expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
+    return JsonResponse({'expected_start_date':expected_start_date})

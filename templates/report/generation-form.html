@@ -31,14 +31,57 @@
          <br>
       </div>
 
-      <form autocomplete="off" id="report" class ="form-horizantal budget_form" action="/report/detail/" method="POST" enctype="multipart/form-data">
+      <form autocomplete="off" id="report" class ="form-horizantal budget_form" action="/report/section-form/" method="POST" enctype="multipart/form-data">
          {% csrf_token %}
          <div class="col-md-12">
-            <h3 class="border_line">Section 1</h3>
+            <h3 class="border_line">Cover Page</h3>
             <br>
             <input type="hidden" name="project_slug" value="{{project_slug}}" id="{{project_slug}}">
 
             <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+            <div class="row">
+               <div class="col-md-6 nopadding">
+                  <div class="col-md-12">
+                     <div class="form-group">
+                        <label>Report Name</label>
+                        <input type="text" name="report_name" value="{% if report_obj.name %}{{report_obj.name}}{% endif %}"id="id_report_name" required="" class="form-control"></input>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
+            <div class="row">
+               <div class="col-md-6 nopadding">
+                  <div class="col-md-12">
+                     <div class="form-group">
+                        <label>Cover Image</label>
+                        <input type="file" name="upload_cover_image" id="id_cover_image" required=""><img src="{{image_url}}{{cover_image.attachment_file.url}}" height=100px width = 100px></img></input>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
+            <div class="row">
+               <div class="col-md-6 nopadding">
+                  <div class="col-md-12">
+                     <div class="form-group">
+                        <label>Report Type</label>
+                        <div><b>{{report_obj.get_report_type_display}}</b></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
+            <div class="row">
+               <div class="col-md-6 nopadding">
+                  <div class="col-md-12">
+                     <div class="form-group">
+                        <label>Duartion</label>
+                        <div><b>{{report_obj.start_date|date:'Y-m-d'}}  to  {{report_obj.end_date|date:'Y-m-d'}}</b></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
             <div class="row">
                <div class="col-md-6 nopadding">
                   <div class="col-md-12">
@@ -66,7 +109,7 @@
          
          
          <div class="col-md-12">
-            <h3 class="border_line">Section 2</h3>
+            <h3 class="border_line">Program Summary Sheet</h3>
             <div class="row">
                <div class="col-md-6 nopadding">
                   <div class="col-md-12">
@@ -82,10 +125,11 @@
                   <div class="col-md-12">
                      <div class="form-group">
                         <label>Funder<font color="red">*</font></label>
-                        <select class="form-control" name="funder" id="funder">
-                           <option selected disabled>Select Funder</option>
-                           {% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
-                        </select>
+                            {{mapping_view.funder.organization}}
+<!--                        <select class="form-control" name="funder" id="funder">-->
+<!--                           <option selected disabled>Select Funder</option>-->
+<!--                           {% for i in funder_user %}<option {% if mapping_view.funder.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}-->
+<!--                        </select>-->
                      </div>
                   </div>
                </div>
@@ -104,8 +148,8 @@
                <div class="col-md-6 nopadding">
                   <div class="col-md-12">
                      <div class="form-group">
-                        <label>Duration (Months.)</label>
-                        <div><b>{{project.duration}}</b></div>
+                        <label>Project Duration </label>
+                        <div><b>{{project.start_date|date:'Y-m-d'}}  to  {{project.end_date|date:'Y-m-d'}}</b></div>
                      </div>
                   </div>
                </div>
@@ -125,40 +169,38 @@
                   <div class="col-md-12">
                      <div class="form-group">
                         <label>Implementation partner<font color="red">*</font></label>
-                        <select class="form-control" name="implementation_partner" id="implementation_partner" required>
-                           <option selected disabled>Select Implementation Partner</option>
-                           {% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}
-                        </select>
+                            {{mapping_view.implementation_partner.organization}}
+<!--                        <select class="form-control" name="implementation_partner" id="implementation_partner" required>-->
+<!--                           <option selected disabled>Select Implementation Partner</option>-->
+<!--                           {% for i in partner %}<option {% if mapping_view.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.organization}}" >{{i.organization}}</option>{% endfor %}-->
+<!--                        </select>-->
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-6 nopadding">
+                  <div class="col-md-12">
+                     <div class="form-group">
+                        <label>Project Description<font color="red">*</font></label>{{report_obj.description}}
+                        <textarea type="text" name="description" value="{{report_obj.description}}" id="description" required="" class="form-control text_area"></textarea>
                      </div>
                   </div>
                </div>
             </div>
             
-         </div>
-         <div class="col-md-12">
-            <h3 class="border_line">Section 3</h3>
-            <br>
             <div class="row">
                <div class="col-md-6 nopadding">
                   <div class="col-md-12">
                      <div class="form-group">
-                        <label>Project Description<font color="red">*</font></label>
-                        <textarea type="text" name="description" value="{{project.summary}}" id="description" required="" class="form-control text_area"></textarea>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-6 nopadding">
-                  <div class="col-md-12">
-                     <div class="form-group">
-                        <label>Objective of the project<font color="red">*</font></label>
-                        <textarea type="text" name="objective" id="objective" required="" class="form-control text_area"></textarea>
+                        <label>Objective of the project<font color="red">*</font></label>{{report_obj.objective}}
+                        <textarea type="text" name="objective" value="{{report_obj.objective}}" id="objective" required="" class="form-control text_area"></textarea>
                      </div>
                   </div>
                </div>
             </div>
          </div>
+         
           <input class="btn btn-primary" name = 'quarter_updates' type="submit" value="Save and Generate Quarter Updates" onclick="return ddlValidate();" />
          <input class="btn btn-primary" name = 'report_save' type="submit" value="Save" onclick="return ddlValidate();" />
          <a class="btn btn-success" href="/project/summary/?slug={{project_slug}}&key=summary"">Back</button></a>

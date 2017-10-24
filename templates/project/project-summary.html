@@ -25,6 +25,10 @@ $(document).ready(function(){
 .key-image-budget {
     margin-top: 81px;
 }
+/*.key-image{
+  margin-top: -10px;
+}
+*/
 </style>
 <div class="clear"></div>
 <!--Green pad starts-->
@@ -45,7 +49,7 @@ $(document).ready(function(){
     <ul>
 
     	<li><a href="javascript:void(0)"> by: {% if project_funders.funder.organization %} {{project_funders.funder.organization}}  {% else %} {% endif %}</a></li>
-        <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.attrs.first_name %}{{project_funders.implementation_partner.attrs.first_name}} {{project_funders.implementation_partner.attrs.last_name}} {% else %} {{project_funders.implementation_partner.name}}  {% endif %}</a></li>
+        <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.organization %}{{project_funders.implementation_partner.organization}} {% else %} {{project_funders.implementation_partner.name}}  {% endif %}</a></li>
     </ul>
     </div>
     <span style="position: absolute;
@@ -253,8 +257,7 @@ $(document).ready(function() {
           $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       };
-    // $(wrapper).append('<div><input class="form-control" placeholder="Enter Activity Name" type="text" name="activity['+x+']"/><input class="form-control" type="number" placeholder="Duration" name="duration['+x+']" id="id_number"><a href="#" class="remove_field">Remove</a></div>'); //add input box
-}
+    
 })
 </script>
 <script type="text/javascript">
@@ -272,24 +275,37 @@ $(document).ready(function() {
       if (obj.type == 'CUR') {
         var url = loc_url + '/' + "static/img/budget-icon.png";
         var value = numDifferentiation(obj.value);
-        var class_name = "key-image";
+        var class_name = "key-image parameter-position";
         }else{
-          var class_name = "key-image-budget";
-          var value = numberWithCommas(obj.value);
+          var class_name = "key-image-budget parameter-position";
+          var value = numDifferentiation_beneficiary(obj.value);
           var url = loc_url + '/' + "static/img/key-icon2.png";
         };
         $(wrapper).append('<li><h3>'+title+'</h3><img class="'+class_name+'" src='+url+' alt=""><h4 class="title-pad">'+value+'</h4></li>');
 }
 })
 function numDifferentiation(val) {
-    if(val >= 10000000) val = '<small>₹</small>'+ (val/10000000).toFixed(1) + ' <small>Cr</small>';
-    else if(val >= 100000) val = '<small>₹</small>'+ (val/100000).toFixed(1) + '<small>Lac</small>';
+    if(val >= 10000000) val = '<small>₹</small>'+ (val/10000000).toFixed(2) + ' <small>Cr</small>';
+    else if(val >= 100000) val = '<small>₹</small>'+ (val/100000).toFixed(2) + '<small>Lac</small>';
     else if(val >= 1000) val = '<small>₹</small>'+ numberWithCommas(val);
     else if(val < 1000) val = '<small>₹</small>'+ val;
     return val;
 }
+function numDifferentiation_beneficiary(val) {
+    if(val >= 10000000) val = (val/10000000).toFixed(1) + ' <small>Cr</small>';
+    else if(val >= 100000) val = (val/100000).toFixed(1) + '<small>Lac</small>';
+    else if(val >= 1000) val = numberWithCommas(val);
+    else if(val < 1000) val = val;
+    return val;
+}
 function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    x=x.toString();
+    var lastThree = x.substring(x.length-3);
+    var otherNumbers = x.substring(0,x.length-3);
+    if(otherNumbers != '')
+    lastThree = ',' + lastThree;
+    //var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
 }
 
 </script>
@@ -1035,6 +1051,7 @@ Highcharts.chart(values, {
                 layout: 'horizontal',
                 align: 'center',
                 width: 250,
+                height:300,
                 verticalAlign: 'bottom',
                 borderWidth: 0,
                 useHTML: true,
@@ -1093,6 +1110,7 @@ Highcharts.chart(values, {
                 layout: 'horizontal',
                 align: 'center',
                 width: 250,
+                height:300,
                 verticalAlign: 'bottom',
                 borderWidth: 0,
                 useHTML: true,
