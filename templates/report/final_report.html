@@ -145,7 +145,10 @@
                         <form action=".?slug={{slug}}" method = "post">
                         {% csrf_token %}
                         <div>
+                        
+                        
                             {% for quest in previous_questionlist %}
+<!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
@@ -154,6 +157,8 @@
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
+                            
+<!--                            this is for key achievements-->
                             {% if quest.slug == "key-achievements-in-this-quarter" %}
                             <div class="col-md-12 report_text " style="padding:0px">
                                 <p>Key Achievements in this quarter</p>
@@ -161,62 +166,71 @@
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
-                            {% if quest.slug == "milestone-section" %}
+                            
+<!--                            this is for milestone section-->
+                            
+                        {% if quest.slug == "milestone-section" %}
                             <div class="milestone">
                                 <div class="col-md-12"></div>
                                 
                                 {% get_previous_subquestions quest as milestone_questions %}
-                                {% for mile_quest in milestone_questions %}
-                                <div class="col-md-6 report_text">
                                 
-                                {% if mile_quest.slug == "milestone-name" %}
-                                    <p>{{mile_quest.text|title}}</p>
-                                    <input type="text " class="form_section">
-                                    <h5><a href="#">Remove</a></h5>
-                                {% endif %}
-                                
-                                {% if mile_quest.qtype == "F" %}
-                                <div class=" report_text">
-                                    <p>{{mile_quest.text|title}}</p>
-                                    <div class="form-group upload_text">
-                                        <input type="file" id="input02">
-                                    </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                {% endif %}
-                                
-                                {% if mile_quest.slug == "picture-description" %}
-                                <div class=" report_text">
-                                    <p>{{mile_quest.text|title}}</p>
-                                    <div class="form-group">
-                                        <input type="text " class="form_section">
-                                    </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                          <div class="form-group addpicture">
-                                            <input type="file" id="input05">
+                                    <div class="col-md-6 report_text">
+                                    {% for mile_quest in milestone_questions %}
+                                    {% if mile_quest.slug == "milestone-name" %}
+                                        <p>{{mile_quest.text|title}}</p>
+                                        <input type="text " style="width:100%;" >
+                                        <h5><a href="#">Remove</a></h5>
+                                    {% endif %}
+                                    
+                                    {% if mile_quest.slug == "upload-picture" %}
+                                        <div class="report_text">
+                                            <p>{{mile_quest.text|title}}</p>
+                                                  <div class="form-group upload_text">
+                                                    <input type="file" id="input02">
+                                                </div>
+                                                  <h5><a href="#">Remove</a></h5>
                                         </div>
-                                </div>
-                                {% endif %}
-                                </div>
+                                    {% endif %}
+                                    
+                                    {% if mile_quest.slug == "picture-description" %}
+                                        <div class=" report_text">
+                                            <p>{{mile_quest.text|title}}</p>
+                                            <div class="form-group">
+                                                <input type="text " class="form_section">
+                                            </div>
+                                            <div class="form-group addpicture">
+                                                    <input type="file" id="input05">
+                                                </div>
+                                            <h5><a href="#">Remove</a></h5>
+                                                  
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% endfor %}
+                                    </div> <!--  col 6 div ends-->
+                                    
+                                {% for mile_quest in milestone_questions %}
                                 {% if mile_quest.slug == "milestone-description" %}
-                                <div class="col-md-6 report_text">
-                                    <p>{{mile_quest.text|title}}</p>
-                                    <div class="logo-partner-scroll">
-                                        <p> </p>
-                                    </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
-                                {% endif %}
+                                        <div class="col-md-6 report_text">
+                                            <p>{{mile_quest.text|title}}</p>
+                                            <div class="logo-partner-scroll">
+                                                <p> </p>
+                                            </div>
+                                            <h5><a href="#">Remove</a></h5>
+                                        </div>
+                                    {% endif %}
+                                    {% endfor %}
                                 
-                                <div class="form-group addmilestone">
-                                    <p>+ add Milestone</p>
-                                </div>
-                                {% endfor %}
-                                {% endif %}
-                                {% if quest.slug == "parameter-section" %}
+                                
+                            </div> <!-- milestone class -->
+                        {% endif %}
+<!--                            this is for parameter selection -->
+                        {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">
-                                {% get_previous_subquestions quest as parameter_questions %}
                                 <div class="milestone">
+                                {% get_previous_subquestions quest as parameter_questions %}
+                                
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
@@ -247,8 +261,11 @@
                                 <div class="form-group addmilestone">
                                     <p>+ add More Parameter</p>
                                 </div>
-                                {% endif %}
-                                {% if quest.slug == "budget-utlization-tranches" %}
+                            {% endif %}
+                            
+<!--                            this is for budget table display-->
+                            
+                            {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>Budget Utilisation and tranches</p>
                                     <div class="table-responsive">
@@ -278,18 +295,18 @@
                                     </div>
                                     <h5><a href="#">Remove</a></h5>
                                 </div>
-                                {% endif %}
-                                
-                                {% endfor %}
-                                <br>
-                                <button class="report_save">Save</button>
-                                
+                            {% endif %}
+                            
+                            {% endfor %}
+                            
+                            
+                            
+                            
                             </div>
                             </form>
                     {% endwith %}
                     {% endfor %}
                     <!--previous quarters div ends here-->
-
 
 
 
