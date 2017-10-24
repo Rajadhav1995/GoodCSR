@@ -122,7 +122,6 @@ def report_detail(request):
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
-    import ipdb; ipdb.set_trace()
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
