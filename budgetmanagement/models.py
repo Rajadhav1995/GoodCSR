@@ -214,6 +214,9 @@ class Answer(BaseContent):
     object_id = models.IntegerField(_('object ID'),**OPTIONAL)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
 
+    def __str__(self):
+        return str(self.id)
+
 OPTION_TYPE = ((1,"Question Type"),(2,"Block type"),(3,"invite"))
 class RemoveQuestion(BaseContent):
     quarter_report = models.ForeignKey(ProjectReport,**OPTIONAL)
