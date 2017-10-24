@@ -87,8 +87,9 @@ def create_project(request):
                 location_type = 'type_'+str(i+1)
                 
                 if city not in city_var_list:
-                    boundary_obj = Boundary.objects.get(id=request.POST.get(city))
-                    location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+                    boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(city))
+                    if boundary_obj:
+                        location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
             del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
