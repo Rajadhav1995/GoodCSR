@@ -357,7 +357,7 @@ def finalreportdesign(request):
 #    to save the next quarter updates:
 
         quarter_list = futurequarter_list
-        next_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
+        next_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
         if next_itemlist:
             milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,next_itemlist)
 
