@@ -62,7 +62,7 @@ def download_report_generation(request):
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
         if answer_obj and (question.qtype == 'T' or question.qtype == 'APT'):
             answer = str(answer_obj.text) 
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API'):
+        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
             answer = answer_obj.attachment_file.url 
         else:
             try:
@@ -79,6 +79,8 @@ def download_report_generation(request):
     result = StringIO.StringIO()
     name = project.name.replace(' ','_')
     file_name = name+'_'+str(report_obj.start_date.strftime('%Y/%m/%d'))+'_To_'+str(report_obj.end_date.strftime('%Y/%m/%d'))+'.pdf'
+#    links= lambda uri, rel: os.path.join(settings.STATIC_ROOT, uri.replace(settings.PMU_URL, ''))
+#    pdf= pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")),dest=result, link_callback=links)
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), dest=result  )
 #    , link_callback=fetch_resources
     response = HttpResponse(result.getvalue(), content_type='application/pdf')

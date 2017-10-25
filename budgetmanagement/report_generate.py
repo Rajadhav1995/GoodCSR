@@ -410,6 +410,7 @@ def quartergeneratereport(request):
 
 def finalreportdesign(request):
     slug = request.GET.get('slug')
+#    licals_list display_blocks(request)
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
