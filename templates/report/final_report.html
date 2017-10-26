@@ -312,6 +312,8 @@
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <div>
 
+
+                <!--                        this is add functionality -->
                         {% for quest in current_questionlist %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
@@ -492,6 +494,9 @@
                             {% endif %}
 
                             {% endfor %} <!-- this for ends for previous question list -->
+
+<!--                           this is for edit functions-->
+                       
 
                             <br>
                             <button class="report_save">Save</button>
