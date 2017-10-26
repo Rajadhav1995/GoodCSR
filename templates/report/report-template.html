@@ -189,22 +189,26 @@
                      <h5 class="color_green">Key Achievements in this quarter</h5>
                      <img src="/static/img/report/prev-banner.png" style="width:100%">
                   </div>
+                  {% get_milestones i report_obj as mile %}
+                    {% for m in mile %}  
                   <div class="margin_30 prev_banner milestone1">
                      <h5 class="color-red">MILESTONE 1</h5>
                      <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
                      <p><strong>About the Milestone</strong></p>
                      <h6 class="color_grey">{{m.description}} </h6>
+                     {% get_mile_images m.id as images %}
+                        {% for img in images %}
                      <div class="col-md-6" style="padding:0px">
-                        <img src="/static/img/report/prev-imag1.png" >
-                        <p>We will conduct free educational classes and also will conduct skill<br>
-                           development programs.
+                        {% if img.attachment_file %}
+                        <img src="{{image_url}}{{img.attachment_file.url}}" >
+                        <p>{{img.description}}
                         </p>
+                        {% endif %}
+                        {% endfor %}
                      </div>
-                     <div class="col-md-6" style="padding:0px">
-                        <img src="/static/img/report/prev-imag2.png" style="float:right">    
-                        <p style="float:right">Free educational classes and also will conduct development programs</p>
-                     </div>
+                     
                   </div>
+                  {% endfor %}
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">

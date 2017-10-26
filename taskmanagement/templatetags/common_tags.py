@@ -87,9 +87,9 @@ def get_milestones(quarter,report_obj):
 #to get the milestones or activities that are save for particular quarters
     report_miles = []
     data = {}
-    answer = Answer.objects.filter(quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+    answer = Answer.objects.get_or_none(quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
     milestones = answer.inline_answer if answer else ''
-    miles_list = ReportMilestoneActivity.objects.filter(id__in = list(milestones))
+    miles_list = ReportMilestoneActivity.objects.filter(id__in = eval(milestones))
     for i in miles_list:
         data = {'name':i.name,'description':i.description,'id':i.id}
         report_miles.append(data)
@@ -102,11 +102,7 @@ def get_mile_images(mile_id):
     image_miles= []
     miles_obj =  ReportMilestoneActivity.objects.get_or_none(id=mile_id)
     images= Attachment.objects.filter(content_type = ContentType.objects.get_for_model(miles_obj),object_id = miles_obj.id)
-    for img in images:
-        image_ = {'img_source':img.attachment_file.url,'img_description':img.decsription}
-        data['image']=image_
-        image_miles.append(data)
-    return image_miles
+    return images
     
 def get_sub_answers(details,sub_questions,project_report,project):
 # to get the answers of auto populated questions calculating based on whether there is answer object to that question 
