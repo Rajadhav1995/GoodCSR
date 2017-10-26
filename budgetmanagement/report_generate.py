@@ -32,30 +32,53 @@ def report_form(request):
         budget_quarters = get_budget_quarters(budget_obj) 
         if request.method == 'POST':
             data = request.POST
+            report_id=data.get('report_id')
             budget_start_date = budget_quarters.get(0).split(' to ')[0] 
             project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
-            project_report = ProjectReport.objects.create(project = project_obj,created_by = user,\
-                report_type = data.get('report_type'),start_date  = budget_start_date,
-                name = project_obj.name)
             quarter_ids = data.get('quarter_type')
             dates = budget_quarters[int(quarter_ids)]
             dates_list = dates.split(' to ')
-            project_report.end_date = dates_list[1] if dates_list else ''
-            project_report.save()
-#            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
-            return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
+            budget_end_date = dates_list[1] if dates_list else '' 
+            project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
+                report_type = data.get('report_type'),start_date  = budget_start_date,
+                name = project_obj.name,end_date = budget_end_date)
+            if created:
+                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
+            else:
+                project_report.save()
+                quarter_msg = "Already Report is generated to this Quarter"
+#            project_report.end_date = dates_list[1] if dates_list else ''
+#            project_report.save()
+            
     else :
         msg = "Budget is not created"
     return render(request,'report/report-form.html',locals())
 
 def report_listing(request):
+# listing of the generated reports in the lisiting page
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     report_obj = ProjectReport.objects.filter(project=project)
     return render(request,'report/listing.html',locals())
 
+def save_section_answers(quest_ids,project_report,request,data,user):
+# common function to save the two sections data in answer table 
+    for ques in sorted(quest_ids):
+        question = Question.objects.get_or_none(id = int(ques))
+        if question.slug != "report_type" and question.slug != "report_duration" :
+            answer, created = Answer.objects.get_or_create(question =question,
+                content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user = user )
+            if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
+                answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 
+                answer.description = 'cover image' if question.slug == 'cover_image' else 'Logos'
+                answer.save()
+            elif question.qtype != 'F' and question.qtype != 'API':
+                answer.text = data.get(question.slug+'_'+str(question.id))
+                answer.save()
+    return answer
+
 def report_section_form(request):
-    # to save report name,project description ,objective and cover image
+    # to save the two sections cover page and project summary page data
     report_id = request.GET.get('report_id')
     image_url = PMU_URL
     project_slug = request.GET.get('project_slug')
@@ -63,47 +86,37 @@ def report_section_form(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
     report_obj = ProjectReport.objects.get_or_none(id = report_id)
+    # to get the questions that are taged to the cover and project summary page
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
-    quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)
+    quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)# to get the question names with the ids so that to save the data 
     if not report_obj:
         report_obj = ProjectReport.objects.get_or_none(id = request.POST.get('report_id'))
     if request.method == 'POST' or request.method == 'FILES':
         data = request.POST
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
         project_report = ProjectReport.objects.get_or_none(id = data.get('report_id'))
-        form_keys = set(data.keys())|set(request.FILES.keys())
-        final_ques = quest_names & form_keys
-        quest_ids = [i.split('_')[-1] for i in final_ques if i.split('_')]
-        for ques in sorted(quest_ids):
-            question = Question.objects.get_or_none(id = int(ques))
-            if question.slug != "report_type" and question.slug != "report_duration" :
-                answer, created = Answer.objects.get_or_create(question =question,
-                    content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user = user )
-                if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
-                    answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 
-                    answer.description = 'cover image' if question.slug == 'cover_image' else 'Logos'
-                    answer.save()
-                elif question.qtype != 'F' and question.qtype != 'API':
-                    answer.text = data.get(question.slug+'_'+str(question.id))
-                    answer.save()
-
+        form_keys = set(data.keys())|set(request.FILES.keys())# to get the keys of the form so that to comapre the questions and then save
+        final_ques = quest_names & form_keys# Getting the questions that are common in form data and the questions tagged to that sections
+        quest_ids = [i.split('_')[-1] for i in final_ques if i.split('_')]# Splitting the qname and ids so that to loop and save the answers for the particular question which is entered
+        section_answer_saved = save_section_answers(quest_ids,project_report,request,data,user)
     return (locals())
 
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
 from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
 def report_detail(request):
-    answer_list ={}
-    answer = ''
+# to display the details in the view report of the genreated report
     slug = request.GET.get('slug')
     image_url = PMU_URL
     report_id = request.GET.get('report_id')
+    answer_list ={}
+    answer = ''
     project = Project.objects.get_or_none(slug = slug)
-    report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
-    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    report_quarter = QuarterReportSection.objects.filter(project=report_obj)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
+    report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
+    report_quarter = QuarterReportSection.objects.filter(project=report_obj)
+    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     budgetobj = Budget.objects.latest_one(project = project,active=2)
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
     quarter_list = get_budget_quarters(budgetobj)
@@ -123,7 +136,7 @@ def report_detail(request):
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
         if answer_obj and (question.qtype == 'T' or question.qtype == 'APT'):
             answer = answer_obj.text 
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API'):
+        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
             answer = answer_obj.attachment_file.url 
         else:
             answer = ''
@@ -136,7 +149,8 @@ def get_quarter_report_logic(projectobj):
     projectobj_enddate = projectobj.end_date
     if sd.day >= 15:
         year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month+1,year=year)
+        month =  1 if sd.month == 12 else sd.month+1
+        sd = sd.replace(day=01,month = month,year=year)
     elif sd.day < 15:
         sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = projectobj.end_date
@@ -184,6 +198,7 @@ def get_quarter_report(request,itemlist,quarter):
 
 
 def display_blocks(request):
+# this is to get the two blocks cover page and project summary page so that to display the questions in dynamic
     project_slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     survey = Survey.objects.get(id=1)
@@ -248,7 +263,7 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
                         parameter_list.append(line)
     return milestone_list,parameter_list,pic_list,quarterreportobj
 
-def quarter_image_save(request,milestoneobj,projectobj,pic_count):
+def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
 #    Common functionality to save the images
     imageobj = None
     for j in range(int(pic_count)):
@@ -274,8 +289,8 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count):
     return imageobj
 
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
-    mil_activity_count = obj_count_list.get('mil_activity_count')
-    pic_count = obj_count_list.get(pic_count)
+    mil_activity_count = obj_count_list.get('milestone_count')
+    pic_count = obj_count_list.get('milestone_pic_count')
     for i in range(int(mil_activity_count)):
         result = {}
         for mile_attribute in milestone_list:
@@ -287,7 +302,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         name = result.get('milestone','')
         description = result.get('about milestone','')
         milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
-        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count)
+        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj).values_list("id",flat=True)
     milestone_ids = map(int,milestone_ids)
@@ -329,7 +344,9 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
 
 def saving_of_quarters_section(request):
     slug = request.GET.get('slug')
+    projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
+    projectobj = projectreportobj.project
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
 #    to save the previous quarter updates:
     quarter_list = previousquarter_list
@@ -353,7 +370,7 @@ def saving_of_quarters_section(request):
         activity_pic_count = request.POST.get('activity-pic-count_1',0)
         parameter_count = request.POST.get('current_parameter_count_1',0)
         if activity_count > 0:
-            obj_count_list = {'milestone_pic_count':activity_count,'milestone_count':activity_pic_count,}
+            obj_count_list = {'milestone_pic_count':activity_pic_count,'milestone_count':activity_count,}
             answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
         if parameter_count > 0:
             answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)

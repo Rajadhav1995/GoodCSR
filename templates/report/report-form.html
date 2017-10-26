@@ -79,52 +79,58 @@ ul li {
          </div><br>
             </div>
             <!-- /.box-header -->
-            {% if msg %}
+            {% if msg  %}
                 <h3 class border_linr">Please add <a style="text-decoration:underline;color:#169776" href= '/manage/project/budget/create/?slug={{project.slug}}'>Budget</a>  for the project before proceeding with generation of the report </h3>
-                
                 <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
+                
             {% else %}
             <div class="box-body">
-            <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-                        <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
-                        <input type="hidden" name="report_id" value="{{report_id}}" class="form-control" maxlength="200">
-                            <div class="row">
-                            <div class="col-md-6 nopadding">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                <label>Report Type<font color="red">*</font></label>
-                                <select class="form-control" name="report_type" id="report_type" required>
-                                <option  value="1" >Quarterly</option>
-                                <option  value="2" >Monthly</option>
-                                </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                                <div class="row">
-                                <div class="col-md-6 nopadding">
+                {% if quarter_msg %}
+                    <h3 class border_linr">Already reported is generated for this quarter. <a style="text-decoration:underline;color:#169776" href= '/report/detail/?slug={{project_obj.slug}}&report_id={{project_report.id}}'>View the Report Here</a></h3>
+                    <a class="btn btn-success" href="/report/listing/?slug={{project_obj.slug}}" style="margin-right:5px;float: right;  padding:3px 15px;">Back</a>
+                {% else %}
+                    <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                                <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
+                                <input type="hidden" name="report_id" value="{{report_id}}" class="form-control" maxlength="200">
+                                    <div class="row">
+                                    <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>Report Duration<font color="red">*</font></label>
-                                        <select class="form-control" name="quarter_type" id="quarter_type" required>
-                                        {% for k,v in budget_quarters.iteritems %}
-                                            <option  value="{{k}}" {% if quarter_no == k %}selected="selected" {% endif %}>Quarter {{forloop.counter}}</option>
-                                        {% endfor %}
+                                        <label>Report Type<font color="red">*</font></label>
+                                        <select class="form-control" name="report_type" id="report_type" required>
+                                        <option  value="1" >Quarterly</option>
+                                        <option  value="2" >Monthly</option>
                                         </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                       
+                                        <div class="row">
+                                        <div class="col-md-6 nopadding">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                <label>Report Duration<font color="red">*</font></label>
+                                                <select class="form-control" name="quarter_type" id="quarter_type" required>
+                                                {% for k,v in budget_quarters.iteritems %}
+                                                    <option  value="{{k}}" {% if quarter_no == k %}selected="selected" {% endif %}>Quarter {{forloop.counter}}</option>
+                                                {% endfor %}
+                                                </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                               
 
-                        <input class="budget_button" type="submit" value="Submit" onclick="return email_valid();" /></a>  
-                        
-                        <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
+                                <input class="budget_button" type="submit" value="Submit" onclick="return email_valid();" /></a>  
+                                
+                                <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
-                    </form>
+                            </form>
+                    {% endif %}
                 </div>
+                
                 {% endif %}
   </div>
   </div>

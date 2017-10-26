@@ -2,7 +2,7 @@ from budgetmanagement.report_generate import *
 
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
-
+# this imports for the pdf download where the packages to be installed are 
 import csv
 from reportlab.pdfgen import canvas
 from django.template.loader import get_template
@@ -13,6 +13,7 @@ from xhtml2pdf import pisa
 import StringIO
 
 def download_report_generation(request):
+#to download the pdf of the report generated and fetching the details of what to be dislayed in the pdf
     answer_list ={}
     answer = ''
     slug = request.GET.get('slug')
@@ -53,7 +54,7 @@ def download_report_generation(request):
         answer_list[str(question.slug)] = answer
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     location = ProjectLocation.objects.filter(object_id=project.id)
-    
+    # this is to make html to pdf 
     template = get_template('report/report-pdf-download.html')
     html = template.render(answer_list)
     result = StringIO.StringIO()
