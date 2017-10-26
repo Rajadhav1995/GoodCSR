@@ -30,7 +30,7 @@
                         <img src="/static/img/report/header-img.jpg" style="width:100%">
                      </div>
                      <div>
-                        <img src="{{image_url}}/{{answer_list.cover_image}}" style="width:100%">
+                        <img src="{{image_url}}{{answer_list.cover_image}}" style="width:100%">
                      </div>
                      <div>
                         <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
@@ -43,8 +43,7 @@
                            <li> <img src="{{image_url}}{{answer_list.logos}}" height = 100 width = 100></li>
                         </ul>
                      </div>
-                     <div class="text-head">
-                        
+                     <div class="text-head">                        
                         <h1>{{answer_list.report_name}}</h1>
                         <h5 style="float:left">by {{answer_list.client_name}}</h5>
                         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
@@ -125,6 +124,7 @@
                         </div>
                      </div>
                      <img src="/static/img/report/budget_banner.png" style="width:100%; margin:20px 0px">
+                     Total Budget:<b>{{answer_list.project_budget}}</b> Project Beneficiaries: {{answer_list.no_of_beneficiaries}} Project Duration: {{answer_list.project_duration}}
                   </div>
                   <div class="location">
                      <p>Location Coverage</p>
@@ -200,7 +200,7 @@
                         {% for img in images %}
                      <div class="col-md-6" style="padding:0px">
                         {% if img.attachment_file %}
-                        <img src="{{image_url}}{{img.attachment_file.url}}" >
+                        <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
                         <p>{{img.description}}
                         </p>
                         {% endif %}
@@ -413,7 +413,6 @@
                      </div> -->
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches1</P>
-                     <img src="/static/img/report/table01.png" style="width:100%; ">
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
            <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
@@ -538,7 +537,6 @@
                   </div>
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <img src="/static/img/report/table01.png" style="width:100%; ">
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
            <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
@@ -772,7 +770,6 @@
                   </div>
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <img src="/static/img/report/table01.png" style="width:100%; ">
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
            <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
