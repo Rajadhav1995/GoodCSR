@@ -92,18 +92,17 @@ def report_section_form(request):
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
 def report_detail(request):
-    answer_list ={}
-    answer = ''
     slug = request.GET.get('slug')
     image_url = PMU_URL
     report_id = request.GET.get('report_id')
+    answer_list ={}
+    answer = ''
     project = Project.objects.get_or_none(slug = slug)
-    report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
-    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    report_quarter = QuarterReportSection.objects.filter(project=report_obj)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-
+    report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
+    report_quarter = QuarterReportSection.objects.filter(project=report_obj)
+    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
     location = ProjectLocation.objects.filter(object_id=project.id)
