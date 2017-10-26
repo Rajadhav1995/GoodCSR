@@ -149,7 +149,8 @@ def get_quarter_report_logic(projectobj):
     projectobj_enddate = projectobj.end_date
     if sd.day >= 15:
         year = sd.year+1 if sd.month == 12 else sd.year
-        sd = sd.replace(day=01,month = sd.month+1,year=year)
+        month =  1 if sd.month == 12 else sd.month+1
+        sd = sd.replace(day=01,month = month,year=year)
     elif sd.day < 15:
         sd = sd.replace(day=01,month = sd.month,year=sd.year)
     ed = projectobj.end_date
