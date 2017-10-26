@@ -112,7 +112,7 @@ def report_detail(request):
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
         if answer_obj and (question.qtype == 'T' or question.qtype == 'APT'):
             answer = answer_obj.text 
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API'):
+        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
             answer = answer_obj.attachment_file.url 
         else:
             answer = ''

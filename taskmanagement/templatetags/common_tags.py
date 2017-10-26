@@ -117,14 +117,20 @@ def get_sub_answers(details,sub_questions,project_report,project):
         elif answer_obj and answer_obj.attachment_file :
             data['answer']=answer_obj.attachment_file.url
         else:
-            if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
-                from projectmanagement.templatetags import urs_tags
-                org_logo = urs_tags.get_org_logo(project)
-                if org_logo:
-                    data['answer'] = org_logo
-                else :
-                    data['answer'] = "/static/img/GoodCSR_color_circle.png"
-            if sub.slug in keys:
-                data['answer'] = details[sub.slug]
+            data = get_org_logos(data,project,keys,details,sub)
+           
         sub_quest_list.append(data)
     return sub_quest_list
+    
+def get_org_logos(data,project,keys,details,sub):
+
+    if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
+        from projectmanagement.templatetags import urs_tags
+        org_logo = urs_tags.get_org_logo(project)
+        if org_logo:
+            data['answer'] = org_logo
+        else :
+            data['answer'] = "/static/img/GoodCSR_color_circle.png"
+    if sub.slug in keys:
+        data['answer'] = details[sub.slug]
+    return data
