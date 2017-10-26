@@ -226,13 +226,12 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
                         'object_id':projectreportobj.id,
                         'user':user_obj,
                         }
-                        
                         answer = Answer.objects.create(**answer_dict)
                     elif len(line_list) == 6:
                         milestone_list.append(line)
                     elif len(line_list) == 7 and line_list[6] != "parameter":
                         pic_list.append(line)
-                    else:
+                    elif len(line_list) == 7 and line_list[6] == "parameter":
                         parameter_list.append(line)
     return milestone_list,parameter_list,pic_list,quarterreportobj
 
