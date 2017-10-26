@@ -42,20 +42,20 @@ def report_form(request):
             dates_list = dates.split(' to ')
             project_report.end_date = dates_list[1] if dates_list else ''
             project_report.save()
-#            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
             return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
     else :
         msg = "Budget is not created"
     return render(request,'report/report-form.html',locals())
 
 def report_listing(request):
+# listing of the generated reports in the lisiting page
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     report_obj = ProjectReport.objects.filter(project=project)
     return render(request,'report/listing.html',locals())
 
 def report_section_form(request):
-    # to save report name,project description ,objective and cover image
+    # to save the two sections cover page and project summary page data
     report_id = request.GET.get('report_id')
     image_url = PMU_URL
     project_slug = request.GET.get('project_slug')
@@ -63,17 +63,18 @@ def report_section_form(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug = project_slug)
     report_obj = ProjectReport.objects.get_or_none(id = report_id)
+    # to get the questions that are taged to the cover and project summary page
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
-    quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)
+    quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)# to get the question names with the ids so that to save the data 
     if not report_obj:
         report_obj = ProjectReport.objects.get_or_none(id = request.POST.get('report_id'))
     if request.method == 'POST' or request.method == 'FILES':
         data = request.POST
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
         project_report = ProjectReport.objects.get_or_none(id = data.get('report_id'))
-        form_keys = set(data.keys())|set(request.FILES.keys())
-        final_ques = quest_names & form_keys
-        quest_ids = [i.split('_')[-1] for i in final_ques if i.split('_')]
+        form_keys = set(data.keys())|set(request.FILES.keys())# to get the keys of the form so that to comapre the questions and then save
+        final_ques = quest_names & form_keys# Getting the questions that are common in form data and the questions tagged to that sections
+        quest_ids = [i.split('_')[-1] for i in final_ques if i.split('_')]# Splitting the qname and ids so that to loop and save the answers for the particular question which is entered
         for ques in sorted(quest_ids):
             question = Question.objects.get_or_none(id = int(ques))
             if question.slug != "report_type" and question.slug != "report_duration" :
@@ -92,6 +93,7 @@ def report_section_form(request):
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
 def report_detail(request):
+# to display the details in the view report of the genreated report
     slug = request.GET.get('slug')
     image_url = PMU_URL
     report_id = request.GET.get('report_id')
@@ -173,6 +175,7 @@ def get_quarter_report(request,itemlist,quarter):
 
 
 def display_blocks(request):
+# this is to get the two blocks cover page and project summary page so that to display the questions in dynamic
     project_slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     survey = Survey.objects.get(id=1)
