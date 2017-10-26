@@ -21,7 +21,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-  
 
 </head>
 
@@ -47,28 +46,27 @@
    
     </div>
     <div class="text-head">
-        
         <h1>{{report_name}}</h1>
         <h5 style="float:left">by {{client_name}}</h5>
         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
         <hr>
      </div>
      <p style="float:left; width:auto">Prepared by {{prepared_by}}</p>
-     <p style="text-align:right;width:auto; float:right">Jan 2017 to Mar 2017</p>
+     <p style="text-align:right;width:auto; float:right">{{report_duration}}</p>
     </div>
    
 </header>
 <header style="margin-top:50px">
    <div>
-   <img src="img/bottomslider.jpg" style="width:100%">
+   <img src="/static/img/bottomslider.jpg" style="width:100%">
     </div>
     </header>
 <div class="container">
    <div class="margin_25">
        <h1 style="font-size:24px">Index</h1>
        <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
+       <img src="/static/img/ovp.jpg">
+       <img src="/static/img/akanksha.jpg">
        </div>
        
     </div>
@@ -126,43 +124,37 @@
     <div class="school_project">
     <div>
         <p class="color-red">PROJECT</p>
-        <h1>Nabarangpur School Project</h1>
+        <h1>{{project_title}}</h1>
     </div>
     <div class="col-md-6">
     <div class="row">
         <p class="color-red">DONOR</p>
-        <p>OVP venture partners</p>
+        <p>{{donor}}</p>
         </div>
     </div>
     <div class="col-md-6">
     <div class="row">
         <p class="color-red">IMPLEMENTATION NGO</p>
-        <p>OVP venture partners</p>
+        <p>{{implement_ngo}}</p>
         </div>
     </div>
-    <img src="img/budget_banner.png" style="width:100%; margin:20px 0px">
+    <img src="/static/img/budget_banner.png" style="width:100%; margin:20px 0px">
     </div>
     
     <div class="location">
         <p>Location Coverage</p>
-        <ul>
-        <li><span> West Bengal, North 24 Parganas Rural</span></li>
-        <li><span>West Bengal, East Midnapore Urban</span></li>
-        <li><span>West Bengal, Kolkata Semi-urban</span></li>
-            <li><span>West Bengal, Hooghly</span></li>
+        <ul>{{location}}
         </ul>
     </div>
     <div class="location">
         <p>About the Program</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth.</h5>
-<h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes and skill development program too. </h5>
+        <h5>{{program_description}}</h5>
     </div>
   
     
     <footer>
       <hr>
-    <img src="img/logo.png" style="float:left">
+    <img src="/static/img/logo.png" style="float:left">
     <h3 style="float:right;margin-top:0px;">3</h3>
     </footer>
     </div>
@@ -170,15 +162,15 @@
     <!--Index page 04 html starts-->
     <header style="margin-top:50px">
    <div>
-   <img src="img/bottomslider.jpg" style="width:100%">
+   <img src="/static/img/bottomslider.jpg" style="width:100%">
     </div>
     </header>
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{report_name}}</h1>
        <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
+       <img src="/static/img/ovp.jpg">
+       <img src="/static/img/akanksha.jpg">
        </div>
        
     </div>
@@ -186,14 +178,13 @@
    
     <div class="location margin-top40">
         <p>Objective of the project</p>
-        <h5>The success of the St. Jude model hinges on utmost hygiene and sanitation in every aspect of the families’ and staff’s daily lives at the centres. This includes keeping all the areas – family units, community area, washrooms, kitchen and dining area – clinically clean and upholding utmost standards in hygiene and sanitation. The organisation takes this responsibility very seriously and is taking it to a new level by installing incinerators for sanitary napkins in the ladies washrooms at all the 33 centres across India.</h5>
-<h5>The installation of incinerators at 22 centres at Cotton Green Campus, Parel and Kharghar in Mumbai is complete. We plan to take the drive to our centres in Delhi, Kolkata, Hyderabad and Jaipur in the coming months, after successful implementation in Mumbai.</h5>
+        <h5>{{project_objective}}</h5>
     </div>
   
     
     <footer>
       <hr>
-    <img src="img/logo.png" style="float:left">
+    <img src="/static/img/logo.png" style="float:left">
     <h3 style="float:right;margin-top:0px;">4</h3>
     </footer>
     </div>
@@ -201,10 +192,10 @@
     <!--Index page 05 html starts-->
     <div class="container">
    <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
+       <h1 style="font-size:20px">{{report_name}}</h1>
        <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
+       <img src="/static/img/ovp.jpg">
+       <img src="/static/img/akanksha.jpg">
        </div>
        
     </div>
@@ -596,8 +587,8 @@ development programs.</p>
     
     
     
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 
 
 </body>

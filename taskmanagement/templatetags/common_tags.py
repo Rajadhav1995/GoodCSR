@@ -112,8 +112,10 @@ def get_sub_answers(details,sub_questions,project_report,project):
     for sub in sub_questions:
         data = {'q_id':sub.id,'q_text':sub.text,'q_type':sub.qtype,'q_name':sub.slug}
         answer_obj = Answer.objects.get_or_none(question=sub,content_type=ContentType.objects.get_for_model(project_report),object_id=project_report.id)
-        if answer_obj:
-            data['answer']= answer_obj.text if sub.qtype == 'T' or sub.qtype == 'APT' else answer_obj.attachment_file.url
+        if answer_obj and (sub.qtype == 'T' or sub.qtype == 'APT'):
+            data['answer']= answer_obj.text 
+        elif answer_obj and answer_obj.attachment_file :
+            data['answer']=answer_obj.attachment_file.url
         else:
             if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
                 from projectmanagement.templatetags import urs_tags
