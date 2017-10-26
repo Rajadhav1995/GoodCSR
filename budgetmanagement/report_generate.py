@@ -343,6 +343,7 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
 
 def saving_of_quarters_section(request):
     slug = request.GET.get('slug')
+    projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
 #    to save the previous quarter updates:
