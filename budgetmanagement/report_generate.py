@@ -103,6 +103,7 @@ def report_section_form(request):
 
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
+from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
 def report_detail(request):
 # to display the details in the view report of the genreated report
     slug = request.GET.get('slug')
@@ -116,10 +117,20 @@ def report_detail(request):
     report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
     report_quarter = QuarterReportSection.objects.filter(project=report_obj)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
+    budgetobj = Budget.objects.latest_one(project = project,active=2)
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+    quarter_list = get_budget_quarters(budgetobj)
     cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
     location = ProjectLocation.objects.filter(object_id=project.id)
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
+
+    tranche_list = Tranche.objects.filter(project = project,active=2)
+    tranche_amount = tanchesamountlist(tranche_list)
+    planned_amount = tranche_amount['planned_amount']
+    actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
+    recommended_amount = tranche_amount['recommended_amount']
+    utilized_amount = tranche_amount['utilized_amount']
     for question in quest_list:
         answer_obj = Answer.objects.get_or_none(question =question,
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
