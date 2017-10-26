@@ -22,6 +22,7 @@ register = template.Library()
 @register.assignment_tag
 def get_previous_question_value(quest,quarter,i):
     number_dict = {0:"First",1:"second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
+    heading_label = {''}
     text = ""
     if quest.slug == "heading":
         text = "Previous Quarter Updates"
