@@ -228,7 +228,9 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
             'end_date':end_date,
             'quarter_order':quarter,
             }
-            quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
+            quarterreportobj = QuarterReportSection.objects.get_or_none(project=projectreportobj,quarter_type = quarter_type,quarter_order = quarter )
+            if not quarterreportobj:
+                quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
             user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
             milestone_list = []
             pic_list = []
@@ -246,7 +248,12 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
                         'object_id':projectreportobj.id,
                         'user':user_obj,
                         }
-                        answer = Answer.objects.create(**answer_dict)
+                        answerobj = Answer.objects.get_or_none(question__id=question_id,quarter=quarterreportobj)
+                        if not answerobj:
+                            answer = Answer.objects.create(**answer_dict)
+                        else:
+                            answerobj.text = request.POST.get(line)
+                            answerobj.save()
                     elif len(line_list) == 6:
                         milestone_list.append(line)
                     elif len(line_list) == 7 and line_list[6] != "parameter":
