@@ -236,22 +236,34 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
                         parameter_list.append(line)
     return milestone_list,parameter_list,pic_list,quarterreportobj
 
-def quarter_image_save(request,milestoneobj,projectobj,milestone_images):
+def quarter_image_save(request,milestoneobj,projectobj,pic_count):
 #    Common functionality to save the images
-    user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
-    image_dict = {
-            'created_by' : user_obj,
-            'attachment_file':milestone_images.get('upload picture',''),
-            'description' : milestone_images.get('picture description',''), 
-            'name' : projectobj.name,
-            'attachment_type' : 1,
-            'content_type' : ContentType.objects.get_for_model(milestoneobj),
-            'object_id' : milestoneobj.id
-    }
-    imageobj = Attachment.objects.create(**image_dict)
+    imageobj = None
+    for j in range(int(pic_count)):
+        milestone_images = {}
+        for pic in pic_list:
+            pic_length_list = pic.split('_')
+            if len(pic_length_list) == 7 and pic.endswith('_'+str(j+1)):
+                name = pic_length_list[0]
+                milestone_images.update({name.lower():request.POST.get(pic)})
+
+
+        user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
+        image_dict = {
+                'created_by' : user_obj,
+                'attachment_file':milestone_images.get('upload picture',''),
+                'description' : milestone_images.get('picture description',''), 
+                'name' : projectobj.name,
+                'attachment_type' : 1,
+                'content_type' : ContentType.objects.get_for_model(milestoneobj),
+                'object_id' : milestoneobj.id
+        }
+        imageobj = Attachment.objects.create(**image_dict)
     return imageobj
 
-def milestone_activity_save(request,mil_activity_count,milestone_list,pic_count,pic_list,projectreportobj,quarterreportobj,projectobj):
+def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
+    mil_activity_count = obj_count_list.get('mil_activity_count')
+    pic_count = obj_count_list.get(pic_count)
     for i in range(int(mil_activity_count)):
         result = {}
         for mile_attribute in milestone_list:
@@ -263,14 +275,7 @@ def milestone_activity_save(request,mil_activity_count,milestone_list,pic_count,
         name = result.get('milestone','')
         description = result.get('about milestone','')
         milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
-        for j in range(int(pic_count)):
-            milestone_images = {}
-            for pic in pic_list:
-                pic_length_list = pic.split('_')
-                if len(pic_length_list) == 7 and pic.endswith('_'+str(j+1)):
-                    name = pic_length_list[0]
-                    milestone_images.update({name.lower():request.POST.get(pic)})
-            imageobj = quarter_image_save(request,milestoneobj,projectobj,milestone_images)
+        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj).values_list("id",flat=True)
     milestone_ids = map(int,milestone_ids)
@@ -310,6 +315,43 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
     answer = Answer.objects.create(**parameter_answer_dict)
     return answer
 
+def saving_of_quarters_section(request):
+    slug = request.GET.get('slug')
+    projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
+    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+#    to save the previous quarter updates:
+    quarter_list = previousquarter_list
+    previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
+    if previous_itemlist:
+        milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist)
+        milestone_count = request.POST.get('milestone_count_1',0)
+        milestone_pic_count = request.POST.get('milestone-pic-count_1',0)
+        parameter_count = request.POST.get('parameter_count_1',0)
+        if milestone_count > 0:
+            obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
+            answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
+        if parameter_count > 0:
+            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+#    to save the Current quarter updates:
+    quarter_list = currentquarter_list
+    current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
+    if current_itemlist:
+        milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,current_itemlist)
+        activity_count = request.POST.get('activity_count_1',0)
+        activity_pic_count = request.POST.get('activity-pic-count_1',0)
+        parameter_count = request.POST.get('current_parameter_count_1',0)
+        if activity_count > 0:
+            obj_count_list = {'milestone_pic_count':activity_count,'milestone_count':activity_pic_count,}
+            answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
+        if parameter_count > 0:
+            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+#    to save the next quarter updates:
+    quarter_list = futurequarter_list
+    next_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
+    if next_itemlist:
+        milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,next_itemlist)
+    return projectreportobj
+
 def finalreportdesign(request):
     slug = request.GET.get('slug')
 #    licals_list display_blocks(request)
@@ -323,46 +365,7 @@ def finalreportdesign(request):
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
     if request.method == "POST":
-        slug = request.GET.get('slug')
-        projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
-        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-#    to save the previous quarter updates:
-        
-        quarter_list = previousquarter_list
-        previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
-        if previous_itemlist:
-            milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist)
-            milestone_count = request.POST.get('milestone_count_1',0)
-            milestone_pic_count = request.POST.get('milestone-pic-count_1',0)
-            parameter_count = request.POST.get('parameter_count_1',0)
-            if milestone_count > 0:
-                
-                answer = milestone_activity_save(request,milestone_count,milestone_list,milestone_pic_count,pic_list,projectreportobj,quarterreportobj,projectobj)
-            if parameter_count > 0:
-                answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
-#    to save the Current quarter updates:
-
-        quarter_list = currentquarter_list
-        
-        current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
-        if current_itemlist:
-            milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,current_itemlist)
-            activity_count = request.POST.get('activity_count_1',0)
-            activity_pic_count = request.POST.get('activity-pic-count_1',0)
-            parameter_count = request.POST.get('current_parameter_count_1',0)
-            if activity_count > 0:
-                answer = milestone_activity_save(request,activity_count,milestone_list,activity_pic_count,pic_list,projectreportobj,quarterreportobj,projectobj)
-            if parameter_count > 0:
-                answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
-
-#    to save the next quarter updates:
-
-        quarter_list = futurequarter_list
-        next_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
-        if next_itemlist:
-            milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,next_itemlist)
-
-
-
+#        to save the quarter reports
+        on_success_saving = saving_of_quarters_section(request)
     return render(request,'report/final_report.html',locals())
 
