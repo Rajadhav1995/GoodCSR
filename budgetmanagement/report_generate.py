@@ -176,94 +176,6 @@ def get_quarter_report(request,itemlist,quarter):
             result.update({name:request.POST.get(line)})
     return result
 
-def get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,itemlist):
-    for quarter,value in quarter_list.items():
-        budget_period = value
-        start_date = budget_period.split('to')[0].rstrip()
-        end_date = budget_period.split('to')[1].lstrip()
-        result = get_quarter_report(request,itemlist,quarter)
-        quarter_report_dict = {
-                        'project':projectreportobj,
-                        'quarter_type':quarter_type,
-                        'description':result.get("about-quarter",""),
-                        'budget_utilization':result.get('budget-tranches',""),
-                        'about_budget':result.get("about-budget",""),
-                        'risks_mitigation':result.get("risk-mitigation",""),
-                        'start_date':start_date,
-                        'end_date':end_date,
-                        'duration':result['duration'],
-                        'quarter_order':quarter,
-        }
-        quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
-    return quarterreportobj,result
-
-def milestone_activity_save(request,name,description,result,quarterreportobj):
-#    Common function to save the milestone and activities
-    milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
-    if result['paramter-selection']:
-        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(result['paramter-selection'])),description = result['about-parameter'])
-    return milestoneobj
-
-def image_save(request,milestoneobj,projectobj,result):
-#    Common functionality to save the images
-    user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
-    image_dict = {
-            'created_by' : user_obj,
-            'attachment_file':result['img'],
-            'description' : result['pic-description'], 
-            'name' : projectobj.name,
-            'attachment_type' : 1,
-            'content_type' : ContentType.objects.get_for_model(milestoneobj),
-            'object_id' : milestoneobj.id
-    }
-    imageobj = Attachment.objects.create(**image_dict)
-    return imageobj
-
-def generate_report(request):
-    slug = request.GET.get('slug')
-    projectobj = ProjectReport.objects.filter(project__slug=slug)[0]
-    previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
-    project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
-    
-    if projectobj:
-        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
-    if request.method == "POST":
-        slug = request.POST.get('slug')
-        projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
-        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
-#    to save the previous quarter updates:
-        quarter_type = 1
-        quarter_list = previousquarter_list
-        previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
-        if previous_itemlist:
-            quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,previous_itemlist)
-            if result['milestone-name']:
-                name = result['milestone-name']
-                description = result['milestone-description']
-                milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
-                imageobj = image_save(request,milestoneobj,projectobj,result)
-
-#    to save the Current quarter updates:
-        current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
-        quarter_list = currentquarter_list
-        quarter_type = 2
-        if current_itemlist:
-            quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,current_itemlist)
-            if result['activity-name']:
-                name = result['activity-name']
-                description = result['activity-description']
-                milestoneobj = milestone_activity_save(request,name,description,result,quarterreportobj)
-                imageobj = image_save(request,milestoneobj,projectobj,result)
-#    to save the Future quarter updates:
-        future_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
-        quarter_list = futurequarter_list
-        quarter_type = 3
-        if future_itemlist:
-            quarterreportobj,result = get_report_based_quarter(request,projectreportobj,quarter_type,quarter_list,future_itemlist)
-        return HttpResponseRedirect('/project/summary/?slug='+str(slug)+'&key=summary')
-    return render(request,'report/quarter-update.html',locals())
-
-
 
 def display_blocks(request):
     project_slug = request.GET.get('project_slug')
@@ -278,6 +190,51 @@ def display_blocks(request):
     
     return render(request,'report/report-display-section.html',locals())
     
+
+#this is the actual report saving we are using 
+
+def get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist):
+    for quarter,value in quarter_list.items():
+        present_quarter = previous_itemlist[0]
+        quarter_type = present_quarter.split('_')[1]
+        if str(quarter) == present_quarter.split('_')[2]:
+            budget_period = value
+            start_date = budget_period.split('to')[0].rstrip()
+            end_date = budget_period.split('to')[1].lstrip()
+            quarter_report_dict = {
+            'project':projectreportobj,
+            'quarter_type':quarter_type,
+            'start_date':start_date,
+            'end_date':end_date,
+            'quarter_order':quarter,
+            }
+            quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
+            user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
+            milestone_list = []
+            pic_list = []
+            parameter_list = []
+            for line in previous_itemlist:
+                if str(quarter) == line.split('_')[2]:
+                    line_list = line.split('_')
+                    if len(line_list) == 5:
+                        question_id = line_list[3]
+                        answer_dict = {
+                        'quarter':quarterreportobj,
+                        'question':Question.objects.get_or_none(id=int(question_id)),
+                        'text':request.POST.get(line),
+                        'content_type':ContentType.objects.get_for_model(projectreportobj),
+                        'object_id':projectreportobj.id,
+                        'user':user_obj,
+                        }
+                        
+                        answer = Answer.objects.create(**answer_dict)
+                    elif len(line_list) == 6:
+                        milestone_list.append(line)
+                    elif len(line_list) == 7 and line_list[6] != "parameter":
+                        pic_list.append(line)
+                    else:
+                        parameter_list.append(line)
+    return milestone_list,parameter_list,pic_list,quarterreportobj
 
 def quarter_image_save(request,milestoneobj,projectobj,milestone_images):
 #    Common functionality to save the images
@@ -294,119 +251,64 @@ def quarter_image_save(request,milestoneobj,projectobj,milestone_images):
     imageobj = Attachment.objects.create(**image_dict)
     return imageobj
 
-def quartergeneratereport(request):
-    slug = request.GET.get('slug')
-    projectobj = ProjectReport.objects.filter(project__slug=slug)[0]
-    previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
-    if projectobj:
-        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectobj)
-    project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
-    previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
-    if request.method == "POST":
-        slug = request.GET.get('slug')
-        projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
-        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-#    to save the previous quarter updates:
-        quarter_type = 1
-        quarter_list = previousquarter_list
-        previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
-        if previous_itemlist:
-            for quarter,value in quarter_list.items():
-                present_quarter = previous_itemlist[0]
-                if str(quarter) == present_quarter.split('_')[2]:
-                    budget_period = value
-                    start_date = budget_period.split('to')[0].rstrip()
-                    end_date = budget_period.split('to')[1].lstrip()
-                    quarter_report_dict = {
-                    'project':projectreportobj,
-                    'quarter_type':quarter_type,
-                    'start_date':start_date,
-                    'end_date':end_date,
-                    'quarter_order':quarter,
-                    }
-                    quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
-                    user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
-                    milestone_list = []
-                    pic_list = []
-                    parameter_list = []
-                    for line in previous_itemlist:
-                        if str(quarter) == line.split('_')[2]:
-                            line_list = line.split('_')
-                            if len(line_list) == 5:
-                                question_id = line_list[3]
-                                answer_dict = {
-                                'quarter':quarterreportobj,
-                                'question':Question.objects.get_or_none(id=int(question_id)),
-                                'text':request.POST.get(line),
-                                'content_type':ContentType.objects.get_for_model(projectreportobj),
-                                'object_id':projectreportobj.id,
-                                'user':user_obj,
-                                }
-                                
-                                answer = Answer.objects.create(**answer_dict)
-                            elif len(line_list) == 6:
-                                milestone_list.append(line)
-                            elif len(line_list) == 7 and line_list[6] != "parameter":
-                                pic_list.append(line)
-                            else:
-                                parameter_list.append(line)
-                    milestone_count = request.POST.get('milestone_count_1',0)
-                    milestone_pic_count = request.POST.get('milestone-pic-count_1',0)
-                    parameter_count = request.POST.get('parameter_count_1',0)
-                    if milestone_count > 0:
-                        for i in range(int(milestone_count)):
-                            result = {}
-                            for mile_attribute in milestone_list:
-                                mile_length_list =  mile_attribute.split('_')
-                                if len(mile_length_list) == 6 and mile_attribute.endswith('_'+str(i+1)):
-                                    name = mile_length_list[0]
-                                    parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
-                                    result.update({name.lower():request.POST.get(mile_attribute)})
-                            name = result.get('milestone','')
-                            description = result.get('about milestone','')
-                            milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
-                            for j in range(int(milestone_pic_count)):
-                                milestone_images = {}
-                                for pic in pic_list:
-                                    pic_length_list = pic.split('_')
-                                    if len(pic_length_list) == 7 and pic.endswith('_'+str(j+1)):
-                                        name = pic_length_list[0]
-                                        milestone_images.update({name.lower():request.POST.get(pic)})
-                                imageobj = quarter_image_save(request,milestoneobj,projectobj,milestone_images)
-                        milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj).values_list("id",flat=True)
-                        milestone_answer_dict = {
-                                'quarter':quarterreportobj,
-                                'question':Question.objects.get_or_none(id=int(parent_milestone_question.id)),
-                                'inline_answer':milestone_ids,
-                                'content_type':ContentType.objects.get_for_model(projectreportobj),
-                                'object_id':projectreportobj.id,
-                                'user':user_obj,
-                                }
-                        answer = Answer.objects.create(**milestone_answer_dict)
-                    if parameter_count > 0:
-                        for k in range(int(parameter_count)):
-                            parameter_result = {}
-                            for parameter in parameter_list:
-                                param_list =  parameter.split('_')
-                                if len(param_list) == 7 and int(param_list[5]) == int(k)+1:
-                                    name = param_list[0]
-                                    parent_paramter_question = Question.objects.get(id=param_list[3]).parent
-                                    parameter_result.update({name.lower():request.POST.get(parameter)})
-                            reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
-                    
-                        parameter_ids = ReportParameter.objects.filter(quarter = quarterreportobj)
-                        parameter_answer_dict = {
-                                'quarter':quarterreportobj,
-                                'question':Question.objects.get_or_none(id=int(parent_paramter_question.id)),
-                                'inline_answer':parameter_ids,
-                                'content_type':ContentType.objects.get_for_model(projectreportobj),
-                                'object_id':projectreportobj.id,
-                                'user':user_obj,
-                                }
-                        answer = Answer.objects.create(**parameter_answer_dict)
-                    print result
+def milestone_activity_save(request,mil_activity_count,milestone_list,pic_count,pic_list,projectreportobj,quarterreportobj,projectobj):
+    for i in range(int(mil_activity_count)):
+        result = {}
+        for mile_attribute in milestone_list:
+            mile_length_list =  mile_attribute.split('_')
+            if len(mile_length_list) == 6 and mile_attribute.endswith('_'+str(i+1)):
+                name = mile_length_list[0]
+                parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
+                result.update({name.lower():request.POST.get(mile_attribute)})
+        name = result.get('milestone','')
+        description = result.get('about milestone','')
+        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
+        for j in range(int(pic_count)):
+            milestone_images = {}
+            for pic in pic_list:
+                pic_length_list = pic.split('_')
+                if len(pic_length_list) == 7 and pic.endswith('_'+str(j+1)):
+                    name = pic_length_list[0]
+                    milestone_images.update({name.lower():request.POST.get(pic)})
+            imageobj = quarter_image_save(request,milestoneobj,projectobj,milestone_images)
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
+    milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj).values_list("id",flat=True)
+    milestone_ids = map(int,milestone_ids)
+    milestone_answer_dict = {
+            'quarter':quarterreportobj,
+            'question':Question.objects.get_or_none(id=int(parent_milestone_question.id)),
+            'inline_answer':milestone_ids,
+            'content_type':ContentType.objects.get_for_model(projectreportobj),
+            'object_id':projectreportobj.id,
+            'user':user_obj,
+            }
+    answer = Answer.objects.create(**milestone_answer_dict)
+    return answer
 
-    return render(request,'report/quarter-update.html',locals())
+def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
+    for k in range(int(parameter_count)):
+        parameter_result = {}
+        for parameter in parameter_list:
+            param_list =  parameter.split('_')
+            if len(param_list) == 7 and int(param_list[5]) == int(k)+1:
+                name = param_list[0]
+                parent_paramter_question = Question.objects.get(id=param_list[3]).parent
+                parameter_result.update({name.lower():request.POST.get(parameter)})
+        
+        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
+    parameter_ids = ReportParameter.objects.filter(quarter = quarterreportobj).values_list("id",flat=True)
+    parameter_ids = map(int,parameter_ids)
+    parameter_answer_dict = {
+            'quarter':quarterreportobj,
+            'question':Question.objects.get_or_none(id=int(parent_paramter_question.id)),
+            'inline_answer':parameter_ids,
+            'content_type':ContentType.objects.get_for_model(projectreportobj),
+            'object_id':projectreportobj.id,
+            'user':user_obj,
+            }
+    answer = Answer.objects.create(**parameter_answer_dict)
+    return answer
 
 def finalreportdesign(request):
     slug = request.GET.get('slug')
@@ -418,107 +320,49 @@ def finalreportdesign(request):
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
+    current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
+    next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
     if request.method == "POST":
         slug = request.GET.get('slug')
         projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
 #    to save the previous quarter updates:
-        quarter_type = 1
+        
         quarter_list = previousquarter_list
         previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
         if previous_itemlist:
-            for quarter,value in quarter_list.items():
-                present_quarter = previous_itemlist[0]
-                if str(quarter) == present_quarter.split('_')[2]:
-                    budget_period = value
-                    start_date = budget_period.split('to')[0].rstrip()
-                    end_date = budget_period.split('to')[1].lstrip()
-                    quarter_report_dict = {
-                    'project':projectreportobj,
-                    'quarter_type':quarter_type,
-                    'start_date':start_date,
-                    'end_date':end_date,
-                    'quarter_order':quarter,
-                    }
-                    quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
-                    user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
-                    milestone_list = []
-                    pic_list = []
-                    parameter_list = []
-                    for line in previous_itemlist:
-                        if str(quarter) == line.split('_')[2]:
-                            line_list = line.split('_')
-                            if len(line_list) == 5:
-                                question_id = line_list[3]
-                                answer_dict = {
-                                'quarter':quarterreportobj,
-                                'question':Question.objects.get_or_none(id=int(question_id)),
-                                'text':request.POST.get(line),
-                                'content_type':ContentType.objects.get_for_model(projectreportobj),
-                                'object_id':projectreportobj.id,
-                                'user':user_obj,
-                                }
-                                
-                                answer = Answer.objects.create(**answer_dict)
-                            elif len(line_list) == 6:
-                                milestone_list.append(line)
-                            elif len(line_list) == 7 and line_list[6] != "parameter":
-                                pic_list.append(line)
-                            else:
-                                parameter_list.append(line)
-                    milestone_count = request.POST.get('milestone_count_1',0)
-                    milestone_pic_count = request.POST.get('milestone-pic-count_1',0)
-                    parameter_count = request.POST.get('parameter_count_1',0)
-                    if milestone_count > 0:
-                        for i in range(int(milestone_count)):
-                            result = {}
-                            for mile_attribute in milestone_list:
-                                mile_length_list =  mile_attribute.split('_')
-                                if len(mile_length_list) == 6 and mile_attribute.endswith('_'+str(i+1)):
-                                    name = mile_length_list[0]
-                                    parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
-                                    result.update({name.lower():request.POST.get(mile_attribute)})
-                            name = result.get('milestone','')
-                            description = result.get('about milestone','')
-                            milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
-                            for j in range(int(milestone_pic_count)):
-                                milestone_images = {}
-                                for pic in pic_list:
-                                    pic_length_list = pic.split('_')
-                                    if len(pic_length_list) == 7 and pic.endswith('_'+str(j+1)):
-                                        name = pic_length_list[0]
-                                        milestone_images.update({name.lower():request.POST.get(pic)})
-                                imageobj = quarter_image_save(request,milestoneobj,projectobj,milestone_images)
-                        milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj).values_list("id",flat=True)
-                        milestone_answer_dict = {
-                                'quarter':quarterreportobj,
-                                'question':Question.objects.get_or_none(id=int(parent_milestone_question.id)),
-                                'inline_answer':milestone_ids,
-                                'content_type':ContentType.objects.get_for_model(projectreportobj),
-                                'object_id':projectreportobj.id,
-                                'user':user_obj,
-                                }
-                        answer = Answer.objects.create(**milestone_answer_dict)
-                    if parameter_count > 0:
-                        for k in range(int(parameter_count)):
-                            parameter_result = {}
-                            for parameter in parameter_list:
-                                param_list =  parameter.split('_')
-                                if len(param_list) == 7 and int(param_list[5]) == int(k)+1:
-                                    name = param_list[0]
-                                    parent_paramter_question = Question.objects.get(id=param_list[3]).parent
-                                    parameter_result.update({name.lower():request.POST.get(parameter)})
-                            reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
-                    
-                        parameter_ids = ReportParameter.objects.filter(quarter = quarterreportobj)
-                        parameter_answer_dict = {
-                                'quarter':quarterreportobj,
-                                'question':Question.objects.get_or_none(id=int(parent_paramter_question.id)),
-                                'inline_answer':parameter_ids,
-                                'content_type':ContentType.objects.get_for_model(projectreportobj),
-                                'object_id':projectreportobj.id,
-                                'user':user_obj,
-                                }
-                        answer = Answer.objects.create(**parameter_answer_dict)
+            milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist)
+            milestone_count = request.POST.get('milestone_count_1',0)
+            milestone_pic_count = request.POST.get('milestone-pic-count_1',0)
+            parameter_count = request.POST.get('parameter_count_1',0)
+            if milestone_count > 0:
+                
+                answer = milestone_activity_save(request,milestone_count,milestone_list,milestone_pic_count,pic_list,projectreportobj,quarterreportobj,projectobj)
+            if parameter_count > 0:
+                answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+#    to save the Current quarter updates:
+
+        quarter_list = currentquarter_list
+        
+        current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
+        if current_itemlist:
+            milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,current_itemlist)
+            activity_count = request.POST.get('activity_count_1',0)
+            activity_pic_count = request.POST.get('activity-pic-count_1',0)
+            parameter_count = request.POST.get('current_parameter_count_1',0)
+            if activity_count > 0:
+                answer = milestone_activity_save(request,activity_count,milestone_list,activity_pic_count,pic_list,projectreportobj,quarterreportobj,projectobj)
+            if parameter_count > 0:
+                answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+
+#    to save the next quarter updates:
+
+        quarter_list = futurequarter_list
+        next_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
+        if next_itemlist:
+            milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,next_itemlist)
+
+
+
     return render(request,'report/final_report.html',locals())
 
