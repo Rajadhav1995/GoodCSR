@@ -32,17 +32,24 @@ def report_form(request):
         budget_quarters = get_budget_quarters(budget_obj) 
         if request.method == 'POST':
             data = request.POST
+            report_id=data.get('report_id')
             budget_start_date = budget_quarters.get(0).split(' to ')[0] 
             project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
-            project_report = ProjectReport.objects.create(project = project_obj,created_by = user,\
-                report_type = data.get('report_type'),start_date  = budget_start_date,
-                name = project_obj.name)
             quarter_ids = data.get('quarter_type')
             dates = budget_quarters[int(quarter_ids)]
             dates_list = dates.split(' to ')
-            project_report.end_date = dates_list[1] if dates_list else ''
-            project_report.save()
-            return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
+            budget_end_date = dates_list[1] if dates_list else '' 
+            project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
+                report_type = data.get('report_type'),start_date  = budget_start_date,
+                name = project_obj.name,end_date = budget_end_date)
+            if created:
+                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
+            else:
+                project_report.save()
+                quarter_msg = "Already Report is generated to this Quarter"
+#            project_report.end_date = dates_list[1] if dates_list else ''
+#            project_report.save()
+            
     else :
         msg = "Budget is not created"
     return render(request,'report/report-form.html',locals())
