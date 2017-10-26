@@ -322,7 +322,7 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
 
 def saving_of_quarters_section(request):
     slug = request.GET.get('slug')
-    projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
+    projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
 #    to save the previous quarter updates:
     quarter_list = previousquarter_list
@@ -366,7 +366,7 @@ def finalreportdesign(request):
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))#based on report id filter the project report obj
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
-    if projectobj:
+    if projectreportobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
@@ -381,9 +381,9 @@ def finalreportdesign(request):
             cover_page_locals = report_section_form(request)
         # else the dynamic sections of the quarters are saved when that sections are made to be saved # ENDS
         else:
-            previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
             #        to save the quarter reports
-            on_success_saving = saving_of_quarters_section(request)
+            projectreportobj = saving_of_quarters_section(request)
+            projectobj = projectreportobj.project
         # redirection to the same page of the form #STARTS
         return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
         # ENDS to redirection   
