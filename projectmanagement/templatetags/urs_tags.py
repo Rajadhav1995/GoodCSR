@@ -144,8 +144,8 @@ def get_duration_month(date):
     return duration
 
 @register.assignment_tag
-def get_parameter(obj):
-    question_obj = Question.objects.get_or_none(slug='parameter-section')
+def get_parameter(obj,block_id):
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block=block_id)
     answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
     main_list =[]
     master_list = []
