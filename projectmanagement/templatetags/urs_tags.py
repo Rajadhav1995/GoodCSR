@@ -146,10 +146,7 @@ def get_duration_month(date):
 
 @register.assignment_tag
 def get_parameter(obj):
-    # report_parameter = ReportParameter.objects.filter(quarter=obj.id)
-    # parameter_ids =[i.keyparameter.id for i in report_parameter]
     question_obj = Question.objects.get_or_none(slug='parameter-section')
-    # import ipdb; ipdb.set_trace()
     answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
     main_list =[]
     master_list = []
@@ -167,3 +164,8 @@ def get_parameter(obj):
 @register.filter
 def get_at_index(list, index):
     return list[index]
+
+@register.assignment_tag
+def get_budget_detail(block,quarter,obj):
+    question_obj = Question.objects.get_or_none(slug='about-the-budget',block=block)
+    answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id)
