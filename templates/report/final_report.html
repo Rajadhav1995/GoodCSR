@@ -68,7 +68,7 @@
                         </div>
                         <input type="submit" class="report_save " name="cover_page_save" >Save</button>
                      </form>
-                     
+
                      <h3>{{locals_list.block2.name}}</h3>
                      <form action="." method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -116,7 +116,7 @@
                         <input type= "Submit" class="report_save" name= "project_summary_save"></input>
                      </form>
 <!--                                             </div>-->
-                  </div>
+
             <!--Cover page and Project Summary Sections div                   -->
 
 
@@ -130,8 +130,8 @@
                         <input type="hidden" name="milestone-pic-count_1" value="1">
                         <input type="hidden" name="parameter_count_1" value="1">
                         <div>
-                        
-                        
+
+
                             {% for quest in previous_questionlist %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
@@ -142,7 +142,7 @@
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
-                            
+
 <!--                            this is for key achievements-->
                             {% if quest.slug == "key-achievements-in-this-quarter" %}
                             <div class="col-md-12 report_text " style="padding:0px">
@@ -151,15 +151,15 @@
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
-                            
+
 <!--                            this is for milestone section-->
-                            
+
                         {% if quest.slug == "milestone-section" %}
                             <div class="milestone">
                                 <div class="col-md-12"></div>
-                                
+
                                 {% get_previous_subquestions quest as milestone_questions %}
-                                
+
                                     <div class="col-md-6 report_text">
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
@@ -167,7 +167,7 @@
                                         <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1" >
                                         <h5><a href="#">Remove</a></h5>
                                     {% endif %}
-                                    
+
                                     {% if mile_quest.slug == "upload-picture" %}
                                         <div class="report_text">
                                             <p>{{mile_quest.text|title}}</p>
@@ -177,7 +177,7 @@
                                                   <h5><a href="#">Remove</a></h5>
                                         </div>
                                     {% endif %}
-                                    
+
                                     {% if mile_quest.slug == "picture-description" %}
                                         <div class=" report_text">
                                             <p>{{mile_quest.text|title}}</p>
@@ -188,13 +188,13 @@
                                                     <input type="file" id="input05">
                                                 </div>
                                             <h5><a href="#">Remove</a></h5>
-                                                  
+
                                         </div>
                                     {% endif %}
-                                    
+
                                     {% endfor %}
                                     </div> <!--  col 6 div ends-->
-                                    
+
                                 {% for mile_quest in milestone_questions %}
                                 {% if mile_quest.slug == "milestone-description" %}
                                         <div class="col-md-6 report_text">
@@ -206,8 +206,8 @@
                                         </div>
                                     {% endif %}
                                     {% endfor %}
-                                
-                                
+
+
                             </div> <!-- milestone class -->
                                   <div class="form-group addmilestone">
                                         <p>+ add Milestone</p>
@@ -218,7 +218,7 @@
                                 <hr class="border_line">
                                 <div class="milestone">
                                 {% get_previous_subquestions quest as parameter_questions %}
-                                
+
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
@@ -232,8 +232,8 @@
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
                                     {% endif %}
-                                    
-                                    
+
+
                                     {% if param_quest.slug == "about-parameter" %}
                                     <div class="col-md-12 report_text ">
                                         <p>{{param_quest.text|title}}</p>
@@ -243,16 +243,16 @@
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
                                     {% endif %}
-                                
+
                                     {% endfor %}
                                 </div>
                                 <div class="form-group addmilestone">
                                     <p>+ add More Parameter</p>
                                 </div>
                             {% endif %}
-                            
+
 <!--                            this is for budget table display-->
-                            
+
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>Budget Utilisation and tranches</p>
@@ -278,17 +278,17 @@
                                                 <td>1000</td>
                                                 <td>0</td>
                                             </tr>
-                                            
+
                                         </table>
                                     </div>
                                     <h5><a href="#">Remove</a></h5>
                                 </div>
                             {% endif %}
-                            
+
                             {% endfor %}
-                            
-                            
-                            
+
+
+
                               <br>
                                 <button class="report_save">Save</button>
                             </div>
@@ -308,7 +308,7 @@
                         <input type="hidden" name="activity-pic-count_1" value="1">
                         <input type="hidden" name="current_parameter_count_1" value="1">
                         <div>
-                        
+
                         {% for quest in current_questionlist %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
@@ -319,7 +319,7 @@
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
-                            
+
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
                             <div class="col-md-12 report_text " style="padding:0px">
@@ -327,7 +327,7 @@
                                 <img src="/static/img/imgpage0802.jpg" style="width:100%">
                             </div>
                         {% endif %}
-                            
+
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px">
@@ -337,24 +337,24 @@
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                         {% endif %}
-                        
+
 
                         <!--                            this is for milestone section-->
-                            
+
                         {% if quest.slug == "activity-section" %}
-                            
+
                             <div class="milestone">
                             {% get_previous_subquestions quest as activity_questions %}
                                 <div class="col-md-6 report_text ">
-                                
+
                                 {% for act_quest in activity_questions %}
-                                    
+
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
                                         <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1" >
                                         <h5><a href="#">Remove</a></h5>
                                     {% endif %}
-                                    
+
                                     {% if act_quest.slug == "about-the-actvity" %}
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
@@ -396,13 +396,13 @@
                                 <p>+ add Milestone</p>
                             </div>
                             {% endif %}
-                            
+
 <!--                     this is for parameter selection -->
                         {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">
                                 <div class="milestone">
                                 {% get_previous_subquestions quest as parameter_questions %}
-                                
+
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
@@ -416,8 +416,8 @@
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
                                     {% endif %}
-                                    
-                                    
+
+
                                     {% if param_quest.slug == "about-parameter" %}
                                     <div class="col-md-12 report_text ">
                                         <p>{{param_quest.text|title}}</p>
@@ -427,7 +427,7 @@
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
                                     {% endif %}
-                                
+
                                     {% endfor %}
                                 </div>
                                 <div class="form-group addmilestone">
@@ -436,7 +436,7 @@
                         {% endif %}
 
 <!--                            this is for budget table display-->
-                            
+
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>{{quest.text|title}}</p>
@@ -462,13 +462,13 @@
                                                 <td>1000</td>
                                                 <td>0</td>
                                             </tr>
-                                            
+
                                         </table>
                                     </div>
                                     <h5><a href="#">Remove</a></h5>
                                 </div>
                             {% endif %}
-                            
+
                             {% if quest.slug == "about-the-budget" %}
                             <div class="col-md-12 report_text current_quarter">
                                 <p>{{quest.text|title}}</p>
@@ -497,8 +497,8 @@
                     {% endwith %}
                     {% endfor %} <!-- currentquarter for loop ends -->
                         <!-- ends Current Quarter Updates-->
-                        
-                        
+
+
                         <!--starts Next Quarter Plan -->
                    {% for i,v in futurequarter_list.items %}
                     {% with forloop.counter as j %}
@@ -527,7 +527,7 @@
                                 <img src="/static/img/imgpage0802.jpg" style="width:100%">
                             </div>
                         {% endif %}
-                        
+
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px">
@@ -617,18 +617,18 @@
                         {% endfor %} <!-- future question for loop ends here -->
 
 
-                            
+
                             <br>
                             <button class="report_save">Save</button>
                         </div>
-                        
+
                         </form>
                         {% endwith %} <!-- main quarter for loop ends here -->
                         {% endfor %}
                         <!--ends nexrt quarter updates -->
 
 
-
+                    </div>
                     </div>
                     <div class="below_buttons">
                         <hr>
@@ -657,17 +657,17 @@
 <script>
     $(document).ready(function() {
       'use strict';
-    
+
       $(window).on('ariaAccordion.initialised', function(event, element) {
         console.log('initialised');
       });
-    
+
       $('.accordion-group').first().ariaAccordion({
         contentRole: ['document', 'application', 'document'],
         expandOnPageLoad: true,
         slideSpeed: 400
       });
-    
+
       $('.accordion-group').last().ariaAccordion({
         contentRole: ['document', 'application', 'document'],
         expandOnPageLoad: true,
@@ -678,12 +678,12 @@
 </script>
 <script>
     //Toggle
-    		
+
     		 $('.user-menu').on('click',function(){
               $('.dropdown-menu').slideToggle();
-              
+
             });
-    		 $(document).ready(function(e) {	
+    		 $(document).ready(function(e) {
     	/*Content Show/Hide */
     	$('.hide-cont').hide();
     	$('.close-cont').hide();
@@ -696,13 +696,13 @@
     		$('.hide-cont').slideUp(350);
     		$('.close-cont').hide();
     		$('.view-cont').show();
-    	});	
+    	});
      });
-    	
+
 </script>
 <script type="text/javascript">
     var expanded = false;
-    
+
     function showCheckboxes() {
      var checkboxes = document.getElementById("checkboxes");
      if (!expanded) {
@@ -713,18 +713,18 @@
        expanded = false;
      }
     }
-       
+
 </script>
 <script>
     $(document).ready(function() {
-    
+
     var nice = $("html").niceScroll();  // The document page (body)
-    
+
     $("#div1").html($("#div1").html()+' '+nice.version);
-      
+
       $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
-    
-      
+
+
     });
 </script>
 <script>
@@ -732,18 +732,18 @@
     var $table = $('table.scroll'),
     $bodyCells = $table.find('tbody tr:first').children(),
     colWidth;
-    
+
     // Adjust the width of thead cells when window resizes
     $(window).resize(function() {
     // Get the tbody columns width array
     colWidth = $bodyCells.map(function() {
         return $(this).width();
     }).get();
-    
+
     // Set the width of thead columns
     $table.find('thead tr').children().each(function(i, v) {
         $(v).width(colWidth[i]);
-    });    
+    });
     }).resize(); // Trigger resize handler
 </script>
 <script type="text/javascript" src="/static/js/bootstrap-filestyle.js"></script>
@@ -756,14 +756,14 @@
         $('#input05').filestyle({
             text : '+ add Picture'
         });
-       
+
         $('#input04').filestyle({
             text : '+ add Milestone'
         });
        $('#file01').filestyle({
             text : '+ Upload Image'
         });
-       
+
         $('#file02').filestyle({
             text : '+ add more picture'
         });
@@ -777,5 +777,5 @@
             text : '+ add more picture'
         });
    </script>
-    
+
 {% endblock %}
