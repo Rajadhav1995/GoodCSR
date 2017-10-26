@@ -11,7 +11,6 @@ def key_parameter_chart(obj,parameter_id):
     pin_title_name = []
     counter =0
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
-    # pie_object = ProjectParameter.objects.filter(active= 2,parent=parameter_obj)
     pie_object = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     

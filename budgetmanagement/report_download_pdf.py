@@ -1,27 +1,8 @@
-import requests,ast
-import math
-import datetime
-from django.contrib.contenttypes.models import ContentType
-from datetime import timedelta,datetime
-from django.shortcuts import render
-from dateutil import relativedelta
-from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponse,HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from media.models import (Article,Section,ContactPersonInformation,
-            ProjectLocation,Attachment)
-from media.forms import ContactPersonForm,Attachment
-from django.template import loader
-from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
-from budgetmanagement.models import *
-from budgetmanagement.manage_budget import get_budget_logic
-from django.shortcuts import redirect
-from pmu.settings import PMU_URL
+from budgetmanagement.report_generate import *
 
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
 
-#import pdfkit
 import csv
 from reportlab.pdfgen import canvas
 from django.template.loader import get_template
@@ -70,7 +51,6 @@ def download_report_generation(request):
             except:
                 answer = ''
         answer_list[str(question.slug)] = answer
-    print answer_list
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     location = ProjectLocation.objects.filter(object_id=project.id)
     
@@ -79,15 +59,8 @@ def download_report_generation(request):
     result = StringIO.StringIO()
     name = project.name.replace(' ','_')
     file_name = name+'_'+str(report_obj.start_date.strftime('%Y/%m/%d'))+'_To_'+str(report_obj.end_date.strftime('%Y/%m/%d'))+'.pdf'
-#    links= lambda uri, rel: os.path.join(settings.STATIC_ROOT, uri.replace(settings.PMU_URL, ''))
-#    pdf= pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")),dest=result, link_callback=links)
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), dest=result  )
-#    , link_callback=fetch_resources
     response = HttpResponse(result.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename = '+str(file_name)+''
     return response
     
-#def fetch_resources(uri, rel):
-#    path = PMU_URL
-
-#    return path
