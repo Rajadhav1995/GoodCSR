@@ -343,6 +343,7 @@ def budgetview(request):
     key = request.GET.get('key')
     if budgetobj:
         quarter_list = get_budget_quarters(budgetobj)
+        
         quarter_names = get_budget_quarter_names(budgetobj)
         budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")

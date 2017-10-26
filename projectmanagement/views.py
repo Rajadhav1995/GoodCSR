@@ -58,17 +58,9 @@ def create_project(request):
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
-            
-            implementation_partner = UserProfile.objects.get(id=request.POST.get('implementation_partner'))
-            mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
-            if mapping:
-                mapping.funder=funder
-                mapping.implementation_partner=implementation_partner
-                mapping.total_budget=request.POST.get('total_budget')
-                mapping.save()
-            else:
-                mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
-                    implementation_partner=implementation_partner,total_budget=request.POST.get('total_budget'))
+            total_budget = request.POST.get('total_budget')
+            ff = funder_mapping(funder,implementation_partner,total_budget,obj)
+
             rem_id = request.POST.get('rem_id')
             city_var = request.POST.get('city_var')
             if rem_id != '':
@@ -93,6 +85,20 @@ def create_project(request):
             del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
+
+def funder_mapping(funder,implementation_partner,total_budget,obj):
+    implementation_partner = UserProfile.objects.get(id=implementation_partner)
+    mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
+    if mapping:
+        mapping.funder=funder
+        mapping.implementation_partner=implementation_partner
+        mapping.total_budget= total_budget
+        mapping.save()
+    else:
+        mapping = ProjectFunderRelation.objects.create(project=obj,funder=funder,\
+            implementation_partner=implementation_partner,total_budget=total_budget)
+    return mapping
+
 
 def project_list(request):
     '''

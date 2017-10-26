@@ -11,11 +11,12 @@ from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation,ProjectParameter)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
-                                ReportParameter)
+                                ReportParameter, Question,Answer,QuarterReportSection)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
 from media.models import Attachment
+
 
 
 register = template.Library()
@@ -67,6 +68,11 @@ def get_budget_lineitem(row,projectobj):
     return lineitem
 
 @register.assignment_tag
+def get_quarter_order(quarter_type,projectobj):
+    quarter_order = QuarterReportSection.objects.latest_one(project__project=projectobj,quarter_type=quarter_type).quarter_order
+    return quarter_order
+
+@register.assignment_tag
 def get_quarter_details(row,quarter,projectobj):
     try:
         line_itemobj = BudgetPeriodUnit.objects.get(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
@@ -98,13 +104,14 @@ def get_utlizedline_total(row,projectobj):
 
 @register.assignment_tag
 def get_org_logo(projectobj):
-    funderobj = get_funder(projectobj)
-    data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
-    ''' calling function to return the company logo based on the project'''
-    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
-    validation_data = json.loads(companyobj.content)
-    front_image = validation_data.get('organization_logo')
-    org_logo = validation_data.get('front_image')
+    # funderobj = get_funder(projectobj)
+    # data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
+    # ''' calling function to return the company logo based on the project'''
+    # companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
+    # validation_data = json.loads(companyobj.content)
+    # front_image = validation_data.get('organization_logo')
+    # org_logo = validation_data.get('front_image')
+    org_logo = ''
     return org_logo
 
 @register.assignment_tag
@@ -139,17 +146,22 @@ def get_duration_month(date):
 
 @register.assignment_tag
 def get_parameter(obj):
-    report_parameter = ReportParameter.objects.filter(quarter=obj.id)
-    parameter_ids =[i.keyparameter.id for i in report_parameter]
-    parameter_obj = ProjectParameter.objects.filter(id__in=parameter_ids)
-    from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
+    # report_parameter = ReportParameter.objects.filter(quarter=obj.id)
+    # parameter_ids =[i.keyparameter.id for i in report_parameter]
+    question_obj = Question.objects.get_or_none(slug='parameter-section')
+    # import ipdb; ipdb.set_trace()
+    answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
     main_list =[]
     master_list = []
     master_names = []
-    for i in parameter_obj:
-        main_list = pie_chart_mainlist_report(i,obj.start_date,obj.end_date)
-        master_list.append(main_list)
-        master_names.append(i.name)
+    if answer_obj:
+        parameter_obj = ProjectParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+        # parameter_obj = ProjectParameter.objects.filter(id__in=parameter_ids)
+        from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
+        for i in parameter_obj:
+            main_list = pie_chart_mainlist_report(i,obj.start_date,obj.end_date)
+            master_list.append(main_list)
+            master_names.append(i.name)
     return master_list,master_names
 
 @register.filter

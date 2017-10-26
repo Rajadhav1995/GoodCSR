@@ -409,8 +409,100 @@
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches1</P>
                      <img src="/static/img/report/table01.png" style="width:100%; ">
-                     <br>
-                     <img src="/static/img/report/table02.jpg" style="width:100%" class="margin_top30">
+                     <div class="white-box">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+           <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            <tr class="sticky-row quarter_color">
+
+              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
+            </tr>  
+            <tr  class="sticky-row">
+              <th  class="sticky-cell">Super Category</th>
+              <th  class="sticky-cell">Heading</th>
+              <th  class="sticky-cell">Subheading</th>
+              <th  class="sticky-cell">Total Planned</th>
+              <th  class="sticky-cell">Total Utilized</th>
+              <th  class="sticky-cell">Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody class="budget_section">
+            {% for j in budget_period %}
+            <tr class = "data_row">
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center" class="sticky-cell">{{line_total}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
+                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 1 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+    </div>
+                     <br><!-- ------------------------------------------------------- -->
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
                   </div>
                   {% endif %}
                   <footer>
