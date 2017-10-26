@@ -178,7 +178,7 @@
                   </div>
                   <hr>
                   {% for i in report_quarter %}
-                  {% get_parameter i as pie_data %}
+                  {% get_parameter i 3 as pie_data %}
                   {{pie_data.0.PIN}}
                   {% if i.quarter_type == 1 %}
                   <div class="quarter_updates">
@@ -228,7 +228,7 @@
                   </div>
                   <div class="col-md-12">
                      <div class="row">
-                        {% get_parameter i as pie_data %}
+                        {% get_parameter i 3 as pie_data %}
                         {% if pie_data.0 %}
                         {% for lol in  pie_data.0 %}
                         <div class="margin_30 prev_banner">
@@ -268,7 +268,7 @@
                         </script>
                         <!--/* Pie Chat Number */-->
                         <script type="text/javascript">
-                           {% get_parameter i as pie_data %}
+                           {% get_parameter i 3 as pie_data %}
                            var new_data_pin = 0;
                            var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
                            var values = "coll{{forloop.counter}}"
@@ -330,7 +330,7 @@
                   </div>
                   <div class="col-md-12">
                      <div class="row">
-                        {% get_parameter i as pie_data %}
+                        {% get_parameter i 3 as pie_data %}
                         {{pie_data.3}}
                         {% if pie_data.3 %}
                         {% for lol in  pie_data.3 %}
@@ -523,7 +523,7 @@
                   </div>
                   <hr>
                   {% if i.quarter_type == 2 %}
-                  {% get_parameter i as pie_data %}
+                  {% get_parameter i 4 as pie_data %}
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -668,7 +668,7 @@
                   </div>
                   <div class="col-md-12">
                      <div class="row">
-                        {% get_parameter i as pie_data %}
+                        {% get_parameter i 4 as pie_data %}
                         {% if pie_data.0 %}
                         {% for lol in  pie_data.0 %}
                         <div class="margin_30 prev_banner">
@@ -703,7 +703,7 @@
                         </script>
                         <!--/* Pie Chat Number */-->
                         <script type="text/javascript">
-                           {% get_parameter i as pie_data %}
+                           {% get_parameter i 4 as pie_data %}
                            var new_data_pin = 0;
                            var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
                            console.log(data1);
@@ -912,9 +912,9 @@
                   </div>
                   <hr>
                   {% if i.quarter_type == 3 %}
-                  {{i.id}}464564564554
-                  {% get_parameter i as pie_data,title,tile %}
-                  {{pie_data.0}}{{title}}ff{{tile}}
+                  
+                  {% get_parameter i 5 as pie_data %}
+                  
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Next Quarter Updates</h4>
                      <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
