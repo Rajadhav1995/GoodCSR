@@ -42,7 +42,8 @@ def report_form(request):
             dates_list = dates.split(' to ')
             project_report.end_date = dates_list[1] if dates_list else ''
             project_report.save()
-            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug')+'&key=add')
+#            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
+            return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
     else :
         msg = "Budget is not created"
     return render(request,'report/report-form.html',locals())
@@ -85,13 +86,8 @@ def report_section_form(request):
                 elif question.qtype != 'F' and question.qtype != 'API':
                     answer.text = data.get(question.slug+'_'+str(question.id))
                     answer.save()
-        if data.get('cover_image_save'):
-            msg = "Cover Page is saved successfully"
-            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
-        else:
-            msg = "Project Summary Page is saved successfully"
-            return HttpResponseRedirect('/report/display/blocks/?report_id='+str(project_report.id)+'&project_slug='+data.get('project_slug'))
-    return render(request,'report/report-display-section.html',locals())
+
+    return (locals())
 
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart
@@ -178,7 +174,7 @@ def get_quarter_report(request,itemlist,quarter):
 
 
 def display_blocks(request):
-    project_slug = request.GET.get('project_slug')
+    project_slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     survey = Survey.objects.get(id=1)
     image_url = PMU_URL
@@ -187,8 +183,8 @@ def display_blocks(request):
     project_report = ProjectReport.objects.get_or_none(id=report_id)
     project = Project.objects.get_or_none(slug=project_slug)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    
-    return render(request,'report/report-display-section.html',locals())
+    return (locals())
+#    return render(request,'report/report-display-section.html',locals())
     
 
 #this is the actual report saving we are using 
@@ -353,9 +349,12 @@ def saving_of_quarters_section(request):
 
 def finalreportdesign(request):
     slug = request.GET.get('slug')
-#    licals_list display_blocks(request)
+    report_id = request.GET.get('report_id')
+    #to display the cover page and summary page sections calling the functions by passing request #STARTS)
+    locals_list = display_blocks(request)
+    # end of the display cover page and summary #ENDS
     projectobj = Project.objects.get_or_none(slug=slug)
-    projectreportobj = ProjectReport.objects.filter(project__slug=slug)[0]
+    projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))#based on report id filter the project report obj
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
     if projectobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
@@ -364,7 +363,19 @@ def finalreportdesign(request):
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
     if request.method == "POST":
-#        to save the quarter reports
-        on_success_saving = saving_of_quarters_section(request)
+        slug = request.POST.get('slug')
+        projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
+        projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
+        #to save the two sections data based the save of two sections calling the report_section_form()#STARTS
+        if request.POST.get('cover_page_save') or request.POST.get('project_summary_save'):
+            cover_page_locals = report_section_form(request)
+        # else the dynamic sections of the quarters are saved when that sections are made to be saved # ENDS
+        else:
+            previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+            #        to save the quarter reports
+            on_success_saving = saving_of_quarters_section(request)
+        # redirection to the same page of the form #STARTS
+        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
+        # ENDS to redirection   
     return render(request,'report/final_report.html',locals())
 
