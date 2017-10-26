@@ -503,7 +503,7 @@
 
 
                         <!--starts Next Quarter Plan -->
-                   {% for i,v in futurequarter_list.items %}
+                   {% for i,v in futurequarter_list.items|slice:"1" %}
                     {% with forloop.counter as j %}
                         <h3>Next Quarter Plan :{{v}}</h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
@@ -511,6 +511,8 @@
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <div>
+                        {% getreport_status report_id v 3 as reportupdates %}
+                        {% if reportupdates.0 == "False" %}
                             {% for quest in next_questionlist %}
 
 <!--                             this is for auto populate text -->
@@ -544,7 +546,7 @@
                         <!--this is for budget and tranches table -->
                             {% if quest.slug == "budget-utlization-tranches" %}
                             <div class="col-md-12 report_text " style="padding:0px">
-                                <p>Budget Utilisation and tranches</p>
+                                <p>{{quest.text|title}}</p>
                                 <div class="table-responsive">
                                     <table class="table table-boardered budget_table">
                                         <tr>
@@ -608,7 +610,7 @@
                         <!--this is for about paramter section-->
                         {% if quest.slug == "about-the-budget" %}
                             <div class="col-md-12 report_text current_quarter">
-                                <p>About parameter</p>
+                                <p>{{quest.text|title}}</p>
                                 <div class="logo-partner-scroll">
                                     <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> </textarea>
                                 </div>
@@ -619,8 +621,122 @@
 
 
                         {% endfor %} <!-- future question for loop ends here -->
+                    {% else %} <!--  if object is there -->
+<!--                        if object is der                            -->
+                    object is present
+                            {% for quest in next_questionlist %}
+
+<!--                             this is for auto populate text -->
+                            {% if quest.qtype == "APT" %}
+                            <div class="col-md-6 report_text">
+                                <p>{{quest.text|title}}</p>
+                                {% get_previous_question_value quest v i as text %}
+                                <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            {% endif %}
 
 
+<!--                            this is for milestone and activity graph-->
+                        {% if quest.slug == "milestones-activities-snapshot" %}
+                            <div class="col-md-12 report_text " style="padding:0px">
+                                <p>{{quest.text|title}}</p>
+                                <img src="/static/img/imgpage0802.jpg" style="width:100%">
+                            </div>
+                        {% endif %}
+
+<!--                            this is for about the quarter-->
+                        {% if quest.slug == "about-the-quarter" %}
+                            <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px">
+                                <p>{{quest.text|title}} </p>
+                                {% get_answer_question quest reportupdates.1 as text %}
+                                <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">  {{text}}</textarea>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                        {% endif %}
+
+                        <!--this is for budget and tranches table -->
+                            {% if quest.slug == "budget-utlization-tranches" %}
+                            <div class="col-md-12 report_text " style="padding:0px">
+                                <p>{{quest.text|title}}</p>
+                                <div class="table-responsive">
+                                    <table class="table table-boardered budget_table">
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Heading</th>
+                                            <th>Subheading</th>
+                                            <th>Units</th>
+                                            <th>Rate</th>
+                                            <th>Total Planned</th>
+                                            <th>Total Utikized</th>
+                                            <th>Variance</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Programmatic</td>
+                                            <td>Salaries</td>
+                                            <td>Project Manager Salary</td>
+                                            <td>1</td>
+                                            <td>1000</td>
+                                            <td>1000</td>
+                                            <td>1000</td>
+                                            <td>0</td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                                <h5><a href="#">Remove</a></h5>
+                                <br>
+                                <div class="table-responsive">
+                                    <table class="table table-boardered budget_table">
+                                        <tr>
+                                            <th>Tranche No.</th>
+                                            <th>Due Date</th>
+                                            <th>Planned Amount</th>
+                                            <th>Actual Disbursement</th>
+                                            <th>Recommended Disbursement</th>
+                                            <th>Utilized</th>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>1-Jan-18</td>
+                                            <td>Rs. 100</td>
+                                            <td>Rs. 100</td>
+                                            <td>Rs. 100</td>
+                                            <td>Rs. 100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>1-Jun-18</td>
+                                            <td>Rs. 100</td>
+                                            <td>Rs. 100</td>
+                                            <td>Rs. 100</td>
+                                            <td>Rs. 100</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!--<img src="img/table01.png" style="width:100%">-->
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            {% endif %}
+
+                        <!--this is for about paramter section-->
+                        {% if quest.slug == "about-the-budget" %}
+                            <div class="col-md-12 report_text current_quarter">
+                                <p>{{quest.text|title}}</p>
+                                <div class="logo-partner-scroll">
+                                {% get_answer_question quest reportupdates.1 as text %}
+                                    <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
+                                </div>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
+                            {% endif %}
+
+                        {% endfor %} <!-- future question for loop ends here -->
+
+
+<!--                        object loop ends here                   -->
+
+                    {% endif %} <!-- if object is present loop ends here-->
 
                             <br>
                             <button class="report_save">Save</button>
