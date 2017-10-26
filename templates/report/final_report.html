@@ -20,122 +20,104 @@
                 <div>
                     <p align="right" class="edit_templete"><a href="forms-single.html" target="_self">Edit Templete</a></p>
                 </div>
-                <div id="accordion">
-                    <h3>Cover Page</h3>
-                    <div class="text_accordion">
-                        <div class="col-md-6 report_text">
-                            <p>Report Name</p>
-                            <button>Nabarangpur School Project</button>
-                            <h5><a href="#">Remove</a></h5>
-                        </div>
-                        <div class="col-md-6 report_text">
-                            <p>Cover Image</p>
-                            <button>Upload image</button>
-                            <h5><a href="#">Remove</a></h5>
-                        </div>
-                        <div class="col-md-6 report_text">
-                            <p>Report Type</p>
-                            <button>Quarterly</button>
-                            <h5><a href="#">Remove</a></h5>
-                        </div>
-                        <div class="col-md-6 report_text">
-                            <p>Report Duration</p>
-                            <button style="width:45%">05/09/16</button> To <button style="width:45%">24/02/17</button>
-                            <h5><a href="#">Remove</a></h5>
-                        </div>
-                        <div class="col-md-6 report_text">
-                            <p>Client Name</p>
-                            <button>OVP venture partners</button>
-                            <h5><a href="#">Remove</a></h5>
-                        </div>
-                        <div class="col-md-6 report_text">
-                            <p>Prepared by</p>
-                            <button>Akanksha</button>
-                            <h5><a href="#">Remove</a></h5>
-                        </div>
-                        <div class="col-md-12 report_text">
-                            <p>Logos</p>
-                            <div class="logo-partner">
-                                <h6>Implementation Partner </h6>
-                                <img src="img/akanksha.jpg" style="">
-                                <div class="form-group addpicture">
-                                    <img src="img/browse.png">
-                                    <input type="file" id="imge01">
-                                </div>
-                            </div>
-                            <div class="logo-partner">
-                                <h6>Client </h6>
-                                <img src="img/ovp-logo.jpg" style="">
-                                <div class="form-group addpicture">
-                                    <img src="img/browse.png">
-                                    <input type="file" id="imge02">
-                                </div>
-                            </div>
-                            <div class="logo-partner">
-                                <h6>PMO</h6>
-                                <img src="img/logo.png" style="">
-                                <div class="form-group addpicture">
-                                    <img src="img/browse.png">
-                                    <input type="file" id="imge03">
-                                </div>
-                            </div>
-                        </div>
-                        <button class="report_save">Save</button>
-                    </div>
-                    <h3>Project Summery sheet</h3>
-                    <div>
+<!--Cover Page and Project Summary Page div where the questions are made dynamic  STARTS -->
+                  <div id="accordion">
+                     <h3>{{locals_list.block1.name}}</h3>
+                     <form action="." method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
+                        <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <div class="text_accordion">
-                            <div class="col-md-6 report_text">
-                                <p>Project Title</p>
-                                <button>Nabarangpur School Project</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Donor</p>
-                                <button>OVP venture partners</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Location</p>
-                                <button>Kanpur, Satara, Pin </button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Project Budget</p>
-                                <button>65 Lakhs</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Project Duration</p>
-                                <button>Jan 2015 - Nov 2017</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Number of Beneficiaries</p>
-                                <button>20,000</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-6 report_text">
-                                <p>Implementation NGO</p>
-                                <button>Akansha</button>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <div class="col-md-12 report_text">
-                                <p>Program Description</p>
-                                <div class="logo-partner-scroll ">
-                                    <p>This project seeks to raise funds for over 700 children who can be enrolled in our kindergarten programs in 400 villages in Karnataka in 2016. These children are either orphans or belong to very poor families some of them with family incomes as low as $15 per month. </p>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                                <p>Objective of the project</p>
-                                <div class="logo-partner-scroll ">
-                                    <p>This project seeks to raise funds for over 700 children who can be enrolled in our kindergarten programs in 400 villages in Karnataka in 2016. These children are either orphans or belong to very poor families some of them with family incomes as low as $15 per month. </p>
-                                </div>
-                                <h5><a href="#">Remove</a></h5>
-                            </div>
-                            <button class="report_save">Save</button>
+                           {% get_questions locals_list.block1 projectreportobj as ques %}
+                           {% for i in ques %}
+                               {% if i.q_type == 'OT' %}
+                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                                       {% for sub in sub_questions %}
+                                           {% if sub.q_type == 'APT' %}
+                                               <div class="col-md-6 report_text">
+                                                  <p>{{sub.q_text}}</p>
+                                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}"></input>
+                                                  <h5><a href="#">Remove</a></h5>
+                                               </div>
+                                           {% elif sub.q_type == 'API' %}
+                                               <div class="logo-partner">
+                                                  <h6>{{sub.q_text}}</h6>
+                                                  <img src="{{sub.answer}}" style="">
+                                                  <!--                                                                <img src="{{sub.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                                                  <div class="form-group addpicture">
+                                                     <img src="/static/img/browse.png">
+                                                     <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}" ></input>
+                                                  </div>
+                                               </div>
+                                           {% endif %}
+                                       {% endfor %}
+                               {% else %}
+                                   <div class="col-md-6 report_text">
+                                      <p>{{i.q_text}}</p>
+                                      {% if i.q_type == 'T' %}
+                                          <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" ></input>
+                                          <h5><a href="#">Remove</a></h5>
+                                      {% elif i.q_type == 'F' %}
+                                          <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                                          <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" ></input>
+                                          <h5><a href="#">Remove</a></h5>
+                                      {% endif %}
+                                   </div>
+                               {% endif %}
+                           {% endfor%}
                         </div>
-                    </div>
-
+                        <input type="submit" class="report_save " name="cover_page_save" >Save</button>
+                     </form>
+                     
+                     <h3>{{locals_list.block2.name}}</h3>
+                     <form action="." method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
+                        <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <div class="text_accordion">
+                           {% get_questions locals_list.block2 projectreportobj as ques %}
+                           {% for i in ques %}
+                               {% if i.q_type == 'OT' %}
+                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                                       {% for sub in sub_questions %}
+                                           {% if sub.q_type == 'APT' %}
+                                               <div class="col-md-6 report_text">
+                                                  <p>{{sub.q_text}}</p>
+                                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}"></input>
+                                                  <h5><a href="#">Remove</a></h5>
+                                               </div>
+                                           {% elif sub.q_type == 'API' %}
+                                               <div class="logo-partner">
+                                                  <h6>{{sub.q_text}}</h6>
+                                                  <img src="{{sub.answer}}" style="">
+                                                  <!--                                                                <img src="{{sub.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                                                  <div class="form-group addpicture">
+                                                     <img src="/static/img/browse.png">
+                                                     <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}" ></input>
+                                                  </div>
+                                               </div>
+                                           {% endif %}
+                                       {% endfor %}
+                               {% else %}
+                                   <div class="col-md-6 report_text">
+                                      <p>{{i.q_text}}</p>
+                                      {% if i.q_type == 'T' %}
+                                          <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" ></input>
+                                          <h5><a href="#">Remove</a></h5>
+                                      {% elif i.q_type == 'F' %}
+                                          <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                                          <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" ></input>
+                                          <h5><a href="#">Remove</a></h5>
+                                      {% endif %}
+                                   </div>
+                                   {% endif %}
+                           {% endfor%}
+                        </div>
+                        <input type= "Submit" class="report_save" name= "project_summary_save"></input>
+                     </form>
+<!--                                             </div>-->
+                  </div>
+            <!--Cover page and Project Summary Sections div                   -->
 
 
                     <!--Previous Quarter updates div starts here-->
