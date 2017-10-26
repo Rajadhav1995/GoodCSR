@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'listing/$',report_listing),
     url(r'display/blocks/$',display_blocks),
     url(r'^download/pdf/$',download_report_generation),
-    url(r'survey/quarter/$',quartergeneratereport),
     url(r'final/design/$',finalreportdesign),
 
 ]
