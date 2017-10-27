@@ -372,7 +372,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="">
-                                            <input type="text" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0">
+                                            <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0"> </textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -435,7 +435,7 @@
                                     <div class="col-md-12 report_text ">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="">
-                                            <textarea id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
+                                            <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -509,7 +509,7 @@
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i as text %}
-                                <input type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly>
+                                <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
@@ -528,7 +528,7 @@
                                 <h5><a href="#">Remove</a></h5>
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
-                                <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
+                                <textarea type="text" class="textarea_file" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                         {% endif %}
@@ -547,15 +547,15 @@
 
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
-                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
+                                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
                                         <h5><a href="#">Remove</a></h5>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
-                                        <div class="logo-partner-scroll">
-                                            <input type="text" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}">
+                                        <div class="">
+                                            <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}"> {{{{mileobj.description}}}} </textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -579,7 +579,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
-                                            <input type="text " class="form_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value = "{{imageobj.description}}" >
+                                            <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value = "{{imageobj.description}}" >
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                         <div class="form-group addpicture">
@@ -624,8 +624,8 @@
                                     {% if param_quest.slug == "about-parameter" %}
                                     <div class="col-md-12 report_text ">
                                         <p>{{param_quest.text|title}}</p>
-                                        <div class="logo-partner-scroll">
-                                            <textarea id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description}}</textarea>
+                                        <div class="">
+                                            <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description}}</textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -677,8 +677,8 @@
                             <div class="col-md-12 report_text current_quarter">
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
-                                <div class="logo-partner-scroll">
-                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
+                                <div class="">
+                                    <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
                                 </div>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -687,8 +687,8 @@
                             <div class="col-md-12 report_text current_quarter">
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
-                                <div class="logo-partner-scroll">
-                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}}</textarea>
+                                <div class="">
+                                    <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}}</textarea>
                                 </div>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -835,7 +835,6 @@
                         {% endfor %} <!-- future question for loop ends here -->
                     {% else %} <!--  if object is there -->
 <!--                        if object is der                            -->
-                    object is present
                             {% for quest in next_questionlist %}
 
 <!--                             this is for auto populate text -->
@@ -960,7 +959,7 @@
                         {% endfor %}
                         <!--ends nexrt quarter updates -->
 
-
+                    
                     </div>
                     </div>
                     <div class="below_buttons">
