@@ -22,6 +22,35 @@ from common_method import unique_slug_generator,add_keywords
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 from menu_decorators import check_loggedin_access
 
+def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
+    #this function is to manage project location 
+    for i in range(location_count):
+        city = 'city1_'+str(i+1)
+        location_type = 'type_'+str(i+1)
+        if city not in city_var_list:
+            boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(city))
+            if boundary_obj:
+                location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+    del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
+
+def project_location(request,obj,location):
+    # this function is to add or edit location for project
+    rem_id = request.POST.get('rem_id')
+    city_var = request.POST.get('city_var')
+    if rem_id != '':
+        rem_id_list = map(int,str(rem_id).split(','))
+    else:
+        rem_id_list=[]
+    if city_var != '':
+        city_var_list = map(str,str(city_var).split(','))
+    else:
+        city_var_list = []
+    if location:
+        [ i.switch() for i in location]
+    location_count = int(request.POST.get('name_count'))
+    manage_project_location(request,location_count,obj,city_var_list,rem_id_list)
+    
+
 def create_project(request):
     #Create and edit project (with dynamic activities)
     
@@ -40,7 +69,6 @@ def create_project(request):
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
     if request.method == 'POST':
-        
         try:
             instance = get_object_or_404(Project, slug=slug)
             form = ProjectForm(request.POST,request.FILES or None, instance=instance)
@@ -60,35 +88,15 @@ def create_project(request):
             funder = UserProfile.objects.get(id=request.POST.get('funder'))
             total_budget = request.POST.get('total_budget')
             ff = funder_mapping(funder,implementation_partner,total_budget,obj)
-
-            rem_id = request.POST.get('rem_id')
-            city_var = request.POST.get('city_var')
-            if rem_id != '':
-                rem_id_list = map(int,str(rem_id).split(','))
-            else:
-                rem_id_list=[]
-            if city_var != '':
-                city_var_list = map(str,str(city_var).split(','))
-            else:
-                city_var_list = []
-            if location:
-                [ i.switch() for i in location]
-            location_count = int(request.POST.get('name_count'))
-            for i in range(location_count):
-                city = 'city1_'+str(i+1)
-                location_type = 'type_'+str(i+1)
-                
-                if city not in city_var_list:
-                    boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(city))
-                    if boundary_obj:
-                        location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
-            del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
+            project_location(request,obj,location)
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
 def funder_mapping(funder,implementation_partner,total_budget,obj):
+    #this function is to map implementation partner and funder
     implementation_partner = UserProfile.objects.get(id=implementation_partner)
     mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
+    # mapping of implementation partner and funder for project
     if mapping:
         mapping.funder=funder
         mapping.implementation_partner=implementation_partner

@@ -21,6 +21,7 @@
                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
                <link rel="stylesheet" href="/static/css/report-bootstrap.min.css">
                <link rel="stylesheet" href="/static/css/report-style.css">
+               <!-- <link rel="stylesheet" href="/static/css/style.css"> -->
             </head>
             <!-- onload="window.print()" -->
             <body >
@@ -126,6 +127,14 @@
                      <img src="/static/img/report/budget_banner.png" style="width:100%; margin:20px 0px">
                      Total Budget:<b>{{answer_list.project_budget}}</b> Project Beneficiaries: {{answer_list.no_of_beneficiaries}} Project Duration: {{answer_list.project_duration}}
                   </div>
+<!-- ######################### -->
+<div class="white-box">
+        <ul class="key_parameter parameter">
+          <div class='numeric_parameter'></div>
+        </ul>
+    </div>
+
+
                   <div class="location">
                      <p>Location Coverage</p>
                      <ul> {{answer_list.location}}</ul>
@@ -178,7 +187,7 @@
                   </div>
                   <hr>
                   {% for i in report_quarter %}
-                  {% get_parameter i as pie_data %}
+                  {% get_parameter i 3 as pie_data %}
                   {{pie_data.0.PIN}}
                   {% if i.quarter_type == 1 %}
                   <div class="quarter_updates">
@@ -232,7 +241,7 @@
                   </div>
                   <div class="col-md-12">
                      <div class="row">
-                        {% get_parameter i as pie_data %}
+                        {% get_parameter i 3 as pie_data %}
                         {% if pie_data.0 %}
                         {% for lol in  pie_data.0 %}
                         <div class="margin_30 prev_banner">
@@ -272,7 +281,7 @@
                         </script>
                         <!--/* Pie Chat Number */-->
                         <script type="text/javascript">
-                           {% get_parameter i as pie_data %}
+                           {% get_parameter i 3 as pie_data %}
                            var new_data_pin = 0;
                            var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
                            var values = "coll{{forloop.counter}}"
@@ -334,7 +343,7 @@
                   </div>
                   <div class="col-md-12">
                      <div class="row">
-                        {% get_parameter i as pie_data %}
+                        {% get_parameter i 3 as pie_data %}
                         {{pie_data.3}}
                         {% if pie_data.3 %}
                         {% for lol in  pie_data.3 %}
@@ -412,22 +421,19 @@
                      </div>
                      </div> -->
                   <div class="margin_top30">
-                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches1</P>
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
-        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
-           <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+            <div class="table-responsive">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
             <thead>
-            <tr class="sticky-row quarter_color">
-
-              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
-            </tr>  
-            <tr  class="sticky-row">
-              <th  class="sticky-cell">Super Category</th>
-              <th  class="sticky-cell">Heading</th>
-              <th  class="sticky-cell">Subheading</th>
-              <th  class="sticky-cell">Total Planned</th>
-              <th  class="sticky-cell">Total Utilized</th>
-              <th  class="sticky-cell">Units Type</th>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
               <th>Units</th>
               <th>Rate</th>
               <th> Planned</th>
@@ -435,18 +441,18 @@
               <th>Variance</th>
             </tr>
             </thead>
-            <tbody class="budget_section">
+            <tbody>
             {% for j in budget_period %}
-            <tr class = "data_row">
+            <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center" class="sticky-cell">{{line_total}}</td>
+                <td align="center">{{line_total}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
-                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                <td align="center">{{utilized_amount}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_order 1 project as quarter_order %}
@@ -465,6 +471,7 @@
 
             </tbody>
           </table>
+        </div>
         </div>
     </div>
                      <br><!-- ------------------------------------------------------- -->
@@ -527,7 +534,7 @@
                   </div>
                   <hr>
                   {% if i.quarter_type == 2 %}
-                  {% get_parameter i as pie_data %}
+                  {% get_parameter i 4 as pie_data %}
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -539,19 +546,17 @@
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
-           <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+         <div class="table-responsive">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
             <thead>
-            <tr class="sticky-row quarter_color">
-
-              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
-            </tr>  
-            <tr  class="sticky-row">
-              <th  class="sticky-cell">Super Category</th>
-              <th  class="sticky-cell">Heading</th>
-              <th  class="sticky-cell">Subheading</th>
-              <th  class="sticky-cell">Total Planned</th>
-              <th  class="sticky-cell">Total Utilized</th>
-              <th  class="sticky-cell">Units Type</th>
+            
+            <tr>
+              <th>fbb Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
               <th>Units</th>
               <th>Rate</th>
               <th> Planned</th>
@@ -559,18 +564,18 @@
               <th>Variance</th>
             </tr>
             </thead>
-            <tbody class="budget_section">
+            <tbody>
             {% for j in budget_period %}
-            <tr class = "data_row">
+            <tr >
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center" class="sticky-cell">{{line_total}}</td>
+                <td align="center">{{line_total}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
-                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                <td align="center">{{utilized_amount}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_order 2 project as quarter_order %}
@@ -589,6 +594,7 @@
 
             </tbody>
           </table>
+          </div>
         </div>
     </div>
                      <br>
@@ -672,7 +678,7 @@
                   </div>
                   <div class="col-md-12">
                      <div class="row">
-                        {% get_parameter i as pie_data %}
+                        {% get_parameter i 4 as pie_data %}
                         {% if pie_data.0 %}
                         {% for lol in  pie_data.0 %}
                         <div class="margin_30 prev_banner">
@@ -707,7 +713,7 @@
                         </script>
                         <!--/* Pie Chat Number */-->
                         <script type="text/javascript">
-                           {% get_parameter i as pie_data %}
+                           {% get_parameter i 4 as pie_data %}
                            var new_data_pin = 0;
                            var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
                            console.log(data1);
@@ -772,7 +778,8 @@
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
-           <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+         <div class="table-responsive">
+           <table class="tab-resp1" id="example11" >
             <thead>
             <tr class="sticky-row quarter_color">
 
@@ -822,6 +829,7 @@
 
             </tbody>
           </table>
+        </div>
         </div>
     </div>
                      <br>
@@ -916,9 +924,9 @@
                   </div>
                   <hr>
                   {% if i.quarter_type == 3 %}
-                  {{i.id}}464564564554
-                  {% get_parameter i as pie_data,title,tile %}
-                  {{pie_data.0}}{{title}}ff{{tile}}
+                  
+                  {% get_parameter i 5 as pie_data %}
+                  
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Next Quarter Updates</h4>
                      <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -929,22 +937,23 @@
                   </div>
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <img src="/static/img/report/table01.png" style="width:100%; ">
+                     
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
-           <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+         <div class="white-box">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
             <thead>
-            <tr class="sticky-row quarter_color">
+            <tr>
 
-              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
+              <td colspan="6">&nbsp;</td>
             </tr>  
             <tr  class="sticky-row">
-              <th  class="sticky-cell">Super Category</th>
-              <th  class="sticky-cell">Heading</th>
-              <th  class="sticky-cell">Subheading</th>
-              <th  class="sticky-cell">Total Planned</th>
-              <th  class="sticky-cell">Total Utilized</th>
-              <th  class="sticky-cell">Units Type</th>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
               <th>Units</th>
               <th>Rate</th>
               <th> Planned</th>
@@ -956,14 +965,14 @@
             {% for j in budget_period %}
             <tr class = "data_row">
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center" class="sticky-cell">{{line_total}}</td>
+                <td align="center">{{line_total}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
-                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                <td align="center">{{utilized_amount}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_order 2 project as quarter_order %}
@@ -982,6 +991,7 @@
 
             </tbody>
           </table>
+        </div>  
         </div>
     </div>
                      <br>
