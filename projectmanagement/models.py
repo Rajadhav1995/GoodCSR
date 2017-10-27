@@ -123,6 +123,7 @@ CATEGORY_CHOICES=(('DBC', 'Direct to Beneficiary Cost'),
      ('O', 'Others')) 
 
 class MasterCategory(BaseContent):
+    #this model structure is to store categories 
     category_type = models.CharField(choices=CATEGORY_CHOICES,max_length=100,blank=True, null=True)
     name = models.CharField(max_length=200,**OPTIONAL)
     code = models.CharField(max_length=100,**OPTIONAL)
@@ -136,6 +137,7 @@ def my_default():
     return {'first_name': '','last_name':''}
 
 class UserProfile(BaseContent):
+    #this model structure is to store user details
     user_reference_id = models.IntegerField(default=0)
     user = models.ForeignKey("auth.User",**OPTIONAL)
     name = models.CharField(max_length=500,**OPTIONAL)
@@ -165,6 +167,7 @@ STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 BUDGET_TYPE = ((1,'Yearly'),(2,'Quarterly'),(3,'Half Yearly'))
 
 class Project(BaseContent):
+    #this model structure is to store detail information about Project and its related data
     program = models.ForeignKey(Program,**OPTIONAL)
     request_status = models.IntegerField(choices=REQUEST_STATUS,default=0)
     name = models.CharField(max_length=300,**OPTIONAL)
@@ -190,6 +193,7 @@ class Project(BaseContent):
         return smart_str(self.name) or ''
 
     def total_tasks(self):
+        # this model method is for total task count for project
         from taskmanagement.models import Activity,Task
         project = Project.objects.get(id= self.id)
         activity = Activity.objects.filter(project = project)
@@ -197,6 +201,7 @@ class Project(BaseContent):
         return task_count
         
     def tasks_completed(self):
+        # this model method is for total completed task count for project
         from taskmanagement.models import Activity,Task
         from datetime import datetime
         completed_tasks = 0
