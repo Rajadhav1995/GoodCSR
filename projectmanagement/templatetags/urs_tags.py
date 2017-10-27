@@ -69,7 +69,10 @@ def get_budget_lineitem(row,projectobj):
 
 @register.assignment_tag
 def get_quarter_order(quarter_type,projectobj):
-    quarter_order = QuarterReportSection.objects.latest_one(project__project=projectobj,quarter_type=quarter_type).quarter_order
+    quarter_order=''
+    quarter_order = QuarterReportSection.objects.latest_one(project__project=projectobj,quarter_type=quarter_type)
+    if quarter_order:
+        quarter_order = quarter_order.quarter_order
     return quarter_order
 
 @register.assignment_tag
@@ -144,8 +147,8 @@ def get_duration_month(date):
     return duration
 
 @register.assignment_tag
-def get_parameter(obj):
-    question_obj = Question.objects.get_or_none(slug='parameter-section')
+def get_parameter(obj,block_id):
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block=block_id)
     answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
     main_list =[]
     master_list = []
