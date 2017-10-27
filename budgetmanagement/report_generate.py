@@ -240,7 +240,7 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
                 milestone_list.append(line)
             elif len(line_list) == 8 and line_list[6] != "parameter":
                 pic_list.append(line)
-            elif len(line_list) == 8 and line_list[6] == "parameter":
+            else:
                 parameter_list.append(line)
     return milestone_list,parameter_list,pic_list
 
