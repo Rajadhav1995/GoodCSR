@@ -47,6 +47,7 @@ def project_location(request,obj,location):
         city_var_list = []
     if location:
         [ i.switch() for i in location]
+    #if user not clicks on addmore location then by default it will take 1 location count
     try:
         location_count = int(request.POST.get('name_count'))
     except:
