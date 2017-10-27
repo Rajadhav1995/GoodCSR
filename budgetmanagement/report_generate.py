@@ -214,6 +214,37 @@ def display_blocks(request):
 
 #this is the actual report saving we are using 
 
+def get_milestone_parameterlist(previous_itemlist,quarterreportobj,projectreportobj,user_obj):
+    milestone_list = []
+    pic_list = []
+    parameter_list = []
+    for line in previous_itemlist:
+        if str(quarter) == line.split('_')[2]:
+            line_list = line.split('_')
+            if len(line_list) == 5:
+                question_id = line_list[3]
+                answer_dict = {
+                'quarter':quarterreportobj,
+                'question':Question.objects.get_or_none(id=int(question_id)),
+                'text':request.POST.get(line),
+                'content_type':ContentType.objects.get_for_model(projectreportobj),
+                'object_id':projectreportobj.id,
+                'user':user_obj,
+                }
+                answerobj = Answer.objects.get_or_none(question__id=question_id,quarter=quarterreportobj)
+                if not answerobj:
+                    answer = Answer.objects.create(**answer_dict)
+                else:
+                    answerobj.text = request.POST.get(line)
+                    answerobj.save()
+            elif len(line_list) == 6:
+                milestone_list.append(line)
+            elif len(line_list) == 7 and line_list[6] != "parameter":
+                pic_list.append(line)
+            elif len(line_list) == 7 and line_list[6] == "parameter":
+                parameter_list.append(line)
+    return milestone_list,pic_list,parameter_list
+
 def get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist):
     for quarter,value in quarter_list.items():
         present_quarter = previous_itemlist[0]
@@ -233,34 +264,7 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
             if not quarterreportobj:
                 quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
             user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
-            milestone_list = []
-            pic_list = []
-            parameter_list = []
-            for line in previous_itemlist:
-                if str(quarter) == line.split('_')[2]:
-                    line_list = line.split('_')
-                    if len(line_list) == 5:
-                        question_id = line_list[3]
-                        answer_dict = {
-                        'quarter':quarterreportobj,
-                        'question':Question.objects.get_or_none(id=int(question_id)),
-                        'text':request.POST.get(line),
-                        'content_type':ContentType.objects.get_for_model(projectreportobj),
-                        'object_id':projectreportobj.id,
-                        'user':user_obj,
-                        }
-                        answerobj = Answer.objects.get_or_none(question__id=question_id,quarter=quarterreportobj)
-                        if not answerobj:
-                            answer = Answer.objects.create(**answer_dict)
-                        else:
-                            answerobj.text = request.POST.get(line)
-                            answerobj.save()
-                    elif len(line_list) == 6:
-                        milestone_list.append(line)
-                    elif len(line_list) == 7 and line_list[6] != "parameter":
-                        pic_list.append(line)
-                    elif len(line_list) == 7 and line_list[6] == "parameter":
-                        parameter_list.append(line)
+            milestone_list,parameter_list,pic_list = get_milestone_parameterlist(previous_itemlist,quarterreportobj,projectreportobj,user_obj)
     return milestone_list,parameter_list,pic_list,quarterreportobj
 
 def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):

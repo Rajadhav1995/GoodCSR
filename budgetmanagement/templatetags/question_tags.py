@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,QuarterReportSection,
-                                    BudgetPeriodUnit,Question,Block,Answer)
+                                    BudgetPeriodUnit,Question,Block,Answer,ReportParameter)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
@@ -59,3 +59,15 @@ def get_answer_question(quest,quarterreportobj):
     except:
         text = ""
     return text
+
+@register.assignment_tag
+def get_parameters_list(quest,quarterreportobj):
+    try:
+        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
+        answerlist = answerobj.inline_answer
+        import ipdb;ipdb.set_trace();
+        parameterlist = ReportParameter.objects.filter(id__in = eval(answerlist))
+    except:
+        parameterlist = []
+    return parameterlist
+        
