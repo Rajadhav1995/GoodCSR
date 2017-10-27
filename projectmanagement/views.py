@@ -93,8 +93,10 @@ def create_project(request):
     return render(request,'project/project_add.html',locals())
 
 def funder_mapping(funder,implementation_partner,total_budget,obj):
+    #this function is to map implementation partner and funder
     implementation_partner = UserProfile.objects.get(id=implementation_partner)
     mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
+    # mapping of implementation partner and funder for project
     if mapping:
         mapping.funder=funder
         mapping.implementation_partner=implementation_partner
