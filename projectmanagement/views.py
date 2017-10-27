@@ -23,6 +23,7 @@ from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 from menu_decorators import check_loggedin_access
 
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
+    #this function is to manage project location 
     for i in range(location_count):
         city = 'city1_'+str(i+1)
         location_type = 'type_'+str(i+1)
@@ -33,6 +34,7 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
     del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
 
 def project_location(request,obj,location):
+    # this function is to add or edit location for project
     rem_id = request.POST.get('rem_id')
     city_var = request.POST.get('city_var')
     if rem_id != '':
@@ -47,15 +49,6 @@ def project_location(request,obj,location):
         [ i.switch() for i in location]
     location_count = int(request.POST.get('name_count'))
     manage_project_location(request,location_count,obj,city_var_list,rem_id_list)
-
-    # for i in range(location_count):
-    #     city = 'city1_'+str(i+1)
-    #     location_type = 'type_'+str(i+1)
-    #     if city not in city_var_list:
-    #         boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(city))
-    #         if boundary_obj:
-    #             location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
-    # del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
     
 
 def create_project(request):
