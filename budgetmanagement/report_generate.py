@@ -214,7 +214,7 @@ def display_blocks(request):
 
 #this is the actual report saving we are using 
 
-def get_milestone_parameterlist(previous_itemlist,quarterreportobj,projectreportobj,user_obj):
+def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,projectreportobj,user_obj,quarter):
     milestone_list = []
     pic_list = []
     parameter_list = []
@@ -237,13 +237,13 @@ def get_milestone_parameterlist(previous_itemlist,quarterreportobj,projectreport
                 else:
                     answerobj.text = request.POST.get(line)
                     answerobj.save()
-            elif len(line_list) == 6:
+            elif len(line_list) == 7:
                 milestone_list.append(line)
-            elif len(line_list) == 7 and line_list[6] != "parameter":
+            elif len(line_list) == 8 and line_list[6] != "parameter":
                 pic_list.append(line)
-            elif len(line_list) == 7 and line_list[6] == "parameter":
+            elif len(line_list) == 8 and line_list[6] == "parameter":
                 parameter_list.append(line)
-    return milestone_list,pic_list,parameter_list
+    return milestone_list,parameter_list,pic_list
 
 def get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist):
     for quarter,value in quarter_list.items():
@@ -264,7 +264,7 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
             if not quarterreportobj:
                 quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
             user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
-            milestone_list,parameter_list,pic_list = get_milestone_parameterlist(previous_itemlist,quarterreportobj,projectreportobj,user_obj)
+            milestone_list,parameter_list,pic_list = get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,projectreportobj,user_obj,quarter)
     return milestone_list,parameter_list,pic_list,quarterreportobj
 
 def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
@@ -274,8 +274,9 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
         milestone_images = {}
         for pic in pic_list:
             pic_length_list = pic.split('_')
-            if len(pic_length_list) == 7 and pic.endswith('_'+str(j+1)):
+            if len(pic_length_list) == 8 and pic_length_list[-3] == str(j+1):
                 name = pic_length_list[0]
+                image_id = pic_length_list[-1]
                 milestone_images.update({name.lower():request.POST.get(pic)})
 
 
@@ -289,7 +290,13 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
                 'content_type' : ContentType.objects.get_for_model(milestoneobj),
                 'object_id' : milestoneobj.id
         }
-        imageobj = Attachment.objects.create(**image_dict)
+        if int(image_id) == 0:
+            imageobj = Attachment.objects.create(**image_dict)
+        else:
+            imageobj = Attachment.objects.get_or_none(id=int(image_id))
+            imageobj.attachment_file = image_dict.get('attachment_file')
+            imageobj.description = image_dict.get('description')
+            imageobj.save()
     return imageobj
 
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
@@ -299,13 +306,24 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         result = {}
         for mile_attribute in milestone_list:
             mile_length_list =  mile_attribute.split('_')
-            if len(mile_length_list) == 6 and mile_attribute.endswith('_'+str(i+1)):
+            if len(mile_length_list) == 7 and mile_length_list[-2] == str(i+1):
                 name = mile_length_list[0]
+                mile_id = mile_length_list[-1]
                 parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
                 result.update({name.lower():request.POST.get(mile_attribute)})
-        name = result.get('milestone','')
-        description = result.get('about milestone','')
-        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
+        if quarterreportobj.quarter_type == 1:
+            name = result.get('milestone','')
+            description = result.get('about milestone','')
+        else:
+            name = result.get('activity','')
+            description = result.get('about the activity','')
+        if int(mile_id) == 0:
+            milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
+        else:
+            milestoneobj = ReportMilestoneActivity.objects.get(id=int(mile_id))
+            milestoneobj.name = name
+            milestoneobj.description=description
+            milestoneobj.save()
         imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj).values_list("id",flat=True)
@@ -318,7 +336,12 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
             'object_id':projectreportobj.id,
             'user':user_obj,
             }
-    answer = Answer.objects.create(**milestone_answer_dict)
+    answer =  Answer.objects.get_or_none(question = milestone_answer_dict.get('question'),quarter=quarterreportobj)
+    if answer:
+        answer.inline_answer = milestone_ids
+        answer.save()
+    else:
+        answer = Answer.objects.create(**milestone_answer_dict)
     return answer
 
 def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
@@ -326,12 +349,18 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
         parameter_result = {}
         for parameter in parameter_list:
             param_list =  parameter.split('_')
-            if len(param_list) == 7 and int(param_list[5]) == int(k)+1:
+            if len(param_list) == 8 and int(param_list[5]) == int(k)+1:
                 name = param_list[0]
+                parameter_id = param_list[-1]
                 parent_paramter_question = Question.objects.get(id=param_list[3]).parent
                 parameter_result.update({name.lower():request.POST.get(parameter)})
-        
-        reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
+        if int(parameter_id) == 0:
+            reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
+        else:
+            reportparamterobj = ReportParameter.objects.get(id=int(parameter_id))
+            reportparamterobj.keyparameter = ProjectParameter.objects.get(id=int(parameter_result['parameter selection']))
+            reportparamterobj.description = parameter_result['about parameter']
+            reportparamterobj.save()
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     parameter_ids = ReportParameter.objects.filter(quarter = quarterreportobj).values_list("id",flat=True)
     parameter_ids = map(int,parameter_ids)
@@ -343,7 +372,12 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
             'object_id':projectreportobj.id,
             'user':user_obj,
             }
-    answer = Answer.objects.create(**parameter_answer_dict)
+    answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj)
+    if answer:
+        answer.inline_answer = parameter_ids
+        answer.save()
+    else:
+        answer = Answer.objects.create(**parameter_answer_dict)
     return answer
 
 def saving_of_quarters_section(request):

@@ -313,9 +313,7 @@
                         <div>
                         
                         {% getreport_status report_id v 2 as reportupdates %}
-                        {{reportupdates.0}}
                         {% if reportupdates.0 == False %}
-                                        object is not der
                 <!--                        this is add functionality -->
                         {% for quest in current_questionlist %}
 <!--                             this is for auto populate text -->
@@ -359,7 +357,7 @@
 
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
-                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1" >
+                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
                                         <h5><a href="#">Remove</a></h5>
                                     {% endif %}
 
@@ -367,7 +365,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="logo-partner-scroll">
-                                            <input type="text" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1">
+                                            <input type="text" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0">
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -380,7 +378,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group upload_text">
-                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1">
+                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0">
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -415,7 +413,7 @@
                                     {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
                                         <p>{{param_quest.text|title}}</p>
-                                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" >
+                                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
                                             <option>Select</option>
                                             {% for i in project_paramterlist %}
                                             <option value="{{i.id}}">{{i.name}}</option>
@@ -430,7 +428,7 @@
                                     <div class="col-md-12 report_text ">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="logo-partner-scroll">
-                                            <textarea id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter"></textarea>
+                                            <textarea id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -532,7 +530,8 @@
                         <!--                            this is for milestone section-->
 
                         {% if quest.slug == "activity-section" %}
-                            
+                            {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
+                            {% for mileobj in act_mile_list %} <!--  for loop for activity list -->
                             <div class="milestone">
                             {% get_previous_subquestions quest as activity_questions %}
                                 <div class="col-md-6 report_text ">
@@ -541,7 +540,7 @@
 
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
-                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1" >
+                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
                                         <h5><a href="#">Remove</a></h5>
                                     {% endif %}
 
@@ -549,20 +548,22 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="logo-partner-scroll">
-                                            <input type="text" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1">
+                                            <input type="text" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}">
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
                                 </div>
+                                {% get_mile_act_images mileobj as imagelist %}
+                                {% for imageobj in imagelist %}
                                 {% for act_quest in activity_questions %}
                                 <div class="col-md-6 report_text">
                                 {% if act_quest.slug == "upload-picture" %}
                                     <div class=" report_text">
-                                        <p>{{act_quest.text|title}}</p>
+                                        <p>{{act_quest.text|title}} </p>
                                         <div class="form-group upload_text">
-                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1">
+                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -571,7 +572,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
-                                            <input type="text " class="form_section">
+                                            <input type="text " class="form_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value = "{{imageobj.description}}" >
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                         <div class="form-group addpicture">
@@ -581,7 +582,9 @@
                                 {% endif %}
                                 </div>
                                 {% endfor %}
+                                {% endfor %}
                             </div>
+                            {% endfor %}
                             <div class="form-group addmilestone">
                                 <p>+ add Milestone</p>
                             </div>
@@ -597,12 +600,13 @@
 
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
+                                    
                                     <div class="col-md-6 report_text parameter_section">
                                         <p>{{param_quest.text|title}}</p>
-                                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" >
+                                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
                                             <option>Select</option>
                                             {% for i in project_paramterlist %}
-                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
                                             {% endfor %}
                                         </select>
                                         <h5><a href="#">Remove</a></h5>
@@ -614,7 +618,7 @@
                                     <div class="col-md-12 report_text ">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="logo-partner-scroll">
-                                            <textarea id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter">{{paramobj.description}}</textarea>
+                                            <textarea id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description}}</textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -625,6 +629,7 @@
                                 <div class="form-group addmilestone">
                                     <p>+ add More Parameter</p>
                                 </div>
+                                {% endfor %}
                         {% endif %}
 
 <!--                            this is for budget table display-->
