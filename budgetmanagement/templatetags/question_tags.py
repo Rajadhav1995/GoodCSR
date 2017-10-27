@@ -11,7 +11,8 @@ from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,QuarterReportSection,
-                                    BudgetPeriodUnit,Question,Block,Answer)
+                                    BudgetPeriodUnit,Question,Block,Answer,
+                                    ReportParameter,ReportMilestoneActivity)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
@@ -59,3 +60,31 @@ def get_answer_question(quest,quarterreportobj):
     except:
         text = ""
     return text
+
+@register.assignment_tag
+def get_parameters_list(quest,quarterreportobj):
+    try:
+        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
+        answerlist = answerobj.inline_answer
+        parameterlist = ReportParameter.objects.filter(id__in = eval(answerlist))
+    except:
+        parameterlist = []
+    return parameterlist
+
+@register.assignment_tag
+def get_milestone_list(quest,quarterreportobj):
+    try:
+        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
+        answerlist = answerobj.inline_answer
+        act_mile_list = ReportMilestoneActivity.objects.filter(id__in = eval(answerlist))
+    except:
+        act_mile_list = []
+    return act_mile_list
+
+@register.assignment_tag
+def get_mile_act_images(mileobj):
+    try:
+        imagelist = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(mileobj),object_id = mileobj.id)
+    except:
+        imagelist = []
+    return imagelist
