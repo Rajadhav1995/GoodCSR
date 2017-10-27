@@ -47,7 +47,10 @@ def project_location(request,obj,location):
         city_var_list = []
     if location:
         [ i.switch() for i in location]
-    location_count = int(request.POST.get('name_count'))
+    try:
+        location_count = int(request.POST.get('name_count'))
+    except:
+        location_count = 1
     manage_project_location(request,location_count,obj,city_var_list,rem_id_list)
     
 
