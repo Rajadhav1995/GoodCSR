@@ -937,22 +937,23 @@
                   </div>
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <img src="/static/img/report/table01.png" style="width:100%; ">
+                     
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
-           <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+         <div class="white-box">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
             <thead>
-            <tr class="sticky-row quarter_color">
+            <tr>
 
-              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
+              <td colspan="6">&nbsp;</td>
             </tr>  
             <tr  class="sticky-row">
-              <th  class="sticky-cell">Super Category</th>
-              <th  class="sticky-cell">Heading</th>
-              <th  class="sticky-cell">Subheading</th>
-              <th  class="sticky-cell">Total Planned</th>
-              <th  class="sticky-cell">Total Utilized</th>
-              <th  class="sticky-cell">Units Type</th>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
               <th>Units</th>
               <th>Rate</th>
               <th> Planned</th>
@@ -964,14 +965,14 @@
             {% for j in budget_period %}
             <tr class = "data_row">
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center" class="sticky-cell">{{line_total}}</td>
+                <td align="center">{{line_total}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
-                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                <td align="center">{{utilized_amount}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_order 2 project as quarter_order %}
@@ -990,6 +991,7 @@
 
             </tbody>
           </table>
+        </div>  
         </div>
     </div>
                      <br>
