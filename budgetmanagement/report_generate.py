@@ -209,7 +209,6 @@ def display_blocks(request):
     project = Project.objects.get_or_none(slug=project_slug)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     return (locals())
-#    return render(request,'report/report-display-section.html',locals())
     
 
 #this is the actual report saving we are using 
