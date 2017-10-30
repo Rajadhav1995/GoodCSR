@@ -182,6 +182,7 @@ def get_about_parameter(quarter,obj):
 
 @register.assignment_tag
 def get_about_quarter(quarter,obj,block):
+    # this template tag we are using to get quarter details in report detai page
     answer_obj = ''
     question = Question.objects.get_or_none(slug='about-the-quarter',block=block)
     answer_obj = Answer.objects.get_or_none(question=question,object_id=obj.id,quarter=quarter)
@@ -191,6 +192,7 @@ def get_about_quarter(quarter,obj,block):
 
 @register.assignment_tag
 def get_report_list(obj):
+    # this template tag we are using to list report which have answer
     answer_obj = Answer.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='projectreport'))
     if answer_obj:
         report_list = 1
