@@ -68,24 +68,18 @@
                   </div>
                   <hr>
                   <div class="margin-50">
-                     <div class="margin-botom35 border_text">
-                        <h2><span>About the Project</span> <span>3</span></h2>
-                     </div>
-                     <div class="margin-botom35 border_line">
-                        <h2>Previous Quarter Updates</h2>
-                        <h3><span>First Quarter</span><span>4</span></h3>
-                     </div>
-                     <div class="margin-botom35 border_line">
-                        <h2>Current Quarter Updates</h2>
-                        <h3><span>First Quarter</span><span>6</span></h3>
-                     </div>
-                     <div class="margin-botom35 border_line">
-                        <h2>Next Quarter Updates</h2>
-                        <h3><span>First Quarter</span><span>10</span></h3>
-                     </div>
-                     <div class="margin-botom35 border_text">
-                        <h2><span>Annexure</span><span>12</span></h2>
-                     </div>
+                     {% for key,value in contents.iteritems %}
+                             <div class="margin-botom35 border_line">
+                                <h2>{{value}}</h2>
+                                {% for k,v in quarters.iteritems %}
+                                    {% if value == k %}
+                                        {% for k,v in v.iteritems %}
+                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span>4</span></h3>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                             </div>
+                     {% endfor %}
                   </div>
                   <hr>
                   <img src="/static/img/report/logo.png" style="float:left">
