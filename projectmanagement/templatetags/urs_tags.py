@@ -167,9 +167,13 @@ def get_at_index(list, index):
     return list[index]
 
 @register.assignment_tag
-def get_budget_detail(block,quarter,obj):
+def get_budget_detail(block,quarter):
+    budget_detail = ''
     question_obj = Question.objects.get_or_none(slug='about-the-budget',block=block)
-    answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id)
+    answer_obj = Answer.objects.get_or_none(quarter=quarter,question=question_obj)
+    if answer_obj:
+        budget_detail = answer_obj.text
+    return budget_detail
 
 @register.assignment_tag
 def get_about_parameter(quarter,obj):
@@ -200,3 +204,12 @@ def get_report_list(obj):
     else:
         report_list = 0
     return report_list
+
+@register.assignment_tag
+def get_risk_mitigation(obj):    
+    risk_mitigation = ''
+    question = Question.objects.get_or_none(slug='risks-mitigation')
+    answer = Answer.objects.get_or_none(question=question,quarter=obj)
+    if answer:
+        risk_mitigation = answer.text
+    return risk_mitigation
