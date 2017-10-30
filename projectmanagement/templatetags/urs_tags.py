@@ -173,6 +173,7 @@ def get_budget_detail(block,quarter,obj):
 
 @register.assignment_tag
 def get_about_parameter(quarter,obj):
+    # template tag to get parameter detail quarter wise in report detail page
     about_parameter = ''
     question_obj = Question.objects.get_or_none(slug='about-parameter')
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
