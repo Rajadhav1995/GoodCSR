@@ -426,6 +426,17 @@ def finalreportdesign(request):
     locals_list = display_blocks(request)
     # end of the display cover page and summary #ENDS
     projectobj = Project.objects.get_or_none(slug=slug)
+    budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+#    trancches detail 
+    tranche_list = Tranche.objects.filter(project = projectobj,active=2)
+
+    tranche_amount = tanchesamountlist(tranche_list)
+    planned_amount = tranche_amount['planned_amount']
+    actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
+    recommended_amount = tranche_amount['recommended_amount']
+    utilized_amount = tranche_amount['utilized_amount']
+#     tranches detail ends 
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))#based on report id filter the project report obj
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
     if projectreportobj:

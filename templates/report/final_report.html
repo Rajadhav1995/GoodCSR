@@ -157,7 +157,7 @@
 <!--                            this is for key achievements-->
                             {% if quest.slug == "key-achievements-in-this-quarter" %}
                             <div class="col-md-12 report_text " style="padding:0px">
-                                <p>Key Achievements in this quarter</p>
+                                <p>{{quest.text|title}}</p>
                                 <img src="/static/img/image_slideshow.jpg" style="width:100%">
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -266,30 +266,45 @@
 
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
-                                    <p>Budget Utilisation and tranches</p>
-                                    <div class="table-responsive">
-                                        <table class="table table-boardered budget_table">
-                                            <tr>
-                                                <th>Category</th>
-                                                <th>Heading</th>
-                                                <th>Subheading</th>
-                                                <th>Units</th>
-                                                <th>Rate</th>
-                                                <th>Total Planned</th>
-                                                <th>Total Utikized</th>
-                                                <th>Variance</th>
+                                    <p>{{quest.text|title}}</p>
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                        <table class="table table-boardered table-striped table-striped budget_table">
+                                            <thead>
+                                            <tr class="sticky-row">
+                                              <th  class="sticky-cell">Super Category</th>
+                                              <th  class="sticky-cell">Heading</th>
+                                              <th  class="sticky-cell">Subheading</th>
+                                              <th  class="sticky-cell">Total Planned</th>
+                                              <th  class="sticky-cell">Total Utilized</th>
+                                              <th  class="sticky-cell">Units Type</th>
+                                              <th>Units</th>
+                                              <th>Rate</th>
+                                              <th> Planned</th>
+                                              <th> Utilized</th>
+                                              <th>Variance</th>
                                             </tr>
-                                            <tr>
-                                                <td>Programmatic</td>
-                                                <td>Salaries</td>
-                                                <td>Project Manager Salary</td>
-                                                <td>1</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>0</td>
+                                            </thead>
+                                        <tbody class="budget_section">
+                                            {% for row in budget_period %}
+                                            <tr class = "data_row">
+                                                {% get_budget_lineitem row projectobj as lineitemobj %}
+                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                                {% get_line_total row projectobj as line_total %}
+                                                <td align="right" class="sticky-cell">{{line_total}}</td>
+                                                {% get_utlizedline_total row projectobj as utilized_amount %}
+                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             </tr>
-
+                                            {% endfor %}
+                                        </tbody>
                                         </table>
                                     </div>
                                     <h5><a href="#">Remove</a></h5>
@@ -434,30 +449,45 @@
 
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
-                                    <p>Budget Utilisation and tranches</p>
-                                    <div class="table-responsive">
-                                        <table class="table table-boardered budget_table">
-                                            <tr>
-                                                <th>Category</th>
-                                                <th>Heading</th>
-                                                <th>Subheading</th>
-                                                <th>Units</th>
-                                                <th>Rate</th>
-                                                <th>Total Planned</th>
-                                                <th>Total Utikized</th>
-                                                <th>Variance</th>
+                                    <p>{{quest.text|title}}</p>
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                        <table class="table table-boardered table-striped table-striped budget_table">
+                                            <thead>
+                                            <tr class="sticky-row">
+                                              <th  class="sticky-cell">Super Category</th>
+                                              <th  class="sticky-cell">Heading</th>
+                                              <th  class="sticky-cell">Subheading</th>
+                                              <th  class="sticky-cell">Total Planned</th>
+                                              <th  class="sticky-cell">Total Utilized</th>
+                                              <th  class="sticky-cell">Units Type</th>
+                                              <th>Units</th>
+                                              <th>Rate</th>
+                                              <th> Planned</th>
+                                              <th> Utilized</th>
+                                              <th>Variance</th>
                                             </tr>
-                                            <tr>
-                                                <td>Programmatic</td>
-                                                <td>Salaries</td>
-                                                <td>Project Manager Salary</td>
-                                                <td>1</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>0</td>
+                                            </thead>
+                                        <tbody class="budget_section">
+                                            {% for row in budget_period %}
+                                            <tr class = "data_row">
+                                                {% get_budget_lineitem row projectobj as lineitemobj %}
+                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                                {% get_line_total row projectobj as line_total %}
+                                                <td align="right" class="sticky-cell">{{line_total}}</td>
+                                                {% get_utlizedline_total row projectobj as utilized_amount %}
+                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             </tr>
-
+                                            {% endfor %}
+                                        </tbody>
                                         </table>
                                     </div>
                                     <h5><a href="#">Remove</a></h5>
@@ -629,29 +659,44 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive">
-                                        <table class="table table-boardered budget_table">
-                                            <tr>
-                                                <th>Category</th>
-                                                <th>Heading</th>
-                                                <th>Subheading</th>
-                                                <th>Units</th>
-                                                <th>Rate</th>
-                                                <th>Total Planned</th>
-                                                <th>Total Utikized</th>
-                                                <th>Variance</th>
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                        <table class="table table-boardered table-striped table-striped budget_table">
+                                            <thead>
+                                            <tr class="sticky-row">
+                                              <th  class="sticky-cell">Super Category</th>
+                                              <th  class="sticky-cell">Heading</th>
+                                              <th  class="sticky-cell">Subheading</th>
+                                              <th  class="sticky-cell">Total Planned</th>
+                                              <th  class="sticky-cell">Total Utilized</th>
+                                              <th  class="sticky-cell">Units Type</th>
+                                              <th>Units</th>
+                                              <th>Rate</th>
+                                              <th> Planned</th>
+                                              <th> Utilized</th>
+                                              <th>Variance</th>
                                             </tr>
-                                            <tr>
-                                                <td>Programmatic</td>
-                                                <td>Salaries</td>
-                                                <td>Project Manager Salary</td>
-                                                <td>1</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>0</td>
+                                            </thead>
+                                        <tbody class="budget_section">
+                                            {% for row in budget_period %}
+                                            <tr class = "data_row">
+                                                {% get_budget_lineitem row projectobj as lineitemobj %}
+                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                                {% get_line_total row projectobj as line_total %}
+                                                <td align="right" class="sticky-cell">{{line_total}}</td>
+                                                {% get_utlizedline_total row projectobj as utilized_amount %}
+                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             </tr>
-
+                                            {% endfor %}
+                                        </tbody>
                                         </table>
                                     </div>
                                     <h5><a href="#">Remove</a></h5>
@@ -820,33 +865,46 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive">
-                                        <table class="table table-boardered budget_table">
-                                            <tr>
-                                                <th>Category</th>
-                                                <th>Heading</th>
-                                                <th>Subheading</th>
-                                                <th>Units</th>
-                                                <th>Rate</th>
-                                                <th>Total Planned</th>
-                                                <th>Total Utikized</th>
-                                                <th>Variance</th>
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                        <table class="table table-boardered table-striped table-striped budget_table">
+                                            <thead>
+                                            <tr class="sticky-row">
+                                              <th  class="sticky-cell">Super Category</th>
+                                              <th  class="sticky-cell">Heading</th>
+                                              <th  class="sticky-cell">Subheading</th>
+                                              <th  class="sticky-cell">Total Planned</th>
+                                              <th  class="sticky-cell">Total Utilized</th>
+                                              <th  class="sticky-cell">Units Type</th>
+                                              <th>Units</th>
+                                              <th>Rate</th>
+                                              <th> Planned</th>
+                                              <th> Utilized</th>
+                                              <th>Variance</th>
                                             </tr>
-                                            <tr>
-                                                <td>Programmatic</td>
-                                                <td>Salaries</td>
-                                                <td>Project Manager Salary</td>
-                                                <td>1</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>1000</td>
-                                                <td>0</td>
+                                            </thead>
+                                        <tbody class="budget_section">
+                                            {% for row in budget_period %}
+                                            <tr class = "data_row">
+                                                {% get_budget_lineitem row projectobj as lineitemobj %}
+                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                                {% get_line_total row projectobj as line_total %}
+                                                <td align="right" class="sticky-cell">{{line_total}}</td>
+                                                {% get_utlizedline_total row projectobj as utilized_amount %}
+                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             </tr>
-
+                                            {% endfor %}
+                                        </tbody>
                                         </table>
                                     </div>
-                                    <h5><a href="#">Remove</a></h5>
-                                </div>
                             {% endif %}
 
                             {% if quest.slug == "about-the-budget" %}
@@ -935,59 +993,82 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                             <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>Heading</th>
-                                            <th>Subheading</th>
-                                            <th>Units</th>
-                                            <th>Rate</th>
-                                            <th>Total Planned</th>
-                                            <th>Total Utikized</th>
-                                            <th>Variance</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Salaries</td>
-                                            <td>Project Manager Salary</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-
-                                    </table>
-                                </div>
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                        <table class="table table-boardered table-striped table-striped budget_table">
+                                            <thead>
+                                            <tr class="sticky-row">
+                                              <th  class="sticky-cell">Super Category</th>
+                                              <th  class="sticky-cell">Heading</th>
+                                              <th  class="sticky-cell">Subheading</th>
+                                              <th  class="sticky-cell">Total Planned</th>
+                                              <th  class="sticky-cell">Total Utilized</th>
+                                              <th  class="sticky-cell">Units Type</th>
+                                              <th>Units</th>
+                                              <th>Rate</th>
+                                              <th> Planned</th>
+                                              <th> Utilized</th>
+                                              <th>Variance</th>
+                                            </tr>
+                                            </thead>
+                                        <tbody class="budget_section">
+                                            {% for row in budget_period %}
+                                            <tr class = "data_row">
+                                                {% get_budget_lineitem row projectobj as lineitemobj %}
+                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                                {% get_line_total row projectobj as line_total %}
+                                                <td align="right" class="sticky-cell">{{line_total}}</td>
+                                                {% get_utlizedline_total row projectobj as utilized_amount %}
+                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        </table>
+                                    </div>
                                 <h5><a href="#">Remove</a></h5>
                                 <br>
                                 <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Tranche No.</th>
-                                            <th>Due Date</th>
-                                            <th>Planned Amount</th>
-                                            <th>Actual Disbursement</th>
-                                            <th>Recommended Disbursement</th>
-                                            <th>Utilized</th>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>1-Jan-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>1-Jun-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
+                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                      <thead>
+                                      <tr>
+                                        <th align="center">Tranche No.</th>
+                                        <th>Due Date</th>
+                                        <th>Planned Amount</th>
+                                        <th>Actual Disbursement</th>
+                                        <th>Recommended Disbursement</th>
+                                        <th> Utilized</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in tranche_list %}
+                                      {% with forloop.counter as rnum %}
+                                      <tr>
+                                        <td>{{rnum}}</td>
+                                        <td>{{i.due_date}}</td>
+                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                      </tr>
+                                      {% endwith %}
+                                      {% endfor %}
+                                      <tr bgcolor="#f1f3e9" class="table-tr">
+                                        <td>Total</td>
+                                        <td>&nbsp;</td>
+                                        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                                      </tr>
+                                      </tbody>
                                     </table>
                                 </div>
                                 <!--<img src="img/table01.png" style="width:100%">-->
@@ -1047,59 +1128,82 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                             <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>Heading</th>
-                                            <th>Subheading</th>
-                                            <th>Units</th>
-                                            <th>Rate</th>
-                                            <th>Total Planned</th>
-                                            <th>Total Utikized</th>
-                                            <th>Variance</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Programmatic</td>
-                                            <td>Salaries</td>
-                                            <td>Project Manager Salary</td>
-                                            <td>1</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-
-                                    </table>
-                                </div>
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                        <table class="table table-boardered table-striped table-striped budget_table">
+                                            <thead>
+                                            <tr class="sticky-row">
+                                              <th  class="sticky-cell">Super Category</th>
+                                              <th  class="sticky-cell">Heading</th>
+                                              <th  class="sticky-cell">Subheading</th>
+                                              <th  class="sticky-cell">Total Planned</th>
+                                              <th  class="sticky-cell">Total Utilized</th>
+                                              <th  class="sticky-cell">Units Type</th>
+                                              <th>Units</th>
+                                              <th>Rate</th>
+                                              <th> Planned</th>
+                                              <th> Utilized</th>
+                                              <th>Variance</th>
+                                            </tr>
+                                            </thead>
+                                        <tbody class="budget_section">
+                                            {% for row in budget_period %}
+                                            <tr class = "data_row">
+                                                {% get_budget_lineitem row projectobj as lineitemobj %}
+                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                                {% get_line_total row projectobj as line_total %}
+                                                <td align="right" class="sticky-cell">{{line_total}}</td>
+                                                {% get_utlizedline_total row projectobj as utilized_amount %}
+                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        </table>
+                                    </div>
                                 <h5><a href="#">Remove</a></h5>
                                 <br>
                                 <div class="table-responsive">
-                                    <table class="table table-boardered budget_table">
-                                        <tr>
-                                            <th>Tranche No.</th>
-                                            <th>Due Date</th>
-                                            <th>Planned Amount</th>
-                                            <th>Actual Disbursement</th>
-                                            <th>Recommended Disbursement</th>
-                                            <th>Utilized</th>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>1-Jan-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>1-Jun-18</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                            <td>Rs. 100</td>
-                                        </tr>
+                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                      <thead>
+                                      <tr>
+                                        <th align="center">Tranche No.</th>
+                                        <th>Due Date</th>
+                                        <th>Planned Amount</th>
+                                        <th>Actual Disbursement</th>
+                                        <th>Recommended Disbursement</th>
+                                        <th> Utilized</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in tranche_list %}
+                                      {% with forloop.counter as rnum %}
+                                      <tr>
+                                        <td>{{rnum}}</td>
+                                        <td>{{i.due_date}}</td>
+                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                      </tr>
+                                      {% endwith %}
+                                      {% endfor %}
+                                      <tr bgcolor="#f1f3e9" class="table-tr">
+                                        <td>Total</td>
+                                        <td>&nbsp;</td>
+                                        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                                      </tr>
+                                      </tbody>
                                     </table>
                                 </div>
                                 <!--<img src="img/table01.png" style="width:100%">-->
