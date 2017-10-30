@@ -120,7 +120,6 @@ def get_sub_answers(details,sub_questions,project_report,project):
             data = get_org_logos(data,project,keys,details,sub)# to get the organozation logos and the answers from details dictionary
            
         sub_quest_list.append(data)
-        print sub_quest_list
     return sub_quest_list
     
 def get_org_logos(data,project,keys,details,sub):
