@@ -222,7 +222,7 @@
                      <h5 class="color_green">Key Achievements in this quarter</h5>
                      <img src="/static/img/report/prev-banner.png" style="width:100%">
                   </div>
-                  {% get_milestones i report_obj as mile %}
+                  {% get_milestones i report_obj 1 as mile %}
                     {% for m in mile %}  
                   <div class="margin_30 prev_banner milestone1">
                      <h5 class="color-red">MILESTONE 1</h5>
@@ -672,12 +672,12 @@
                   </div>
                   <div class=" margin_top30">
                      <p class="color-red">ACTIVITY</p>
-                     {% get_milestones i report_obj as mile %}
+                     {% get_milestones i report_obj 2 as mile %}
                      {% for m in mile %}
                      <p class="color_green">{{m.name}}</p>
                      <h5><strong>About the Activity</strong></h5>
                      <h5 style="color:#666; font-weight:normal">{{m.description}}</h5>
-                     {% endfor %}
+                     
                   </div>
                   {% get_mile_images m.id as images %}
                   {% for img in images %}
@@ -687,6 +687,7 @@
                      <p style="font-size:13px; margin-top:10px"><strong>{{img.description}}</p>
                      {% endif %}
                   </div>
+                  {% endfor %}
                   {% endfor %}
                   <footer>
                      <hr>
