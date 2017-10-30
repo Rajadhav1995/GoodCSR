@@ -170,3 +170,30 @@ def get_at_index(list, index):
 def get_budget_detail(block,quarter,obj):
     question_obj = Question.objects.get_or_none(slug='about-the-budget',block=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id)
+
+@register.assignment_tag
+def get_about_parameter(quarter,obj):
+    about_parameter = ''
+    question_obj = Question.objects.get_or_none(slug='about-parameter')
+    answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
+    if answer_obj:
+        about_parameter = answer_obj.inline_answer
+    return about_parameter
+
+@register.assignment_tag
+def get_about_quarter(quarter,obj,block):
+    answer_obj = ''
+    question = Question.objects.get_or_none(slug='about-the-quarter',block=block)
+    answer_obj = Answer.objects.get_or_none(question=question,object_id=obj.id,quarter=quarter)
+    if answer_obj:
+        about_quarter = answer_obj.inline_answer
+    return about_quarter
+
+@register.assignment_tag
+def get_report_list(obj):
+    answer_obj = Answer.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='projectreport'))
+    if answer_obj:
+        report_list = 1
+    else:
+        report_list = 0
+    return report_list
