@@ -1,5 +1,6 @@
 {% load urs_tags %}
 {% load common_tags %}
+{% load humanize %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      
 <html class="no-js lt-ie9 lt-ie8 lt-ie7">
@@ -137,11 +138,11 @@
             <tr>
                 <td >
                     <p>Total Budget</p>
-                    <img src="/static/img/rupee.png"><span>{{answer_list.project_budget}}</span>
+                    <img src="/static/img/rupee.png"><span>{{answer_list.project_budget | currency}}</span>
                 </td>
                <td>
                     <p>Project Beneficiaries</p>
-                    <img src="/static/img/user.png"><span>{{answer_list.no_of_beneficiaries}}</span>
+                    <img src="/static/img/user.png"><span>{{answer_list.no_of_beneficiaries | intcomma}}</span>
                 </td>
                   <td>
                     <p>Project Duration</p>

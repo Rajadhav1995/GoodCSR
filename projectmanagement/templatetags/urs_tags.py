@@ -166,6 +166,24 @@ def get_parameter(obj,block_id):
 def get_at_index(list, index):
     return list[index]
 
+import locale
+import re
+@register.filter
+def currency(value):
+    loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
+    value = float('{:.2f}'.format(float(value)))
+    if value <= 99999.99:
+        value = re.sub(u'\u20b9', ' ', locale.currency(value, grouping=True).decode('utf-8')).strip()
+        return re.sub(r'\.00', '', value)
+    elif value >= 100000.99 and value <= 9999999.99:
+        value = re.sub(u'\u20b9', ' ', locale.currency(value / 100000, grouping=True).decode('utf-8')).strip()
+        return str(float(value)) + ' ' + 'Lac'
+    else:
+        h = locale.format("%d", value)
+        value = float(h) * (0.0001 / 1000)
+        value = '{:.2f}'.format(value)
+        return str(float(value)) + ' ' + 'Cr'
+
 @register.assignment_tag
 def get_budget_detail(block,quarter):
     budget_detail = ''
