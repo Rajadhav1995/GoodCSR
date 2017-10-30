@@ -455,18 +455,25 @@ def finalreportdesign(request):
 
 
 def get_index_contents(slug,report_id):
-#    import ipdb;ipdb.set_trace();
+# to get the index contents dynamically by using a dictionay passing the contents
     contents = {}
     index={}
     quarters = {}
     project = Project.objects.get_or_none(slug=slug)
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
+    # by using get_quarters() function getting the previous,current and next quarters list
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(report_obj)
+    # based on the answer object created to the report,if answer object is created to that report
+    # then we will display the contents which are present
     cover_summary_answers = answer=Answer.objects.filter(question__block__block_type=0,
         content_type = ContentType.objects.get_for_model(report_obj),object_id=report_id)
+    # if answer object is present for the particular report then add "About the Project" to the dict
     if cover_summary_answers:
         contents['1']= 'About the project'
         quarters['About the project'] = ''
+        # if previous quarter then add to contents dict and in quarters dict give the list of quarters to that previous quarter
+        # so that we can render the quarters based on the name of the content and iterate it
+        # same way for current and next quarters is done
         if previousquarter_list:
             contents['2'] = 'Previous Quarter Updates'
             quarters['Previous Quarter Updates'] = previousquarter_list
