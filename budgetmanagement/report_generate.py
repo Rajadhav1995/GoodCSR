@@ -125,20 +125,22 @@ def report_detail(request):
         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
     location = ProjectLocation.objects.filter(object_id=project.id)
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
-
     tranche_list = Tranche.objects.filter(project = project,active=2)
     tranche_amount = tanchesamountlist(tranche_list)
     planned_amount = tranche_amount['planned_amount']
     actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
     recommended_amount = tranche_amount['recommended_amount']
     utilized_amount = tranche_amount['utilized_amount']
+    # for basic details of project report we are sending all fields in dictionary 
     for question in quest_list:
         answer_obj = Answer.objects.get_or_none(question =question,
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
         if answer_obj and (question.qtype == 'T' or question.qtype == 'APT'):
-            answer = answer_obj.text 
+            answer = answer_obj.text
         elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
             answer = answer_obj.attachment_file.url 
+        elif answer_obj and (question.qtype == 'ck'):
+            answer = answer_obj.text
         else:
             answer = ''
         answer_list[str(question.slug)] = answer

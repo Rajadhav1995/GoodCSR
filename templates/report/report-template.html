@@ -1,5 +1,6 @@
 {% load urs_tags %}
 {% load common_tags %}
+{% load humanize %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      
 <html class="no-js lt-ie9 lt-ie8 lt-ie7">
@@ -53,7 +54,7 @@
                            <li> <img src="{{image_url}}{{answer_list.logos}}" height = 100 width = 100></li>
                         </ul>
                      </div>
-                     <div class="text-head">                        
+                     <div class="text-head">
                         <h1>{{answer_list.report_name}}</h1>
                         <h5 style="float:left">by {{answer_list.client_name}}</h5>
                         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
@@ -137,11 +138,11 @@
             <tr>
                 <td >
                     <p>Total Budget</p>
-                    <img src="/static/img/rupee.png"><span>{{answer_list.project_budget}}</span>
+                    <img src="/static/img/rupee.png"><span>{{answer_list.project_budget | currency}}</span>
                 </td>
                <td>
                     <p>Project Beneficiaries</p>
-                    <img src="/static/img/user.png"><span>{{answer_list.no_of_beneficiaries}}</span>
+                    <img src="/static/img/user.png"><span>{{answer_list.no_of_beneficiaries | intcomma}}</span>
                 </td>
                   <td>
                     <p>Project Duration</p>
@@ -910,9 +911,8 @@
                   </div>
                   <div class="location margin_top30">
                      <p>About The Budget</p>
-                     <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-                     <h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-                        5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.
+                     {% get_budget_detail 4 i as budget_detail %}
+                     <h5>{{budget_detail}}
                      </h5>
                   </div>
                   <footer>
@@ -938,7 +938,9 @@
                   </div>
                   <div class="location margin_top_50">
                      <p>Risks and mitigation</p>
-                     <h5>{{i.risks_mitigation}} </h5>
+                     {% get_risk_mitigation i as risk_mitigation %}
+                     <h5>{{risk_mitigation}} </h5>
+                     
                   </div>
                   {% endif %}
                   <footer>
@@ -1073,7 +1075,9 @@
                   </div>
                   <div class="location margin_top30">
                      <p>About The Budget</p>
-                     <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h5>
+                     {% get_budget_detail 5 i as budget_detail %}
+                     <h5>{{budget_detail}}
+                     </h5>
                   </div>
                   {% endif %}
                   {% endfor %}

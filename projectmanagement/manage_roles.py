@@ -3,7 +3,7 @@ from  django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import (Project,)
 from userprofile.models import (ProjectUserRoleRelationship,)
 from .forms import(ProjectUserRoleRelationshipForm,)
-
+# this section is to manage role wise access to different functionalities
 
 def projectuserslist(request):
     '''

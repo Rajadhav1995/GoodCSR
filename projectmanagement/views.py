@@ -141,7 +141,7 @@ def budget_tranche(request):
 
 def tranche_list(request):
     '''
-    This function is for listing of project tranches
+    This function is for listing of project tranches                                
     '''
     slug =  request.GET.get('slug')
     obj = Project.objects.get(slug=slug)
@@ -175,7 +175,7 @@ def key_parameter(request):
 
 def add_parameter(request):
     '''
-    This function is to add key parameter
+    This function is to add key parameter for project
     '''
     form = ProjectParameterForm()
     slug =  request.GET.get('slug')
@@ -445,7 +445,7 @@ def get_timeline_process(timeline,milestone):
 
 @check_loggedin_access
 def project_summary(request):
-# to display the project details in project summary page
+# to display the project details in project summary page                    
 #Displaying pie chart detail
     image_url = PMU_URL
     slug =  request.GET.get('slug')
@@ -553,6 +553,7 @@ def pie_chart_mainlist_report(obj,start_date,end_date):
 
 
 def delete_upload_image(request):
+    # this function is to delete image from timeline                                
     url=request.META.get('HTTP_REFERER')
     ids = request.GET.get('id')
     attach = Attachment.objects.get_or_none(id=int(ids))
