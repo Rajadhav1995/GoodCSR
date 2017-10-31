@@ -1,5 +1,6 @@
 {% load urs_tags %}
 {% load common_tags %}
+{% load humanize %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      
 <html class="no-js lt-ie9 lt-ie8 lt-ie7">
@@ -22,7 +23,16 @@
                <link rel="stylesheet" href="/static/css/report-bootstrap.min.css">
                <link rel="stylesheet" href="/static/css/report-style.css">
                <!-- <link rel="stylesheet" href="/static/css/style.css"> -->
+                <style>
+      .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid }
+       .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
+      .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
+      .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
+      .pmu_formtable td span{font-size:45px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable td p{font-size:22px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+    </style>
             </head>
+
             <!-- onload="window.print()" -->
             <body >
                <header>
@@ -44,7 +54,7 @@
                            <li> <img src="{{image_url}}{{answer_list.logos}}" height = 100 width = 100></li>
                         </ul>
                      </div>
-                     <div class="text-head">                        
+                     <div class="text-head">
                         <h1>{{answer_list.report_name}}</h1>
                         <h5 style="float:left">by {{answer_list.client_name}}</h5>
                         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
@@ -120,8 +130,23 @@
                            <p>{{answer_list.implement_ngo}}</p>
                         </div>
                      </div>
-                     <img src="/static/img/report/budget_banner.png" style="width:100%; margin:20px 0px">
-                     Total Budget:<b>{{answer_list.project_budget}}</b> Project Beneficiaries: {{answer_list.no_of_beneficiaries}} Project Duration: {{answer_list.project_duration}}
+                      <table class="table pmu_formtable">
+            <tr>
+                <td >
+                    <p>Total Budget</p>
+                    <img src="/static/img/rupee.png"><span>{{answer_list.project_budget | currency}}</span>
+                </td>
+               <td>
+                    <p>Project Beneficiaries</p>
+                    <img src="/static/img/user.png"><span>{{answer_list.no_of_beneficiaries | intcomma}}</span>
+                </td>
+                  <td>
+                    <p>Project Duration</p>
+                      <img src="/static/img/time-calculater.png"><span>16<sub>Months</sub></span>
+                </td>
+            </tr>
+        </table>
+                     <!-- Total Budget:<b>{{answer_list.project_budget}}</b> Project Beneficiaries: {{answer_list.no_of_beneficiaries}} Project Duration: {{answer_list.project_duration}} -->
                   </div>
 <!-- ######################### -->
 <div class="white-box">
@@ -194,7 +219,7 @@
                      <h5 class="color_green">Key Achievements in this quarter</h5>
                      <img src="/static/img/report/prev-banner.png" style="width:100%">
                   </div>
-                  {% get_milestones i report_obj as mile %}
+                  {% get_milestones i report_obj 1 as mile %}
                     {% for m in mile %}  
                   <div class="margin_30 prev_banner milestone1">
                      <h5 class="color-red">MILESTONE 1</h5>
@@ -261,7 +286,8 @@
                               <div class="col-md-8">
                                  <div class="parameter-textbottom">
                                     <h4 class="color_green">About This Parameter</h4>
-                                    <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
+                                    {% get_about_parameter i report_obj as about_parameter %}
+                                    <p> {{about_parameter}} </p>
                                  </div>
                               </div>
                            </div>
@@ -363,8 +389,9 @@
                               </div>
                               <div class="col-md-8">
                                  <div class="parameter-textbottom">
-                                    <h4 class="color_green">About THis Parameter</h4>
-                                    <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
+                                    <h4 class="color_green">About This Parameter</h4>
+                                    {% get_about_parameter i report_obj as about_parameter %}
+                                    <p> {{about_parameter}} </p>
                                  </div>
                               </div>
                            </div>
@@ -635,22 +662,30 @@
     </div>
                   </div>
                   <div class="location margin_top30" style="margin-bottom:0px">
+                     {% get_about_quarter i report_obj 4 as abut_parameter %}
                      <p>About The Quarter</p>
-                     <h5 >Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-                     <h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-                        5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.
+                     <h5 >{{abut_parameter}}
                      </h5>
                   </div>
                   <div class=" margin_top30">
                      <p class="color-red">ACTIVITY</p>
-                     <p class="color_green">Hiring of teachers and school staff</p>
+                     {% get_milestones i report_obj 2 as mile %}
+                     {% for m in mile %}
+                     <p class="color_green">{{m.name}}</p>
                      <h5><strong>About the Activity</strong></h5>
-                     <h5 style="color:#666; font-weight:normal">Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed.</h5>
+                     <h5 style="color:#666; font-weight:normal">{{m.description}}</h5>
+                     
                   </div>
+                  {% get_mile_images m.id as images %}
+                  {% for img in images %}
                   <div>
-                     <img src="/static/img/report/imgpage0801.jpg">
-                     <p style="font-size:13px; margin-top:10px"><strong>First Day School:</strong> We will conduct free educational classes and also will <br>conduct skill development programs for the undeprivileged women and youth.</p>
+                     {% if img.attachment_file %}
+                     <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
+                     <p style="font-size:13px; margin-top:10px"><strong>{{img.description}}</p>
+                     {% endif %}
                   </div>
+                  {% endfor %}
+                  {% endfor %}
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
@@ -698,7 +733,8 @@
                               <div class="col-md-8">
                                  <div class="parameter-textbottom">
                                     <h4 class="color_green">About This Parameter</h4>
-                                    <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
+                                    {% get_about_parameter i report_obj as about_parameter %}
+                                    <p> {{about_parameter}} </p>
                                  </div>
                               </div>
                            </div>
@@ -871,9 +907,8 @@
                   </div>
                   <div class="location margin_top30">
                      <p>About The Budget</p>
-                     <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-                     <h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-                        5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.
+                     {% get_budget_detail 4 i as budget_detail %}
+                     <h5>{{budget_detail}}
                      </h5>
                   </div>
                   <footer>
@@ -899,7 +934,9 @@
                   </div>
                   <div class="location margin_top_50">
                      <p>Risks and mitigation</p>
-                     <h5>{{i.risks_mitigation}} </h5>
+                     {% get_risk_mitigation i as risk_mitigation %}
+                     <h5>{{risk_mitigation}} </h5>
+                     
                   </div>
                   {% endif %}
                   <footer>
@@ -929,7 +966,8 @@
                   </div>
                   <div class="location margin_top30" style="margin-bottom:0px">
                      <p>About The Quarter</p>
-                     <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h5>
+                     {% get_about_quarter i report_obj 5 as abut_parameter %}
+                     <h5>{{abut_parameter}} </h5>
                   </div>
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
@@ -1033,7 +1071,9 @@
                   </div>
                   <div class="location margin_top30">
                      <p>About The Budget</p>
-                     <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h5>
+                     {% get_budget_detail 5 i as budget_detail %}
+                     <h5>{{budget_detail}}
+                     </h5>
                   </div>
                   {% endif %}
                   {% endfor %}

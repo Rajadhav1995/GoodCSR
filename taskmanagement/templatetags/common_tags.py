@@ -83,11 +83,13 @@ def get_auto_populated_questions(ques_id,project,project_report):
     return sub_quest_list
     
 @register.assignment_tag 
-def get_milestones(quarter,report_obj):
-#to get the milestones or activities that are save for particular quarters
+def get_milestones(quarter,report_obj,type_id):
+# to get the milestones or activities that are save for particular quarters
     report_miles = []
     data = {}
-    answer = Answer.objects.get_or_none(quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+    sss = {1:'milestone-setion',2:'activity-section'}
+    question = Question.objects.get_or_none(slug=sss.get(type_id))
+    answer = Answer.objects.get_or_none(question=question,quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
     milestones = answer.inline_answer if answer else ''
     miles_list = ReportMilestoneActivity.objects.filter(id__in = eval(milestones))
     for i in miles_list:
@@ -100,9 +102,10 @@ def get_mile_images(mile_id):
 #to get the milestone and activity images 
     data = {}
     image_miles= []
-    miles_obj =  ReportMilestoneActivity.objects.get_or_none(id=mile_id)
-    images= Attachment.objects.filter(content_type = ContentType.objects.get_for_model(miles_obj),object_id = miles_obj.id)
-    return images
+    if mile_id:
+        miles_obj =  ReportMilestoneActivity.objects.get_or_none(id=mile_id)
+        image_miles= Attachment.objects.filter(content_type = ContentType.objects.get_for_model(miles_obj),object_id = miles_obj.id)
+    return image_miles
     
 def get_sub_answers(details,sub_questions,project_report,project):
 # to get the answers of auto populated questions calculating based on whether there is answer object to that question 
