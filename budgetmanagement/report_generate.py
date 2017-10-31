@@ -13,6 +13,7 @@ from media.models import (Article,Section,ContactPersonInformation,
 from media.forms import ContactPersonForm,Attachment
 from django.template import loader
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
+from taskmanagement.models import Milestone,Activity,Task
 from budgetmanagement.models import *
 from budgetmanagement.manage_budget import get_budget_logic
 from django.shortcuts import redirect
@@ -102,7 +103,7 @@ def report_section_form(request):
     return (locals())
 
 from budgetmanagement.common_method import key_parameter_chart
-from projectmanagement.views import parameter_pie_chart
+from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
 def report_detail(request):
 # to display the details in the view report of the genreated report
@@ -446,6 +447,10 @@ def finalreportdesign(request):
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
     if projectreportobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+#      timeline progress 
+    image = PMU_URL
+#      timeline progress ends 
+
     project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")

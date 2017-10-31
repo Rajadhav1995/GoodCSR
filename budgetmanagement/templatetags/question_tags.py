@@ -15,11 +15,16 @@ from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,QuarterRepor
                                     ReportParameter,ReportMilestoneActivity)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
-from taskmanagement.models import Activity
+from taskmanagement.models import Activity,Milestone
 from media.models import Attachment
+from projectmanagement.views import parameter_pie_chart,get_timeline_process
 
 
 register = template.Library()
+
+@register.assignment_tag
+def to_and(value):
+    return value.replace(" ","_")
 
 @register.assignment_tag
 def get_previous_question_value(quest,quarter,i):
@@ -88,3 +93,16 @@ def get_mile_act_images(mileobj):
     except:
         imagelist = []
     return imagelist
+
+@register.assignment_tag
+def get_timeline_progress(projectobj,v):
+    start_date = v.split('to')[0].rstrip()
+    end_date = v.split('to')[1].lstrip()
+    start_date = datetime.strptime(start_date[:19], '%Y-%m-%d').date()
+    end_date = datetime.strptime(end_date[:19], '%Y-%m-%d').date()
+    timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,created__gte = start_date,created__lte = end_date ).order_by('date')
+    today = datetime.today()
+    print timeline,"--------",v
+    milestone = Milestone.objects.filter(project = projectobj,overdue__lte=today.now())
+    timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
+    return timeline_json,timeline_json_length
