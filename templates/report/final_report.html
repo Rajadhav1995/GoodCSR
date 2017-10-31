@@ -173,9 +173,14 @@
                                                     </ul>
                                                 </div>
                                                </div>
+                                               </div>
                                                         </div>
                                                     </div>
-                                                    <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                                                    <div class="scrollbar">
+                                                    <div class="track">
+                                                    <div class="thumb">
+                                                    <div class="end">
+                                                    </div></div></div></div>
                                                     {% endif %}
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
                                 <h5><a href="#">Remove</a></h5>
@@ -333,7 +338,6 @@
                             {% endfor %} <!-- this is for previous question loop ends for add functionality -->
 
                     {% else %}  <!--  edit functionality starts here -->
-                              object is exists
                             {% for quest in previous_questionlist %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
