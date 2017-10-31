@@ -424,6 +424,7 @@ def saving_of_quarters_section(request):
 def finalreportdesign(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
+    key = request.GET.get('key')
     #to display the cover page and summary page sections calling the functions by passing request #STARTS)
     locals_list = display_blocks(request)
     # end of the display cover page and summary #ENDS
@@ -438,6 +439,7 @@ def finalreportdesign(request):
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
     if request.method == "POST":
         slug = request.POST.get('slug')
+        key = request.POST.get('key')
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
         projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
         #to save the two sections data based the save of two sections calling the report_section_form()#STARTS
@@ -449,9 +451,15 @@ def finalreportdesign(request):
             projectreportobj = saving_of_quarters_section(request)
             projectobj = projectreportobj.project
         # redirection to the same page of the form #STARTS
-        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
-        # ENDS to redirection   
-    return render(request,'report/final_report.html',locals())
+        if key == 'edit_template':
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
+        else:
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
+        # ENDS to redirection  
+    if key == 'edit_template':
+        return render(request,'report/report-display-section.html',locals())
+    else:
+        return render(request,'report/final_report.html',locals())
 
 
 def get_index_contents(slug,report_id):
@@ -487,4 +495,6 @@ def get_index_contents(slug,report_id):
         quarters['Annexure']=''
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
+    # final contents dict = {'1':About the Project,'2':current quarter updates,.....}
+    # quarters dict = {'About the Project':'','current quarter updates':{0:from and to date,1:from and to date},....}
     return contents,quarters
