@@ -11,6 +11,7 @@
 <input type="hidden" name="slug" value="{{slug}}">
 <input type="hidden" name="project-report" value="{{projectreportobj.id}}">
 <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+<input type="hidden" name="key" value={{key}}>
 <section class="content-part">
     <div class=" company_listing">
     <div class="col-md-12 col-xs-12 nopadding company_listing">
@@ -28,6 +29,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div class="text_accordion">
                            {% get_questions locals_list.block1 projectreportobj as ques %}
                            {% for i in ques %}
@@ -78,6 +80,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div class="text_accordion">
                            {% get_questions locals_list.block2 projectreportobj as ques %}
                            {% for i in ques %}
@@ -137,6 +140,7 @@
                         <input type="hidden" name="milestone-pic-count_1" value="1">
                         <input type="hidden" name="parameter_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div>
                         {% getreport_status report_id v 1 as reportupdates %}
                         {{reportupdates.0 }}
@@ -522,6 +526,7 @@
                         <input type="hidden" name="activity-pic-count_1" value="1">
                         <input type="hidden" name="current_parameter_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div>
                         
                         {% getreport_status report_id v 2 as reportupdates %}
@@ -955,6 +960,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div>
                         {% getreport_status report_id v 3 as reportupdates %}
                         {% if reportupdates.0 == False %}

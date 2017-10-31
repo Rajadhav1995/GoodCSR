@@ -470,7 +470,7 @@ def finalreportdesign(request):
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
         # ENDS to redirection  
     if key == 'edit_template':
-        return render(request,'report/report-display-section.html',locals())
+        return render(request,'report/forms-single.html',locals())
     else:
         return render(request,'report/final_report.html',locals())
 
