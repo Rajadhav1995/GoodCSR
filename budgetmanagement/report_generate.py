@@ -130,6 +130,7 @@ def report_detail(request):
     actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
     recommended_amount = tranche_amount['recommended_amount']
     utilized_amount = tranche_amount['utilized_amount']
+    # for basic details of project report we are sending all fields in dictionary 
     for question in quest_list:
         answer_obj = Answer.objects.get_or_none(question =question,
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
