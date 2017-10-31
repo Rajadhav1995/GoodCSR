@@ -27,8 +27,7 @@
         </thead>
         
         {% for i in report_obj %}
-        {% get_report_list i as report_list %}
-        {% if report_list == 1 %}
+
         <tr>
             <!-- <td><a href="/project/summary/?slug={{i.slug}}">{{i.start_date}}</a></td> -->
             <td>{{i.start_date | date:"d-m-Y"}} - {{i.end_date | date:"d-m-Y"}}</td>
@@ -38,7 +37,7 @@
             <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}">Edit Report</button></a></td>
 
         </tr>
-        {% endif %}
+
         {% endfor %}
 
   </tbody>
