@@ -1,0 +1,1357 @@
+{% extends 'project/project-summary.html' %}
+{% load common_tags %}
+{% load urs_tags %}
+{% load question_tags %}
+<!--{% load urs_tags %}-->
+{% block content %}
+<link rel="stylesheet" href="/static/css/aria-accordion.css" />
+<link rel="stylesheet" href="/static/css/style-accordion.css" />
+<link rel="stylesheet" href="/static/css/jquery-ui.css">
+<input type="hidden" name="count" value="6">
+<input type="hidden" name="slug" value="{{slug}}">
+<input type="hidden" name="project-report" value="{{projectreportobj.id}}">
+<input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+<!--Section class content     -->
+<section class="content-part">
+   <div class=" company_listing">
+      <div class="col-md-12 col-xs-12 nopadding company_listing">
+         <div class="row">
+            <div class="generate_boxbg ">
+               <div class="general_report edit_templete">
+                  <h2>Edit Generate Report</h2>
+                  <!--<div>
+                     <p align="right" class="edit_templete"><a href="#">Edit Templete</a></p>
+                     </div>-->
+                  <div id="" >
+                     <h3 class="heading">{{locals_list.block1.name}}</h3>
+                     <form action="." method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
+                        <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
+                        <div class="text_accordion">
+                           {% get_questions locals_list.block1 projectreportobj as ques %}
+                           {% for i in ques %}
+                           {% if i.q_type == 'OT' %}
+                           {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                           {% for sub in sub_questions %}
+                           {% if sub.q_type == 'APT' %}
+                           <div class="col-md-6 report_text">
+                              <p>{{sub.q_text}}</p>
+                              <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
+                              <h5><a href="#">Remove</a></h5>
+                           </div>
+                           {% elif sub.q_type == 'API' %}
+                           <div class="logo-partner">
+                              <h6>{{sub.q_text}}</h6>
+                              <img src="{{sub.answer}}" style="">
+                              <!--                                                                <img src="{{sub.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                              <div class="form-group addpicture">
+                                 <img src="/static/img/browse.png">
+                                 <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}"  class="input_file"></input>
+                              </div>
+                           </div>
+                           {% endif %}
+                           {% endfor %}
+                           {% else %}
+                           <div class="col-md-6 report_text">
+                              <p>{{i.q_text}}</p>
+                              {% if i.q_type == 'T' %}
+                              <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
+                              <h5><a href="#">Remove</a></h5>
+                              {% elif i.q_type == 'ck' %}
+                              <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file">{{i.answer}}</textarea>
+                              <h5><a href="#">Remove</a></h5>
+                              {% elif i.q_type == 'F' %}
+                              <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                              <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}"  class="input_file"></input>
+                              <h5><a href="#">Remove</a></h5>
+                              {% endif %}
+                           </div>
+                           {% endif %}
+                           {% endfor%}
+                        </div>
+                        <input type="submit" class="report_save " name="cover_page_save" value = "Save"></input>
+                     </form>
+
+                  <h3 class="heading">{{locals_list.block2.name}}</h3>
+                  <form action="." method="POST" enctype="multipart/form-data">
+                     {% csrf_token %}
+                     <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
+                     <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                     <input type="hidden" name="key" value={{key}}>
+                     <div>
+                        <div class="text_accordion">
+                           {% get_questions locals_list.block2 projectreportobj as ques %}
+                           {% for i in ques %}
+                           {% if i.q_type == 'OT' %}
+                           {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                           {% for sub in sub_questions %}
+                           {% if sub.q_type == 'APT' %}
+                           <div class="col-md-6 report_text">
+                              <p>{{sub.q_text}}</p>
+                              <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
+                              <h5><a href="#">Remove</a></h5>
+                           </div>
+                           {% elif sub.q_type == 'API' %}
+                           <div class="logo-partner">
+                              <h6>{{sub.q_text}}</h6>
+                              <img src="{{sub.answer}}" style="">
+                              <!--                                                                <img src="{{sub.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                              <div class="form-group addpicture">
+                                 <img src="/static/img/browse.png">
+                                 <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}" class="input_file"></input>
+                              </div>
+                           </div>
+                           {% endif %}
+                           {% endfor %}
+                           {% else %}
+                           <div class="col-md-6 report_text">
+                              <p>{{i.q_text}}</p>
+                              {% if i.q_type == 'T' %}
+                              <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
+                              <h5><a href="#">Remove</a></h5>
+                              {% elif i.q_type == 'ck' %}
+                              <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file">{{i.answer}}</textarea>
+                              <h5><a href="#">Remove</a></h5>
+                              {% elif i.q_type == 'F' %}
+                              <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
+                              <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" ></input>
+                              <h5><a href="#">Remove</a></h5>
+                              {% endif %}
+                           </div>
+                           {% endif %}
+                           {% endfor%}
+                        </div>
+                        <input type= "submit" class="report_save" name= "project_summary_save" value="Save"></input>
+                     </div>
+
+               <!-- Previous Quarters Updates starts here                           -->
+               {% for i,v in previousquarter_list.items %}
+               {% with forloop.counter as j %}
+               <h3 class="heading"> Previous Quarter Updates :{{v}}</h3>
+               <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+                        {% csrf_token %}
+                        <input type="hidden" name="milestone_count_1" value="1">
+                        <input type="hidden" name="milestone-pic-count_1" value="1">
+                        <input type="hidden" name="parameter_count_1" value="1">
+                        <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
+               <div>
+               {% getreport_status report_id v 1 as reportupdates %}
+               {{reportupdates.0 }}
+               {% if reportupdates.0 == False %}
+               <!--                                if object is not present -->
+               {% for quest in previous_questionlist %}
+               <!--                             this is for auto populate text -->
+               {% if quest.qtype == "APT" %}
+               <div class="col-md-6 report_text">
+               <p>{{quest.text|title}}</p>
+               {% get_previous_question_value quest v i as text %}
+               <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               <!--                            this is for key achievements-->
+               {% if quest.slug == "key-achievements-in-this-quarter" %}
+               <div class="col-md-12 report_text " style="padding:0px">
+               <p>{{quest.text|title}}</p>
+               <img src="/static/img/image_slideshow.jpg" style="width:100%">
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               <!--                            this is for milestone section-->
+               {% if quest.slug == "milestone-section" %}
+               <div class="milestone">
+               <div class="col-md-12"></div>
+               {% get_previous_subquestions quest as milestone_questions %}
+               <div class="col-md-6 report_text">
+               {% for mile_quest in milestone_questions %}
+               {% if mile_quest.slug == "milestone-name" %}
+               <p>{{mile_quest.text|title}}</p>
+               <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">
+               <h5><a href="#">Remove</a></h5>
+               {% endif %}
+               {% if mile_quest.slug == "upload-picture" %}
+               <div class="report_text">
+               <p>{{mile_quest.text|title}}</p>
+               <div class="form-group upload_text">
+               <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% if mile_quest.slug == "picture-description" %}
+               <div class=" report_text">
+               <p>{{mile_quest.text|title}}</p>
+               <div class="form-group">
+               <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
+               </div>
+               <div class="form-group addpicture">
+               <input type="file" id="input05">
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %}
+               </div> <!--  col 6 div ends-->
+               {% for mile_quest in milestone_questions %}
+               {% if mile_quest.slug == "milestone-description" %}
+               <div class="col-md-6 report_text">
+               <p>{{mile_quest.text|title}}</p>
+               <div class="">
+               <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0"  class="textarea_file"></textarea>
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %}
+               </div> <!-- milestone class -->
+               <div class="form-group addmilestone">
+               <p>+ add Milestone</p>
+               </div>
+               {% endif %}
+               <!--                            this is for parameter selection -->
+               {% if quest.slug == "parameter-section" %}
+               <hr class="border_line">
+               <div class="milestone">
+               {% get_previous_subquestions quest as parameter_questions %}
+               {% for param_quest in parameter_questions %}
+               {% if param_quest.slug == "parameter-selection" %}
+               <div class="col-md-6 report_text parameter_section">
+               <p>{{param_quest.text|title}}</p>
+               <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
+               <option>Select</option>
+               {% for i in project_paramterlist %}
+               <option value="{{i.id}}">{{i.name}}</option>
+               {% endfor %}
+               </select>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% if param_quest.slug == "about-parameter" %}
+               <div class="col-md-12 report_text ">
+               <p>{{param_quest.text|title}}</p>
+               <div class="">
+               <textarea id="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"  class="textarea_file"></textarea>
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %}
+               </div>
+               <div class="form-group addmilestone">
+               <p>+ add More Parameter</p>
+               </div>
+               {% endif %}
+               <!--                            this is for budget table display-->
+               {% if quest.slug == "budget-utlization-tranches" %}
+               <div class="col-md-12 report_text " style="padding:0px">
+               <p>{{quest.text|title}}</p>
+               <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+               <table class="table table-boardered table-striped table-striped budget_table">
+               <thead>
+               <tr class="sticky-row">
+               <th  class="sticky-cell">Super Category</th>
+               <th  class="sticky-cell">Heading</th>
+               <th  class="sticky-cell">Subheading</th>
+               <th  class="sticky-cell">Total Planned</th>
+               <th  class="sticky-cell">Total Utilized</th>
+               <th  class="sticky-cell">Units Type</th>
+               <th>Units</th>
+               <th>Rate</th>
+               <th> Planned</th>
+               <th> Utilized</th>
+               <th>Variance</th>
+               </tr>
+               </thead>
+               <tbody class="budget_section">
+               {% for row in budget_period %}
+               <tr class = "data_row">
+               {% get_budget_lineitem row projectobj as lineitemobj %}
+               <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+               <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+               <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+               {% get_line_total row projectobj as line_total %}
+               <td align="right" class="sticky-cell">{{line_total}}</td>
+               {% get_utlizedline_total row projectobj as utilized_amount %}
+               <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+               <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+               {% get_quarter_details row i projectobj as line_itemobj %}
+               <td align="right" class=""> {{line_itemobj.unit}} </td>
+               <td align="right" class=""> {{line_itemobj.rate}}  </td>
+               <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+               <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+               <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+               </tr>
+               {% endfor %}
+               </tbody>
+               </table>
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %} <!-- this is for previous question loop ends for add functionality -->
+               {% else %}  <!--  edit functionality starts here -->
+               object is exists
+               {% for quest in previous_questionlist %}
+               <!--                             this is for auto populate text -->
+               {% if quest.qtype == "APT" %}
+               <div class="col-md-6 report_text">
+               <p>{{quest.text|title}}</p>
+               {% get_previous_question_value quest v i as text %}
+               <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               <!--                            this is for key achievements-->
+               {% if quest.slug == "key-achievements-in-this-quarter" %}
+               <div class="col-md-12 report_text " style="padding:0px">
+               <p>Key Achievements in this quarter</p>
+               <img src="/static/img/image_slideshow.jpg" style="width:100%">
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               <!--                            this is for milestone section-->
+               {% if quest.slug == "milestone-section" %}
+               {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
+               {% for mileobj in act_mile_list %} <!--  for loop for milestone list -->
+               <div class="milestone">
+               <div class="col-md-12"></div>
+               {% get_previous_subquestions quest as milestone_questions %}
+               <div class="col-md-6 report_text">
+               {% for mile_quest in milestone_questions %}
+               {% if mile_quest.slug == "milestone-name" %}
+               <p>{{mile_quest.text|title}}</p>
+               <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">
+               <h5><a href="#">Remove</a></h5>
+               {% endif %}
+               {% get_mile_act_images mileobj as imagelist %}
+               {% for imageobj in imagelist %}
+               {% if mile_quest.slug == "upload-picture" %}
+               <div class="report_text">
+               <p>{{mile_quest.text|title}}</p>
+               <div class="form-group upload_text">
+               <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value="{{imageobj.attachment_file}}">
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% if mile_quest.slug == "picture-description" %}
+               <div class=" report_text">
+               <p>{{mile_quest.text|title}}</p>
+               <div class="form-group">
+               <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
+               </div>
+               <div class="form-group addpicture">
+               <input type="file" id="input05">
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %} <!--  this ends for image loop -->
+               {% endfor %}
+               </div> <!--  col 6 div ends-->
+               {% for mile_quest in milestone_questions %}
+               {% if mile_quest.slug == "milestone-description" %}
+               <div class="col-md-6 report_text">
+               <p>{{mile_quest.text|title}}</p>
+               <div class="">
+               <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}"  class="textarea_file"> {{mileobj.description}}</textarea>
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %}
+               </div> <!-- milestone class -->
+               {% endfor %} <!--  this for loop for number of milestones-->
+               <div class="form-group addmilestone">
+               <p>+ add Milestone</p>
+               </div>
+               {% endif %}
+               <!--                            this is for parameter selection -->
+               {% if quest.slug == "parameter-section" %}
+               <hr class="border_line">
+               {% get_parameters_list quest reportupdates.1 as parameters_list %}
+               {% for paramobj in parameters_list %}
+               <div class="milestone">
+               {% get_previous_subquestions quest as parameter_questions %}
+               {% for param_quest in parameter_questions %}
+               {% if param_quest.slug == "parameter-selection" %}
+               <div class="col-md-6 report_text parameter_section">
+               <p>{{param_quest.text|title}}</p>
+               <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
+               <option>Select</option>
+               {% for i in project_paramterlist %}
+               <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
+               {% endfor %}
+               </select>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% if param_quest.slug == "about-parameter" %}
+               <div class="col-md-12 report_text ">
+               <p>{{param_quest.text|title}}</p>
+               <div class="">
+               <textarea id="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}"  class="textarea_file"> {{paramobj.description}}</textarea>
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %}
+               </div>
+               {% endfor %} <!--  this is for paramter list count loop ends -->
+               <div class="form-group addmilestone">
+               <p>+ add More Parameter</p>
+               </div>
+               {% endif %}
+               <!--                            this is for budget table display-->
+               {% if quest.slug == "budget-utlization-tranches" %}
+               <div class="col-md-12 report_text " style="padding:0px">
+               <p>{{quest.text|title}}</p>
+               <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+               <table class="table table-boardered table-striped table-striped budget_table">
+               <thead>
+               <tr class="sticky-row">
+               <th  class="sticky-cell">Super Category</th>
+               <th  class="sticky-cell">Heading</th>
+               <th  class="sticky-cell">Subheading</th>
+               <th  class="sticky-cell">Total Planned</th>
+               <th  class="sticky-cell">Total Utilized</th>
+               <th  class="sticky-cell">Units Type</th>
+               <th>Units</th>
+               <th>Rate</th>
+               <th> Planned</th>
+               <th> Utilized</th>
+               <th>Variance</th>
+               </tr>
+               </thead>
+               <tbody class="budget_section">
+               {% for row in budget_period %}
+               <tr class = "data_row">
+               {% get_budget_lineitem row projectobj as lineitemobj %}
+               <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+               <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+               <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+               {% get_line_total row projectobj as line_total %}
+               <td align="right" class="sticky-cell">{{line_total}}</td>
+               {% get_utlizedline_total row projectobj as utilized_amount %}
+               <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+               <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+               {% get_quarter_details row i projectobj as line_itemobj %}
+               <td align="right" class=""> {{line_itemobj.unit}} </td>
+               <td align="right" class=""> {{line_itemobj.rate}}  </td>
+               <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+               <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+               <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+               </tr>
+               {% endfor %}
+               </tbody>
+               </table>
+               </div>
+               <h5><a href="#">Remove</a></h5>
+               </div>
+               {% endif %}
+               {% endfor %} <!-- this is for previous question loop ends for edit functionality -->
+               {% endif %} <!-- this if ends here. thsi is to check whether this is add and edit functionality  -->
+               <br>
+               <button class="report_save">Save</button>
+               </div>
+               </form>
+
+            {% endwith %}
+            {% endfor %}
+            <!-- Previous quarter updates ends here -->
+            <!-- current quarter upodates starts here -->
+            {% for i,v in currentquarter_list.items %}
+            {% with forloop.counter as j %}
+            <h3 class="heading">Current Quarter Updates :{{v}}</h3>
+            <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+               {% csrf_token %}
+               <input type="hidden" name="activity_count_1" value="1">
+               <input type="hidden" name="activity-pic-count_1" value="1">
+               <input type="hidden" name="current_parameter_count_1" value="1">
+               <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+               <input type="hidden" name="key" value={{key}}>
+               <div>
+                  {% getreport_status report_id v 2 as reportupdates %}
+                  {% if reportupdates.0 == False %}
+                  <!--                        this is add functionality -->
+                  {% for quest in current_questionlist %}
+                  <!--                             this is for auto populate text -->
+                  {% if quest.qtype == "APT" %}
+                  <div class="col-md-6 report_text">
+                     <p>{{quest.text|title}}</p>
+                     {% get_previous_question_value quest v i as text %}
+                     <input type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for milestone and activity graph-->
+                  {% if quest.slug == "milestones-activities-snapshot" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <img src="/static/img/imgpage0802.jpg" style="width:100%">
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for about the quarter-->
+                  {% if quest.slug == "about-the-quarter" %}
+                  <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px">
+                     <p>{{quest.text|title}}</p>
+                     <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for milestone section-->
+                  {% if quest.slug == "activity-section" %}
+                  <div class="milestone">
+                     {% get_previous_subquestions quest as activity_questions %}
+                     <div class="col-md-6 report_text ">
+                        {% for act_quest in activity_questions %}
+                        {% if act_quest.slug == "activity-name" %}
+                        <p>{{act_quest.text|title}}</p>
+                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
+                        <h5><a href="#">Remove</a></h5>
+                        {% endif %}
+                        {% if act_quest.slug == "about-the-actvity" %}
+                        <div class=" report_text">
+                           <p>{{act_quest.text|title}}</p>
+                           <div class="">
+                              <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0"> </textarea>
+                           </div>
+                           <h5><a href="#">Remove</a></h5>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                     </div>
+                     {% for act_quest in activity_questions %}
+                     <div class="col-md-6 report_text">
+                        {% if act_quest.slug == "upload-picture" %}
+                        <div class=" report_text">
+                           <p>{{act_quest.text|title}}</p>
+                           <div class="form-group upload_text">
+                              <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0">
+                           </div>
+                           <h5><a href="#">Remove</a></h5>
+                        </div>
+                        {% endif %}
+                        {% if act_quest.slug == "picture-description" %}
+                        <div class=" report_text">
+                           <p>{{act_quest.text|title}}</p>
+                           <div class="form-group">
+                              <input type="text " class="form_section input_section">
+                           </div>
+                           <h5><a href="#">Remove</a></h5>
+                           <div class="form-group addpicture">
+                              <input type="file" id="file02">
+                           </div>
+                        </div>
+                        {% endif %}
+                     </div>
+                     {% endfor %}
+                  </div>
+                  <div class="form-group addmilestone">
+                     <p>+ add Milestone</p>
+                  </div>
+                  {% endif %}
+                  <!--                     this is for parameter selection -->
+                  {% if quest.slug == "parameter-section" %}
+                  <hr class="border_line">
+                  <div class="milestone">
+                     {% get_previous_subquestions quest as parameter_questions %}
+                     {% for param_quest in parameter_questions %}
+                     {% if param_quest.slug == "parameter-selection" %}
+                     <div class="col-md-6 report_text parameter_section">
+                        <p>{{param_quest.text|title}}</p>
+                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
+                           <option>Select</option>
+                           {% for i in project_paramterlist %}
+                           <option value="{{i.id}}">{{i.name}}</option>
+                           {% endfor %}
+                        </select>
+                        <h5><a href="#">Remove</a></h5>
+                     </div>
+                     {% endif %}
+                     {% if param_quest.slug == "about-parameter" %}
+                     <div class="col-md-12 report_text ">
+                        <p>{{param_quest.text|title}}</p>
+                        <div class="">
+                           <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
+                        </div>
+                        <h5><a href="#">Remove</a></h5>
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  <div class="form-group addmilestone">
+                     <p>+ add More Parameter</p>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for budget table display-->
+                  {% if quest.slug == "budget-utlization-tranches" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                        <table class="table table-boardered table-striped table-striped budget_table">
+                           <thead>
+                              <tr class="sticky-row">
+                                 <th  class="sticky-cell">Super Category</th>
+                                 <th  class="sticky-cell">Heading</th>
+                                 <th  class="sticky-cell">Subheading</th>
+                                 <th  class="sticky-cell">Total Planned</th>
+                                 <th  class="sticky-cell">Total Utilized</th>
+                                 <th  class="sticky-cell">Units Type</th>
+                                 <th>Units</th>
+                                 <th>Rate</th>
+                                 <th> Planned</th>
+                                 <th> Utilized</th>
+                                 <th>Variance</th>
+                              </tr>
+                           </thead>
+                           <tbody class="budget_section">
+                              {% for row in budget_period %}
+                              <tr class = "data_row">
+                                 {% get_budget_lineitem row projectobj as lineitemobj %}
+                                 <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                 <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                 {% get_line_total row projectobj as line_total %}
+                                 <td align="right" class="sticky-cell">{{line_total}}</td>
+                                 {% get_utlizedline_total row projectobj as utilized_amount %}
+                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                 {% get_quarter_details row i projectobj as line_itemobj %}
+                                 <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                 <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                 <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                 <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                 <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  {% if quest.slug == "about-the-budget" %}
+                  <div class="col-md-12 report_text current_quarter">
+                     <p>{{quest.text|title}}</p>
+                     <div class="">
+                        <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                     </div>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  {% if quest.slug == "risks-mitigation" %}
+                  <div class="col-md-12 report_text current_quarter">
+                     <p>{{quest.text|title}}</p>
+                     <div class="">
+                        <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                     </div>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  {% endfor %} <!-- this for ends for previous question list -->
+                  {% else %}
+                  {% for quest in current_questionlist %} <!-- this is for loop for  if object is present -->
+                  <!--                             this is for auto populate text -->
+                  {% if quest.qtype == "APT" %}
+                  <div class="col-md-6 report_text">
+                     <p>{{quest.text|title}}</p>
+                     {% get_previous_question_value quest v i as text %}
+                     <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for milestone and activity graph-->
+                  {% if quest.slug == "milestones-activities-snapshot" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <img src="/static/img/imgpage0802.jpg" style="width:100%">
+                  </div>
+                  {% endif %}
+                  <!--                            this is for about the quarter-->
+                  {% if quest.slug == "about-the-quarter" %}
+                  <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px">
+                     <h5><a href="#">Remove</a></h5>
+                     <p>{{quest.text|title}}</p>
+                     {% get_answer_question quest reportupdates.1 as text %}
+                     <textarea type="text" class="textarea_file" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for milestone section-->
+                  {% if quest.slug == "activity-section" %}
+                  {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
+                  {% for mileobj in act_mile_list %} <!--  for loop for activity list -->
+                  <div class="milestone">
+                     {% get_previous_subquestions quest as activity_questions %}
+                     <div class="col-md-6 report_text ">
+                        {% for act_quest in activity_questions %}
+                        {% if act_quest.slug == "activity-name" %}
+                        <p>{{act_quest.text|title}}</p>
+                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
+                        <h5><a href="#">Remove</a></h5>
+                        {% endif %}
+                        {% if act_quest.slug == "about-the-actvity" %}
+                        <div class=" report_text">
+                           <p>{{act_quest.text|title}}</p>
+                           <div class="">
+                              <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}"> {{mileobj.description}} </textarea>
+                           </div>
+                           <h5><a href="#">Remove</a></h5>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                     </div>
+                     {% get_mile_act_images mileobj as imagelist %}
+                     {% for imageobj in imagelist %}
+                     {% for act_quest in activity_questions %}
+                     <div class="col-md-6 report_text">
+                        {% if act_quest.slug == "upload-picture" %}
+                        <div class=" report_text">
+                           <p>{{act_quest.text|title}} </p>
+                           <div class="form-group upload_text">
+                              <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
+                           </div>
+                           <h5><a href="#">Remove</a></h5>
+                        </div>
+                        {% endif %}
+                        {% if act_quest.slug == "picture-description" %}
+                        <div class=" report_text">
+                           <p>{{act_quest.text|title}}</p>
+                           <div class="form-group">
+                              <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value = "{{imageobj.description}}" >
+                           </div>
+                           <h5><a href="#">Remove</a></h5>
+                           <div class="form-group addpicture">
+                              <input type="file" id="file02">
+                           </div>
+                        </div>
+                        {% endif %}
+                     </div>
+                     {% endfor %}
+                     {% endfor %}
+                  </div>
+                  {% endfor %}
+                  <div class="form-group addmilestone">
+                     <p>+ add Milestone</p>
+                  </div>
+                  {% endif %}
+                  <!--                     this is for parameter selection -->
+                  {% if quest.slug == "parameter-section" %}
+                  <hr class="border_line">
+                  {% get_parameters_list quest reportupdates.1 as parameters_list %}
+                  {% for paramobj in parameters_list %}
+                  <div class="milestone">
+                     {% get_previous_subquestions quest as parameter_questions %}
+                     {% for param_quest in parameter_questions %}
+                     {% if param_quest.slug == "parameter-selection" %}
+                     <div class="col-md-6 report_text parameter_section">
+                        <p>{{param_quest.text|title}}</p>
+                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
+                           <option>Select</option>
+                           {% for i in project_paramterlist %}
+                           <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
+                           {% endfor %}
+                        </select>
+                        <h5><a href="#">Remove</a></h5>
+                     </div>
+                     {% endif %}
+                     {% if param_quest.slug == "about-parameter" %}
+                     <div class="col-md-12 report_text ">
+                        <p>{{param_quest.text|title}}</p>
+                        <div class="">
+                           <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description}}</textarea>
+                        </div>
+                        <h5><a href="#">Remove</a></h5>
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  <div class="form-group addmilestone">
+                     <p>+ add More Parameter</p>
+                  </div>
+                  {% endfor %}
+                  {% endif %}
+                  <!--                            this is for budget table display-->
+                  {% if quest.slug == "budget-utlization-tranches" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                        <table class="table table-boardered table-striped table-striped budget_table">
+                           <thead>
+                              <tr class="sticky-row">
+                                 <th  class="sticky-cell">Super Category</th>
+                                 <th  class="sticky-cell">Heading</th>
+                                 <th  class="sticky-cell">Subheading</th>
+                                 <th  class="sticky-cell">Total Planned</th>
+                                 <th  class="sticky-cell">Total Utilized</th>
+                                 <th  class="sticky-cell">Units Type</th>
+                                 <th>Units</th>
+                                 <th>Rate</th>
+                                 <th> Planned</th>
+                                 <th> Utilized</th>
+                                 <th>Variance</th>
+                              </tr>
+                           </thead>
+                           <tbody class="budget_section">
+                              {% for row in budget_period %}
+                              <tr class = "data_row">
+                                 {% get_budget_lineitem row projectobj as lineitemobj %}
+                                 <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                 <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                 {% get_line_total row projectobj as line_total %}
+                                 <td align="right" class="sticky-cell">{{line_total}}</td>
+                                 {% get_utlizedline_total row projectobj as utilized_amount %}
+                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                 {% get_quarter_details row i projectobj as line_itemobj %}
+                                 <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                 <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                 <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                 <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                 <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                     {% endif %}
+                     {% if quest.slug == "about-the-budget" %}
+                     <div class="col-md-12 report_text current_quarter">
+                        <p>{{quest.text|title}}</p>
+                        {% get_answer_question quest reportupdates.1 as text %}
+                        <div class="">
+                           <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
+                        </div>
+                        <h5><a href="#">Remove</a></h5>
+                     </div>
+                     {% endif %}
+                     {% if quest.slug == "risks-mitigation" %}
+                     <div class="col-md-12 report_text current_quarter">
+                        <p>{{quest.text|title}}</p>
+                        {% get_answer_question quest reportupdates.1 as text %}
+                        <div class="">
+                           <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}}</textarea>
+                        </div>
+                        <h5><a href="#">Remove</a></h5>
+                     </div>
+                     this is if object is already exists.
+                     {% endif %}
+                     {% endfor %} <!-- this for ends for edit currrent question list -->
+                     {% endif %}
+                     <!--                           this is for edit functions-->
+                    </div>
+                     <br>
+                     <button class="report_save">Save</button>
+
+              </div>
+            </form>
+            {% endwith %}
+            {% endfor %}
+            <!--   End of current quarter updates                     -->
+            <!-- Next quarter updates starts here            -->
+            {% for i,v in futurequarter_list.items|slice:"1" %}
+            {% with forloop.counter as j %}
+            <h3 class="heading">Next Quarter Plan :{{v}}</h3>
+            <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+               {% csrf_token %}
+               <input type="hidden" name="activity_count_1" value="1">
+               <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+               <input type="hidden" name="key" value={{key}}>
+               <div>
+                  {% getreport_status report_id v 3 as reportupdates %}
+                  {% if reportupdates.0 == False %}
+                  {% for quest in next_questionlist %}
+                  <!--                             this is for auto populate text -->
+                  {% if quest.qtype == "APT" %}
+                  <div class="col-md-6 report_text">
+                     <p>{{quest.text|title}}</p>
+                     {% get_previous_question_value quest v i as text %}
+                     <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for milestone and activity graph-->
+                  {% if quest.slug == "milestones-activities-snapshot" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <img src="/static/img/imgpage0802.jpg" style="width:100%">
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for about the quarter-->
+                  {% if quest.slug == "about-the-quarter" %}
+                  <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px">
+                     <p>{{quest.text|title}}</p>
+                     <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--this is for budget and tranches table -->
+                  {% if quest.slug == "budget-utlization-tranches" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                        <table class="table table-boardered table-striped table-striped budget_table">
+                           <thead>
+                              <tr class="sticky-row">
+                                 <th  class="sticky-cell">Super Category</th>
+                                 <th  class="sticky-cell">Heading</th>
+                                 <th  class="sticky-cell">Subheading</th>
+                                 <th  class="sticky-cell">Total Planned</th>
+                                 <th  class="sticky-cell">Total Utilized</th>
+                                 <th  class="sticky-cell">Units Type</th>
+                                 <th>Units</th>
+                                 <th>Rate</th>
+                                 <th> Planned</th>
+                                 <th> Utilized</th>
+                                 <th>Variance</th>
+                              </tr>
+                           </thead>
+                           <tbody class="budget_section">
+                              {% for row in budget_period %}
+                              <tr class = "data_row">
+                                 {% get_budget_lineitem row projectobj as lineitemobj %}
+                                 <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                 <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                 {% get_line_total row projectobj as line_total %}
+                                 <td align="right" class="sticky-cell">{{line_total}}</td>
+                                 {% get_utlizedline_total row projectobj as utilized_amount %}
+                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                 {% get_quarter_details row i projectobj as line_itemobj %}
+                                 <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                 <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                 <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                 <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                 <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                     <h5><a href="#">Remove</a></h5>
+                     <br>
+                     <div class="table-responsive">
+                        <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                           <thead>
+                              <tr>
+                                 <th align="center">Tranche No.</th>
+                                 <th>Due Date</th>
+                                 <th>Planned Amount</th>
+                                 <th>Actual Disbursement</th>
+                                 <th>Recommended Disbursement</th>
+                                 <th> Utilized</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for i in tranche_list %}
+                              {% with forloop.counter as rnum %}
+                              <tr>
+                                 <td>{{rnum}}</td>
+                                 <td>{{i.due_date}}</td>
+                                 <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                 <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                 <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                 <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                              </tr>
+                              {% endwith %}
+                              {% endfor %}
+                              <tr bgcolor="#f1f3e9" class="table-tr">
+                                 <td>Total</td>
+                                 <td>&nbsp;</td>
+                                 <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+                                 <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                 <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+                                 <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <!--<img src="img/table01.png" style="width:100%">-->
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--this is for about paramter section-->
+                  {% if quest.slug == "about-the-budget" %}
+                  <div class="col-md-12 report_text current_quarter">
+                     <p>{{quest.text|title}}</p>
+                     <div class="">
+                        <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                     </div>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  {% endfor %} <!-- future question for loop ends here -->
+                  {% else %} <!--  if object is there -->
+                  <!--                        if object is der                            -->
+                  {% for quest in next_questionlist %}
+                  <!--                             this is for auto populate text -->
+                  {% if quest.qtype == "APT" %}
+                  <div class="col-md-6 report_text">
+                     <p>{{quest.text|title}}</p>
+                     {% get_previous_question_value quest v i as text %}
+                     <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for milestone and activity graph-->
+                  {% if quest.slug == "milestones-activities-snapshot" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <img src="/static/img/imgpage0802.jpg" style="width:100%">
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--                            this is for about the quarter-->
+                  {% if quest.slug == "about-the-quarter" %}
+                  <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px">
+                     <p>{{quest.text|title}} </p>
+                     {% get_answer_question quest reportupdates.1 as text %}
+                     <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">  {{text}}</textarea>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--this is for budget and tranches table -->
+                  {% if quest.slug == "budget-utlization-tranches" %}
+                  <div class="col-md-12 report_text " style="padding:0px">
+                     <p>{{quest.text|title}}</p>
+                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                        <table class="table table-boardered table-striped table-striped budget_table">
+                           <thead>
+                              <tr class="sticky-row">
+                                 <th  class="sticky-cell">Super Category</th>
+                                 <th  class="sticky-cell">Heading</th>
+                                 <th  class="sticky-cell">Subheading</th>
+                                 <th  class="sticky-cell">Total Planned</th>
+                                 <th  class="sticky-cell">Total Utilized</th>
+                                 <th  class="sticky-cell">Units Type</th>
+                                 <th>Units</th>
+                                 <th>Rate</th>
+                                 <th> Planned</th>
+                                 <th> Utilized</th>
+                                 <th>Variance</th>
+                              </tr>
+                           </thead>
+                           <tbody class="budget_section">
+                              {% for row in budget_period %}
+                              <tr class = "data_row">
+                                 {% get_budget_lineitem row projectobj as lineitemobj %}
+                                 <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                 <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                 {% get_line_total row projectobj as line_total %}
+                                 <td align="right" class="sticky-cell">{{line_total}}</td>
+                                 {% get_utlizedline_total row projectobj as utilized_amount %}
+                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                 {% get_quarter_details row i projectobj as line_itemobj %}
+                                 <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                 <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                 <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                 <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                 <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                     <h5><a href="#">Remove</a></h5>
+                     <br>
+                     <div class="table-responsive">
+                        <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                           <thead>
+                              <tr>
+                                 <th align="center">Tranche No.</th>
+                                 <th>Due Date</th>
+                                 <th>Planned Amount</th>
+                                 <th>Actual Disbursement</th>
+                                 <th>Recommended Disbursement</th>
+                                 <th> Utilized</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for i in tranche_list %}
+                              {% with forloop.counter as rnum %}
+                              <tr>
+                                 <td>{{rnum}}</td>
+                                 <td>{{i.due_date}}</td>
+                                 <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                 <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                 <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                 <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                              </tr>
+                              {% endwith %}
+                              {% endfor %}
+                              <tr bgcolor="#f1f3e9" class="table-tr">
+                                 <td>Total</td>
+                                 <td>&nbsp;</td>
+                                 <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+                                 <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                 <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+                                 <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <!--<img src="img/table01.png" style="width:100%">-->
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  <!--this is for about paramter section-->
+                  {% if quest.slug == "about-the-budget" %}
+                  <div class="col-md-12 report_text current_quarter">
+                     <p>{{quest.text|title}}</p>
+                     <div class="">
+                        {% get_answer_question quest reportupdates.1 as text %}
+                        <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> {{text}} </textarea>
+                     </div>
+                     <h5><a href="#">Remove</a></h5>
+                  </div>
+                  {% endif %}
+                  {% endfor %} <!-- future question for loop ends here -->
+                  <!--                        object loop ends here                   -->
+                  {% endif %} <!-- if object is present loop ends here-->
+                  <br>
+                  <button class="report_save">Save</button>
+               </div>
+            </form>
+            {% endwith %} <!-- main quarter for loop ends here -->
+            {% endfor %}
+            <!--ends nexrt quarter updates -->
+         </div>
+         </div>
+         </div>
+      </div>
+      <div class="below_buttons">
+         <hr>
+         <div style="float:left">
+            <button class="report_save">Preview Report</button>
+         </div>
+         <div align="right" class="save_exit">
+            <button class="report_save">Submit Report</button>
+            <button class="report_save">Save And Exit</button>
+         </div>
+      </div>
+   </div>
+   </div>
+   </div>
+   </div>
+</section>
+<!--Content part Ends-->
+<!--Footer starts-->
+<footer>
+   <div class="row">
+      <div class="f-left">
+         <ul>
+            <li><a href="javascript:void(0);">Privacy Policy</a></li>
+            <li><a href="javascript:void(0);">Terms of Service</a></li>
+         </ul>
+      </div>
+      <div class="f-right">&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</div>
+   </div>
+</footer>
+<!--Footer Ends-->
+</div>
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="js/jquery.selectbox-0.2.js"></script>
+<script type="text/javascript" src="js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="js/common.js" /></script>
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<!--<script src="js/jquery.nicescroll.min.js"></script>-->
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+<script>
+   $( function() {
+     $( "#accordion" ).accordion({
+       collapsible: true
+     });
+   } );
+</script>
+<script>
+   $(document).ready(function() {
+     'use strict';
+
+     $(window).on('ariaAccordion.initialised', function(event, element) {
+       console.log('initialised');
+     });
+
+     $('.accordion-group').first().ariaAccordion({
+       contentRole: ['document', 'application', 'document'],
+       expandOnPageLoad: true,
+       slideSpeed: 400
+     });
+
+     $('.accordion-group').last().ariaAccordion({
+       contentRole: ['document', 'application', 'document'],
+       expandOnPageLoad: true,
+       expandOnlyOne: true,
+       slideSpeed: 800
+     });
+   });
+</script>
+<script>
+   //Toggle
+
+   		 $('.user-menu').on('click',function(){
+             $('.dropdown-menu').slideToggle();
+
+           });
+   		 $(document).ready(function(e) {
+   	/*Content Show/Hide */
+   	$('.hide-cont').hide();
+   	$('.close-cont').hide();
+   	$('.view-cont').click(function(){
+   		$('.hide-cont').slideDown(350);
+   		$('.close-cont').show();
+   		$('.view-cont').hide();
+   	});
+   	$('.close-cont').click(function(){
+   		$('.hide-cont').slideUp(350);
+   		$('.close-cont').hide();
+   		$('.view-cont').show();
+   	});
+    });
+
+</script>
+<script type="text/javascript">
+   var expanded = false;
+
+   function showCheckboxes() {
+    var checkboxes = document.getElementById("checkboxes");
+    if (!expanded) {
+      checkboxes.style.display = "block";
+      expanded = true;
+    } else {
+      checkboxes.style.display = "none";
+      expanded = false;
+    }
+   }
+
+</script>
+<script>
+   $(document).ready(function() {
+
+   var nice = $("html").niceScroll();  // The document page (body)
+
+   $("#div1").html($("#div1").html()+' '+nice.version);
+
+     $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+
+   });
+</script>
+<script>
+   // Change the selector if needed
+   var $table = $('table.scroll'),
+   $bodyCells = $table.find('tbody tr:first').children(),
+   colWidth;
+
+   // Adjust the width of thead cells when window resizes
+   $(window).resize(function() {
+   // Get the tbody columns width array
+   colWidth = $bodyCells.map(function() {
+       return $(this).width();
+   }).get();
+
+   // Set the width of thead columns
+   $table.find('thead tr').children().each(function(i, v) {
+       $(v).width(colWidth[i]);
+   });
+   }).resize(); // Trigger resize handler
+</script>
+<script type="text/javascript" src="js/bootstrap-filestyle.js"></script>
+<script type="text/javascript">
+   $('#input02').filestyle({
+       text : 'Upload'
+   });
+</script>
+<script type="text/javascript">
+   $('#input05').filestyle({
+       text : '+ add Picture'
+   });
+
+   $('#input04').filestyle({
+       text : '+ add Milestone'
+   });
+   $('#file01').filestyle({
+       text : '+ Upload Image'
+   });
+
+   $('#file02').filestyle({
+       text : '+ add more picture'
+   });
+   $('#imge01').filestyle({
+       text : '+ add more picture'
+   });
+   $('#imge02').filestyle({
+       text : '+ add more picture'
+   });
+   $('#imge03').filestyle({
+       text : '+ add more picture'
+   });
+   $('#inputpicture').filestyle({
+       text : 'Upload'
+   });
+   $('#filemilestone').filestyle({
+       text : 'Upload Image'
+   });
+   $('#filemilestone01').filestyle({
+       text : 'Upload Image'
+   });
+   $('#filemilestone02').filestyle({
+       text : 'Upload Image'
+   });
+
+
+</script>
+<!-- <div class="milestone">
+   <div class="col-md-6 report_text parameter_section">
+   <p>Parameter Selection</p>
+    <select>
+      <option>Select</option>
+      <option>1</option>
+      <option>2</option>
+       </select>
+       <h5><a href="#">Remove</a></h5>
+
+     </div>
+     <div class="col-md-12 report_text ">
+     <p>About parameter</p>
+       <div class="text_area_height">
+      <textarea placeholder="comment"></textarea>
+
+       </div>
+       <h5><a href="#">Remove</a></h5>
+
+     </div>
+
+   </div>-->
+<script>
+   $(document).ready(function() {
+   var max_fields      = 20; //maximum input boxes allowed
+   var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+   var add_button      = $(".add_field_button"); //Add button ID
+
+   var x = 1; //initlal text box count
+   $(add_button).click(function(e){ //on add input button click
+   e.preventDefault();
+   if(x < max_fields){ //max input box allowed
+       x++; //text box increment
+       $(wrapper).prepend('<div class="milestone"><div class="col-md-6"><p>Parameter Selection</p><select><option>fg</option></select></div><div class="col-md-12"><p>About parameter</p><textarea placeholder="dfgd"></textarea></div><div><br><a href="#" class="remove_field">Remove</a></div>'); //add input box
+   }
+   });
+
+   $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+   e.preventDefault(); $(this).parent('div').remove(); x--;
+   })
+   });
+</script>
+{% endblock %}

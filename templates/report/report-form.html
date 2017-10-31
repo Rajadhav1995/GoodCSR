@@ -86,7 +86,7 @@ ul li {
             {% else %}
             <div class="box-body">
                 {% if quarter_msg %}
-                    <h3 class border_linr">Already reported is generated for this quarter. <a style="text-decoration:underline;color:#169776" href= '/report/detail/?slug={{project_obj.slug}}&report_id={{project_report.id}}'>View the Report Here</a></h3>
+                    <h3 class border_linr">Already reported is generated for this quarter. <a style="text-decoration:underline;color:#169776" href= '/report/detail/?slug={{project_obj.slug}}&report_id={{project_report.id}}'>View the Report Here </a> or if u want to edit the report click here <a style="text-decoration:underline;color:#169776" href= '/report/final/design/?slug={{project_obj.slug}}&report_id={{project_report.id}}'>Edit the Report</a></h3>
                     <a class="btn btn-success" href="/report/listing/?slug={{project_obj.slug}}" style="margin-right:5px;float: right;  padding:3px 15px;">Back</a>
                 {% else %}
                     <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">

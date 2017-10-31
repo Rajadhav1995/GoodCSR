@@ -11,6 +11,7 @@
 <input type="hidden" name="slug" value="{{slug}}">
 <input type="hidden" name="project-report" value="{{projectreportobj.id}}">
 <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+<input type="hidden" name="key" value={{key}}>
 <section class="content-part">
     <div class=" company_listing">
     <div class="col-md-12 col-xs-12 nopadding company_listing">
@@ -19,7 +20,7 @@
             <div class="general_report">
                 <h2>Generate Report</h2>
                 <div>
-                    <p align="right" class="edit_templete"><a href="forms-single.html" target="_self">Edit Template</a></p>
+                    <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=edit_template" target="_self">Edit Template</a></p>
                 </div>
 <!--Cover Page and Project Summary Page div where the questions are made dynamic  STARTS -->
                   <div id="accordion">
@@ -28,6 +29,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div class="text_accordion">
                            {% get_questions locals_list.block1 projectreportobj as ques %}
                            {% for i in ques %}
@@ -59,7 +61,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file"></textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file">{{i.answer}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                           <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
@@ -78,6 +80,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div class="text_accordion">
                            {% get_questions locals_list.block2 projectreportobj as ques %}
                            {% for i in ques %}
@@ -109,7 +112,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file"></textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file">{{i.answer}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                           <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
@@ -137,6 +140,7 @@
                         <input type="hidden" name="milestone-pic-count_1" value="1">
                         <input type="hidden" name="parameter_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div>
                         {% getreport_status report_id v 1 as reportupdates %}
                         {% if reportupdates.0 == False %}
@@ -160,7 +164,7 @@
                                     <!-- timeline slider -->
                                             {% if timeline_json != '[]' %}
                                             <div id="scrollbar1">
-                                                    
+
                                                     <div class="viewport">
                                                          <div class="overview">
                                                            <div id="time-line-pad">
@@ -356,7 +360,7 @@
                                     <!-- timeline slider -->
                                             {% if timeline_json != '[]' %}
                                             <div id="scrollbar1">
-                                                    
+
                                                     <div class="viewport">
                                                          <div class="overview">
                                                            <div id="time-line-pad">
@@ -388,10 +392,10 @@
 <!--                            this is for milestone section-->
 
                         {% if quest.slug == "milestone-section" %}
-                        
+
                         {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
                             {% for mileobj in act_mile_list %} <!--  for loop for milestone list -->
-                        
+
                             <div class="milestone">
                                 <div class="col-md-12"></div>
 
@@ -452,7 +456,7 @@
                                   <div class="form-group addmilestone">
                                         <p>+ add Milestone</p>
                                    </div>
-                           
+
                         {% endif %}
 <!--                            this is for parameter selection -->
                         {% if quest.slug == "parameter-section" %}
@@ -488,7 +492,7 @@
                                     {% endif %}
 
                                     {% endfor %}
-                                </div> 
+                                </div>
                                 {% endfor %} <!--  this is for paramter list count loop ends -->
                                 <div class="form-group addmilestone">
                                     <p>+ add More Parameter</p>
@@ -545,11 +549,11 @@
                             {% endif %}
 
                             {% endfor %} <!-- this is for previous question loop ends for edit functionality -->
-                            
-                            
-                            
-                            
-                            
+
+
+
+
+
                             {% endif %} <!-- this if ends here. thsi is to check whether this is add and edit functionality  -->
 
 
@@ -572,8 +576,9 @@
                         <input type="hidden" name="activity-pic-count_1" value="1">
                         <input type="hidden" name="current_parameter_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div>
-                        
+
                         {% getreport_status report_id v 2 as reportupdates %}
                         {% if reportupdates.0 == False %}
                 <!--                        this is add functionality -->
@@ -600,7 +605,7 @@
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px">
-                                
+
                                 <p>{{quest.text|title}}</p>
                                 <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                                 <h5><a href="#">Remove</a></h5>
@@ -878,7 +883,7 @@
 
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
-                                    
+
                                     <div class="col-md-6 report_text parameter_section">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
@@ -980,18 +985,20 @@
                             {% endif %}
 
                             {% endfor %} <!-- this for ends for edit currrent question list -->
-                        
-                        
-                        
+
+
+
                         {% endif %}
 
 <!--                           this is for edit functions-->
-                       
 
+                            </div>
                             <br>
                             <button class="report_save">Save</button>
+
                         </div>
                         </form>
+
                     {% endwith %}
                     {% endfor %} <!-- currentquarter for loop ends -->
                         <!-- ends Current Quarter Updates-->
@@ -1005,6 +1012,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
+                        <input type="hidden" name="key" value={{key}}>
                         <div>
                         {% getreport_status report_id v 3 as reportupdates %}
                         {% if reportupdates.0 == False %}
@@ -1289,7 +1297,7 @@
                         {% endfor %}
                         <!--ends nexrt quarter updates -->
 
-                    
+
                     </div>
                     </div>
                     <div class="below_buttons">
