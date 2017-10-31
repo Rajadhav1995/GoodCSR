@@ -19,7 +19,7 @@
             <div class="general_report">
                 <h2>Generate Report</h2>
                 <div>
-                    <p align="right" class="edit_templete"><a href="forms-single.html" target="_self">Edit Template</a></p>
+                    <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=edit_template" target="_self">Edit Template</a></p>
                 </div>
 <!--Cover Page and Project Summary Page div where the questions are made dynamic  STARTS -->
                   <div id="accordion">
@@ -59,7 +59,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file"></textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file">{{i.answer}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                           <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
@@ -109,7 +109,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file"></textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file">{{i.answer}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                           <!--                                                <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />-->
