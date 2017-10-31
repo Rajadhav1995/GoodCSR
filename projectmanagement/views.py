@@ -141,7 +141,7 @@ def budget_tranche(request):
 
 def tranche_list(request):
     '''
-    This function is for listing of project tranches
+    This function is for listing of project tranches                                
     '''
     slug =  request.GET.get('slug')
     obj = Project.objects.get(slug=slug)
@@ -175,7 +175,7 @@ def key_parameter(request):
 
 def add_parameter(request):
     '''
-    This function is to add key parameter
+    This function is to add key parameter for project
     '''
     form = ProjectParameterForm()
     slug =  request.GET.get('slug')
@@ -430,9 +430,22 @@ def timeline_listing(obj):
         object_id = obj.id,active=2,attachment_type= 1).order_by('date')
     return attach
 
+def get_timeline_process(timeline,milestone):
+    timeline_json = []
+    for i in timeline:
+        data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
+        timeline_json.append(data)
+    for j in milestone:
+        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone','id':''}
+        timeline_json.append(data)
+    timeline_json.sort(key=lambda item:item['date'], reverse=False)
+    timeline_json_length = len(timeline_json)
+    timeline_json = json.dumps(timeline_json)
+    return timeline_json,timeline_json_length
+
 @check_loggedin_access
 def project_summary(request):
-# to display the project details in project summary page
+# to display the project details in project summary page                    
 #Displaying pie chart detail
     image_url = PMU_URL
     slug =  request.GET.get('slug')
@@ -448,19 +461,12 @@ def project_summary(request):
     timeline = timeline_listing(obj)
     today = datetime.datetime.today()
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
-    timeline_json = []
+    timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
+
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
-    for i in timeline:
-        data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
-        timeline_json.append(data)
-    for j in milestone:
-        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone','id':''}
-        timeline_json.append(data)
-    timeline_json.sort(key=lambda item:item['date'], reverse=False)
-    timeline_json_length = len(timeline_json)
-    timeline_json = json.dumps(timeline_json)
+
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
@@ -547,6 +553,7 @@ def pie_chart_mainlist_report(obj,start_date,end_date):
 
 
 def delete_upload_image(request):
+    # this function is to delete image from timeline                                
     url=request.META.get('HTTP_REFERER')
     ids = request.GET.get('id')
     attach = Attachment.objects.get_or_none(id=int(ids))
