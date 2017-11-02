@@ -170,12 +170,13 @@ def get_parameter(obj,block_id):
     master_list = []
     master_names = []
     if answer_obj:
-        parameter_obj = ProjectParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+        report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+        # parameter_obj = ProjectParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
-        for i in parameter_obj:
-            main_list = pie_chart_mainlist_report(i,obj.start_date,obj.end_date)
+        for i in report_para:
+            main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
             master_list.append(main_list)
-            master_names.append(i.name)
+            master_names.append(i.keyparameter.name)
     return master_list,master_names
 
 @register.filter
@@ -215,14 +216,17 @@ def get_budget_detail(block,quarter):
     return budget_detail
 
 @register.assignment_tag
-def get_about_parameter(quarter,obj):
+def get_about_parameter(quarter,obj,block):
     # template tag to get parameter detail quarter wise in report detail page
     about_parameter = ''
-    question_obj = Question.objects.get_or_none(slug='about-parameter')
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
-    if answer_obj:
-        about_parameter = answer_obj.text
-    return about_parameter
+    report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+    for i in report_para:
+        detil = i.description
+    # if answer_obj:
+    #     about_parameter = answer_obj.text
+    return detil
 
 @register.assignment_tag
 def get_about_quarter(quarter,obj,block):
