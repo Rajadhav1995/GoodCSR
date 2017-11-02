@@ -475,7 +475,7 @@ def project_summary(request):
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     ''' calling api to return the gantt chart format data '''
     funderobj = get_funder(obj)
-    data = {'project_id':int(obj.id),'company_name':str(funderobj.funder.organization) if funderobj else ''}
+    data = {'project_id':int(obj.id),'company_name':str(funderobj.funder.organization) if funderobj else '','start_date':'','end_date':''}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     number_json = json.dumps(number_json)
