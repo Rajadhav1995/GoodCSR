@@ -117,9 +117,11 @@ def report_detail(request):
         contents[key]=value
     project = Project.objects.get_or_none(slug = slug)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
+    # calling function to get JSON data for pie chart display
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
     report_quarter = QuarterReportSection.objects.filter(project=report_obj)
+    # mapping view is to show funder and implementation partner relation
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     budgetobj = Budget.objects.latest_one(project = project,active=2)
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
@@ -138,12 +140,10 @@ def report_detail(request):
     for question in quest_list:
         answer_obj = Answer.objects.get_or_none(question =question,
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
-        if answer_obj and (question.qtype == 'T' or question.qtype == 'APT'):
+        if answer_obj and (question.qtype == 'T' or question.qtype == 'APT' or question.qtype == 'ck'):
             answer = answer_obj.text
         elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
-            answer = answer_obj.attachment_file.url 
-        elif answer_obj and (question.qtype == 'ck'):
-            answer = answer_obj.text
+            answer = answer_obj.attachment_file.url
         else:
             answer = ''
         answer_list[str(question.slug)] = answer

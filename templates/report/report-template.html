@@ -286,7 +286,7 @@
                               <div class="col-md-8">
                                  <div class="parameter-textbottom">
                                     <h4 class="color_green">About This Parameter</h4>
-                                    {% get_about_parameter i report_obj as about_parameter %}
+                                    {% get_about_parameter i report_obj 3 as about_parameter %}
                                     <p> {{about_parameter}} </p>
                                  </div>
                               </div>
@@ -390,7 +390,7 @@
                               <div class="col-md-8">
                                  <div class="parameter-textbottom">
                                     <h4 class="color_green">About This Parameter</h4>
-                                    {% get_about_parameter i report_obj as about_parameter %}
+                                    {% get_about_parameter i report_obj 3 as about_parameter %}
                                     <p> {{about_parameter}} </p>
                                  </div>
                               </div>
@@ -710,6 +710,7 @@
                   <div class="col-md-12">
                      <div class="row">
                         {% get_parameter i 4 as pie_data %}
+                        
                         {% if pie_data.0 %}
                         {% for lol in  pie_data.0 %}
                         <div class="margin_30 prev_banner">
@@ -731,9 +732,9 @@
                                  </div>
                               </div>
                               <div class="col-md-8">
-                                 <div class="parameter-textbottom">
+                                 <div class="parameter-text">
                                     <h4 class="color_green">About This Parameter</h4>
-                                    {% get_about_parameter i report_obj as about_parameter %}
+                                    {% get_about_parameter i report_obj 4 as about_parameter %}
                                     <p> {{about_parameter}} </p>
                                  </div>
                               </div>
@@ -744,11 +745,14 @@
                            var new_data_pip = 0;
                         </script>
                         <!--/* Pie Chat Number */-->
+                        <script src="/static/code/highcharts.js"></script>
+                        <script src="/static/code/highcharts-more.js"></script>
+                        <script src="/static/code/modules/solid-gauge.js"></script>
                         <script type="text/javascript">
                            {% get_parameter i 4 as pie_data %}
                            var new_data_pin = 0;
                            var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
-                           console.log(data1);
+                           console.log(data11);
                            var values = "comm{{forloop.counter}}"
                            var pin_title = {{pin_title_name | safe}}
                            var pin_title = pin_title[new_data_pin]
@@ -806,6 +810,7 @@
                         {% endif %}
                      </div>
                   </div>
+                  <br>
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
