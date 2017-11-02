@@ -90,11 +90,12 @@ def get_milestones(quarter,report_obj,type_id):
     sss = {1:'milestone-setion',2:'activity-section'}
     question = Question.objects.get_or_none(slug=sss.get(type_id))
     answer = Answer.objects.get_or_none(question=question,quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
-    milestones = answer.inline_answer if answer else ''
-    miles_list = ReportMilestoneActivity.objects.filter(id__in = eval(milestones))
-    for i in miles_list:
-        data = {'name':i.name,'description':i.description,'id':i.id}
-        report_miles.append(data)
+    if answer:
+        milestones = answer.inline_answer if answer else ''
+        miles_list = ReportMilestoneActivity.objects.filter(id__in = eval(milestones))
+        for i in miles_list:
+            data = {'name':i.name,'description':i.description,'id':i.id}
+            report_miles.append(data)
     return report_miles
 
 @register.assignment_tag 
