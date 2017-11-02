@@ -50,7 +50,7 @@ def get_questions(block,project_report):
         answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,
             'q_type':i.qtype,'q_name':i.slug}
-        if i.qtype == 'T':
+        if i.qtype == 'T' or i.qtype == 'ck':
             question_dict['answer'] = answer.text if answer else ''
         question_list.append(question_dict)
     return question_list
@@ -70,7 +70,7 @@ def get_auto_populated_questions(ques_id,project,project_report):
     # details dict is to get the details of two sections on first click of generate report
     details = {'report_type':project_report.get_report_type_display(),
         'report_duration':project_report.start_date.strftime('%Y-%m-%d')+' TO '+project_report.end_date.strftime('%Y-%m-%d'),
-        'prepared_by':project_report.created_by.name,'client_name':mapping_view.funder.organization,
+        'prepared_by':project_report.created_by.attrs.get('first_name')+' '+project_report.created_by.attrs.get('last_name'),'client_name':mapping_view.funder.organization,
         'report_name': project_report.name if project_report.name else '',
         'cover_image': cover_image.attachment_file.url if cover_image else '',
         'project_title':project.name,'project_budget':project.total_budget,
@@ -115,7 +115,7 @@ def get_sub_answers(details,sub_questions,project_report,project):
     for sub in sub_questions:
         data = {'q_id':sub.id,'q_text':sub.text,'q_type':sub.qtype,'q_name':sub.slug}
         answer_obj = Answer.objects.get_or_none(question=sub,content_type=ContentType.objects.get_for_model(project_report),object_id=project_report.id)
-        if answer_obj and (sub.qtype == 'T' or sub.qtype == 'APT'):# if answer_obj is there get answers according to the question type
+        if answer_obj and (sub.qtype == 'T' or sub.qtype == 'APT' or sub.qtype == 'ck'):# if answer_obj is there get answers according to the question type
             data['answer']= answer_obj.text 
         elif answer_obj and answer_obj.attachment_file :
             data['answer']=answer_obj.attachment_file.url

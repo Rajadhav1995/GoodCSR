@@ -112,6 +112,9 @@ def report_detail(request):
     report_id = request.GET.get('report_id')
     answer_list ={}
     answer = ''
+    contents,quarters = get_index_contents(slug,report_id)
+    for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
+        contents[key]=value
     project = Project.objects.get_or_none(slug = slug)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
@@ -304,6 +307,7 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
     mil_activity_count = obj_count_list.get('milestone_count')
     pic_count = obj_count_list.get('milestone_pic_count')
+    import ipdb;ipdb.set_trace();
     for i in range(int(mil_activity_count)):
         result = {}
         for mile_attribute in milestone_list:
@@ -393,7 +397,8 @@ def saving_of_quarters_section(request):
     previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
     if previous_itemlist:
         milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist)
-        milestone_count = request.POST.get('milestone_count_1',0)
+        quarter_number = previous_itemlist[0].split('_')[2]
+        milestone_count = request.POST.get('milestone_count_'+str(quarter_number)+"_"+str(1),0)
         milestone_pic_count = request.POST.get('milestone-pic-count_1',0)
         parameter_count = request.POST.get('parameter_count_1',0)
         if milestone_count > 0:
@@ -424,6 +429,7 @@ def saving_of_quarters_section(request):
 def finalreportdesign(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
+    key = request.GET.get('key')
     #to display the cover page and summary page sections calling the functions by passing request #STARTS)
     locals_list = display_blocks(request)
     # end of the display cover page and summary #ENDS
@@ -453,6 +459,7 @@ def finalreportdesign(request):
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
     if request.method == "POST":
         slug = request.POST.get('slug')
+        key = request.POST.get('key')
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
         projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
         #to save the two sections data based the save of two sections calling the report_section_form()#STARTS
@@ -464,7 +471,50 @@ def finalreportdesign(request):
             projectreportobj = saving_of_quarters_section(request)
             projectobj = projectreportobj.project
         # redirection to the same page of the form #STARTS
-        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
-        # ENDS to redirection   
-    return render(request,'report/final_report.html',locals())
+        if key == 'edit_template':
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
+        else:
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
+        # ENDS to redirection  
+    if key == 'edit_template':
+        return render(request,'report/forms-single.html',locals())
+    else:
+        return render(request,'report/final_report.html',locals())
 
+
+def get_index_contents(slug,report_id):
+# to get the index contents dynamically by using a dictionay passing the contents
+    contents = {}
+    index={}
+    quarters = {}
+    project = Project.objects.get_or_none(slug=slug)
+    report_obj = ProjectReport.objects.get_or_none(id=report_id)
+    # by using get_quarters() function getting the previous,current and next quarters list
+    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(report_obj)
+    # based on the answer object created to the report,if answer object is created to that report
+    # then we will display the contents which are present
+    cover_summary_answers = answer=Answer.objects.filter(question__block__block_type=0,
+        content_type = ContentType.objects.get_for_model(report_obj),object_id=report_id)
+    # if answer object is present for the particular report then add "About the Project" to the dict
+    if cover_summary_answers:
+        contents['1']= 'About the project'
+        quarters['About the project'] = ''
+        # if previous quarter then add to contents dict and in quarters dict give the list of quarters to that previous quarter
+        # so that we can render the quarters based on the name of the content and iterate it
+        # same way for current and next quarters is done
+        if previousquarter_list:
+            contents['2'] = 'Previous Quarter Updates'
+            quarters['Previous Quarter Updates'] = previousquarter_list
+        if currentquarter_list:
+            contents['3'] = 'Current Quarter Updates'
+            quarters['Current Quarter Updates'] = currentquarter_list
+        if futurequarter_list:
+            contents['4'] = 'Next Quarter Updates'
+            quarters['Next Quarter Updates']=futurequarter_list
+        contents['5'] = "Annexure"
+        quarters['Annexure']=''
+    for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
+        contents[key]=value
+    # final contents dict = {'1':About the Project,'2':current quarter updates,.....}
+    # quarters dict = {'About the Project':'','current quarter updates':{0:from and to date,1:from and to date},....}
+    return contents,quarters
