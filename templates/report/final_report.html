@@ -255,7 +255,7 @@
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="remove_{{i}}_{{j}}">Remove</a>
+                                            <a href ="javascript:void(0);" class ="add_remove_{{i}}_{{j}}">Remove</a>
                                         </div>
                                    </div>
                         {% endif %}
@@ -270,7 +270,7 @@
                                     <div class="col-md-6 report_text parameter_section">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
-                                            <option>Select</option>
+                                            <option value="0">Select</option>
                                             {% for i in project_paramterlist %}
                                             <option value="{{i.id}}">{{i.name}}</option>
                                             {% endfor %}
@@ -365,7 +365,6 @@
                             <div class="col-md-12 report_text " style="padding:0px">
                                 <p>Key Achievements in this quarter</p>
                                     <!-- timeline slider -->
-                                        {% if timeline_json != '[]' %}
                                             <div id="scrollbar1">
 
                                                     <div class="viewport">
@@ -390,7 +389,6 @@
                                                     <div class="thumb">
                                                     <div class="end">
                                                     </div></div></div></div>
-                                            {% endif %}
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -405,8 +403,9 @@
                             <input type="hidden" name="milestone-pic-count_1" value="1">
                             <input type="hidden" name="parameter_count_1" value="1">
                             {% for mileobj in act_mile_list %} <!--  for loop for milestone list -->
+                                {% with forloop.counter as m_count %}
                         
-                            <div class="milestone data_row_{{i}}_1">
+                            <div class="milestone data_row_{{i}}_{{m_count}}">
                                 <div class="col-md-12"></div>
 
                                 {% get_previous_subquestions quest as milestone_questions %}
@@ -415,16 +414,17 @@
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
-                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">
+                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">
                                         <h5><a href="#">Remove</a></h5>
                                     {% endif %}
                                 {% get_mile_act_images mileobj as imagelist %}
+                                {% if imagelist %}
                                 {% for imageobj in imagelist %}
                                     {% if mile_quest.slug == "upload-picture" %}
                                         <div class="report_text">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
-                                                    <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value="{{imageobj.attachment_file}}">
+                                                    <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" value="{{imageobj.attachment_file}}">
                                                 </div>
                                                   <h5><a href="#">Remove</a></h5>
                                         </div>
@@ -434,7 +434,7 @@
                                         <div class=" report_text">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
-                                                <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
+                                                <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
                                             </div>
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
@@ -444,6 +444,32 @@
                                         </div>
                                     {% endif %}
                                 {% endfor %} <!--  this ends for image loop -->
+                                {% else %}
+                                    {% if mile_quest.slug == "upload-picture" %}
+                                        <div class="report_text">
+                                            <p>{{mile_quest.text|title}}</p>
+                                                  <div class="form-group upload_text">
+                                                    <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
+                                                </div>
+                                                  <h5><a href="#">Remove</a></h5>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if mile_quest.slug == "picture-description" %}
+                                        <div class=" report_text">
+                                            <p>{{mile_quest.text|title}}</p>
+                                            <div class="form-group">
+                                                <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
+                                            </div>
+                                            <div class="form-group addpicture">
+                                                    <input type="file" id="input05">
+                                                </div>
+                                            <h5><a href="#">Remove</a></h5>
+
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
 
                                     {% endfor %}
                                     </div> <!--  col 6 div ends-->
@@ -453,7 +479,7 @@
                                         <div class="col-md-6 report_text">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="">
-                                                <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_{{mileobj.id}}"  class="textarea_file"> {{mileobj.description}}</textarea>
+                                                <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}"  class="textarea_file"> {{mileobj.description}}</textarea>
                                             </div>
                                             <h5><a href="#">Remove</a></h5>
                                         </div>
@@ -462,15 +488,16 @@
 
 
                             </div> <!-- milestone class -->
+                            {% endwith %}
                             {% endfor %} <!--  this for loop for number of milestones-->
                                   <div class="form-group addmilestone click_buttons">
                                        <div class="link-left">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="add_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                            <a href ="javascript:void(0);" class ="edit_clone_{{i}}_{{j}}">+Add more Lines</a>
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="remove_{{i}}_{{j}}">Remove</a>
+                                            <a href ="javascript:void(0);" class ="edit_remove_{{i}}_{{j}}">Remove</a>
                                         </div>
                                    </div>
 
@@ -488,7 +515,7 @@
                                     <div class="col-md-6 report_text parameter_section">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
-                                            <option>Select</option>
+                                            <option value="0">Select</option>
                                             {% for i in project_paramterlist %}
                                             <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
                                             {% endfor %}
@@ -672,7 +699,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
-                                            <input type="text " class="form_section input_section">
+                                            <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" class="form_section input_section">
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                         <div class="form-group addpicture">
@@ -699,7 +726,7 @@
                                     <div class="col-md-6 report_text parameter_section">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
-                                            <option>Select</option>
+                                            <option value="0">Select</option>
                                             {% for i in project_paramterlist %}
                                             <option value="{{i.id}}">{{i.name}}</option>
                                             {% endfor %}
@@ -904,7 +931,7 @@
                                     <div class="col-md-6 report_text parameter_section">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
-                                            <option>Select</option>
+                                            <option value="0">Select</option>
                                             {% for i in project_paramterlist %}
                                             <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
                                             {% endfor %}
@@ -1403,44 +1430,96 @@ $(document).ready(function() {
 <!--                        <input type="hidden" name="parameter_count_1" value="1">-->
 
 
-<!--script for add more functionalities -->
+<!--script for  a add more functionalities in edit functionality for previous section -->
 <script type="text/javascript">
     $(document).ready(function(){
                 function clone(){
                     nam = $(this).context.className.split('_')
-                    var milestone_count = $('input[name=milestone_count_'+nam[2]+'_'+nam[3]+']').val();
+                    var milestone_count = $('input[name^=milestone_count_'+nam[2]).val();
                     var c = milestone_count;
-                    alert(c)
                     var tR = $('.data_row_'+nam[2]+'_'+c+':last').clone();
                     milestone_count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
                     $(tR).find('textarea, select, input').each(function(){
                       if ($(this).attr('name')){
-                            
+                            $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
-                              var name = $(this).attr('name').split('_');
+                              var name = $(this).attr('name').split('_')Milestone_1_1_6_2_1_70
                               $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
                               $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'0');
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'0');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
                             }
                       }
                     });
-                    $('input[name=milestone_count_'+nam[2]+'_'+nam[3]+']').val(milestone_count)
+                    $('input[name^=milestone_count_'+nam[2]).val(milestone_count)
+                    //$(tR).find('td span.init').text(count);
+                    $(tR).insertAfter('.data_row_'+nam[2]+'_'+c+':last');
+                    tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count++).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
+                    
+                    }
+                function edit_remove(){
+                    nam = $(this).context.className.split('_')
+                    var count = $('input[name^=milestone_count_'+nam[2]).val();
+                      if (count > 1) {
+                            $('^input.data_row_'+nam[2]+':last').remove();
+                            count  = $('^tr.data_row_'+nam[2]).length;
+                            $('input[name^=milestone_count'+nam[2]).val(milestone_count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            //$(".add_clone").on("click", clone);
+            $("[class^=edit_clone_]").on("click", clone);
+            $("[class^=edit_remove_]").on("click", edit_remove);
+    
+    });
+</script>
+
+
+<!--script for  a add more functionalities in "---Add --" functionality for previous section -->
+<script type="text/javascript">
+    $(document).ready(function(){
+                function clone(){
+                    nam = $(this).context.className.split('_')
+                    var milestone_count = $('input[name^=milestone_count_'+nam[2]).val();
+                    var c = milestone_count;
+                    var tR = $('.data_row_'+nam[2]+'_'+c+':last').clone();
+                    milestone_count++; /* To increase the count */
+                    /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).find('textarea, select, input').each(function(){
+                      if ($(this).attr('name')){
+                            $(this).val('')
+                           if ($(this).attr('name').split('_').length == 7){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 8){
+                              var name = $(this).attr('name').split('_')
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
+                            }
+                      }
+                    });
+                    $('input[name^=milestone_count_'+nam[2]).val(milestone_count)
                     //$(tR).find('td span.init').text(count);
                     $(tR).insertAfter('.data_row_'+nam[2]+'_'+c+':last');
                     tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
                     
                     }
                 function remove(){
-                    var count = $('input[name=milestone_count_'+nam[2]+'_'+nam[3]+']').val();
+                    nam = $(this).context.className.split('_')
+                    var count = $('input[name^=milestone_count_'+nam[2]).val();
                       if (count > 1) {
-                            $('input.data_row_'+nam[2]+'_'+nam[3]+':last').remove();
-                            count  = $('tr.data_row_'+nam[2]+'_'+nam[3]).length;
-                            $('input[name=milestone_count'+nam[2]+'_'+nam[3]+']').val(milestone_count);
+                            
+                            $('input.data_row_'+nam[2]+'_'+count+':last').remove();
+                            count  = $('tr.data_row_'+nam[2]+'_'+count).length;
+                            $('input[name^=milestone_count'+nam[2]).val(milestone_count);
                       }
                       else{
                         alert("Please add atleast one record")
@@ -1448,10 +1527,11 @@ $(document).ready(function() {
                 }
             //$(".add_clone").on("click", clone);
             $("[class^=add_clone_]").on("click", clone);
-            $("[class^=remove_]").on("click", remove);
+            $("[class^=add_remove_]").on("click", remove);
     
     });
 </script>
+
 
 <!--this script is for add more functionality for pictures-->
 <script type="text/javascript">
@@ -1460,11 +1540,9 @@ $(document).ready(function() {
                     nam = $(this).context.className.split('_')
                     var pic_count = $('input[name=milestone-pic-count_'+nam[2]+']').val();
                     var c = pic_count;
-                    alert(c)
                     var tR = $('.data_picture_'+c+':last').clone();
                     pic_count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
-                    debugger;
                     $(tR).find('textarea, select, input').each(function(){
                       if ($(this).attr('name')){
                             
