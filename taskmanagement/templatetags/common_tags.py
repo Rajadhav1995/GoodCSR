@@ -4,9 +4,11 @@ from datetime import datetime
 from media.models import Comment,Attachment
 from django.contrib.contenttypes.models import ContentType
 import pytz
+import requests,ast
 from taskmanagement.models import Task
 from budgetmanagement.models import *
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
+from pmu.settings import PMU_URL
 
 @register.assignment_tag
 def get_details(obj):
@@ -138,3 +140,16 @@ def get_org_logos(data,project,keys,details,sub):
     if sub.slug in keys:
         data['answer'] = details[sub.slug]
     return data
+    
+@register.assignment_tag 
+def get_gantt_details(v,projectobj):
+# this function to get the gantt chart details for the particular quarter that is generated
+    start_date = v.split('to')[0].rstrip()
+    end_date = v.split('to')[1].lstrip()
+    start_date = datetime.strptime(start_date[:19], '%Y-%m-%d').date()
+    end_date = datetime.strptime(end_date[:19], '%Y-%m-%d').date()
+    import json
+    data = {'project_id':int(projectobj.id),'start_date':start_date,'end_date':end_date}
+    rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
+    taskdict = ast.literal_eval(json.dumps(rdd.content))
+    return taskdict
