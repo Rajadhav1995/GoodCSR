@@ -100,9 +100,8 @@ def get_timeline_progress(projectobj,v):
     end_date = v.split('to')[1].lstrip()
     start_date = datetime.strptime(start_date[:19], '%Y-%m-%d').date()
     end_date = datetime.strptime(end_date[:19], '%Y-%m-%d').date()
-    timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,created__gte = start_date,created__lte = end_date ).order_by('date')
+    timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = start_date,date__lte = end_date ).order_by('date')
     today = datetime.today()
-    print timeline,"--------",v
     milestone = Milestone.objects.filter(project = projectobj,overdue__lte=today.now())
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     return timeline_json,timeline_json_length
