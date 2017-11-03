@@ -263,6 +263,7 @@
                   <div class="col-md-12">
                      <div class="row">
                         {% get_parameter i 3 as pie_data %}
+                        {{pie_data}}
                         {% if pie_data.0 %}
                         {% for lol in  pie_data.0 %}
                         <div class="margin_30 prev_banner">
