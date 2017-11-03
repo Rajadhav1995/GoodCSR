@@ -60,8 +60,17 @@ def download_report_generation(request):
     result = StringIO.StringIO()
     name = project.name.replace(' ','_')
     file_name = name+'_'+str(report_obj.start_date.strftime('%Y/%m/%d'))+'_To_'+str(report_obj.end_date.strftime('%Y/%m/%d'))+'.pdf'
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), dest=result  )
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), dest=result,  link_callback=fetch_resources )
+    import ipdb; ipdb.set_trace()
     response = HttpResponse(result.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename = '+str(file_name)+''
     return response
     
+def fetch_resources(uri, rel):
+    import os
+    import cgi
+    from django.conf import settings
+    path = 'http://localhost:8000/static/' + os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
+    print path
+    print settings.MEDIA_ROOT
+    return path

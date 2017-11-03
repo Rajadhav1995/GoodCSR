@@ -7,7 +7,7 @@ from django.contrib import messages
 from calendar import monthrange
 from projectmanagement.models import *
 from projectmanagement.forms import *
-from budgetmanagement.forms import TrancheForm
+from budgetmanagement.forms import get_tranche_form
 from budgetmanagement.models import Tranche,ProjectReport
 from media.models import Attachment,Keywords,FileKeywords,ProjectLocation
 from django.http import HttpResponseRedirect
@@ -125,13 +125,17 @@ def budget_tranche(request):
     '''
     This function is for Add budget tranche
     '''
-    form = TrancheForm()
+    
     slug =  request.GET.get('slug')
+    f = get_tranche_form(slug)
+    form = f()
     user_id = request.session.get('user_id')
     project = Project.objects.get_or_none(slug=slug)
-    form.fields["recommended_by"].queryset = UserProfile.objects.filter(is_admin_user=True)
+    tt = ProjectUserRoleRelationship.objects.filter(project=project)
+    recommended_by = UserProfile.objects.filter(id__in=[i.id for i in tt])
+    # form.fields["recommended_by"].queryset = ProjectUserRoleRelationship.objects.filter(project=project)
     if request.method == 'POST':
-        form = TrancheForm(request.POST, request.FILES)
+        form = f(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.project = project

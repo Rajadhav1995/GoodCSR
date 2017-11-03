@@ -35,7 +35,9 @@
 
             <!-- onload="window.print()" -->
             <body >
+              <div class='header_page_height'>
                <header>
+
                   <div class="">
                      <div>
                         <img src="/static/img/report/header-img.jpg" style="width:100%">
@@ -63,7 +65,9 @@
                      <p style="float:left; width:auto">Prepared by {{answer_list.prepared_by}}</p>
                      <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
                   </div>
+                
                </header>
+               </div>
                <header style="margin-top:50px">
                   <div>
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
@@ -78,7 +82,7 @@
                      </div>
                   </div>
                   <hr>
-                  <div class="margin-50">
+                  <div class="margin-50 page_height">
                     <!--Dynamic getting of the contents of index page (STARTS)                  -->
                      {% for key,value in contents.iteritems %}
                              <div class="margin-botom35 border_line">
@@ -113,6 +117,7 @@
                      </div>
                   </div>
                   <hr>
+                  <div class='page_height'>
                   <div class="school_project">
                      <div>
                         <p class="color-red">PROJECT</p>
@@ -169,6 +174,7 @@
                      <p>About the Program</p>
                      <h5>{{answer_list.program_description|safe}}</h5>
                   </div>
+                  </div>
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
@@ -186,7 +192,7 @@
                      </div>
                   </div>
                   <hr>
-                  <div class="location margin-top40">
+                  <div class="location margin-top40 page_height">
                      <p>Objective of the project</p>
                      <h5>{{answer_list.project_objective|safe}}</h5>
                   </div>
@@ -198,6 +204,11 @@
                </div>
                <!--Index page 04 html ends-->
                <!--Index page 05 html starts-->
+               {% for i in report_quarter %}
+                {% get_parameter i 3 as pie_data %}
+                {{pie_data.0.PIN}}
+                {% if i.quarter_type == 1 %}
+
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -207,15 +218,13 @@
                      </div>
                   </div>
                   <hr>
-                  {% for i in report_quarter %}
-                  {% get_parameter i 3 as pie_data %}
-                  {{pie_data.0.PIN}}
-                  {% if i.quarter_type == 1 %}
+
+                  <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
                      <p>First Quarter (12 Jan to 30 Mar 2017)</p>
                   </div>
-                  <div class="margin_30 prev_banner">
+                  <div class="margin_30 prev_banner page_height">
                      <h5 class="color_green">Key Achievements in this quarter</h5>
                      <img src="/static/img/report/prev-banner.png" style="width:100%">
                   </div>
@@ -239,6 +248,7 @@
                      
                   </div>
                   {% endfor %}
+                  </div>
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
@@ -256,6 +266,7 @@
                      </div>
                   </div>
                   <hr>
+                  <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
                      <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -401,6 +412,7 @@
                         {% endif %}
                      </div>
                   </div>
+                  </div>
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
@@ -538,16 +550,18 @@
     </div>
     
     </div>
-                  </div>
-                  {% endif %}
+                  
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
                      <h3 style="float:right;margin-top:0px;">7</h3>
                   </footer>
                </div>
+               {% endif %}
                <!--Index page 07 html ends-->
                <!--Index page 08 html starts-->
+               {% if i.quarter_type == 2 %}
+              {% get_parameter i 4 as pie_data %}
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -557,13 +571,13 @@
                      </div>
                   </div>
                   <hr>
-                  {% if i.quarter_type == 2 %}
-                  {% get_parameter i 4 as pie_data %}
+                  
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
-                  <div>
+                  <div class='page_height'>
+                  <div> 
                      <img src="/static/img/report/imgpage0802.jpg" style="width:100%">
                   </div>
                   <div class="margin_top30">
@@ -687,12 +701,14 @@
                   </div>
                   {% endfor %}
                   {% endfor %}
+                  </div>
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
                      <h3 style="float:right;margin-top:0px;">8</h3>
                   </footer>
                </div>
+
                <!--Index page 08 html ends-->
                <!--Index page 09 html starts-->
                <div class="container">
@@ -704,6 +720,7 @@
                      </div>
                   </div>
                   <hr>
+                  <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -917,6 +934,7 @@
                      <h5>{{budget_detail}}
                      </h5>
                   </div>
+                  </div>
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
@@ -934,6 +952,7 @@
                      </div>
                   </div>
                   <hr>
+                  <div class="page_height">
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -944,16 +963,23 @@
                      <h5>{{risk_mitigation}} </h5>
                      
                   </div>
-                  {% endif %}
+                  </div>
+                  
+
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
                      <h3 style="float:right;margin-top:0px;">10</h3>
                   </footer>
                </div>
+               {% endif %}
                <!--Index page 10 html ends-->
                <!--Index page 10 html starts-->
+               {% if i.quarter_type == 3 %}
+                  
+                  {% get_parameter i 5 as pie_data %}
                <div class="container">
+                <div class='page_height'>
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{project.name}}</h1>
                      <div class="float_right">
@@ -962,10 +988,8 @@
                      </div>
                   </div>
                   <hr>
-                  {% if i.quarter_type == 3 %}
                   
-                  {% get_parameter i 5 as pie_data %}
-                  
+                  <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Next Quarter Updates</h4>
                      <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
@@ -1081,14 +1105,16 @@
                      <h5>{{budget_detail}}
                      </h5>
                   </div>
-                  {% endif %}
-                  {% endfor %}
+                  
+                  </div>
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
                      <h3 style="float:right;margin-top:0px;">11</h3>
                   </footer>
                </div>
+               {% endif %}
+                {% endfor %}
                <!--Index page 11 html ends-->
                <!--Index page 12 html-->
                <div class="container">
@@ -1100,8 +1126,10 @@
                      </div>
                   </div>
                   <hr>
+                  <div class='page_height'>
                   <div style="margin:15% 0px;float: left;width: 100%;">
                      <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
+                  </div>
                   </div>
                   <footer>
                      <hr>
