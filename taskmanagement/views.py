@@ -37,7 +37,7 @@ def listing(request):
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
     status = get_assigned_users(user,project)
     import json
-    data = {'project_id':int(project.id)}
+    data = {'project_id':int(project.id),'start_date':'','end_date':''}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     #    added by meghana
@@ -581,9 +581,16 @@ class GanttChartData(APIView):
         '''
         tasks = None
         i_project_id = request.data.get('project_id')
-        tasks = Task.objects.filter(activity__project=i_project_id)
-        activities = Activity.objects.filter(project=i_project_id)
-        milestones = Milestone.objects.filter(project=i_project_id)
+        start_date = request.data.get('start_date')
+        end_date = request.data.get('end_date')
+        if start_date and end_date:
+            tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date)
+            activities = Activity.objects.filter(id__in=[i.activity.id for i in tasks])
+            milestones = Milestone.objects.filter(task__id__in=[i.id for i in tasks])
+        else:
+            tasks = Task.objects.filter(activity__project=i_project_id)
+            activities = Activity.objects.filter(project=i_project_id)
+            milestones = Milestone.objects.filter(project=i_project_id)
         supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
         ExpectedDatesCalculator(task_list=tasks)
         taskdict = {}
@@ -593,6 +600,7 @@ class GanttChartData(APIView):
             milestones, many=True).data
         taskdict['supercategories'] = SuperCategorySerializer(
             supercategories, many=True).data
+        print taskdict
         return Response(taskdict)
         
         
