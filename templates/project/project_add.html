@@ -318,7 +318,9 @@ width:450px;
                 </div>
             </div>
         </div>
-
+<p>Date: <input type="text" id="datepicker"/></p>
+<div id="placeholder"></div>                
+</div>
 
         <div class="row">
             <div class="col-md-6 nopadding">
@@ -366,8 +368,7 @@ width:450px;
                 </div>
             </div>
         </div>
-                        
-</div>
+        
 </form>
 </div>
   </div>
@@ -384,7 +385,15 @@ width:450px;
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 
-
+<script type="text/javascript">
+$(function() {
+    $("#datepicker").datepicker();
+    $("#datepicker").change(function() {
+        var date = $(this).datepicker("getDate");
+        $("#placeholder").text(date);
+    });
+});
+</script>
 <script type="text/javascript">
 var rem_id = []
 var city_var = []
@@ -505,9 +514,8 @@ $(document).ready(function() {
     dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true,
     
     })
-
-
 </script>
+
 <script>
 function date_validate() {
     if ($('#id_start_date').val()>$('#id_end_date').val()){
