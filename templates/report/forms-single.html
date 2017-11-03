@@ -157,6 +157,7 @@
                <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
                                     <!-- timeline slider -->
+                                    {% if timeline_json != '[]' %}
                                             <div id="scrollbar1">
 
                                                     <div class="viewport">
@@ -179,6 +180,7 @@
                                                     <div class="thumb">
                                                     <div class="end">
                                                     </div></div></div></div>
+                                        {% endif %}
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -332,6 +334,7 @@
                <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
                                     <!-- timeline slider -->
+                                    {% if timeline_json != '[]' %}
                                             <div id="scrollbar1">
 
                                                     <div class="viewport">
@@ -354,6 +357,7 @@
                                                     <div class="thumb">
                                                     <div class="end">
                                                     </div></div></div></div>
+                                        {% endif %}
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -1218,15 +1222,18 @@
 </footer>
 <!--Footer Ends-->
 </div>
+
+{% endblock %}
 <!-- jQuery (necessary for JavaScript plugins) -->
 <script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
 <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
 <script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
-<script type="text/javascript" src="/static/js/common.js" /></script>
-<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
-<!--<script src="js/jquery.nicescroll.min.js"></script>-->
+<script type="text/javascript" src="/static/js/common.js" ></script>
+<script type="text/javascript" src="/static/js/jquery.scrollbox.js"></script>
+<script src="/static/js/jquery.nicescroll.min.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+   {% block script %}
 <script>
    $( function() {
      $( "#accordion" ).accordion({
@@ -1420,6 +1427,7 @@
     {% for i,v in currentquarter_list.items %}
         {% get_gantt_details v projectobj as taskdict %}
         var jsonData = {{taskdict|safe}}
+        alert("hi")
         console.log(jsonData)
         var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
         // console.log(jsonData.tasks);
@@ -1705,7 +1713,6 @@
     {% for i,v in futurequarter_list.items %}
         {% get_gantt_details v projectobj as taskdict %}
         var jsonData = {{taskdict|safe}}
-        console.log(jsonData)
         var g = new JSGantt.GanttChart(document.getElementById('gwContainer_next'), 'week');
         // console.log(jsonData.tasks);
         // Get today and tomorrows date
@@ -1985,8 +1992,8 @@
      {% endfor %}
 </script>
 
-<script type="text/javascript">
-$(document).ready(function() {
+
+<script>
     //var loop_count = $('#loop_count').val()
 {% for i,v in previousquarter_list.items %}
     {% to_and v as timeperiod %}
@@ -1995,6 +2002,7 @@ $(document).ready(function() {
     var lengths = {{timeline.1}};
     var ff= {{timeline.0|safe}}
     var loc_url = '{{image}}'
+    alert(lengths);
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++)
     {
@@ -2019,7 +2027,6 @@ $(document).ready(function() {
             //return confirm("Are you sure you want to delete this item?");
             alert("Are you sure?");
         }
-
       if (i % 2) {
         if (obj.type == 'image') {
         $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
@@ -2035,7 +2042,6 @@ $(document).ready(function() {
       };
     }
     {% endfor %}
-})
 </script>
-
 {% endblock %}
+

@@ -1445,7 +1445,7 @@ $(document).ready(function() {
 <!--script for  a add more functionalities in edit functionality for previous section -->
 <script type="text/javascript">
     $(document).ready(function(){
-                function clone(){
+                function edit_clone(){
                     nam = $(this).context.className.split('_')
                     var milestone_count = $('input[name^=milestone_count_'+nam[2]).val();
                     var c = milestone_count;
@@ -1456,7 +1456,7 @@ $(document).ready(function() {
                       if ($(this).attr('name')){
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
-                              var name = $(this).attr('name').split('_')Milestone_1_1_6_2_1_70
+                              var name = $(this).attr('name').split('_')
                               $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
                               $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
                             }
@@ -1477,16 +1477,16 @@ $(document).ready(function() {
                     nam = $(this).context.className.split('_')
                     var count = $('input[name^=milestone_count_'+nam[2]).val();
                       if (count > 1) {
-                            $('^input.data_row_'+nam[2]+':last').remove();
-                            count  = $('^tr.data_row_'+nam[2]).length;
-                            $('input[name^=milestone_count'+nam[2]).val(milestone_count);
+                            $('div.data_row_'+nam[2]+'_'+count+':last').remove();
+                            count--
+                            $('input[name^=milestone_count_'+nam[2]).val(count);
                       }
                       else{
                         alert("Please add atleast one record")
                       }
                 }
             //$(".add_clone").on("click", clone);
-            $("[class^=edit_clone_]").on("click", clone);
+            $("[class^=edit_clone_]").on("click", edit_clone);
             $("[class^=edit_remove_]").on("click", edit_remove);
     
     });
@@ -1528,10 +1528,9 @@ $(document).ready(function() {
                     nam = $(this).context.className.split('_')
                     var count = $('input[name^=milestone_count_'+nam[2]).val();
                       if (count > 1) {
-                            
-                            $('input.data_row_'+nam[2]+'_'+count+':last').remove();
-                            count  = $('tr.data_row_'+nam[2]+'_'+count).length;
-                            $('input[name^=milestone_count'+nam[2]).val(milestone_count);
+                            $('div.data_row_'+nam[2]+'_'+count+':last').remove();
+                            count--
+                            $('input[name^=milestone_count_'+nam[2]).val(count);
                       }
                       else{
                         alert("Please add atleast one record")
