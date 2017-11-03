@@ -307,6 +307,10 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
     mil_activity_count = obj_count_list.get('milestone_count')
     pic_count = obj_count_list.get('milestone_pic_count')
+    milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
+    for milestone in milestoneobj:
+        milestone.active = 0
+        milestone.save()
     for i in range(int(mil_activity_count)):
         result = {}
         for mile_attribute in milestone_list:
@@ -316,7 +320,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
                 mile_id = mile_length_list[-1]
                 parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
                 result.update({name.lower():request.POST.get(mile_attribute)})
-        if quarterreportobj.quarter_type == 1:
+        if int(quarterreportobj.quarter_type) == 1:
             name = result.get('milestone','')
             description = result.get('about milestone','')
         else:
@@ -325,13 +329,15 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         if int(mile_id) == 0:
             milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
         else:
-            milestoneobj = ReportMilestoneActivity.objects.get(id=int(mile_id))
-            milestoneobj.name = name
-            milestoneobj.description=description
-            milestoneobj.save()
+            milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
+            if milestoneobj:
+                milestoneobj.name = name
+                milestoneobj.description=description
+                milestoneobj.active = 2
+                milestoneobj.save()
         imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
-    milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj).values_list("id",flat=True)
+    milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2).values_list("id",flat=True)
     milestone_ids = map(int,milestone_ids)
     milestone_answer_dict = {
             'quarter':quarterreportobj,
@@ -359,8 +365,8 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
                 parameter_id = param_list[-1]
                 parent_paramter_question = Question.objects.get(id=param_list[3]).parent
                 parameter_result.update({name.lower():request.POST.get(parameter)})
-        if int(parameter_id) == 0:
-            reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
+        if int(parameter_id) == 0 :
+            reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get_or_none(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
         else:
             reportparamterobj = ReportParameter.objects.get(id=int(parameter_id))
             reportparamterobj.keyparameter = ProjectParameter.objects.get(id=int(parameter_result['parameter selection']))
@@ -396,7 +402,8 @@ def saving_of_quarters_section(request):
     previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
     if previous_itemlist:
         milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist)
-        milestone_count = request.POST.get('milestone_count_1',0)
+        quarter_number = previous_itemlist[0].split('_')[2]
+        milestone_count = request.POST.get('milestone_count_'+str(quarter_number)+"_"+str(1),0)
         milestone_pic_count = request.POST.get('milestone-pic-count_1',0)
         parameter_count = request.POST.get('parameter_count_1',0)
         if milestone_count > 0:
