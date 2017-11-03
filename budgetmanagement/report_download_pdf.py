@@ -61,7 +61,6 @@ def download_report_generation(request):
     name = project.name.replace(' ','_')
     file_name = name+'_'+str(report_obj.start_date.strftime('%Y/%m/%d'))+'_To_'+str(report_obj.end_date.strftime('%Y/%m/%d'))+'.pdf'
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), dest=result,  link_callback=fetch_resources )
-    import ipdb; ipdb.set_trace()
     response = HttpResponse(result.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename = '+str(file_name)+''
     return response
