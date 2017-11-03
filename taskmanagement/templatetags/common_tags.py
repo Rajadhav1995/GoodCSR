@@ -54,6 +54,8 @@ def get_questions(block,project_report):
             'q_type':i.qtype,'q_name':i.slug}
         if i.qtype == 'T' or i.qtype == 'ck':
             question_dict['answer'] = answer.text if answer else ''
+        elif i.qtype == 'F':
+            question_dict['answer'] = answer.attachment_file.url if answer else "/static/img/GoodCSR_color_circle.png"
         question_list.append(question_dict)
     return question_list
     
