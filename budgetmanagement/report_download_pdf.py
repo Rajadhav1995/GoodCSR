@@ -69,7 +69,7 @@ def fetch_resources(uri, rel):
     import os
     import cgi
     from django.conf import settings
-    path = 'http://localhost:8000/static/' + os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
+    path = PMU_URL + os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
     print path
     print settings.MEDIA_ROOT
     return path
