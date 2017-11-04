@@ -663,8 +663,10 @@
                         <!--                            this is for milestone section-->
 
                         {% if quest.slug == "activity-section" %}
-
-                            <div class="milestone">
+                             <input type="hidden" name="milestone_count_{{i}}_1" value="1">
+                            <input type="hidden" name="milestone-pic-count_1" value="1">
+                            <input type="hidden" name="parameter_count_1" value="1">
+                            <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                             {% get_previous_subquestions quest as activity_questions %}
                                 <div class="col-md-6 report_text ">
 
@@ -714,7 +716,14 @@
                                 {% endfor %}
                             </div>
                             <div class="form-group addmilestone">
-                                <p>+ add Milestone</p>
+                                 <div class="link-left">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="aadd_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                        </div>
+                                        <div class="link-center">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="aadd_remove_{{i}}_{{j}}">Remove</a>
+                                        </div>
                             </div>
                             {% endif %}
 
@@ -864,6 +873,9 @@
 
                         {% if quest.slug == "activity-section" %}
                             {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
+                             <input type="hidden" name="milestone_count_{{i}}_1" value="{{act_mile_list|length}}">
+                            <input type="hidden" name="milestone-pic-count_1" value="1">
+                            <input type="hidden" name="parameter_count_1" value="1">
                             {% for mileobj in act_mile_list %} <!--  for loop for activity list -->
                             <div class="milestone">
                             {% get_previous_subquestions quest as activity_questions %}
@@ -919,7 +931,14 @@
                             </div>
                             {% endfor %}
                             <div class="form-group addmilestone">
-                                <p>+ add Milestone</p>
+                                <div class="link-left">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="edit_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                        </div>
+                                        <div class="link-center">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="edit_remove_{{i}}_{{j}}">Remove</a>
+                                        </div>
                             </div>
                             {% endif %}
 
@@ -1597,6 +1616,109 @@ $(document).ready(function() {
 
 
 <!--add more script ends here -->
+
+
+
+<!--script for  a add more functionalities in edit functionality for Current section -->
+<script type="text/javascript">
+    $(document).ready(function(){
+                function edit_clone(){
+                    nam = $(this).context.className.split('_')
+                    var milestone_count = $('input[name^=milestone_count_'+nam[2]).val();
+                    var c = milestone_count;
+                    var tR = $('.data_row_'+nam[2]+'_'+c+':last').clone();
+                    milestone_count++; /* To increase the count */
+                    /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).find('textarea, select, input').each(function(){
+                      if ($(this).attr('name')){
+                            $(this).val('')
+                           if ($(this).attr('name').split('_').length == 7){
+                              var name = $(this).attr('name').split('_')
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
+                            }
+                            else if ($(this).attr('name').split('_').length == 8){
+                              var name = $(this).attr('name').split('_')
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
+                            }
+                      }
+                    });
+                    $('input[name^=milestone_count_'+nam[2]).val(milestone_count)
+                    //$(tR).find('td span.init').text(count);
+                    $(tR).insertAfter('.data_row_'+nam[2]+'_'+c+':last');
+                    tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count++).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
+                    
+                    }
+                function edit_remove(){
+                    nam = $(this).context.className.split('_')
+                    var count = $('input[name^=milestone_count_'+nam[2]).val();
+                      if (count > 1) {
+                            $('div.data_row_'+nam[2]+'_'+count+':last').remove();
+                            count--
+                            $('input[name^=milestone_count_'+nam[2]).val(count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            //$(".add_clone").on("click", clone);
+            $("[class^=edit_clone_]").on("click", edit_clone);
+            $("[class^=edit_remove_]").on("click", edit_remove);
+    
+    });
+</script>
+
+
+<!--script for  a add more functionalities in "---Add --" functionality for Current section -->
+<script type="text/javascript">
+    $(document).ready(function(){
+                function clone(){
+                    nam = $(this).context.className.split('_')
+                    var milestone_count = $('input[name^=milestone_count_'+nam[2]).val();
+                    var c = milestone_count;
+                    var tR = $('.data_row_'+nam[2]+'_'+c+':last').clone();
+                    milestone_count++; /* To increase the count */
+                    /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).find('textarea, select, input').each(function(){
+                      if ($(this).attr('name')){
+                            $(this).val('')
+                           if ($(this).attr('name').split('_').length == 7){
+                              var name = $(this).attr('name').split('_');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
+                            }
+                            else if ($(this).attr('name').split('_').length == 8){
+                              var name = $(this).attr('name').split('_')
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
+                            }
+                      }
+                    });
+                    $('input[name^=milestone_count_'+nam[2]).val(milestone_count)
+                    //$(tR).find('td span.init').text(count);
+                    $(tR).insertAfter('.data_row_'+nam[2]+'_'+c+':last');
+                    tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
+                    
+                    }
+                function remove(){
+                    nam = $(this).context.className.split('_')
+                    var count = $('input[name^=milestone_count_'+nam[2]).val();
+                      if (count > 1) {
+                            $('div.data_row_'+nam[2]+'_'+count+':last').remove();
+                            count--
+                            $('input[name^=milestone_count_'+nam[2]).val(count);
+                      }
+                      else{
+                        alert("Please add atleast one record")
+                      }
+                }
+            //$(".add_clone").on("click", clone);
+            $("[class^=aadd_clone_]").on("click", clone);
+            $("[class^=aadd_remove_]").on("click", remove);
+    
+    });
+</script>
 
 
 

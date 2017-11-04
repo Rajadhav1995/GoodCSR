@@ -139,7 +139,7 @@ def get_org_logos(data,project,keys,details,sub):
             data['answer'] = org_logo
         else :
             data['answer'] = "/static/img/GoodCSR_color_circle.png"
-    # get the answers from details if there is no answer object 
+    # get the answers from details if there is no answer object ..
     if sub.slug in keys:
         data['answer'] = details[sub.slug]
     return data
