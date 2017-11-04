@@ -1,6 +1,6 @@
 {% load urs_tags %}
-{% load common_tags%}
-<!DOCTYPE html>
+{% load common_tags %}
+{% load humanize %}
 <!--[if lt IE 7]>      
 <html class="no-js lt-ie9 lt-ie8 lt-ie7">
     <![endif]-->
@@ -19,578 +19,1197 @@
     <title>Goodcsr</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+      .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid }
+       .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
+      .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid}
+      .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
+      .pmu_formtable td span{font-size:45px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable td p{font-size:22px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+    </style>
+    
+    <style>
+    /*@charset "utf-8";
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900');*/
+body { font-family:"Work Sans";font-weight: normal; color: #232323;font-size: 14px; margin: 0px; padding: 0px;}
+ul{padding-left: 0px}
+
+
+
+.margin_top_50{margin:50px 0px;float:left; width: 100%}
+.margin_top_50 ul li{float:left;list-style-type: none; margin-left: 30px}
+.margin_top_50 ul li:nth-child(1){border-right:1px solid #dedede;margin-left: 0px}
+.margin_top_50 ul li img{margin-right:30px}
+.text-head h1{color:#a63967; font-size: 28px; font-weight: bold;float: left; width:100%}
+.text-head p{color:#019875; float: right; font-size: 12px;text-transform: uppercase;}
+hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
+.margin_top_50 ul{padding-left: 0px}
+.margin_25{margin: 25px 0px 15px; float:left;width:100%;}
+.margin_25 .float_right{float: right}
+.margin_25 h1{float: left;position: relative; top:35px;font-weight: 600}
+.margin-botom35 h2{color:#019875; font-weight:600; font-size: 20px; margin-bottom: 5px}
+.margin-botom35{margin-bottom: 35px;}
+.margin-50{margin:50px 0px; float: left; width:100%}
+.margin-botom35 h2 span:nth-last-child(1){float: right;background: #fff; position: relative;color:#232323; top: 10px; padding: 0px 0px 0px 10px;}
+.margin-botom35 h2 span:nth-child(1){background: #fff; position: relative; top: 10px; padding: 0px 10px 0px 0px;}
+.margin-botom35 h3 span:nth-last-child(1){float: right;background: #fff; position: relative; top: 5px; padding: 0px 0px 0px 10px;}
+.margin-botom35 h3 span:nth-child(1){background: #fff; position: relative; top: 5px; padding: 0px 10px 0px 0px;}
+.margin-botom35 h3{font-weight:600; border-bottom: 1px solid #dedede;width: 100%; font-size: 16px; margin-top:-10px}
+.border_text h2{color:#019875; font-weight:600; border-bottom: 1px solid #dedede;width: 100%}
+.quarter_updates p{border-bottom: 1px solid #dedede ;padding-bottom: 5px}
+.quarter_updates{margin-top:20px}
+.color-red{color:#a63967;margin: 0px; }
+.school_project h1{margin: 0px; border-bottom: 1px solid #dedede; padding-bottom: 10px;margin-bottom: 30px; font-size: 20px}
+.school_project {margin-bottom: 40px}
+.school_project .row p:nth-last-child(1){font-weight: 600}
+.location p{color:#019875; border-bottom: 1px solid #dedede; padding-bottom: 5px;font-weight: 600}
+.location ul li{list-style-type: disc; color:#019875}
+.location ul li span{color:#232323}
+.location ul{padding-left: 15px;}
+.location{margin-bottom: 60px}
+.location h5{color:#363636 ; font-weight: normal}
+footer{margin:30px 0px; float: left; width: 100%}
+.margin-top40{margin-top:40px}
+.quarter_updates h4{font-size: 14px; font-weight: 600}
+.quarter_updates p{color:#424242; font-size: 10px; border-bottom: 1px solid #dedede; padding-bottom: 4px}
+.margin_30{margin: 30px 0px; float: left; width:100%}
+.color_green{font-weight: 600; color:#019875;border-bottom: 1px solid #dedede; padding-bottom: 5px; margin-bottom:10px !important}
+.color_grey{color:#666666}
+
+
+
+.parameter-textbottom{position: absolute; top:180px}
+.parameter-textbottom .color_green{border-bottom: 0px}
+
+.margin_top30{margin-top:30px; float: left; width:100%}
+
+/* tab-resp */ 
+.tab-resp1    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+.tab-resp1 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5;  }
+.tab-resp1 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;}
+.tab-resp1 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
+.tab-resp1 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
+.tab-resp1 td:last-child  { border-right:none;}
+.tab-resp1 .table-tr td { color:#006861; font-weight:600;}
+
+/* tab-resp2 */ 
+.tab-resp2    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+.tab-resp2 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5;  }
+.tab-resp2 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;}
+.tab-resp2 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
+.tab-resp2 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
+.tab-resp2 td:last-child  { border-right:none;}
+.tab-resp2 .table-tr td { color:#006861; font-weight:600;}
+
+.budget_section td input, .budget_section td select{height: 36px; border-radius: 5px;border: 1px solid #c4c4c4; font-size: 12px; padding-left: 10px;}
+.budget_section td:nth-child(2n-2){padding-left:0px; padding: 5px 10px;}
+.budget_section td:nth-child(1) span{background:url('../img/cross-delete-black.png') no-repeat; padding: 0px 2px 4px;}
+.budget_section td:nth-child(1) span:hover{background:url('../img/cross-delete-color.png') no-repeat }
+.parameter .numeric_parameter li:nth-last-child(1) {
+    margin-right: 8px !important;
+}
+.page_height{margin:50px 0px; float: left; width:100%; min-height: 800px}
+.header_page_height{margin:50px 0px; float: left; width:100%; min-height: 800px}
+</style>
 
 </head>
 
-<body>
-<header>
-<div class="">   
-<div>
-<img src="/static/img/header-img.jpg" style="width:100%">
-    </div>
-    <div>
-<img src="{{image_url}}{{cover_image}}" style="width:100%">
-    </div>
-    <div>
-<img src="/static/img/bottomslider.jpg" style="width:100%;margin-top: -1px;">
-    </div>
-</div>
- <div class="container">
-  <div class="margin_top_50">
-  <ul>
-      <li><img src="{{image_url}}{{client_logo}}"></li>
-      <li> <img src="{{image_url}}{{logos}}"></li>
-      </ul>
-   
-    </div>
-    <div class="text-head">{{an}}
-        <h1>{{report_name}}</h1>
-        <h5 style="float:left">by {{client_name}}</h5>
-        <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
-        <hr>
-     </div>
-     <p style="float:left; width:auto">Prepared by {{prepared_by}}</p>
-     <p style="text-align:right;width:auto; float:right">{{report_duration}}</p>
-    </div>
-   
-</header>
-<header style="margin-top:50px">
-   <div>
-   <img src="/static/img/bottomslider.jpg" style="width:100%">
-    </div>
-    </header>
-<div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:24px">Index</h1>
-       <div class="float_right">
-       <img src="/static/img/ovp.jpg">
-       <img src="/static/img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    <div class="margin-50">
-       <div class="margin-botom35 border_text">
-           <h2><span>About the Project</span> <span>3</span></h2>
-        </div>
-        <div class="margin-botom35 border_line">
-        <h2>Previous Quarter Updates</h2>
-        <h3><span>First Quarter</span><span>4</span></h3>
-        </div>
-        <div class="margin-botom35 border_line">
-        <h2>Current Quarter Updates</h2>
-        <h3><span>First Quarter</span><span>6</span></h3>
-        </div>
-        <div class="margin-botom35 border_line">
-        <h2>Next Quarter Updates</h2>
-        <h3><span>First Quarter</span><span>10</span></h3>
-        </div>
-        <div class="margin-botom35 border_text">
-        <h2><span>Annexure</span><span>12</span></h2>
-        </div>
-    </div>
-    <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">2</h3>
-    </div>
-    
-    
-    
-    <!--<header>
-   <div>
-   <img src="img/bottomslider.jpg" style="width:100%">
-    </div>
-    </header>-->
-     <!--Index page 02 html ends-->
-     
-    <!--Index page 03 html starts-->
-    <header style="margin-top:50px">
-   <div>
-   <img src="img/bottomslider.jpg" style="width:100%">
-    </div>
-    </header>
-<div class="container">
-   <div class="margin_25">
-       
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    <div class="school_project">
-    <div>
-        <p class="color-red">PROJECT</p>
-        <h1>{{project_title}}</h1>
-    </div>
-    <div class="col-md-6">
-    <div class="row">
-        <p class="color-red">DONOR</p>
-        <p>{{donor}}</p>
-        </div>
-    </div>
-    <div class="col-md-6">
-    <div class="row">
-        <p class="color-red">IMPLEMENTATION NGO</p>
-        <p>{{implement_ngo}}</p>
-        </div>
-    </div>
-    <img src="/static/img/budget_banner.png" style="width:100%; margin:20px 0px">
-    </div>
-    
-    <div class="location">
-        <p>Location Coverage</p>
-        <ul>{{location}}
+<<<<<<< HEAD
+<body >
+              <div class='header_page_height'>
+               <header>
+
+                  <div class="">
+                     <div>
+                        <img src="/static/img/report/header-img.jpg" style="width:100%">
+                     </div>
+                     <div>
+                        <img src="{{image_url}}{{cover_image}}" style="width:100%">
+                     </div>
+                     <div>
+                        <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
+                     </div>
+                  </div>
+                  <div class="container">
+                     <div class="margin_top_50">
+                        <ul>
+                           <li><img src="{{image_url}}{{client_logo}}" height = 100 width = 100></li>
+                           <li> <img src="{{image_url}}{{logos}}" height = 100 width = 100></li>
+                        </ul>
+                     </div>
+                     <div class="text-head">
+                        <h1>{{ report_name}}</h1>
+                        <h5 style="float:left">by {{client_name}}</h5>
+                        <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>{{answer_list}}answer_list
+                        <hr>
+                     </div>
+                     <p style="float:left; width:auto">Prepared by {{prepared_by}}</p>
+                     <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+                  </div>
+                
+               </header>
+               </div>
+               <header style="margin-top:50px">
+                  <div>
+                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:24px">Index</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="margin-50 page_height">
+                    <!--Dynamic getting of the contents of index page (STARTS)                  -->
+                     {% for key,value in contents.iteritems %}
+                             <div class="margin-botom35 border_line">
+                                <h2>{{value}}</h2>
+                                {% for k,v in quarters.iteritems %}
+                                    {% if value == k %}
+                                        {% for k,v in v.iteritems %}
+                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span>4</span></h3>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                             </div>
+                     {% endfor %}
+                     <!--Dynamic getting of the contents of index page (END)                  -->
+                  </div>
+                  <hr>
+                  <img src="/static/img/report/logo.png" style="float:left">
+                  <h3 style="float:right;margin-top:0px;">2</h3>
+               </div>
+               <!--<header>
+                  <div>
+                  <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                   </div>
+                   </header>-->
+               <!--Index page 02 html ends-->
+               <!--Index page 03 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class='page_height'>
+                  <div class="school_project">
+                     <div>
+                        <p class="color-red">PROJECT</p>
+                        <h1>{{project.name}}</h1>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="row">
+                           <p class="color-red">DONOR</p>
+                           <p>{{donor}}</p>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="row">
+                           <p class="color-red">IMPLEMENTATION NGO</p>
+                           <p>{{implement_ngo}}</p>
+                        </div>
+                     </div>
+                      <table class="table pmu_formtable">
+            <tr>
+                <td >
+                    <p>Total Budget</p>
+                    <img src="/static/img/rupee.png"><span>{{project_budget | currency}}</span>
+                </td>
+               <td>
+                    <p>Project Beneficiaries</p>
+                    <img src="/static/img/user.png"><span>{{no_of_beneficiaries | intcomma}}</span>
+                </td>
+                  <td>
+                    <p>Project Duration</p>
+                      <img src="/static/img/time-calculater.png"><span>16<sub>Months</sub></span>
+                </td>
+            </tr>
+        </table>
+                     <!-- Total Budget:<b>{{answer_list.project_budget}}</b> Project Beneficiaries: {{answer_list.no_of_beneficiaries}} Project Duration: {{answer_list.project_duration}} -->
+                  </div>
+<!-- ######################### -->
+<div class="white-box">
+        <ul class="key_parameter parameter">
+          <div class='numeric_parameter'></div>
+
         </ul>
     </div>
-    <div class="location">
-        <p>About the Program</p>
-        <h5>{{program_description}}</h5>
-    </div>
-  
-    
-    <footer>
-      <hr>
-    <img src="/static/img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">3</h3>
-    </footer>
-    </div>
-     <!--Index page 03 html ends-->
-    <!--Index page 04 html starts-->
-    <header style="margin-top:50px">
-   <div>
-   <img src="/static/img/bottomslider.jpg" style="width:100%">
-    </div>
-    </header>
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">{{report_name}}</h1>
-       <div class="float_right">
-       <img src="/static/img/ovp.jpg">
-       <img src="/static/img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-   
-    <div class="location margin-top40">
-        <p>Objective of the project</p>
-        <h5>{{project_objective}}</h5>
-    </div>
-  
-    
-    <footer>
-      <hr>
-    <img src="/static/img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">4</h3>
-    </footer>
-    </div>
-     <!--Index page 04 html ends-->
-    <!--Index page 05 html starts-->
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">{{report_name}}</h1>
-       <div class="float_right">
-       <img src="/static/img/ovp.jpg">
-       <img src="/static/img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-   <div class="quarter_updates">
-       <h4 style="margin:0px">Previous Quarter Updates</h4>
-       <p>First Quarter (12 Jan to 30 Mar 2017)</p>
-    </div>
-    <div class="margin_30 prev_banner">
-        <h5 class="color_green">Key Achievements in this quarter</h5>
-        <img src="img/prev-banner.png" style="width:100%">
-    </div>
-    
-    <div class="margin_30 prev_banner milestone1">
-       <h5 class="color-red">MILESTONE 1</h5>
-        <h5 class="color_green" style="margin:0px">Construction of KG to III standard classroom</h5>
-        <p><strong>About the Milestone</strong></p>
-        <h6 class="color_grey">Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h6>
-        <div class="col-md-6" style="padding:0px">
-        <img src="img/prev-imag1.png" >
-        <p>We will conduct free educational classes and also will conduct skill<br>
-development programs.</p>    
-        </div>
-        <div class="col-md-6" style="padding:0px">
-        <img src="img/prev-imag2.png" style="float:right">    
-        <p style="float:right">Free educational classes and also will conduct development programs</p>
-        </div>
-        
-    </div>
-    
-  
-    
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">5</h3>
-    </footer>
-    </div>
-    
-     <!--Index page 05 html ends-->
-    <!--Index page 06 html starts-->
-    
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    
-   <div class="quarter_updates">
-       <h4 style="margin:0px">Previous Quarter Updates</h4>
-       <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
-       
-    </div>
-    <div class="col-md-12">
-    <div class="row">
-    <div class="margin_30 prev_banner">
-        <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">Beneficiary Distribution</h5>
-        <div>
-       <div class="col-md-4">
-       <div class="row">
-       <img src="img/parameter01.jpg" style="width:100%">
-       </div>
-        </div>
-        <div class="col-md-8">
-       <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
-           <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
-           </div>
-        </div>
-    </div>
-    
-    </div>
-    </div>
-    </div>
-    <div class="col-md-12">
-    <div class="row">
-    <div class="margin_30 prev_banner">
-        <h5 class="color-red">PARAMETER 2</h5>
-        <h5 class="color_green">Batch Size</h5>
-        <div>
-       <div class="col-md-4">
-       <div class="row">
-       <img src="img/parameter02.jpg" style="width:100%">
-       </div>
-        </div>
-        <div class="col-md-8">
-       <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
-           <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
-           </div>
-        </div>
-    </div>
-    
-    </div>
-        </div>
-    </div>
-    
-  
-    
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">6</h3>
-    </footer>
-    </div>
-     <!--Index page 06 html ends-->
-    <!--Index page 07 html starts-->
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    
-   <div class="quarter_updates">
-       <h4 style="margin:0px">Previous Quarter Updates</h4>
-       <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
-       
-    </div>
-    <div class="col-md-12">
-    <div class="row">
-    <div class="margin_30 prev_banner">
-        <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">Beneficiary Distribution</h5>
-        <div>
-       <div class="col-md-4">
-       <div class="row">
-       <img src="img/parameter01.jpg" style="width:100%">
-       </div>
-        </div>
-        <div class="col-md-8">
-       <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
-           <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
-           </div>
-        </div>
-    </div>
-    
-    </div>
-    </div>
-    </div>
-    
-    <div class="margin_top30">
-    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-    <img src="img/table01.png" style="width:100%; ">
-    <br>
-    <img src="img/table02.jpg" style="width:100%" class="margin_top30">
-    </div>
-  
-    
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">7</h3>
-    </footer>
-    </div>
-     <!--Index page 07 html ends-->
-    <!--Index page 08 html starts-->
-    
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    
-   <div class="quarter_updates">
-       <h4 style="margin:0px">Current Quarter Updates</h4>
-       <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
-       
-    </div>
-    <div>
-    <img src="img/imgpage0802.jpg" style="width:100%">
-    </div>
-    
-    <div class="margin_top30">
-    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-    <img src="img/table01.png" style="width:100%; ">
-    <br>
-    <img src="img/table02.jpg" style="width:100%" class="margin_top30">
-    </div>
-  
-    <div class="location margin_top30" style="margin-bottom:0px">
-        <p>About The Quarter</p>
-        <h5 >Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-<h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.</h5>
-    </div>
-    
-     <div class=" margin_top30">
-        <p class="color-red">ACTIVITY</p>
-        <p class="color_green">Hiring of teachers and school staff</p>
-         <h5><strong>About the Activity</strong></h5>
-         <h5 style="color:#666; font-weight:normal">Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed.</h5>
-    </div>
-    <div>
-    <img src="img/imgpage0801.jpg">
-    <p style="font-size:13px; margin-top:10px"><strong>First Day School:</strong> We will conduct free educational classes and also will <br>conduct skill development programs for the undeprivileged women and youth.</p>
-    </div>
-    
-    
-    
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">8</h3>
-    </footer>
-    </div>
-     <!--Index page 08 html ends-->
-    <!--Index page 09 html starts-->
-    
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    
-   <div class="quarter_updates">
-       <h4 style="margin:0px">Current Quarter Updates</h4>
-       <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
-       
-    </div>
-    <div class="col-md-12">
-    <div class="row">
-    <div class="margin_30 prev_banner">
-        <h5 class="color-red">PARAMETER 1</h5>
-        <h5 class="color_green">Beneficiary Distribution</h5>
-        <div>
-       <div class="col-md-4">
-       <div class="row">
-       <img src="img/parameter01.jpg" style="width:100%">
-       </div>
-        </div>
-        <div class="col-md-8">
-       <div class="parameter-textbottom">
-           <h4 class="color_green">About THis Parameter</h4>
-           <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
-           </div>
-        </div>
-    </div>
-    
-    </div>
-    </div>
-    </div>
-    
-    <div class="margin_top30">
-    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-    <img src="img/table01.png" style="width:100%; ">
-    <br>
-    <img src="img/table02.jpg" style="width:100%" class="margin_top30">
-    </div>
-  
-    <div class="location margin_top30">
-        <p>About The Budget</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-<h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.</h5>
-    </div>
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">9</h3>
-    </footer>
-    </div>
-     <!--Index page 09 html ends-->
-    <!--Index page 10 html starts-->
-    
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    
-   <div class="quarter_updates">
-       <h4 style="margin:0px">Current Quarter Updates</h4>
-       <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
-       
-    </div>
-    
-    
-  
-    <div class="location margin_top_50">
-        <p>Risks and mitigation</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </h5>
-<h5>Our volunteers will give free tuitions 5days a week and saturday and sunday will be holidays. Skill development programs will held also for
-5 days a week with differnt timmings so that one person can get enrolled in both eductional program classes.</h5>
-    </div>
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">10</h3>
-    </footer>
-    </div>
-    <!--Index page 10 html ends-->
-    <!--Index page 10 html starts-->
-    
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-    
-   <div class="quarter_updates">
-       <h4 style="margin:0px">Next Quarter Updates</h4>
-       <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
-       
-    </div>
-    <div class="location margin_top30" style="margin-bottom:0px">
-        <p>About The Quarter</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h5>
-
-    </div>
-    
-    <div class="margin_top30">
-    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-    <img src="img/table01.png" style="width:100%; ">
-    <br>
-    <img src="img/table02.jpg" style="width:100%" class="margin_top30">
-    </div>
-  
-    <div class="location margin_top30">
-        <p>About The Budget</p>
-        <h5>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. </h5>
-
-    </div>
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">11</h3>
-    </footer>
-    </div>
-    <!--Index page 11 html ends-->
-    <!--Index page 12 html-->
-    <div class="container">
-   <div class="margin_25">
-       <h1 style="font-size:20px">Nabarangpur School Project</h1>
-       <div class="float_right">
-       <img src="img/ovp.jpg">
-       <img src="img/akanksha.jpg">
-       </div>
-       
-    </div>
-    <hr>
-
-   <div style="margin:15% 0px;float: left;width: 100%;">
-       <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
-    </div>
-    <footer>
-      <hr>
-    <img src="img/logo.png" style="float:left">
-    <h3 style="float:right;margin-top:0px;">12</h3>
-    </footer>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
 
 
-</body>
+                  <div class="location">
+                     <p>Location Coverage</p>
+                     <ul> {{location}}</ul>
+                     <!--        <ul>-->
+                     <!--<!--          {% for i in location %}-->
+                     <!--        <li><span> {{i.location.parent.name}}, {{i.location.name}}, {{i.get_program_type_display}}</span></li>-->
+                     <!--        {% endfor %}-->
+                     <!--        </ul>-->
+                  </div>
+                  <div class="location">
+                     <p>About the Program</p>
+                     <h5>{{program_description|safe}}</h5>
+                  </div>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">3</h3>
+                  </footer>
+               </div>
+               <!--Index page 03 html ends-->
+               <!--Index page 04 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="location margin-top40 page_height">
+                     <p>Objective of the project</p>
+                     <h5>{{project_objective|safe}}</h5>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">4</h3>
+                  </footer>
+               </div>
+               <!--Index page 04 html ends-->
+               <!--Index page 05 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  {% for i in report_quarter %}
+                  {% get_parameter i 3 as pie_data %}
+                  {{pie_data.0.PIN}}
+                  {% if i.quarter_type == 1 %}
+                  <div class='page_height'>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Previous Quarter Updates</h4>
+                     <p>First Quarter (12 Jan to 30 Mar 2017)</p>
+                  </div>
+                  <div class="margin_30 prev_banner page_height">
+                     <h5 class="color_green">Key Achievements in this quarter</h5>
+                     <img src="/static/img/report/prev-banner.png" style="width:100%">
+                  </div>
+                  {% get_milestones i report_obj 1 as mile %}
+                    {% for m in mile %}  
+                  <div class="margin_30 prev_banner milestone1">
+                     <h5 class="color-red">MILESTONE 1</h5>
+                     <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
+                     <p><strong>About the Milestone</strong></p>
+                     <h6 class="color_grey">{{m.description}} </h6>
+                     {% get_mile_images m.id as images %}
+                        {% for img in images %}
+                     <div class="col-md-6" style="padding:0px">
+                        {% if img.attachment_file %}
+                        <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
+                        <p>{{img.description}}
+                        </p>
+                        {% endif %}
+                        {% endfor %}
+                     </div>
+                     
+                  </div>
+                  {% endfor %}
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">5</h3>
+                  </footer>
+               </div>
+               <!--Index page 05 html ends-->
+               <!--Index page 06 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class='page_height'>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Previous Quarter Updates</h4>
+                     <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class="col-md-12">
+                     <div class="row">
+                        {% get_parameter i 3 as pie_data %}
+                        
+                        {% if pie_data.0 %}
+                        {% for lol in  pie_data.0 %}
+                        <div class="margin_30 prev_banner">
+                           <h5 class="color-red">PARAMETER 1</h5>
+                           <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
+                           <div>
+                              <div class="col-md-4">
+                                 <div class="row">
+                                    <ul class="key_parameter parameter">
+                                       <!-- <div class='numeric_parameter'></div> -->
+                                       <li>
+                                          <!-- <h3>{{chart_name_pip}}</h3> -->
+                                          <div class="right-budget beni-dist">
+                                             <div id="coll{{forloop.counter}}" style="width: 100%;float: left;"></div>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                    <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
+                                 </div>
+                              </div>
+                              <div class="col-md-8">
+                                 <div class="parameter-textbottom">
+                                    <h4 class="color_green">About This Parameter</h4>
+                                    {% get_about_parameter i report_obj 3 as about_parameter %}
+                                    <p> {{about_parameter}} </p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <script src="/static/js/jquery.min.js"></script>
+                        <script src="/static/js/bootstrap.min.js"></script>
+                        <script src="/static/code/highcharts.js"></script>
+                        <script src="/static/code/highcharts-more.js"></script>
+                        <script src="/static/code/modules/solid-gauge.js"></script>
+                        <script type="text/javascript">
+                           var new_data_pin = 0;
+                           var new_data_pip = 0;
+                        </script>
+                        <!--/* Pie Chat Number */-->
+                        <script type="text/javascript">
+                           {% get_parameter i 3 as pie_data %}
+                           var new_data_pin = 0;
+                           var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+                           var values = "coll{{forloop.counter}}"
+                           var pin_title = {{pin_title_name | safe}}
+                           var pin_title = pin_title[new_data_pin]
+                           new_data_pin++;
+                           Highcharts.chart(values, {
+                              chart:{type:'pie', backgroundColor: null,height:288},
+                                       credits:{enabled: false},
+                                       colors:[
+                                           '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                                           ],
+                                       title:{text: ''},
+                                       tooltip:{
+                                           enabled: true,
+                                           animation: true
+                                       },
+                                       plotOptions: {
+                                           pie: {
+                                               allowPointSelect: true,
+                                               animation: true,
+                                               cursor: 'pointer',
+                                               showInLegend: true,
+                                               dataLabels: {
+                                                   enabled: false,
+                                                   formatter: function() {
+                                                       return this.percentage.toFixed(2) + '%';
+                                                   }
+                                               }
+                                           }
+                                       },
+                                       legend: {
+                                           enabled: true,
+                                           layout: 'horizontal',
+                                           align: 'center',
+                                           width: 250,
+                                           height:300,
+                                           verticalAlign: 'bottom',
+                                           borderWidth: 0,
+                                           useHTML: true,
+                           
+                                           margin: 12
+                           
+                           
+                                       },
+                                       series: [{
+                                           type: 'pie',
+                                           dataLabels:{
+                           
+                                           },
+                                           data: data1
+                           
+                                       }]
+                                   });
+                        </script>
+                        {% endfor %}
+                        {% endif %}
+                     </div>
+                  </div>
+                  <div class="col-md-12">
+                     <div class="row">
+                        {% get_parameter i 3 as pie_data %}
+                        {{pie_data.3}}
+                        {% if pie_data.3 %}
+                        {% for lol in  pie_data.3 %}
+                        <div class="margin_30 prev_banner">
+                           <h5 class="color-red">PARAMETER 2</h5>
+                           <h5 class="color_green">Batch Size</h5>
+                           <div>
+                              <div class="col-md-4">
+                                 <div class="row">
+                                    <ul class="key_parameter parameter">
+                                       <!-- <div class='numeric_parameter'></div> -->
+                                       <li>
+                                          <!-- <h3>{{chart_name_pip}}</h3> -->
+                                          <div class="right-budget beni-dist">
+                                             <div id="coll" style="width: 100%;float: left;"></div>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                    <!-- <img src="/static/img/report/parameter02.jpg" style="width:100%"> -->
+                                 </div>
+                              </div>
+                              <div class="col-md-8">
+                                 <div class="parameter-textbottom">
+                                    <h4 class="color_green">About This Parameter</h4>
+                                    {% get_about_parameter i report_obj 3 as about_parameter %}
+                                    <p> {{about_parameter}} </p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                     </div>
+                  </div>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">6</h3>
+                  </footer>
+               </div>
+               <!--Index page 06 html ends-->
+               <!--Index page 07 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Previous Quarter Updates</h4>
+                     <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <!-- <div class="col-md-12">
+                     <div class="row">
+                     <div class="margin_30 prev_banner">
+                         <h5 class="color-red">PARAMETER 1</h5>
+                         <h5 class="color_green">Beneficiary Distribution</h5>
+                         <div>
+                        <div class="col-md-4">
+                        <div class="row">
+                        <img src="/static/img/report/parameter01.jpg" style="width:100%">
+                        </div>
+                         </div>
+                         <div class="col-md-8">
+                        <div class="parameter-textbottom">
+                            <h4 class="color_green">About THis Parameter</h4>
+                            <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
+                            </div>
+                         </div>
+                     </div>
+                     
+                     </div>
+                     </div>
+                     </div> -->
+                  <div class="margin_top30">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     <div class="white-box">
+            <div class="table-responsive">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for j in budget_period %}
+            <tr>
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center">{{line_total}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center">{{utilized_amount}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
 
-</html>
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 1 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
+                     <br><!-- ------------------------------------------------------- -->
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
+                  {% endif %}
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">7</h3>
+                  </footer>
+               </div>
+               <!--Index page 07 html ends-->
+               <!--Index page 08 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  {% if i.quarter_type == 2 %}
+                  {% get_parameter i 4 as pie_data %}
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Current Quarter Updates</h4>
+                     <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class='page_height'>
+                  <div> 
+                     <img src="/static/img/report/imgpage0802.jpg" style="width:100%">
+                  </div>
+                  <div class="margin_top30">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     <div class="white-box">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+         <div class="table-responsive">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            
+            <tr>
+              <th>fbb Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for j in budget_period %}
+            <tr >
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center">{{line_total}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center">{{utilized_amount}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 2 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+          </div>
+        </div>
+    </div>
+                     <br>
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
+                  </div>
+                  <div class="location margin_top30" style="margin-bottom:0px">
+                     {% get_about_quarter i report_obj 4 as abut_parameter %}
+                     <p>About The Quarter</p>
+                     <h5 >{{abut_parameter}}
+                     </h5>
+                  </div>
+                  <div class=" margin_top30">
+                     <p class="color-red">ACTIVITY</p>
+                     {% get_milestones i report_obj 2 as mile %}
+                     {% for m in mile %}
+                     <p class="color_green">{{m.name}}</p>
+                     <h5><strong>About the Activity</strong></h5>
+                     <h5 style="color:#666; font-weight:normal">{{m.description}}</h5>
+                     
+                  </div>
+                  {% get_mile_images m.id as images %}
+                  {% for img in images %}
+                  <div>
+                     {% if img.attachment_file %}
+                     <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
+                     <p style="font-size:13px; margin-top:10px"><strong>{{img.description}}</p>
+                     {% endif %}
+                  </div>
+                  {% endfor %}
+                  {% endfor %}
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">8</h3>
+                  </footer>
+               </div>
+
+               <!--Index page 08 html ends-->
+               <!--Index page 09 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Current Quarter Updates</h4>
+                     <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class="col-md-12">
+                     <div class="row">
+                        {% get_parameter i 4 as pie_data %}
+                        
+                        {% if pie_data.0 %}
+                        {% for lol in  pie_data.0 %}
+                        <div class="margin_30 prev_banner">
+                           <h5 class="color-red">PARAMETER 1</h5>
+                           <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
+                           <div>
+                              <div class="col-md-4">
+                                 <div class="row">
+                                    <ul class="key_parameter parameter">
+                                       <!-- <div class='numeric_parameter'></div> -->
+                                       <li>
+                                          <!-- <h3>{{chart_name_pip}}</h3> -->
+                                          <div class="right-budget beni-dist">
+                                             <div id="comm{{forloop.counter}}" style="width: 100%;float: left;"></div>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                    <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
+                                 </div>
+                              </div>
+                              <div class="col-md-8">
+                                 <div class="parameter-text">
+                                    <h4 class="color_green">About This Parameter</h4>
+                                    {% get_about_parameter i report_obj 4 as about_parameter %}
+                                    <p> {{about_parameter}} </p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <script type="text/javascript">
+                           var new_data_pin = 0;
+                           var new_data_pip = 0;
+                        </script>
+                        <!--/* Pie Chat Number */-->
+                        <script src="/static/code/highcharts.js"></script>
+                        <script src="/static/code/highcharts-more.js"></script>
+                        <script src="/static/code/modules/solid-gauge.js"></script>
+                        <script type="text/javascript">
+                           {% get_parameter i 4 as pie_data %}
+                           var new_data_pin = 0;
+                           var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+                           console.log(data11);
+                           var values = "comm{{forloop.counter}}"
+                           var pin_title = {{pin_title_name | safe}}
+                           var pin_title = pin_title[new_data_pin]
+                           new_data_pin++;
+                           Highcharts.chart(values, {
+                              chart:{type:'pie', backgroundColor: null,height:288},
+                                       credits:{enabled: false},
+                                       colors:[
+                                           '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                                           ],
+                                       title:{text: ''},
+                                       tooltip:{
+                                           enabled: true,
+                                           animation: true
+                                       },
+                                       plotOptions: {
+                                           pie: {
+                                               allowPointSelect: true,
+                                               animation: true,
+                                               cursor: 'pointer',
+                                               showInLegend: true,
+                                               dataLabels: {
+                                                   enabled: false,
+                                                   formatter: function() {
+                                                       return this.percentage.toFixed(2) + '%';
+                                                   }
+                                               }
+                                           }
+                                       },
+                                       legend: {
+                                           enabled: true,
+                                           layout: 'horizontal',
+                                           align: 'center',
+                                           width: 250,
+                                           height:300,
+                                           verticalAlign: 'bottom',
+                                           borderWidth: 0,
+                                           useHTML: true,
+                           
+                                           margin: 12
+                           
+                           
+                                       },
+                                       series: [{
+                                           type: 'pie',
+                                           dataLabels:{
+                           
+                                           },
+                                           data: data11
+                           
+                                       }]
+                                   });
+                        </script>
+                        {% endfor %}
+                        {% endif %}
+                     </div>
+                  </div>
+                  <br>
+                  <div class="margin_top30">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     <div class="white-box">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+         <div class="table-responsive">
+           <table class="tab-resp1" id="example11" >
+            <thead>
+            <tr class="sticky-row quarter_color">
+
+              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
+            </tr>  
+            <tr  class="sticky-row">
+              <th  class="sticky-cell">Super Category</th>
+              <th  class="sticky-cell">Heading</th>
+              <th  class="sticky-cell">Subheading</th>
+              <th  class="sticky-cell">Total Planned</th>
+              <th  class="sticky-cell">Total Utilized</th>
+              <th  class="sticky-cell">Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody class="budget_section">
+            {% for j in budget_period %}
+            <tr class = "data_row">
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center" class="sticky-cell">{{line_total}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
+                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 2 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
+                     <br>
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
+                  </div>
+                  <div class="location margin_top30">
+                     <p>About The Budget</p>
+                     {% get_budget_detail 4 i as budget_detail %}
+                     <h5>{{budget_detail}}
+                     </h5>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">9</h3>
+                  </footer>
+               </div>
+               <!--Index page 09 html ends-->
+               <!--Index page 10 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="page_height">
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Current Quarter Updates</h4>
+                     <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class="location margin_top_50">
+                     <p>Risks and mitigation</p>
+                     {% get_risk_mitigation i as risk_mitigation %}
+                     <h5>{{risk_mitigation}} </h5>
+                     
+                  </div>
+                  </div>
+                  {% endif %}
+
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">10</h3>
+                  </footer>
+               </div>
+               <!--Index page 10 html ends-->
+               <!--Index page 10 html starts-->
+               <div class="container">
+                <div class='page_height'>
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{project.name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  {% if i.quarter_type == 3 %}
+                  
+                  {% get_parameter i 5 as pie_data %}
+                  <div class='page_height'>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Next Quarter Updates</h4>
+                     <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class="location margin_top30" style="margin-bottom:0px">
+                     <p>About The Quarter</p>
+                     {% get_about_quarter i report_obj 5 as abut_parameter %}
+                     <h5>{{abut_parameter}} </h5>
+                  </div>
+                  <div class="margin_top30">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     
+                     <div class="white-box">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+         <div class="white-box">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            <tr>
+
+              <td colspan="6">&nbsp;</td>
+            </tr>  
+            <tr  class="sticky-row">
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody class="budget_section">
+            {% for j in budget_period %}
+            <tr class = "data_row">
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center">{{line_total}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center">{{utilized_amount}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 2 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>  
+        </div>
+    </div>
+                     <br>
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
+                  </div>
+                  <div class="location margin_top30">
+                     <p>About The Budget</p>
+                     {% get_budget_detail 5 i as budget_detail %}
+                     <h5>{{budget_detail}}
+                     </h5>
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">11</h3>
+                  </footer>
+               </div>
+               <!--Index page 11 html ends-->
+               <!--Index page 12 html-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{report_name}}</h1>
+                     <div class="float_right">
+                        <img src="{{image_url}}{{client_logo}}" height = 100 width = 100>
+                        <img src="{{image_url}}{{logos}}" height = 100 width = 100>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class='page_height'>
+                  <div style="margin:15% 0px;float: left;width: 100%;">
+                     <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
+                  </div>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     <h3 style="float:right;margin-top:0px;">12</h3>
+                  </footer>
+               </div>
+            </body>
+         </html>
