@@ -52,10 +52,10 @@ def get_questions(block,project_report):
         answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,
             'q_type':i.qtype,'q_name':i.slug}
-        if i.qtype == 'T' or i.qtype == 'ck':
-            question_dict['answer'] = answer.text if answer else ''
+        if answer and (i.qtype == 'T' or i.qtype == 'ck'):
+            question_dict['answer'] = answer.text 
         elif i.qtype == 'F':
-            question_dict['answer'] = answer.attachment_file.url if answer else "/static/img/GoodCSR_color_circle.png"
+            question_dict['answer'] = answer.attachment_file.url if answer and answer.attachment_file else "/static/img/GoodCSR_color_circle.png"
         question_list.append(question_dict)
     return question_list
     
