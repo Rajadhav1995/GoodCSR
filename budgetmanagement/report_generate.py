@@ -147,6 +147,13 @@ def report_detail(request):
             answer = answer_obj.text
         elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
             answer = answer_obj.attachment_file.url
+        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file == '' :
+            from projectmanagement.templatetags import urs_tags
+            org_logo = urs_tags.get_org_logo(project)
+            if org_logo:
+                answer = org_logo
+            else :
+                answer = "/static/img/GoodCSR_color_circle.png"
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
