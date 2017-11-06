@@ -257,3 +257,17 @@ def get_risk_mitigation(obj):
     if answer:
         risk_mitigation = answer.text
     return risk_mitigation
+
+import datetime
+@register.assignment_tag
+def get_date_range(obj):
+    quarter = QuarterReportSection.objects.get(id=obj.id)
+    duration = ''
+    if quarter:
+        duration = quarter.start_date.strftime('%d %b %Y')+ ' to ' + quarter.end_date.strftime('%d %b %Y')
+    return duration
+
+@register.assignment_tag
+def get_quarter_sections(obj):
+    quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project)
+    return quarter_section

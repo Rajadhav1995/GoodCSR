@@ -110,6 +110,7 @@ def report_detail(request):
     slug = request.GET.get('slug')
     image_url = PMU_URL
     report_id = request.GET.get('report_id')
+
     answer_list ={}
     answer = ''
     contents,quarters = get_index_contents(slug,report_id)
@@ -136,6 +137,8 @@ def report_detail(request):
     actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
     recommended_amount = tranche_amount['recommended_amount']
     utilized_amount = tranche_amount['utilized_amount']
+    projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
+    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     # for basic details of project report we are sending all fields in dictionary 
     for question in quest_list:
         answer_obj = Answer.objects.get_or_none(question =question,
