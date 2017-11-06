@@ -37,12 +37,14 @@
                                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
                                        {% for sub in sub_questions %}
                                            {% if sub.q_type == 'APT' %}
+                                           
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
                                                   <h5><a href="#">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
+                                           {{sub}}
                                                <div class="logo-partner">
                                                   <h6>{{sub.q_text}}</h6>
                                                   <img src="{{sub.answer}}" style="">
