@@ -29,6 +29,22 @@ def get_user_permission(request):
     return user_obj
 
 @register.assignment_tag
+def get_user_permission_pmo(request):
+
+    # this template tag is used to get user permission
+
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
+    project = Project.objects.get_or_none(slug=request.GET.get('slug'))
+    pmo_user = ProjectUserRoleRelationship.objects.get_or_none(project=project,role=3,user__id=user_id)
+    admin_user = user_obj.is_admin_user
+    if admin_user == True or pmo_user != '':
+        option = 1
+    else:
+        option = 0
+    return option
+
+@register.assignment_tag
 def get_funder(projectobj):
     # this template tag is used to get funder relation
     funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
