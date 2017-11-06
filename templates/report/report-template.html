@@ -352,11 +352,12 @@
                         
                         {% if pie_data.0 %}
                         {% for lol in  pie_data.0 %}
-                        {{pie_data.0.0.1}}
+
                         <div class="margin_30 prev_banner">
                            <h5 class="color-red">PARAMETER 1</h5>
                            <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
                            <div>
+                            {% if pie_data.0.0.1.y != 0 %}
                               <div class="col-md-4">
                                  <div class="row">
                                     <ul class="key_parameter parameter">
@@ -371,6 +372,7 @@
                                     <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
                                  </div>
                               </div>
+                              {% endif %}
                               <div class="col-md-8">
                                  <div class="parameter-textbottom">
                                     <h4 class="color_green">About This Parameter</h4>
@@ -832,6 +834,7 @@
                            <h5 class="color-red">PARAMETER 1</h5>
                            <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
                            <div>
+                            {% if pie_data.0.0.1.y != 0 %}
                               <div class="col-md-4">
                                  <div class="row">
                                     <ul class="key_parameter parameter">
@@ -846,6 +849,7 @@
                                     <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
                                  </div>
                               </div>
+                              {% endif %}
                               <div class="col-md-8">
                                  <div class="parameter-text">
                                     <h4 class="color_green">About This Parameter</h4>
