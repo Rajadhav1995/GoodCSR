@@ -1427,7 +1427,6 @@
     {% for i,v in currentquarter_list.items %}
         {% get_gantt_details v projectobj as taskdict %}
         var jsonData = {{taskdict|safe}}
-        alert("hi")
         console.log(jsonData)
         var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
         // console.log(jsonData.tasks);
@@ -2002,7 +2001,6 @@
     var lengths = {{timeline.1}};
     var ff= {{timeline.0|safe}}
     var loc_url = '{{image}}'
-    alert(lengths);
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++)
     {
