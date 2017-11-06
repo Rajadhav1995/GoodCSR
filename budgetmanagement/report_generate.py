@@ -454,7 +454,6 @@ def finalreportdesign(request):
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
     if projectreportobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-        print futurequarter_list
 #      timeline progress 
     image = PMU_URL
 #      timeline progress ends 

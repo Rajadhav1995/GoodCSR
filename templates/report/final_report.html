@@ -872,12 +872,14 @@
                         <!--                            this is for milestone section-->
 
                         {% if quest.slug == "activity-section" %}
-                            {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
-                             <input type="hidden" name="milestone_count_{{i}}_1" value="{{act_mile_list|length}}">
+                            <input type="hidden" name="milestone_count_{{i}}_1" value="{{act_mile_list|length}}">
                             <input type="hidden" name="milestone-pic-count_1" value="1">
                             <input type="hidden" name="parameter_count_1" value="1">
+                            {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
                             {% for mileobj in act_mile_list %} <!--  for loop for activity list -->
-                            <div class="milestone">
+                            {% with forloop.counter as m_count %}
+                        
+                            <div class="milestone data_row_{{i}}_{{m_count}}">
                             {% get_previous_subquestions quest as activity_questions %}
                                 <div class="col-md-6 report_text ">
 
@@ -929,17 +931,19 @@
                                 {% endfor %}
                                 {% endfor %}
                             </div>
+                            {% endwith %}
                             {% endfor %}
-                            <div class="form-group addmilestone">
-                                <div class="link-left">
+                            <div class="form-group addmilestone click_buttons">
+                                       <div class="link-left">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="edit_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                            <a href ="javascript:void(0);" class ="aedit_clone_{{i}}_{{j}}">+Add more Lines</a>
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="edit_remove_{{i}}_{{j}}">Remove</a>
+                                            <a href ="javascript:void(0);" class ="aedit_remove_{{i}}_{{j}}">Remove</a>
                                         </div>
-                            </div>
+                                   </div>
+
                             {% endif %}
 
 <!--                     this is for parameter selection -->
@@ -1663,8 +1667,8 @@ $(document).ready(function() {
                       }
                 }
             //$(".add_clone").on("click", clone);
-            $("[class^=edit_clone_]").on("click", edit_clone);
-            $("[class^=edit_remove_]").on("click", edit_remove);
+            $("[class^=aedit_clone_]").on("click", edit_clone);
+            $("[class^=aedit_remove_]").on("click", edit_remove);
     
     });
 </script>
