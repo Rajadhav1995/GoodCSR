@@ -60,6 +60,9 @@ def report_listing(request):
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     report_obj = ProjectReport.objects.filter(project=project)
+    budget_obj = Budget.objects.get_or_none(project=project)
+    from budgetmanagement.manage_budget import get_budget_quarters
+    budget_quarters = get_budget_quarters(budget_obj) 
     return render(request,'report/listing.html',locals())
 
 def save_section_answers(quest_ids,project_report,request,data,user):
