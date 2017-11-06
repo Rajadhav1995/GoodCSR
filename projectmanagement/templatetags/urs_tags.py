@@ -36,7 +36,6 @@ def get_user_permission_pmo(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
     project = Project.objects.get_or_none(slug=request.GET.get('slug'))
-    
     pmo_user = ProjectUserRoleRelationship.objects.get_or_none(project=project,role=3,user__id=user_id)
     admin_user = user_obj.is_admin_user
     if admin_user == True or pmo_user != '':
