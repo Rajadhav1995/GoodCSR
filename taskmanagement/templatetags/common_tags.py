@@ -161,11 +161,7 @@ def get_gantt_details(v,projectobj):
 def get_report_quarters(start_date,end_date,budget_quarters):
     report_duration=''
     for k in budget_quarters.keys():
-        try:
-            value = budget_quarters[k].split(' to ')[-1]
-            if value == end_date.strftime('%Y-%m-%d'):
-                report_duration = int(k)+1
-        except:
-            report_duration = ''
-        
+        value = budget_quarters[k].split(' to ')[-1]
+        if value == end_date.strftime('%Y-%m-%d'):
+            report_duration = int(k)+1
     return report_duration
