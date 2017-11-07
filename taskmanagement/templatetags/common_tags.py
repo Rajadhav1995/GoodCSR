@@ -159,7 +159,7 @@ def get_gantt_details(v,projectobj):
 
 @register.assignment_tag     
 def get_report_quarters(start_date,end_date,budget_quarters):
-    report_duration=0
+    report_duration=''
     for k in budget_quarters.keys():
         try:
             value = budget_quarters[k].split(' to ')[-1]
