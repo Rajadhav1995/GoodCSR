@@ -55,6 +55,7 @@ def download_report_generation(request):
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
     location = ProjectLocation.objects.filter(object_id=project.id)
     # this is to make html to pdf 
+    
     template = get_template('report/report-pdf-download.html')
     html = template.render(answer_list)
     result = StringIO.StringIO()
