@@ -60,13 +60,13 @@
                      <div class="margin_top_50">
                         <ul>
                           {% if answer_list.client_logo %}
-                           <li><img src="{{image_url}}{{answer_list.client_logo}}" height = 70 width = 100></li>
+                           <li><img src="{{answer_list.client_logo}}" height = 70 width = 100></li>
                            {% else %}
-                            <img src="http://app.goodcsr.mahiti.org/static/2017/03/31/rmnch-img_lstoivh.jpg" height = 70 width = 100>
-                            
+                            <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
+
                             {% endif %}
                             {% if answer_list.logos %}
-                           <li> <img src="{{image_url}}{{answer_list.logos}}" height = 70 width = 100></li>
+                           <li> <img src="{{answer_list.logos}}" height = 70 width = 100></li>
                            {% else %}
                             <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
                             {% endif %}
@@ -95,12 +95,12 @@
                      <h1 style="font-size:24px">Index</h1>
                      <div class="float_right">
                       {% if answer_list.client_logo %}
-                        <img src="{{image_url}}{{answer_list.client_logo}}" height = 70 width = 100>
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
                         {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
                         {% endif %}
                         {% if answer_list.logos %}
-                        <img src="{{image_url}}{{answer_list.logos}}" height = 70 width = 100>
+                        <img src="{{answer_list.logos}}" height = 70 width = 100>
                         {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
                         {% endif %}
@@ -142,12 +142,12 @@
                   <div class="margin_25">
                      <div class="float_right">
                       {% if answer_list.client_logo %}
-                        <img src="{{image_url}}{{answer_list.client_logo}}" height = 70 width = 100>
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
                         {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
                         {% endif %}
                         {% if answer_list.logos %}
-                        <img src="{{image_url}}{{answer_list.logos}}" height = 70 width = 100>
+                        <img src="{{answer_list.logos}}" height = 70 width = 100>
                         {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
                         {% endif %}

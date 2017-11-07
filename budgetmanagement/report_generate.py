@@ -146,7 +146,7 @@ def report_detail(request):
         if answer_obj and (question.qtype == 'T' or question.qtype == 'APT' or question.qtype == 'ck'):
             answer = answer_obj.text
         elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
-            answer = answer_obj.attachment_file.url
+            answer = image_url + answer_obj.attachment_file.url
         elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file == '' :
             from projectmanagement.templatetags import urs_tags
             org_logo = urs_tags.get_org_logo(project)
