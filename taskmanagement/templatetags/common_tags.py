@@ -55,7 +55,7 @@ def get_questions(block,project_report):
         if answer and (i.qtype == 'T' or i.qtype == 'ck'):
             question_dict['answer'] = answer.text 
         elif i.qtype == 'F':
-            question_dict['answer'] = answer.attachment_file.url if answer and answer.attachment_file else "/static/img/GoodCSR_color_circle.png"
+            question_dict['answer'] = answer.attachment_file.url if answer and answer.attachment_file else ""
         question_list.append(question_dict)
     return question_list
     
@@ -156,3 +156,15 @@ def get_gantt_details(v,projectobj):
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     return taskdict
+
+@register.assignment_tag     
+def get_report_quarters(start_date,end_date,budget_quarters):
+    report_duration=0
+    for k in budget_quarters.keys():
+        try:
+            value = budget_quarters[k].split(' to ')[-1]
+        except:
+            value = ''
+        if value == end_date.strftime('%Y-%m-%d'):
+            report_duration = int(k)+1
+    return report_duration
