@@ -119,7 +119,9 @@
                                             <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file">{{i.answer}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
-                                                                                          <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
+                                        {% if i.answer %}
+                                              <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
+                                        {% endif %}
                                           <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" ></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% endif %}
@@ -138,7 +140,7 @@
                     {% for i,v in previousquarter_list.items %}
                     {% with forloop.counter as j %}
                     <h3> Previous Quarter Updates :{{v}}</h3>
-                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
@@ -618,7 +620,7 @@
                     {% for i,v in currentquarter_list.items %}
                     {% with forloop.counter as j %}
                         <h3>Current Quarter Updates :{{v}}</h3>
-                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="activity-pic-count_1" value="1">
@@ -1059,7 +1061,7 @@
                                 </div>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
-                            this is if object is already exists.
+<!--                            this is if object is already exists.-->
                             {% endif %}
 
                             {% endfor %} <!-- this for ends for edit currrent question list -->
@@ -1086,7 +1088,7 @@
                    {% for i,v in futurequarter_list.items|slice:"1" %}
                     {% with forloop.counter as j %}
                         <h3>Next Quarter Plan :{{v}}</h3>
-                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
