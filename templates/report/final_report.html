@@ -66,7 +66,9 @@
                                             <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file">{{i.answer}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
-                                                                                          <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
+                                        {% if i.answer %}
+                                          <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
+                                        {% endif %}                                   
                                           <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}"  class="input_file"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% endif %}
