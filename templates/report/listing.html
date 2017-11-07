@@ -3,6 +3,7 @@
 {% endblock %}
 {% block content %}
 {% load urs_tags %}
+{% load common_tags %}
 <!--Green pad Ends-->
 <!--Content part starts-->
 <style>
@@ -21,6 +22,8 @@
     <table id="example1" class="table table-striped table-bordered textalign_boottom" cellspacing="0" width="100%">
         <thead>
             <tr>
+                <th>Report type</th>
+                <th>Report Duration</th>
                 <th>From Date - To Date</th>
                 
             </tr>
@@ -30,10 +33,12 @@
 
         <tr>
             <!-- <td><a href="/project/summary/?slug={{i.slug}}">{{i.start_date}}</a></td> -->
+            <td>{{i.get_report_type_display}}</td>
+            <td>{% get_report_quarters i.start_date i.end_date budget_quarters as report_duration%}Quarter {{report_duration}}</td>
             <td>{{i.start_date | date:"d-m-Y"}} - {{i.end_date | date:"d-m-Y"}}</td>
             <!-- <td>{{i.get_active_display}}</td> -->
             <td><a class="budget_button" href="/report/detail/?slug={{project.slug}}&report_id={{i.id}}" target="_blank">View Report</button></a></td>
-            <td><a class="budget_button" href="/report/download/pdf/?slug={{project.slug}}&report_id={{i.id}}">Download Report</button></a></td>
+            <td><a class="budget_button" href="">Download Report</button></a></td>
             <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}">Edit Report</button></a></td>
 
         </tr>
