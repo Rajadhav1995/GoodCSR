@@ -22,17 +22,18 @@
                <title>Goodcsr</title>
                <meta name="description" content="">
                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+               <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
                <link rel="stylesheet" href="/static/css/report-bootstrap.min.css">
                <link rel="stylesheet" href="/static/css/report-style.css">
-               <link rel="stylesheet" href="/static/css/tinyscrollbar.css">
+             <!--   <link rel="stylesheet" href="/static/css/tinyscrollbar.css"> -->
                <!-- <link rel="stylesheet" href="/static/css/style.css"> -->
                 <style>
-      .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid }
+      .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid; margin-bottom: 45px; }
        .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
       .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
       .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
-      .pmu_formtable td span{font-size:45px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
-      .pmu_formtable td p{font-size:22px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+      .pmu_formtable td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable td p{font-size:14px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
     </style>
             </head>
 
@@ -47,7 +48,7 @@
                      </div>
                      <div>
                       {% if answer_list.cover_image %}
-                        <img src="{{image_url}}{{answer_list.cover_image}}" style="width:100%">
+                        <img src="{{answer_list.cover_image}}" style="width:100%">
                       {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" style="width:100%">
                       {% endif %}
@@ -294,7 +295,7 @@
                      {% get_date_range j as date_range %}
                      <p>First Quarter {{date_range}}</p>
                   </div>
-                  <div class="margin_30 prev_banner page_height">
+                  <div class="margin_30 prev_banner ">
                      <h5 class="color_green">Key Achievements in this quarter</h5>
                      <!-- <img src="/static/img/report/prev-banner.png" style="width:100%"> -->
                      <!-- ---------------########## -->
