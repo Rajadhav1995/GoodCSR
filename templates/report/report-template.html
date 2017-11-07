@@ -93,7 +93,7 @@
                </header>
                <div class="container">
                   <div class="margin_25">
-                     <h1 style="font-size:24px">Index</h1>
+                     <h1 style="font-size:24px">Index{{taskdict1}}</h1>
                      <div class="float_right">
                       {% if answer_list.client_logo %}
                         <img src="{{answer_list.client_logo}}" height = 70 width = 100>
@@ -427,73 +427,7 @@
                               </div>
                            </div>
                         </div>
-                        <script src="/static/js/jquery.min.js"></script>
-                        <script src="/static/js/bootstrap.min.js"></script>
-                        <script src="/static/code/highcharts.js"></script>
-                        <script src="/static/code/highcharts-more.js"></script>
-                        <script src="/static/code/modules/solid-gauge.js"></script>
-                        <script type="text/javascript">
-                           var new_data_pin = 0;
-                           var new_data_pip = 0;
-                        </script>
-                        <!--/* Pie Chat Number */-->
-                        <script type="text/javascript">
-                           {% get_parameter j 3 as pie_data %}
-                           var new_data_pin = 0;
-                           var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
-                           var values = "coll{{forloop.counter}}"
-                           var pin_title = {{pin_title_name | safe}}
-                           var pin_title = pin_title[new_data_pin]
-                           new_data_pin++;
-                           Highcharts.chart(values, {
-                              chart:{type:'pie', backgroundColor: null,height:288},
-                                       credits:{enabled: false},
-                                       colors:[
-                                           '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
-                                           ],
-                                       title:{text: ''},
-                                       tooltip:{
-                                           enabled: true,
-                                           animation: true
-                                       },
-                                       plotOptions: {
-                                           pie: {
-                                               allowPointSelect: true,
-                                               animation: true,
-                                               cursor: 'pointer',
-                                               showInLegend: true,
-                                               dataLabels: {
-                                                   enabled: false,
-                                                   formatter: function() {
-                                                       return this.percentage.toFixed(2) + '%';
-                                                   }
-                                               }
-                                           }
-                                       },
-                                       legend: {
-                                           enabled: true,
-                                           layout: 'horizontal',
-                                           align: 'center',
-                                           width: 250,
-                                           height:300,
-                                           verticalAlign: 'bottom',
-                                           borderWidth: 0,
-                                           useHTML: true,
-                           
-                                           margin: 12
-                           
-                           
-                                       },
-                                       series: [{
-                                           type: 'pie',
-                                           dataLabels:{
-                           
-                                           },
-                                           data: data1
-                           
-                                       }]
-                                   });
-                        </script>
+                        
                         {% endfor %}
                         {% endif %}
                      </div>
@@ -696,6 +630,74 @@
                </div>
                </div>
                {% endfor %}
+               <script src="/static/js/jquery.min.js"></script>
+                        <script src="/static/js/bootstrap.min.js"></script>
+                        <script src="/static/code/highcharts.js"></script>
+                        <script src="/static/code/highcharts-more.js"></script>
+                        <script src="/static/code/modules/solid-gauge.js"></script>
+                        <script type="text/javascript">
+                           var new_data_pin = 0;
+                           var new_data_pip = 0;
+                        </script>
+                        <!--/* Pie Chat Number */-->
+                        <script type="text/javascript">
+                           {% get_parameter i 3 as pie_data %}
+                           var new_data_pin = 0;
+                           var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+                           var values = "coll{{forloop.counter}}"
+                           alert(values);
+                           var pin_title = {{pin_title_name | safe}}
+                           var pin_title = pin_title[new_data_pin]
+                           new_data_pin++;
+                           Highcharts.chart(values, {
+                              chart:{type:'pie', backgroundColor: null,height:288},
+                                       credits:{enabled: false},
+                                       colors:[
+                                           '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                                           ],
+                                       title:{text: ''},
+                                       tooltip:{
+                                           enabled: true,
+                                           animation: true
+                                       },
+                                       plotOptions: {
+                                           pie: {
+                                               allowPointSelect: true,
+                                               animation: true,
+                                               cursor: 'pointer',
+                                               showInLegend: true,
+                                               dataLabels: {
+                                                   enabled: false,
+                                                   formatter: function() {
+                                                       return this.percentage.toFixed(2) + '%';
+                                                   }
+                                               }
+                                           }
+                                       },
+                                       legend: {
+                                           enabled: true,
+                                           layout: 'horizontal',
+                                           align: 'center',
+                                           width: 250,
+                                           height:300,
+                                           verticalAlign: 'bottom',
+                                           borderWidth: 0,
+                                           useHTML: true,
+                           
+                                           margin: 12
+                           
+                           
+                                       },
+                                       series: [{
+                                           type: 'pie',
+                                           dataLabels:{
+                           
+                                           },
+                                           data: data1
+                           
+                                       }]
+                                   });
+                        </script>
                {% endif %}
                <!--Index page 07 html ends-->
                <!--Index page 08 html starts-->
@@ -731,8 +733,306 @@
                   </div>
                   <div class='page_height'>
                   <div> 
-                     <img src="/static/img/report/imgpage0802.jpg" style="width:100%">
+                     
+                     <div class="col-md-12 report_text " style="padding:0px">
+                                <p class="color_green" style="border-bottom:0px">Milestones & Activities</p>
+<!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
+                                <div class=" white-box ">
+                            <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+                         </div>
+                                <h5><a href="#">Remove</a></h5>
+                            </div>
                   </div>
+
+<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/jsgantt.js" type="text/javascript"></script>
+
+<script>
+    {% for i,v in currentquarter_list.items %}
+        {% get_gantt_details v project as taskdict %}
+        var jsonData = {{taskdict|safe}}
+        var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
+        // console.log(jsonData.tasks);
+        // Get today and tomorrows date
+        var cur = new Date();
+        var tom = new Date();
+        tom.setDate(tom.getDate() + 1);
+        var curDate = cur.getFullYear() + '-' +
+          (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
+          (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
+
+        var tomDate = tom.getFullYear() + '-' +
+          (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
+          (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
+        // Get today and tomorrows date
+        $.each(jsonData.supercategories, function (i) {
+          superId = 1, activity_type = 'Core', taskCompletion = 0, superName = 'Super Category';
+          if (this.id != null) {
+            superId = this.id;
+          }
+          superName = this.name;
+          var superDesc = this.description;
+          if (superName.toLowerCase() != "location") {
+            g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+              '', superDesc, g));
+          }
+          // console.log("Super");
+          // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+          //   '', superDesc);
+        });
+        $.each(jsonData.activities, function (i) {
+          var activityId = 11,
+            superId = 1,
+            activity_type = 'Core',
+            taskCompletion = 0,
+            activityName = 'Activity';
+          if (this.id != null) {
+            activityId = this.id.toString();
+          }
+          if (this.super_category != null) {
+            superId = this.super_category;
+            if (this.id != null) {
+              activityId = this.super_category.toString() + activityId;
+            }
+          }
+          // console.log("ActID", activityId);
+          activityName = this.name;
+          var activityDesc = this.description;
+          g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
+            1, '', '',
+            activityDesc, g));
+          // console.log("Act");
+          // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
+        });
+        $.each(jsonData.tasks, function (i) {
+          var taskId = 111,
+            tempId = 1,
+            activityId = 11,
+            superId = 1,
+            activity_type = 'Core',
+            taskCompletion = 0,
+            taskName = 'Task',
+            taskStatus = 'gtaskred',
+            eStartDate = curDate,
+            eEndDate = tomDate;
+          if (this.id != null) {
+            taskId = this.id;
+            tempId = this.id;
+          }
+          if (this.activity != null) {
+            activityId = this.activity;
+          }
+          // activity = jsonData.activities.filter(function( i ) {
+          //   if(i.id == activityId){return i.super_category;}
+          // });
+          $.each(jsonData.activities, function () {
+            if (this.id == activityId) {
+              activity_type = this.activity_type;
+              if (this.super_category != null) {
+                superId = this.super_category;
+              }
+            }
+          });
+          if (superId != null && activityId != null && taskId != null) {
+            taskId = superId.toString() + activityId.toString() + taskId.toString();
+          }
+          if (superId != null && activityId != null) {
+            activityId = superId.toString() + activityId.toString();
+          }
+          activityId = parseInt(activityId);
+          // console.log("TaskID", taskId);
+          taskName = this.name;
+          eStartDate = this.expected_start_date;
+          eEndDate = this.expected_end_date;
+          if (activity_type == "Core") {
+            switch (this.status) {
+              case "Ongoing":
+                taskStatus = 'gtaskblue';
+                break;
+              case "Open":
+                taskStatus = 'gtaskyellow';
+                break;
+              case "Close":
+                taskStatus = 'gtaskgreen';
+                break;
+              default:
+                taskStatus = 'gtaskblue';
+                break;
+            };
+          }
+          // For Milestones
+          var completionDate = this.actual_end_date;
+          console.log('Complete date', completionDate);
+          $.each(jsonData.milestones, function (i) {
+            var mileId = 111, mileStatus = 'gmilestone redmile '
+            depTask = [];
+            depTask = this.task;
+            mileName = this.name;
+            if (this.id != null) {
+              mileId = this.id;
+            }
+            // if (depTask.length == 1) {
+            var ln = depTask.length;
+            ln--;
+            console.log('depTask', depTask[0]);
+            if (depTask[ln] == tempId) {
+              var d1 = new Date(eEndDate);
+              var d2 = new Date(eEndDate);
+              d1.setDate(d1.getDate() + 1);
+              d2.setDate(d2.getDate() + 11);
+              var mileStart = d1.getFullYear() + '-' +
+                (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
+                (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
+
+              var mileEnd = d2.getFullYear() + '-' +
+                (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
+                (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
+              //Check for milestone complete or calculate delay
+              if (completionDate == null) {
+                mileStatus = 'gmilestone redmile '
+              } else {
+                var d3 = new Date(this.overdue);
+                var d4 = new Date(completionDate);
+                var timeDiff = (d3.getTime() + 86400) - d4.getTime();
+                var diffDays = Math.ceil(timeDiff / 86400000);
+                console.log('DiffDays', diffDays);
+                if (diffDays < 0) {
+                  var dur = Math.abs(diffDays);
+                  if (dur < 8) { mileName += " - Delayed by " + dur + " day(s)" };
+                  if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Delayed by " + dur + "+ week(s)" };
+                  if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Delayed by " + dur + "+ month(s)" };
+                  if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Delayed by " + dur + "+ year(s)" };
+                  console.log('Diff days', mileName);
+                } else {
+                  mileStatus = 'gmilestone greenmile '
+                  var dur = Math.abs(diffDays);
+                  if (dur == 0) { mileName += " - On track" };
+                  if (dur < 8) { mileName += " - Ahead by " + dur + " day(s)" };
+                  if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Ahead by " + dur + "+ week(s)" };
+                  if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Ahead by " + dur + "+ month(s)" };
+                  if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Ahead by " + dur + "+ year(s)" };
+                  console.log('Diff days', mileName);
+                }
+              }
+              g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
+                mileStatus, '', 1, '', null, 0, activityId, 1, '', '', '', g));
+            }
+            // } else {
+            //   var prevDate, maxDate;
+            //   $.each(depTask, function () {
+            //     var depValue = this.valueOf();
+            //     $.each(jsonData.tasks,function(){
+            //       if(this.id == depValue){
+
+            //       }
+            //     });
+            //     console.log('Dep', this.valueOf(), depTask);
+            //   });
+            // }
+            // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
+            //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
+          });
+
+
+          //Draw task after drawing milestone
+          g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+            '', 0, 0, activityId, 1, '', '', '', g));
+          // console.log("Task");
+          // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+          //   '', 0, 0, activityId, 1, '', '', '');
+
+        });
+
+        g.setShowStartDate(0);
+        g.setShowEndDate(0);
+        g.setShowRes(0);
+        g.setShowDeps(0);
+        g.setShowDur(0);
+        g.setUseToolTip(0);
+        g.setWeekColWidth(50);
+        g.setWeekMajorDateDisplayFormat('mon yyyy');
+        g.setWeekMinorDateDisplayFormat('W w');
+        // g.setScrollTo('today');
+        g.Draw();
+
+        function collision($div1, $div2) {
+          var x1 = $div1.offset().left;
+          var y1 = $div1.offset().top;
+          var h1 = $div1.outerHeight(true);
+          var w1 = $div1.outerWidth(true);
+          var b1 = y1 + h1;
+          var r1 = x1 + w1;
+          var x2 = $div2.offset().left;
+          var y2 = $div2.offset().top;
+          var h2 = $div2.outerHeight(true);
+          var w2 = $div2.outerWidth(true);
+          var b2 = y2 + h2;
+          var r2 = x2 + w2;
+
+          if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+          return true;
+        }
+        var count = 0,
+          padding = 25,
+          arrayTask = [],
+          collide = false;
+        $('.gselector').hide();
+        $(document).ready(function () {
+          var previous = null;
+          var prePrevious = null;
+          var mile = false;
+          $(".gtaskbarcontainer").each(function (index) {
+            currParent = $(this).parent().parent().parent();
+            listParent = currParent.attr('id').replace('row', '');
+            if ($(this).hasClass('gmilecontainer')) {
+              mile = true;
+            }
+            if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
+              .attr('id')) {
+              // console.log("This ID", $(this).attr('id'), mile);
+              if (mile) {
+
+              }
+              if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+                $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
+                  if ($(this).css('top') == '-5px') {
+                    $(this).css('top', '0px');
+                  }
+                });
+                collide = true;
+                $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
+                if (count == 0) {
+                  $(previous).css('top', '0px');
+                  count++;
+                }
+                listParentDiv = $('#' + listParent);
+                if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+                  listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
+                  currParent.css({
+                    'height': parseInt(currParent.css('height')) + 25 + 'px',
+                    'vertical-align': 'top'
+                  });
+                }
+              }
+            } else {
+              count = 0;
+              arrayTask = [];
+              collide = false;
+              $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
+                top: '-5px'
+              });
+              mile = false;
+            }
+            prePrevious = previous;
+            previous = this;
+          });
+        });
+     {% endfor %}
+</script>
+
+
+
+
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
