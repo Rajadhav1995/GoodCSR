@@ -132,7 +132,7 @@ def budget_tranche(request):
     user_id = request.session.get('user_id')
     project = Project.objects.get_or_none(slug=slug)
     tt = ProjectUserRoleRelationship.objects.filter(project=project)
-    recommended_by = UserProfile.objects.filter(id__in=[i.id for i in tt])
+    recommended_by = UserProfile.objects.filter(id__in=[i.user.id for i in tt])
     # form.fields["recommended_by"].queryset = ProjectUserRoleRelationship.objects.filter(project=project)
     if request.method == 'POST':
         form = f(request.POST, request.FILES)

@@ -288,17 +288,23 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
 def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
 #    Common functionality to save the images
     imageobj = None
+    quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
     for j in range(int(pic_count)):
         milestone_images = {}
         for pic in pic_list:
             pic_length_list = pic.split('_')
+            pic_quest_id = pic.split('_')[3]
             if len(pic_length_list) == 8 and pic_length_list[-3] == str(j+1):
                 name = pic_length_list[0]
                 image_id = pic_length_list[-1]
-                milestone_images.update({name.lower():request.POST.get(pic)})
+                if int(pic_quest_id) in quest_list:
+                    milestone_images.update({name.lower():request.FILES.get(pic)})
+                else:
+                    milestone_images.update({name.lower():request.POST.get(pic)})
 
 
         user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
+        
         image_dict = {
                 'created_by' : user_obj,
                 'attachment_file':milestone_images.get('upload picture',''),
@@ -312,7 +318,8 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
             imageobj = Attachment.objects.create(**image_dict)
         else:
             imageobj = Attachment.objects.get_or_none(id=int(image_id))
-            imageobj.attachment_file = image_dict.get('attachment_file')
+            if image_dict.get('attachment_file'):
+                imageobj.attachment_file = image_dict.get('attachment_file') 
             imageobj.description = image_dict.get('description')
             imageobj.save()
     return imageobj
@@ -413,6 +420,7 @@ def saving_of_quarters_section(request):
 #    to save the previous quarter updates:
     quarter_list = previousquarter_list
     previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
+    previous_itemlist.extend([str(k) for k,v in request.FILES.items() if '_1_' in str(k) if k.split('_')[1]=='1'])
     if previous_itemlist:
         milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist)
         quarter_number = previous_itemlist[0].split('_')[2]
@@ -426,7 +434,9 @@ def saving_of_quarters_section(request):
             answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
 #    to save the Current quarter updates:
     quarter_list = currentquarter_list
+    
     current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
+    current_itemlist.extend([str(k) for k,v in request.FILES.items() if '_2_' in str(k) if k.split('_')[1]=='2'])
     if current_itemlist:
         milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,current_itemlist)
         activity_count = request.POST.get('activity_count_1',0)
