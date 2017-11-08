@@ -553,7 +553,6 @@ def pie_chart_mainlist_report(obj,start_date,end_date):
             color = colors[counter]
             counter+=1
             main_list.append({'name': str(y.name),'y':value,'color':color})
-
     return main_list
 
 
