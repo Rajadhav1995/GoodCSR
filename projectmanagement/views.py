@@ -547,11 +547,12 @@ def pie_chart_mainlist_report(obj,start_date,end_date):
     counter =0
     pie_object = ProjectParameter.objects.filter(active= 2,parent=obj)
     for y in pie_object:
-        values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y, submit_date__gte=start_date,submit_date__lte=end_date).values_list('parameter_value',flat=True))
-        value = aggregate_project_parameters(pie_object[0],values)
-        color = colors[counter]
-        counter+=1
-        main_list.append({'name': str(y.name),'y':value,'color':color})
+        values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y, start_date__gte=start_date,end_date__lte=end_date).values_list('parameter_value',flat=True))
+        if values:
+            value = aggregate_project_parameters(pie_object[0],values)
+            color = colors[counter]
+            counter+=1
+            main_list.append({'name': str(y.name),'y':value,'color':color})
 
     return main_list
 
