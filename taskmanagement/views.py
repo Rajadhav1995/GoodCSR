@@ -357,25 +357,26 @@ def my_tasks_details(request):
     
 def create_task_progress(request,task):
     try:
-        if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
-            task.status = 1
-            task.actual_end_date = None
-            task.task_progress = request.POST.get('tea1')
-            task.save()
-        else:
-            task.task_progress = request.POST.get('tea1')
-            task.save()
-            if request.POST.get('tea1') == '100':
-                task.status = 2  
-                task.actual_end_date = task.modified.date() 
+        if request.POST.get('tea1') != 'None' :
+            if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
+                task.status = 1
+                task.actual_end_date = None
+                task.task_progress = request.POST.get('tea1')
                 task.save()
-            if task.status == 2 and not task.actual_start_date:
-                task.actual_end_date = task.modified.date() 
-                task.actual_start_date = task.start_date
+            else:
+                task.task_progress = request.POST.get('tea1')
                 task.save()
-            if task.status != 2 and not task.actual_start_date:
-                task.actual_start_date = task.modified.date() 
-                task.save()
+                if request.POST.get('tea1') == '100':
+                    task.status = 2  
+                    task.actual_end_date = task.modified.date() 
+                    task.save()
+                if task.status == 2 and not task.actual_start_date:
+                    task.actual_end_date = task.modified.date() 
+                    task.actual_start_date = task.start_date
+                    task.save()
+                if task.status != 2 and not task.actual_start_date:
+                    task.actual_start_date = task.modified.date() 
+                    task.save()
     except:
         pass
     return task
