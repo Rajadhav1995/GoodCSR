@@ -192,8 +192,13 @@ def get_parameter(obj,block_id):
         for i in report_para:
             main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
             master_list.append(main_list)
-            master_names.append(i.keyparameter.name)
-    return master_list,master_names
+            try:
+                master_names.append(i.keyparameter.name)
+                pie_chart = 1
+            except:
+                master_names.append(i.name)
+                pie_chart = 0
+    return master_list,master_names,pie_chart
 
 @register.filter
 def get_at_index(list, index):

@@ -107,7 +107,6 @@
                <img src="/static/img/default_profile_image.png" alt="">{%endfor%}</li>{%if i.subscribers.all|length >= 3 %}. . . .{% endif %}
             </ul>
          </div>
-         {% if request.GET.status == '0' %}
          <div class="task-completion">
             <div class="task-completion-left">
                <img class="user-image" src="/static/img/default_profile_image.png" alt="">
@@ -125,14 +124,13 @@
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
                 <div class = 'task_bar' style="width: 375px;float: left;">
-                         <input type="hidden" name="tea1" class="range" id="{{i.id}}" value="{{i.task_progress}}"   />
+                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{{i.task_progress}}"   />
                 </div>
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
             </div>
          </div>
-         {% endif %}
          <div class="user-timeline">
          {% if i.task_attachments %}
             <div id="boxscroll-timeline">
@@ -368,22 +366,102 @@
            var sl_id = $(this).attr('id')
            $('.right-task').hide();
            $('.div-'+sl_id).show();
+           var progress = $('#xp_'+sl_id).val();
+            $('.range-control-handle').css('left',progress+'%');
+
+           $('.range-'+sl_id).rangeControl({
+
+          max: 100,
+         
+          delim: '', 
+         
+          scale: {
+            position: 'bottom',
+            labels: true,
+           // interval:1
+          },
+          className: ''
+        });
+
+            $('.range-'+sl_id).on('rangeControlSlide.rangeControlEvent', function () {
+              // on slide event
+
+                
+             
+
+             // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+              $('#slectedNumber').html($('.range-control-current-value').text());
+             
+            });
+
+            $('.range-'+sl_id).on('rangeControlChange.rangeControlEvent', function () {
+                 $('#slectedNumber').html($('.range-control-current-value').text());
+            });
+
+            $('.range-'+sl_id).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+            });
+
+
+            var progress = $('#xp_'+sl_id).val();
+            $('.range-control-handle').css('left',progress+'%');
+
        });
        $('.hide-show').first().trigger('click');
+       $(".hide-show").addClass('active');
    }
    );
 </script>
 <script>
     $(function(){
         var key = "{{request.GET.task_slug}}"
-        console.log(key);
         if (key !=''){
-        $('.right-task').hide();
-        $(".div-"+key).show();
-        $(".hide-show").addClass('active');
+            $('.right-task').hide();
+            $('.range-'+key).rangeControl({
+
+                  max: 100,
+                 
+                  delim: '', 
+                 
+                  scale: {
+                    position: 'bottom',
+                    labels: true,
+                   // interval:1
+                  },
+                  className: ''
+            });
+
+            $('.range-'+key).on('rangeControlSlide.rangeControlEvent', function () {
+              // on slide event
+
+
+                 // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+                  $('#slectedNumber').html($('.range-control-current-value').text());
+                 
+                });
+
+                $('.range-'+key).on('rangeControlChange.rangeControlEvent', function () {
+                     $('#slectedNumber').html($('.range-control-current-value').text());
+                });
+
+                $('.range-'+key).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+                });
+
+
+            var progress = $('#xp_'+key).val();
+            alert("Task completion status is updated to "+progress+" successfully");
+            $('.range-control-handle').css('left',progress+'%');
+
+            $(".div-"+key).show();
+            $(".hide-show").addClass('active');
+            
         }
         else{
         $('.hide-show').first().trigger('click');
+        $(".hide-show").addClass('active');
         }
        });
 </script>
@@ -413,60 +491,6 @@
 <!--        -->
 <!--</script>-->
 
-<script>
-$(document).ready(function(){
-
-// $("input[type=range]").val(6);
-var tasks = {{task_ids|safe}}
-for (j=0;j<tasks.length;j++){
-
-   $('#'+tasks[j]).rangeControl({
-
-  max: 100,
- 
-  delim: '', 
- 
-  scale: {
-    position: 'bottom',
-    labels: true,
-   // interval:1
-  },
-  className: ''
-});
-
-
-
-
-    $('#'+tasks[j]).on('rangeControlSlide.rangeControlEvent', function () {
-      // on slide event
-
-        
-     
-
-     // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
-      $('#slectedNumber').html($('.range-control-current-value').text());
-     
-    });
-
-    $('#'+tasks[j]).on('rangeControlChange.rangeControlEvent', function () {
-         $('#slectedNumber').html($('.range-control-current-value').text());
-    });
-
-    $('#'+tasks[j]).on('rangeControlAddHandle.rangeControlEvent', function () {
-
-
-    });
-
-
-    var progress = $('#'+tasks[j]).val();
-    console.log(progress);
-    $('.range-control-handle').css('left',progress+'%');
-
-}
-
-  });
-
-</script>
 </script>
 
 <link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />

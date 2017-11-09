@@ -89,13 +89,17 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     except:
         project = Project.objects.get(slug = request.POST.get('slug_project'))
     if request.method == 'POST':
+        task_progress = m.task_progress
+        if m.status == 2 and request.POST.get('status') == '1' :
+            task_progress = '90'
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         try:
             end_date = form.data['end_date']
         except:
             pass
         if form.is_valid():
-            f=form.save()
+            f=form.save(commit=False)
+            f.task_progress = task_progress
             from projectmanagement.common_method import unique_slug_generator
             f.slug = unique_slug_generator(f,edit)
             f.save()
@@ -354,19 +358,25 @@ def my_tasks_details(request):
     
 def create_task_progress(request,task):
     try:
-        task.task_progress = request.POST.get('tea1')
-        task.save()
-        if request.POST.get('tea1') == '100':
-            task.status = 2  
-            task.actual_end_date = task.modified.date() 
+        if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
+            task.status = 1
+            task.actual_end_date = None
+            task.task_progress = request.POST.get('tea1')
             task.save()
-        if task.status == 2 and not task.actual_start_date:
-            task.actual_end_date = task.modified.date() 
-            task.actual_start_date = task.start_date
+        else:
+            task.task_progress = request.POST.get('tea1')
             task.save()
-        if task.status != 2 and not task.actual_start_date:
-            task.actual_start_date = task.modified.date() 
-            task.save()
+            if request.POST.get('tea1') == '100':
+                task.status = 2  
+                task.actual_end_date = task.modified.date() 
+                task.save()
+            if task.status == 2 and not task.actual_start_date:
+                task.actual_end_date = task.modified.date() 
+                task.actual_start_date = task.start_date
+                task.save()
+            if task.status != 2 and not task.actual_start_date:
+                task.actual_start_date = task.modified.date() 
+                task.save()
     except:
         pass
     return task
