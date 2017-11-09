@@ -192,12 +192,11 @@ def get_parameter(obj,block_id):
         for i in report_para:
             main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
             master_list.append(main_list)
-            try:
-                master_names.append(i.keyparameter.name)
-                pie_chart = 1
-            except:
-                master_names.append(i.name)
+            master_names.append(i.keyparameter.name)
+            if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
                 pie_chart = 0
+            else:
+                pie_chart = 1
     return master_list,master_names,pie_chart
 
 @register.filter
