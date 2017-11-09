@@ -17,6 +17,7 @@ def task_auto_updation_date(sender, **kwargs):
         
 @receiver(post_save, sender=Task)
 def milestone_completion_status(sender,**kwargs):
+#this is to close the milestone based on the closed task of that milestone 
     task_obj = kwargs['instance']
     task = Task.objects.latest_one(id=task_obj.id,status=2)
     miles = Milestone.objects.filter(task = task)
@@ -27,4 +28,3 @@ def milestone_completion_status(sender,**kwargs):
             mile_obj.status=2
             mile_obj.save()
         
-            
