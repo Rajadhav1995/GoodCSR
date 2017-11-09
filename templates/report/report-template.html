@@ -34,6 +34,13 @@
       .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
       .pmu_formtable td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
       .pmu_formtable td p{font-size:14px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+
+      .pmu_formtable_parameter{text-align: center;width: 250px; float:left; border-top:0px solid; margin-bottom: 45px; }
+       .pmu_formtable_parameter tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
+      .pmu_formtable_parameter td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
+      .pmu_formtable_parameter td:nth-last-child(1){border-right:0px solid #dedede}
+      .pmu_formtable_parameter td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable_parameter td p{font-size:16px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
     </style>
             </head>
 
@@ -119,7 +126,7 @@
                                 {% for k,v in quarters.iteritems %}
                                     {% if value == k %}
                                         {% for k,v in v.iteritems %}
-                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span>4</span></h3>
+                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span></h3>
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
@@ -400,33 +407,39 @@
                         {% for lol in  pie_data.0 %}
 
                         <div class="margin_30 prev_banner">
-                           <h5 class="color-red">PARAMETER 111</h5>
+                           <h5 class="color-red">PARAMETER 1</h5>
                            <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
                            <div>
-                            {% if pie_data.2 == 10 %}
-                            
-                            {% if pie_data.0.0.1.y != 0 %}
-                              <div class="col-md-4">
-                                 <div class="row">
-                                    <ul class="key_parameter parameter">
-                                       <!-- <div class='numeric_parameter'></div> -->
-                                       
-                                          <!-- <h3>{{chart_name_pip}}</h3> -->
-                                          <div class="right-budget beni-dist">
-                                             <div id="coll{{forloop.counter}}" style="width: 100%;float: left;"></div>
-                                          </div>
-                                       
-                                    </ul>
-                                    <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
-                                 </div>
-                              </div>
-                              {% endif %}
-
+                            {% if pie_data.2 == 1 %}
+                                        {% if pie_data.0.0.1.y != 0 %}
+                                        <div class="col-md-4">
+                                           <div class="row">
+                                              <ul class="key_parameter parameter">
+                                                 <!-- <div class='numeric_parameter'></div> -->
+                                                 
+                                                    <!-- <h3>{{chart_name_pip}}</h3> -->
+                                                    <div class="right-budget beni-dist">
+                                                       <div id="coll{{forloop.counter}}" style="width: 100%;float: left;"></div>
+                                                    </div>
+                                                 
+                                              </ul>
+                                              <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
+                                           </div>
+                                        </div>
+                                        {% endif %}
                               {% else %}
                               <ul class="key_parameter parameter">
                                 <!-- <div>
                                   <li><h3>Beneficiary</h3><img class="key-image parameter-position" src='/static/img/key-icon2.png' alt=""><h4 class="title-pad">2,380</h4></li>'
                                 </div> -->
+                                <table class="table pmu_formtable_parameter">
+                                  <tr>
+                                     <td>
+                                          <p>{{pie_data.1 | get_at_index:forloop.counter0}}</p>
+                                          <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
+                                      </td>
+                                  </tr>
+                              </table>
                               </ul>
                               {% endif %}
 
