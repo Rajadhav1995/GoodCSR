@@ -201,7 +201,7 @@ def get_parameter(obj,block_id):
 
 @register.filter
 def get_at_index(list, index):
-    # this template tag is used to get index value of pie chart data
+    # this template tag is used to get index value of pie chart data 
     return list[index]
 
 import locale
