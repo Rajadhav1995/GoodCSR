@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'display/blocks/$',display_blocks),
     url(r'^download/pdf/$',download_report_generation),
     url(r'final/design/$',finalreportdesign),
-    url(r'pdf/view/$',html_to_pdf_view),
+    # url(r'pdf/view/$',html_to_pdf_view),
 ]
