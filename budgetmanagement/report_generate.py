@@ -382,21 +382,19 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
     # add_section = 0 then add , if add_section = 1 its edit
-    import ipdb;ipdb.set_trace();
     for j in act_count :
         milestone_images = {}
-        name1 = []
         for pic in pic_list:
             pic_length_list = pic.split('_')
             pic_quest_id = pic.split('_')[3]
             if j == pic_length_list[-1] and len(pic_length_list) == 8 :
-                name = pic_length_list[0].split('-')
-                name1 = name = pic_length_list[0].split('-')
+                name = pic_length_list[0]
+#                name1 = name = pic_length_list[0].split('-')
                 image_id = pic_length_list[-1]
                 if int(pic_quest_id) in quest_list:
-                    milestone_images.update({name[0].lower():request.FILES.get(pic)})
+                    milestone_images.update({name.lower():request.FILES.get(pic)})
                 else:
-                    milestone_images.update({name[0].lower():request.POST.get(pic)})
+                    milestone_images.update({name.lower():request.POST.get(pic)})
 
 
         user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
@@ -410,7 +408,7 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
                 'content_type' : ContentType.objects.get_for_model(milestoneobj),
                 'object_id' : milestoneobj.id
         }
-        if int(add_section) == 0 or len(name1) == 2:
+        if int(add_section) == 0 :
             imageobj = Attachment.objects.create(**image_dict)
         else:
             imageobj = Attachment.objects.get_or_none(id=int(image_id))
@@ -433,18 +431,17 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
     else:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
-    import ipdb;ipdb.set_trace();
     for i in act_count:
         result = {}
-        name1 = []
+#        name1 = []
         for mile_attribute in milestone_list:
             mile_length_list =  mile_attribute.split('_')
             if i == mile_length_list[-1] and len(mile_length_list) == 7:
-                name = mile_length_list[0].split('-')
-                name1 = mile_length_list[0].split('-')
+                name = mile_length_list[0]
+#                name1 = mile_length_list[0].split('-')
                 mile_id = mile_length_list[-1]
                 parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
-                result.update({name[0].lower():request.POST.get(mile_attribute)})
+                result.update({name.lower():request.POST.get(mile_attribute)})
         if int(quarterreportobj.quarter_type) == 1:
             name = result.get('milestone','')
             description = result.get('about milestone','')
@@ -454,7 +451,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         # here checking for add or edit so that to get the ReportMilestoneActivity object
 #        milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
         
-        if int(add_section) == 0 or len(name1) == 2:
+        if int(add_section) == 0:
             milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
         else:
             milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
@@ -539,7 +536,6 @@ def saving_of_quarters_section(request):
         if milestone_count > 0:
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
             answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
-        import ipdb;ipdb.set_trace()
         if parameter_count > 0:
             answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
 #    to save the Current quarter updates:
