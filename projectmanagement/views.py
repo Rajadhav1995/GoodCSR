@@ -442,7 +442,7 @@ def get_timeline_process(timeline,milestone):
         data = {'date':i.date.astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
         timeline_json.append(data)
     for j in milestone:
-        data = {'date':j.astimezone(pytz.timezone('Asia/Kolkata')).overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone','id':''}
+        data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone','id':''}
         timeline_json.append(data)
     timeline_json.sort(key=lambda item:item['date'], reverse=False)
     timeline_json_length = len(timeline_json)
