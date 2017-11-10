@@ -439,7 +439,7 @@ def timeline_listing(obj):
 def get_timeline_process(timeline,milestone):
     timeline_json = []
     for i in timeline:
-        data = {'date':i.date.astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
+        data = {'date':i.date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
         timeline_json.append(data)
     for j in milestone:
         data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone','id':''}

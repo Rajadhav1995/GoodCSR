@@ -452,7 +452,9 @@
 
 
             var progress = $('#xp_'+key).val();
-            alert("Task completion status is updated to "+progress+" successfully");
+            if (progress != 'None'){
+                alert("Task completion status is updated to "+progress+" % successfully");
+            }
             $('.range-control-handle').css('left',progress+'%');
 
             $(".div-"+key).show();
