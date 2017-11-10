@@ -112,9 +112,9 @@ def report_section_form(request):
     return (locals())
 
 
-# from budgetmanagement.common_method import key_parameter_chart
-# from projectmanagement.views import parameter_pie_chart,get_timeline_process
-# from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
+from budgetmanagement.common_method import key_parameter_chart
+from projectmanagement.views import parameter_pie_chart,get_timeline_process
+from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
 # def html_to_pdf_view(request):
 #     # slug = request.GET.get('slug')
 #     slug = 'rabri-devi'

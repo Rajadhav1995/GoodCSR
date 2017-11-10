@@ -185,6 +185,7 @@ def get_parameter(obj,block_id):
     main_list =[]
     master_list = []
     master_names = []
+    pie_chart = ''
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         # parameter_obj = ProjectParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
