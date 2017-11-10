@@ -1650,13 +1650,13 @@ $(document).ready(function() {
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
-                              $(this).attr('id', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
+                              $(this).attr('name', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
-                              $(this).attr('id', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
+                              $(this).attr('name', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
                             }
                       }
                     });
