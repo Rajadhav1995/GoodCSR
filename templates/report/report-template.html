@@ -126,7 +126,7 @@
                                 {% for k,v in quarters.iteritems %}
                                     {% if value == k %}
                                         {% for k,v in v.iteritems %}
-                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span></h3>
+                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span></span></h3>
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
@@ -218,6 +218,7 @@
                      <!--        {% endfor %}-->
                      <!--        </ul>-->
                   </div>
+                  <br>
                   <div class="location">
                      <p>About the Program</p>
                      <h5>{{answer_list.program_description|safe}}</h5>
