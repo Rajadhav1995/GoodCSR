@@ -93,6 +93,7 @@ def get_milestones(quarter,report_obj,type_id):
     data = {}
     slug = {1:'milestone-section',2:'activity-section'}
     question = Question.objects.get_or_none(slug=slug.get(type_id))
+    
     answer = Answer.objects.get_or_none(question=question,quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
     if answer:
         milestones = answer.inline_answer if answer else ''

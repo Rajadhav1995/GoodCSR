@@ -185,6 +185,7 @@ def get_parameter(obj,block_id):
     main_list =[]
     master_list = []
     master_names = []
+    pie_chart = ''
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         # parameter_obj = ProjectParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
@@ -192,17 +193,16 @@ def get_parameter(obj,block_id):
         for i in report_para:
             main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
             master_list.append(main_list)
-            try:
-                master_names.append(i.keyparameter.name)
-                pie_chart = 1
-            except:
-                master_names.append(i.name)
+            master_names.append(i.keyparameter.name)
+            if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
                 pie_chart = 0
+            else:
+                pie_chart = 1
     return master_list,master_names,pie_chart
 
 @register.filter
 def get_at_index(list, index):
-    # this template tag is used to get index value of pie chart data
+    # this template tag is used to get index value of pie chart data 
     return list[index]
 
 import locale
@@ -292,3 +292,8 @@ def get_date_range(obj):
 def get_quarter_sections(obj):
     quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project)
     return quarter_section
+
+@register.assignment_tag
+def get_test_name(gg):
+    name = 'Shashtri'
+    return name

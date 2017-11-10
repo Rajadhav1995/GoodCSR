@@ -2,6 +2,7 @@ from django.shortcuts import render
 import requests,ast
 import datetime
 import json
+import pytz
 from time import strptime
 from django.contrib import messages
 from calendar import monthrange
@@ -21,6 +22,7 @@ from pmu.settings import (SAMITHA_URL,PMU_URL)
 from common_method import unique_slug_generator,add_keywords
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 from menu_decorators import check_loggedin_access
+
 
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
     #this function is to manage project location 
@@ -437,7 +439,7 @@ def timeline_listing(obj):
 def get_timeline_process(timeline,milestone):
     timeline_json = []
     for i in timeline:
-        data = {'date':i.date.strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
+        data = {'date':i.date.astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
         timeline_json.append(data)
     for j in milestone:
         data = {'date':j.overdue.strftime("%Y-%m-%d"),'name':j.name,'url':'','type':'milestone','id':''}
