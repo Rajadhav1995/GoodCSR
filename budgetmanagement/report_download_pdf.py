@@ -71,6 +71,21 @@ def fetch_resources(uri, rel):
     import cgi
     from django.conf import settings
     path = PMU_URL + os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
-    print path
-    print settings.MEDIA_ROOT
     return path
+
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse, HttpResponseNotFound
+from io import BytesIO
+from reportlab.pdfgen import canvas
+
+def pdf_view(request):
+    fs = FileSystemStorage()
+    filename = 'testp.pdf'
+    if fs.exists(filename):
+        with fs.open(filename) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="testp.pdf"'
+            return response
+    else:
+        return HttpResponseNotFound('The requested pdf was not found in our server.')
+

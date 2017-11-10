@@ -291,3 +291,8 @@ def get_date_range(obj):
 def get_quarter_sections(obj):
     quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project)
     return quarter_section
+
+@register.assignment_tag
+def get_test_name(gg):
+    name = 'Shashtri'
+    return name

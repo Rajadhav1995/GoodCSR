@@ -1,0 +1,19 @@
+{% load urs_tags %}
+<html>
+<head>
+  <title>Test</title>
+  <style>
+    body {
+      background-color: #f7f7f7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test Template</h1>
+  {% for paragraph in paragraphs %}
+    <p>{{ paragraph }}</p>
+  {% endfor %}
+  {% get_test_name p as sharp %}
+  <h3>{{sharp}}</h3>
+</body>
+</html>
