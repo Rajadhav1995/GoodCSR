@@ -200,6 +200,7 @@
                             <input type="hidden" name="milestone_count_{{i}}_1" value="1">
                             <input type="hidden" name="milestone-pic-count_1" value="1">
                             <input type="hidden" name="parameter_count_1" value="1">
+                            <input type="hidden" name="add_section" value="0">
                             <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                                 <div class="col-md-12"></div>
 
@@ -408,6 +409,7 @@
                                                         <input type="hidden" name="milestone_count_{{i}}_1" value="{{act_mile_list|length}}">
                             <input type="hidden" name="milestone-pic-count_1" value="1">
                             <input type="hidden" name="parameter_count_1" value="1">
+                            <input type="hidden" name="add_section" value="1">
                             {% for mileobj in act_mile_list %} <!--  for loop for milestone list -->
                                 {% with forloop.counter as m_count %}
                         
@@ -669,9 +671,10 @@
                         <!--                            this is for milestone section-->
 
                         {% if quest.slug == "activity-section" %}
-                             <input type="hidden" name="milestone_count_{{i}}_1" value="1">
-                            <input type="hidden" name="milestone-pic-count_1" value="1">
-                            <input type="hidden" name="parameter_count_1" value="1">
+                             <input type="hidden" name="activity_count_{{i}}_1" value="1">
+                            <input type="hidden" name="activity-pic-count_1" value="1">
+                            <input type="hidden" name="current_parameter_count_1" value="1">
+                            <input type="hidden" name="add_section" value="0">
                             <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                             {% get_previous_subquestions quest as activity_questions %}
                                 <div class="col-md-6 report_text ">
@@ -878,10 +881,13 @@
                         <!--                            this is for milestone section-->
 
                         {% if quest.slug == "activity-section" %}
-                            <input type="hidden" name="milestone_count_{{i}}_1" value="{{act_mile_list|length}}">
-                            <input type="hidden" name="milestone-pic-count_1" value="1">
-                            <input type="hidden" name="parameter_count_1" value="1">
+                            
+                            <!--  this is to know it is add or edit add_section == 1 then edit    -->
                             {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
+                            <input type="hidden" name="activity_count_{{i}}_1" value="{{act_mile_list|length}}">
+                            <input type="hidden" name="activity-pic-count_1" value="1">
+                            <input type="hidden" name="current_parameter_count_1" value="1">
+                            <input type="hidden" name="add_section" value="1">
                             {% for mileobj in act_mile_list %} <!--  for loop for activity list -->
                             {% with forloop.counter as m_count %}
                         
@@ -1486,13 +1492,13 @@ $(document).ready(function() {
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+'0');
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+'0');
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]+'_'+'0');
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]+'_'+'0');
                             }
                       }
                     });
@@ -1537,13 +1543,13 @@ $(document).ready(function() {
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
                               var name = $(this).attr('name').split('_');
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]);
                             }
                       }
                     });
@@ -1634,7 +1640,7 @@ $(document).ready(function() {
     $(document).ready(function(){
                 function edit_clone(){
                     nam = $(this).context.className.split('_')
-                    var milestone_count = $('input[name^=milestone_count_'+nam[2]).val();
+                    var milestone_count = $('input[name^=activity_count_'+nam[2]).val();
                     var c = milestone_count;
                     var tR = $('.data_row_'+nam[2]+'_'+c+':last').clone();
                     milestone_count++; /* To increase the count */
@@ -1644,29 +1650,29 @@ $(document).ready(function() {
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+'0');
+                              $(this).attr('name', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]+'_'+'0');
+                              $(this).attr('name', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+'-1'+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
                             }
                       }
                     });
-                    $('input[name^=milestone_count_'+nam[2]).val(milestone_count)
+                    $('input[name^=activity_count_'+nam[2]).val(milestone_count)
                     //$(tR).find('td span.init').text(count);
                     $(tR).insertAfter('.data_row_'+nam[2]+'_'+c+':last');
-                    tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count++).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
+                    tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
                     
                     }
                 function edit_remove(){
                     nam = $(this).context.className.split('_')
-                    var count = $('input[name^=milestone_count_'+nam[2]).val();
+                    var count = $('input[name^=activity_count_'+nam[2]).val();
                       if (count > 1) {
                             $('div.data_row_'+nam[2]+'_'+count+':last').remove();
                             count--
-                            $('input[name^=milestone_count_'+nam[2]).val(count);
+                            $('input[name^=activity_count_'+nam[2]).val(count);
                       }
                       else{
                         alert("Please add atleast one record")
@@ -1683,9 +1689,9 @@ $(document).ready(function() {
 <!--script for  a add more functionalities in "---Add --" functionality for Current section -->
 <script type="text/javascript">
     $(document).ready(function(){
-                function clone(){
+                function a_clone(){
                     nam = $(this).context.className.split('_')
-                    var milestone_count = $('input[name^=milestone_count_'+nam[2]).val();
+                    var milestone_count = $('input[name^=activity_count_'+nam[2]).val();
                     var c = milestone_count;
                     var tR = $('.data_row_'+nam[2]+'_'+c+':last').clone();
                     milestone_count++; /* To increase the count */
@@ -1695,37 +1701,37 @@ $(document).ready(function() {
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
                               var name = $(this).attr('name').split('_');
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count);
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+milestone_count+"_"+name[6]);
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]);
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]);
                             }
                       }
                     });
-                    $('input[name^=milestone_count_'+nam[2]).val(milestone_count)
+                    $('input[name^=activity_count_'+nam[2]).val(milestone_count)
                     //$(tR).find('td span.init').text(count);
                     $(tR).insertAfter('.data_row_'+nam[2]+'_'+c+':last');
                     tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
                     
                     }
-                function remove(){
+                function a_remove(){
                     nam = $(this).context.className.split('_')
-                    var count = $('input[name^=milestone_count_'+nam[2]).val();
+                    var count = $('input[name^=activity_count_'+nam[2]).val();
                       if (count > 1) {
                             $('div.data_row_'+nam[2]+'_'+count+':last').remove();
                             count--
-                            $('input[name^=milestone_count_'+nam[2]).val(count);
+                            $('input[name^=activity_count_'+nam[2]).val(count);
                       }
                       else{
                         alert("Please add atleast one record")
                       }
                 }
             //$(".add_clone").on("click", clone);
-            $("[class^=aadd_clone_]").on("click", clone);
-            $("[class^=aadd_remove_]").on("click", remove);
+            $("[class^=aadd_clone_]").on("click", a_clone);
+            $("[class^=aadd_remove_]").on("click", a_remove);
     
     });
 </script>

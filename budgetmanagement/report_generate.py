@@ -264,6 +264,10 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
     return milestone_list,parameter_list,pic_list
 
 def get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist):
+    milestone_list=[]
+    parameter_list=[]
+    pic_list=[]
+    quarterreportobj =None
     for quarter,value in quarter_list.items():
         present_quarter = previous_itemlist[0]
         quarter_type = present_quarter.split('_')[1]
@@ -285,22 +289,31 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
             milestone_list,parameter_list,pic_list = get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,projectreportobj,user_obj,quarter)
     return milestone_list,parameter_list,pic_list,quarterreportobj
 
-def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
+def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarterreportobj):
 #    Common functionality to save the images
     imageobj = None
+    if int(quarterreportobj.quarter_type) == 1:
+        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
+    else:
+        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
-    for j in range(int(pic_count)):
+    add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
+    # add_section = 0 then add , if add_section = 1 its edit
+    import ipdb;ipdb.set_trace();
+    for j in act_count :
         milestone_images = {}
+        name1 = []
         for pic in pic_list:
             pic_length_list = pic.split('_')
             pic_quest_id = pic.split('_')[3]
-            if len(pic_length_list) == 8 and pic_length_list[-3] == str(j+1):
-                name = pic_length_list[0]
+            if j == pic_length_list[-1] and len(pic_length_list) == 8 :
+                name = pic_length_list[0].split('-')
+                name1 = name = pic_length_list[0].split('-')
                 image_id = pic_length_list[-1]
                 if int(pic_quest_id) in quest_list:
-                    milestone_images.update({name.lower():request.FILES.get(pic)})
+                    milestone_images.update({name[0].lower():request.FILES.get(pic)})
                 else:
-                    milestone_images.update({name.lower():request.POST.get(pic)})
+                    milestone_images.update({name[0].lower():request.POST.get(pic)})
 
 
         user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
@@ -314,7 +327,7 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list):
                 'content_type' : ContentType.objects.get_for_model(milestoneobj),
                 'object_id' : milestoneobj.id
         }
-        if int(image_id) == 0:
+        if int(add_section) == 0 or len(name1) == 2:
             imageobj = Attachment.objects.create(**image_dict)
         else:
             imageobj = Attachment.objects.get_or_none(id=int(image_id))
@@ -328,25 +341,37 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     mil_activity_count = obj_count_list.get('milestone_count')
     pic_count = obj_count_list.get('milestone_pic_count')
     milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
+    add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
+    # add_section = 0 then add , if add_section = 1 its edit
     for milestone in milestoneobj:
         milestone.active = 0
         milestone.save()
-    for i in range(int(mil_activity_count)):
+    if int(quarterreportobj.quarter_type) == 1:
+        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
+    else:
+        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
+    import ipdb;ipdb.set_trace();
+    for i in act_count:
         result = {}
+        name1 = []
         for mile_attribute in milestone_list:
             mile_length_list =  mile_attribute.split('_')
-            if len(mile_length_list) == 7 and mile_length_list[-2] == str(i+1):
-                name = mile_length_list[0]
+            if i == mile_length_list[-1] and len(mile_length_list) == 7:
+                name = mile_length_list[0].split('-')
+                name1 = mile_length_list[0].split('-')
                 mile_id = mile_length_list[-1]
                 parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
-                result.update({name.lower():request.POST.get(mile_attribute)})
+                result.update({name[0].lower():request.POST.get(mile_attribute)})
         if int(quarterreportobj.quarter_type) == 1:
             name = result.get('milestone','')
             description = result.get('about milestone','')
         else:
             name = result.get('activity','')
             description = result.get('about the activity','')
-        if int(mile_id) == 0:
+        # here checking for add or edit so that to get the ReportMilestoneActivity object
+#        milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
+        
+        if int(add_section) == 0 or len(name1) == 2:
             milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
         else:
             milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
@@ -355,7 +380,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
                 milestoneobj.description=description
                 milestoneobj.active = 2
                 milestoneobj.save()
-        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list)
+        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarterreportobj)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2).values_list("id",flat=True)
     milestone_ids = map(int,milestone_ids)
@@ -376,6 +401,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     return answer
 
 def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
+    add_section = request.POST.get('add_section')
     for k in range(int(parameter_count)):
         parameter_result = {}
         for parameter in parameter_list:
@@ -385,11 +411,11 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
                 parameter_id = param_list[-1]
                 parent_paramter_question = Question.objects.get(id=param_list[3]).parent
                 parameter_result.update({name.lower():request.POST.get(parameter)})
-        if int(parameter_id) == 0 :
+        if int(add_section) == 0 :
             reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get_or_none(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
         else:
             reportparamterobj = ReportParameter.objects.get(id=int(parameter_id))
-            reportparamterobj.keyparameter = ProjectParameter.objects.get(id=int(parameter_result['parameter selection']))
+            reportparamterobj.keyparameter = ProjectParameter.objects.get_or_none(id=int(parameter_result['parameter selection']))
             reportparamterobj.description = parameter_result['about parameter']
             reportparamterobj.save()
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
@@ -430,6 +456,7 @@ def saving_of_quarters_section(request):
         if milestone_count > 0:
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
             answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
+        import ipdb;ipdb.set_trace()
         if parameter_count > 0:
             answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
 #    to save the Current quarter updates:
@@ -439,7 +466,8 @@ def saving_of_quarters_section(request):
     current_itemlist.extend([str(k) for k,v in request.FILES.items() if '_2_' in str(k) if k.split('_')[1]=='2'])
     if current_itemlist:
         milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,current_itemlist)
-        activity_count = request.POST.get('activity_count_1',0)
+        quarter_number = current_itemlist[0].split('_')[2]
+        activity_count = request.POST.get('activity_count_'+str(quarter_number)+"_"+str(1),0)
         activity_pic_count = request.POST.get('activity-pic-count_1',0)
         parameter_count = request.POST.get('current_parameter_count_1',0)
         if activity_count > 0:
