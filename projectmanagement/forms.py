@@ -28,7 +28,7 @@ class ProjectForm(forms.ModelForm):
 	class Meta:
 		model = Project
 		fields  = ('name','start_date','end_date','total_budget','budget_type',\
-        			'project_status','duration','summary','no_of_beneficiaries','cause_area','target_beneficiaries')
+        			'project_status','duration','summary','program_aim','no_of_beneficiaries','cause_area','target_beneficiaries')
 
 	def clean(self):
 		cleaned_data = self.cleaned_data

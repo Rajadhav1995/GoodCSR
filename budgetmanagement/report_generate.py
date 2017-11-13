@@ -65,7 +65,7 @@ def report_listing(request):
 # listing of the generated reports in the lisiting page
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
-    report_obj = ProjectReport.objects.filter(project=project)
+    report_obj = ProjectReport.objects.filter(project=project,active=2)
     budget_obj = Budget.objects.get_or_none(project=project)
     from budgetmanagement.manage_budget import get_budget_quarters
     budget_quarters = get_budget_quarters(budget_obj) 
@@ -656,3 +656,7 @@ def get_index_contents(slug,report_id):
     # final contents dict = {'1':About the Project,'2':current quarter updates,.....}
     # quarters dict = {'About the Project':'','current quarter updates':{0:from and to date,1:from and to date},....}
     return contents,quarters
+
+# def delete_report(request):
+#     report_id = request.GET.get('report_id')
+#     report = ProjectReport.objects.get(id=report_id)

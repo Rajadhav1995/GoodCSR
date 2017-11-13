@@ -179,6 +179,7 @@ class Project(BaseContent):
     project_status = models.IntegerField(choices=STATUS_CHOICES, default=0)
     duration = models.IntegerField(default=0)
     summary = RichTextField(**OPTIONAL)
+    program_aim = RichTextField(**OPTIONAL)
     no_of_beneficiaries = models.IntegerField(default=0)
     cause_area = models.ManyToManyField(MasterCategory,blank=True,related_name="area_category")
     target_beneficiaries = models.ManyToManyField(MasterCategory,blank=True,related_name="target_beneficiaries")
