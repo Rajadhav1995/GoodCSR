@@ -432,7 +432,7 @@
                                         <div class="report_text">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
-                                                    <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" value="{{imageobj.attachment_file}}">
+                                                    <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}">
                                                 </div>
                                                   <h5><a href="#">Remove</a></h5>
                                         </div>
@@ -442,7 +442,7 @@
                                         <div class=" report_text">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
-                                                <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_1_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
+                                                <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
                                             </div>
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
@@ -704,7 +704,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group upload_text">
-                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0">
+                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0">
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -713,7 +713,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
-                                            <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_0" class="form_section input_section">
+                                            <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                         <div class="form-group addpicture">
@@ -922,7 +922,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}} </p>
                                         <div class="form-group upload_text">
-                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
+                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -931,7 +931,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
-                                            <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_1_{{imageobj.id}}" value = "{{imageobj.description}}" >
+                                            <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value = "{{imageobj.description}}" >
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                         <div class="form-group addpicture">
@@ -1492,20 +1492,32 @@ $(document).ready(function() {
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+'0');
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+'0');
+                              if (name[0].indexOf("-1") > -1){
+                                  $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                                  $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                              }
+                              else {
+                                  $(this).attr('name', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                                  $(this).attr('id', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                            }
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]+'_'+'0');
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count+"_"+name[6]+'_'+'0');
+                              if (name[0].indexOf("-1") > -1){
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              }
+                              else {
+                              $(this).attr('name', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              $(this).attr('id', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              }
                             }
                       }
                     });
                     $('input[name^=milestone_count_'+nam[2]).val(milestone_count)
                     //$(tR).find('td span.init').text(count);
                     $(tR).insertAfter('.data_row_'+nam[2]+'_'+c+':last');
-                    tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count++).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
+                    tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
                     
                     }
                 function edit_remove(){
@@ -1638,7 +1650,7 @@ $(document).ready(function() {
 <!--script for  a add more functionalities in edit functionality for Current section -->
 <script type="text/javascript">
     $(document).ready(function(){
-                function edit_clone(){
+                function aedit_clone(){
                     nam = $(this).context.className.split('_')
                     var milestone_count = $('input[name^=activity_count_'+nam[2]).val();
                     var c = milestone_count;
@@ -1650,13 +1662,25 @@ $(document).ready(function() {
                             $(this).val('')
                            if ($(this).attr('name').split('_').length == 7){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
-                              $(this).attr('id', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+milestone_count);
+                              if (name[0].indexOf("-1") > -1){
+                                  $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                                  $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                              }
+                              else {
+                                  $(this).attr('name', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                                  $(this).attr('id', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count);
+                            }
                             }
                             else if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
-                              $(this).attr('name', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
-                              $(this).attr('id', name[0]+"_"+'1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+"_"+name[6]+"_"+milestone_count);
+                              if (name[0].indexOf("-1") > -1){
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              }
+                              else {
+                              $(this).attr('name', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              $(this).attr('id', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              }
                             }
                       }
                     });
@@ -1666,7 +1690,7 @@ $(document).ready(function() {
                     tR.removeClass().addClass('milestone data_row_'+nam[2]+'_'+milestone_count).attr("id",'data_row_'+nam[2]+'_'+milestone_count)
                     
                     }
-                function edit_remove(){
+                function aedit_remove(){
                     nam = $(this).context.className.split('_')
                     var count = $('input[name^=activity_count_'+nam[2]).val();
                       if (count > 1) {
@@ -1679,8 +1703,8 @@ $(document).ready(function() {
                       }
                 }
             //$(".add_clone").on("click", clone);
-            $("[class^=aedit_clone_]").on("click", edit_clone);
-            $("[class^=aedit_remove_]").on("click", edit_remove);
+            $("[class^=aedit_clone_]").on("click", aedit_clone);
+            $("[class^=aedit_remove_]").on("click", aedit_remove);
     
     });
 </script>
