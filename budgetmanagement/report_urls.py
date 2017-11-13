@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^download/pdf/$',download_report_generation),
     url(r'final/design/$',finalreportdesign),
     # url(r'pdf/view/$',html_to_pdf_view),
+    url(r'save/exit/$',report_save_exit)
 ]

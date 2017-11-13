@@ -431,6 +431,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         milestone.save()
     if int(quarterreportobj.quarter_type) == 1:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
+        # to get the last digit of the add more activity/milestone so that to loop and check condition
     else:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
     for i in act_count:
@@ -452,8 +453,10 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
             name = result.get('activity','')
             description = result.get('about the activity','')
         # here checking for add or edit so that to get the ReportMilestoneActivity object
-#        milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
-        
+        # name1 length > 1 then it is the add more of activity/milestone in edit to specify that whether it is edit add more 
+        # In edit add more to the name we are appending "-1" so that to know it is add more in edit form
+        # for example name = Activity-1_2_0_40_1_1_3 then name.split('-') we will get ['Activity','1'] based on the length of this 
+        # we will make sure it is of add more from edit and create a new object for that added activity/milestone
         if int(add_section) == 0 or len(name1) == 2:
             milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
         else:
@@ -657,6 +660,14 @@ def get_index_contents(slug,report_id):
     # quarters dict = {'About the Project':'','current quarter updates':{0:from and to date,1:from and to date},....}
     return contents,quarters
 
-# def delete_report(request):
-#     report_id = request.GET.get('report_id')
-#     report = ProjectReport.objects.get(id=report_id)
+def report_save_exit(request):
+    slug = request.GET.get('slug')
+    report_id = request.GET.get('report_id')
+    projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
+    try:
+        save = finalreportdesign(request)
+        return HttpResponseRedirect('/report/listing/?slug='+slug)
+    except :
+        save = "not submitted successfully"
+        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
+    
