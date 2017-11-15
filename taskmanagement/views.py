@@ -618,7 +618,6 @@ class GanttChartData(APIView):
             milestones, many=True).data
         taskdict['supercategories'] = SuperCategorySerializer(
             supercategories, many=True).data
-        print taskdict
         return Response(taskdict)
         
         
