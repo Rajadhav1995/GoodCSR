@@ -126,7 +126,7 @@ ga('send', 'pageview');
                   </ul>
                 <!--</div>-->
               </li>
-              
+              <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
         {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True %}
         <li class="user-wrap"><a href="javascript:void(0);">

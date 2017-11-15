@@ -334,6 +334,8 @@ def remove_record(request):
     ids =  request.GET.get('id')
     model =  eval(request.GET.get('model'))
     deact = model.objects.get(id=ids).switch()
+    if request.GET.get('model') == 'ProjectReport':
+        deleting_objects = model.objects.get(id=ids).delete_report_answers()
     return HttpResponseRedirect(url)
 
 def manage_parameter_values(request):
