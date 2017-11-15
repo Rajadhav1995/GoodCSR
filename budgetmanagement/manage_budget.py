@@ -257,9 +257,13 @@ def budgetutilization(request):
     budget_id = request.GET.get('budget_id')
     budgetobj = Budget.objects.get_or_none(id = budget_id)
     years_list = []
-    sd = years_list.append(budgetobj.start_date.year)
-    ed = years_list.append(budgetobj.end_date.year)
-    years_list = list(set(years_list))
+#    sd = years_list.append(budgetobj.start_date.year)
+#    ed = years_list.append(budgetobj.end_date.year)
+    sd = budgetobj.start_date.year
+    ed = budgetobj.end_date.year
+    difference = ed-sd
+    years_list = [sd+i for i in range(difference)]
+    years_list.append(ed)
     if quarter_key:
         budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
