@@ -54,9 +54,6 @@ def report_form(request):
             else:
                 project_report.save()
                 quarter_msg = "Already Report is generated to this Quarter"
-#            project_report.end_date = dates_list[1] if dates_list else ''
-#            project_report.save()
-            
     else :
         msg = "Budget is not created"
     return render(request,'report/report-form.html',locals())
@@ -65,7 +62,7 @@ def report_listing(request):
 # listing of the generated reports in the lisiting page
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
-    report_obj = ProjectReport.objects.filter(project=project)
+    report_obj = ProjectReport.objects.filter(project=project,active=2)
     budget_obj = Budget.objects.get_or_none(project=project)
     from budgetmanagement.manage_budget import get_budget_quarters
     budget_quarters = get_budget_quarters(budget_obj) 
@@ -239,7 +236,9 @@ def report_detail(request):
             if org_logo:
                 answer = org_logo
             else :
-                answer = "/static/img/GoodCSR_color_circle.png"
+                answer = ""
+            if question.slug == 'pmo_logo':
+                answer = "/static/img/new-logo.png"
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
@@ -375,26 +374,24 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
 def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarterreportobj):
 #    Common functionality to save the images
     imageobj = None
-    if int(quarterreportobj.quarter_type) == 1:
-        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
-    else:
-        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
+    milestone_images = {}
+    act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
     # add_section = 0 then add , if add_section = 1 its edit
-    for j in act_count :
+    for j in pic_count :
         milestone_images = {}
+        name1 = []
         for pic in pic_list:
             pic_length_list = pic.split('_')
             pic_quest_id = pic.split('_')[3]
-            if j == pic_length_list[-1] and len(pic_length_list) == 8 :
-                name = pic_length_list[0]
-#                name1 = name = pic_length_list[0].split('-')
-                image_id = pic_length_list[-1]
-                if int(pic_quest_id) in quest_list:
-                    milestone_images.update({name.lower():request.FILES.get(pic)})
-                else:
-                    milestone_images.update({name.lower():request.POST.get(pic)})
+            name = pic_length_list[0].split('-')
+            name1 = pic_length_list[0].split('-')
+            image_id = pic_length_list[-1]
+            if int(pic_quest_id) in quest_list:
+                milestone_images.update({name[0].lower():request.FILES.get(pic)})
+            else:
+                milestone_images.update({name[0].lower():request.POST.get(pic)})
 
 
         user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
@@ -408,7 +405,7 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
                 'content_type' : ContentType.objects.get_for_model(milestoneobj),
                 'object_id' : milestoneobj.id
         }
-        if int(add_section) == 0 :
+        if int(add_section) == 0 or len(name1) == 2:
             imageobj = Attachment.objects.create(**image_dict)
         else:
             imageobj = Attachment.objects.get_or_none(id=int(image_id))
@@ -429,19 +426,21 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         milestone.save()
     if int(quarterreportobj.quarter_type) == 1:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
+        # to get the last digit of the add more activity/milestone so that to loop and check condition
     else:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
     for i in act_count:
         result = {}
-#        name1 = []
+        name1 = []
         for mile_attribute in milestone_list:
             mile_length_list =  mile_attribute.split('_')
             if i == mile_length_list[-1] and len(mile_length_list) == 7:
-                name = mile_length_list[0]
-#                name1 = mile_length_list[0].split('-')
+                name = mile_length_list[0].split('-')
+                name1 = mile_length_list[0].split('-')
                 mile_id = mile_length_list[-1]
                 parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
-                result.update({name.lower():request.POST.get(mile_attribute)})
+                result.update({name[0].lower():request.POST.get(mile_attribute)})
+                pic_list1 =[p for p in pic_list if p.split('_')[-2] == i] 
         if int(quarterreportobj.quarter_type) == 1:
             name = result.get('milestone','')
             description = result.get('about milestone','')
@@ -449,9 +448,11 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
             name = result.get('activity','')
             description = result.get('about the activity','')
         # here checking for add or edit so that to get the ReportMilestoneActivity object
-#        milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
-        
-        if int(add_section) == 0:
+        # name1 length > 1 then it is the add more of activity/milestone in edit to specify that whether it is edit add more 
+        # In edit add more to the name we are appending "-1" so that to know it is add more in edit form
+        # for example name = Activity-1_2_0_40_1_1_3 then name.split('-') we will get ['Activity','1'] based on the length of this 
+        # we will make sure it is of add more from edit and create a new object for that added activity/milestone
+        if int(add_section) == 0 or len(name1) == 2:
             milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
         else:
             milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
@@ -460,7 +461,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
                 milestoneobj.description=description
                 milestoneobj.active = 2
                 milestoneobj.save()
-        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarterreportobj)
+        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list1,quarterreportobj)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2).values_list("id",flat=True)
     milestone_ids = map(int,milestone_ids)
@@ -536,8 +537,11 @@ def saving_of_quarters_section(request):
         if milestone_count > 0:
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
             answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
-        if parameter_count > 0:
-            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+# clients requirement not to provide paramerter selection in previous quarter list so commented
+#        if parameter_count > 0:
+#            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+# end of parameter saving function
+
 #    to save the Current quarter updates:
     quarter_list = currentquarter_list
     
@@ -587,7 +591,9 @@ def finalreportdesign(request):
 #      timeline progress 
     image = PMU_URL
 #      timeline progress ends 
-
+    previous_len = len(previousquarter_list)+1
+    current_len = len(currentquarter_list)+1
+    future_len = len(futurequarter_list)+1
     project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
@@ -597,6 +603,7 @@ def finalreportdesign(request):
         key = request.POST.get('key')
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
         projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
+        div_id = request.POST.get('div_id')
         #to save the two sections data based the save of two sections calling the report_section_form()#STARTS
         if request.POST.get('cover_page_save') or request.POST.get('project_summary_save'):
             cover_page_locals = report_section_form(request)
@@ -609,7 +616,7 @@ def finalreportdesign(request):
         if key == 'edit_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
         else:
-            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1))               
         # ENDS to redirection  
     if key == 'edit_template':
         return render(request,'report/forms-single.html',locals())
@@ -653,3 +660,15 @@ def get_index_contents(slug,report_id):
     # final contents dict = {'1':About the Project,'2':current quarter updates,.....}
     # quarters dict = {'About the Project':'','current quarter updates':{0:from and to date,1:from and to date},....}
     return contents,quarters
+
+def report_save_exit(request):
+    slug = request.GET.get('slug')
+    report_id = request.GET.get('report_id')
+    projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
+    try:
+        save = finalreportdesign(request)
+        return HttpResponseRedirect('/report/listing/?slug='+slug)
+    except :
+        save = "not submitted successfully"
+        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
+    

@@ -116,25 +116,21 @@ $(document).ready(function(){
 
         </div>
       </div>
-
+      
       <div class="cont-det">
          <h2>Location coverage</h2>
-         {% if lobj %}
-         <p>{% for i in lobj %}
 
-                                <div>
-                                <b>Category: </b>{{i.get_program_type_display}}<br>
-                                </div>
-                                <div>
-                                <b>State: </b>{{i.location.parent.name}}<br>
-                                </div>
-                                <div>
-                                <b>City: </b>{{i.location.name}}<br>
-                                </div><br>
-                {% endfor %}</p>
-                {% else %}
-                <p>N/A</p>
-                {% endif %}
+         {% if project_location %}
+          
+            {% for j in project_location %}
+            <li style="color:#363636;" > {{j.location.name}}, {{j.location.parent.name}}, {{j.get_program_type_display}}</li>
+            {% endfor %}
+          
+          {% else %}
+          <li style="color:#363636;" >N/A</li>
+          {% endif %}
+          <br>
+                
          <h2>About the Program</h2>
 <p dangerouslySetInnerHTML={{obj.summary}}>{{projectobj.summary | safe}}</p>
 
