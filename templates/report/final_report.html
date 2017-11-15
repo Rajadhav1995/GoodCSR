@@ -24,12 +24,13 @@
                 </div>
 <!--Cover Page and Project Summary Page div where the questions are made dynamic  STARTS -->
                   <div id="accordion">
-                     <h3>{{locals_list.block1.name}}</h3>
+                     <h3 id='0'>{{locals_list.block1.name}}</h3>
                      <form action="." method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
+                        <input type= "hidden" name="div_id" value='0'>
                         <div class="text_accordion">
                            {% get_questions locals_list.block1 projectreportobj as ques %}
                            {% for i in ques %}
@@ -79,12 +80,13 @@
                         <input type="submit" class="report_save " name="cover_page_save" value = "Save"></input>
                      </form>
 
-                     <h3>{{locals_list.block2.name}}</h3>
+                     <h3 id='1'>{{locals_list.block2.name}}</h3>
                      <form action="." method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
+                        <input type= "hidden" name="div_id" value='1'>
                         <div class="text_accordion">
                            {% get_questions locals_list.block2 projectreportobj as ques %}
                            {% for i in ques %}
@@ -94,7 +96,7 @@
                                            {% if sub.q_type == 'APT' %}
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
-                                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
+                                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" readonly="true"></input>
                                                   <h5><a href="#">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
@@ -139,11 +141,12 @@
                     <!--Previous Quarter updates div starts here-->
                     {% for i,v in previousquarter_list.items %}
                     {% with forloop.counter as j %}
-                    <h3> Previous Quarter Updates :{{v}}</h3>
+                    <h3 id="{{j|add:'2'}}"> Previous Quarter Updates :{{v}}</h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
+                        <input type="hidden" name="div_id" value="{{j|add:'2'}}">
                         <div>
                         {% getreport_status report_id v 1 as reportupdates %}
                         {% if reportupdates.0 == False %}
@@ -258,7 +261,7 @@
                                   <div class="form-group addmilestone click_buttons">
                                        <div class="link-left">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="add_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                            <a href ="javascript:void(0);" class ="add_clone_{{i}}_{{j}}">Add more</a>
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
@@ -267,42 +270,42 @@
                                    </div>
                         {% endif %}
 <!--                            this is for parameter selection -->
-                        {% if quest.slug == "parameter-section" %}
-                                <hr class="border_line">
-                                <div class="milestone">
-                                {% get_previous_subquestions quest as parameter_questions %}
+<!--                        {% if quest.slug == "parameter-section" %}-->
+<!--                                <hr class="border_line">-->
+<!--                                <div class="milestone">-->
+<!--                                {% get_previous_subquestions quest as parameter_questions %}-->
 
-                                    {% for param_quest in parameter_questions %}
-                                    {% if param_quest.slug == "parameter-selection" %}
-                                    <div class="col-md-6 report_text parameter_section">
-                                        <p>{{param_quest.text|title}}</p>
-                                        <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
-                                            <option value="0">Select</option>
-                                            {% for i in project_paramterlist %}
-                                            <option value="{{i.id}}">{{i.name}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <h5><a href="#">Remove</a></h5>
-                                    </div>
-                                    {% endif %}
+<!--                                    {% for param_quest in parameter_questions %}-->
+<!--                                    {% if param_quest.slug == "parameter-selection" %}-->
+<!--                                    <div class="col-md-6 report_text parameter_section">-->
+<!--                                        <p>{{param_quest.text|title}}</p>-->
+<!--                                        <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >-->
+<!--                                            <option value="0">Select</option>-->
+<!--                                            {% for i in project_paramterlist %}-->
+<!--                                            <option value="{{i.id}}">{{i.name}}</option>-->
+<!--                                            {% endfor %}-->
+<!--                                        </select>-->
+<!--                                        <h5><a href="#">Remove</a></h5>-->
+<!--                                    </div>-->
+<!--                                    {% endif %}-->
 
 
-                                    {% if param_quest.slug == "about-parameter" %}
-                                    <div class="col-md-12 report_text ">
-                                        <p>{{param_quest.text|title}}</p>
-                                        <div class="">
-                                            <textarea id="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"  class="textarea_file"></textarea>
-                                        </div>
-                                        <h5><a href="#">Remove</a></h5>
-                                    </div>
-                                    {% endif %}
+<!--                                    {% if param_quest.slug == "about-parameter" %}-->
+<!--                                    <div class="col-md-12 report_text ">-->
+<!--                                        <p>{{param_quest.text|title}}</p>-->
+<!--                                        <div class="">-->
+<!--                                            <textarea id="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"  class="textarea_file"></textarea>-->
+<!--                                        </div>-->
+<!--                                        <h5><a href="#">Remove</a></h5>-->
+<!--                                    </div>-->
+<!--                                    {% endif %}-->
 
-                                    {% endfor %}
-                                </div> <!-- paramter div ends-->
-                                <div class="form-group addmilestone click_buttons">
-                                    <p>+ add More Parameter</p>
-                                </div>
-                            {% endif %}
+<!--                                    {% endfor %}-->
+<!--                                </div> <!-- paramter div ends-->-->
+<!--                                <div class="form-group addmilestone click_buttons">-->
+<!--                                    <p>+ add More Parameter</p>-->
+<!--                                </div>-->
+<!--                            {% endif %}-->
 
 <!--                            this is for budget table display-->
 
@@ -330,7 +333,8 @@
                                             {% for row in budget_period %}
                                             <tr class = "data_row">
                                                 {% get_budget_lineitem row projectobj as lineitemobj %}
-                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> 
+                                                {{lineitemobj.category.name}}</td>
                                                 <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
                                                 <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
                                                 {% get_line_total row projectobj as line_total %}
@@ -501,7 +505,7 @@
                                   <div class="form-group addmilestone click_buttons">
                                        <div class="link-left">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="edit_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                            <a href ="javascript:void(0);" class ="edit_clone_{{i}}_{{j}}">Add more</a>
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
@@ -511,45 +515,45 @@
 
                         {% endif %}
 <!--                            this is for parameter selection -->
-                        {% if quest.slug == "parameter-section" %}
-                                <hr class="border_line">
-                        {% get_parameters_list quest reportupdates.1 as parameters_list %}
-                            {% for paramobj in parameters_list %}
-                                <div class="milestone">
-                                {% get_previous_subquestions quest as parameter_questions %}
+<!--                        {% if quest.slug == "parameter-section" %}-->
+<!--                                <hr class="border_line">-->
+<!--                        {% get_parameters_list quest reportupdates.1 as parameters_list %}-->
+<!--                            {% for paramobj in parameters_list %}-->
+<!--                                <div class="milestone">-->
+<!--                                {% get_previous_subquestions quest as parameter_questions %}-->
 
-                                    {% for param_quest in parameter_questions %}
-                                    {% if param_quest.slug == "parameter-selection" %}
-                                    <div class="col-md-6 report_text parameter_section">
-                                        <p>{{param_quest.text|title}}</p>
-                                        <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
-                                            <option value="0">Select</option>
-                                            {% for i in project_paramterlist %}
-                                            <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <h5><a href="#">Remove</a></h5>
-                                    </div>
-                                    {% endif %}
+<!--                                    {% for param_quest in parameter_questions %}-->
+<!--                                    {% if param_quest.slug == "parameter-selection" %}-->
+<!--                                    <div class="col-md-6 report_text parameter_section">-->
+<!--                                        <p>{{param_quest.text|title}}</p>-->
+<!--                                        <select name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >-->
+<!--                                            <option value="0">Select</option>-->
+<!--                                            {% for i in project_paramterlist %}-->
+<!--                                            <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>-->
+<!--                                            {% endfor %}-->
+<!--                                        </select>-->
+<!--                                        <h5><a href="#">Remove</a></h5>-->
+<!--                                    </div>-->
+<!--                                    {% endif %}-->
 
 
-                                    {% if param_quest.slug == "about-parameter" %}
-                                    <div class="col-md-12 report_text ">
-                                        <p>{{param_quest.text|title}}</p>
-                                        <div class="">
-                                            <textarea id="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}"  class="textarea_file"> {{paramobj.description}}</textarea>
-                                        </div>
-                                        <h5><a href="#">Remove</a></h5>
-                                    </div>
-                                    {% endif %}
+<!--                                    {% if param_quest.slug == "about-parameter" %}-->
+<!--                                    <div class="col-md-12 report_text ">-->
+<!--                                        <p>{{param_quest.text|title}}</p>-->
+<!--                                        <div class="">-->
+<!--                                            <textarea id="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_1_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}"  class="textarea_file"> {{paramobj.description}}</textarea>-->
+<!--                                        </div>-->
+<!--                                        <h5><a href="#">Remove</a></h5>-->
+<!--                                    </div>-->
+<!--                                    {% endif %}-->
 
-                                    {% endfor %}
-                                </div>
-                                {% endfor %} <!--  this is for paramter list count loop ends -->
-                                <div class="form-group addmilestone click_buttons">
-                                    <p>+ add More Parameter</p>
-                                </div>
-                            {% endif %}
+<!--                                    {% endfor %}-->
+<!--                                </div>-->
+<!--                                {% endfor %} <!--  this is for paramter list count loop ends -->-->
+<!--                                <div class="form-group addmilestone click_buttons">-->
+<!--                                    <p>+ add More Parameter</p>-->
+<!--                                </div>-->
+<!--                            {% endif %}-->
 
 <!--                            this is for budget table display-->
 
@@ -621,7 +625,7 @@
                         <!--Current Quarter Updates starts here -->
                     {% for i,v in currentquarter_list.items %}
                     {% with forloop.counter as j %}
-                        <h3>Current Quarter Updates :{{v}}</h3>
+                        <h3 id={{j|add:previous_len}} >Current Quarter Updates :{{v}}</h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
@@ -629,6 +633,7 @@
                         <input type="hidden" name="current_parameter_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
+                        <input type="hidden" name="div_id" value={{j|add:previous_len}}>
                         <div>
 
                         {% getreport_status report_id v 2 as reportupdates %}
@@ -727,7 +732,7 @@
                             <div class="form-group addmilestone click_buttons">
                                  <div class="link-left">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aadd_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                            <a href ="javascript:void(0);" class ="aadd_clone_{{i}}_{{j}}">Add more</a>
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
@@ -948,7 +953,7 @@
                             <div class="form-group addmilestone click_buttons">
                                        <div class="link-left">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aedit_clone_{{i}}_{{j}}">+Add more Lines</a>
+                                            <a href ="javascript:void(0);" class ="aedit_clone_{{i}}_{{j}}">Add more</a>
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
@@ -1093,12 +1098,13 @@
                         <!--starts Next Quarter Plan -->
                    {% for i,v in futurequarter_list.items|slice:"1" %}
                     {% with forloop.counter as j %}
-                        <h3>Next Quarter Plan :{{v}}</h3>
+                        <h3 id={{j|add:current_len}}>Next Quarter Plan :{{v}}</h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
+                        <input type="hidden" name="div_id" value={{j|add:current_len}}>
                         <div>
                         {% getreport_status report_id v 3 as reportupdates %}
                         {% if reportupdates.0 == False %}
@@ -2463,6 +2469,20 @@ $(document).ready(function() {
         });
    </script>
 
+
+<script>
+
+    ids = "{{request.GET.div_id}}"
+    first_div = ids-1
+    $('#'+first_div).attr('aria-selected','false')
+    $('#'+first_div).removeClass('ui-accordion-header');
+    $('#'+first_div).addClass('ui-state','active');
+    $('#'+first_div).addClass('ui-corner-top');
+    $('#'+div_id).attr('aria-selected','true');
+    $('#'+div_id).addClass('ui-accordion-header','active');
+    $('#'+div_id).addClass('ui-state','active');
+    $('#'+div_id).addClass('ui-corner','top');
+</script>
 
 
 {% endblock %}

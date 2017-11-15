@@ -54,9 +54,6 @@ def report_form(request):
             else:
                 project_report.save()
                 quarter_msg = "Already Report is generated to this Quarter"
-#            project_report.end_date = dates_list[1] if dates_list else ''
-#            project_report.save()
-            
     else :
         msg = "Budget is not created"
     return render(request,'report/report-form.html',locals())
@@ -239,7 +236,9 @@ def report_detail(request):
             if org_logo:
                 answer = org_logo
             else :
-                answer = "/static/img/GoodCSR_color_circle.png"
+                answer = ""
+            if question.slug == 'pmo_logo':
+                answer = "/static/img/new-logo.png"
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
@@ -376,10 +375,7 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
 #    Common functionality to save the images
     imageobj = None
     milestone_images = {}
-    if int(quarterreportobj.quarter_type) == 1:
-        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
-    else:
-        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
+    act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
     # add_section = 0 then add , if add_section = 1 its edit
@@ -389,7 +385,6 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
         for pic in pic_list:
             pic_length_list = pic.split('_')
             pic_quest_id = pic.split('_')[3]
-    #        if j == pic_length_list[-1] and len(pic_length_list) == 8 :
             name = pic_length_list[0].split('-')
             name1 = pic_length_list[0].split('-')
             image_id = pic_length_list[-1]
@@ -542,8 +537,11 @@ def saving_of_quarters_section(request):
         if milestone_count > 0:
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
             answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
-        if parameter_count > 0:
-            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+# clients requirement not to provide paramerter selection in previous quarter list so commented
+#        if parameter_count > 0:
+#            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+# end of parameter saving function
+
 #    to save the Current quarter updates:
     quarter_list = currentquarter_list
     
@@ -593,7 +591,9 @@ def finalreportdesign(request):
 #      timeline progress 
     image = PMU_URL
 #      timeline progress ends 
-
+    previous_len = len(previousquarter_list)+1
+    current_len = len(currentquarter_list)+1
+    future_len = len(futurequarter_list)+1
     project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
@@ -603,6 +603,7 @@ def finalreportdesign(request):
         key = request.POST.get('key')
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
         projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
+        div_id = request.POST.get('div_id')
         #to save the two sections data based the save of two sections calling the report_section_form()#STARTS
         if request.POST.get('cover_page_save') or request.POST.get('project_summary_save'):
             cover_page_locals = report_section_form(request)
@@ -615,7 +616,7 @@ def finalreportdesign(request):
         if key == 'edit_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
         else:
-            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1))               
         # ENDS to redirection  
     if key == 'edit_template':
         return render(request,'report/forms-single.html',locals())
