@@ -351,11 +351,11 @@ def my_tasks_details(request):
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
     else:
-        task_listing = my_tasks_listing(project,user,status)
-#        tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
-#        tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
-#        remain_tasks = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
-#        task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
+        over_due = my_tasks_listing(project,user,status)
+        tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
+        tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
+        remain_tasks = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
+        task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
     projectobj = project
     user_obj = user
