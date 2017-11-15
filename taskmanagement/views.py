@@ -205,7 +205,7 @@ def my_tasks_listing(project,user,status):
     task_lists=[]
     activities = Activity.objects.filter(project = project)
     if status == '0':
-        tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today,assigned_to=user).order_by('-start_date')
+        tasks_list = Task.objects.filter(assigned_to=user).order_by('-start_date')
     else:
         tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).order_by('-start_date')
     return tasks_list
@@ -343,12 +343,20 @@ def my_tasks_details(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
-    over_due = my_tasks_listing(project,user,status)
-    tasks_today = project.get_todays_tasks(today,user,status)
-    tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
-    remain_tasks = project.get_remaining_tasks(remain_days,user,status)
-    task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
-    task_ids = [int(i.id) for i in task_listing]
+    if status == 1:
+        over_due = my_tasks_listing(project,user,status)
+        tasks_today = project.get_todays_tasks(today,user,status)
+        tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
+        remain_tasks = project.get_remaining_tasks(remain_days,user,status)
+        task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
+        task_ids = [int(i.id) for i in task_listing]
+    else:
+        task_listing = my_tasks_listing(project,user,status)
+#        tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
+#        tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
+#        remain_tasks = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
+#        task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
+        task_ids = [int(i.id) for i in task_listing]
     projectobj = project
     user_obj = user
     status = get_assigned_users(user_obj,projectobj)

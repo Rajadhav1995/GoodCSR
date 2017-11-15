@@ -49,10 +49,11 @@ def report_form(request):
             project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
                 report_type = data.get('report_type'),start_date  = budget_start_date,
                 name = project_obj.name,end_date = budget_end_date)
-            if created:
+            if created or int(project_report.active) == 0 :
+                project_report.active = 2
+                project_report.save()
                 return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
             else:
-                project_report.save()
                 quarter_msg = "Already Report is generated to this Quarter"
     else :
         msg = "Budget is not created"
