@@ -2474,6 +2474,15 @@ $(document).ready(function() {
 
     ids = "{{request.GET.div_id}}"
     first_div = ids-1
+    if (ids == 1){
+        alert('Cover Page is successfully submitted ');
+    }
+    else if (ids == 2){
+        alert('Project Summary sheet is successfully submitted ');
+    }
+    else if (ids == 3 || ids == 4 || ids == 5 || ids == 6 || ids == 7 || ids == 8){
+        alert('Quarter details are submitted successfully ');
+    }
     $('#'+first_div).attr('aria-selected','false')
     $('#'+first_div).removeClass('ui-accordion-header');
     $('#'+first_div).addClass('ui-state','active');
