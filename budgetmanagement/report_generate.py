@@ -486,7 +486,7 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
     add_section = request.POST.get('add_section')
     para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
 #    for k in range(int(parameter_count)):
-    for k in para_detail:
+    for k in sorted(para_detail):
         parameter_result = {}
         for parameter in parameter_list:
             param_list =  parameter.split('_')
