@@ -343,7 +343,7 @@ def my_tasks_details(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
-    if status == 1:
+    if status == '1':
         over_due = my_tasks_listing(project,user,status)
         tasks_today = project.get_todays_tasks(today,user,status)
         tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
@@ -359,9 +359,11 @@ def my_tasks_details(request):
         task_ids = [int(i.id) for i in task_listing]
     projectobj = project
     user_obj = user
-    status = get_assigned_users(user_obj,projectobj)
     key = request.GET.get('key')
-    return render(request,'taskmanagement/my-task.html',locals())
+    if status == '1':
+        return render(request,'taskmanagement/project-task.html',locals())
+    else:
+        return render(request,'taskmanagement/my-task.html',locals())
     
 def create_task_progress(request,task):
     try:
