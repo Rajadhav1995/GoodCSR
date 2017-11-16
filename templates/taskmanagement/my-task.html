@@ -1,19 +1,21 @@
 {% extends 'project/project-summary.html' %}
 {% load common_tags %}
 {% load urs_tags %}
-{% if status == '0' %}
-    {% block section %}
-        <section class="green-pad green-height">
-        <div class="row">
-            <div class="image-pad orglogo ">
-	            {% get_org_logo projectobj as org_logo %}
-            	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
+
+
+{% block section %}
+    <section class="green-pad green-height">
+    <div class="row">
+        <div class="image-pad orglogo ">
+            {% get_org_logo projectobj as org_logo %}
+        	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
 <!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
-            </div>
         </div>
-        </section>
-    {% endblock %}
-{% endif %}
+    </div>
+    </section>
+{% endblock %}
+
+
 {% block content %}
 <div class="clear"></div>
 <!--Content part starts-->
