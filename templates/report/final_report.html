@@ -1778,11 +1778,10 @@ $(document).ready(function() {
 <script type="text/javascript">
    
                function para_a_clone(){
-                    debugger;
                    nam = $(this).context.className.split('_')
                    var milestone_count = $('input[name^=current_parameter_count_'+nam[4]).val();
                    var c = milestone_count;
-                   var tR = $('.data_row_'+nam[4]+'_'+c+':last').clone();
+                   var tR = $('.data_row_'+nam[3]+'_'+c+':last').clone();
                    milestone_count++; /* To increase the count */
                    /* further functionalitie to split the name and append row number to each input type */
                    $(tR).find('textarea, select').each(function(){
@@ -1798,8 +1797,8 @@ $(document).ready(function() {
                    });
                    $('input[name^=current_parameter_count_'+nam[4]).val(milestone_count)
                    //$(tR).find('td span.init').text(count);
-                   $(tR).insertAfter('.data_row_'+nam[4]+'_'+c+':last');
-                   tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[4]+'_'+milestone_count)
+                   $(tR).insertAfter('.data_row_'+nam[3]+'_'+c+':last');
+                   tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[3]+'_'+milestone_count)
                    
                    }
                function para_a_remove(){
@@ -1820,6 +1819,53 @@ $(document).ready(function() {
    
 </script>
 <!--script for  a add more PARAMETERS in "---Add --" functionality for Current section  End script -->
+
+
+<!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section -->
+<script type="text/javascript">
+   
+               function para_e_clone(){
+                   nam = $(this).context.className.split('_')
+                   var milestone_count = $('input[name^=current_parameter_count_'+nam[4]).val();
+                   var c = milestone_count;
+                   var tR = $('.data_row_'+nam[3]+'_'+c+':last').clone();
+                   milestone_count++; /* To increase the count */
+                   /* further functionalitie to split the name and append row number to each input type */
+                   $(tR).find('textarea, select').each(function(){
+                     if ($(this).attr('name')){
+                           $(this).val('')
+                          if ($(this).attr('name').split('_').length == 8){
+                             var name = $(this).attr('name').split('_');
+                             $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+'_'+name[6]+"_"+milestone_count);
+                             $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+'_'+name[6]+"_"+milestone_count);
+                           }
+                           
+                     }
+                   });
+                   $('input[name^=current_parameter_count_'+nam[4]).val(milestone_count)
+                   //$(tR).find('td span.init').text(count);
+                   $(tR).insertAfter('.data_row_'+nam[3]+'_'+c+':last');
+                   tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[3]+'_'+milestone_count)
+                   
+                   }
+               function para_e_remove(){
+                   nam = $(this).context.className.split('_')
+                   var count = $('input[name^=current_parameter_count_'+nam[4]).val();
+                     if (count > 1) {
+                           $('div.data_row_'+nam[4]+'_'+count+':last').remove();
+                           count--
+                           $('input[name^=current_parameter_count_'+nam[4]).val(count);
+                     }
+                     else{
+                       alert("Please add atleast one record")
+                     }
+               }
+           //$(".add_clone").on("click", clone);
+           $("[class^=para_edit_clone_]").on("click", para_e_clone);
+           $("[class^=para_edit_remove_]").on("click", para_e_remove);
+   
+</script>
+<!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section  End script -->
 
 
 

@@ -484,11 +484,13 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
 
 def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
     add_section = request.POST.get('add_section')
-    for k in range(int(parameter_count)):
+    para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
+#    for k in range(int(parameter_count)):
+    for k in para_detail:
         parameter_result = {}
         for parameter in parameter_list:
             param_list =  parameter.split('_')
-            if len(param_list) == 8 and int(param_list[5]) == int(k)+1:
+            if len(param_list) == 8 and k == param_list[-1]:
                 name = param_list[0]
                 parameter_id = param_list[-1]
                 parent_paramter_question = Question.objects.get(id=param_list[3]).parent
