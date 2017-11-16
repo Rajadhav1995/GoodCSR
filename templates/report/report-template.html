@@ -193,7 +193,7 @@
                   <td>
                     <p>Project Duration</p>
                     
-                      <img src="/static/img/time-calculater.png"><span>{{project.duration}}<sub>Months</sub></span>
+                      <img src="/static/img/time-calculater.png"><span>{{project.duration}}<sub style="bottom:0px; font-size: 20px;">months</sub></span>
                 </td>
             </tr>
         </table>
@@ -582,9 +582,9 @@
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center">{{line_total}}</td>
+                <td align="center">{{line_total | get_currency}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center">{{utilized_amount}}</td>
+                <td align="center">{{utilized_amount | get_currency}}</td>
                  <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
@@ -764,7 +764,6 @@
                                 <div class=" white-box ">
                             <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
                          </div>
-                                <h5><a href="#">Remove</a></h5>
                             </div>
                   </div>
 
@@ -1087,16 +1086,16 @@
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center">{{line_total}}</td>
+                <td align="center">{{line_total | get_currency}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center">{{utilized_amount}}</td>
+                <td align="center">{{utilized_amount | get_currency}}</td>
                  <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_order 2 project as quarter_order %}
                 {% if i == quarter_order %}
                 {% get_quarter_details j i project as line_itemobj %}
-                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                   <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
                     <td align="center" class=""> {{line_itemobj.rate}}  </td>
                      <td align="center" class=""> {{line_itemobj.planned_unit_cost}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
@@ -1228,6 +1227,7 @@
                            <h5 class="color-red">PARAMETER 1</h5>
                            <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
                            <div>
+                            {% if pie_data.2 == 1 %}
                             {% if pie_data.0.0.1.y != 0 %}
                               <div class="col-md-4">
                                  <div class="row">
@@ -1244,6 +1244,24 @@
                                  </div>
                               </div>
                               {% endif %}
+                              {% else %}
+                              <ul class="key_parameter parameter">
+                                <!-- <div>
+                                  <li><h3>Beneficiary</h3><img class="key-image parameter-position" src='/static/img/key-icon2.png' alt=""><h4 class="title-pad">2,380</h4></li>'
+                                </div> -->
+                                <table class="table pmu_formtable_parameter">
+                                  <tr>
+                                     <td>
+                                          <p>{{pie_data.1 | get_at_index:forloop.counter0}}</p>
+                                          <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
+                                      </td>
+                                  </tr>
+                              </table>
+                              </ul>
+                              {% endif %}
+
+
+
                               <div class="col-md-8">
                                  <div class="parameter-text">
                                     <h4 class="color_green">About This Parameter</h4>
@@ -1747,8 +1765,30 @@
 
   });
 </script>
+<!-- 
+<script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
+<script>
+html2canvas([document.getElementById('time-line-pad')], {
+    onrendered: function (canvas) {
+      var imagedata = canvas.toDataURL('image/png');
+      alert(imagedata);
+      var imgdata = imagedata.replace(/^data:image\/(png|jpg);base64,/, "");
+    //ajax call to save image inside folder
+    $.ajax({
+      url: '/report/save/image/',
+      data: {'imgdata':imgdata },
+      type:'GET',
+      success: function (response) {   
+               console.log(response);
+         $('#image_id img').attr('src', response);
+      }
+    });
+    alert("asdfgh");
+    }
+  })
+</script>
 
 
-
+ -->
             </body>
          </html>

@@ -35,7 +35,7 @@
         vertical-align: bottom;
         /*border-bottom: 0.5pt solid*/ }
     @bottom-right {
-        content: "Page " counter(page)
+        content: /*"Page " counter(page)*/
                  /*" of " counter(pages)*/ }
     /*@left-top {
         content: "W3C Recommendation";
@@ -45,10 +45,16 @@
         transform-origin: 100% 0;
         transform: rotate(-90deg) }*/}
 
+        div.image {
+        width:150px;
+        height:50px;
+        /*background-image:url(data:image/png;base64,{{img}});*/
+      }
+
 
       .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid; margin-bottom: 45px; }
-       .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
-      .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
+       .pmu_formtable tr{padding: 50px;float: left;width:86%;background:#f1f3e9;}
+      .pmu_formtable td{border-right:1px solid #dedede; width: 30%; float: left; border-top:0px solid !important}
       .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
       .pmu_formtable td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
       .pmu_formtable td p{font-size:14px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
@@ -57,7 +63,7 @@
        .pmu_formtable_parameter tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
       .pmu_formtable_parameter td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
       .pmu_formtable_parameter td:nth-last-child(1){border-right:0px solid #dedede}
-      .pmu_formtable_parameter td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable_parameter td span{font-size:14px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
       .pmu_formtable_parameter td p{font-size:16px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
       .margin_top_50{margin:50px 0px;float:left; width: 100%}
 .margin_top_50 ul li{float:left;list-style-type: none; margin-left: 30px}
@@ -88,10 +94,10 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
 .school_project .row p:nth-last-child(1){font-weight: 600}
 .location p{color:#019875; border-bottom: 1px solid #dedede; padding-bottom: 5px;font-weight: 600; font-size: large;}
 .location ul li{list-style-type: disc; color:#019875}
-.location ul li span{color:#232323; font-size: 12px;}
+.location ul li span{color:#232323; font-size: 14px;}
 .location ul{padding-left: 15px;}
-.location{margin-bottom: 60px;margin-top: 30px; float: left;}
-.location h5{color:#363636 ; font-weight: normal; font-size: 12px; font-family: "Work Sans";}
+.location{margin-bottom: 60px;margin-top: 30px; float: left; width: 100%;}
+.location h5{color:#363636 ; font-weight: normal; font-size: 14px; font-family: "Work Sans";}
 footer{margin:30px 0px; float: left; width: 100%}
 .margin-top40{margin-top:40px}
 .quarter_updates h4{font-size: 16px; font-weight: 600}}
@@ -137,8 +143,8 @@ footer{margin:30px 0px; float: left; width: 100%}
 @media screen and (min-width: 1000px) {} 
 @media screen and (min-width: 1200px) {}
 
-.page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
-.header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 700px}
+.page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 740px}
+.header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 550px}
 
 .table-scroll {
   position:relative;
@@ -248,16 +254,16 @@ footer{margin:30px 0px; float: left; width: 100%}
                         <ul>
                           <!-- {% if answer_list.client_logo %} -->
                            <!-- <li><img src="{{answer_list.client_logo}}" height = 70 width = 100></li> -->
-                           <li><img src="{{image_url}}/static/img/report/ovp.jpg" height = 70 width = 100></li>
+                           <li><img src="{{image_url}}/static/img/report/ovp.jpg" height = 70 width = 100 style="width:100px; height:70px"></li>
                            {% else %}
-                            <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
+                            <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:100px; height:70px" >
 
                             {% endif %}
                             {% if answer_list.logos %}
                            <!-- <li> <img src="{{answer_list.logos}}" height = 70 width = 100></li> -->
-                           <li> <img src="{{image_url}}/static/img/report/akanksha.jpg" height = 70 width = 100></li>
+                           <li> <img src="{{image_url}}/static/img/report/akanksha.jpg" height = 70 width = 100 style="width:100px; height:70px"></li>
                            {% else %}
-                            <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
+                            <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:100px; height:70px">
                             {% endif %}
                         </ul>
                      </div>
@@ -284,14 +290,14 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h1 style="font-size:24px">Index{{taskdict1}}</h1>
                      <div class="float_right">
                       {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:100px; height:70px">
                         {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:100px; height:70px">
                         {% endif %}
                         {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:100px; height:70px">
                         {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:100px; height:70px">
                         {% endif %}
                      </div>
                   </div>
@@ -307,7 +313,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                                 {% for k,v in quarters.iteritems %}
                                     {% if value == k %}
                                         {% for k,v in v.iteritems %}
-                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span></h3>
+                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span></span></h3>
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
@@ -320,6 +326,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                   <h3 style="float:right;margin-top:0px;">2</h3>
                </div>
                <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
+
                <!--<header>
                   <div>
                   <img src="/static/img/report/bottomslider.jpg" style="width:100%">
@@ -327,6 +334,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                    </header>-->
                <!--Index page 02 html ends-->
                <!--Index page 03 html starts-->
+
                <div class="container">
                   <div class="margin_25">
                      <div class="float_right">
@@ -342,7 +350,9 @@ footer{margin:30px 0px; float: left; width: 100%}
                         {% endif %}
                      </div>
                   </div>
+
                   <hr>
+                  <div style='page-break-after: always;'>
                   <div class='page_height'>
                   <div class="school_project">
                      <div>
@@ -365,16 +375,16 @@ footer{margin:30px 0px; float: left; width: 100%}
             <tr>
                 <td >
                     <p>Total Budget</p>
-                    <img src="{{image_url}}/static/img/rupee.png"><span>{{answer_list.project_budget | currency}}</span>
+                    <img style="width:40px; height:40px" src="{{image_url}}/static/img/rupee.png"><span style="font-size: 20px;">{{answer_list.project_budget | currency}}</span>
                 </td>
                <td>
                     <p>Project Beneficiaries</p>
-                    <img src="{{image_url}}/static/img/user.png"><span>{{answer_list.no_of_beneficiaries | intcomma}}</span>
+                    <img style="width:40px; height:40px" src="{{image_url}}/static/img/user.png"><span style="font-size: 20px;">{{answer_list.no_of_beneficiaries | intcomma}}</span>
                 </td>
                   <td>
                     <p>Project Duration</p>
                     
-                      <img src="{{image_url}}/static/img/time-calculater.png"><span>{{project.duration}}<sub>Months</sub></span>
+                      <img style="width:40px; height:40px" src="{{image_url}}/static/img/time-calculater.png"><span style="font-size: 20px;">{{project.duration}}<sub>Months</sub></span>
                 </td>
             </tr>
         </table>
@@ -404,6 +414,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h5>{{answer_list.program_description|safe}}</h5>
                   </div>
                   </div>
+                </div>
                   <footer>
                      <hr>
                      <img src="{{image_url}}/static/img/report/logo.png" style="float:left">
@@ -486,12 +497,12 @@ footer{margin:30px 0px; float: left; width: 100%}
                   </div>
                   <div class="margin_30 prev_banner ">
                      <h5 class="color_green">Key Achievements in this quarter</h5>
-                     <!-- <img src="/static/img/report/prev-banner.png" style="width:100%"> -->
+                     <img src="{{image_url}}/static/img/report/prev-banner.png" style="width:100%">
                      <!-- ---------------########## -->
                      
-                     <div class="col-md-12 report_text " style="padding:0px">
-                                <p>{{quest.text|title}}mahiti</p>
-                                    <!-- timeline slider -->
+                     <!-- <div class="col-md-12 report_text " style="padding:0px">
+                                <p>{{quest.text|title}}</p>
+
                                     
                                             <div id="scrollbar1">
                 
@@ -518,9 +529,9 @@ footer{margin:30px 0px; float: left; width: 100%}
                                                     <div class="end">
                                                     </div></div></div></div>
                                         
-<!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
+
                                
-                            </div>
+                            </div> -->
        <!-- ---------------------------------############ -->
                   </div>
                   {% get_milestones j report_obj 1 as mile %}

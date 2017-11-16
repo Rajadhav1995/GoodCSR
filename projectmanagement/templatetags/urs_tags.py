@@ -297,3 +297,11 @@ def get_quarter_sections(obj):
 def get_test_name(gg):
     name = 'Shashtri'
     return name
+
+import locale
+@register.filter
+def get_currency(amount):
+    locale.setlocale( locale.LC_ALL, '' )
+    group_amount = locale.currency( amount, grouping=True )
+    group_amount = group_amount[4:-3]
+    return group_amount

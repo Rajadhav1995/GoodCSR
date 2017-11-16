@@ -77,6 +77,8 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, HttpResponseNotFound
 from io import BytesIO
 from reportlab.pdfgen import canvas
+import re
+import base64
 
 def pdf_view(request):
     fs = FileSystemStorage()
@@ -89,3 +91,12 @@ def pdf_view(request):
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
 
+def save_screenshots(request):
+    pass
+    # dataUrlPattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
+    # image_data = request.GET.get('imgdata')
+    # image_data = dataUrlPattern.match(image_data).group(2)
+    # with open('screenshot.jpg', 'wb') as f:
+    #     import ipdb; ipdb.set_trace()
+    #     f.write(image_data)
+    # return HttpResponseRedirect('/report/final/design')
