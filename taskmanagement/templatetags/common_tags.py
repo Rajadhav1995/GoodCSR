@@ -133,13 +133,15 @@ def get_sub_answers(details,sub_questions,project_report,project):
     
 def get_org_logos(data,project,keys,details,sub):
     #get the organization logos
-    if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' or data.get('q_name') == 'pmo_logo':
+    if data.get('q_name') == 'logos' or data.get('q_name')== 'client_logo' :
         from projectmanagement.templatetags import urs_tags
         org_logo = urs_tags.get_org_logo(project)
         if org_logo:
             data['answer'] = org_logo
         else :
-            data['answer'] = "/static/img/GoodCSR_color_circle.png"
+            data['answer'] = ""
+    if data.get('q_name') == 'pmo_logo':
+        data['answer'] = "/static/img/new-logo.png"
     # get the answers from details if there is no answer object ..
     if sub.slug in keys:
         data['answer'] = details[sub.slug]
