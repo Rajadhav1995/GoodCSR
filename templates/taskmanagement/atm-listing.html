@@ -8,7 +8,7 @@
 <!--Content part starts-->
 <section class="content-part">
 	<div class="row">
-	
+	<div id="Super_Completion" style="width: 100%;float: left;">Super Category Completion</div>
 	<div class=" white-box ">
 <!--    	<img src="/static/img/wip-img.jpg" alt="">-->
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
@@ -305,6 +305,11 @@ $(document).ready(function(){
         taskId = this.id;
         tempId = this.id;
       }
+      // added the script 16th-Nov
+      if(this.task_progress != null || this.task_progress != undefined){
+            taskCompletion = this.task_progress;
+      }
+      // ended th script
       if (this.activity != null) {
         activityId = this.activity;
       }
@@ -350,13 +355,37 @@ $(document).ready(function(){
       var completionDate = this.actual_end_date;
       console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
-        var mileId = 111, mileStatus = 'gmilestone redmile '
+        var mileId = 111, 
+        mileStatus = 'gmilestone redmile '
         depTask = [];
         depTask = this.task;
         mileName = this.name;
         if (this.id != null) {
           mileId = this.id;
         }
+        // added the script 16th-Nov
+        maxDate = new Date('1970-01-01');		
+        var tempArray = [];		
+        var n = 0;		
+        $.each(depTask, function (index, value) {		
+          console.log('value', n);		
+          tempArray.push({		
+            'id': value		
+          });		
+          for (var i = 0; i < jsonData.tasks.length; i++) {		
+            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {		
+              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();		
+            }		
+            if (i == (depTask.length - 1)) {		
+            		
+              console.log('Array', depTask)		
+              console.log('Max Date',Math.max(tempArray.date));		
+            }		
+          }		
+          n++;		
+        });		
+        console.log("tempArray", tempArray);
+        //end of  the added script
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
@@ -383,25 +412,61 @@ $(document).ready(function(){
             var diffDays = Math.ceil(timeDiff / 86400000);
             console.log('DiffDays', diffDays);
             if (diffDays < 0) {
-              var dur = Math.abs(diffDays);
-              if (dur < 8) { mileName += " - Delayed by " + dur + " day(s)" };
-              if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Delayed by " + dur + "+ week(s)" };
-              if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Delayed by " + dur + "+ month(s)" };
-              if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Delayed by " + dur + "+ year(s)" };
+              var dur = rem = Math.abs(diffDays);
+              if (dur < 8) { 
+                mileName += " - Delayed by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) {
+                dur = Math.floor(dur / 7); 
+                //add 16th- Nov
+                rem = Math.floor(rem % 7);
+                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";              
+                };
+                //end
+              if (dur >= 30 && dur < 365) { 
+                dur = Math.floor(dur / 30);
+                //add 16th-Nov
+                rem = Math.floor(rem % 30);
+                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";		
+              };
+                //end 
+              if (dur >= 365) { 
+                dur = Math.floor(dur / 365);
+                //added script 
+                rem = Math.floor(rem % 365);
+                mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
+              };
+              //ended script
               console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
-              var dur = Math.abs(diffDays);
-              if (dur == 0) { mileName += " - On track" };
-              if (dur < 8) { mileName += " - Ahead by " + dur + " day(s)" };
-              if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Ahead by " + dur + "+ week(s)" };
-              if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Ahead by " + dur + "+ month(s)" };
-              if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Ahead by " + dur + "+ year(s)" };
+              var dur = rem = Math.abs(diffDays);
+              if (dur == 0) {
+                 mileName += " - On track"
+              };
+              if (dur < 8) { 
+                mileName += " - Ahead by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) { 
+                dur = Math.floor(dur / 7);
+                rem = Math.floor(rem % 7);//new line
+                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";	//modified
+              };
+              if (dur >= 30 && dur < 365) { 
+                dur = Math.floor(dur / 30);
+                rem = Math.floor(rem % 30);//new line
+                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";//modified
+              };
+              if (dur >= 365) {
+                 dur = Math.floor(dur / 365);
+                rem = Math.floor(rem % 365);//new line
+                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";//modified
+                 };
               console.log('Diff days', mileName);
             }
           }
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
-            mileStatus, '', 1, '', null, 0, activityId, 1, '', '', '', g));
+            mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));//changed null to 100
         }
         // } else {
         //   var prevDate, maxDate;
@@ -422,7 +487,7 @@ $(document).ready(function(){
 
       //Draw task after drawing milestone
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-        '', 0, 0, activityId, 1, '', '', '', g));
+        '', taskCompletion , 0, activityId, 1, '', '', '', g));
       // console.log("Task");
       // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
       //   '', 0, 0, activityId, 1, '', '', '');
@@ -438,7 +503,7 @@ $(document).ready(function(){
     g.setWeekColWidth(50);
     g.setWeekMajorDateDisplayFormat('mon yyyy');
     g.setWeekMinorDateDisplayFormat('W w');
-    // g.setScrollTo('today');
+    g.setScrollTo('today');
     g.Draw();
 
     function collision($div1, $div2) {
@@ -513,10 +578,116 @@ $(document).ready(function(){
         previous = this;
       });
     });
+    // new script 16th-Nov 
+    if (window.location.hash) {
+        setTimeout(function() {
+        $('html, body').scrollTop(0).show();	
+        $('html, body').animate({	
+                scrollTop: $(window.location.hash).offset().top - ($(window).height()/2) }, 1000)
+        },0);
+            $(window.location.hash).trigger('click')
+    $(window.location.hash).click();
+    }
+    else{
+        $('html, body').show();
+    }
+    // end of the script added 16th-Nov
   </script>
 
+<!--script for super categories starts -->
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+    if (gSuperName.length > 0) {
+      var SuperRemain = new Array();
+      for (i = 0; i < gSuperComp.length; i++) {
+        SuperRemain.push(100 - gSuperComp[i]);
+        SuperRemain = SuperRemain.reverse();
+      }
+      SuperComp = Highcharts.chart('Super_Completion', {
+        chart: {
+          type: 'bar',
+          backgroundColor: null,
+          height: 320,
+          borderWidth: 1,
+          borderColor: 'rgba(0,0,0,0)',
+          margin: [20, 10, 50, 100],
+          backgroundColor: '#fbfbfb'
+        },
+        exporting: {
+          enabled: false
+        },
+        credits: {
+          enabled: false
+        },
+        title: {
+          text: null,
+        },
+        xAxis: {
+          categories: gSuperName.reverse(),
+          labels: {
+            style: {
+              fontWeight: '600',
+              fontSize: '1em',
+              whiteSpace: 'normal',
+              textOverflow: 'ellipsis',
+            }
+          },
+        },
+        yAxis: {
+          visible: true,
+          min: 0,
+          max: 100,
+          title: {
+            text: '% completion',
+          },
+        },
+        plotOptions: {
+          series: {
+            stacking: 'normal',
+            pointWidth: 15
+          },
+          bar: {
+            grouping: false,
+            dataLabels: {
+              enabled: false
+            }
+          }
+        },
+        legend: {
+          enabled: false
+
+        },
+        series: [{
+          name: 'Remaining',
+          data: SuperRemain,
+          borderWidth: 0,
+          color: "#D0D0D0",
+        }, {
+          name: 'Completed',
+          data: gSuperComp.reverse(),
+          color: "#00998b",
+          dataLabels: {
+            enabled: true,
+            inside: true,
+            format: '{y}%',
+            style: {
+              fontSize: '0.75em',
+              fontWeight: 'normal',
+              color: 'black',
+              backgroundColor: 'transparent',
+            }
+          },
+        }]
+
+      });
+    }
 </script>
 
+</script>
+<!--script for super categories end -->
 <link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
 <script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
 

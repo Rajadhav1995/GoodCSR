@@ -66,7 +66,7 @@ $(document).ready(function(){
      <div class="menu-bottom">
         <ul>
           <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
-          <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestone</a></li>
+          <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>
           <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
           <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>
           <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
@@ -576,10 +576,11 @@ function confirm_alert(node) {
 }
 */
 </script>
-
+<!-- script for gantt chart starts here-->
 
 <script>
     var jsonData = {{taskdict|safe}}
+    console.log(jsonData);
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -648,9 +649,11 @@ function confirm_alert(node) {
         taskId = this.id;
         tempId = this.id;
       }
+      // added the script 16th-Nov
       if(this.task_progress != null || this.task_progress != undefined){
-        taskCompletion = this.task_progress;
+            taskCompletion = this.task_progress;
       }
+      // ended th script
       if (this.activity != null) {
         activityId = this.activity;
       }
@@ -696,35 +699,37 @@ function confirm_alert(node) {
       var completionDate = this.actual_end_date;
       console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
-        var mileId = 111,
-          mileStatus = 'gmilestone redmile '
+        var mileId = 111, 
+        mileStatus = 'gmilestone redmile '
         depTask = [];
         depTask = this.task;
         mileName = this.name;
         if (this.id != null) {
           mileId = this.id;
         }
-        maxDate = new Date('1970-01-01');
-        var tempArray = [];
-        var n = 0;
-        $.each(depTask, function (index, value) {
-          console.log('value', n);
-          tempArray.push({
-            'id': value
-          });
-          for (var i = 0; i < jsonData.tasks.length; i++) {
-            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {
-              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();
-            }
-            if (i == (depTask.length - 1)) {
-            
-              console.log('Array', depTask)
-              console.log('Max Date',Math.max(tempArray.date));
-            }
-          }
-          n++;
-        });
+        // added the script 16th-Nov
+        maxDate = new Date('1970-01-01');		
+        var tempArray = [];		
+        var n = 0;		
+        $.each(depTask, function (index, value) {		
+          console.log('value', n);		
+          tempArray.push({		
+            'id': value		
+          });		
+          for (var i = 0; i < jsonData.tasks.length; i++) {		
+            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {		
+              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();		
+            }		
+            if (i == (depTask.length - 1)) {		
+            		
+              console.log('Array', depTask)		
+              console.log('Max Date',Math.max(tempArray.date));		
+            }		
+          }		
+          n++;		
+        });		
         console.log("tempArray", tempArray);
+        //end of  the added script
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
@@ -752,54 +757,60 @@ function confirm_alert(node) {
             console.log('DiffDays', diffDays);
             if (diffDays < 0) {
               var dur = rem = Math.abs(diffDays);
-              if (dur < 8) {
+              if (dur < 8) { 
                 mileName += " - Delayed by " + dur + " day(s)"
               };
               if (dur >= 8 && dur < 30) {
-                dur = Math.floor(dur / 7);
+                dur = Math.floor(dur / 7); 
+                //add 16th- Nov
                 rem = Math.floor(rem % 7);
-                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";
-              };
-              if (dur >= 30 && dur < 365) {
+                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";              
+                };
+                //end
+              if (dur >= 30 && dur < 365) { 
                 dur = Math.floor(dur / 30);
+                //add 16th-Nov
                 rem = Math.floor(rem % 30);
-                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";
+                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";		
               };
-              if (dur >= 365) {
+                //end 
+              if (dur >= 365) { 
                 dur = Math.floor(dur / 365);
+                //added script 
                 rem = Math.floor(rem % 365);
                 mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
               };
+              //ended script
               console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
               var dur = rem = Math.abs(diffDays);
               if (dur == 0) {
-                mileName += " - On track"
+                 mileName += " - On track"
               };
-              if (dur < 8) {
+              if (dur < 8) { 
                 mileName += " - Ahead by " + dur + " day(s)"
               };
-              if (dur >= 8 && dur < 30) {
+              if (dur >= 8 && dur < 30) { 
                 dur = Math.floor(dur / 7);
-                rem = Math.floor(rem % 7);
-                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";
+                rem = Math.floor(rem % 7);//new line
+                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";	//modified
               };
-              if (dur >= 30 && dur < 365) {
+              if (dur >= 30 && dur < 365) { 
                 dur = Math.floor(dur / 30);
-                rem = Math.floor(rem % 30);
-                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";
+                rem = Math.floor(rem % 30);//new line
+                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";//modified
               };
               if (dur >= 365) {
-                dur = Math.floor(dur / 365);
-                rem = Math.floor(rem % 365);
-                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
-              };
+                 dur = Math.floor(dur / 365);
+                rem = Math.floor(rem % 365);//new line
+                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";//modified
+                 };
               console.log('Diff days', mileName);
             }
           }
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
-            mileStatus, '', 1, '', null, 0, activityId, 1, '', '', '', g));
+            mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));//changed null to 100
         }
         // } else {
         //   var prevDate, maxDate;
@@ -820,7 +831,7 @@ function confirm_alert(node) {
 
       //Draw task after drawing milestone
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-        '', taskCompletion, 0, activityId, 1, '', '', '', g));
+        '', taskCompletion , 0, activityId, 1, '', '', '', g));
       // console.log("Task");
       // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
       //   '', 0, 0, activityId, 1, '', '', '');
@@ -836,7 +847,7 @@ function confirm_alert(node) {
     g.setWeekColWidth(50);
     g.setWeekMajorDateDisplayFormat('mon yyyy');
     g.setWeekMinorDateDisplayFormat('W w');
-    // g.setScrollTo('today');
+    g.setScrollTo('today');
     g.Draw();
 
     function collision($div1, $div2) {
@@ -911,7 +922,23 @@ function confirm_alert(node) {
         previous = this;
       });
     });
+    // new script 16th-Nov 
+    if (window.location.hash) {
+        setTimeout(function() {
+        $('html, body').scrollTop(0).show();	
+        $('html, body').animate({	
+                scrollTop: $(window.location.hash).offset().top - ($(window).height()/2) }, 1000)
+        },0);
+            $(window.location.hash).trigger('click')
+    $(window.location.hash).click();
+    }
+    else{
+        $('html, body').show();
+    }
+    // end of the script added 16th-Nov
   </script>
+  
+  <!-- script for gant chart ends here-->
 <script>
 //Toggle
 
