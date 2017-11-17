@@ -703,7 +703,6 @@
                      <h3 style="float:right;margin-top:0px;">7</h3>
                   </footer>
                </div>
-               </div>
                {% endfor %}
                <script src="/static/js/jquery.min.js"></script>
                         <script src="/static/js/bootstrap.min.js"></script>
@@ -743,7 +742,7 @@
                                                dataLabels: {
                                                    enabled: false,
                                                    formatter: function() {
-                                                       return this.percentage.toFixed(2) + '%';
+                                                       return this.percentage.toFixed(1) + '%';
                                                    }
                                                }
                                            }
@@ -773,6 +772,7 @@
                                    });
                         </script>
                {% endif %}
+               </div>
                <!--Index page 07 html ends-->
                <!--Index page 08 html starts-->
                {% if i.quarter_type == 2 %}
@@ -799,13 +799,13 @@
                      </div>
                   </div>
                   <hr>
-                  
+                  <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      {% get_date_range i as date_range %}
                      <p>Second Quarter: ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
-                  <div class='page_height'>
+                  
                   <div> 
                      
                      <div class="col-md-12 report_text " style="padding:0px">
@@ -1358,7 +1358,7 @@
                                                dataLabels: {
                                                    enabled: false,
                                                    formatter: function() {
-                                                       return this.percentage.toFixed(2) + '%';
+                                                       return this.percentage.toFixed(1) + '%';
                                                    }
                                                }
                                            }
