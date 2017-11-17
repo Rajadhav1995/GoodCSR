@@ -298,7 +298,8 @@ def get_quarter_sections(obj):
 import locale
 @register.filter
 def get_currency(amount):
-    locale.setlocale( locale.LC_ALL, '' )
+    
+    locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
     group_amount = locale.currency( int(amount), grouping=True )
     group_amount = group_amount[4:-3]
     return group_amount
