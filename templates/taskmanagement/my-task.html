@@ -8,7 +8,7 @@
     <div class="row">
         <div class="image-pad orglogo ">
             {% get_org_logo projectobj as org_logo %}
-        	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
+        	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);"></a>
 <!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
         </div>
     </div>
@@ -42,7 +42,7 @@
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span></a></li>
+               <li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span><span>{% if status == '0' %}{{task.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% endif %}
             </ul>
@@ -53,7 +53,7 @@
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li>
+               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span><span>{% if status == '0' %}{{i.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -66,7 +66,7 @@
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li>
+               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span><span>{% if status == '0' %}{{j.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -92,7 +92,7 @@
        <div class="border-bottom task_width">
          <div class="task-head-lft ">
             <h4>{{i.name}}<img src="/static/img/vender-icon.png" alt=""></h4>
-            <h5>in <span class="under-line">{{i.activity.project.name}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
+            <h5>in <span class="under-line">{{i.activity.project.name|title}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
 <!--            <p>Details: This project works for child development, health and-->
 <!--               welfare of Ramnagar village in Andhra Pradesh. -->
 <!--            </p>-->
@@ -115,12 +115,32 @@
          </div>
          <div class="planned-pad">
             <ul>
-               <li><span>Assigned to</span> <img src="/static/img/default_profile_image.png" alt=""></li>
-               <li><span>Created by </span><img src="/static/img/default_profile_image.png" alt=""></li>
+               <li><span>Assigned to</span> 
+                   <div  class="middle_text"><img src="/static/img/default_profile_image.png" alt="" class="image">
+                        <div class="middle">
+                            <div class="text">{{i.assigned_to.name}}</div>
+                        </div>
+                   </div>
+               </li>
+               <li><span>Created by </span>
+                   <div  class="middle_text"><img src="/static/img/default_profile_image.png" alt="" class="image">
+                            <div class="middle">
+                                <div class="text">{{i.created_by.name}}</div>
+                            </div>
+                       </div>
+               </li>
                <li><span>Approval</span> <img src="/static/img/default_profile_image.png" alt=""></li>
-               <li><span>Subscribed to</span>{% for sub in i.subscribers.all|slice:"0:2" %} 
-               <img src="/static/img/default_profile_image.png" alt="">{%endfor%}</li>{%if i.subscribers.all|length >= 3 %}. . . .{% endif %}
+               <li><span>Subscribed to</span>
+                    {% for sub in i.subscribers.all|slice:"0:2" %} 
+                     <div  class="middle_text"><img src="/static/img/default_profile_image.png" alt="" class="image">
+                        <div class="middle">
+                            <div class="text">{{sub.name}}</div>
+                        </div>
+                     </div>
+                    {%endfor%}
+               </li>{%if i.subscribers.all|length >= 3 %}. . . .{% endif %}
             </ul>
+            
          </div>
          <div class="task-completion">
             <div class="task-completion-left">
