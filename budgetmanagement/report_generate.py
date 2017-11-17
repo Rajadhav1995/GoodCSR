@@ -166,7 +166,6 @@ def html_to_pdf_view(request):
             answer = ''
         answer_list[str(question.slug)] = answer
     paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
-    # import ipdb; ipdb.set_trace()
     html_string = render_to_string('report/report-pdf.html', {'paragraphs': paragraphs,
         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
         'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,

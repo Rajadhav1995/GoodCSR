@@ -105,3 +105,11 @@ def get_timeline_progress(projectobj,v):
     milestone = Milestone.objects.filter(project = projectobj,overdue__lte=today.now())
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     return timeline_json,timeline_json_length
+
+@register.assignment_tag
+def get_timeline_json(projectobj,quarter_obj):
+    timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = quarter_obj.start_date,date__lte = quarter_obj.end_date ).order_by('date')
+    today = datetime.today()
+    milestone = Milestone.objects.filter(project = projectobj,overdue__gte = quarter_obj.start_date,overdue__lte = quarter_obj.end_date)
+    timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
+    return timeline_json,timeline_json_length

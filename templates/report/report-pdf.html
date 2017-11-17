@@ -227,30 +227,31 @@ footer{margin:30px 0px; float: left; width: 100%}
 
             <!-- onload="window.print()" -->
             <body >
-              <div class='header_page_height'>
+
+              <div class='header_page_height' style='page-break-after: always;'>
                <header>
 
                   <div class="">
                      <div>
-                        <img src="{{image_url}}/static/img/report/header-img.jpg" style="width:100%">
+                        <img src="{{image_url}}/static/img/report/header-img.jpg" style="width:120%; margin-left: -10%;">
                      </div>
                      <div>
                       
                       {% if answer_list.cover_image %}
-                        <img src="{{image_url}}/static/img/report/banner-cover.jpg" style="width:100%">
-                        <!-- <img src="{{answer_list.cover_image}}" style="width:100%"> -->
+                        <img src="{{image_url}}/static/img/report/banner-cover.jpg" style="width:120%; margin-left: -10%; margin-top: -3%;">
+                        <!-- <img src="{{answer_list.cover_image}}" style="width:120%; margin-left: -10%; margin-top: -3%;"> -->
                         
                       {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" style="width:100%">
                       {% endif %}
                      </div>
                      <div>
-                        <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
+                        <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:120%; margin-left: -10%; margin-top: -3%;">
                      </div>
                   </div>
 
                   <div class="container">
-                     <div class="margin_top_50">
+                     <div class="margin_top_50" style="margin-top:0px">
                         <ul>
                           <!-- {% if answer_list.client_logo %} -->
                            <!-- <li><img src="{{answer_list.client_logo}}" height = 70 width = 100></li> -->
@@ -280,12 +281,13 @@ footer{margin:30px 0px; float: left; width: 100%}
                 
                </header>
                </div>
-               <header style="margin-top:50px">
+              
+               <div class="container" style='page-break-after: always;'>
+                 <header style="margin-top:0px">
                   <div>
                      <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
                   </div>
                </header>
-               <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:24px">Index{{taskdict1}}</h1>
                      <div class="float_right">
@@ -325,13 +327,14 @@ footer{margin:30px 0px; float: left; width: 100%}
                   <img src="{{image_url}}/static/img/report/logo.png" style="float:left">
                   <h3 style="float:right;margin-top:0px;">2</h3>
                </div>
+               <div style='page-break-after: always;'>
                <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
 
-               <!--<header>
+               <header>
                   <div>
-                  <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                  <img src="/static/img/report/bottomslider.jpg" style="width:100%; margin-left: -10%; margin-top: -3%;">
                    </div>
-                   </header>-->
+                   </header>
                <!--Index page 02 html ends-->
                <!--Index page 03 html starts-->
 
@@ -421,9 +424,11 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">3</h3>
                   </footer>
                </div>
-               <header style="margin-top:50px">
+             </div>
+             <div style='page-break-after: always;'>
+               <header style="margin-top:0px">
                   <div>
-                     <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
+                     <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%; margin-left: -10%; margin-top: -3%;">
                   </div>
                </header>
                <!--Index page 03 html ends-->
@@ -455,23 +460,33 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">4</h3>
                   </footer>
                </div>
-               
+               </div>
+               <header style="margin-top:0px">
+                  <div>
+                     <img src="/static/img/report/bottomslider.jpg" style="width:120%; left: -120%;">
+                  </div>
+               </header>
+
                <!--Index page 04 html ends-->
                <!--Index page 05 html starts-->
                {% for i in report_quarter %}
                 {% get_parameter i 3 as pie_data %}
                 {{pie_data.0.PIN}}
                 {% if i.quarter_type == 1 %}
+                
                 {% get_quarter_sections i as quart_section %}
                 {% for j in quart_section %}
-
-                <header style="margin-top:50px">
+                <header style="margin-top:0px">
                   <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                     <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:120%; margin-left: -10%; margin-top: -3%;">
                   </div>
                </header>
+                <div style='page-break-after: always;'>
+                
 
                <div class="container">
+
+
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      <div class="float_right">
@@ -561,9 +576,11 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">5</h3>
                   </footer>
                </div>
-               <header style="margin-top:50px">
+             </div>
+             <div style='page-break-after: always;'>
+               <header style="margin-top:0px">
                   <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                     <img src="/static/img/report/bottomslider.jpg" style="width:120%; margin-left: -10%; margin-top: -3%;">
                   </div>
                </header>
                <!--Index page 05 html ends-->
@@ -651,39 +668,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                   </div>
                   <div class="col-md-12">
                      <div class="row">
-                        {% get_parameter i 3 as pie_data %}
-                        {{pie_data.3}}
-                        {% if pie_data.3 %}
-                        {% for lol in  pie_data.3 %}
-                        <div class="margin_30 prev_banner">
-                           <h5 class="color-red">PARAMETER 2</h5>
-                           <h5 class="color_green">Batch Size</h5>
-                           <div>
-                              <div class="col-md-4">
-                                 <div class="row">
-                                    <ul class="key_parameter parameter">
-                                       <!-- <div class='numeric_parameter'></div> -->
-                                       
-                                          <!-- <h3>{{chart_name_pip}}</h3> -->
-                                          <div class="right-budget beni-dist">
-                                             <div id="coll" style="width: 100%;float: left;"></div>
-                                          </div>
-                                       
-                                    </ul>
-                                    <!-- <img src="/static/img/report/parameter02.jpg" style="width:100%"> -->
-                                 </div>
-                              </div>
-                              <div class="col-md-8">
-                                 <div class="parameter-textbottom">
-                                    <h4 class="color_green">About This Parameter</h4>
-                                    {% get_about_parameter i report_obj 3 as about_parameter %}
-                                    <p> {{about_parameter}} </p>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
+                        <img src="img/parameter01.jpg" style="width:100%">
                      </div>
                   </div>
                   </div>
@@ -693,9 +678,10 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">6</h3>
                   </footer>
                </div>
-               <header style="margin-top:50px">
+               <div style='page-break-after: always;'>
+               <header style="margin-top:0px">
                   <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                     <img src="/static/img/report/bottomslider.jpg" style="width:120%; margin-left: -10%; margin-top: -3%;">
                   </div>
                </header>
                <!--Index page 06 html ends-->
@@ -845,6 +831,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                   </footer>
                </div>
                </div>
+             </div>
                {% endfor %}
                <script src="/static/js/jquery.min.js"></script>
                         <script src="/static/js/bootstrap.min.js"></script>
@@ -918,12 +905,13 @@ footer{margin:30px 0px; float: left; width: 100%}
                <!--Index page 08 html starts-->
                {% if i.quarter_type == 2 %}
               {% get_parameter i 4 as pie_data %}
-              <header style="margin-top:50px">
+              <div style='page-break-after: always;'>
+              <header style="margin-top:0px">
                   <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                     <img src="/static/img/report/bottomslider.jpg" style="width:120%; margin-left: -10%; margin-top: -3%;">
                   </div>
                </header>
-               <div class="container">
+               <div class="container ">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      <div class="float_right">
@@ -1378,10 +1366,11 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">8</h3>
                   </footer>
                </div>
-
+</div>
                <!--Index page 08 html ends-->
                <!--Index page 09 html starts-->
-               <header style="margin-top:50px">
+               <div style='page-break-after: always;'>
+               <header style="margin-top:0px">
                   <div>
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                   </div>
@@ -1627,9 +1616,11 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">9</h3>
                   </footer>
                </div>
+             </div>
                <!--Index page 09 html ends-->
                <!--Index page 10 html starts-->
-               <header style="margin-top:50px">
+               <div style='page-break-after: always;'>
+               <header style="margin-top:0px">
                   <div>
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                   </div>
@@ -1671,11 +1662,13 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">10</h3>
                   </footer>
                </div>
+             </div>
                {% endif %}
                <!--Index page 10 html ends-->
                <!--Index page 10 html starts-->
                {% if i.quarter_type == 3 %}
-                <header style="margin-top:50px">
+               <div style='page-break-after: always;'>
+                <header style="margin-top:0px">
                   <div>
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                   </div>
@@ -1824,11 +1817,13 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h3 style="float:right;margin-top:0px;">11</h3>
                   </footer>
                </div>
+             </div>
                {% endif %}
                 {% endfor %}
                <!--Index page 11 html ends-->
                <!--Index page 12 html-->
-               <header style="margin-top:50px">
+               <div style='page-break-after: always;'>
+               <header style="margin-top:0px">
                   <div>
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                   </div>
