@@ -399,7 +399,7 @@
                      <h5 class="color-red">MILESTONE 1</h5>
                      <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
                      <p><strong>About the Milestone</strong></p>
-                     <h6 class="color_grey">{{m.description}} </h6>
+                     <h5>{{m.description}} </h5>
                      {% get_mile_images m.id as images %}
                         {% for img in images %}
                      <div class="col-md-6" style="padding:0px">
@@ -641,11 +641,11 @@
                 {% get_quarter_order 1 project as quarter_order %}
                 {% if i == quarter_order %}
                 {% get_quarter_details j i project as line_itemobj %}
-                   <td align="center" class=""> {{line_itemobj.unit}} </td>
-                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                   <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
                      <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
-                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                      {% endif %}
                      {% endfor %}
 
@@ -703,7 +703,6 @@
                      <h3 style="float:right;margin-top:0px;">7</h3>
                   </footer>
                </div>
-               </div>
                {% endfor %}
                <script src="/static/js/jquery.min.js"></script>
                         <script src="/static/js/bootstrap.min.js"></script>
@@ -741,9 +740,10 @@
                                                cursor: 'pointer',
                                                showInLegend: true,
                                                dataLabels: {
-                                                   enabled: false,
+                                                   enabled: true,
+                                                   distance: -30,
                                                    formatter: function() {
-                                                       return this.percentage.toFixed(2) + '%';
+                                                       return this.percentage.toFixed(1) + '%';
                                                    }
                                                }
                                            }
@@ -773,6 +773,7 @@
                                    });
                         </script>
                {% endif %}
+               </div>
                <!--Index page 07 html ends-->
                <!--Index page 08 html starts-->
                {% if i.quarter_type == 2 %}
@@ -799,13 +800,13 @@
                      </div>
                   </div>
                   <hr>
-                  
+                  <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      {% get_date_range i as date_range %}
                      <p>Second Quarter: ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
-                  <div class='page_height'>
+                  
                   <div> 
                      
                      <div class="col-md-12 report_text " style="padding:0px">
@@ -1146,10 +1147,10 @@
                 {% if i == quarter_order %}
                 {% get_quarter_details j i project as line_itemobj %}
                    <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
-                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                    <td align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
                      <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
-                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                      {% endif %}
                      {% endfor %}
 
@@ -1356,9 +1357,10 @@
                                                cursor: 'pointer',
                                                showInLegend: true,
                                                dataLabels: {
-                                                   enabled: false,
+                                                   enabled: true,
+                                                   distance: -30,
                                                    formatter: function() {
-                                                       return this.percentage.toFixed(2) + '%';
+                                                       return this.percentage.toFixed(1) + '%';
                                                    }
                                                }
                                            }
@@ -1438,7 +1440,7 @@
                     <td align="center" class=""> {{line_itemobj.rate}}  </td>
                      <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
-                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                      {% endif %}
                      {% endfor %}
 
@@ -1621,9 +1623,9 @@
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center">{{line_total}}</td>
+                <td align="center">{{line_total | get_currency}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center">{{utilized_amount}}</td>
+                <td align="center">{{utilized_amount | get_currency}}</td>
                  <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
@@ -1632,9 +1634,9 @@
                 {% get_quarter_details j i project as line_itemobj %}
                    <td align="center" class=""> {{line_itemobj.unit}} </td>
                     <td align="center" class=""> {{line_itemobj.rate}}  </td>
-                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency | get_currency}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
-                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                      {% endif %}
                      {% endfor %}
 
