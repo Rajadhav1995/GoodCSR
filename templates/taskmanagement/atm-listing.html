@@ -604,7 +604,7 @@ $(document).ready(function(){
       var SuperRemain = new Array();
       for (i = 0; i < gSuperComp.length; i++) {
         SuperRemain.push(100 - gSuperComp[i]);
-        SuperRemain = SuperRemain.reverse();
+        //SuperRemain = SuperRemain.reverse();
       }
       SuperComp = Highcharts.chart('Super_Completion', {
         chart: {
@@ -626,7 +626,7 @@ $(document).ready(function(){
           text: null,
         },
         xAxis: {
-          categories: gSuperName.reverse(),
+          categories: gSuperName,
           labels: {
             style: {
               fontWeight: '600',
@@ -667,7 +667,7 @@ $(document).ready(function(){
           color: "#D0D0D0",
         }, {
           name: 'Completed',
-          data: gSuperComp.reverse(),
+          data: gSuperComp,
           color: "#00998b",
           dataLabels: {
             enabled: true,
@@ -686,7 +686,6 @@ $(document).ready(function(){
     }
 </script>
 
-</script>
 <!--script for super categories end -->
 <link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
 <script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
