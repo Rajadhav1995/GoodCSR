@@ -198,6 +198,7 @@ def get_parameter(obj,block_id):
                 pie_chart = 0
             else:
                 pie_chart = 1
+
     return master_list,master_names,pie_chart
 
 @register.filter
@@ -286,14 +287,18 @@ def get_date_range(obj):
     duration = ''
     if quarter:
         duration = quarter.start_date.strftime('%d %b %Y')+ ' to ' + quarter.end_date.strftime('%d %b %Y')
-    return duration
+        quarter_duration = quarter.start_date.strftime('%Y-%m-%d')+ 'to' + quarter.end_date.strftime('%Y-%m-%d')
+    return duration,quarter_duration
 
 @register.assignment_tag
 def get_quarter_sections(obj):
     quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project)
     return quarter_section
 
-@register.assignment_tag
-def get_test_name(gg):
-    name = 'Shashtri'
-    return name
+import locale
+@register.filter
+def get_currency(amount):
+    locale.setlocale( locale.LC_ALL, '' )
+    group_amount = locale.currency( int(amount), grouping=True )
+    group_amount = group_amount[4:-3]
+    return group_amount

@@ -1114,9 +1114,10 @@ Highcharts.chart(values, {
                     cursor: 'pointer',
                     showInLegend: true,
                     dataLabels: {
-                        enabled: false,
+                        enabled: true,
+                        distance: -30,
                         formatter: function() {
-                            return this.percentage.toFixed(2) + '%';
+                            return this.y;
                         }
                     }
                 }
@@ -1173,10 +1174,10 @@ Highcharts.chart(values, {
                     cursor: 'pointer',
                     showInLegend: true,
                     dataLabels: {
-                        enabled: false,
+                        enabled: true,
+                        distance: -30,
                         formatter: function() {
-                            return this.percentage.toFixed(2) + '%';
-                        }
+                            return this.y;
                     }
                 }
             },
