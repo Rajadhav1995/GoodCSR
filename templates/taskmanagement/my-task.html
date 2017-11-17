@@ -42,7 +42,7 @@
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span><span>{% if status == '0' %}{{task.activity.project.name}}{% endif %}</span></a></li>
+               <li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span><span>{% if status == '0' %}{{task.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% endif %}
             </ul>
@@ -53,7 +53,7 @@
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span><span>{% if status == '0' %}{{i.activity.project.name}}{% endif %}</span></a></li>
+               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span><span>{% if status == '0' %}{{i.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -66,7 +66,7 @@
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span><span>{% if status == '0' %}{{j.activity.project.name}}{% endif %}</span></a></li>
+               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span><span>{% if status == '0' %}{{j.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -92,7 +92,7 @@
        <div class="border-bottom task_width">
          <div class="task-head-lft ">
             <h4>{{i.name}}<img src="/static/img/vender-icon.png" alt=""></h4>
-            <h5>in <span class="under-line">{{i.activity.project.name}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
+            <h5>in <span class="under-line">{{i.activity.project.name|title}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
 <!--            <p>Details: This project works for child development, health and-->
 <!--               welfare of Ramnagar village in Andhra Pradesh. -->
 <!--            </p>-->
