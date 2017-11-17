@@ -1634,7 +1634,7 @@
                 {% get_quarter_details j i project as line_itemobj %}
                    <td align="center" class=""> {{line_itemobj.unit}} </td>
                     <td align="center" class=""> {{line_itemobj.rate}}  </td>
-                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency | get_currency}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
                      <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                      {% endif %}
