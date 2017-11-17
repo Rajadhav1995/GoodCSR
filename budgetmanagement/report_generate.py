@@ -22,7 +22,7 @@ from pmu.settings import PMU_URL
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-# from weasyprint import HTML
+from weasyprint import HTML
 
 
 def report_form(request):
@@ -113,78 +113,76 @@ def report_section_form(request):
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
-# def html_to_pdf_view(request):
-#     # slug = request.GET.get('slug')
-#     slug = 'test-pmu-oct'
-#     image_url = PMU_URL
-#     # report_id = request.GET.get('report_id')
-#     report_id = 76
-#     answer_list ={}
-#     answer = ''
-#     contents,quarters = get_index_contents(slug,report_id)
-#     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
-#         contents[key]=value
-#     project = Project.objects.get_or_none(slug = slug)
-#     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
-#     # calling function to get JSON data for pie chart display
-#     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-#     report_obj = ProjectReport.objects.get_or_none(id=report_id)
-#     report_quarter = QuarterReportSection.objects.filter(project=report_obj).order_by('quarter_type')
-#     # mapping view is to show funder and implementation partner relation
-#     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-#     budgetobj = Budget.objects.latest_one(project = project,active=2)
-#     budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
-#     quarter_list = get_budget_quarters(budgetobj)
-#     # cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
-#         # content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
-#     location = ProjectLocation.objects.filter(object_id=project.id)
-#     quest_list = Question.objects.filter(active=2,block__block_type = 0)
-#     tranche_list = Tranche.objects.filter(project = project,active=2)
-#     tranche_amount = tanchesamountlist(tranche_list)
-#     planned_amount = tranche_amount['planned_amount']
-#     actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
-#     recommended_amount = tranche_amount['recommended_amount']
-#     utilized_amount = tranche_amount['utilized_amount']
-#     projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
-#     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-#     # for basic details of project report we are sending all fields in dictionary 
-#     for question in quest_list:
-#         answer_obj = Answer.objects.get_or_none(question =question,
-#                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
-#         if answer_obj and (question.qtype == 'T' or question.qtype == 'APT' or question.qtype == 'ck'):
-#             answer = answer_obj.text
-#         elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
-#             answer = image_url + '/' + answer_obj.attachment_file.url
-#         elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file == '' :
-#             from projectmanagement.templatetags import urs_tags
-#             org_logo = urs_tags.get_org_logo(project)
-#             if org_logo:
-#                 answer = org_logo
-#             else :
-#                 answer = "/static/img/GoodCSR_color_circle.png"
-#         else:
-#             answer = ''
-#         answer_list[str(question.slug)] = answer
-#     paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
-#     html_string = render_to_string('report/report-pdf.html', {'paragraphs': paragraphs,
-#         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
-#         'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
-#         'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
-#         'actual_disbursed_amount':actual_disbursed_amount,'planned_amount':planned_amount,
-#         'quarter_list':quarter_list,'budget_period':budget_period,'image_url':image_url,
-#         'project':project,'report_quarter':report_quarter,'report_obj':report_obj,'contents':contents,
-#         'quarters':quarters})
+def html_to_pdf_view(request):
+    slug = request.GET.get('slug')
+    image_url = PMU_URL
+    report_id = request.GET.get('report_id')
+    answer_list ={}
+    answer = ''
+    contents,quarters = get_index_contents(slug,report_id)
+    for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
+        contents[key]=value
+    project = Project.objects.get_or_none(slug = slug)
+    parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
+    # calling function to get JSON data for pie chart display
+    master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
+    report_obj = ProjectReport.objects.get_or_none(id=report_id)
+    report_quarter = QuarterReportSection.objects.filter(project=report_obj).order_by('quarter_type')
+    # mapping view is to show funder and implementation partner relation
+    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
+    budgetobj = Budget.objects.latest_one(project = project,active=2)
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+    quarter_list = get_budget_quarters(budgetobj)
+    # cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
+        # content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
+    location = ProjectLocation.objects.filter(object_id=project.id)
+    quest_list = Question.objects.filter(active=2,block__block_type = 0)
+    tranche_list = Tranche.objects.filter(project = project,active=2)
+    tranche_amount = tanchesamountlist(tranche_list)
+    planned_amount = tranche_amount['planned_amount']
+    actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
+    recommended_amount = tranche_amount['recommended_amount']
+    utilized_amount = tranche_amount['utilized_amount']
+    projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
+    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    # for basic details of project report we are sending all fields in dictionary 
+    for question in quest_list:
+        answer_obj = Answer.objects.get_or_none(question =question,
+                        content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
+        if answer_obj and (question.qtype == 'T' or question.qtype == 'APT' or question.qtype == 'ck'):
+            answer = answer_obj.text
+        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
+            answer = image_url + '/' + answer_obj.attachment_file.url
+        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file == '' :
+            from projectmanagement.templatetags import urs_tags
+            org_logo = urs_tags.get_org_logo(project)
+            if org_logo:
+                answer = org_logo
+            else :
+                answer = "/static/img/GoodCSR_color_circle.png"
+        else:
+            answer = ''
+        answer_list[str(question.slug)] = answer
+    paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
+    html_string = render_to_string('report/report-pdf.html', {'paragraphs': paragraphs,
+        'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
+        'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
+        'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
+        'actual_disbursed_amount':actual_disbursed_amount,'planned_amount':planned_amount,
+        'quarter_list':quarter_list,'budget_period':budget_period,'image_url':image_url,
+        'project':project,'report_quarter':report_quarter,'report_obj':report_obj,'contents':contents,
+        'quarters':quarters})
 
-#     html = HTML(string=html_string)
-#     html.write_pdf(target='testp.pdf');
+    html = HTML(string=html_string)
+    html.write_pdf(target='testp.pdf');
 
-#     fs = FileSystemStorage()
-#     with fs.open('testp.pdf') as pdf:
-#         response = HttpResponse(pdf, content_type='application/pdf')
-#         response['Content-Disposition'] = 'attachment; filename="testp.pdf"'
-#         return response
+    fs = FileSystemStorage()
+    with fs.open('testp.pdf') as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="testp.pdf"'
+        return response
 
-#     return response
+    return response
 
 
 

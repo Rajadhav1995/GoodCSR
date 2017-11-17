@@ -14,6 +14,6 @@ urlpatterns = [
     url(r'final/design/$',finalreportdesign),
     # url(r'pdf/view/$',html_to_pdf_view),
     url(r'save/image/$',save_screenshots),
-    # url(r'pdf/view/$',html_to_pdf_view),
+    url(r'pdf/view/$',html_to_pdf_view),
     url(r'save/exit/$',report_save_exit)
 ]
