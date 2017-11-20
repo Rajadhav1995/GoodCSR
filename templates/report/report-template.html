@@ -743,7 +743,7 @@
                                                    enabled: true,
                                                    distance: -30,
                                                    formatter: function() {
-                                                       return this.percentage.toFixed(1) + '%';
+                                                       return this.y;
                                                    }
                                                }
                                            }
@@ -783,6 +783,7 @@
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                   </div>
                </header>
+               <div class='page_height'>
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -800,7 +801,7 @@
                      </div>
                   </div>
                   <hr>
-                  <div class='page_height'>
+                  
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      {% get_date_range i as date_range %}
@@ -1231,6 +1232,7 @@
                   {% endfor %}
                   {% endfor %}
                   </div>
+                  </div>
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
@@ -1360,7 +1362,7 @@
                                                    enabled: true,
                                                    distance: -30,
                                                    formatter: function() {
-                                                       return this.percentage.toFixed(1) + '%';
+                                                       return this.y;
                                                    }
                                                }
                                            }
