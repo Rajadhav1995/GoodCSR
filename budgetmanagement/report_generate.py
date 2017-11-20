@@ -114,11 +114,9 @@ from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
 def html_to_pdf_view(request):
-    # slug = request.GET.get('slug')
-    slug = 'test-pmu-oct'
+    slug = request.GET.get('slug')
     image_url = PMU_URL
-    # report_id = request.GET.get('report_id')
-    report_id = 76
+    report_id = request.GET.get('report_id')
     answer_list ={}
     answer = ''
     contents,quarters = get_index_contents(slug,report_id)
