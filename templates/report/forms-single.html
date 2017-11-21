@@ -635,19 +635,20 @@
                               <div class="col-md-6 report_text ">
                                  {% for act_quest in activity_questions %}
                                      {% if act_quest.slug == "activity-name" %}
-                                     <p>{{act_quest.text|title}}</p>
-                                     <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
-                                     <h5><a href="#">Remove</a></h5>
-                                     {% endif %}
+                                        <p>{{act_quest.text|title}}</p>
+                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
+                                        <h5><a href="#">Remove</a></h5>
+                                    {% endif %}
+                                    
                                      {% if act_quest.slug == "about-the-actvity" %}
-                                        <div class=" report_text">
-                                            <p>{{act_quest.text|title}}</p>
-                                            <div class="">
-                                                <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
-                                            </div>
-                                            <h5><a href="#">Remove</a></h5>
+                                    <div class=" report_text">
+                                        <p>{{act_quest.text|title}}</p>
+                                        <div class="">
+                                            <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
                                         </div>
-                                        {% endif %}
+                                        <h5><a href="#">Remove</a></h5>
+                                    </div>
+                                    {% endif %}
                                  {% endfor %}
                               </div>
                               {% for act_quest in activity_questions %}
@@ -690,31 +691,32 @@
                            <!--                     this is for parameter selection -->
                            {% if quest.slug == "parameter-section" %}
                            <hr class="border_line">
-                           <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
+                           <div class="milestone para_data_row_{{i}}_1" id="data_row_{{i}}_1">
                                 {% get_previous_subquestions quest as parameter_questions %}
 
                                     {% for param_quest in parameter_questions %}
-                                    {% if param_quest.slug == "parameter-selection" %}
-                                      <div class="col-md-6 report_text parameter_section">
-                                         <p>{{param_quest.text|title}}</p>
-                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
-                                            <option value="0">Select</option>
-                                            {% for i in project_paramterlist %}
-                                            <option value="{{i.id}}">{{i.name}}</option>
-                                            {% endfor %}
-                                         </select>
-                                         <h5><a href="#">Remove</a></h5>
-                                      </div>
-                                    {% endif %}
-                                      {% if param_quest.slug == "about-parameter" %}
-                                      <div class="col-md-12 report_text ">
-                                         <p>{{param_quest.text|title}}</p>
-                                         <div class="">
-                                            <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
-                                         </div>
-                                         <h5><a href="#">Remove</a></h5>
-                                      </div>
-                                      {% endif %}
+                                        {% if param_quest.slug == "parameter-selection" %}
+                                            <div class="col-md-6 report_text parameter_section">
+                                                <p>{{param_quest.text|title}}</p>
+                                                <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
+                                                    <option value="0">Select</option>
+                                                    {% for i in project_paramterlist %}
+                                                    <option value="{{i.id}}">{{i.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <h5><a href="#">Remove</a></h5>
+                                            </div>
+                                           {% endif %}
+                                           
+                                          {% if param_quest.slug == "about-parameter" %}
+                                            <div class="col-md-12 report_text ">
+                                                <p>{{param_quest.text|title}}</p>
+                                                <div class="">
+                                                    <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
+                                                </div>
+                                                <h5><a href="#">Remove</a></h5>
+                                            </div>
+                                          {% endif %}
                                    {% endfor %}
                                  </div>
                                    <div class="form-group addmilestone click_buttons">
@@ -847,6 +849,7 @@
                                         <h5><a href="#">Remove</a></h5>
                                     {% endif %}
 
+
                                     {% if act_quest.slug == "about-the-actvity" %}
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
@@ -910,30 +913,32 @@
                                 
                             {% for paramobj in parameters_list %}
                                 {% with forloop.counter as m_count %}
-                                <div class="milestone data_row_{{i}}_{{m_count}}">
+                                <div class="milestone para_data_row_{{i}}_{{m_count}}">
                               {% get_previous_subquestions quest as parameter_questions %}
                               {% for param_quest in parameter_questions %}
                                   {% if param_quest.slug == "parameter-selection" %}
-                                  <div class="col-md-6 report_text parameter_section">
-                                     <p>{{param_quest.text|title}}</p>
-                                     <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
-                                        <option value="0">Select</option>
-                                        {% for i in project_paramterlist %}
-                                        <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
-                                        {% endfor %}
-                                     </select>
-                                     <h5><a href="#">Remove</a></h5>
-                                  </div>
-                                  {% endif %}
+
+                                    <div class="col-md-6 report_text parameter_section">
+                                        <p>{{param_quest.text|title}}</p>
+                                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
+                                            <option value="0">Select</option>
+                                            {% for i in project_paramterlist %}
+                                            <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <h5><a href="#">Remove</a></h5>
+                                    </div>
+                                    {% endif %}
+                                    
                                   {% if param_quest.slug == "about-parameter" %}
-                                  <div class="col-md-12 report_text ">
-                                     <p>{{param_quest.text|title}}</p>
-                                     <div class="">
-                                        <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description}}</textarea>
-                                     </div>
-                                     <h5><a href="#">Remove</a></h5>
-                                  </div>
-                                  {% endif %}
+                                    <div class="col-md-12 report_text ">
+                                        <p>{{param_quest.text|title}}</p>
+                                        <div class="">
+                                            <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description}}</textarea>
+                                        </div>
+                                        <h5><a href="#">Remove</a></h5>
+                                    </div>
+                                    {% endif %}
 
                                     {% endfor %}
                                 
@@ -2424,7 +2429,7 @@
                    nam = $(this).context.className.split('_')
                    var milestone_count = $('input[name^=current_parameter_count_'+nam[4]).val();
                    var c = milestone_count;
-                   var tR = $('.data_row_'+nam[3]+'_'+c+':last').clone();
+                   var tR = $('.para_data_row_'+nam[3]+'_'+c+':last').clone();
                    milestone_count++; /* To increase the count */
                    /* further functionalitie to split the name and append row number to each input type */
                    $(tR).find('textarea, select').each(function(){
@@ -2441,15 +2446,15 @@
                    });
                    $('input[name^=current_parameter_count_'+nam[4]).val(milestone_count)
                    //$(tR).find('td span.init').text(count);
-                   $(tR).insertAfter('.data_row_'+nam[3]+'_'+c+':last');
-                   tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[3]+'_'+milestone_count)
+                   $(tR).insertAfter('.para_data_row_'+nam[3]+'_'+c+':last');
+                   tR.removeClass().addClass('milestone para_data_row_'+nam[4]+'_'+milestone_count).attr("id",'para_data_row_'+nam[3]+'_'+milestone_count)
                    
                    }
                function para_a_remove(){
                    nam = $(this).context.className.split('_')
                    var count = $('input[name^=current_parameter_count_'+nam[4]).val();
                      if (count > 1) {
-                           $('div.data_row_'+nam[4]+'_'+count+':last').remove();
+                           $('div.para_data_row_'+nam[4]+'_'+count+':last').remove();
                            count--
                            $('input[name^=current_parameter_count_'+nam[4]).val(count);
                      }
@@ -2468,10 +2473,11 @@
 <!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section -->
 <script type="text/javascript">
                 function pedit_clone(){
+                    debugger;
                     nam = $(this).context.className.split('_')
                     var milestone_count = $('input[name^=current_parameter_count_'+nam[4]).val();
                     var c = milestone_count;
-                    var tR = $('.data_row_'+nam[3]+'_'+c+':last').clone();
+                    var tR = $('.para_data_row_'+nam[3]+'_'+c+':last').clone();
                     milestone_count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
                     $(tR).find('textarea, select').each(function(){
@@ -2493,15 +2499,15 @@
                     });
                     $('input[name^=current_parameter_count_'+nam[4]).val(milestone_count)
                     //$(tR).find('td span.init').text(count);
-                    $(tR).insertAfter('.data_row_'+nam[3]+'_'+c+':last');
-                    tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[3]+'_'+milestone_count)
+                    $(tR).insertAfter('.para_data_row_'+nam[3]+'_'+c+':last');
+                    tR.removeClass().addClass('milestone para_data_row_'+nam[4]+'_'+milestone_count).attr("id",'para_data_row_'+nam[3]+'_'+milestone_count)
                     
                     }
                 function pedit_remove(){
                     nam = $(this).context.className.split('_')
                     var count = $('input[name^=current_parameter_count_'+nam[2]).val();
                       if (count > 1) {
-                            $('div.data_row_'+nam[2]+'_'+count+':last').remove();
+                            $('div.para_data_row_'+nam[2]+'_'+count+':last').remove();
                             count--
                             $('input[name^=current_parameter_count_'+nam[2]).val(count);
                       }
