@@ -254,6 +254,7 @@ def get_about_parameter(quarter,obj,block):
 def get_about_quarter(quarter,obj,block):
     # this template tag we are using to get quarter details in report detai page
     answer_obj = ''
+    about_quarter = ''
     question = Question.objects.get_or_none(slug='about-the-quarter',block=block)
     answer_obj = Answer.objects.get_or_none(question=question,object_id=obj.id,quarter=quarter)
     if answer_obj:
