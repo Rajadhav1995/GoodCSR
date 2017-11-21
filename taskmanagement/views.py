@@ -374,7 +374,7 @@ def my_tasks_details(request):
     else:
         return render(request,'taskmanagement/my-task.html',locals())
     
-def create_task_progress(request,task):
+def create_task_progress(request):
     try:
         if request.POST.get('tea1') != 'None' :
             if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
@@ -414,7 +414,9 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
-        
+        progress= request.POST.get('tea1')
+        if progress:
+            return render(request,'taskmanagement/task_progress_update.html',locals())
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -439,6 +441,7 @@ def task_comments(request):
             comment.save()
         progress_status = create_task_progress(request,task)
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
+        
     return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
