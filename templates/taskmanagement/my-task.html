@@ -191,7 +191,8 @@
                            </li>
                             
                         </ul>
-                        <span>{{a.created.time|date:"g:i a"}}</span>
+                        {% get_converted_time a.created as time %}
+                        <span>{{time}}</span>
                         {% endif %}
                      </div>
                      
@@ -218,7 +219,8 @@
                               {% endif %}
                            </li>
                         </ul>
-                        <span>{{a.created.time|date:"g:i a"}}</span>
+                        {% get_converted_time a.created as time %}
+                        <span>{{time}}</span>
                         {% endif %}
                      </div>
                   </li>
@@ -234,7 +236,8 @@
                         <ul>
                            <li>{% if c.text %}{{c.text}}{% endif %}</li>
                         </ul>
-                        <span>{{c.created.time|date:"g:i a"}}</span>
+                        {% get_converted_time c.created as time %}
+                        <span>{{time}}</span>
                             
                      </div>
                      {% endfor %}
