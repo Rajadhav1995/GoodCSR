@@ -207,6 +207,7 @@
     </div>
 
 
+                  <div>
                   <div class="location">
                      <p>Location Coverage</p>
                      <ul> 
@@ -218,10 +219,13 @@
                      <!--        {% endfor %}-->
                      <!--        </ul>-->
                   </div>
+                </div>
                   <br>
+                  <div>
                   <div class="location">
                      <p>About the Program</p>
                      <h5>{{answer_list.program_description|safe}}</h5>
+                  </div>
                   </div>
                   </div>
                   <footer>
@@ -271,6 +275,7 @@
                 {% get_parameter i 3 as pie_data %}
                 {{pie_data.0.PIN}}
                 {% if i.quarter_type == 1 %}
+                {% if forloop.counter == 1 %}
                 {% get_quarter_sections i as quart_section %}
                 {% for j in quart_section %}
                 <header style="margin-top:50px">
@@ -579,7 +584,8 @@
                   <hr>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
-                     <p>First Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                     {% get_date_range j as date_range %}
+                     <p>{{forloop.counter | get_ordinal_number}} Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   <!-- <div class="col-md-12">
                      <div class="row">
@@ -773,6 +779,7 @@
                                    });
                         </script>
                {% endif %}
+               {% endif %}
                </div>
                <!--Index page 07 html ends-->
                <!--Index page 08 html starts-->
@@ -805,7 +812,7 @@
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      {% get_date_range i as date_range %}
-                     <p>Second Quarter: ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
+                     <p>First Quarter: ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   
                   <div> 
@@ -1117,7 +1124,7 @@
             <thead>
             
             <tr>
-              <th>fbb Super Category</th>
+              <th>Super Category</th>
               <th>Heading</th>
               <th>Subheading</th>
               <th>Total Planned</th>
@@ -1268,7 +1275,7 @@
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
                      {% get_date_range i as date_range %}
-                     <p>Second Quarter ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
+                     <p>First Quarter ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   <div class="col-md-12">
                      <div class="row">
@@ -1535,7 +1542,8 @@
                   <div class="page_height">
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
-                     <p>Second Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                     {% get_date_range i as date_range %}
+                     <p>First Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   <div class="location margin_top_50">
                      <p>Risks and mitigation</p>
@@ -1584,7 +1592,8 @@
                   <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Next Quarter Updates</h4>
-                     <p>Third Quarter (12 Jan to 30 Mar 2017)<span style="float:right">Key Achievements in this quarter</span></p>
+                     {% get_date_range i as date_range %}
+                     <p>Third Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   <div class="location margin_top30" style="margin-bottom:0px">
                      <p>About The Quarter</p>
