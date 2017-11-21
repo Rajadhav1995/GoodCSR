@@ -401,6 +401,7 @@ def create_task_progress(request,task):
     return task
     
 def task_comments(request):
+# to save the updates of tasks like attachments / progress bar / comments
     msg =""
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
@@ -413,7 +414,8 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
-        
+        if request.POST.get('tea1'):
+            return render(request,'taskmanagement/task_progress_update.html',locals())
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -436,8 +438,9 @@ def task_comments(request):
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
             comment.save()
-        progress_status = create_task_progress(request,task)
+        import ipdb;ipdb.set_trace();
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
+        
     return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
