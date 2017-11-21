@@ -302,3 +302,9 @@ def get_currency(amount):
     group_amount = locale.currency( int(amount), grouping=True )
     group_amount = group_amount[4:-3]
     return group_amount
+
+@register.filter
+def get_ordinal_number(number):
+    ordinal = {1:"First",2:"Second",3:"Third",4:"Fourth",5:"Fifth"}
+    # this template tag is used to get text ordinal (eg if we pass '1' then we will get 'First')
+    return ordinal.get(int(number))
