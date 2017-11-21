@@ -488,11 +488,12 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
         for parameter in parameter_list:
             param_list =  parameter.split('_')
             if len(param_list) == 8 and k == param_list[-1]:
-                name = param_list[0]
+                name = param_list[0].split('-')
+                name1 = param_list[0].split('-')
                 parameter_id = param_list[-1]
                 parent_paramter_question = Question.objects.get(id=param_list[3]).parent
-                parameter_result.update({name.lower():request.POST.get(parameter)})
-        if int(add_section) == 0 :
+                parameter_result.update({name[0].lower():request.POST.get(parameter)})
+        if int(add_section) == 0 or len(name1) == 2:
             reportparamterobj = ReportParameter.objects.create(quarter = quarterreportobj,keyparameter=ProjectParameter.objects.get_or_none(id=int(parameter_result['parameter selection'])),description = parameter_result['about parameter'])
         else:
             reportparamterobj = ReportParameter.objects.get(id=int(parameter_id))

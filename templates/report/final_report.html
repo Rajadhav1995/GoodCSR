@@ -631,7 +631,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="activity-pic-count_1" value="1">
-                        <input type="hidden" name="current_parameter_count_1" value="1">
+<!--                        <input type="hidden" name="current_parameter_count_1" value="1">-->
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
                         <input type="hidden" name="div_id" value={{j|add:previous_len}}>
@@ -899,7 +899,7 @@
                             {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
                             <input type="hidden" name="activity_count_{{i}}_1" value="{{act_mile_list|length}}">
                             <input type="hidden" name="activity-pic-count_1" value="1">
-                            <input type="hidden" name="current_parameter_count_1" value="1">
+<!--                            <input type="hidden" name="current_parameter_count_1" value="1">-->
                             <input type="hidden" name="add_section" value="1">
                             {% for mileobj in act_mile_list %} <!--  for loop for activity list -->
                             {% with forloop.counter as m_count %}
@@ -975,8 +975,13 @@
                         {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">
                                 {% get_parameters_list quest reportupdates.1 as parameters_list %}
+                                
+                                <input type="hidden" name="current_parameter_count_1" value="{{parameters_list|length}}">
+                                <input type="hidden" name="add_section" value="1">
+                                
                             {% for paramobj in parameters_list %}
-                                <div class="milestone">
+                                {% with forloop.counter as m_count %}
+                                <div class="milestone data_row_{{i}}_{{m_count}}">
                                 {% get_previous_subquestions quest as parameter_questions %}
 
                                     {% for param_quest in parameter_questions %}
@@ -1007,17 +1012,18 @@
 
                                     {% endfor %}
                                 </div>
+                                {% endwith %}
+                                {% endfor %}
                                 <div class="form-group addmilestone click_buttons">
                                         <div class="link-left">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_add_clone_{{i}}_{{j}}">Add more</a>
+                                            <a href ="javascript:void(0);" class ="para_edit_clone_{{i}}_{{j}}">Add more</a>
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_add_remove_{{i}}_{{j}}">Remove</a>
+                                            <a href ="javascript:void(0);" class ="para_edit_remove_{{i}}_{{j}}">Remove</a>
                                         </div>
                                 </div>
-                                {% endfor %}
                         {% endif %}
 
 <!--                            this is for budget table display-->
@@ -1670,7 +1676,6 @@ $(document).ready(function() {
 
 <!--script for  a add more functionalities in edit functionality for Current section -->
 <script type="text/javascript">
-    $(document).ready(function(){
                 function aedit_clone(){
                     nam = $(this).context.className.split('_')
                     var milestone_count = $('input[name^=activity_count_'+nam[2]).val();
@@ -1727,14 +1732,13 @@ $(document).ready(function() {
             $("[class^=aedit_clone_]").on("click", aedit_clone);
             $("[class^=aedit_remove_]").on("click", aedit_remove);
     
-    });
 </script>
 
 
 <!--script for  a add more functionalities in "---Add --" functionality for Current section -->
 <script type="text/javascript">
-    $(document).ready(function(){
                 function a_clone(){
+                   
                     nam = $(this).context.className.split('_')
                     var milestone_count = $('input[name^=activity_count_'+nam[2]).val();
                     var c = milestone_count;
@@ -1778,7 +1782,6 @@ $(document).ready(function() {
             $("[class^=aadd_clone_]").on("click", a_clone);
             $("[class^=aadd_remove_]").on("click", a_remove);
     
-    });
 </script>
 
 
@@ -1797,6 +1800,7 @@ $(document).ready(function() {
                            $(this).val('')
                           if ($(this).attr('name').split('_').length == 8){
                              var name = $(this).attr('name').split('_');
+                             
                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+'_'+name[6]+"_"+milestone_count);
                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+"_"+name[5]+'_'+name[6]+"_"+milestone_count);
                            }
@@ -1831,54 +1835,52 @@ $(document).ready(function() {
 
 <!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section -->
 <script type="text/javascript">
-    $(document).ready(function(){
                 function pedit_clone(){
                     nam = $(this).context.className.split('_')
-                    var milestone_count = $('input[name^=activity_count_'+nam[4]).val();
+                    var milestone_count = $('input[name^=current_parameter_count_'+nam[4]).val();
                     var c = milestone_count;
                     var tR = $('.data_row_'+nam[3]+'_'+c+':last').clone();
                     milestone_count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
-                    $(tR).find('textarea, select, input').each(function(){
+                    $(tR).find('textarea, select').each(function(){
                       if ($(this).attr('name')){
                             $(this).val('')
                            
                              if ($(this).attr('name').split('_').length == 8){
                               var name = $(this).attr('name').split('_')
                               if (name[0].indexOf("-1") > -1){
-                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
-                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              $(this).attr('name', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+milestone_count+'_'+name[5]+"_"+'parameter'+"_0");
+                              $(this).attr('id', name[0]+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+milestone_count+'_'+name[5]+"_"+'parameter'+"_0");
                               }
                               else {
-                              $(this).attr('name', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
-                              $(this).attr('id', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+name[4]+'_'+name[5]+"_"+milestone_count+"_0");
+                              $(this).attr('name', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+milestone_count+'_'+name[5]+"_"+'parameter'+"_0");
+                              $(this).attr('id', name[0]+'-1'+"_"+name[1]+"_"+name[2]+"_"+name[3]+"_"+milestone_count+'_'+name[5]+"_"+'parameter'+"_0");
                               }
-                            }
+                         }
                       }
                     });
-                    $('input[name^=activity_count_'+nam[4]).val(milestone_count)
+                    $('input[name^=current_parameter_count_'+nam[4]).val(milestone_count)
                     //$(tR).find('td span.init').text(count);
                     $(tR).insertAfter('.data_row_'+nam[3]+'_'+c+':last');
                     tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[3]+'_'+milestone_count)
                     
                     }
-                function aedit_remove(){
+                function pedit_remove(){
                     nam = $(this).context.className.split('_')
-                    var count = $('input[name^=activity_count_'+nam[2]).val();
+                    var count = $('input[name^=current_parameter_count_'+nam[2]).val();
                       if (count > 1) {
                             $('div.data_row_'+nam[2]+'_'+count+':last').remove();
                             count--
-                            $('input[name^=activity_count_'+nam[2]).val(count);
+                            $('input[name^=current_parameter_count_'+nam[2]).val(count);
                       }
                       else{
                         alert("Please add atleast one record")
                       }
                 }
             //$(".add_clone").on("click", clone);
-            $("[class^=aedit_clone_]").on("click", aedit_clone);
-            $("[class^=aedit_remove_]").on("click", aedit_remove);
+            $("[class^=para_edit_clone_]").on("click", pedit_clone);
+            $("[class^=para_edit_remove_]").on("click", pedit_remove);
     
-    });
 </script>
 <!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section  End script -->
 
