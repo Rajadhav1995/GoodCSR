@@ -292,7 +292,7 @@ def get_date_range(obj):
 
 @register.assignment_tag
 def get_quarter_sections(obj):
-    quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project).order_by('id')
+    quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project).order_by('quarter_order')
     return quarter_section
 
 import locale
