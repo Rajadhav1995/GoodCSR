@@ -414,8 +414,7 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
-        if request.POST.get('tea1'):
-            return render(request,'taskmanagement/task_progress_update.html',locals())
+        
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -438,9 +437,8 @@ def task_comments(request):
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
             comment.save()
-        import ipdb;ipdb.set_trace();
+        progress_status = create_task_progress(request,task)
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
-        
     return HttpResponseRedirect(url)
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''

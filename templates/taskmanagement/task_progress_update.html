@@ -82,7 +82,7 @@ ul li {
             
                     <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                                <input type="hidden" name="progress" value="{{request.POST.get('tea1')}}">
+                                <input type="hidden" name="progress" value="{{progress}}">
                                 <input type="hidden" name="task_id" value="{{task_id}}">
                                     <div class="row">
                                     <div class="col-md-6 nopadding">
@@ -116,6 +116,9 @@ ul li {
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script src='https://www.google.com/recaptcha/api.js'></script>
+<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+
 
 <script>
     
@@ -124,8 +127,10 @@ ul li {
 
 
 <script type="text/javascript">
-$(function() {
-    $("#datepicker").datepicker();
+$(document).ready(function(){
+    $('#id_actual_start_date').datepicker();
+    $("#id_actual_start_date").datepicker('setDate', 'today');
+});
 </script>
 
 {% endif %}
