@@ -170,3 +170,10 @@ def get_report_quarters(start_date,end_date,budget_quarters):
         if value == conver_time.strftime('%Y-%m-%d'):
             report_duration = int(k)+1
     return report_duration
+    
+@register.assignment_tag
+def get_converted_time(created):
+    created_time = created.replace(tzinfo=pytz.utc)
+    convert_time = created_time.astimezone(pytz.timezone('Asia/Kolkata'))
+    time = convert_time.strftime("%I:%M %p")
+    return time
