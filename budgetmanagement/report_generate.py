@@ -175,11 +175,11 @@ def html_to_pdf_view(request):
 
     html = HTML(string=html_string)
     from pmu.settings import BASE_DIR
-    html.write_pdf(target=BASE_DIR + '/static/testp.pdf');
+    html.write_pdf(target=BASE_DIR + '/static/project_report.pdf');
     fs = FileSystemStorage()
-    with fs.open(BASE_DIR +'/static/testp.pdf') as pdf:
+    with fs.open(BASE_DIR +'/static/project_report.pdf') as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="testp.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="project_report.pdf"'
         return response
 
     return response
