@@ -174,10 +174,10 @@ def html_to_pdf_view(request):
         'quarters':quarters})
 
     html = HTML(string=html_string)
-    html.write_pdf(target='static/testp.pdf');
+    html.write_pdf(target='/static/testp.pdf');
 
     fs = FileSystemStorage()
-    with fs.open('static/testp.pdf') as pdf:
+    with fs.open('/static/testp.pdf') as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="testp.pdf"'
         return response
