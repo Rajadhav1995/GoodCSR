@@ -95,8 +95,12 @@ def save_screenshots(request):
     pass
     # dataUrlPattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
     # image_data = request.GET.get('imgdata')
+    # fh = open("imageToSave11.png", "wb")
+    # fh.write(image_data.decode('base64'))
+    # fh.close()
+
     # image_data = dataUrlPattern.match(image_data).group(2)
     # with open('screenshot.jpg', 'wb') as f:
     #     import ipdb; ipdb.set_trace()
     #     f.write(image_data)
-    # return HttpResponseRedirect('/report/final/design')
+    return HttpResponseRedirect('/report/final/design')
