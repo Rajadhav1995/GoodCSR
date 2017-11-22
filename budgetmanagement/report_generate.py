@@ -177,7 +177,7 @@ def html_to_pdf_view(request):
     html.write_pdf(target='static/testp.pdf');
 
     fs = FileSystemStorage()
-    with fs.open('testp.pdf') as pdf:
+    with fs.open('static/testp.pdf') as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="testp.pdf"'
         return response
@@ -654,8 +654,9 @@ def get_index_contents(slug,report_id):
             quarters['Current Quarter Updates'] = currentquarter_list
         if futurequarter_list:
             contents['4'] = 'Next Quarter Updates'
-            import itertools as it
-            futurequarter_list = {k: futurequarter_list[k] for k in it.ifilter(lambda x:x == 2, futurequarter_list.keys())}
+            import operator
+            sorted_futurequarter_list = sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]
+            # futurequarter_list = {k: futurequarter_list[k] for k in it.ifilter(lambda x:x == 2, futurequarter_list.keys())}
             quarters['Next Quarter Updates']=futurequarter_list
         contents['5'] = "Annexure"
         quarters['Annexure']=''

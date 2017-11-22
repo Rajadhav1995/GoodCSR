@@ -316,3 +316,8 @@ def get_ordinal_number(number):
     ordinal = {1:"First",2:"Second",3:"Third",4:"Fourth",5:"Fifth"}
     # this template tag is used to get text ordinal (eg if we pass '1' then we will get 'First')
     return ordinal.get(int(number))
+
+@register.assignment_tag
+def get_page_number(page_number):
+    page_number += 1
+    return page_number
