@@ -76,6 +76,8 @@ def upload_attachment(request):
             form = ImageUpload(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
+            obj.name = request.POST.get('name')
+            obj.description = request.POST.get('description')
             obj.content_type=ContentType.objects.get(model=model)
             obj.object_id=project_obj.id
             if key==1:

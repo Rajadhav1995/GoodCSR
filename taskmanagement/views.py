@@ -59,9 +59,14 @@ def add_taskmanagement(request,model_name,m_form):
     form=eval(m_form)
     if budget:
         if request.method=='POST':
+            if request.POST.get('status') == '3':
+                task_progress = '10'
+            elif request.POST.get('status') == '1':
+                task_progress = '0'
             form=form(user_id,project.id,request.POST,request.FILES)
             if form.is_valid():
-                f=form.save()
+                f=form.save(commit=False)
+                f.task_progress = task_progress
                 from projectmanagement.common_method import unique_slug_generator
                 f.slug = unique_slug_generator(f,edit)
                 f.save()
@@ -91,6 +96,10 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         task_progress = m.task_progress
         if m.status == 2 and request.POST.get('status') == '1' :
             task_progress = '90'
+        elif request.POST.get('status') == '2':
+            task_progress = '100'
+        elif request.POST.get('status') == '3':
+            task_progress = '10'
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         try:
             end_date = form.data['end_date']
@@ -205,9 +214,9 @@ def my_tasks_listing(project,user,status):
     task_lists=[]
     activities = Activity.objects.filter(project = project)
     if status == '0':
-        tasks_list = Task.objects.filter(assigned_to=user).order_by('-start_date')
+        tasks_list = Task.objects.filter(assigned_to=user,start_date__lt = today).exclude(status=2).order_by('-start_date')
     else:
-        tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).order_by('-start_date')
+        tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).exclude(status=2).order_by('-start_date')
     return tasks_list
     
 def get_project_updates(project,uploads):
@@ -392,6 +401,7 @@ def create_task_progress(request,task):
     return task
     
 def task_comments(request):
+# to save the updates of tasks like attachments / progress bar / comments
     msg =""
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}

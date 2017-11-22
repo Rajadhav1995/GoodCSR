@@ -745,7 +745,7 @@
 <!--                     this is for parameter selection -->
                         {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">
-                                <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
+                                <div class="milestone para_data_row_{{i}}_1" id="data_row_{{i}}_1">
                                 {% get_previous_subquestions quest as parameter_questions %}
 
                                     {% for param_quest in parameter_questions %}
@@ -981,7 +981,7 @@
                                 
                             {% for paramobj in parameters_list %}
                                 {% with forloop.counter as m_count %}
-                                <div class="milestone data_row_{{i}}_{{m_count}}">
+                                <div class="milestone para_data_row_{{i}}_{{m_count}}">
                                 {% get_previous_subquestions quest as parameter_questions %}
 
                                     {% for param_quest in parameter_questions %}
@@ -1676,6 +1676,7 @@ $(document).ready(function() {
 
 <!--script for  a add more functionalities in edit functionality for Current section -->
 <script type="text/javascript">
+
                 function aedit_clone(){
                     nam = $(this).context.className.split('_')
                     var milestone_count = $('input[name^=activity_count_'+nam[2]).val();
@@ -1792,7 +1793,7 @@ $(document).ready(function() {
                    nam = $(this).context.className.split('_')
                    var milestone_count = $('input[name^=current_parameter_count_'+nam[4]).val();
                    var c = milestone_count;
-                   var tR = $('.data_row_'+nam[3]+'_'+c+':last').clone();
+                   var tR = $('.para_data_row_'+nam[3]+'_'+c+':last').clone();
                    milestone_count++; /* To increase the count */
                    /* further functionalitie to split the name and append row number to each input type */
                    $(tR).find('textarea, select').each(function(){
@@ -1809,15 +1810,15 @@ $(document).ready(function() {
                    });
                    $('input[name^=current_parameter_count_'+nam[4]).val(milestone_count)
                    //$(tR).find('td span.init').text(count);
-                   $(tR).insertAfter('.data_row_'+nam[3]+'_'+c+':last');
-                   tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[3]+'_'+milestone_count)
+                   $(tR).insertAfter('.para_data_row_'+nam[3]+'_'+c+':last');
+                   tR.removeClass().addClass('milestone para_data_row_'+nam[4]+'_'+milestone_count).attr("id",'para_data_row_'+nam[3]+'_'+milestone_count)
                    
                    }
                function para_a_remove(){
                    nam = $(this).context.className.split('_')
                    var count = $('input[name^=current_parameter_count_'+nam[4]).val();
                      if (count > 1) {
-                           $('div.data_row_'+nam[4]+'_'+count+':last').remove();
+                           $('div.para_data_row_'+nam[4]+'_'+count+':last').remove();
                            count--
                            $('input[name^=current_parameter_count_'+nam[4]).val(count);
                      }
@@ -1835,11 +1836,11 @@ $(document).ready(function() {
 
 <!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section -->
 <script type="text/javascript">
-                function pedit_clone(){
+                function p_edit_clone(){
                     nam = $(this).context.className.split('_')
                     var milestone_count = $('input[name^=current_parameter_count_'+nam[4]).val();
                     var c = milestone_count;
-                    var tR = $('.data_row_'+nam[3]+'_'+c+':last').clone();
+                    var tR = $('.para_data_row_'+nam[3]+'_'+c+':last').clone();
                     milestone_count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
                     $(tR).find('textarea, select').each(function(){
@@ -1861,15 +1862,15 @@ $(document).ready(function() {
                     });
                     $('input[name^=current_parameter_count_'+nam[4]).val(milestone_count)
                     //$(tR).find('td span.init').text(count);
-                    $(tR).insertAfter('.data_row_'+nam[3]+'_'+c+':last');
-                    tR.removeClass().addClass('milestone data_row_'+nam[4]+'_'+milestone_count).attr("id",'data_row_'+nam[3]+'_'+milestone_count)
+                    $(tR).insertAfter('.para_data_row_'+nam[3]+'_'+c+':last');
+                    tR.removeClass().addClass('milestone para_data_row_'+nam[4]+'_'+milestone_count).attr("id",'para_data_row_'+nam[3]+'_'+milestone_count)
                     
                     }
-                function pedit_remove(){
+                function p_edit_remove(){
                     nam = $(this).context.className.split('_')
                     var count = $('input[name^=current_parameter_count_'+nam[2]).val();
                       if (count > 1) {
-                            $('div.data_row_'+nam[2]+'_'+count+':last').remove();
+                            $('div.para_data_row_'+nam[2]+'_'+count+':last').remove();
                             count--
                             $('input[name^=current_parameter_count_'+nam[2]).val(count);
                       }
@@ -1878,8 +1879,8 @@ $(document).ready(function() {
                       }
                 }
             //$(".add_clone").on("click", clone);
-            $("[class^=para_edit_clone_]").on("click", pedit_clone);
-            $("[class^=para_edit_remove_]").on("click", pedit_remove);
+            $("[class^=para_edit_clone_]").on("click", p_edit_clone);
+            $("[class^=para_edit_remove_]").on("click", p_edit_remove);
     
 </script>
 <!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section  End script -->
