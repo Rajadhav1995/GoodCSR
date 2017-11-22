@@ -400,7 +400,7 @@ def create_task_progress(request):
         pass
     return task
     
-def task_comments(request):
+def task_comments(request,obj_id):
 # to save the updates of tasks like attachments / progress bar / comments
     msg =""
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
@@ -411,11 +411,11 @@ def task_comments(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
-    if request.method == 'POST':
+    if request.method == 'POST' or obj_id:
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
         progress= request.POST.get('tea1')
-        if progress:
+        if progress or obj_id:
             return render(request,'taskmanagement/task_progress_update.html',locals())
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')

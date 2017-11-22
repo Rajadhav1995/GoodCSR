@@ -1,6 +1,16 @@
 {% extends 'project/project-summary.html' %}
 {% load common_tags %}
 {% load urs_tags %}
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $('#popup').click(function(){
+	$('#pop1').simplePopup();
+    });
+});
+
+</script>
 
 {% block content %}
 <div class="clear"></div>
@@ -148,10 +158,17 @@
                 <div class = 'task_bar' style="width: 375px;float: left;">
                          <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{{i.task_progress}}"   />
                 </div>
-                  <input class="task-link" type="submit" value="Add update"/>
+                <a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">
+                  <input class="task-link" type="submit" value="Add update"/> </a>
                   </form>
                </div>
-               <a href="/managing/my-tasks/updates/" class="iframe" id="px_{{i.slug}}"><button type="button"  class="singup"> Add Update</button></a>
+               
+               <div id="pop1" class="simplePopup">
+                    <div class="pop-content">
+                    hi
+                    </div>
+                </div>
+                
             </div>
          </div>
          <div class="user-timeline">
@@ -375,8 +392,6 @@
 </script>
 <!---datepicker script-->
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-
-
 <script>
    $(function() {
    $( ".datepicker" ).datepicker({
@@ -414,7 +429,7 @@
             $('.range-'+sl_id).on('rangeControlSlide.rangeControlEvent', function () {
               // on slide event
 
-                $("#px_"+sl_id).attr("href", "/managing/my-tasks/updates/"+$('.range-control-current-value').text()+"/")
+                
              
 
              // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
@@ -431,9 +446,8 @@
 
             });
 
+
             var progress = $('#xp_'+sl_id).val();
-            
-            
             $('.range-control-handle').css('left',progress+'%');
 
        });
@@ -481,11 +495,8 @@
 
 
             var progress = $('#xp_'+key).val();
-            $("#px_"+sl_id).attr("href", "/managing/my-tasks/updates/"+progress+"/")
             if (progress != 'None'){
                 alert("Task completion status is updated to "+progress+" % successfully");
-                var tg = $('input[name^=tea1').val();
-                alert(tg)
             }
             $('.range-control-handle').css('left',progress+'%');
 
@@ -535,8 +546,6 @@ $(document).ready(function() {
     $(".iframe").fancybox({
         type: 'iframe'
     });
-    var tg = $('input[name^=tea1').val();
-    alert(tg)
 });
 </script>
 
