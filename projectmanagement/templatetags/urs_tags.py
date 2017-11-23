@@ -188,7 +188,6 @@ def get_parameter(obj,block_id):
     pie_chart = ''
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
-        # parameter_obj = ProjectParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
         for i in report_para:
             main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
@@ -246,8 +245,6 @@ def get_about_parameter(quarter,obj,block):
     report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
     for i in report_para:
         detil = i.description
-    # if answer_obj:
-    #     about_parameter = answer_obj.text
     return detil
 
 @register.assignment_tag

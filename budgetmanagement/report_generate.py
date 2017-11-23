@@ -626,7 +626,6 @@ def get_index_contents(slug,report_id):
     quarters = {}
     project = Project.objects.get_or_none(slug=slug)
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
-    print report_obj
     # by using get_quarters() function getting the previous,current and next quarters list
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(report_obj)
     # based on the answer object created to the report,if answer object is created to that report
