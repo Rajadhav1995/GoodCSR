@@ -317,6 +317,8 @@
 
                      <!-- <img src="/static/img/report/prev-banner.png" style="width:100%"> -->
                      <!-- ---------------########## -->
+                     {% get_timeline_json project j as timeline %}
+                     {% if timeline.0 != '[]' %}
                      <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
                                     <!-- timeline slider -->
@@ -348,8 +350,7 @@
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
 </div>
 
-
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script type="text/javascript">
     //var loop_count = $('#loop_count').val()
     {% get_date_range j as date_range %}
@@ -358,14 +359,12 @@
     // var ii = ".timeline-slide_" + "{{date_range.1}}";
     {% get_timeline_json project j as timeline %}
     var lengths = {{timeline.1}};
-    alert("aaaa");
-    var hk = "{{previousquarter_list | get_at_index:forloop.counter0}}";
-    var ff= {{timeline.0|safe}}
+    var timeline_data= {{timeline.0|safe}}
     var loc_url = '{{image}}'
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++)
     {
-      var obj = ff[i]
+      var obj = timeline_data[i]
       var name = obj.name;
       console.log(obj);
       if (obj.url) {
@@ -401,7 +400,9 @@
       };
     }
 </script>
-
+{% else %}
+No Key Acheivements in this Quarter
+{% endif %}
 
        <!-- ---------------------------------############ -->
                   </div>
