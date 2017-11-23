@@ -635,19 +635,16 @@ No Key Acheivements in this Quarter
                                            }
                                        },
                                        legend: {
-                                           enabled: true,
-                                           layout: 'horizontal',
-                                           align: 'center',
-                                           width: 250,
-                                           height:300,
-                                           verticalAlign: 'bottom',
-                                           borderWidth: 0,
-                                           useHTML: true,
-                           
-                                           margin: 12
-                           
-                           
-                                       },
+                                          enabled: true,
+                                          layout: 'horizontal',
+                                          align: 'center',
+                                          width: 200,
+                                          verticalAlign: 'bottom',
+                                          useHTML: true,
+                                          labelFormatter: function() {
+                                              return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.y + '%</div>';
+                                          }
+                                      },
                                        series: [{
                                            type: 'pie',
                                            dataLabels:{
@@ -1256,19 +1253,16 @@ No Key Acheivements in this Quarter
                                            }
                                        },
                                        legend: {
-                                           enabled: true,
-                                           layout: 'horizontal',
-                                           align: 'center',
-                                           width: 250,
-                                           height:300,
-                                           verticalAlign: 'bottom',
-                                           borderWidth: 0,
-                                           useHTML: true,
-                           
-                                           margin: 12
-                           
-                           
-                                       },
+                                          enabled: true,
+                                          layout: 'horizontal',
+                                          align: 'center',
+                                          width: 200,
+                                          verticalAlign: 'bottom',
+                                          useHTML: true,
+                                          labelFormatter: function() {
+                                              return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.y + '%</div>';
+                                          }
+                                      },
                                        series: [{
                                            type: 'pie',
                                            dataLabels:{

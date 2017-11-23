@@ -54,6 +54,7 @@ def timeline_upload(request):
             return HttpResponseRedirect('/project/summary/?slug='+project.slug)
     else:
         form=ImageUpload()
+    timeline = 1
     return render(request,'taskmanagement/forms.html',locals())
 
 def upload_attachment(request):
