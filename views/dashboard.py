@@ -30,7 +30,13 @@ def admin_dashboard(request):
         project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
     project_count = obj_list.count()
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list)
+    projectuseridlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list("user__id",flat=True)
+    projectrole_id = []
+    for i in projectuseridlist:
+        projectuserobj = ProjectUserRoleRelationship.objects.filter(active=2, user__id=int(i),project__in = obj_list).latest("id")
+        if projectuserobj.id not in projectrole_id:
+            projectrole_id.append(projectuserobj.id)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2, id__in = projectrole_id)
     projectuserlist = list(set(projectuserlist))
     total_beneficiaries = obj_list.aggregate(Sum('no_of_beneficiaries')).values()[0]
     updates_list = updates(obj_list)
