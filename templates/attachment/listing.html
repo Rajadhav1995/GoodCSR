@@ -53,7 +53,7 @@
       <th>Tags</th>
       <!-- <th>Source</th> -->
       <th>Upload Date </th>
-      <th>Edit </th>
+      <!-- <th>Edit </th> -->
     </tr>
   </thead>
   <tbody>
@@ -81,7 +81,7 @@
         <td align="center"><div class="span_bottom">{% for j in i.get_file_keywords %}<span>{{j}} </span>{% endfor %}<!-- <span>Budget</span><span>Report</span><span>Document</span><span>Files</span> --></div class="span_bottom"></td>
       <!-- <td>Task: Dhenuki Labours Unit</td> -->
       <td align="center">{{i.created}}</td>
-      <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td>
+      <!-- <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td> -->
     </tr>
     {% endfor %}
 

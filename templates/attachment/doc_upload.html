@@ -360,7 +360,10 @@ $(function () {
                 name:{required:"<font color=#fc282f>Please enter name"},
                 date : {required:"<font color=#fc282f>Please select Date</font>"},
                 description:{required:"<font color=#fc282f>Please enter description</font>"},
-                attachment_file:{required:"<br><font color=#fc282f>Please upload Image"},
+                {% if key == 1 %}
+                attachment_file:{required:"<br><font color=#fc282f>Please upload File"},
+                {% else %}
+                attachment_file:{required:"<br><font color=#fc282f>Please upload Image"},{% endif %}
 
             },
             highlight: function (element) {
