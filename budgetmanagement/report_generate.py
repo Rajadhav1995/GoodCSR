@@ -133,8 +133,6 @@ def html_to_pdf_view(request):
     budgetobj = Budget.objects.latest_one(project = project,active=2)
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
     quarter_list = get_budget_quarters(budgetobj)
-    # cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
-        # content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
     location = ProjectLocation.objects.filter(object_id=project.id)
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
     tranche_list = Tranche.objects.filter(project = project,active=2)
@@ -163,8 +161,8 @@ def html_to_pdf_view(request):
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
-    paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
-    html_string = render_to_string('report/report-pdf.html', {'paragraphs': paragraphs,
+    # here we are sending/rendering all variable to generate PDF 
+    html_string = render_to_string('report/report-pdf.html', {
         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
         'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
         'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
@@ -174,6 +172,7 @@ def html_to_pdf_view(request):
         'quarters':quarters})
 
     html = HTML(string=html_string)
+    # first we are writing new PDF and
     from pmu.settings import BASE_DIR
     html.write_pdf(target=BASE_DIR + '/static/project_report.pdf');
     fs = FileSystemStorage()
@@ -376,7 +375,7 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
     act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
-    # add_section = 0 then add , if add_section = 1 its edit
+    
     for j in pic_count :
         milestone_images = {}
         name1 = []
@@ -418,7 +417,6 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     pic_count = obj_count_list.get('milestone_pic_count')
     milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
-    # add_section = 0 then add , if add_section = 1 its edit
     for milestone in milestoneobj:
         milestone.active = 0
         milestone.save()
@@ -482,7 +480,6 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
 def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
     add_section = request.POST.get('add_section')
     para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
-#    for k in range(int(parameter_count)):
     for k in sorted(para_detail):
         parameter_result = {}
         for parameter in parameter_list:
@@ -539,10 +536,7 @@ def saving_of_quarters_section(request):
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
             answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
 # clients requirement not to provide paramerter selection in previous quarter list so commented
-#        if parameter_count > 0:
-#            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
 # end of parameter saving function
-
 #    to save the Current quarter updates:
     quarter_list = currentquarter_list
     
@@ -655,18 +649,17 @@ def get_index_contents(slug,report_id):
         if futurequarter_list:
             contents['4'] = 'Next Quarter Updates'
             import operator
+            # here we getting all next quarter so we taking first quarter 
             sorted_futurequarter_list = sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]
-            # futurequarter_list = {k: futurequarter_list[k] for k in it.ifilter(lambda x:x == 2, futurequarter_list.keys())}
             quarters['Next Quarter Updates']=futurequarter_list
         contents['5'] = "Annexure"
         quarters['Annexure']=''
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    # final contents dict = {'1':About the Project,'2':current quarter updates,.....}
-    # quarters dict = {'About the Project':'','current quarter updates':{0:from and to date,1:from and to date},....}
     return contents,quarters
 
 def report_save_exit(request):
+    # this dunction is to save form details of report and exit from current page
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
@@ -675,79 +668,4 @@ def report_save_exit(request):
         return HttpResponseRedirect('/report/listing/?slug='+slug)
     except :
         save = "not submitted successfully"
-        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
-
-from django.http import HttpResponse
-from django.views.generic import View
-
-from budgetmanagement.utils import render_to_pdf #created in step 4
-
-class GeneratePdf(View):
-    def get(self, request, *args, **kwargs):
-        slug = "toilet-construction"
-        image_url = PMU_URL
-        report_id = 86
-        answer_list ={}
-        answer = ''
-        contents,quarters = get_index_contents(slug,report_id)
-        for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
-            contents[key]=value
-        project = Project.objects.get_or_none(slug = slug)
-        parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
-        # calling function to get JSON data for pie chart display
-        master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-        report_obj = ProjectReport.objects.get_or_none(id=report_id)
-        report_quarter = QuarterReportSection.objects.filter(project=report_obj).order_by('quarter_type')
-        # mapping view is to show funder and implementation partner relation
-        mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-        budgetobj = Budget.objects.latest_one(project = project,active=2)
-        budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
-        quarter_list = get_budget_quarters(budgetobj)
-        # cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
-            # content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
-        location = ProjectLocation.objects.filter(object_id=project.id)
-        quest_list = Question.objects.filter(active=2,block__block_type = 0)
-        tranche_list = Tranche.objects.filter(project = project,active=2)
-        tranche_amount = tanchesamountlist(tranche_list)
-        planned_amount = tranche_amount['planned_amount']
-        actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
-        recommended_amount = tranche_amount['recommended_amount']
-        utilized_amount = tranche_amount['utilized_amount']
-        projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
-        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-        # for basic details of project report we are sending all fields in dictionary 
-        for question in quest_list:
-            answer_obj = Answer.objects.get_or_none(question =question,
-                            content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
-            if answer_obj and (question.qtype == 'T' or question.qtype == 'APT' or question.qtype == 'ck'):
-                answer = answer_obj.text
-            elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
-                answer = image_url + '/' + answer_obj.attachment_file.url
-            elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file == '' :
-                from projectmanagement.templatetags import urs_tags
-                org_logo = urs_tags.get_org_logo(project)
-                if org_logo:
-                    answer = org_logo
-                else :
-                    answer = "/static/img/GoodCSR_color_circle.png"
-            else:
-                answer = ''
-            answer_list[str(question.slug)] = answer
-        paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
-        data = {'paragraphs': paragraphs,
-            'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
-            'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
-            'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
-            'actual_disbursed_amount':actual_disbursed_amount,'planned_amount':planned_amount,
-            'quarter_list':quarter_list,'budget_period':budget_period,'image_url':image_url,
-            'project':project,'report_quarter':report_quarter,'report_obj':report_obj,'contents':contents,
-            'quarters':quarters}
-#        data = {
-#              'today': datetime.date.today(), 
-#              'amount': 39.99,
-#             'customer_name': 'Cooper Mann',
-#             'order_id': 1233434,
-#         }
-        pdf = render_to_pdf('report/invoice.html', data)
-        return HttpResponse(pdf, content_type='application/pdf')
-
+        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))

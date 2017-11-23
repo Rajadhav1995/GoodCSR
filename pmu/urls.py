@@ -25,7 +25,7 @@ from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
                                             projectbudgetdetail,budgetutilization,
                                             budgetview,year_quarter_list,
                                             budgetlineitemedit)
-from budgetmanagement.report_generate import (GeneratePdf,)
+
 admin.autodiscover()
 
 roles_patterns = ([
@@ -61,7 +61,6 @@ urlpatterns = [
     url(r'^manage/user-access/$',UserInformationStorage.as_view()),
     url(r'^logout/$',signout),
     url(r'^save/image/$',saveimage),
-    url(r'^download/$',GeneratePdf.as_view()),
     url(r'^manage/', include(roles_patterns)),
 
 ]
