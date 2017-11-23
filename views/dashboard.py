@@ -30,8 +30,7 @@ def admin_dashboard(request):
         project_ids = ProjectUserRoleRelationship.objects.filter(user = user_obj).values_list("project_id",flat=True)
         obj_list = Project.objects.filter(id__in = project_ids,active=2)
     project_count = obj_list.count()
-    import ipdb; ipdb.set_trace()
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list('user')
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list)
     projectuserlist = list(set(projectuserlist))
     total_beneficiaries = obj_list.aggregate(Sum('no_of_beneficiaries')).values()[0]
     updates_list = updates(obj_list)
