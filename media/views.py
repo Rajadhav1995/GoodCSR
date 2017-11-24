@@ -20,7 +20,7 @@ def list_document(request):
     except:
         ids = request.GET.get('id')
         obj = model.objects.get(id=ids)
-    attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model')))
+    attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model'))).order_by('-created')
     image = PMU_URL
     key = request.GET.get('key')
     user_id = request.session.get('user_id')
@@ -61,6 +61,7 @@ def upload_attachment(request):
     '''
     This function is to upload Image/Document 
     '''
+    user_id = request.session.get('user_id')
     slug =  request.GET.get('slug')
     model =  request.GET.get('model')
     key = int(request.GET.get('key'))
@@ -81,6 +82,7 @@ def upload_attachment(request):
             obj.description = request.POST.get('description')
             obj.content_type=ContentType.objects.get(model=model)
             obj.object_id=project_obj.id
+            obj.created_by = UserProfile.objects.get_or_none(id=user_id)
             if key==1:
                 obj.attachment_type=2
             else:

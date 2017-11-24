@@ -225,7 +225,7 @@ def get_project_updates(project,uploads):
     if project.history.latest():
         attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
         for a in attach_lists:
-            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,
+            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,'file_type':a.get_attachment_type_display(),
             'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''})
     return uploads
     
