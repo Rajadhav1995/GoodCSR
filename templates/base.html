@@ -184,7 +184,7 @@ ga('send', 'pageview');
               <li class="user-header">
                 <img src="/static/img/default_profile_image.png" class="img-circle " alt="User Image">
                 {% get_user_permission request as user_obj %}
-                <h3>{{user_obj.name}}</h3>
+                <h3>{% if user_obj.user.attrs.first_name %}{{user_obj.attrs.first_name}} {{user_obj.attrs.last_name}} {% else %} {{ user_obj.user.name }} {% endif %}</h3>
                 {% if user_obj.is_admin_user == True %}
                 <h4>Admin</h4>
                 {% else %}
