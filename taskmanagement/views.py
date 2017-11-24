@@ -254,7 +254,7 @@ def updates(obj_list):
                 'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()})
             uploads = get_tasks_status(project,task,uploads)
     try:
-        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+        uploads = sorted(uploads, key=lambda key: key['time'],reverse=True)
     except:
         uploads = uploads
     return uploads
