@@ -61,16 +61,20 @@
     <tr>
       <td align="center">{% if i.attachment_type == 2 %}
         {% if i.document_type == 1 %}<!-- excel -->
-        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/excell-color.jpg" height=128px width=128px></a>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-color.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 2 %}<!-- pdf -->
-        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/pdf.jpg" height=128px width=128px></a>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/pdf.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 3 %}<!-- ppt -->
-        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/wordpress.jpg" height=128px width=128px></a>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/wordpress.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 4 %}<!-- doc -->
-        <a href="{{image}}/{{i.attachment_file.url}}" download><img src="/static/img/excell-black.jpg" height=128px width=128px></a>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-black.jpg" height=128px width=128px></a>
         {% endif %}
         {% else %}
         {% if i.attachment_file %}<a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% else %}<img src="" height=128px width=128px>{% endif %}{% endif %}</td></a>
