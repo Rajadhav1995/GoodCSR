@@ -45,6 +45,22 @@ def listing(request):
     key = request.GET.get('key')
     return render(request,'taskmanagement/atm-listing.html',locals())
 
+def update_task_completion(request,add,status):
+    import ipdb;ipdb.set_trace()
+    if add == 'True':
+        if request.POST.get('status') == '3':
+            task_progress = '10'
+        elif request.POST.get('status') == '1':
+            task_progress = '0'
+    else:
+        if int(status) == 2 and request.POST.get('status') == '1' :
+            task_progress = '90'
+        elif request.POST.get('status') == '2':
+            task_progress = '100'
+        elif request.POST.get('status') == '3':
+            task_progress = '10'
+    return task_progress
+
 def add_taskmanagement(request,model_name,m_form):
     url=request.META.get('HTTP_REFERER')
     add = "True"
@@ -59,10 +75,7 @@ def add_taskmanagement(request,model_name,m_form):
     form=eval(m_form)
     if budget:
         if request.method=='POST':
-            if request.POST.get('status') == '3':
-                task_progress = '10'
-            elif request.POST.get('status') == '1':
-                task_progress = '0'
+            task_progress = update_task_completion(request,add,status=None)
             form=form(user_id,project.id,request.POST,request.FILES)
             if form.is_valid():
                 f=form.save(commit=False)
@@ -94,12 +107,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         project = Project.objects.get(slug = request.POST.get('slug_project'))
     if request.method == 'POST':
         task_progress = m.task_progress
-        if m.status == 2 and request.POST.get('status') == '1' :
-            task_progress = '90'
-        elif request.POST.get('status') == '2':
-            task_progress = '100'
-        elif request.POST.get('status') == '3':
-            task_progress = '10'
+        task_progress = update_task_completion(request,add,m.status)
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         try:
             end_date = form.data['end_date']
@@ -356,15 +364,20 @@ def my_tasks_details(request):
         over_due = my_tasks_listing(project,user,status)
         tasks_today = project.get_todays_tasks(today,user,status)
         tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
-        remain_tasks = project.get_remaining_tasks(remain_days,user,status)
+        tasks_remain = project.get_remaining_tasks(remain_days,user,status)
+        closed_tasks = Task.objects.filter(status=2,activity__project__id=project.id).order_by('-id')
+        remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
     else:
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
         tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
-        remain_tasks = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
+        tasks_remain = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
+        closed_tasks = Task.objects.filter(status=2,activity__project__id=project.id).order_by('-id')
+        remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
+        
         task_ids = [int(i.id) for i in task_listing]
     projectobj = project
     user_obj = user
