@@ -318,3 +318,8 @@ def get_ordinal_number(number):
 def get_page_number(page_number):
     page_number += 1
     return page_number
+
+@register.filter
+def location_split(value, sep = "."):
+    parts = value.split(sep)
+    return (parts[0], sep.join(parts[1:]))

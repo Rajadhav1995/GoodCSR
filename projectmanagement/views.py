@@ -8,7 +8,7 @@ from django.contrib import messages
 from calendar import monthrange
 from projectmanagement.models import *
 from projectmanagement.forms import *
-from budgetmanagement.forms import get_tranche_form
+from budgetmanagement.forms import get_tranche_form,TrancheForms
 from budgetmanagement.models import Tranche,ProjectReport
 from media.models import Attachment,Keywords,FileKeywords,ProjectLocation
 from django.http import HttpResponseRedirect
@@ -129,14 +129,27 @@ def budget_tranche(request):
     '''
     
     slug =  request.GET.get('slug')
-    f = get_tranche_form(slug)
-    form = f()
+    # f = get_tranche_form(slug)
+    form = TrancheForms()
+    try:
+        tranche_id =  request.GET.get('tranche_id')
+        obj = Tranche.objects.get_or_none(id=tranche_id)
+        form = TrancheForms(instance = obj)
+    except:
+        pass
     user_id = request.session.get('user_id')
     project = Project.objects.get_or_none(slug=slug)
     tt = ProjectUserRoleRelationship.objects.filter(project=project)
     recommended_by = UserProfile.objects.filter(id__in=[i.user.id for i in tt])
     if request.method == 'POST':
-        form = f(request.POST, request.FILES)
+        slug = request.POST.get('slug')
+        try:
+            import ipdb; ipdb.set_trace()
+            instance = get_object_or_404(Tranche, id=tranche_id)
+            form = TrancheForms(request.POST,request.FILES or None, instance=instance)
+        except:
+            form = TrancheForms(request.POST,request.FILES)
+
         if form.is_valid():
             obj = form.save(commit=False)
             obj.project = project
