@@ -114,53 +114,38 @@ from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
 def html_to_pdf_view(request):
-    slug = request.GET.get('slug')
+    # this function is to generate pdf with css and images.
+    # here we are passing same variables which we are sending in report_detail function
+    project_slug = request.GET.get('slug')
     image_url = PMU_URL
-    report_id = request.GET.get('report_id')
+    project_report_id = request.GET.get('report_id')
     answer_list ={}
     answer = ''
-    contents,quarters = get_index_contents(slug,report_id)
+    contents,quarters = get_index_contents(project_slug,project_report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    project = Project.objects.get_or_none(slug = slug)
+    project = Project.objects.get_or_none(slug = project_slug)
     parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
     # calling function to get JSON data for pie chart display
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-    report_obj = ProjectReport.objects.get_or_none(id=report_id)
+    report_obj = ProjectReport.objects.get_or_none(id=project_report_id)
     report_quarter = QuarterReportSection.objects.filter(project=report_obj).order_by('quarter_type')
     # mapping view is to show funder and implementation partner relation
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     budgetobj = Budget.objects.latest_one(project = project,active=2)
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
     quarter_list = get_budget_quarters(budgetobj)
-    location = ProjectLocation.objects.filter(object_id=project.id)
-    quest_list = Question.objects.filter(active=2,block__block_type = 0)
-    tranche_list = Tranche.objects.filter(project = project,active=2)
-    tranche_amount = tanchesamountlist(tranche_list)
+    report_quest_list = Question.objects.filter(active=2,block__block_type = 0)
+    project_tranche_list = Tranche.objects.filter(project = project,active=2)
+    tranche_amount = tanchesamountlist(project_tranche_list)
     planned_amount = tranche_amount['planned_amount']
     actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
     recommended_amount = tranche_amount['recommended_amount']
     utilized_amount = tranche_amount['utilized_amount']
-    projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
+    projectreportobj = ProjectReport.objects.get_or_none(id=project_report_id)
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     # for basic details of project report we are sending all fields in dictionary 
-    for question in quest_list:
-        answer_obj = Answer.objects.get_or_none(question =question,
-                        content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
-        if answer_obj and (question.qtype == 'T' or question.qtype == 'APT' or question.qtype == 'ck'):
-            answer = answer_obj.text
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
-            answer = image_url + '/' + answer_obj.attachment_file.url
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file == '' :
-            from projectmanagement.templatetags import urs_tags
-            org_logo = urs_tags.get_org_logo(project)
-            if org_logo:
-                answer = org_logo
-            else :
-                answer = "/static/img/GoodCSR_color_circle.png"
-        else:
-            answer = ''
-        answer_list[str(question.slug)] = answer
+    answer_list = report_question_list(report_quest_list,report_obj)
     # here we are sending/rendering all variable to generate PDF 
     html_string = render_to_string('report/report-pdf.html', {
         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
@@ -172,7 +157,7 @@ def html_to_pdf_view(request):
         'quarters':quarters})
 
     html = HTML(string=html_string)
-    # first we are writing new PDF and
+    # first we are writing new PDF and sending request to download file in pdf format
     from pmu.settings import BASE_DIR
     html.write_pdf(target=BASE_DIR + '/static/project_report.pdf');
     fs = FileSystemStorage()
@@ -183,7 +168,27 @@ def html_to_pdf_view(request):
 
     return response
 
-
+def report_question_list(report_quest_list,report_obj):
+    answer_list = {}
+    image_url = PMU_URL
+    for ques in report_quest_list:
+        answer_obj = Answer.objects.get_or_none(question =ques,
+                        content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
+        if answer_obj and (ques.qtype == 'T' or ques.qtype == 'APT' or ques.qtype == 'ck'):
+            answer = answer_obj.text
+        elif answer_obj and (ques.qtype == 'F' or ques.qtype == 'API') and answer_obj.attachment_file:
+            answer = image_url + answer_obj.attachment_file.url
+        elif answer_obj and (ques.qtype == 'F' or ques.qtype == 'API') and answer_obj.attachment_file == '' :
+            from projectmanagement.templatetags import urs_tags
+            org_logo = urs_tags.get_org_logo(project)
+            if org_logo:
+                answer = org_logo
+            else :
+                answer = "/static/img/GoodCSR_color_circle.png"
+        else:
+            answer = ''
+        answer_list[str(ques.slug)] = answer
+    return answer_list
 
 def report_detail(request):
 # to display the details in the view report of the genreated report
@@ -220,25 +225,7 @@ def report_detail(request):
     projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     # for basic details of project report we are sending all fields in dictionary 
-    for question in quest_list:
-        answer_obj = Answer.objects.get_or_none(question =question,
-                        content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
-        if answer_obj and (question.qtype == 'T' or question.qtype == 'APT' or question.qtype == 'ck'):
-            answer = answer_obj.text
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file:
-            answer = image_url + answer_obj.attachment_file.url
-        elif answer_obj and (question.qtype == 'F' or question.qtype == 'API') and answer_obj.attachment_file == '' :
-            from projectmanagement.templatetags import urs_tags
-            org_logo = urs_tags.get_org_logo(project)
-            if org_logo:
-                answer = org_logo
-            else :
-                answer = ""
-            if question.slug == 'pmo_logo':
-                answer = "/static/img/new-logo.png"
-        else:
-            answer = ''
-        answer_list[str(question.slug)] = answer
+    answer_list = report_question_list(quest_list,report_obj)
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):

@@ -21,7 +21,7 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this.parentNode.parentNode,'activity')"></i> <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>
+               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')"></i> <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>
 
 <!--               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>-->
                {% get_user_permission request as user_obj %}
@@ -80,7 +80,7 @@
                   {% if milestone %}
                   {% for mile in milestone %}
                   
-                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this.parentNode.parentNode,'milestone')"></i><i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>
+                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')"></i><i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>
 <!--                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>-->
 
 
@@ -135,10 +135,10 @@ function milestone(name,slug,mile_id,task_ids) {
 
 <!--script for filters by- malcolm-->
 <script>
-function filter(parent,type) {
-    if ($(event.target).hasClass('fa-filter')) {
-      $(event.target).toggleClass('fa fa-ban');
-      $(event.target).toggleClass('fa fa-filter');
+function filter(target,parent,type) {
+    if ($(target).hasClass('fa-filter')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
       $("#boxscroll-atm1>ul>li").each(function () {
         var child = $(this).children()[0];
         $(this).show();
@@ -154,14 +154,14 @@ function filter(parent,type) {
         }
         }
       });
-      $('.fa-ban').not(event.target).each(function(){
+      $('.fa-ban').not(target).each(function(){
         $(this).toggleClass('fa fa-ban');
         $(this).toggleClass('fa fa-filter');
       });
       // Code to filter tasks when the button is clicked
-    } else if ($(event.target).hasClass('fa-ban')) {
-      $(event.target).toggleClass('fa fa-ban');
-      $(event.target).toggleClass('fa fa-filter');
+    } else if ($(target).hasClass('fa-ban')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
       $("#boxscroll-atm1>ul>li").show();
   // Code to show all tasks when the button is clicked
   }
