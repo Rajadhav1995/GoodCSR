@@ -27,16 +27,20 @@ def to_and(value):
     return value.replace(" ","_")
 
 @register.assignment_tag
-def get_previous_question_value(quest,quarter,i):
+def get_previous_question_value(quest,quarter,i,report_obj):
     number_dict = {0:"First",1:"second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
     heading_label = {'previous-quarter-update':"Previous Quarter Updates",'current-quarter-update':"Current Quarter Updates",'next-quarter-update':"Next Quarter Updates",}
     text = ""
-    if quest.slug == "heading":
-        text = heading_label.get(quest.block.slug)
-    elif quest.slug == "sub-heading":
-        text = number_dict.get(i) + " Quarter Updates" 
-    elif quest.slug == "duration":
-        text = quarter
+    answer_obj = Answer.objects.get_or_none(question=quest,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+    if answer_obj:
+        text = answer_obj.text 
+    else:
+        if quest.slug == "heading":
+            text = heading_label.get(quest.block.slug)
+        elif quest.slug == "sub-heading":
+            text = number_dict.get(i) + " Quarter Updates" 
+        elif quest.slug == "duration":
+            text = quarter
     return text
 
 @register.assignment_tag

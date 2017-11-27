@@ -73,16 +73,16 @@ def save_section_answers(quest_ids,project_report,request,data,user):
 # common function to save the two sections data in answer table 
     for ques in sorted(quest_ids):
         question = Question.objects.get_or_none(id = int(ques))
-        if question.slug != "report_type" and question.slug != "report_duration" :
-            answer, created = Answer.objects.get_or_create(question =question,
-                content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user = user )
-            if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
-                answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 
-                answer.description = 'cover image' if question.slug == 'cover_image' else 'Logos'
-                answer.save()
-            elif question.qtype != 'F' and question.qtype != 'API':
-                answer.text = data.get(question.slug+'_'+str(question.id))
-                answer.save()
+#        if question.slug != "report_type" and question.slug != "report_duration" :
+        answer, created = Answer.objects.get_or_create(question =question,
+            content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user = user )
+        if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
+            answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 
+            answer.description = 'cover image' if question.slug == 'cover_image' else 'Logos'
+            answer.save()
+        elif question.qtype != 'F' and question.qtype != 'API':
+            answer.text = data.get(question.slug+'_'+str(question.id))
+            answer.save()
     return answer
 
 def report_section_form(request):
