@@ -374,7 +374,7 @@ def my_tasks_details(request):
     else:
         return render(request,'taskmanagement/my-task.html',locals())
     
-def create_task_progress(request):
+def create_task_progress(request,task):
     try:
         if request.POST.get('tea1') != 'None' :
             if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
@@ -415,8 +415,6 @@ def task_comments(request):
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
         progress= request.POST.get('tea1')
-        if progress:
-            return render(request,'taskmanagement/task_progress_update.html',locals())
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
