@@ -490,7 +490,7 @@ under 0 Milestones</h5>
       {% if projectuserlist %}
       {% for i in projectuserlist %}
       <tr>
-            <td style="width:28%;"><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image">{{i.user.name}}</a></td>
+            <td style="width:28%;"><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</a></td>
             <td style="width:19%;">{{i.user.organization}}</td>
             <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:19%;">{{i.role.name}}
@@ -1129,15 +1129,12 @@ Highcharts.chart(values, {
                 enabled: true,
                 layout: 'horizontal',
                 align: 'center',
-                width: 250,
-                height:300,
+                width: 200,
                 verticalAlign: 'bottom',
-                borderWidth: 0,
                 useHTML: true,
-
-                margin: 12
-
-
+                labelFormatter: function() {
+                    return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.y + '%</div>';
+				}
             },
             series: [{
                 type: 'pie',
@@ -1188,15 +1185,12 @@ Highcharts.chart(values, {
                 enabled: true,
                 layout: 'horizontal',
                 align: 'center',
-                width: 250,
-                height:300,
+                width: 200,
                 verticalAlign: 'bottom',
-                borderWidth: 0,
                 useHTML: true,
-
-                margin: 12
-
-
+                labelFormatter: function() {
+                    return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.y + '%</div>';
+				}
             },
             series: [{
                 type: 'pie',

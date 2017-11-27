@@ -80,7 +80,7 @@ ul li {
             </div>
             <!-- /.box-header -->
             
-                    <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+                    <form  autocomplete="off" id="report-form"  action="/managing/tasks/updates/{{obj_id}}/{{slug}}/" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                                 <input type="hidden" name="progress" value="{{obj_id}}">
                                 <input type="hidden" name="task_id" value="{{task_id}}">
@@ -94,7 +94,7 @@ ul li {
                                     </div>
                                 </div>
                             </div>
-                                <input class="budget_button" type="submit" value="Submit" onclick="return email_valid();" /></a>  
+                                <input class="budget_button" type="submit" value="Submit" /></a>  
                                 
                                 <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
@@ -130,6 +130,15 @@ ul li {
 $(document).ready(function(){
     $('#id_actual_start_date').datepicker();
     $("#id_actual_start_date").datepicker('setDate', 'today');
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    if ("{{msg_status}}" == "2"){
+        //alert("Task completion status is updated to "+progress+" % successfully");
+        window.parent.location.reload();
+    }
 });
 </script>
 

@@ -224,7 +224,7 @@ def get_project_updates(project,uploads):
     if project.history.latest():
         attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
         for a in attach_lists:
-            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,
+            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,'file_type':a.get_attachment_type_display(),
             'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''})
     return uploads
     
@@ -254,7 +254,7 @@ def updates(obj_list):
                 'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()})
             uploads = get_tasks_status(project,task,uploads)
     try:
-        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+        uploads = sorted(uploads, key=lambda key: key['time'],reverse=True)
     except:
         uploads = uploads
     return uploads
@@ -374,7 +374,7 @@ def my_tasks_details(request):
     else:
         return render(request,'taskmanagement/my-task.html',locals())
     
-def create_task_progress(request):
+def create_task_progress(request,task):
     try:
         if request.POST.get('tea1') != 'None' :
             if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
@@ -400,7 +400,7 @@ def create_task_progress(request):
         pass
     return task
     
-def task_comments(request,obj_id):
+def task_comments(request):
 # to save the updates of tasks like attachments / progress bar / comments
     msg =""
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
@@ -411,12 +411,10 @@ def task_comments(request,obj_id):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
-    if request.method == 'POST' or obj_id:
+    if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
         progress= request.POST.get('tea1')
-        if progress or obj_id:
-            return render(request,'taskmanagement/task_progress_update.html',locals())
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]

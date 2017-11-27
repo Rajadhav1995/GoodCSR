@@ -58,7 +58,8 @@
   <tbody>
     {% for i in attachment %}
     <tr>
-      <td align="center">{% if i.attachment_type == 2 %}
+      <td align="center">
+      {% if i.attachment_type == 2 %}
         {% if i.document_type == 1 %}<!-- excel -->
         <img src="/static/img/excell-color.jpg" height=128px width=128px>
         {% endif %}
@@ -72,7 +73,10 @@
         <img src="/static/img/excell-black.jpg" height=128px width=128px>
         {% endif %}
         {% else %}
-        {% if i.attachment_file %}<img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% else %}<img src="" height=128px width=128px>{% endif %}{% endif %}</td>
+            {% if i.attachment_file %}<img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% else %}<img src="" height=128px width=128px>
+        {% endif %}
+    {% endif %}
+    </td>
       <td align="center"><a href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}">{{i.name}} </a></td>
       <td align="center">{{i.description}}</a></td>
       <td align="center">{{i.get_attachment_type_display}} {% if i.attachment_type == 2 %} ({{i.get_document_type_display}}) {% endif %}</td>

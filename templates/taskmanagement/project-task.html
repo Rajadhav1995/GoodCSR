@@ -85,9 +85,9 @@
          </div>
          <div class="task-head-rgt">
 <!--            <div class="my-progress-bar"></div>-->
-    <div class="progress-bar position" data-percent="{{i.task_progress}}" data-duration="1000" data-color="#ccc,#3ca187"></div>
+    <div class="progress-bar position" data-percent=" {% if i.task_progress %}{{i.task_progress}} {% else %} 0 {% endif %}" data-duration="1000" data-color="#ccc,#3ca187"></div>
 <!--            <img src="/static/img/progress-icon.png" alt="">-->
-            <p>{%if i.status == 2 %}completed {% else %} 0% in progress{% endif %}</p>
+            <p>{%if i.status == 2 %}completed {% else %} in progress{% endif %}</p>
          </div>
          </div>
          <div class="planned-date">
@@ -151,7 +151,6 @@
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
-               <a href="/managing/my-tasks/updates/" class="iframe" id="px_{{i.slug}}"><button type="button"  class="singup"> Add Update</button></a>
             </div>
          </div>
          <div class="user-timeline">
@@ -375,8 +374,6 @@
 </script>
 <!---datepicker script-->
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-
-
 <script>
    $(function() {
    $( ".datepicker" ).datepicker({
@@ -414,7 +411,7 @@
             $('.range-'+sl_id).on('rangeControlSlide.rangeControlEvent', function () {
               // on slide event
 
-                $("#px_"+sl_id).attr("href", "/managing/my-tasks/updates/"+$('.range-control-current-value').text()+"/")
+                
              
 
              // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
@@ -431,9 +428,8 @@
 
             });
 
+
             var progress = $('#xp_'+sl_id).val();
-            
-            
             $('.range-control-handle').css('left',progress+'%');
 
        });
@@ -481,11 +477,8 @@
 
 
             var progress = $('#xp_'+key).val();
-            $("#px_"+sl_id).attr("href", "/managing/my-tasks/updates/"+progress+"/")
             if (progress != 'None'){
                 alert("Task completion status is updated to "+progress+" % successfully");
-                var tg = $('input[name^=tea1').val();
-                alert(tg)
             }
             $('.range-control-handle').css('left',progress+'%');
 
@@ -535,8 +528,6 @@ $(document).ready(function() {
     $(".iframe").fancybox({
         type: 'iframe'
     });
-    var tg = $('input[name^=tea1').val();
-    alert(tg)
 });
 </script>
 
