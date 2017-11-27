@@ -133,8 +133,6 @@ def html_to_pdf_view(request):
     budgetobj = Budget.objects.latest_one(project = project,active=2)
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
     quarter_list = get_budget_quarters(budgetobj)
-    # cover_image = Attachment.objects.get_or_none(description__iexact = 'cover image',\
-        # content_type = ContentType.objects.get_for_model(report_obj),object_id = report_id)
     location = ProjectLocation.objects.filter(object_id=project.id)
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
     tranche_list = Tranche.objects.filter(project = project,active=2)
@@ -163,8 +161,8 @@ def html_to_pdf_view(request):
         else:
             answer = ''
         answer_list[str(question.slug)] = answer
-    paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
-    html_string = render_to_string('report/report-pdf.html', {'paragraphs': paragraphs,
+    # here we are sending/rendering all variable to generate PDF 
+    html_string = render_to_string('report/report-pdf.html', {
         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
         'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
         'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
@@ -174,12 +172,13 @@ def html_to_pdf_view(request):
         'quarters':quarters})
 
     html = HTML(string=html_string)
-    html.write_pdf(target='testp.pdf');
-
+    # first we are writing new PDF and
+    from pmu.settings import BASE_DIR
+    html.write_pdf(target=BASE_DIR + '/static/project_report.pdf');
     fs = FileSystemStorage()
-    with fs.open('testp.pdf') as pdf:
+    with fs.open(BASE_DIR +'/static/project_report.pdf') as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="testp.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="project_report.pdf"'
         return response
 
     return response
@@ -376,7 +375,7 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
     act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
-    # add_section = 0 then add , if add_section = 1 its edit
+    
     for j in pic_count :
         milestone_images = {}
         name1 = []
@@ -418,7 +417,6 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     pic_count = obj_count_list.get('milestone_pic_count')
     milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
-    # add_section = 0 then add , if add_section = 1 its edit
     for milestone in milestoneobj:
         milestone.active = 0
         milestone.save()
@@ -482,7 +480,6 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
 def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
     add_section = request.POST.get('add_section')
     para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
-#    for k in range(int(parameter_count)):
     for k in sorted(para_detail):
         parameter_result = {}
         for parameter in parameter_list:
@@ -539,10 +536,7 @@ def saving_of_quarters_section(request):
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
             answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
 # clients requirement not to provide paramerter selection in previous quarter list so commented
-#        if parameter_count > 0:
-#            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
 # end of parameter saving function
-
 #    to save the Current quarter updates:
     quarter_list = currentquarter_list
     
@@ -624,10 +618,10 @@ def finalreportdesign(request):
     else:
         return render(request,'report/final_report.html',locals())
 
-
+from collections import OrderedDict
 def get_index_contents(slug,report_id):
 # to get the index contents dynamically by using a dictionay passing the contents
-    contents = {}
+    contents = OrderedDict()
     index={}
     quarters = {}
     project = Project.objects.get_or_none(slug=slug)
@@ -653,16 +647,18 @@ def get_index_contents(slug,report_id):
             quarters['Current Quarter Updates'] = currentquarter_list
         if futurequarter_list:
             contents['4'] = 'Next Quarter Updates'
+            import operator
+            # here we getting all next quarter so we taking first quarter 
+            sorted_futurequarter_list = sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]
             quarters['Next Quarter Updates']=futurequarter_list
         contents['5'] = "Annexure"
         quarters['Annexure']=''
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    # final contents dict = {'1':About the Project,'2':current quarter updates,.....}
-    # quarters dict = {'About the Project':'','current quarter updates':{0:from and to date,1:from and to date},....}
     return contents,quarters
 
 def report_save_exit(request):
+    # this dunction is to save form details of report and exit from current page
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
@@ -671,5 +667,4 @@ def report_save_exit(request):
         return HttpResponseRedirect('/report/listing/?slug='+slug)
     except :
         save = "not submitted successfully"
-        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))               
-    
+        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))

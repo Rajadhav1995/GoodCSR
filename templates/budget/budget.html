@@ -421,7 +421,7 @@ Highcharts.chart('Budget_location', {
                     cursor: 'pointer',
                     showInLegend: true,
                     dataLabels: {
-                            enabled:true,
+                            enabled:false,
                             distance: -30,
                             formatter: function() {
                                 return this.percentage.toFixed(1) + '%';
@@ -433,14 +433,12 @@ Highcharts.chart('Budget_location', {
                 enabled: true,
                 layout: 'horizontal',
                 align: 'center',
-                width: 250,
+                width: 200,
                 verticalAlign: 'bottom',
-                borderWidth: 0,
                 useHTML: true,
-              
-                margin: 12
-            
-               
+                labelFormatter: function() {
+                    return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                }
             },
             series: [{
                 type: 'pie',

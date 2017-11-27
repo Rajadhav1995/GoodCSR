@@ -46,13 +46,14 @@
   <thead>
     <tr>
       <th>File</th>
-      <th>File Title</th>
+      <th style="width: 10%;">File Title</th>
       <th>File Description</th>
       <th>File Type</th>
       <!-- <th>Uploadaed by</th> -->
       <th>Tags</th>
       <!-- <th>Source</th> -->
       <th>Upload Date </th>
+      <!-- <th>Edit </th> -->
     </tr>
   </thead>
   <tbody>
@@ -60,26 +61,31 @@
     <tr>
       <td align="center">{% if i.attachment_type == 2 %}
         {% if i.document_type == 1 %}<!-- excel -->
-        <img src="/static/img/excell-color.jpg" height=128px width=128px>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-color.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 2 %}<!-- pdf -->
-        <img src="/static/img/pdf.jpg" height=128px width=128px>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/pdf.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 3 %}<!-- ppt -->
-        <img src="/static/img/wordpress.jpg" height=128px width=128px>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/wordpress.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 4 %}<!-- doc -->
-        <img src="/static/img/excell-black.jpg" height=128px width=128px>
+        {% if i.attachment_file %}
+        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-black.jpg" height=128px width=128px></a>
         {% endif %}
         {% else %}
-        {% if i.attachment_file %}<img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% else %}<img src="" height=128px width=128px>{% endif %}{% endif %}</td>
-      <td align="center"><a href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}">{{i.name}} </a></td>
+        {% if i.attachment_file %}<a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% else %}<img src="" height=128px width=128px>{% endif %}{% endif %}</td></a>
+      <td align="center" style="width: 10%;"><!-- <a href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> -->{% if i.name %}{{i.name}}{% else %}-{% endif %} <!-- </a> --></td>
       <td align="center">{{i.description}}</a></td>
       <td align="center">{{i.get_attachment_type_display}} {% if i.attachment_type == 2 %} ({{i.get_document_type_display}}) {% endif %}</td>
       <!-- <td>{{i.created_by.user.first_name}} {{i.created_by.user.last_name}}</td> -->
         <td align="center"><div class="span_bottom">{% for j in i.get_file_keywords %}<span>{{j}} </span>{% endfor %}<!-- <span>Budget</span><span>Report</span><span>Document</span><span>Files</span> --></div class="span_bottom"></td>
       <!-- <td>Task: Dhenuki Labours Unit</td> -->
       <td align="center">{{i.created}}</td>
+      <!-- <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td> -->
     </tr>
     {% endfor %}
 

@@ -136,7 +136,9 @@
                   </div>
                   <hr>
                   <img src="/static/img/report/logo.png" style="float:left">
-                  <h3 style="float:right;margin-top:0px;">2</h3>
+                  <!-- <h3 style="float:right;margin-top:0px;">2</h3> -->
+                  {% get_page_number 0 as page_number %}
+                  <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                </div>
                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                <!--<header>
@@ -231,7 +233,8 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">3</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
                <header style="margin-top:50px">
@@ -265,7 +268,8 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">4</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
                
@@ -310,22 +314,23 @@
                   </div>
                   <div class="margin_30 prev_banner ">
                      <h5 class="color_green">Key Achievements in this quarter</h5>
+
                      <!-- <img src="/static/img/report/prev-banner.png" style="width:100%"> -->
                      <!-- ---------------########## -->
-                     
+                     {% get_timeline_json project j as timeline %}
+                     {% if timeline.0 != '[]' %}
                      <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
                                     <!-- timeline slider -->
                                     
                                             <div id="scrollbar1">
-                
                 <div class="viewport">
                      <div class="overview">
                        <div id="time-line-pad">
             <div class="time-line">
               <div class="time-line-bdr"></div>
                 <ul>
-                   
+                   {% get_date_range j as date_range %}
                     <div class="timeline-slide_{{date_range.1}}"></div>
                     
                 </ul>
@@ -343,22 +348,23 @@
                                                     </div></div></div></div>
                                         
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
-                               
-                            </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script type="text/javascript">
     //var loop_count = $('#loop_count').val()
+    {% get_date_range j as date_range %}
     // var wrapper = $(".timeline-slide_" + "{{timeperiod}}"); //Fields wrapper
     var wrapper = $(".timeline-slide_" + "{{date_range.1}}"); //Fields wrapper
-    var ii = ".timeline-slide_" + "{{date_range.1}}";
+    // var ii = ".timeline-slide_" + "{{date_range.1}}";
     {% get_timeline_json project j as timeline %}
     var lengths = {{timeline.1}};
-    var hk = "{{previousquarter_list | get_at_index:forloop.counter0}}";
-    var ff= {{timeline.0|safe}}
+    var timeline_data= {{timeline.0|safe}}
     var loc_url = '{{image}}'
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++)
     {
-      var obj = ff[i]
+      var obj = timeline_data[i]
       var name = obj.name;
       console.log(obj);
       if (obj.url) {
@@ -394,7 +400,9 @@
       };
     }
 </script>
-
+{% else %}
+No Key Acheivements in this Quarter
+{% endif %}
 
        <!-- ---------------------------------############ -->
                   </div>
@@ -404,7 +412,7 @@
                      <h5 class="color-red">MILESTONE 1</h5>
                      <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
                      <p><strong>About the Milestone</strong></p>
-                     <h5>{{m.description}} </h5>
+                     <div class="location"><h5> {{m.description}} </h5></div>
                      {% get_mile_images m.id as images %}
                         {% for img in images %}
                      <div class="col-md-6" style="padding:0px">
@@ -422,141 +430,11 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">5</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
-               <!--Index page 05 html ends-->
-               <!--Index page 06 html starts-->
-               <div class="container">
-                  <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
-                  </div>
-                  <hr>
-                  <div class='page_height'>
-                  <div class="quarter_updates">
-                     <h4 style="margin:0px">Previous Quarter Updates</h4>
-                     {% get_date_range j as date_range %}
-                     <p>First Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
-                  </div>
-                  <div class="col-md-12">
-                     <div class="row">
-                        {% get_parameter j 3 as pie_data %}
-                        
-                        {% if pie_data.0 %}
-                        {% for lol in  pie_data.0 %}
-
-                        <div class="margin_30 prev_banner">
-                           <h5 class="color-red">PARAMETER 1</h5>
-                           <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
-                           <div>
-                            {% if pie_data.2 == 1 %}
-                                        {% if pie_data.0.0.1.y != 0 %}
-                                        <div class="col-md-4">
-                                           <div class="row">
-                                              <ul class="key_parameter parameter">
-                                                 <!-- <div class='numeric_parameter'></div> -->
-                                                 
-                                                    <!-- <h3>{{chart_name_pip}}</h3> -->
-                                                    <div class="right-budget beni-dist">
-                                                       <div id="coll{{forloop.counter}}" style="width: 100%;float: left;"></div>
-                                                    </div>
-                                                 
-                                              </ul>
-                                              <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
-                                           </div>
-                                        </div>
-                                        {% endif %}
-                              {% else %}
-                              <ul class="key_parameter parameter">
-                                <!-- <div>
-                                  <li><h3>Beneficiary</h3><img class="key-image parameter-position" src='/static/img/key-icon2.png' alt=""><h4 class="title-pad">2,380</h4></li>'
-                                </div> -->
-                                <table class="table pmu_formtable_parameter">
-                                  <tr>
-                                     <td>
-                                          <p>{{pie_data.1 | get_at_index:forloop.counter0}}</p>
-                                          <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
-                                      </td>
-                                  </tr>
-                              </table>
-                              </ul>
-                              {% endif %}
-
-                              <div class="col-md-8">
-                                 <div class="parameter-textbottom">
-                                    <h4 class="color_green">About This Parameter</h4>
-                                    {% get_about_parameter j report_obj 3 as about_parameter %}
-                                    <p> {{about_parameter}} </p>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        
-                        {% endfor %}
-                        {% endif %}
-                     </div>
-                  </div>
-                  <div class="col-md-12">
-                     <div class="row">
-                        {% get_parameter i 3 as pie_data %}
-                        {{pie_data.3}}
-                        {% if pie_data.3 %}
-                        {% for lol in  pie_data.3 %}
-                        <div class="margin_30 prev_banner">
-                           <h5 class="color-red">PARAMETER 2</h5>
-                           <h5 class="color_green">Batch Size</h5>
-                           <div>
-                              <div class="col-md-4">
-                                 <div class="row">
-                                    <ul class="key_parameter parameter">
-                                       <!-- <div class='numeric_parameter'></div> -->
-                                       
-                                          <!-- <h3>{{chart_name_pip}}</h3> -->
-                                          <div class="right-budget beni-dist">
-                                             <div id="coll" style="width: 100%;float: left;"></div>
-                                          </div>
-                                       
-                                    </ul>
-                                    <!-- <img src="/static/img/report/parameter02.jpg" style="width:100%"> -->
-                                 </div>
-                              </div>
-                              <div class="col-md-8">
-                                 <div class="parameter-textbottom">
-                                    <h4 class="color_green">About This Parameter</h4>
-                                    {% get_about_parameter i report_obj 3 as about_parameter %}
-                                    <p> {{about_parameter}} </p>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                     </div>
-                  </div>
-                  </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">6</h3>
-                  </footer>
-               </div>
+               
                <header style="margin-top:50px">
                   <div>
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
@@ -564,7 +442,7 @@
                </header>
                <!--Index page 06 html ends-->
                <!--Index page 07 html starts-->
-               <div class='page_height'>
+               
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -582,6 +460,7 @@
                      </div>
                   </div>
                   <hr>
+
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
                      {% get_date_range j as date_range %}
@@ -609,7 +488,7 @@
                      </div>
                      </div>
                      </div> -->
-                  <div class="margin_top30">
+                  <div class="margin_top30 page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
             <div class="table-responsive">
@@ -662,9 +541,9 @@
           </table>
         </div>
         </div>
-    </div>
-                     <br><!-- ------------------------------------------------------- -->
-                     <div class="white-box">
+    
+                     <!-- ------------------------------------------------------- -->
+     ..        <div class="white-box">
     <div class="table-responsive">
     <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
       <thead>
@@ -700,13 +579,14 @@
       </tr>
       </tbody>
    </table>  
-    </div>
-    </div>
+    </div></div></div>
+    
 
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">7</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
                {% endfor %}
@@ -746,7 +626,7 @@
                                                cursor: 'pointer',
                                                showInLegend: true,
                                                dataLabels: {
-                                                   enabled: true,
+                                                   enabled: false,
                                                    distance: -30,
                                                    formatter: function() {
                                                        return this.y;
@@ -755,19 +635,16 @@
                                            }
                                        },
                                        legend: {
-                                           enabled: true,
-                                           layout: 'horizontal',
-                                           align: 'center',
-                                           width: 250,
-                                           height:300,
-                                           verticalAlign: 'bottom',
-                                           borderWidth: 0,
-                                           useHTML: true,
-                           
-                                           margin: 12
-                           
-                           
-                                       },
+                                          enabled: true,
+                                          layout: 'horizontal',
+                                          align: 'center',
+                                          width: 200,
+                                          verticalAlign: 'bottom',
+                                          useHTML: true,
+                                          labelFormatter: function() {
+                                              return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                                          }
+                                      },
                                        series: [{
                                            type: 'pie',
                                            dataLabels:{
@@ -1243,7 +1120,8 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">8</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
 
@@ -1366,7 +1244,7 @@
                                                cursor: 'pointer',
                                                showInLegend: true,
                                                dataLabels: {
-                                                   enabled: true,
+                                                   enabled: false,
                                                    distance: -30,
                                                    formatter: function() {
                                                        return this.y;
@@ -1375,19 +1253,16 @@
                                            }
                                        },
                                        legend: {
-                                           enabled: true,
-                                           layout: 'horizontal',
-                                           align: 'center',
-                                           width: 250,
-                                           height:300,
-                                           verticalAlign: 'bottom',
-                                           borderWidth: 0,
-                                           useHTML: true,
-                           
-                                           margin: 12
-                           
-                           
-                                       },
+                                          enabled: true,
+                                          layout: 'horizontal',
+                                          align: 'center',
+                                          width: 200,
+                                          verticalAlign: 'bottom',
+                                          useHTML: true,
+                                          labelFormatter: function() {
+                                              return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                                          }
+                                      },
                                        series: [{
                                            type: 'pie',
                                            dataLabels:{
@@ -1512,7 +1387,8 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">9</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
                <!--Index page 09 html ends-->
@@ -1557,19 +1433,22 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">10</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
                {% endif %}
                <!--Index page 10 html ends-->
                <!--Index page 10 html starts-->
                {% if i.quarter_type == 3 %}
+               {% get_next_quarter_sections i as next_quarter %}
+               {% for k in next_quarter %}
                 <header style="margin-top:50px">
                   <div>
                      <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                   </div>
                </header>
-                  {% get_parameter i 5 as pie_data %}
+                  {% get_parameter k 5 as pie_data %}
                <div class="container">
                 <div class='page_height'>
                   <div class="margin_25">
@@ -1592,12 +1471,12 @@
                   <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Next Quarter Updates</h4>
-                     {% get_date_range i as date_range %}
+                     {% get_date_range k as date_range %}
                      <p>Third Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   <div class="location margin_top30" style="margin-bottom:0px">
                      <p>About The Quarter</p>
-                     {% get_about_quarter i report_obj 5 as abut_parameter %}
+                     {% get_about_quarter k report_obj 5 as abut_parameter %}
                      <h5>{{abut_parameter}} </h5>
                   </div>
                   <div class="margin_top30">
@@ -1702,7 +1581,7 @@
                   </div>
                   <div class="location margin_top30">
                      <p>About The Budget</p>
-                     {% get_budget_detail 5 i as budget_detail %}
+                     {% get_budget_detail 5 k as budget_detail %}
                      <h5>{{budget_detail}}
                      </h5>
                   </div>
@@ -1711,10 +1590,13 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">11</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
+               {% endfor %}
                {% endif %}
+               
                 {% endfor %}
                <!--Index page 11 html ends-->
                <!--Index page 12 html-->
@@ -1748,7 +1630,8 @@
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
-                     <h3 style="float:right;margin-top:0px;">12</h3>
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
                </div>
 
@@ -1777,13 +1660,13 @@
 
   });
 </script>
-<!-- 
+
 <script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
 <script>
-html2canvas([document.getElementById('time-line-pad')], {
+html2canvas([document.getElementById('gwContainer_current')], {
     onrendered: function (canvas) {
       var imagedata = canvas.toDataURL('image/png');
-      alert(imagedata);
+      // alert(imagedata);
       var imgdata = imagedata.replace(/^data:image\/(png|jpg);base64,/, "");
     //ajax call to save image inside folder
     $.ajax({
@@ -1795,12 +1678,12 @@ html2canvas([document.getElementById('time-line-pad')], {
          $('#image_id img').attr('src', response);
       }
     });
-    alert("asdfgh");
+    // alert("asdfgh");
     }
   })
 </script>
 
 
- -->
+
             </body>
          </html>

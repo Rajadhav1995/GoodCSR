@@ -224,7 +224,7 @@ def get_project_updates(project,uploads):
     if project.history.latest():
         attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
         for a in attach_lists:
-            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,
+            uploads.append({'project_name':project.name,'task_name':'','attach':a.description,'file_type':a.get_attachment_type_display(),
             'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''})
     return uploads
     
@@ -254,7 +254,7 @@ def updates(obj_list):
                 'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()})
             uploads = get_tasks_status(project,task,uploads)
     try:
-        uploads = sorted(uploads, key=lambda key: key['date'],reverse=True)
+        uploads = sorted(uploads, key=lambda key: key['time'],reverse=True)
     except:
         uploads = uploads
     return uploads
