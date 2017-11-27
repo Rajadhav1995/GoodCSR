@@ -17,7 +17,12 @@
          <html class="no-js">
             <!--<![endif]-->
             <head>
-
+              <meta charset="utf-8">
+               <meta http-equiv="X-UA-Compatible" content="IE=edge">
+               <title>Goodcsr</title>
+               <meta name="description" content="">
+               <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+              
                 <style>
 
     </style>
@@ -328,8 +333,6 @@
     var ii = ".timeline-slide_" + "{{date_range.1}}";
     {% get_timeline_json project j as timeline %}
     var lengths = {{timeline.1}};
-    var hk = "{{previousquarter_list | get_at_index:forloop.counter0}}";
-    var ff= {{timeline.0|safe}}
     var loc_url = '{{image}}'
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < lengths ; i++)

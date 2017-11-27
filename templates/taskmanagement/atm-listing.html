@@ -7,10 +7,10 @@
 <div class="clear"></div>
 <!--Content part starts-->
 <section class="content-part">
-	<div class="row">
-	<div id="Super_Completion" style="width: 100%;float: left;">Super Category Completion</div>
-	<div class=" white-box ">
-<!--    	<img src="/static/img/wip-img.jpg" alt="">-->
+  <div class="row">
+  <div id="Super_Completion" style="width: 100%;float: left;">Super Category Completion</div>
+  <div class=" white-box ">
+<!--      <img src="/static/img/wip-img.jpg" alt="">-->
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
     </div>
 <div class="green-box">
@@ -171,48 +171,48 @@ function filter(parent,type) {
 
 <script>
 //Toggle
-		
-	$('.user-menu').on('click',function(){
-		$('.dropdown-menu').slideDown(350);
-	
-	});
-	$('.select-down').on('click',function(){
+    
+  $('.user-menu').on('click',function(){
+    $('.dropdown-menu').slideDown(350);
+  
+  });
+  $('.select-down').on('click',function(){
         $('.dropdown-menu1').slideDown(350);
           
     });
-	
-	$(document).ready(function(e) {	
-		/*Content Show/Hide */
-		$('.hide-cont').hide();
-		$('.close-cont').hide();
-		$('.view-cont').click(function(){
-			$('.hide-cont').slideDown(350);
-			$('.close-cont').show();
-			$('.view-cont').hide();
-		});
-		$('.close-cont').click(function(){
-			$('.hide-cont').slideUp(350);
-			$('.close-cont').hide();
-			$('.view-cont').show();
-		});	
-		$(document).trigger( "click" );
-	});
-	
-	$(document).click(function(){
-	
-		$('.user-menu, .select-down').click(function(event){
-			event.stopPropagation();
-		});
-	
-		$('.dropdown-menu, .dropdown-menu1').slideUp(350);	 
-	
-	});		 
+  
+  $(document).ready(function(e) { 
+    /*Content Show/Hide */
+    $('.hide-cont').hide();
+    $('.close-cont').hide();
+    $('.view-cont').click(function(){
+      $('.hide-cont').slideDown(350);
+      $('.close-cont').show();
+      $('.view-cont').hide();
+    });
+    $('.close-cont').click(function(){
+      $('.hide-cont').slideUp(350);
+      $('.close-cont').hide();
+      $('.view-cont').show();
+    }); 
+    $(document).trigger( "click" );
+  });
+  
+  $(document).click(function(){
+  
+    $('.user-menu, .select-down').click(function(event){
+      event.stopPropagation();
+    });
+  
+    $('.dropdown-menu, .dropdown-menu1').slideUp(350);   
+  
+  });    
 </script>
 
     <script type="text/javascript">
    
-	
-	var expanded = false;
+  
+  var expanded = false;
 
 function showCheckboxes() {
   var checkboxes = document.getElementById("checkboxes");
@@ -229,9 +229,9 @@ function showCheckboxes() {
   $(document).ready(function() {
   
     $("#boxscroll-atm").niceScroll("#boxscroll-atm ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
-	// First scrollable DIV
-	$("#boxscroll-atm1").niceScroll("#boxscroll-atm1 ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
-	$("#boxscroll-atm2").niceScroll("#boxscroll-atm2 ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
+  // First scrollable DIV
+  $("#boxscroll-atm1").niceScroll("#boxscroll-atm1 ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
+  $("#boxscroll-atm2").niceScroll("#boxscroll-atm2 ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
 
     
   });
@@ -253,13 +253,13 @@ function showCheckboxes() {
                 $info.show();
             }
         });
-		});
+    });
 </script>
 <script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $('#myBtn1').click(function(){
-	$('#pop3').simplePopup();
+  $('#pop3').simplePopup();
     });
 });
 </script>
@@ -267,13 +267,13 @@ $(document).ready(function(){
 <!---datepicker script-->
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
-	$(function() {
-	$( ".datepicker" ).datepicker({
-	showOn: "button",
-	buttonImage: "img/calender-icon.png", 
-	buttonImageOnly: true
-	});
-	});
+  $(function() {
+  $( ".datepicker" ).datepicker({
+  showOn: "button",
+  buttonImage: "img/calender-icon.png", 
+  buttonImageOnly: true
+  });
+  });
 </script>
 <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
   <script src="/static/js/jsgantt.js" type="text/javascript"></script>
@@ -407,26 +407,26 @@ $(document).ready(function(){
           mileId = this.id;
         }
         // added the script 16th-Nov
-        maxDate = new Date('1970-01-01');		
-        var tempArray = [];		
-        var n = 0;		
-        $.each(depTask, function (index, value) {		
-          console.log('value', n);		
-          tempArray.push({		
-            'id': value		
-          });		
-          for (var i = 0; i < jsonData.tasks.length; i++) {		
-            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {		
-              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();		
-            }		
-            if (i == (depTask.length - 1)) {		
-            		
-              console.log('Array', depTask)		
-              console.log('Max Date',Math.max(tempArray.date));		
-            }		
-          }		
-          n++;		
-        });		
+        maxDate = new Date('1970-01-01');   
+        var tempArray = [];   
+        var n = 0;    
+        $.each(depTask, function (index, value) {   
+          console.log('value', n);    
+          tempArray.push({    
+            'id': value   
+          });   
+          for (var i = 0; i < jsonData.tasks.length; i++) {   
+            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {   
+              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();    
+            }   
+            if (i == (depTask.length - 1)) {    
+                
+              console.log('Array', depTask)   
+              console.log('Max Date',Math.max(tempArray.date));   
+            }   
+          }   
+          n++;    
+        });   
         console.log("tempArray", tempArray);
         //end of  the added script
         // if (depTask.length == 1) {
@@ -470,7 +470,7 @@ $(document).ready(function(){
                 dur = Math.floor(dur / 30);
                 //add 16th-Nov
                 rem = Math.floor(rem % 30);
-                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";		
+                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";    
               };
                 //end 
               if (dur >= 365) { 
@@ -493,7 +493,7 @@ $(document).ready(function(){
               if (dur >= 8 && dur < 30) { 
                 dur = Math.floor(dur / 7);
                 rem = Math.floor(rem % 7);//new line
-                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";	//modified
+                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)"; //modified
               };
               if (dur >= 30 && dur < 365) { 
                 dur = Math.floor(dur / 30);
@@ -624,8 +624,8 @@ $(document).ready(function(){
     // new script 16th-Nov 
     if (window.location.hash) {
         setTimeout(function() {
-        $('html, body').scrollTop(0).show();	
-        $('html, body').animate({	
+        $('html, body').scrollTop(0).show();  
+        $('html, body').animate({ 
                 scrollTop: $(window.location.hash).offset().top - ($(window).height()/2) }, 1000)
         },0);
             $(window.location.hash).trigger('click')

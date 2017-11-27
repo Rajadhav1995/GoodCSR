@@ -20,7 +20,7 @@ class AttachmentForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Please Select Date','readonly':'true'}))
     document_type = forms.ChoiceField(choices = DOCUMENT_TYPE,widget = forms.Select(attrs={'class': 'form-control'}))
-    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
     class Meta:
         model = Attachment
         fields  = ('attachment_file','name','date','document_type')
@@ -31,7 +31,7 @@ class ImageUpload(forms.ModelForm):
     '''
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true','placeholder':'Please Select Date'}), required=True)
-    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control text_area'}), required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
     class Meta:
         model = Attachment
         fields  = ('date','description','attachment_file')

@@ -188,7 +188,6 @@ def get_parameter(obj,block_id):
     pie_chart = ''
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
-        # parameter_obj = ProjectParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
         for i in report_para:
             main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
@@ -246,8 +245,6 @@ def get_about_parameter(quarter,obj,block):
     report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
     for i in report_para:
         detil = i.description
-    # if answer_obj:
-    #     about_parameter = answer_obj.text
     return detil
 
 @register.assignment_tag
@@ -296,12 +293,19 @@ def get_quarter_sections(obj):
     quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project).order_by('quarter_order')
     return quarter_section
 
+@register.assignment_tag
+def get_next_quarter_sections(obj):
+    quarter_section = QuarterReportSection.objects.filter(quarter_type=3,project=obj.project).order_by('quarter_order')
+    return quarter_section
+
 import locale
 @register.filter
 def get_currency(amount):
     locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
-    group_amount = locale.currency( int(amount), grouping=True )
-    group_amount = group_amount[4:-3]
+    group_amount = 0
+    if amount:
+        group_amount = locale.currency( int(amount), grouping=True )
+        group_amount = group_amount[4:-3]
     return group_amount
 
 @register.filter
@@ -309,3 +313,8 @@ def get_ordinal_number(number):
     ordinal = {1:"First",2:"Second",3:"Third",4:"Fourth",5:"Fifth"}
     # this template tag is used to get text ordinal (eg if we pass '1' then we will get 'First')
     return ordinal.get(int(number))
+
+@register.assignment_tag
+def get_page_number(page_number):
+    page_number += 1
+    return page_number

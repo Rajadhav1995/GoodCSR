@@ -55,11 +55,7 @@ width:450px;
                                             <div class="form-group">
                                             <label>{{form.document_type.label_tag}}</label>
                                             {{form.document_type}}
-                                {% if form.document_type.errors %}
-                                <p style="color: red;">
-                                    Please Select.
-                                </p>
-                                {% endif %}
+                                            {{ form.document_type.errors }}
                                             </div>
                                         </div>
                                     </div>
@@ -82,10 +78,10 @@ width:450px;
                                         <div class="col-md-6 nopadding">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                <label>Attachment File</label><br>
+                                                <label>Upload File</label><br>
                                                 {{form.attachment_file}}
                                                 {{ form.attachment_file.errors }}
-                                                <br><b><font color=#fc282f><span id="file_error"></span></font></b>
+                                                <br><br><b><font color=#fc282f><span id="file_error"></span></font></b>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,27 +99,6 @@ width:450px;
                                         </div>
                                     </div>
                                 </div>
-
-
-<!--                             <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    Attachment Name<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.name}}
-                                    {{ form.name.errors }}
-                                </div>
-                            </div>
- -->
-                            <!-- <div class="row">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                    Attachment Description<font color="red">*</font>
-                                </label>
-                                <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                    {{form.description}}
-                                    {{ form.description.errors }}
-                                </div>
-                            </div> -->
 
                                 <div class="row">
                                     <div class="col-md-6 nopadding">
@@ -153,18 +128,6 @@ width:450px;
                                     </div>
                                 </div>
 
-                        
-                        <!-- <div class="row">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
-                                Keywords:
-                            </label>
-                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                                <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
-                                <p style="color:grey ;">
-                                    (Please press Enter or TAB or ',' after typing each keyword)
-                            </div>
-                        </div> -->
-
                         <div class="row">
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
@@ -177,8 +140,9 @@ width:450px;
                                         </div>
                                     </div>
                                 </div>
-                        <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
-                        <a class="btn btn-success" href="/upload/list/?slug={{slug}}&model={{model}}">Back</button></a>
+                          <a class="btn btn-success" href="/upload/list/?slug={{slug}}&model={{model}}" style="position: relative;left: 40%;padding:3px 15px;height: 30px; line-height: 25px;">Cancel</button></a>
+                        <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" style="position: absolute;left: 47%;padding:3px 15px; height: 30px; line-height: 25px;"/>
+                       
 
                     </form>
   </div>
@@ -329,8 +293,6 @@ $(document).ready(function() {
 });
 </script>
 
-
-
 <script type="text/javascript">
 $(function () {
     //var dddd = new $('#keyss').val().split(', ');
@@ -378,6 +340,42 @@ $(function () {
             $('#demo3').tagEditor('removeTag', tags[i]);
         }
     });*/
+});
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // $('select[multiple=multiple]').multiSelect()
+        $("#prog_edit").validate({
+            rules :
+            {
+                name : {required:true, maxlength: 300},
+                date : {required:true},
+                description : {required:true},
+                attachment_file : {required:true},
+                
+            },
+            messages:
+            {
+                name:{required:"<font color=#fc282f>Please enter name"},
+                date : {required:"<font color=#fc282f>Please select Date</font>"},
+                description:{required:"<font color=#fc282f>Please enter description</font>"},
+                {% if key == 1 %}
+                attachment_file:{required:"<br><font color=#fc282f>Please upload File"},
+                {% else %}
+                attachment_file:{required:"<br><font color=#fc282f>Please upload Image"},{% endif %}
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+
+
+        });
+        
 });
 </script>
 {% endblock %}

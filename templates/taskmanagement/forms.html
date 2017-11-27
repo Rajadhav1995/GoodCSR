@@ -15,8 +15,11 @@
 
 <section class="content-part">
 	<div class="row">
-	
+	{% if timeline == 1 %}
+    <form id="timeline_form" class="form-horizantal budget_form" action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+    {% else %}
     <form class="form-horizantal budget_form" action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
+    {% endif %}
      <div class="col-md-12">
                    <h3 class="border_line">Upload Images</h3>
                   
@@ -152,7 +155,38 @@
       });
     });
 </script>
+{% if timeline == 1 %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        // $('select[multiple=multiple]').multiSelect()
+        $("#timeline_form").validate({
+            rules :
+            {
+                name : {required:true, maxlength: 300},
+                date : {required:true},
+                description : {required:true},
+                attachment_file : {required:true},
+            },
+            messages:
+            {
+                name:{required:"<font color=#fc282f>Please enter name"},
+                date : {required:"<font color=#fc282f>Please select Date</font>"},
+                description:{required:"<font color=#fc282f>Please enter description</font>"},
+                attachment_file:{required:"<font color=#fc282f>Please upload Image"},
 
 
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
 
+
+        });
+        
+});
+</script>
+{% endif %}
 {% endblock %}

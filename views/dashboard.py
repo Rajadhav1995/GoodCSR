@@ -44,5 +44,3 @@ def admin_dashboard(request):
     total_budget = corp_total_budget(obj_list)
     budget = corp_total_budget_disbursed(obj_list)
     return render(request,'corporate_dashboard.html',locals())
-
-
