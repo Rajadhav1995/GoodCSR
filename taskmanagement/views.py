@@ -46,7 +46,6 @@ def listing(request):
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def update_task_completion(request,add,status):
-    import ipdb;ipdb.set_trace()
     if add == 'True':
         if request.POST.get('status') == '3':
             task_progress = '10'
