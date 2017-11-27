@@ -181,7 +181,7 @@ def report_question_list(report_quest_list,report_obj,project):
             answer = image_url + answer_obj.attachment_file.url
         elif answer_obj and (ques.qtype == 'F' or ques.qtype == 'API') and answer_obj.attachment_file == '' :
             from projectmanagement.templatetags import urs_tags
-            org_logo = urs_tags.get_org_logo(project)
+            org_logo = urs_tags.get_org_logo(report_obj.project)
             if org_logo:
                 answer = org_logo
             else :

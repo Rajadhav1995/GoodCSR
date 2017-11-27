@@ -94,7 +94,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                         <label>{{form.recommended_by.label_tag}}</label>
-                                        {{form.recommended_by}}
+                                        <!-- {{form.recommended_by}} -->
+                                        <select name="recommended_by" required="" class="form-control" id="id_recommended_by">
+                                            <option value="">---------</option>
+                                        {% for i in recommended_by %}
+                                        <option value="{{i.id}}">{{i}}</option>
+                                        {% endfor %}
+                                        </select>
                                         {{ form.recommended_by.errors }}
                                         </div>
                                     </div>

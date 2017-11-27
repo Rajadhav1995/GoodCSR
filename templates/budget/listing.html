@@ -57,7 +57,7 @@
             <td>{{i.project.name}}</td>
             <td>{{i.due_date}}</td>
             <td>{{i.disbursed_date}}</td>
-            <td><a class="btn btn-danger" href="/project/remove/record/?id={{i.id}}&model=Tranche" onclick="return confirm('Are you sure you want to Delete')">X</button></a></td>
+            <td><a class="btn btn-danger" href="/project/remove/record/?id={{i.id}}&model=Tranche" onclick="return confirm('Are you sure you want to Delete')">X</button></a><a class="budget_button" href="/project/budget/tranche/?slug={{slug}}&tranche_id={{i.id}}"> Edit</a></td>
             <td>
             </td>
         </tr>

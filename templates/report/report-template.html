@@ -213,7 +213,11 @@
                   <div class="location">
                      <p>Location Coverage</p>
                      <ul> 
-                      <li><span>{{answer_list.location}}</span></li>
+                      {% with answer_list.location|location_split:"," as location %}
+                      {% for k in location %}
+                      <li><span>{{k}}</span></li>
+                      {% endfor %}
+                      {% endwith %}
                     </ul>
                      <!--        <ul>-->
                      <!--<!--          {% for i in location %}-->

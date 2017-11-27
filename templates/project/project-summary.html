@@ -121,7 +121,7 @@ $(document).ready(function(){
          <h2>Location coverage</h2>
 
          {% if project_location %}
-          
+            
             {% for j in project_location %}
             <li style="color:#363636;" > {{j.location.name}}, {{j.location.parent.name}}, {{j.get_program_type_display}}</li>
             {% endfor %}
