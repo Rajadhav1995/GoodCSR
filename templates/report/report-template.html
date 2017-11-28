@@ -213,7 +213,11 @@
                   <div class="location">
                      <p>Location Coverage</p>
                      <ul> 
-                      <li><span>{{answer_list.location}}</span></li>
+                      {% with answer_list.location|location_split:"," as location %}
+                      {% for k in location %}
+                      <li><span>{{k}}</span></li>
+                      {% endfor %}
+                      {% endwith %}
                     </ul>
                      <!--        <ul>-->
                      <!--<!--          {% for i in location %}-->
@@ -1110,7 +1114,7 @@ No Key Acheivements in this Quarter
                      {% if img.attachment_file %}
                      
                      <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
-                     <p style="font-size:13px; margin-top:10px"><strong>{{img.description}}</strong></p>
+                     <p style="font-size:13px; margin-top:10px">{{img.description}}</p>
                      {% endif %}
                   </div>
                   {% endfor %}

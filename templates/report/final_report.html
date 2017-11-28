@@ -97,7 +97,7 @@
                                            {% if sub.q_type == 'APT' %}
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
-                                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" readonly="true"></input>
+                                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" ></input>
                                                   <h5><a href="#">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
@@ -158,8 +158,8 @@
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
-                                {% get_previous_question_value quest v i as text %}
-                                <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                                {% get_previous_question_value quest v i projectreportobj as text %}
+                                <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
@@ -366,8 +366,8 @@
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
-                                {% get_previous_question_value quest v i as text %}
-                                <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                                {% get_previous_question_value quest v i projectreportobj as text %}
+                                <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
@@ -550,7 +550,7 @@
 
 <!--                                    {% endfor %}-->
 <!--                                </div>-->
-<!--                                {% endfor %} <!--  this is for paramter list count loop ends -->-->
+<!--                                {% endfor %} <!--  this is for paramter list count loop ends -->
 <!--                                <div class="form-group addmilestone click_buttons">-->
 <!--                                    <p>+ add More Parameter</p>-->
 <!--                                </div>-->
@@ -645,8 +645,8 @@
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
-                                {% get_previous_question_value quest v i as text %}
-                                <input type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                                {% get_previous_question_value quest v i projectreportobj as text %}
+                                <input type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
@@ -862,8 +862,8 @@
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
-                                {% get_previous_question_value quest v i as text %}
-                                <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly>
+                                {% get_previous_question_value quest v i projectreportobj as text %}
+                                <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" >
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
@@ -1135,8 +1135,8 @@
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
-                                {% get_previous_question_value quest v i as text %}
-                                <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                                {% get_previous_question_value quest v i projectreportobj as text %}
+                                <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
@@ -1272,8 +1272,8 @@
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
                                 <p>{{quest.text|title}}</p>
-                                {% get_previous_question_value quest v i as text %}
-                                <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" readonly class="input_section">
+                                {% get_previous_question_value quest v i projectreportobj as text %}
+                                <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                             {% endif %}
