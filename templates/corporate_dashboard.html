@@ -257,7 +257,7 @@
       <tr>
 
 
-            <td style="width:27%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas>{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</a></td>
+            <td style="width:27%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</a></td>
             <td style="width:18%;">{{i.user.organization}}</td>
             <td style="width:25%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:20%;">{{i.role.name}}
