@@ -190,7 +190,8 @@ ga('send', 'pageview');
             <ul class="dropdown-menu" style="display:none;">
               <!-- User image -->
               <li class="user-header">
-                <img src="/static/img/default_profile_image.png" class="img-circle " alt="User Image">
+                <canvas class="user-icon" data-name="{{user_obj.attrs.first_name}} {{user_obj.attrs.last_name}}A" width="50" height="50" style="border-radius:10px" ></canvas>
+
                 
                 <h3>{% if user_obj.attrs %}{{user_obj.attrs.first_name}} {{user_obj.attrs.last_name}} {% else %} {{ user_obj.name }} {% endif %}</h3>
                 {% if user_obj.is_admin_user == True %}
