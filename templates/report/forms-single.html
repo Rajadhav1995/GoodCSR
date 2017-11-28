@@ -22,9 +22,9 @@
                   <!--<div>
                      <p align="right" class="edit_templete"><a href="#">Edit Templete</a></p>
                      </div>-->
-                  <div id="" >
+                  <div id="template" >
                      <h3 class="heading">{{locals_list.block1.name}}</h3>
-                     <form action="." method="POST" enctype="multipart/form-data">
+                     <form action="." id='ui-accordion-accordion-panel-0' method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -76,7 +76,7 @@
                         <input type="submit" class="report_save " name="cover_page_save" value = "Save"></input>
                      </form>
                      <h3 class="heading">{{locals_list.block2.name}}</h3>
-                     <form action="." method="POST" enctype="multipart/form-data">
+                     <form action="." id='ui-accordion-accordion-panel-1' method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -132,7 +132,7 @@
                         {% for i,v in previousquarter_list.items %}
                         {% with forloop.counter as j %}
                         <h3 class="heading"> Previous Quarter Updates :{{v}}</h3>
-                     <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+                     <form action=".?slug={{slug}}&report_id={{report_id}}" id='ui-accordion-accordion-panel-{{j|add:'2'}}' method = "post">
                         {% csrf_token %}
                         <input type="hidden" name="milestone_count_1" value="1">
                         <input type="hidden" name="milestone-pic-count_1" value="1">
@@ -584,7 +584,7 @@
                      {% for i,v in currentquarter_list.items %}
                      {% with forloop.counter as j %}
                      <h3 class="heading">Current Quarter Updates :{{v}}</h3>
-                     <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+                     <form action=".?slug={{slug}}&report_id={{report_id}}" id='ui-accordion-accordion-panel-{{j|add:previous_len}}' method = "post">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="activity-pic-count_1" value="1">
@@ -1037,7 +1037,7 @@
                      {% for i,v in futurequarter_list.items|slice:"1" %}
                      {% with forloop.counter as j %}
                      <h3 class="heading">Next Quarter Plan :{{v}}</h3>
-                     <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post">
+                     <form action=".?slug={{slug}}&report_id={{report_id}}" id='ui-accordion-accordion-panel-{{j|add:current_len}}' method = "post">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -1321,7 +1321,7 @@
             </div>
             <div align="right" class="save_exit">
                <button class="report_save">Submit Report</button>
-               <a href="/report/save/exit/?slug={{slug}}&report_id={{report_id}}"><button class="report_save">Save And Exit</button>
+               <button class="report_save" id="save_and_exit">Save And Exit</button>
             </div>
          </div>
       </div>
@@ -2521,5 +2521,25 @@
 </script>
 <!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section  End script -->
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script>
+    var request_url = "{{request.get_full_path|safe}}"
+    $('#save_and_exit').on('click',function(){
+    last_form_id = parseInt($('#template form').last().attr('id').split('-')[4])
+    for(var i=0;i<=last_form_id;i++){
+        $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
+            type: 'POST',
+            url: request_url,
+            dataType:'html',
+            success : function(data){
+            }
+        })
+      }
+
+      window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
+    });
+    
+</script>
 
 {% endblock %}

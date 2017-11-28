@@ -129,7 +129,6 @@ def budget_tranche(request):
     '''
     
     slug =  request.GET.get('slug')
-    # f = get_tranche_form(slug)
     form = TrancheForms()
     try:
         tranche_id =  request.GET.get('tranche_id')

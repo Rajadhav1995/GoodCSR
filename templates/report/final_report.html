@@ -1426,7 +1426,7 @@
                         </div>
                         <div align="right" class="save_exit">
                             <button class="report_save">Submit Report</button>
-                            <a href="/report/save/exit/?slug={{slug}}&report_id={{report_id}}"><button class="report_save">Save And Exit</button>
+                            <button class="report_save" id="save_and_exit">Save And Exit</button>
                         </div>
                     </div>
                 </div>
@@ -2612,6 +2612,25 @@ $(document).ready(function() {
 <!--    $('#'+div_id).addClass('ui-corner','top');-->
 <!--    }-->
 <!--</script>-->
+<script type="text/javascript" src="/static/js/jquery.form.js"></script>
 
+<script>
+    var request_url = "{{request.get_full_path|safe}}"
+    $('#save_and_exit').on('click',function(){
+    last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
+    for(var i=0;i<=last_form_id;i++){
+        $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
+            type: 'POST',
+            url: request_url,
+            dataType:'html',
+            success : function(data){
+            }
+        })
+      }
+        alert('Data is submitted successfully')
+      window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
+    });
+    
+</script>
 
 {% endblock %}
