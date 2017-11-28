@@ -168,6 +168,16 @@ def html_to_pdf_view(request):
 
     return response
 
+def get_org_report_logo(answer_obj,ques,report_obj):
+    from projectmanagement.templatetags import urs_tags
+    org_logo = urs_tags.get_org_logo(report_obj.project)
+    if org_logo:
+        answer = org_logo
+    else :
+        answer = "/static/img/GoodCSR_color_circle.png"
+    return answer
+
+
 def report_question_list(report_quest_list,report_obj):
     answer_list = {}
     image_url = PMU_URL
@@ -179,12 +189,7 @@ def report_question_list(report_quest_list,report_obj):
         elif answer_obj and (ques.qtype == 'F' or ques.qtype == 'API') and answer_obj.attachment_file:
             answer = image_url + answer_obj.attachment_file.url
         elif answer_obj and (ques.qtype == 'F' or ques.qtype == 'API') and answer_obj.attachment_file == '' :
-            from projectmanagement.templatetags import urs_tags
-            org_logo = urs_tags.get_org_logo(report_obj.project)
-            if org_logo:
-                answer = org_logo
-            else :
-                answer = "/static/img/GoodCSR_color_circle.png"
+            answer = get_org_report_logo(answer_obj,ques,report_obj)
         else:
             answer = ''
         answer_list[str(ques.slug)] = answer
@@ -400,12 +405,38 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
     return imageobj
 
 def get_activities_list(request,quarterreportobj):
+#    to get activities or milestones list
     if int(quarterreportobj.quarter_type) == 1:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
         # to get the last digit of the add more activity/milestone so that to loop and check condition
     else:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
     return act_count
+
+def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result):
+#    this is to save the milestone object
+    if int(quarterreportobj.quarter_type) == 1:
+        name = result.get('milestone','')
+        description = result.get('about milestone','')
+    else:
+        name = result.get('activity','')
+        description = result.get('about the activity','')
+    # here checking for add or edit so that to get the ReportMilestoneActivity object
+    # name1 length > 1 then it is the add more of activity/milestone in edit to specify that whether it is edit add more 
+    # In edit add more to the name we are appending "-1" so that to know it is add more in edit form
+    # for example name = Activity-1_2_0_40_1_1_3 then name.split('-') we will get ['Activity','1'] based on the length of this 
+    # we will make sure it is of add more from edit and create a new object for that added activity/milestone
+    if int(add_section) == 0 or len(name1) == 2:
+        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
+    else:
+        milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
+        if milestoneobj:
+            milestoneobj.name = name
+            milestoneobj.description=description
+            milestoneobj.active = 2
+            milestoneobj.save()
+    return milestoneobj
+
 
 
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
@@ -428,27 +459,8 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
                 mile_id = mile_length_list[-1]
                 parent_milestone_question = Question.objects.get(id=mile_length_list[3]).parent
                 result.update({name[0].lower():request.POST.get(mile_attribute)})
-                pic_list1 =[p for p in pic_list if p.split('_')[-2] == i] 
-        if int(quarterreportobj.quarter_type) == 1:
-            name = result.get('milestone','')
-            description = result.get('about milestone','')
-        else:
-            name = result.get('activity','')
-            description = result.get('about the activity','')
-        # here checking for add or edit so that to get the ReportMilestoneActivity object
-        # name1 length > 1 then it is the add more of activity/milestone in edit to specify that whether it is edit add more 
-        # In edit add more to the name we are appending "-1" so that to know it is add more in edit form
-        # for example name = Activity-1_2_0_40_1_1_3 then name.split('-') we will get ['Activity','1'] based on the length of this 
-        # we will make sure it is of add more from edit and create a new object for that added activity/milestone
-        if int(add_section) == 0 or len(name1) == 2:
-            milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
-        else:
-            milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
-            if milestoneobj:
-                milestoneobj.name = name
-                milestoneobj.description=description
-                milestoneobj.active = 2
-                milestoneobj.save()
+                pic_list1 =[p for p in pic_list if p.split('_')[-2] == i]
+        milestoneobj = report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result)
         imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list1,quarterreportobj)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2).values_list("id",flat=True)

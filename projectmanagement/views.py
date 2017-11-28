@@ -129,7 +129,6 @@ def budget_tranche(request):
     '''
     
     slug =  request.GET.get('slug')
-    # f = get_tranche_form(slug)
     form = TrancheForms()
     try:
         tranche_id =  request.GET.get('tranche_id')
@@ -144,7 +143,6 @@ def budget_tranche(request):
     if request.method == 'POST':
         slug = request.POST.get('slug')
         try:
-            import ipdb; ipdb.set_trace()
             instance = get_object_or_404(Tranche, id=tranche_id)
             form = TrancheForms(request.POST,request.FILES or None, instance=instance)
         except:
