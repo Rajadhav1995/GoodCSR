@@ -659,15 +659,3 @@ def get_index_contents(slug,report_id):
         contents[key]=value
     return contents,quarters
 
-def report_save_exit(request):
-    # this dunction is to save form details of report and exit from current page
-    
-    slug = request.GET.get('slug')
-    report_id = request.GET.get('report_id')
-    projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
-    try:
-        save = finalreportdesign(request)
-        return HttpResponseRedirect('/report/listing/?slug='+slug)
-    except :
-        save = "not submitted successfully"
-        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))
