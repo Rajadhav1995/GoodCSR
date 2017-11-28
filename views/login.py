@@ -51,3 +51,27 @@ def homepage(request):
 
 def login_popup(request):
     return render(request,'homepage/login_popup.html',locals())
+
+def get_image():
+    import matplotlib.pyplot as plt
+ 
+# Data to plot
+    labels = 'Python', 'C++', 'Ruby', 'Java'
+    sizes = [215, 130, 245, 210]
+    colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue']
+    explode = (0.1, 0, 0, 0)  # explode 1st slice
+
+    import os
+
+    script_dir = os.path.dirname(__file__)
+    results_dir = os.path.join(script_dir, 'Results/')
+    sample_file_name = "sample"
+
+    if not os.path.isdir(results_dir):
+        os.makedirs(results_dir)
+    # Plot
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors,
+            autopct='%1.1f%%', shadow=True, startangle=140)
+     
+    plt.axis('equal')
+    plt.savefig(results_dir + sample_file_name)
