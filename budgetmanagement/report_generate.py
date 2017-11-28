@@ -400,6 +400,15 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
             imageobj.save()
     return imageobj
 
+def get_activities_list(request,quarterreportobj):
+    if int(quarterreportobj.quarter_type) == 1:
+        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
+        # to get the last digit of the add more activity/milestone so that to loop and check condition
+    else:
+        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
+    return act_count
+
+
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
     mil_activity_count = obj_count_list.get('milestone_count')
     pic_count = obj_count_list.get('milestone_pic_count')
@@ -408,11 +417,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     for milestone in milestoneobj:
         milestone.active = 0
         milestone.save()
-    if int(quarterreportobj.quarter_type) == 1:
-        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
-        # to get the last digit of the add more activity/milestone so that to loop and check condition
-    else:
-        act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
+    act_count = get_activities_list(request,quarterreportobj)
     for i in act_count:
         result = {}
         name1 = []

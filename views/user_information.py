@@ -34,7 +34,6 @@ class UserInformationStorage(APIView):
 
 def saveimage(request):
     url=request.META.get('HTTP_REFERER')
-    import ipdb;ipdb.set_trace()
     return HttpResponseRedirect(url)
 
 from django.http import HttpResponse
