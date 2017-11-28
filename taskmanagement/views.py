@@ -239,7 +239,7 @@ def get_tasks_status(project,task,uploads):
     #to get the task status updates 
     if task.status == 2 and task.history.latest():
         uploads.append({'project_name':project.name,'task_name':task.name,'attach':'',
-            'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest()})
+            'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest(),'file_type':''})
     return uploads
  
 def updates(obj_list):
@@ -258,7 +258,7 @@ def updates(obj_list):
             attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
             for attach in attach_list:
                 uploads.append({'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest()})
+                'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest(),'file_type':''})
             uploads = get_tasks_status(project,task,uploads)
     try:
         uploads = sorted(uploads, key=lambda key: key['time'],reverse=True)
@@ -373,7 +373,7 @@ def my_tasks_details(request):
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
         tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
         tasks_remain = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
-        closed_tasks = Task.objects.filter(status=2,activity__project__id=project.id).order_by('-id')
+        closed_tasks = Task.objects.filter(status=2).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         
@@ -387,29 +387,25 @@ def my_tasks_details(request):
         return render(request,'taskmanagement/my-task.html',locals())
     
 def create_task_progress(request,task):
-    try:
-        if request.POST.get('tea1') != 'None' :
-            if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
-                task.status = 1
-                task.actual_end_date = None
-                task.task_progress = request.POST.get('tea1')
-                task.save()
-            else:
-                task.task_progress = request.POST.get('tea1')
-                task.save()
-                if request.POST.get('tea1') == '100':
-                    task.status = 2  
-                    task.actual_end_date = task.modified.date() 
-                    task.save()
-                if task.status == 2 and not task.actual_start_date:
-                    task.actual_end_date = task.modified.date() 
-                    task.actual_start_date = task.start_date
-                    task.save()
-                if task.status != 2 and not task.actual_start_date:
-                    task.actual_start_date = task.modified.date() 
-                    task.save()
-    except:
-        pass
+    if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
+        task.status = 1
+        task.actual_end_date = None
+        task.task_progress = request.POST.get('tea1')
+        task.save()
+    else:
+        task.task_progress = request.POST.get('tea1')
+        task.save()
+        if request.POST.get('tea1') == '100':
+            task.status = 2  
+            task.actual_end_date = task.modified.date() 
+            task.save()
+        if task.status == 2 and not task.actual_start_date:
+            task.actual_end_date = task.modified.date() 
+            task.actual_start_date = task.start_date
+            task.save()
+        if task.status != 2 and not task.actual_start_date:
+            task.actual_start_date = task.modified.date() 
+            task.save()
     return task
     
 def task_comments(request):
