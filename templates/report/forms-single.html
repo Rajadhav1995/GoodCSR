@@ -1320,7 +1320,7 @@
                <a href="/report/detail/?slug={{slug}}&report_id={{report_id}}/"><button class="report_save">Preview Report</button></a>
             </div>
             <div align="right" class="save_exit">
-               <button class="report_save">Submit Report</button>
+               <button class="report_save" id="submit_report">Submit Report</button>
                <button class="report_save" id="save_and_exit">Save And Exit</button>
             </div>
          </div>
@@ -2523,6 +2523,7 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
 <script src="http://malsup.github.com/jquery.form.js"></script> 
+<!-- Script for save and exit starts -->
 <script>
     var request_url = "{{request.get_full_path|safe}}"
     $('#save_and_exit').on('click',function(){
@@ -2541,5 +2542,27 @@
     });
     
 </script>
+<!-- Script for save and exit ends here -->
+
+<!-- Script for submit report starts -->
+<script>
+    var request_url = "{{request.get_full_path|safe}}"
+    var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'
+    $('#submit_report').on('click',function(){
+    last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
+    for(var i=0;i<=last_form_id;i++){
+        $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
+            type: 'POST',
+            url: request_url,
+            dataType:'html',
+            success : function(data){
+            }
+        })
+      }
+      window.location.href = download_url
+    });
+    
+</script>
+<!-- Script for submit report ends here-->
 
 {% endblock %}
