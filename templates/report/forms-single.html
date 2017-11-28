@@ -2521,24 +2521,22 @@
 </script>
 <!--script for  a add more PARAMETERS in "---EDIT --" functionality for Current section  End script -->
 
-
-<script type="text/javascript">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script>
     var request_url = "{{request.get_full_path|safe}}"
     $('#save_and_exit').on('click',function(){
     last_form_id = parseInt($('#template form').last().attr('id').split('-')[4])
     for(var i=0;i<=last_form_id;i++){
-        
-        $.ajax({
-            type: "POST",
+        $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
+            type: 'POST',
             url: request_url,
-            datatype: "html",
-            data: $('#ui-accordion-accordion-panel-'+i.toString()).serialize(),
-            success: function(data) {                   
+            dataType:'html',
+            success : function(data){
             }
-        });
-
-        $('#ui-accordion-accordion-panel-'+i.toString()).submit()
+        })
       }
+
       window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
     });
     

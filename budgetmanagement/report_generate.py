@@ -587,13 +587,8 @@ def finalreportdesign(request):
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
         projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
         div_id = request.POST.get('div_id')
-        #to save the two sections data based the save of two sections calling the report_section_form()#STARTS
-        
-#        if request.POST.get('cover_page_save') or request.POST.get('project_summary_save'):
+        #to save the two sections data based the save of two sections calling the report_section_form()
         cover_page_locals = report_section_form(request)
-        # else the dynamic sections of the quarters are saved when that sections are made to be saved # ENDS
-        
-#        else:
             #        to save the quarter reports
         projectreportobj = saving_of_quarters_section(request)
         projectobj = projectreportobj.project
