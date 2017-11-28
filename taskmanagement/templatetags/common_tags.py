@@ -14,22 +14,20 @@ from pmu.settings import PMU_URL
 def get_details(obj):
     closed_tasks = update = ''
     formats = '%I:%M %p'
-    if obj:
-        user = obj.get('user_name') or ''
-        task_name = obj.get('task_name') or ''
-        project = obj.get('project_name') or ''
-        time_zone= obj.get('time').replace(tzinfo = pytz.utc) if obj.get('time') else ''
-        convert_time = time_zone.astimezone(pytz.timezone('Asia/Kolkata'))
-        time = convert_time.strftime(formats)
-        date = obj.get('date').strftime('%d %B %Y') if obj.get('date') else ''
-        description = obj.get('attach') or ''
-        task_status = obj.get('task_status') or ''
-        file_type = obj.get('file_type') or ''
-        if file_type == '':
-            file_type = 'File'
-        if task_status and task_status.status == 2:
-            closed_tasks = '''<li><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
-        update = '''<li><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' uploaded <u>'''+ file_type +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
+    user = obj.get('user_name') or ''
+    task_name = obj.get('task_name') or ''
+    project = obj.get('project_name') or ''
+    time_zone= obj.get('time').replace(tzinfo = pytz.utc) if obj.get('time') else ''
+    convert_time = time_zone.astimezone(pytz.timezone('Asia/Kolkata'))
+    time = convert_time.strftime(formats)
+    date = obj.get('date').strftime('%d %B %Y') if obj.get('date') else ''
+    description = obj.get('attach') or ''
+    task_status = obj.get('task_status') or ''
+    file_type = obj.get('file_type') or ''
+    if task_status and task_status.status == 2:
+        closed_tasks = '''<li><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
+    update = '''<li><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' uploaded <u>'''+ file_type +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
+
     return update,closed_tasks 
     
 @register.assignment_tag   

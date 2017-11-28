@@ -71,6 +71,7 @@ def report_listing(request):
 
 def save_section_answers(quest_ids,project_report,request,data,user):
 # common function to save the two sections data in answer table 
+    answer=None
     for ques in sorted(quest_ids):
         question = Question.objects.get_or_none(id = int(ques))
 #        if question.slug != "report_type" and question.slug != "report_duration" :
@@ -145,7 +146,7 @@ def html_to_pdf_view(request):
     projectreportobj = ProjectReport.objects.get_or_none(id=project_report_id)
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     # for basic details of project report we are sending all fields in dictionary 
-    answer_list = report_question_list(report_quest_list,report_obj)
+    answer_list = report_question_list(report_quest_list,report_obj,project)
     # here we are sending/rendering all variable to generate PDF 
     html_string = render_to_string('report/report-pdf.html', {
         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
@@ -178,7 +179,7 @@ def get_org_report_logo(answer_obj,ques,report_obj):
     return answer
 
 
-def report_question_list(report_quest_list,report_obj):
+def report_question_list(report_quest_list,report_obj,project):
     answer_list = {}
     image_url = PMU_URL
     for ques in report_quest_list:
@@ -230,7 +231,7 @@ def report_detail(request):
     projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     # for basic details of project report we are sending all fields in dictionary 
-    answer_list = report_question_list(quest_list,report_obj)
+    answer_list = report_question_list(quest_list,report_obj,project)
     return render(request,'report/report-template.html',locals())
 
 def get_quarter_report_logic(projectobj):
@@ -603,14 +604,11 @@ def finalreportdesign(request):
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
         projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
         div_id = request.POST.get('div_id')
-        #to save the two sections data based the save of two sections calling the report_section_form()#STARTS
-        if request.POST.get('cover_page_save') or request.POST.get('project_summary_save'):
-            cover_page_locals = report_section_form(request)
-        # else the dynamic sections of the quarters are saved when that sections are made to be saved # ENDS
-        else:
+        #to save the two sections data based the save of two sections calling the report_section_form()
+        cover_page_locals = report_section_form(request)
             #        to save the quarter reports
-            projectreportobj = saving_of_quarters_section(request)
-            projectobj = projectreportobj.project
+        projectreportobj = saving_of_quarters_section(request)
+        projectobj = projectreportobj.project
         # redirection to the same page of the form #STARTS
         if key == 'edit_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
@@ -663,6 +661,7 @@ def get_index_contents(slug,report_id):
 
 def report_save_exit(request):
     # this dunction is to save form details of report and exit from current page
+    
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
