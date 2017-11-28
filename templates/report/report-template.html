@@ -19,7 +19,8 @@
             <head>
                <meta charset="utf-8">
                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-               <title>Goodcsr</title>
+               <link rel="icon" type="image/png" href="/static/img/favicon.ico">
+               <title>GoodCSR | Project Report</title>
                <meta name="description" content="">
                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
                <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
@@ -134,12 +135,15 @@
                      {% endfor %}
                      <!--Dynamic getting of the contents of index page (END)                  -->
                   </div>
+                  <br>
+                  <footer>
                   <hr>
                   <img src="/static/img/report/logo.png" style="float:left">
                   <!-- <h3 style="float:right;margin-top:0px;">2</h3> -->
                   {% get_page_number 0 as page_number %}
                   <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                </div>
+             </footer>
                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
                <!--<header>
                   <div>
@@ -416,7 +420,8 @@ No Key Acheivements in this Quarter
                      <h5 class="color-red">MILESTONE 1</h5>
                      <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
                      <p><strong>About the Milestone</strong></p>
-                     <div class="location"><h5> {{m.description}} </h5></div>
+                     <!-- <div class="location"><h5> {{m.description}} </h5></div> -->
+                     <h5 style="color:#666; font-weight:normal">{{m.description}}</h5>
                      {% get_mile_images m.id as images %}
                         {% for img in images %}
                      <div class="col-md-6" style="padding:0px">
@@ -547,7 +552,7 @@ No Key Acheivements in this Quarter
         </div>
     
                      <!-- ------------------------------------------------------- -->
-     ..        <div class="white-box">
+             <div class="white-box">
     <div class="table-responsive">
     <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
       <thead>
@@ -565,7 +570,7 @@ No Key Acheivements in this Quarter
       {% with forloop.counter as rnum %}
       <tr>
         <td>{{rnum}}</td>
-        <td>{{i.due_date}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
         <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
         <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
         <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
@@ -1070,7 +1075,7 @@ No Key Acheivements in this Quarter
       {% with forloop.counter as rnum %}
       <tr>
         <td>{{rnum}}</td>
-        <td>{{i.due_date}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
         <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
         <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
         <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
@@ -1116,10 +1121,9 @@ No Key Acheivements in this Quarter
                      <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
                      <p style="font-size:13px; margin-top:10px">{{img.description}}</p>
                      {% endif %}
-                  </div>
+                  
                   {% endfor %}
                   {% endfor %}
-                  </div>
                   </div>
                   <footer>
                      <hr>
@@ -1359,7 +1363,7 @@ No Key Acheivements in this Quarter
       {% with forloop.counter as rnum %}
       <tr>
         <td>{{rnum}}</td>
-        <td>{{i.due_date}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
         <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
         <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
         <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
@@ -1561,7 +1565,7 @@ No Key Acheivements in this Quarter
       {% with forloop.counter as rnum %}
       <tr>
         <td>{{rnum}}</td>
-        <td>{{i.due_date}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
         <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
         <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
         <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
