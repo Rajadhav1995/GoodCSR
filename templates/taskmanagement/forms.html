@@ -34,13 +34,15 @@
                                 <label>{{field.label_tag}}</label>
                                 {{field}}
                                 {{field.errors}}
+                                <font color=#fc282f><b><span id="{{field.auto_id}}1"></span></b></font>
+                                
                             </div>
                         </div>
                     {% endfor %}
             <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
            <div class="col-md-12">
                 <div class="form-group">
-              <input class="budget_button" type="submit" value="Save" onclick="return RemoveProduct();" />
+              <input class="budget_button" type="submit" value="Save" onclick="return ValidateImage();" />
               <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}&key=summary" style="margin-right:5px;float: right;">Back</button></a>
            </div>
            </div>
@@ -187,6 +189,68 @@
         });
         
 });
+</script>
+
+<script>
+(function($) {
+    $.fn.checkFileType = function(options) {
+        var defaults = {
+            allowedExtensions: [],
+            success: function() {},
+            error: function() {}
+        };
+        options = $.extend(defaults, options);
+
+        return this.each(function() {
+
+            $(this).on('change', function() {
+                var value = $(this).val(),
+                    file = value.toLowerCase(),
+                    extension = file.substring(file.lastIndexOf('.') + 1);
+
+                if ($.inArray(extension, options.allowedExtensions) == -1) {
+                    //options.error();
+                    alert("Please upload valid Image file");
+                    $(this).focus();
+                    document.getElementById('id_attachment_file1').innerHTML="<br>Please Upload JPEG/PNG/GIF Image file formats only "
+                } else {
+                    document.getElementById('id_attachment_file1').innerHTML=""
+
+                }
+
+            });
+
+        });
+    };
+
+})(jQuery);
+
+$(function() {
+    $('#id_attachment_file').checkFileType({
+        allowedExtensions: ['jpg', 'jpeg','png','gif'],
+        success: function() {
+            alert('Success');
+        },
+        error: function() {
+            alert('Error');
+        }
+    });
+
+});
+</script>
+
+<script>
+function ValidateImage() {
+    var val = document.getElementById("id_attachment_file1");
+    if (val.innerHTML == '') {
+        return true;
+    } else{
+        alert("Please upload valid Image file");
+        return false;
+    };
+    
+
+}
 </script>
 {% endif %}
 {% endblock %}
