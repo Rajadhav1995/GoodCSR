@@ -162,7 +162,7 @@ def get_gantt_details(v,projectobj):
 
 @register.assignment_tag     
 def get_report_quarters(start_date,end_date,budget_quarters):
-    report_duration=''
+    report_duration=quarter_duration=''
     end_date = end_date.replace(tzinfo=pytz.utc)
     conver_time = end_date.astimezone(pytz.timezone('Asia/Kolkata'))
     for k in budget_quarters.keys():
