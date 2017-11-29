@@ -35,8 +35,9 @@
         <tr>
             <!-- <td><a href="/project/summary/?slug={{i.slug}}">{{i.start_date}}</a></td> -->
             <td>{{i.get_report_type_display}}</td>
-            <td>{% get_report_quarters i.start_date i.end_date budget_quarters as report_duration%}Quarter {{report_duration}}</td>
-            <td>{{i.start_date | date:"d-m-Y"}} - {{i.end_date | date:"d-m-Y"}}</td>
+            <td>{% get_report_quarters i.start_date i.end_date budget_quarters as report_duration%}Quarter {{report_duration.0}}</td>
+<!--            <td>{{i.start_date | date:"d-m-Y"}} - {{i.end_date | date:"d-m-Y"}}</td>-->
+            <td>{{report_duration.1}}</td>
             <!-- <td>{{i.get_active_display}}</td> -->
             <td><a class="budget_button" href="/report/detail/?slug={{project.slug}}&report_id={{i.id}}" target="_blank">View Report</button></a></td>
             <td><a class="budget_button" href="">Download Report</button></a></td>
