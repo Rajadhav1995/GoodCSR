@@ -88,6 +88,7 @@ def add_taskmanagement(request,model_name,m_form):
                 if model_name == 'Activity' or model_name == 'Task':
                     f.created_by = user
                     f.save()
+                form.save_m2m()
                 return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
         else:
             form=form(user_id,project.id)
@@ -126,6 +127,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
+            form.save_m2m()
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)
