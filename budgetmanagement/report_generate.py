@@ -250,6 +250,7 @@ def get_quarter_report_logic(projectobj):
                    'ed':ed,'no_of_quarters':no_of_quarters}
     return output_data
 
+import pytz
 def get_quarters(projectobj):
     ''' To get the quarter list i this format 2017-10-01 to 2017-12-31 '''
     data = get_quarter_report_logic(projectobj)
@@ -270,11 +271,11 @@ def get_quarters(projectobj):
             ed = projectobj_enddate
         current_date = datetime.strptime(str(datetime.now())[:19], '%Y-%m-%d %H:%M:%S')
         if current_date > sd and current_date < ed:
-            currentquarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
+            currentquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%M %d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%M %d"))})
         elif sd > current_date and ed >current_date:
-            futurequarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
+            futurequarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%M %d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%M %d"))})
         elif sd < current_date and ed < current_date:
-            previousquarter_list.update({i:str(sd.date())+" to "+str(ed.date())})
+            previousquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%M %d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%M %d"))})
         sd = ed + timedelta(days=1)
     return previousquarter_list,currentquarter_list,futurequarter_list
 
