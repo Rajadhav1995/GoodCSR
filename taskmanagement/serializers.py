@@ -12,7 +12,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'name', 'expected_start_date', 'expected_end_date', 'start_date', 'end_date', 'active', 'status',
-                  'actual_start_date', 'actual_end_date', 'activity', 'task_dependency', 'assigned_to','task_progress','task_slug','project_slug')
+                  'actual_start_date', 'actual_end_date', 'activity', 'task_dependency', 'assigned_to','task_progress')
 
     def get_active(self, obj):
         return obj.get_active_display()
