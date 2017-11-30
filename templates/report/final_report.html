@@ -100,6 +100,12 @@
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" ></input>
                                                   <h5><a href="#">Remove</a></h5>
                                                </div>
+                                           {% elif sub.q_type == 'ck' %}
+                                                    <div class="col-md-12 report_text">
+                                                    <p>{{sub.q_text}}</p>
+                                                    </div>
+                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" required=""  class="textarea_file">{{sub.answer}}</textarea>
+                                                    <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
                                                   <h6>{{sub.q_text}}</h6>

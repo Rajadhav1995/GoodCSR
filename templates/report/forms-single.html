@@ -94,6 +94,12 @@
                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
                                  <h5><a href="#">Remove</a></h5>
                               </div>
+                              {% elif sub.q_type == 'ck' %}
+                                                    <div class="col-md-12 report_text">
+                                                    <p>{{sub.q_text}}</p>
+                                                    </div>
+                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" required=""  class="textarea_file">{{sub.answer}}</textarea>
+                                                    <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
                               {% elif sub.q_type == 'API' %}
                               <div class="logo-partner">
                                  <h6>{{sub.q_text}}</h6>
@@ -802,7 +808,7 @@
                            {% if quest.qtype == "APT" %}
                            <div class="col-md-6 report_text">
                               <p>{{quest.text|title}}</p>
-                              {% get_previous_question_value quest v i projectreportobj as text %}
+                              {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                               <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" >
                               <h5><a href="#">Remove</a></h5>
                            </div>
