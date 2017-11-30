@@ -55,6 +55,7 @@ def get_questions(block,project_report):
         if answer and (i.qtype == 'T' or i.qtype == 'ck'):
             question_dict['answer'] = answer.text 
         elif i.qtype == 'F':
+            
             question_dict['answer'] = answer.attachment_file.url if answer and answer.attachment_file else ""
         question_list.append(question_dict)
     return question_list
