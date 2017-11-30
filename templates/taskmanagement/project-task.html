@@ -103,25 +103,25 @@
          <div class="planned-pad">
             <ul>
                <li><span>Assigned to</span> 
-                   <div  class="middle_text"><img src="/static/img/default_profile_image.png" alt="" class="image">
+                   <div class="middle_text"><canvas class="user-icon" data-name="{{i.assigned_to}}" width="30" height="30" style="border-radius:30px" ></canvas>
                         <div class="middle">
-                            <div class="text">{{i.assigned_to.name}}</div>
+                            <div class="text">{% if i.assigned_to.attrs.first_name %}{{i.assigned_to.attrs.first_name}} {{i.assigned_to.attrs.last_name}}{% else %}{{i.assigned_to.name}}{% endif %}</div>
                         </div>
                    </div>
                </li>
                <li><span>Created by </span>
-                   <div  class="middle_text"><img src="/static/img/default_profile_image.png" alt="" class="image">
+                   <div  class="middle_text"><canvas class="user-icon" data-name="{{i.created_by}}" width="30" height="30" style="border-radius:30px" ></canvas>
                             <div class="middle">
-                                <div class="text">{{i.created_by.name}}</div>
+                                <div class="text">{{i.created_by.attrs.first_name}} {{i.created_by.attrs.last_name}}</div>
                             </div>
                        </div>
                </li>
-               <li><span>Approval</span> <img src="/static/img/default_profile_image.png" alt=""></li>
+               <li><span>Approval</span> <canvas class="user-icon" data-name="A R" width="30" height="30" style="border-radius:30px" ></canvas></li>
                <li><span>Subscribed to</span>
                     {% for sub in i.subscribers.all|slice:"0:2" %} 
-                     <div  class="middle_text"><img src="/static/img/default_profile_image.png" alt="" class="image">
+                     <div  class="middle_text"><canvas class="user-icon" data-name="{{sub}}" width="30" height="30" style="border-radius:30px" ></canvas>
                         <div class="middle">
-                            <div class="text">{{sub.name}}</div>
+                            <div class="text">{% if sub.attrs.first_name %}{{sub.attrs.first_name}} {{sub.attrs.last_name}}{% else %}{{sub.name}}{% endif %}</div>
                         </div>
                      </div>
                     {%endfor%}
@@ -163,7 +163,13 @@
                   <li>
                      {% for a in attach %}
                      {% if a.attachment_type == 1 %}
-                     <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
                      
                      <div class="right-li first-li">
                             {% if a.attachment_file %}
@@ -185,9 +191,13 @@
                   </li>
                   {% elif a.attachment_type == 2 %}
                   <li>
-                     <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
-                     {% if a.created_by %}
-                     {{a.created_by.name}}{% else %}Unknown{% endif %} uploaded
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
                      <div class="right-li second-li">
                      
                         <ul>
@@ -216,7 +226,13 @@
                   {%if comments %}
                   <li>
                     {% for c in comments %}
-                     <div class="left-li"><img class="user-image" src="/static/img/default_profile_image.png" alt=""></div>
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
                      
                      <div class="right-li third-li">
                         <ul>
