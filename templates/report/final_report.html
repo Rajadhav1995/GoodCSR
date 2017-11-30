@@ -443,7 +443,7 @@
                                         <div class="report_text">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
-                                                    <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}">{{imageobj.attachment_file.url}}
+                                                    <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}">{% if imageobj.attachment_file %}{{imageobj.attachment_file.url}}{% endif %}
                                                 </div>
                                                   <h5><a href="#">Remove</a></h5>
                                         </div>
