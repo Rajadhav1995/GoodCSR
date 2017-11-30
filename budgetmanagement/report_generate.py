@@ -442,7 +442,6 @@ def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,res
 
 
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
-    import ipdb;ipdb.set_trace()
     mil_activity_count = obj_count_list.get('milestone_count')
     pic_count = obj_count_list.get('milestone_pic_count')
     milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
