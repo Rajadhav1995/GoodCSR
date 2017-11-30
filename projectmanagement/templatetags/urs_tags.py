@@ -180,7 +180,7 @@ def get_duration_month(date):
 @register.assignment_tag
 def get_parameter(obj,block_id):
     # this template tag is used to get json data for parameter pie chart 
-    question_obj = Question.objects.get_or_none(slug='parameter-section',block=block_id)
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block_id)
     answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
     main_list =[]
     master_list = []
@@ -199,6 +199,55 @@ def get_parameter(obj,block_id):
                 pie_chart = 1
 
     return master_list,master_names,pie_chart
+
+@register.assignment_tag
+def get_about_parameter_img(obj,block_id):
+    # this template tag is used to get json data for parameter pie chart 
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block_id)
+    answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
+    main_list =[]
+    master_list = []
+    master_names = []
+    pie_chart = ''
+    if answer_obj:
+        report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+        from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
+        for i in report_para:
+            main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
+            master_list.append(main_list)
+    
+    values_list = []
+    label_list = []
+    for i in master_list:
+        for j in i:
+            values_list.append(j['y'])
+            label_list.append(j['name'])
+    import ipdb;ipdb.set_trace();
+    import matplotlib.pyplot as plt
+ 
+# Data to plot
+#    labels = ','.join(map(str,label_list))
+    labels = 'burger','bat'
+    sizes = values_list
+    colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue']
+#    explode = (0.1, 0, 0, 0)  # explode 1st slice
+
+    import os
+
+    script_dir = os.path.dirname(__file__)
+    results_dir = os.path.join(script_dir, 'Results/')
+    sample_file_name = "sample"
+
+    if not os.path.isdir(results_dir):
+        os.makedirs(results_dir)
+    # Plot
+    plt.pie(sizes, labels=labels, colors=colors,
+            autopct='%1.1f%%', shadow=True, startangle=140)
+     
+    plt.axis('equal')
+    plt.savefig(results_dir + sample_file_name)
+    return "abc"
+
 
 @register.filter
 def get_at_index(list, index):
@@ -230,7 +279,7 @@ def currency(value):
 def get_budget_detail(block,quarter):
     # this template tag is used to get budget detail on report detail page
     budget_detail = ''
-    question_obj = Question.objects.get_or_none(slug='about-the-budget',block=block)
+    question_obj = Question.objects.get_or_none(slug='about-the-budget',block__order=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,question=question_obj)
     if answer_obj:
         budget_detail = answer_obj.text
@@ -240,7 +289,7 @@ def get_budget_detail(block,quarter):
 def get_about_parameter(quarter,obj,block):
     # template tag to get parameter detail quarter wise in report detail page
     about_parameter = ''
-    question_obj = Question.objects.get_or_none(slug='parameter-section',block=block)
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
     report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
     for i in report_para:
@@ -252,7 +301,7 @@ def get_about_quarter(quarter,obj,block):
     # this template tag we are using to get quarter details in report detai page
     answer_obj = ''
     about_quarter = ''
-    question = Question.objects.get_or_none(slug='about-the-quarter',block=block)
+    question = Question.objects.get_or_none(slug='about-the-quarter',block__order=block)
     answer_obj = Answer.objects.get_or_none(question=question,object_id=obj.id,quarter=quarter)
     if answer_obj:
         about_quarter = answer_obj.text

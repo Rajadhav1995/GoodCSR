@@ -716,6 +716,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                               </table>
                               </ul>
                               {% endif %}
+                            <div class="col-md-8">
 
                               <div class="col-md-8">
                                  <div class="parameter-textbottom">
@@ -1489,6 +1490,14 @@ footer{margin:30px 0px; float: left; width: 100%}
                                  </div>
                               </div>
                               {% endif %}
+                              <div class="col-md-8">
+                                 <div class="parameter-text">
+                                    <h4 class="color_green">Pie Chart</h4>
+                                    {% get_about_parameter_img i 4 as pie_data %}
+                                    <p> {{about_parameter}} </p>
+                                 </div>
+                              </div>
+                              
                               <div class="col-md-8">
                                  <div class="parameter-text">
                                     <h4 class="color_green">About This Parameter</h4>
