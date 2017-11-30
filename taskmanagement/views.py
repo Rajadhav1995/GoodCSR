@@ -46,6 +46,7 @@ def listing(request):
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def update_task_completion(request,add,status):
+    task_progress = ''
     if add == 'True':
         if request.POST.get('status') == '3':
             task_progress = '10'
@@ -74,17 +75,20 @@ def add_taskmanagement(request,model_name,m_form):
     form=eval(m_form)
     if budget:
         if request.method=='POST':
-            task_progress = update_task_completion(request,add,status=None)
+            if m_form == 'TaskForm':
+                task_progress = update_task_completion(request,add,status=None) 
             form=form(user_id,project.id,request.POST,request.FILES)
             if form.is_valid():
                 f=form.save(commit=False)
-                f.task_progress = task_progress
+                if m_form == 'Task_form':
+                    f.task_progress = task_progress 
                 from projectmanagement.common_method import unique_slug_generator
                 f.slug = unique_slug_generator(f,edit)
                 f.save()
                 if model_name == 'Activity' or model_name == 'Task':
                     f.created_by = user
                     f.save()
+                form.save_m2m()
                 return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
         else:
             form=form(user_id,project.id)
@@ -105,8 +109,9 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     except:
         project = Project.objects.get(slug = request.POST.get('slug_project'))
     if request.method == 'POST':
-        task_progress = m.task_progress
-        task_progress = update_task_completion(request,add,m.status)
+        if m_form == 'TaskForm':
+            task_progress = m.task_progress 
+            task_progress = update_task_completion(request,add,m.status)
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         try:
             end_date = form.data['end_date']
@@ -114,13 +119,15 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             pass
         if form.is_valid():
             f=form.save(commit=False)
-            f.task_progress = task_progress
+            if m_form == 'TaskForm':
+                f.task_progress = task_progress
             from projectmanagement.common_method import unique_slug_generator
             f.slug = unique_slug_generator(f,edit)
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
                 f.save()
+            form.save_m2m()
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)

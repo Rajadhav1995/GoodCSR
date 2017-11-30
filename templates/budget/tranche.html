@@ -15,6 +15,7 @@
 <div class="clear"></div>
 <section class="content-part">
     <div class='container' >
+    <div class="col-md-7">
     <div class="white-box">
                 <div class="col-md-12">
                 
@@ -40,7 +41,7 @@
                         </div>
                         </div>
 
-
+<input type="hidden" name="tranche_id" value="{{obj.id}}" required="" class="form-control" id="tranche_id">
                             <div class="row">
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
@@ -93,12 +94,14 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>{{form.recommended_by.label_tag}}</label>
+                                        <label>Recommended By</label>
+
                                         <!-- {{form.recommended_by}} -->
                                         <select name="recommended_by" required="" class="form-control" id="id_recommended_by">
                                             <option value="">---------</option>
                                         {% for i in recommended_by %}
-                                        <option value="{{i.id}}">{{i}}</option>
+
+                                        <option value="{{i.id}}" {% if obj.recommended_by.id == i.id %} selected {% endif %}>{{i}}</option>
                                         {% endfor %}
                                         </select>
                                         {{ form.recommended_by.errors }}
@@ -142,10 +145,12 @@
                                     </div>
                                 </div>
                             </div>
-                      <div class="col-md-12">
+                      <div class="col-md-11" style="padding:0px">
+                        <div class="">
                             <div class="form-group">  
                         <input id = "save" class="budget_button" type="submit" value="Save"/>
                         <a class="btn btn-success" href="/project/tranche/list/?slug={{slug}}&key=tranches" style="margin-right:5px;float: right;">Back</button></a>
+                        </div>
                         </div>
                         </div>
                             </div>
@@ -154,7 +159,7 @@
                 </div>
             </form>
      </div>
-
+    </div>
   </div>
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>

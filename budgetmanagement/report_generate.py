@@ -651,23 +651,11 @@ def get_index_contents(slug,report_id):
             contents['4'] = 'Next Quarter Updates'
             import operator
             # here we getting all next quarter so we taking first quarter 
-            sorted_futurequarter_list = sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]
-            quarters['Next Quarter Updates']=futurequarter_list
+            sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])
+            quarters['Next Quarter Updates']=sorted_futurequarter_list
         contents['5'] = "Annexure"
         quarters['Annexure']=''
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
     return contents,quarters
 
-def report_save_exit(request):
-    # this dunction is to save form details of report and exit from current page
-    
-    slug = request.GET.get('slug')
-    report_id = request.GET.get('report_id')
-    projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
-    try:
-        save = finalreportdesign(request)
-        return HttpResponseRedirect('/report/listing/?slug='+slug)
-    except :
-        save = "not submitted successfully"
-        return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id))

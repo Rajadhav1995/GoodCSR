@@ -25,8 +25,8 @@ def get_details(obj):
     task_status = obj.get('task_status') or ''
     file_type = obj.get('file_type') or ''
     if task_status and task_status.status == 2:
-        closed_tasks = '''<li><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
-    update = '''<li><img src="/static/img/default_profile_image.png" class="user-image" alt="User Image"> <div class="update-pad">'''+user + ''' uploaded <u>'''+ file_type +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
+        closed_tasks = '''<li><canvas class="user-icon" data-name=" '''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
+    update = '''<li><canvas class="user-icon" data-name=" '''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' uploaded <u>'''+ file_type +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
 
     return update,closed_tasks 
     
@@ -162,14 +162,15 @@ def get_gantt_details(v,projectobj):
 
 @register.assignment_tag     
 def get_report_quarters(start_date,end_date,budget_quarters):
-    report_duration=''
+    report_duration=quarter_duration=''
     end_date = end_date.replace(tzinfo=pytz.utc)
     conver_time = end_date.astimezone(pytz.timezone('Asia/Kolkata'))
     for k in budget_quarters.keys():
         value = budget_quarters[k].split(' to ')[-1]
         if value == conver_time.strftime('%Y-%m-%d'):
             report_duration = int(k)+1
-    return report_duration
+            quarter_duration = budget_quarters[k]
+    return report_duration,quarter_duration
     
 @register.assignment_tag
 def get_converted_time(created):
