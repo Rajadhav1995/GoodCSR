@@ -55,6 +55,7 @@ def get_questions(block,project_report):
         if answer and (i.qtype == 'T' or i.qtype == 'ck'):
             question_dict['answer'] = answer.text 
         elif i.qtype == 'F':
+            
             question_dict['answer'] = answer.attachment_file.url if answer and answer.attachment_file else ""
         question_list.append(question_dict)
     return question_list
@@ -79,6 +80,8 @@ def get_auto_populated_questions(ques_id,project,project_report):
         'cover_image': cover_image.attachment_file.url if cover_image else '',
         'project_title':project.name,'project_budget':project.total_budget,
         'donor':mapping_view.funder.organization,
+        'program_description':project.summary,
+        'project_objective':project.program_aim,
         'implement_ngo':mapping_view.implementation_partner.organization,
         'no_of_beneficiaries':project.no_of_beneficiaries,'project_duration':project.start_date.strftime('%Y-%m-%d')+' TO '+project.end_date.strftime('%Y-%m-%d'),
         'location':project.get_locations()}
