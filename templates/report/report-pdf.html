@@ -1492,14 +1492,15 @@ footer{margin:30px 0px; float: left; width: 100%}
                               {% endif %}
                               <div class="col-md-8">
                                  <div class="parameter-text">
-                                    <h4 class="color_green">Pie Chart</h4>
-                                    {% get_about_parameter_img i 4 as pie_data %}
-                                    <p> {{about_parameter}} </p>
+                                    {% get_about_parameter_img i 4 as screenimage %}
+                                     <img src="{{image_url}}{{screenimage.img_file_path}}" height = 70 width = 100>
                                  </div>
                               </div>
                               
                               <div class="col-md-8">
                                  <div class="parameter-text">
+<!--                                 {% get_about_parameter_img i 4 as screenimage %}-->
+<!--                                     <img src="{{image_url}}{{screenimage.img_file_path}}" height = 10 width = 30>-->
                                     <h4 class="color_green">About This Parameter</h4>
                                     {% get_about_parameter i report_obj 4 as about_parameter %}
                                     <p> {{about_parameter}} </p>

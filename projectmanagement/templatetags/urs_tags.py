@@ -1,6 +1,9 @@
 import requests,ast
 import datetime
 import json
+import os
+from django.core.files import File 
+from pmu.settings import BASE_DIR
 from django import template
 from django.db.models import Sum
 from datetime import datetime
@@ -15,7 +18,8 @@ from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriod
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
-from media.models import Attachment
+from media.models import (Attachment,ScreenshotMedia)
+
 
 
 
@@ -199,54 +203,6 @@ def get_parameter(obj,block_id):
                 pie_chart = 1
 
     return master_list,master_names,pie_chart
-
-@register.assignment_tag
-def get_about_parameter_img(obj,block_id):
-    # this template tag is used to get json data for parameter pie chart 
-    question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block_id)
-    answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
-    main_list =[]
-    master_list = []
-    master_names = []
-    pie_chart = ''
-    if answer_obj:
-        report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
-        from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
-        for i in report_para:
-            main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
-            master_list.append(main_list)
-    
-    values_list = []
-    label_list = []
-    for i in master_list:
-        for j in i:
-            values_list.append(j['y'])
-            label_list.append(j['name'])
-    import ipdb;ipdb.set_trace();
-    import matplotlib.pyplot as plt
- 
-# Data to plot
-#    labels = ','.join(map(str,label_list))
-    labels = 'burger','bat'
-    sizes = values_list
-    colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue']
-#    explode = (0.1, 0, 0, 0)  # explode 1st slice
-
-    import os
-
-    script_dir = os.path.dirname(__file__)
-    results_dir = os.path.join(script_dir, 'Results/')
-    sample_file_name = "sample"
-
-    if not os.path.isdir(results_dir):
-        os.makedirs(results_dir)
-    # Plot
-    plt.pie(sizes, labels=labels, colors=colors,
-            autopct='%1.1f%%', shadow=True, startangle=140)
-     
-    plt.axis('equal')
-    plt.savefig(results_dir + sample_file_name)
-    return "abc"
 
 
 @register.filter
