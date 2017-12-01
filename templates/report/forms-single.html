@@ -147,7 +147,6 @@
                         <input type="hidden" name="key" value={{key}}>
                         <div>
                            {% getreport_status report_id v 1 as reportupdates %}
-                           {{reportupdates.0 }}
                            {% if reportupdates.0 == False %}
                            <!--                                if object is not present -->
                            {% for quest in previous_questionlist %}
@@ -875,7 +874,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}} </p>
                                         <div class="form-group upload_text">
-                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {% if imageobj.attachment_file %}{{imageobj.attachment_file.url}}{% endif %}
+                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
