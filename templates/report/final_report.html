@@ -2631,8 +2631,9 @@ $(document).ready(function() {
             url: request_url,
             dataType:'html',
             success : function(data){
+            $('#ui-accordion-accordion-panel-'+i.toString()).submit();
             }
-         $('#ui-accordion-accordion-panel-'+i.toString()).submit();
+         
         })
       }
         alert('Data is submitted successfully')
@@ -2654,8 +2655,8 @@ $(document).ready(function() {
             url: request_url,
             dataType:'html',
             success : function(data){
+            $('#ui-accordion-accordion-panel-'+i.toString()).submit();
             }
-        $('#ui-accordion-accordion-panel-'+i.toString()).submit();
         })
       }
       window.location.href = download_url
