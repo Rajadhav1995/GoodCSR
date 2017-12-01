@@ -104,7 +104,7 @@
                                                     <div class="col-md-12 report_text">
                                                     <p>{{sub.q_text}}</p>
                                                     </div>
-                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" required=""  class="textarea_file">{{sub.answer}}</textarea>
+                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|safe|escape}}</textarea>
                                                     <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
@@ -2632,6 +2632,7 @@ $(document).ready(function() {
             dataType:'html',
             success : function(data){
             }
+         $('#ui-accordion-accordion-panel-'+i.toString()).submit();
         })
       }
         alert('Data is submitted successfully')
@@ -2654,6 +2655,7 @@ $(document).ready(function() {
             dataType:'html',
             success : function(data){
             }
+        $('#ui-accordion-accordion-panel-'+i.toString()).submit();
         })
       }
       window.location.href = download_url
