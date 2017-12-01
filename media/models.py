@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.fields import GenericForeignKey
 from ckeditor.fields import RichTextField
 from projectmanagement.models import (BaseContent,UserProfile)
+from budgetmanagement.models import (ReportParameter,)
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
@@ -108,3 +109,18 @@ class ContactPersonInformation(BaseContent):
     organization_name = models.CharField("Organization Name", max_length=600, **OPTIONAL)
     mobile_number = models.CharField("Mobile Number", max_length=50, **OPTIONAL)
     message = models.TextField(**OPTIONAL)
+
+IMAGE_TYPE = ((1,'Pie-Image'),(2,'Gatt-image'),)
+class ScreenshotMedia(BaseContent):
+
+    report_parameter = models.ForeignKey(ReportParameter,**OPTIONAL)
+    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
+#    image_type = models.IntegerField('IMAGE_TYPE',choices=IMAGE_TYPE,**OPTIONAL)
+    img_file_path = models.CharField(max_length = 300,**OPTIONAL)
+    content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
+    object_id = models.IntegerField(_('object ID'),null=True,blank=True)
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+
+    def __unicode__(self):
+        return str(self.id) or ''
+
