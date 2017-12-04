@@ -37,7 +37,17 @@
                                {% if i.q_type == 'OT' %}
                                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
                                        {% for sub in sub_questions %}
-                                           {% if sub.q_type == 'APT' %}
+                                        
+                                           {% if sub.q_type == 'APT' and sub.q_name == 'report_duration' %}
+                                                <div class="col-md-6 report_text">
+                                                  <p>{{sub.q_text}}</p>
+                                                    {% get_from_to_dates sub.answer as duration %}
+                                                    
+                                                    <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
+                                                    <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
+                                                  <h5><a href="#">Remove</a></h5>
+                                                </div>  
+                                           {% elif sub.q_type == 'APT' %}
                                            
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
@@ -94,7 +104,16 @@
                                {% if i.q_type == 'OT' %}
                                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
                                        {% for sub in sub_questions %}
-                                           {% if sub.q_type == 'APT' %}
+                                           {% if sub.q_type == 'APT' and sub.q_name == 'project_duration' %}
+                                                <div class="col-md-6 report_text">
+                                                  <p>{{sub.q_text}}</p>
+                                                    {% get_from_to_dates sub.answer as duration %}
+                                                    
+                                                    <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
+                                                    <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
+                                                  <h5><a href="#">Remove</a></h5>
+                                                </div>  
+                                           {% elif sub.q_type == 'APT' %}
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" ></input>
@@ -104,7 +123,7 @@
                                                     <div class="col-md-12 report_text">
                                                     <p>{{sub.q_text}}</p>
                                                     </div>
-                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" required=""  class="textarea_file">{{sub.answer}}</textarea>
+                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|safe}}</textarea>
                                                     <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
@@ -2629,9 +2648,14 @@ $(document).ready(function() {
         $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
             type: 'POST',
             url: request_url,
+            async: false,
             dataType:'html',
             success : function(data){
-            }
+            
+            //$('#ui-accordion-accordion-panel-'+i.toString()).submit();
+            },
+            
+         
         })
       }
         alert('Data is submitted successfully')
@@ -2648,12 +2672,16 @@ $(document).ready(function() {
     $('#submit_report').on('click',function(){
     last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
     for(var i=0;i<=last_form_id;i++){
+       
         $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
             type: 'POST',
             url: request_url,
             dataType:'html',
+            async: false,
             success : function(data){
+            
             }
+            
         })
       }
       window.location.href = download_url

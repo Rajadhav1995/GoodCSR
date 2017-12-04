@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from budgetmanagement.report_generate import *
-from budgetmanagement.report_download_pdf import download_report_generation
+from budgetmanagement.report_download_pdf import download_report_generation,pdfconverter
 
 
 urlpatterns = [
@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'display/blocks/$',display_blocks),
     url(r'^download/pdf/$',download_report_generation),
     url(r'final/design/$',finalreportdesign),
-    url(r'pdf/view/$',html_to_pdf_view),
+#    url(r'pdf/view/$',html_to_pdf_view),
+    url(r'pdf/view/$',pdfconverter),
 ]

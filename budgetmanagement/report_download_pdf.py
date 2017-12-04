@@ -11,6 +11,8 @@ from django.template.context import Context
 from django.utils.html import escape
 from xhtml2pdf import pisa
 import StringIO
+import pdfkit
+from pmu.settings import BASE_DIR,PMU_URL
 
 def download_report_generation(request):
 #to download the pdf of the report generated and fetching the details of what to be dislayed in the pdf
@@ -90,3 +92,20 @@ def pdf_view(request):
             return response
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
+
+
+def pdfconverter(request):
+    slug = request.GET.get('slug')
+    report_id = request.GET.get('report_id')
+    project = Project.objects.get_or_none(slug = slug)
+    import datetime
+    dd = datetime.datetime.today()
+    file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
+    pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id), BASE_DIR +'/static/pdf-reports/'+ file_name)
+    fs = FileSystemStorage()
+    with fs.open(BASE_DIR +'/static/pdf-reports/'+ file_name) as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename='+file_name
+        return response
+
+    return response

@@ -1,6 +1,9 @@
 import requests,ast
 import datetime
 import json
+import os
+from django.core.files import File 
+from pmu.settings import BASE_DIR
 from django import template
 from django.db.models import Sum
 from datetime import datetime
@@ -15,7 +18,8 @@ from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriod
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
-from media.models import Attachment
+from media.models import (Attachment,ScreenshotMedia)
+
 
 
 
@@ -180,7 +184,7 @@ def get_duration_month(date):
 @register.assignment_tag
 def get_parameter(obj,block_id):
     # this template tag is used to get json data for parameter pie chart 
-    question_obj = Question.objects.get_or_none(slug='parameter-section',block=block_id)
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block_id)
     answer_obj = Answer.objects.get_or_none(quarter=obj.id,question=question_obj)
     main_list =[]
     master_list = []
@@ -199,6 +203,7 @@ def get_parameter(obj,block_id):
                 pie_chart = 1
 
     return master_list,master_names,pie_chart
+
 
 @register.filter
 def get_at_index(list, index):
@@ -230,7 +235,7 @@ def currency(value):
 def get_budget_detail(block,quarter):
     # this template tag is used to get budget detail on report detail page
     budget_detail = ''
-    question_obj = Question.objects.get_or_none(slug='about-the-budget',block=block)
+    question_obj = Question.objects.get_or_none(slug='about-the-budget',block__order=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,question=question_obj)
     if answer_obj:
         budget_detail = answer_obj.text
@@ -240,7 +245,7 @@ def get_budget_detail(block,quarter):
 def get_about_parameter(quarter,obj,block):
     # template tag to get parameter detail quarter wise in report detail page
     about_parameter = ''
-    question_obj = Question.objects.get_or_none(slug='parameter-section',block=block)
+    question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
     report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
     for i in report_para:
@@ -252,7 +257,7 @@ def get_about_quarter(quarter,obj,block):
     # this template tag we are using to get quarter details in report detai page
     answer_obj = ''
     about_quarter = ''
-    question = Question.objects.get_or_none(slug='about-the-quarter',block=block)
+    question = Question.objects.get_or_none(slug='about-the-quarter',block__order=block)
     answer_obj = Answer.objects.get_or_none(question=question,object_id=obj.id,quarter=quarter)
     if answer_obj:
         about_quarter = answer_obj.text
