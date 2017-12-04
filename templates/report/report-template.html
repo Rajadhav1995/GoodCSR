@@ -305,7 +305,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                                     {% if value == k %}
                                         {% for k,v in v.iteritems %}
 
-                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span>{% get_index_page_number quarters as quart %}{{quart}}</span></h3>
+                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span></span></h3>
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
