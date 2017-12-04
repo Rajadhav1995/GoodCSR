@@ -162,7 +162,7 @@ def html_to_pdf_view(request):
     # for basic details of project report we are sending all fields in dictionary 
     answer_list = report_question_list(report_quest_list,report_obj,project)
     # here we are sending/rendering all variable to generate PDF 
-    html_string = render_to_string('report/report-pdf.html', {
+    html_string = render_to_string('report/new-pdf.html', {
         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
         'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
         'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
