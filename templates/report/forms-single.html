@@ -82,7 +82,7 @@
                            {% endif %}
                            {% endfor%}
                         </div>
-                        <input type="submit" class="report_save " name="cover_page_save" value = "Save"></input>
+                        <input type="submit" class="report_save " name="cover_page_save" id="submit_0" value = "Save"></input>
                      </form>
                      <h3 class="heading">{{locals_list.block2.name}}</h3>
                      <form action="." id='ui-accordion-accordion-panel-1' method="POST" enctype="multipart/form-data">
@@ -150,7 +150,7 @@
                               {% endif %}
                               {% endfor%}
                            </div>
-                           <input type= "submit" class="report_save" name= "project_summary_save" value="Save"></input>
+                           <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>
                         </div>
                         <!-- Previous Quarters Updates starts here                           -->
                         {% for i,v in previousquarter_list.items %}
@@ -597,7 +597,7 @@
                            {% endfor %} <!-- this is for previous question loop ends for edit functionality -->
                            {% endif %} <!-- this if ends here. thsi is to check whether this is add and edit functionality  -->
                            <br>
-                           <button class="report_save">Save</button>
+                           <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>
                         </div>
                      </form>
                      {% endwith %}
@@ -1050,7 +1050,7 @@
                               <!--                           this is for edit functions-->
                            </div>
                            <br>
-                           <button class="report_save">Save</button>
+                           <input type= "submit" class="report_save" id="submit_{{j|add:previous_len}}" value="Save"></input>
                         </div>
                      </form>
                      {% endwith %}
@@ -1327,7 +1327,7 @@
                            <!--                        object loop ends here                   -->
                            {% endif %} <!-- if object is present loop ends here-->
                            <br>
-                           <button class="report_save">Save</button>
+                           <input type= "submit" class="report_save" id="submit_{{future_len}}" value="Save"></input>
                         </div>
                      </form>
                      {% endwith %} <!-- main quarter for loop ends here -->
@@ -2555,12 +2555,17 @@
         $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
             type: 'POST',
             url: request_url,
+            async: false,
             dataType:'html',
             success : function(data){
-            }
+            
+            //$('#ui-accordion-accordion-panel-'+i.toString()).submit();
+            },
+            
+         
         })
       }
-
+        alert('Data is submitted successfully')
       window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
     });
     
@@ -2578,6 +2583,7 @@
             type: 'POST',
             url: request_url,
             dataType:'html',
+            async: false,
             success : function(data){
             }
         })
