@@ -77,9 +77,15 @@ def save_section_answers(quest_ids,project_report,request,data,user):
 #        if question.slug != "report_type" and question.slug != "report_duration" :
         answer, created = Answer.objects.get_or_create(question =question,
             content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user = user )
+        
         if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
             answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 
             answer.description = 'cover image' if question.slug == 'cover_image' else 'Logos'
+            answer.save()
+        elif question.slug == 'report_duration' or question.slug == 'project_duration':
+            start_date = data.get(question.slug+'_start'+'_'+str(question.id))
+            end_date = data.get(question.slug+'_end'+'_'+str(question.id))
+            answer.text = str(start_date)+' TO '+str(end_date)
             answer.save()
         elif question.qtype != 'F' and question.qtype != 'API':
             answer.text = data.get(question.slug+'_'+str(question.id))
@@ -90,6 +96,7 @@ def report_section_form(request):
     # to save the two sections cover page and project summary page data
     report_id = request.GET.get('report_id')
     image_url = PMU_URL
+    quest_names=[]
     project_slug = request.GET.get('project_slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
@@ -97,15 +104,22 @@ def report_section_form(request):
     report_obj = ProjectReport.objects.get_or_none(id = report_id)
     # to get the questions that are taged to the cover and project summary page
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
-    quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)# to get the question names with the ids so that to save the data 
+    for i in quest_list:
+        if i.slug == 'report_duration' or i.slug == 'project_duration':
+            quest_names.append(i.slug+'_start_'+str(i.id))
+            quest_names.append(i.slug+'_end_'+str(i.id))
+        else:
+            quest_names.append(i.slug+'_'+str(i.id))
+#    quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)# to get the question names with the ids so that to save the data 
     if not report_obj:
         report_obj = ProjectReport.objects.get_or_none(id = request.POST.get('report_id'))
     if request.method == 'POST' or request.method == 'FILES':
         data = request.POST
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
         project_report = ProjectReport.objects.get_or_none(id = data.get('report_id'))
+        
         form_keys = set(data.keys())|set(request.FILES.keys())# to get the keys of the form so that to comapre the questions and then save
-        final_ques = quest_names & form_keys# Getting the questions that are common in form data and the questions tagged to that sections
+        final_ques = set(quest_names) & form_keys# Getting the questions that are common in form data and the questions tagged to that sections
         quest_ids = [i.split('_')[-1] for i in final_ques if i.split('_')]# Splitting the qname and ids so that to loop and save the answers for the particular question which is entered
         section_answer_saved = save_section_answers(quest_ids,project_report,request,data,user)
     return (locals())

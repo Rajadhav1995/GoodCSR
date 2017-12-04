@@ -35,7 +35,16 @@
                            {% if i.q_type == 'OT' %}
                            {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
                            {% for sub in sub_questions %}
-                           {% if sub.q_type == 'APT' %}
+                           {% if sub.q_type == 'APT' and sub.q_name == 'report_duration' %}
+                                <div class="col-md-6 report_text">
+                                  <p>{{sub.q_text}}</p>
+                                    {% get_from_to_dates sub.answer as duration %}
+                                    
+                                    <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
+                                    <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
+                                  <h5><a href="#">Remove</a></h5>
+                                </div>  
+                           {% elif sub.q_type == 'APT' %}
                            <div class="col-md-6 report_text">
                               <p>{{sub.q_text}}</p>
                               <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
@@ -88,7 +97,16 @@
                               {% if i.q_type == 'OT' %}
                               {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
                               {% for sub in sub_questions %}
-                              {% if sub.q_type == 'APT' %}
+                              {% if sub.q_type == 'APT' and sub.q_name == 'project_duration' %}
+                                    <div class="col-md-6 report_text">
+                                      <p>{{sub.q_text}}</p>
+                                        {% get_from_to_dates sub.answer as duration %}
+                                        
+                                        <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
+                                        <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
+                                      <h5><a href="#">Remove</a></h5>
+                                    </div>  
+                              {% elif sub.q_type == 'APT' %}
                               <div class="col-md-6 report_text">
                                  <p>{{sub.q_text}}</p>
                                  <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
@@ -524,7 +542,7 @@
 <!--                              {% endif %}-->
 <!--                              {% endfor %}-->
 <!--                           </div>-->
-<!--                           {% endfor %} <!--  this is for paramter list count loop ends -->-->
+<!--                           {% endfor %} <!--  this is for paramter list count loop ends -->
 <!--                           <div class="form-group addmilestone click_buttons">-->
 <!--                              <p>+ add More Parameter</p>-->
 <!--                           </div>-->
