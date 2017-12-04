@@ -40,12 +40,12 @@ def report_form(request):
         if request.method == 'POST':
             data = request.POST
             report_id=data.get('report_id')
-            budget_start_date = budget_quarters.get(0).split(' to ')[0] 
             project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
             quarter_ids = data.get('quarter_type')
             dates = budget_quarters[int(quarter_ids)]
             dates_list = dates.split(' to ')
             budget_end_date = dates_list[1] if dates_list else '' 
+            budget_start_date = dates_list[0] if dates_list else '' 
             project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
                 report_type = data.get('report_type'),start_date  = budget_start_date,
                 name = project_obj.name,end_date = budget_end_date)
@@ -270,30 +270,41 @@ def get_quarter_report_logic(projectobj):
 import pytz
 def get_quarters(projectobj):
     ''' To get the quarter list i this format 2017-10-01 to 2017-12-31 '''
+    import datetime
+    from datetime import datetime
     data = get_quarter_report_logic(projectobj)
-    sd = data['sd']
+    report_start_date = data['sd']
     projectobj_enddate = data['projectobj_enddate']
     no_of_quarters = data['no_of_quarters']
-    ed = data['ed']
+    report_end_date = data['ed']
+    report_start_date = datetime.strptime(str(report_start_date)[:19], '%Y-%m-%d %H:%M:%S')
+    report_end_date = datetime.strptime(str(report_end_date)[:19], '%Y-%m-%d %H:%M:%S')
     previousquarter_list = {}
     currentquarter_list = {}
     futurequarter_list = {}
-    for i in range(int(no_of_quarters)):
-        ed = sd+relativedelta.relativedelta(months=3)
-        ed = ed - timedelta(days=1)
-        sd = datetime.strptime(str(sd)[:19], '%Y-%m-%d %H:%M:%S')
-        ed = datetime.strptime(str(ed)[:19], '%Y-%m-%d %H:%M:%S')
-        projectobj_enddate = datetime.strptime(str(projectobj_enddate)[:19], '%Y-%m-%d %H:%M:%S')
-        if ed > projectobj_enddate:
-            ed = projectobj_enddate
-        current_date = datetime.strptime(str(datetime.now())[:19], '%Y-%m-%d %H:%M:%S')
-        if current_date > sd and current_date < ed:
-            currentquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
-        elif sd > current_date and ed >current_date:
-            futurequarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
-        elif sd < current_date and ed < current_date:
-            previousquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
-        sd = ed + timedelta(days=1)
+    project = projectobj.project
+    budget_obj = Budget.objects.get_or_none(project=project)
+    if budget_obj:
+        from budgetmanagement.manage_budget import get_budget_quarters
+        
+        budget_quarters = get_budget_quarters(budget_obj)
+        for i,k in budget_quarters.iteritems():
+            sd = k.split('to')[0]
+            ed = k.split('to')[1]
+            sd = sd.strip()
+            ed = ed.strip()
+            sd = datetime.strptime(sd, '%Y-%m-%d')
+            ed = datetime.strptime(ed , '%Y-%m-%d')
+#            projectobj_enddate = datetime.strptime(str(projectobj_enddate)[:19], '%Y-%m-%d %H:%M:%S')
+#            if ed > projectobj_enddate:
+#                ed = projectobj_enddate
+            if report_start_date.date() >= sd.date() and report_end_date.date() <= ed.date():
+                currentquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
+            elif sd > report_start_date and ed > report_start_date:
+                futurequarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
+            elif sd < report_start_date and ed < report_start_date:
+                previousquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
+    print budget_quarters,report_start_date,report_end_date
     return previousquarter_list,currentquarter_list,futurequarter_list
 
 def get_quarter_report(request,itemlist,quarter):
