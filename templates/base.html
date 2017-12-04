@@ -182,7 +182,7 @@ ga('send', 'pageview');
 
             <a href="javascript:void(0);" class="dropdown-toggle" >
               {% if user_obj.attrs %}
-              <canvas class="user-icon" data-name="{{user_obj.attrs.first_name}} {{user_obj.attrs.last_name}}A" width="30" height="30" style="border-radius:40px; position: relative; top: 10px;" ></canvas>
+              <canvas class="user-icon" data-name="{{user_obj.attrs.first_name}} {{user_obj.attrs.last_name}}" width="30" height="30" style="border-radius:40px; position: relative; top: 10px;" ></canvas>
               {% else %}
               <canvas class="user-icon" data-name="{{user_obj}}Admin" width="30" height="30" style="border-radius:40px" ></canvas>
               {% endif %}
@@ -191,7 +191,7 @@ ga('send', 'pageview');
               <!-- User image -->
               <li class="user-header">
 
-                <canvas class="user-icon" data-name="{% if user_obj.attrs %}{{user_obj.attrs.first_name}}{{user_obj.attrs.last_name}}A {% else %} {{user_obj.name}} {% endif %}" width="50" height="50" style="border-radius:50px" ></canvas>
+                <canvas class="user-icon" data-name="{% if user_obj.attrs %}{{user_obj.attrs.first_name}}{{user_obj.attrs.last_name}} {% else %} {{user_obj.name}} {% endif %}" width="50" height="50" style="border-radius:50px" ></canvas>
 
                 
                 <h3>{% if user_obj.attrs %}{{user_obj.attrs.first_name}} {{user_obj.attrs.last_name}} {% else %} {{ user_obj.name }} {% endif %}</h3>

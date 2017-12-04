@@ -339,7 +339,7 @@ def get_last_page_number(page_number):
 @register.assignment_tag
 def get_index_page_number(quarter):
     # import ipdb; ipdb.set_trace()
-    lista = [3]
+    lista = [4]
     prev = len(quarter.get('Previous Quarter Updates'))
     cur = len(quarter.get('Current Quarter Updates'))
     next = len(quarter.get('Next Quarter Updates'))
@@ -366,7 +366,8 @@ def get_index_page_number(quarter):
     page_obj.object_id = 1
     # import ipdb; ipdb.set_trace()
     function_count = int(page_obj.inline_answer)
-    page_obj.inline_answer = function_count + 1 
+    page_obj.inline_answer = function_count
+
     page_obj.save()
 
     return lista[function_count]
