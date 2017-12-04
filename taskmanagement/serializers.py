@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from models import *
 from budgetmanagement.models import SuperCategory
+from projectmanagement.models import Project
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -64,3 +65,11 @@ class SuperCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SuperCategory
         fields = '__all__'
+        
+        
+
+class ProjectSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Project
+        fields = ('id','name','slug','start_date','end_date')
