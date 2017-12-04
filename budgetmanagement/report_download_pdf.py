@@ -100,9 +100,8 @@ def pdfconverter(request):
     project = Project.objects.get_or_none(slug = slug)
     import datetime
     dd = datetime.datetime.today()
-    file_name = project.name +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
-    target = BASE_DIR + '/static/pdf-reports/'+file_name
-    pdfkit.from_url(PMU_URL+ '/report/detail/?slug='+str(slug)+'&report_id='+str(report_id),target)
+    file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
+    pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id), BASE_DIR +'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()
     with fs.open(BASE_DIR +'/static/pdf-reports/'+ file_name) as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')

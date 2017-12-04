@@ -48,6 +48,7 @@ def timeline_upload(request):
             f.created_by = user
             f.content_type = ContentType.objects.get(model=('project'))
             f.object_id = project.id
+            f.timeline_progress = True
             f.save()
             return HttpResponseRedirect('/project/summary/?slug='+project.slug)
         else :
@@ -87,6 +88,7 @@ def upload_attachment(request):
                 obj.attachment_type=2
             else:
                 obj.attachment_type=1
+                obj.timeline_progress = False
             obj.save()
         try:
             keys = request.POST.get('keywords').split(',')
