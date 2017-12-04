@@ -162,7 +162,7 @@ def html_to_pdf_view(request):
     # for basic details of project report we are sending all fields in dictionary 
     answer_list = report_question_list(report_quest_list,report_obj,project)
     # here we are sending/rendering all variable to generate PDF 
-    html_string = render_to_string('report/report-pdf.html', {
+    html_string = render_to_string('report/new-pdf.html', {
         'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
         'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
         'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
@@ -622,12 +622,13 @@ def finalreportdesign(request):
 #      timeline progress ends 
     previous_len = len(previousquarter_list)+1
     current_len = len(currentquarter_list)+1
-    future_len = len(futurequarter_list)+1
+    future_len = previous_len+current_len
     project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
-    if request.method == "POST":
+    
+    if request.method == "POST" or request.FILES:
         slug = request.POST.get('slug')
         key = request.POST.get('key')
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj

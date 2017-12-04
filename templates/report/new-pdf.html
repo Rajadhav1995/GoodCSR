@@ -1,0 +1,1893 @@
+{% load urs_tags %}
+{% load common_tags %}
+{% load humanize %}
+{% load question_tags %}
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>      
+<html class="no-js lt-ie9 lt-ie8 lt-ie7">
+   <![endif]-->
+   <!--[if IE 7]>         
+   <html class="no-js lt-ie9 lt-ie8">
+      <![endif]-->
+      <!--[if IE 8]>         
+      <html class="no-js lt-ie9">
+         <![endif]-->
+         <!--[if gt IE 8]><!-->
+         <html class="no-js">
+            <!--<![endif]-->
+            <head>
+               <meta charset="utf-8">
+               <meta http-equiv="X-UA-Compatible" content="IE=edge">
+               <link rel="icon" type="image/png" href="/static/img/favicon.ico">
+               <title>GoodCSR | Project Report</title>
+               <meta name="description" content="">
+               <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+               <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
+               <link rel="stylesheet" href="/static/css/report-bootstrap.min.css">
+               <link rel="stylesheet" href="/static/css/report-style.css">
+             <!--   <link rel="stylesheet" href="/static/css/tinyscrollbar.css"> -->
+               <!-- <link rel="stylesheet" href="/static/css/style.css"> -->
+                <style>
+      .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid; margin-bottom: 45px; }
+       .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
+      .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
+      .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
+      .pmu_formtable td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable td p{font-size:14px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+
+      .pmu_formtable_parameter{text-align: center;width: 250px; float:left; border-top:0px solid; margin-bottom: 45px; }
+       .pmu_formtable_parameter tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
+      .pmu_formtable_parameter td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
+      .pmu_formtable_parameter td:nth-last-child(1){border-right:0px solid #dedede}
+      .pmu_formtable_parameter td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable_parameter td p{font-size:16px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+
+                @page {
+    margin: 0.3cm 0.3cm; padding-left: 0.3cm;
+    @top-center {
+        /*content: "Introduction to CSS 2.1";*/
+        vertical-align: bottom;
+        /*border-bottom: 0.5pt solid*/ }
+    @bottom-right {
+        content: /*"Page " counter(page)*/
+                 /*" of " counter(pages)*/ }
+    /*@left-top {
+        content: "W3C Recommendation";
+        background: #005a9c;
+        color: #fff;
+        text-align: right;
+        transform-origin: 100% 0;
+        transform: rotate(-90deg) }*/}
+
+        div.image {
+        width:150px;
+        height:50px;
+        /*background-image:url(data:image/png;base64,{{img}});*/
+      }
+
+
+      .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid; margin-bottom: 45px; }
+       .pmu_formtable tr{padding: 50px;float: left;width:86%;background:#f1f3e9;}
+      .pmu_formtable td{border-right:1px solid #dedede; width: 30%; float: left; border-top:0px solid !important}
+      .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
+      .pmu_formtable td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable td p{font-size:14px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+
+      .pmu_formtable_parameter{text-align: center;width: 250px; float:left; border-top:0px solid; margin-bottom: 45px; }
+       .pmu_formtable_parameter tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
+      .pmu_formtable_parameter td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
+      .pmu_formtable_parameter td:nth-last-child(1){border-right:0px solid #dedede}
+      .pmu_formtable_parameter td span{font-size:14px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable_parameter td p{font-size:16px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
+      .margin_top_50{margin:50px 0px;float:left; width: 100%}
+.margin_top_50 ul li{float:left;list-style-type: none; margin-left: 30px}
+.margin_top_50 ul li:nth-child(1){border-right:1px solid #dedede;margin-left: 0px}
+.margin_top_50 ul li img{margin-right:30px}
+.text-head h1{color:#a63967; font-size: 28px; font-weight: bold;float: left; width:100%}
+.text-head p{color:#019875; float: right; font-size: 12px;text-transform: uppercase;}
+hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
+.margin_top_50 ul{padding-left: 0px}
+.margin_25{margin: 25px 0px 15px; float:left;width:100%;}
+.margin_25 .float_right{float: right}
+.margin_25 h1{float: left;position: relative; top:35px;font-weight: 600}
+.margin-botom35 h2{color:#019875; font-weight:600; font-size: 14px; margin-bottom: 5px}
+/*.margin-botom35{margin-bottom: 35px;}*/
+.margin-50{margin:50px 0px; float: left; width:100%}
+.margin-botom35 h2 span:nth-last-child(1){float: right;background: #fff; position: relative;color:#232323; top: 10px; padding: 0px 0px 0px 10px;}
+.margin-botom35 h2 span:nth-child(1){background: #fff; position: relative; top: 10px; padding: 0px 10px 0px 0px;}
+.margin-botom35 h3 span:nth-last-child(1){float: right;background: #fff; position: relative; top: 5px; padding: 0px 0px 0px 10px;}
+.margin-botom35 h3 span:nth-child(1){background: #fff; position: relative; top: 5px; padding: 0px 10px 0px 0px;font-size: 12px}
+.margin-botom35 h3{font-weight:600; border-bottom: 1px solid #dedede;width: 100%; font-size: 16px; margin-top:-10px}
+.border_text h2{color:#019875; font-weight:600; border-bottom: 1px solid #dedede;width: 100%}
+.quarter_updates p{border-bottom: 1px solid #dedede ;padding-bottom: 5px; font-size: 14px}
+.quarter_updates{margin-top:20px}
+.quarter_updates span{font-size: 14px}
+.color-red{color:#a63967;margin: 0px; }
+.school_project h1{margin: 0px; border-bottom: 1px solid #dedede; padding-bottom: 10px;margin-bottom: 20px; font-size: 20px}
+.school_project {margin-bottom: 40px}
+.school_project .row p:nth-last-child(1){font-weight: 600}
+.location p{color:#019875; border-bottom: 1px solid #dedede; padding-bottom: 5px;font-weight: 600; font-size: large;}
+.location ul li{list-style-type: disc; color:#019875}
+.location ul li span{color:#232323; font-size: 14px;}
+.location ul{padding-left: 15px;}
+.location{margin-bottom: 60px;margin-top: 30px; float: left; width: 100%;}
+.location h5{color:#363636 ; font-weight: normal; font-size: 14px; font-family: "Work Sans";}
+footer{margin:30px 0px; float: left; width: 100%}
+.margin-top40{margin-top:40px}
+.quarter_updates h4{font-size: 16px; font-weight: 600}}
+.quarter_updates p{color:#424242; font-size: 10px; border-bottom: 1px solid #dedede; padding-bottom: 4px}
+.margin_30{margin: 30px 0px; float: left; width:100%}
+.color_green{font-weight: 600; color:#019875;border-bottom: 1px solid #dedede; padding-bottom: 5px; margin-bottom:10px !important; margin-top: 0px;}
+.color_grey{color:#666666}
+
+
+
+.parameter-textbottom{position: absolute; top:180px}
+.parameter-textbottom .color_green{border-bottom: 0px}
+
+.margin_top30{margin-top:30px; float: left; width:100%}
+
+/* tab-resp */ 
+.tab-resp1    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+.tab-resp1 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5; font-size: 12px }
+.tab-resp1 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;font-size: 12px}
+.tab-resp1 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
+.tab-resp1 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
+.tab-resp1 td:last-child  { border-right:none;}
+.tab-resp1 .table-tr td { color:#006861; font-weight:600;}
+
+/* tab-resp2 */ 
+.tab-resp2    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+.tab-resp2 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5;  }
+.tab-resp2 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;}
+.tab-resp2 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
+.tab-resp2 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
+.tab-resp2 td:last-child  { border-right:none;}
+.tab-resp2 .table-tr td { color:#006861; font-weight:600;}
+
+.budget_section td input, .budget_section td select{height: 36px; border-radius: 5px;border: 1px solid #c4c4c4; font-size: 12px; padding-left: 10px;}
+.budget_section td:nth-child(2n-2){padding-left:0px; padding: 5px 10px;}
+.budget_section td:nth-child(1) span{background:url('../img/cross-delete-black.png') no-repeat; padding: 0px 2px 4px;}
+.budget_section td:nth-child(1) span:hover{background:url('../img/cross-delete-color.png') no-repeat }
+.parameter .numeric_parameter li:nth-last-child(1) {
+    margin-right: 8px !important;
+}
+@media screen and (min-width: 980px) {} 
+@media screen and (min-width: 992px) {} 
+@media screen and (min-width: 1000px) {} 
+@media screen and (min-width: 1200px) {}
+
+.page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 740px}
+.header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 550px}
+
+.table-scroll {
+  position:relative;
+  max-width:100%;
+  margin:auto;
+  overflow:hidden !important;
+  border:0px solid #000;
+    padding-left:0px !important;
+    height:auto !important;
+}
+.table-wrap {
+  width:100%;
+  overflow:auto;
+}
+.table-scroll table {
+  width:100%;
+  margin:auto;
+  border-collapse:separate;
+  border-spacing:0;
+}
+.table-scroll th, .table-scroll td {
+  padding:5px 10px;
+  background:#fff;
+  white-space:nowrap;
+  vertical-align:top;
+}
+.table-scroll thead, .table-scroll tfoot {
+  background:#f9f9f9;
+}
+
+#time-line-pad  { float:left; width:100%; overflow-y:hidden; overflow-x: scroll;}
+.time-line    { float:left; width: auto; height:440px; position:relative; background:#f1f3e9; }
+.time-line-bdr  { float:left; height:6px; background:#d2bf78; /*background:url(../img/timeline-border.png) no-repeat left #d2bf78; border-bottom:6px solid #d2bf78;*/ position: absolute; top:50%; left:0; margin-top:-3px; width:100%;}
+.event-up   { float:left; width:200px; padding:0 8px; border-right:1px solid #fff; position:relative; min-height:440px; background:rgba(0,0,0,0.03); }
+/*.event-up:first-child { padding-left:30px; width:230px;}*/
+.event-up .event-pad/*:nth-child(2n-1)*/ { background:rgba(0,0,0,0.03)}.event-up .event-img   { position:absolute; bottom:56%;-webkit-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);-moz-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4); background:#fff; padding:10px; width:182px; float:left}
+.event-up .event-img img  { float:none;}
+.event-up .event-img::after { position: absolute; bottom: -8px; left: 0px; content: ""; display: block; width: 0; height: 0; margin: 0 auto; right: 0; border-left: 9px solid transparent;  border-right: 9px solid transparent;  border-top: 8px solid #fff;}
+.event-up .event-date   { position:absolute; top:55%; font-size:22px; color:#00998b; font-weight:700; float:left; width:92%; text-align:center;}
+.event-up .event-date span{ font-size:16px; font-weight:400; width:100%; float:left;}
+.white-box .event-img p { font-size:12px; padding-top:10px; float:left; padding-left:0;}
+.event-circle { float:left; width:24px; height:22px; background:url(../img/event-circle.png) no-repeat center; position:absolute; top:50%; left:50%; margin:-11px 0 0 -12px;} 
+.current-event .event-circle { float:left; width:32px; height:29px; background:url(../img/event-current.png) no-repeat center; top:49%; left:48%;}
+.event-down   { float:left; width:200px; padding:0 8px; border-right:1px solid #fff; position:relative; min-height:440px; }
+.event-down .event-img    { position:absolute; top:56%;-webkit-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);-moz-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4); background:#fff; padding:10px; width:182px; float:left}
+.event-down .event-img img  { float:left;}
+.event-down.red-down .event-img { padding:0 0 10px; text-align:center;}
+.event-down.red-down .event-img img { float:none; margin-top:-17px;}
+.white-box  .event-down.red-down .event-img p { text-align:center; padding:0 10px;} 
+.event-down .event-img h3 { float:left; width:100%; text-align:center; padding:15px 0px; text-shadow: 1px 1px #666; color:#f5e9bd; text-transform:uppercase; font-size:14px; }
+
+.event-down .event-img::before { position: absolute; top: -8px; left: 0px; content: ""; display: block; width: 0; height: 0; margin: 0 auto; right: 0; border-left: 9px solid transparent;  border-right: 9px solid transparent;  border-bottom: 8px solid #fff;}
+.event-down.red-down .event-img::before {border-left: 9px solid transparent;  border-right: 9px solid transparent;  border-bottom: 8px solid #a64d65;}
+.event-down .event-date   { position:absolute; bottom:56%; font-size:22px; color:#00998b; font-weight:700; float:left; width:92%; text-align:center; line-height:18px;}
+.white-box .event-down .event-img p { font-size:12px; padding-top:0px; padding-bottom:10px; line-height:14px; float:left; padding-left:0;}
+.event-down .event-date span{ font-size:16px; font-weight:400; width:100%; float:left;}
+.event-up.red-down .event-img::before {border-left: 9px solid transparent;  border-right: 9px solid transparent;  border-top: 8px solid #a64d65;}
+.event-up .event-img::before {
+    position: absolute;
+    bottom: -8px;
+    left: 0px;
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    margin: 0 auto;
+    right: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 0px solid #fff;z-index:10;
+}
+.event-up {text-align: center;}
+.event-up.red-down .event-img img{position: relative;top:-12px;}
+
+.parameter-text h4.color_green {  font-size: 14px;}
+.parameter-text p {  font-size: 12px;}
+.parameter-text{margin-top:15%}
+    </style>
+            </head>
+
+            <!-- onload="window.print()" -->
+            <body >
+              <div class='header_page_height'>
+               <header>
+
+                  <div class="">
+                     <div>
+
+                        <img src="{{image_url}}static/img/report/header-img.jpg" style="width:120%; margin-left: -10%;">
+                     </div>
+                     <div>
+                      {% if answer_list.cover_image %}
+                        <img src="{{answer_list.cover_image}}" style="width:120%; margin-left: -10%; margin-top: -3%;">
+                      {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" style="width:100%">
+                      {% endif %}
+                     </div>
+                     <div>
+                        <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
+                     </div>
+                  </div>
+                  <div class="container">
+                     <div class="margin_top_50">
+                        <ul>
+                          {% if answer_list.client_logo %}
+                           <li><img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;"></li>
+                           {% else %}
+                            <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+
+                            {% endif %}
+                            {% if answer_list.logos %}
+                           <li> <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;"></li>
+                           {% else %}
+                            <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;" >
+                            {% endif %}
+                        </ul>
+                     </div>
+
+                     <div class="text-head">
+                        <h1>{{answer_list.report_name}}</h1>
+                        <h5 style="float:left">by {{answer_list.client_name}}</h5>
+                        <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
+                        <hr>
+                     </div>
+                     <p style="float:left; width:auto">Prepared by {{answer_list.prepared_by}}</p>
+                     <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+                  </div>
+                
+               </header>
+               </div>
+               <header style="margin-top:50px">
+                  <div>
+                     <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:24px">Index{{taskdict1}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="margin-50 page_height">
+                    <!--Dynamic getting of the contents of index page (STARTS)                  -->
+
+                     {% for key,value in contents.iteritems %}
+
+                             <div class="margin-botom35 border_line">
+                                <h2>{{value}}</h2>
+
+                                {% for k,v in quarters.iteritems %}
+                                    {% if value == k %}
+                                        {% for k,v in v.iteritems %}
+                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span></span></h3>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                             </div>
+                     {% endfor %}
+                     <!--Dynamic getting of the contents of index page (END)                  -->
+                  </div>
+                  <br>
+                  <footer>
+                  <hr>
+                  <img src="{{image_url}}/static/img/report/logo.png" style="float:left">
+                  <!-- <h3 style="float:right;margin-top:0px;">2</h3> -->
+                  {% get_page_number 0 as page_number %}
+                  <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+               </div>
+             </footer>
+               <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
+               <!--<header>
+                  <div>
+                  <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                   </div>
+                   </header>-->
+               <!--Index page 02 html ends-->
+               <!--Index page 03 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  <div class='page_height'>
+                  <div class="school_project">
+                     <div>
+                        <p class="color-red">PROJECT</p>
+                        <h1>{{project.name}}</h1>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="row">
+                           <p class="color-red">DONOR</p>
+                           <p>{{answer_list.donor}}</p>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="row">
+                           <p class="color-red">IMPLEMENTATION NGO</p>
+                           <p>{{answer_list.implement_ngo}}</p>
+                        </div>
+                     </div>
+                      <table class="table pmu_formtable">
+            <tr>
+                <td >
+                    <p>Total Budget</p>
+                    <img src="{{image_url}}/static/img/rupee.png"><span>{{answer_list.project_budget | currency}}</span>
+                </td>
+               <td>
+                    <p>Project Beneficiaries</p>
+                    <img src="{{image_url}}/static/img/user.png"><span>{{answer_list.no_of_beneficiaries | intcomma}}</span>
+                </td>
+                  <td>
+                    <p>Project Duration</p>
+                    
+                      <img src="{{image_url}}/static/img/time-calculater.png"><span>{{project.duration}}<sub style="bottom:0px; font-size: 20px;">months</sub></span>
+                </td>
+            </tr>
+        </table>
+                     <!-- Total Budget:<b>{{answer_list.project_budget}}</b> Project Beneficiaries: {{answer_list.no_of_beneficiaries}} Project Duration: {{answer_list.project_duration}} -->
+                  </div>
+<!-- ######################### -->
+<div class="white-box">
+        <ul class="key_parameter parameter">
+          <div class='numeric_parameter'></div>
+        </ul>
+    </div>
+
+
+                  <div>
+                  <div class="location">
+                     <p>Location Coverage</p>
+                     <ul> {{answer_list.location}}
+                      <!-- {% with answer_list.location|location_split:"," as location %}
+                      {% for k in location %}
+                      <li><span>{{k}}</span></li>
+                      {% endfor %}
+                      {% endwith %} -->
+                    </ul>
+                     <!--        <ul>-->
+                     <!--<!--          {% for i in location %}-->
+                     <!--        <li><span> {{i.location.parent.name}}, {{i.location.name}}, {{i.get_program_type_display}}</span></li>-->
+                     <!--        {% endfor %}-->
+                     <!--        </ul>-->
+                  </div>
+                </div>
+                  <br>
+                  <div>
+                  <div class="location">
+                     <p>About the Program</p>
+                     <h5>{{answer_list.program_description|safe}}</h5>
+                  </div>
+                  </div>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="{{image_url}}/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+               <header style="margin-top:50px">
+                  <div>
+                     <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <!--Index page 03 html ends-->
+               <!--Index page 04 html starts-->
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="location margin-top40 page_height">
+                     <p>Objective of the project</p>
+                     <h5>{{answer_list.project_objective|safe}}</h5>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="{{image_url}}/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+               
+               <!--Index page 04 html ends-->
+               <!--Index page 05 html starts-->
+               {% for i in report_quarter %}
+                {% get_parameter i 3 as pie_data %}
+                {{pie_data.0.PIN}}
+                {% if i.quarter_type == 1 %}
+                {% if forloop.counter == 1 %}
+                {% get_quarter_sections i as quart_section %}
+                {% for j in quart_section %}
+                <header style="margin-top:50px">
+                  <div>
+                     <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+
+                  <div class='page_height'>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Previous Quarter Updates</h4>
+                     {% get_date_range j as date_range %}
+                     <p>First Quarter {{date_range.0}}</p>
+                  </div>
+                  <div class="margin_30 prev_banner ">
+                     <h5 class="color_green">Key Achievements in this quarter</h5>
+
+                     <!-- <img src="/static/img/report/prev-banner.png" style="width:100%"> -->
+                     <!-- ---------------########## -->
+                     {% get_timeline_json project j as timeline %}
+                     {% if timeline.0 != '[]' %}
+                     <div class="col-md-12 report_text " style="padding:0px">
+                                <p>{{quest.text|title}}</p>
+                                    <!-- timeline slider -->
+                                    
+                                            <div id="scrollbar1">
+                <div class="viewport">
+                     <div class="overview">
+                       <div id="time-line-pad">
+            <div class="time-line">
+              <div class="time-line-bdr"></div>
+                <ul>
+                   {% get_date_range j as date_range %}
+                    <div class="timeline-slide_{{date_range.1}}"></div>
+                    
+                </ul>
+            </div>
+           </div>
+                    </div>
+                </div>
+                <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                
+       </div>
+                                                    <div class="scrollbar">
+                                                    <div class="track">
+                                                    <div class="thumb">
+                                                    <div class="end">
+                                                    </div></div></div></div>
+                                        
+<!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript">
+    //var loop_count = $('#loop_count').val()
+    {% get_date_range j as date_range %}
+    // var wrapper = $(".timeline-slide_" + "{{timeperiod}}"); //Fields wrapper
+    var wrapper = $(".timeline-slide_" + "{{date_range.1}}"); //Fields wrapper
+    // var ii = ".timeline-slide_" + "{{date_range.1}}";
+    {% get_timeline_json project j as timeline %}
+    var lengths = {{timeline.1}};
+    var timeline_data= {{timeline.0|safe}}
+    var loc_url = '{{image}}'
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    for (var i = 0; i < lengths ; i++)
+    {
+      var obj = timeline_data[i]
+      var name = obj.name;
+      console.log(obj);
+      if (obj.url) {
+        var url = loc_url + obj.url;
+        }
+    else{
+          var url = loc_url + '/' +"/static/img/milestone-icon.png";
+        };
+        var date = obj.date
+        var f = new Date(date);
+        var month = months[f.getMonth()];
+        var nn = f.getMonth();
+        var ids = obj.id
+        var date1 = f.getDate()
+        //alert(date1);
+        function delete_upload()
+        {
+            //return confirm("Are you sure you want to delete this item?");
+            alert("Are you sure?");
+        }
+      if (i % 2) {
+        if (obj.type == 'image') {
+        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        }else{
+          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+        };
+      } else {
+        if (obj.type == 'image') {
+        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        }else{
+          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+        };
+      };
+    }
+</script>
+{% else %}
+No Key Acheivements in this Quarter
+{% endif %}
+
+       <!-- ---------------------------------############ -->
+                  </div>
+                  {% get_milestones j report_obj 1 as mile %}
+                    {% for m in mile %}  
+                  <div class="margin_30 prev_banner milestone1">
+                     <h5 class="color-red">MILESTONE 1</h5>
+                     <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
+                     <p><strong>About the Milestone</strong></p>
+                     <!-- <div class="location"><h5> {{m.description}} </h5></div> -->
+                     <h5 style="color:#666; font-weight:normal">{{m.description}}</h5>
+                     {% get_mile_images m.id as images %}
+                        {% for img in images %}
+                     <div class="col-md-6" style="padding:0px">
+                        {% if img.attachment_file %}
+                        <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
+                        <p>{{img.description}}
+                        </p>
+                        {% endif %}
+                        {% endfor %}
+                     </div>
+                     
+                  </div>
+                  {% endfor %}
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="{{image_url}}/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+               
+               <header style="margin-top:50px">
+                  <div>
+                     <img src="{{image_url}}/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <!--Index page 06 html ends-->
+               <!--Index page 07 html starts-->
+               
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Previous Quarter Updates</h4>
+                     {% get_date_range j as date_range %}
+                     <p>{{forloop.counter | get_ordinal_number}} Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <!-- <div class="col-md-12">
+                     <div class="row">
+                     <div class="margin_30 prev_banner">
+                         <h5 class="color-red">PARAMETER 1</h5>
+                         <h5 class="color_green">Beneficiary Distribution</h5>
+                         <div>
+                        <div class="col-md-4">
+                        <div class="row">
+                        <img src="/static/img/report/parameter01.jpg" style="width:100%">
+                        </div>
+                         </div>
+                         <div class="col-md-8">
+                        <div class="parameter-textbottom">
+                            <h4 class="color_green">About THis Parameter</h4>
+                            <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
+                            </div>
+                         </div>
+                     </div>
+                     
+                     </div>
+                     </div>
+                     </div> -->
+                  <div class="margin_top30 page_height">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     <div class="white-box">
+            <div class="table-responsive">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for j in budget_period %}
+            <tr>
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center">{{line_total | get_currency}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center">{{utilized_amount | get_currency}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 1 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+        </div>
+    
+                     <!-- ------------------------------------------------------- -->
+             <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div></div></div>
+    
+
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+               {% endfor %}
+               <script src="/static/js/jquery.min.js"></script>
+                        <script src="/static/js/bootstrap.min.js"></script>
+                        <script src="/static/code/highcharts.js"></script>
+                        <script src="/static/code/highcharts-more.js"></script>
+                        <script src="/static/code/modules/solid-gauge.js"></script>
+                        <script type="text/javascript">
+                           var new_data_pin = 0;
+                           var new_data_pip = 0;
+                        </script>
+                        <!--/* Pie Chat Number */-->
+                        <script type="text/javascript">
+                           {% get_parameter i 3 as pie_data %}
+                           var new_data_pin = 0;
+                           var data1 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+                           var values = "coll{{forloop.counter}}"
+                           var pin_title = {{pin_title_name | safe}}
+                           var pin_title = pin_title[new_data_pin]
+                           new_data_pin++;
+                           Highcharts.chart(values, {
+                              chart:{type:'pie', backgroundColor: null,height:288},
+                                       credits:{enabled: false},
+                                       colors:[
+                                           '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                                           ],
+                                       title:{text: ''},
+                                       tooltip:{
+                                           enabled: true,
+                                           animation: true
+                                       },
+                                       plotOptions: {
+                                           pie: {
+                                               allowPointSelect: true,
+                                               animation: true,
+                                               cursor: 'pointer',
+                                               showInLegend: true,
+                                               dataLabels: {
+                                                   enabled: false,
+                                                   distance: -30,
+                                                   formatter: function() {
+                                                       return this.y;
+                                                   }
+                                               }
+                                           }
+                                       },
+                                       legend: {
+                                          enabled: true,
+                                          layout: 'horizontal',
+                                          align: 'center',
+                                          width: 200,
+                                          verticalAlign: 'bottom',
+                                          useHTML: true,
+                                          labelFormatter: function() {
+                                              return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                                          }
+                                      },
+                                       series: [{
+                                           type: 'pie',
+                                           dataLabels:{
+                           
+                                           },
+                                           data: data1
+                           
+                                       }]
+                                   });
+                        </script>
+               {% endif %}
+               {% endif %}
+               </div>
+               <!--Index page 07 html ends-->
+               <!--Index page 08 html starts-->
+               {% if i.quarter_type == 2 %}
+              {% get_parameter i 4 as pie_data %}
+              <header style="margin-top:50px">
+                  <div>
+                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <div class='page_height'>
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Current Quarter Updates</h4>
+                     {% get_date_range i as date_range %}
+                     <p>First Quarter: ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  
+                  <div> 
+                     
+                     <div class="col-md-12 report_text " style="padding:0px">
+                                <p class="color_green" style="border-bottom:0px">Milestones & Activities</p>
+<!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
+                                <div class=" white-box ">
+                            <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+                         </div>
+                            </div>
+                  </div>
+
+<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/jsgantt.js" type="text/javascript"></script>
+
+<script>
+    {% for i,v in currentquarter_list.items %}
+        {% get_gantt_details v project as taskdict %}
+        var jsonData = {{taskdict|safe}}
+        var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
+        // console.log(jsonData.tasks);
+        // Get today and tomorrows date
+        var cur = new Date();
+        var tom = new Date();
+        tom.setDate(tom.getDate() + 1);
+        var curDate = cur.getFullYear() + '-' +
+          (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
+          (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
+
+        var tomDate = tom.getFullYear() + '-' +
+          (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
+          (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
+        // Get today and tomorrows date
+        $.each(jsonData.supercategories, function (i) {
+          superId = 1, activity_type = 'Core', taskCompletion = 0, superName = 'Super Category';
+          if (this.id != null) {
+            superId = this.id;
+          }
+          superName = this.name;
+          var superDesc = this.description;
+          if (superName.toLowerCase() != "location") {
+            g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+              '', superDesc, g));
+          }
+          // console.log("Super");
+          // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+          //   '', superDesc);
+        });
+        $.each(jsonData.activities, function (i) {
+          var activityId = 11,
+            superId = 1,
+            activity_type = 'Core',
+            taskCompletion = 0,
+            activityName = 'Activity';
+          if (this.id != null) {
+            activityId = this.id.toString();
+          }
+          if (this.super_category != null) {
+            superId = this.super_category;
+            if (this.id != null) {
+              activityId = this.super_category.toString() + activityId;
+            }
+          }
+          // console.log("ActID", activityId);
+          activityName = this.name;
+          var activityDesc = this.description;
+          g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
+            1, '', '',
+            activityDesc, g));
+          // console.log("Act");
+          // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
+        });
+        $.each(jsonData.tasks, function (i) {
+          var taskId = 111,
+            tempId = 1,
+            activityId = 11,
+            superId = 1,
+            activity_type = 'Core',
+            taskCompletion = 0,
+            taskName = 'Task',
+            taskStatus = 'gtaskred',
+            eStartDate = curDate,
+            eEndDate = tomDate;
+          if (this.id != null) {
+            taskId = this.id;
+            tempId = this.id;
+          }
+          if (this.activity != null) {
+            activityId = this.activity;
+          }
+          // activity = jsonData.activities.filter(function( i ) {
+          //   if(i.id == activityId){return i.super_category;}
+          // });
+          $.each(jsonData.activities, function () {
+            if (this.id == activityId) {
+              activity_type = this.activity_type;
+              if (this.super_category != null) {
+                superId = this.super_category;
+              }
+            }
+          });
+          if (superId != null && activityId != null && taskId != null) {
+            taskId = superId.toString() + activityId.toString() + taskId.toString();
+          }
+          if (superId != null && activityId != null) {
+            activityId = superId.toString() + activityId.toString();
+          }
+          activityId = parseInt(activityId);
+          // console.log("TaskID", taskId);
+          taskName = this.name;
+          eStartDate = this.expected_start_date;
+          eEndDate = this.expected_end_date;
+          if (activity_type == "Core") {
+            switch (this.status) {
+              case "Ongoing":
+                taskStatus = 'gtaskblue';
+                break;
+              case "Open":
+                taskStatus = 'gtaskyellow';
+                break;
+              case "Close":
+                taskStatus = 'gtaskgreen';
+                break;
+              default:
+                taskStatus = 'gtaskblue';
+                break;
+            };
+          }
+          // For Milestones
+          var completionDate = this.actual_end_date;
+          console.log('Complete date', completionDate);
+          $.each(jsonData.milestones, function (i) {
+            var mileId = 111, mileStatus = 'gmilestone redmile '
+            depTask = [];
+            depTask = this.task;
+            mileName = this.name;
+            if (this.id != null) {
+              mileId = this.id;
+            }
+            // if (depTask.length == 1) {
+            var ln = depTask.length;
+            ln--;
+            console.log('depTask', depTask[0]);
+            if (depTask[ln] == tempId) {
+              var d1 = new Date(eEndDate);
+              var d2 = new Date(eEndDate);
+              d1.setDate(d1.getDate() + 1);
+              d2.setDate(d2.getDate() + 11);
+              var mileStart = d1.getFullYear() + '-' +
+                (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
+                (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
+
+              var mileEnd = d2.getFullYear() + '-' +
+                (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
+                (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
+              //Check for milestone complete or calculate delay
+              if (completionDate == null) {
+                mileStatus = 'gmilestone redmile '
+              } else {
+                var d3 = new Date(this.overdue);
+                var d4 = new Date(completionDate);
+                var timeDiff = (d3.getTime() + 86400) - d4.getTime();
+                var diffDays = Math.ceil(timeDiff / 86400000);
+                console.log('DiffDays', diffDays);
+                if (diffDays < 0) {
+                  var dur = Math.abs(diffDays);
+                  if (dur < 8) { mileName += " - Delayed by " + dur + " day(s)" };
+                  if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Delayed by " + dur + "+ week(s)" };
+                  if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Delayed by " + dur + "+ month(s)" };
+                  if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Delayed by " + dur + "+ year(s)" };
+                  console.log('Diff days', mileName);
+                } else {
+                  mileStatus = 'gmilestone greenmile '
+                  var dur = Math.abs(diffDays);
+                  if (dur == 0) { mileName += " - On track" };
+                  if (dur < 8) { mileName += " - Ahead by " + dur + " day(s)" };
+                  if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Ahead by " + dur + "+ week(s)" };
+                  if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Ahead by " + dur + "+ month(s)" };
+                  if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Ahead by " + dur + "+ year(s)" };
+                  console.log('Diff days', mileName);
+                }
+              }
+              g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
+                mileStatus, '', 1, '', null, 0, activityId, 1, '', '', '', g));
+            }
+            // } else {
+            //   var prevDate, maxDate;
+            //   $.each(depTask, function () {
+            //     var depValue = this.valueOf();
+            //     $.each(jsonData.tasks,function(){
+            //       if(this.id == depValue){
+
+            //       }
+            //     });
+            //     console.log('Dep', this.valueOf(), depTask);
+            //   });
+            // }
+            // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
+            //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
+          });
+
+
+          //Draw task after drawing milestone
+          g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+            '', 0, 0, activityId, 1, '', '', '', g));
+          // console.log("Task");
+          // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+          //   '', 0, 0, activityId, 1, '', '', '');
+
+        });
+
+        g.setShowStartDate(0);
+        g.setShowEndDate(0);
+        g.setShowRes(0);
+        g.setShowDeps(0);
+        g.setShowDur(0);
+        g.setUseToolTip(0);
+        g.setWeekColWidth(50);
+        g.setWeekMajorDateDisplayFormat('mon yyyy');
+        g.setWeekMinorDateDisplayFormat('W w');
+        // g.setScrollTo('today');
+        g.Draw();
+
+        function collision($div1, $div2) {
+          var x1 = $div1.offset().left;
+          var y1 = $div1.offset().top;
+          var h1 = $div1.outerHeight(true);
+          var w1 = $div1.outerWidth(true);
+          var b1 = y1 + h1;
+          var r1 = x1 + w1;
+          var x2 = $div2.offset().left;
+          var y2 = $div2.offset().top;
+          var h2 = $div2.outerHeight(true);
+          var w2 = $div2.outerWidth(true);
+          var b2 = y2 + h2;
+          var r2 = x2 + w2;
+
+          if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+          return true;
+        }
+        var count = 0,
+          padding = 25,
+          arrayTask = [],
+          collide = false;
+        $('.gselector').hide();
+        $(document).ready(function () {
+          var previous = null;
+          var prePrevious = null;
+          var mile = false;
+          $(".gtaskbarcontainer").each(function (index) {
+            currParent = $(this).parent().parent().parent();
+            listParent = currParent.attr('id').replace('row', '');
+            if ($(this).hasClass('gmilecontainer')) {
+              mile = true;
+            }
+            if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
+              .attr('id')) {
+              // console.log("This ID", $(this).attr('id'), mile);
+              if (mile) {
+
+              }
+              if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+                $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
+                  if ($(this).css('top') == '-5px') {
+                    $(this).css('top', '0px');
+                  }
+                });
+                collide = true;
+                $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
+                if (count == 0) {
+                  $(previous).css('top', '0px');
+                  count++;
+                }
+                listParentDiv = $('#' + listParent);
+                if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+                  listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
+                  currParent.css({
+                    'height': parseInt(currParent.css('height')) + 25 + 'px',
+                    'vertical-align': 'top'
+                  });
+                }
+              }
+            } else {
+              count = 0;
+              arrayTask = [];
+              collide = false;
+              $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
+                top: '-5px'
+              });
+              mile = false;
+            }
+            prePrevious = previous;
+            previous = this;
+          });
+        });
+     {% endfor %}
+</script>
+
+
+
+
+                  <div class="margin_top30">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     <div class="white-box">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+         <div class="table-responsive">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for j in budget_period %}
+            <tr >
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center">{{line_total | get_currency}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center">{{utilized_amount | get_currency}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 2 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+          </div>
+        </div>
+    </div>
+                     <br>
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
+                  </div>
+                  <div class="location margin_top30" style="margin-bottom:0px">
+                     {% get_about_quarter i report_obj 4 as abut_parameter %}
+                     <p>About The Quarter</p>
+                     <h5 >{{abut_parameter}}
+                     </h5>
+                  </div>
+                  <div class=" margin_top30">
+                     <p class="color-red">ACTIVITY</p>
+                     {% get_milestones i report_obj 2 as mile %}
+                     {% for m in mile %}
+                     <p class="color_green">{{m.name}}</p>
+                     <h5><strong>About the Activity</strong></h5>
+                     <h5 style="color:#666; font-weight:normal">{{m.description}}</h5>
+                     
+                  </div>
+                  {% get_mile_images m.id as images %}
+                  {% for img in images %}
+
+                  <div>
+                     {% if img.attachment_file %}
+                     
+                     <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
+                     <p style="font-size:13px; margin-top:10px">{{img.description}}</p>
+                     {% endif %}
+                  
+                  {% endfor %}
+                  {% endfor %}
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+
+               <!--Index page 08 html ends-->
+               <!--Index page 09 html starts-->
+               <header style="margin-top:50px">
+                  <div>
+                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  <div class='page_height'>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Current Quarter Updates</h4>
+                     {% get_date_range i as date_range %}
+                     <p>First Quarter ({{date_range.0}})<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class="col-md-12">
+                     <div class="row">
+                        {% get_parameter i 4 as pie_data %}
+                        
+                        {% if pie_data.0 %}
+                        {% for lol in  pie_data.0 %}
+                        <div class="margin_30 prev_banner">
+                           <h5 class="color-red">PARAMETER 1</h5>
+                           <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
+                           <div>
+                            {% if pie_data.2 == 1 %}
+                            {% if pie_data.0.0.1.y != 0 %}
+                              <div class="col-md-4">
+                                 <div class="row">
+                                    <ul class="key_parameter parameter">
+                                       <!-- <div class='numeric_parameter'></div> -->
+                                       
+                                          <!-- <h3>{{chart_name_pip}}</h3> -->
+                                          <div class="right-budget beni-dist">
+                                             <div id="comm{{forloop.counter}}" style="width: 100%;float: left;"></div>
+                                          </div>
+                                       
+                                    </ul>
+                                    <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
+                                 </div>
+                              </div>
+                              {% endif %}
+                              {% else %}
+                              <ul class="key_parameter parameter">
+                                <!-- <div>
+                                  <li><h3>Beneficiary</h3><img class="key-image parameter-position" src='/static/img/key-icon2.png' alt=""><h4 class="title-pad">2,380</h4></li>'
+                                </div> -->
+                                <table class="table pmu_formtable_parameter">
+                                  <tr>
+                                     <td>
+                                          <p>{{pie_data.1 | get_at_index:forloop.counter0}}</p>
+                                          <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
+                                      </td>
+                                  </tr>
+                              </table>
+                              </ul>
+                              {% endif %}
+
+
+
+                              <div class="col-md-8">
+                                 <div class="parameter-text">
+                                    <h4 class="color_green">About This Parameter</h4>
+                                    {% get_about_parameter i report_obj 4 as about_parameter %}
+                                    <p> {{about_parameter}} </p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <script type="text/javascript">
+                           var new_data_pin = 0;
+                           var new_data_pip = 0;
+                        </script>
+                        <!--/* Pie Chat Number */-->
+                        <script src="/static/code/highcharts.js"></script>
+                        <script src="/static/code/highcharts-more.js"></script>
+                        <script src="/static/code/modules/solid-gauge.js"></script>
+                        <script type="text/javascript">
+                           {% get_parameter i 4 as pie_data %}
+                           var new_data_pin = 0;
+                           var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
+                           console.log(data11);
+                           var values = "comm{{forloop.counter}}"
+                           var pin_title = {{pin_title_name | safe}}
+                           var pin_title = pin_title[new_data_pin]
+                           new_data_pin++;
+                           Highcharts.chart(values, {
+                              chart:{type:'pie', backgroundColor: null,height:288},
+                                       credits:{enabled: false},
+                                       colors:[
+                                           '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
+                                           ],
+                                       title:{text: ''},
+                                       tooltip:{
+                                           enabled: true,
+                                           animation: true
+                                       },
+                                       plotOptions: {
+                                           pie: {
+                                               allowPointSelect: true,
+                                               animation: true,
+                                               cursor: 'pointer',
+                                               showInLegend: true,
+                                               dataLabels: {
+                                                   enabled: false,
+                                                   distance: -30,
+                                                   formatter: function() {
+                                                       return this.y;
+                                                   }
+                                               }
+                                           }
+                                       },
+                                       legend: {
+                                          enabled: true,
+                                          layout: 'horizontal',
+                                          align: 'center',
+                                          width: 200,
+                                          verticalAlign: 'bottom',
+                                          useHTML: true,
+                                          labelFormatter: function() {
+                                              return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                                          }
+                                      },
+                                       series: [{
+                                           type: 'pie',
+                                           dataLabels:{
+                           
+                                           },
+                                           data: data11
+                           
+                                       }]
+                                   });
+                        </script>
+                        {% endfor %}
+                        {% endif %}
+                     </div>
+                  </div>
+                  <br>
+                  <div class="margin_top30">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     <div class="white-box">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+         <div class="table-responsive">
+           <table class="tab-resp1" id="example11" >
+            <thead>
+            <tr class="sticky-row quarter_color">
+
+              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
+            </tr>  
+            <tr  class="sticky-row">
+              <th  class="sticky-cell">Super Category</th>
+              <th  class="sticky-cell">Heading</th>
+              <th  class="sticky-cell">Subheading</th>
+              <th  class="sticky-cell">Total Planned</th>
+              <th  class="sticky-cell">Total Utilized</th>
+              <th  class="sticky-cell">Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody class="budget_section">
+            {% for j in budget_period %}
+            <tr class = "data_row">
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center" class="sticky-cell">{{line_total}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
+                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 2 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
+                     <br>
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
+                  </div>
+                  <div class="location margin_top30">
+                     <p>About The Budget</p>
+                     {% get_budget_detail 4 i as budget_detail %}
+                     <h5>{{budget_detail}}
+                     </h5>
+                  </div>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+               <!--Index page 09 html ends-->
+               <!--Index page 10 html starts-->
+               <header style="margin-top:50px">
+                  <div>
+                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="page_height">
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Current Quarter Updates</h4>
+                     {% get_date_range i as date_range %}
+                     <p>First Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class="location margin_top_50">
+                     <p>Risks and mitigation</p>
+                     {% get_risk_mitigation i as risk_mitigation %}
+                     <h5>{{risk_mitigation}} </h5>
+                     
+                  </div>
+                  </div>
+                  
+
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+               {% endif %}
+               <!--Index page 10 html ends-->
+               <!--Index page 10 html starts-->
+               {% if i.quarter_type == 3 %}
+               {% get_next_quarter_sections i as next_quarter %}
+               {% for k in next_quarter %}
+                <header style="margin-top:50px">
+                  <div>
+                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+                  {% get_parameter k 5 as pie_data %}
+               <div class="container">
+                <div class='page_height'>
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{project.name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  
+                  <div class='page_height'>
+                  <div class="quarter_updates">
+                     <h4 style="margin:0px">Next Quarter Updates</h4>
+                     {% get_date_range k as date_range %}
+                     <p>Third Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
+                  </div>
+                  <div class="location margin_top30" style="margin-bottom:0px">
+                     <p>About The Quarter</p>
+                     {% get_about_quarter k report_obj 5 as abut_parameter %}
+                     <h5>{{abut_parameter}} </h5>
+                  </div>
+                  <div class="margin_top30">
+                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                     
+                     <div class="white-box">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+         <div class="white-box">
+           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            <tr>
+
+              <td colspan="6">&nbsp;</td>
+            </tr>  
+            <tr  class="sticky-row">
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead>
+            <tbody class="budget_section">
+            {% for j in budget_period %}
+            <tr class = "data_row">
+                {% get_budget_lineitem j project as lineitemobj %}
+                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
+                {% get_line_total j project as line_total %}
+                <td align="center">{{line_total | get_currency}}</td>
+                {% get_utlizedline_total j project as utilized_amount %}
+                <td align="center">{{utilized_amount | get_currency}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
+
+                {% for i,v in quarter_list.items %}
+                {% get_quarter_order 2 project as quarter_order %}
+                {% if i == quarter_order %}
+                {% get_quarter_details j i project as line_itemobj %}
+                   <td align="center" class=""> {{line_itemobj.unit}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
+                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                     {% endif %}
+                     {% endfor %}
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>  
+        </div>
+    </div>
+                     <br>
+                     <div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    
+    </div>
+                  </div>
+                  <div class="location margin_top30">
+                     <p>About The Budget</p>
+                     {% get_budget_detail 5 k as budget_detail %}
+                     <h5>{{budget_detail}}
+                     </h5>
+                  </div>
+                  
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+               {% endfor %}
+               {% endif %}
+               
+                {% endfor %}
+               <!--Index page 11 html ends-->
+               <!--Index page 12 html-->
+               <header style="margin-top:50px">
+                  <div>
+                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                  </div>
+               </header>
+               <div class="container">
+                  <div class="margin_25">
+                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <div class="float_right">
+                      {% if answer_list.client_logo %}
+                        <img src="{{answer_list.client_logo}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                        {% if answer_list.logos %}
+                        <img src="{{answer_list.logos}}" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% else %}
+                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100 style="width:80px; height:50px;">
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  <div class='page_height'>
+                  <div style="margin:15% 0px;float: left;width: 100%;">
+                     <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
+                  </div>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     {% get_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+
+
+
+
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+<script src="/static/js/jquery.nicescroll.min-bkp.js"></script>
+<script src="/static/js/jquery.scrollbox.js"></script>
+<script src="/static/js/jquery.scrollbox-bkp.js"></script>
+<script src="/static/js/jquery.tinyscrollbar.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+  var li_Count = $('.time-line li').length;
+  $(".time-line").css('width', 200*li_Count);
+  });
+
+  $(document).ready(function()
+  {
+      $("#scrollbar1").tinyscrollbar({ axis: "x"});
+
+  });
+</script>
+
+<script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
+<script>
+html2canvas([document.getElementById('gwContainer_current')], {
+    onrendered: function (canvas) {
+      var imagedata = canvas.toDataURL('image/png');
+      // alert(imagedata);
+      var imgdata = imagedata.replace(/^data:image\/(png|jpg);base64,/, "");
+    //ajax call to save image inside folder
+    $.ajax({
+      url: '/report/save/image/',
+      data: {'imgdata':imgdata },
+      type:'GET',
+      success: function (response) {   
+               console.log(response);
+         $('#image_id img').attr('src', response);
+      }
+    });
+    // alert("asdfgh");
+    }
+  })
+</script>
+
+
+
+            </body>
+         </html>

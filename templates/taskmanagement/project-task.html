@@ -131,7 +131,7 @@
          </div>
          <div class="task-completion">
             <div class="task-completion-left">
-               <img class="user-image" src="/static/img/default_profile_image.png" alt="">
+               <div  class="middle_text"><canvas class="user-icon" data-name="{{user.attrs.first_name}} {{user.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas></div> 
             </div>
             <div class="task-completion-right">
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">{% csrf_token %}
