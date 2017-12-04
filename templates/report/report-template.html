@@ -295,10 +295,16 @@ footer{margin:30px 0px; float: left; width: 100%}
 
                              <div class="margin-botom35 border_line">
                              {% if value == 'Annexure' %}
-                                <h2>{{value}}11</h2>
+                                <h2>{{value}}</h2>
+                                
+                              
+                              {% elif value == 'About the project' %}
+                                <h2>{{value}}</h2>
+                                
                               {% else %}
                                 <h2>{{value}}</h2>
                               {% endif %}
+
                                 
                                 {% for k,v in quarters.iteritems %}
 
@@ -775,10 +781,10 @@ No Key Acheivements in this Quarter
                      {% get_page_number page_number as page_number %}
                      <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
-                  {{page_number}}
+                  
                </div>
                {% endfor %}
-               {{page_number}}
+               
                <script src="/static/js/jquery.min.js"></script>
                         <script src="/static/js/bootstrap.min.js"></script>
                         <script src="/static/code/highcharts.js"></script>
@@ -900,6 +906,8 @@ No Key Acheivements in this Quarter
         {% get_gantt_details v project as taskdict %}
         var jsonData = {{taskdict|safe}}
         var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
+        console.log(g);
+        console.log("amahiti");
         // console.log(jsonData.tasks);
         // Get today and tomorrows date
         var cur = new Date();
