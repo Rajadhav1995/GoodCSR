@@ -316,8 +316,55 @@ def get_ordinal_number(number):
 
 @register.assignment_tag
 def get_page_number(page_number):
-    page_number += 1
+    page_obj = Answer.objects.get(text__iexact='page_count')
+    page_number = page_obj.object_id
+    page_obj.object_id = page_number + 1
+    page_obj.save()
     return page_number
+
+@register.assignment_tag
+def get_last_page_number(page_number):
+    page_obj = Answer.objects.get(text__iexact='page_count')
+    page_number = page_obj.object_id
+    page_obj.object_id = 1
+    page_obj.save()
+    return page_number
+
+
+@register.assignment_tag
+def get_index_page_number(quarter):
+    # import ipdb; ipdb.set_trace()
+    lista = [3]
+    prev = len(quarter.get('Previous Quarter Updates'))
+    cur = len(quarter.get('Current Quarter Updates'))
+    next = len(quarter.get('Next Quarter Updates'))
+    page_obj = Answer.objects.get(text__iexact='index_count')
+
+    for i in range(prev):
+        page = page_obj.object_id + 2
+        lista.append(page)
+        page_obj.object_id = page
+        page_obj.save()
+    for j in range(cur):
+        page = page_obj.object_id + 3
+        lista.append(page)
+        page_obj.object_id = page
+        page_obj.save()
+    for j in range(next):
+        page = page_obj.object_id + 1
+        lista.append(page)
+        page_obj.object_id = page
+        page_obj.save()
+    lista.append(13)
+    page_obj = Answer.objects.get(text__iexact='index_count')
+    page_number = page_obj.object_id
+    page_obj.object_id = 1
+    # import ipdb; ipdb.set_trace()
+    function_count = int(page_obj.inline_answer)
+    page_obj.inline_answer = function_count + 1 
+    page_obj.save()
+
+    return lista[function_count]
 
 @register.filter
 def location_split(value, sep = "."):

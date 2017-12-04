@@ -48,6 +48,7 @@ def timeline_upload(request):
             f.created_by = user
             f.content_type = ContentType.objects.get(model=('project'))
             f.object_id = project.id
+            f.timeline_progress = True
             f.save()
             return HttpResponseRedirect('/project/summary/?slug='+project.slug)
         else :

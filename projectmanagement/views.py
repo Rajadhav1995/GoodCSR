@@ -445,7 +445,7 @@ def project_total_budget(slug):
 def timeline_listing(obj):
 # lisiting of timeline images function
     attach = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(obj),
-        object_id = obj.id,active=2,attachment_type= 1).order_by('date')
+        object_id = obj.id,active=2,attachment_type= 1,timeline_progress=True).order_by('date')
     return attach
 
 def get_timeline_process(timeline,milestone):
