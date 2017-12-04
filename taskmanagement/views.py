@@ -634,13 +634,17 @@ class GanttChartData(APIView):
         start_date = request.data.get('start_date')
         end_date = request.data.get('end_date')
         if start_date and end_date:
+            # this is to get gant chart in  the report form according to the quarters
             tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date)
             activities = Activity.objects.filter(id__in=[i.activity.id for i in tasks])
             milestones = Milestone.objects.filter(task__id__in=[i.id for i in tasks])
+            projects = Project.objects.filter(id=i_project_id)
         else:
+            # this to get the gantt chart in the summary and tasks and milestone page
             tasks = Task.objects.filter(activity__project=i_project_id)
             activities = Activity.objects.filter(project=i_project_id)
             milestones = Milestone.objects.filter(project=i_project_id)
+            projects = Project.objects.filter(id=i_project_id)
         supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
         ExpectedDatesCalculator(task_list=tasks)
         taskdict = {}
@@ -650,6 +654,7 @@ class GanttChartData(APIView):
             milestones, many=True).data
         taskdict['supercategories'] = SuperCategorySerializer(
             supercategories, many=True).data
+        taskdict['project'] = ProjectSerializer(projects,many=True).data
         return Response(taskdict)
         
         
