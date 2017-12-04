@@ -88,7 +88,7 @@
                                {% endif %}
                            {% endfor%}
                         </div>
-                        <input type="submit" class="report_save " name="cover_page_save" value = "Save"></input>
+                        <input type="submit" class="report_save " name="cover_page_save" id="submit_0" value = "Save"></input>
                      </form>
 
                      <h3 id='1'>{{locals_list.block2.name}}</h3>
@@ -157,7 +157,7 @@
                                    {% endif %}
                            {% endfor%}
                         </div>
-                        <input type= "submit" class="report_save" name= "project_summary_save" value="Save"></input>
+                        <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>
                      </form>
 <!--                                             </div>-->
 
@@ -167,12 +167,12 @@
                     <!--Previous Quarter updates div starts here-->
                     {% for i,v in previousquarter_list.items %}
                     {% with forloop.counter as j %}
-                    <h3 id="{{j|add:'2'}}"> Previous Quarter Updates :{{v}}</h3>
+                    <h3 id="{{j|add:'1'}}"> Previous Quarter Updates :{{v}}</h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
-                        <input type="hidden" name="div_id" value="{{j|add:'2'}}">
+                        <input type="hidden" name="div_id" value="{{j|add:'1'}}">
                         <div>
                         {% getreport_status report_id v 1 as reportupdates %}
                         {% if reportupdates.0 == False %}
@@ -640,7 +640,7 @@
 
 
                               <br>
-                                <button class="report_save">Save</button>
+                                <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>
                             </div>
                             </form>
                     {% endwith %}
@@ -1131,7 +1131,7 @@
 
 <!--                            </div>--> <!-- extra div-->
                             <br>
-                            <button class="report_save">Save</button>
+                            <input type= "submit" class="report_save" id="submit_{{j|add:previous_len}}" value="Save"></input>
 
                         </div>
                         </form>
@@ -1144,13 +1144,13 @@
                         <!--starts Next Quarter Plan -->
                    {% for i,v in futurequarter_list.items|slice:"1" %}
                     {% with forloop.counter as j %}
-                        <h3 id={{j|add:current_len}}>Next Quarter Plan :{{v}}</h3>
+                        <h3 id={{future_len}}>Next Quarter Plan :{{v}}</h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
-                        <input type="hidden" name="div_id" value={{j|add:current_len}}>
+                        <input type="hidden" name="div_id" value={{future_len}}>
                         <div>
                         {% getreport_status report_id v 3 as reportupdates %}
                         {% if reportupdates.0 == False %}
@@ -1433,7 +1433,7 @@
                     {% endif %} <!-- if object is present loop ends here-->
 
                             <br>
-                            <button class="report_save">Save</button>
+                            <input type= "submit" class="report_save" id="submit_{{future_len}}" value="Save"></input>
                         </div>
 
                         </form>
