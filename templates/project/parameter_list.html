@@ -39,14 +39,14 @@
     <div class="box-body table-responsive">
         <h3><a href="/project/summary/?slug={{slug}}&key=summary">{{project_name}}</a></h3>
         
-        {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+<!--        {% get_user_permission request as user_obj %}-->
+<!--        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}-->
         {% if parameter_count >= 4 %}
         <div style="float: right;"><a class="budget_button" href="#" onclick="count_validate()">Add Parameter</a></div>
         {% else %}
         <div style="float: right;"><a class="budget_button" href="/project/parameter/add/?slug={{slug}}&key={{key}}" onclick="count_validate()">Add Parameter</a></div>
         {% endif %}
-        {% endif %}
+<!--        {% endif %}-->
         
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
