@@ -88,6 +88,7 @@ def upload_attachment(request):
                 obj.attachment_type=2
             else:
                 obj.attachment_type=1
+                obj.timeline_progress = False
             obj.save()
         try:
             keys = request.POST.get('keywords').split(',')
