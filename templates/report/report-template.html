@@ -213,8 +213,9 @@ footer{margin:30px 0px; float: left; width: 100%}
     font-size: 70%;
     line-height: 0;
     vertical-align: baseline;
+  }
+</style>
 
-    </style>
             </head>
 
             <!-- onload="window.print()" -->
@@ -296,11 +297,11 @@ footer{margin:30px 0px; float: left; width: 100%}
                              <div class="margin-botom35 border_line">
                              {% if value == 'Annexure' %}
                                 <h2>{{value}}</h2>
-                                
+                                <h3><span>23</span></h3>
                               
                               {% elif value == 'About the project' %}
                                 <h2>{{value}}</h2>
-                                
+                                <h3><span></span><span>1</span></h3>
                               {% else %}
                                 <h2>{{value}}</h2>
                               {% endif %}
@@ -601,7 +602,7 @@ No Key Acheivements in this Quarter
                   {% get_milestones j report_obj 1 as mile %}
                     {% for m in mile %}  
                   <div class="margin_30 prev_banner milestone1">
-                     <h5 class="color-red">MILESTONE 1</h5>
+                     <h5 class="color-red">MILESTONE</h5>
                      <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
                      <p><strong>About the Milestone</strong></p>
                      <!-- <div class="location"><h5> {{m.description}} </h5></div> -->
@@ -734,7 +735,7 @@ No Key Acheivements in this Quarter
           </table>
         </div>
         </div>
-    
+    <br><br>
                      <!-- ------------------------------------------------------- -->
              <div class="white-box">
     <div class="table-responsive">

@@ -194,16 +194,15 @@ def get_parameter(obj,block_id):
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
         for i in report_para:
-            main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
-            master_list.append(main_list)
-            master_names.append(i.keyparameter.name)
-            if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
-                pie_chart = 0
-            else:
-                pie_chart = 1
-
+            if i.keyparameter:
+                main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
+                master_list.append(main_list)
+                master_names.append(i.keyparameter.name)
+                if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
+                    pie_chart = 0
+                else:
+                    pie_chart = 1
     return master_list,master_names,pie_chart
-
 
 @register.filter
 def get_at_index(list, index):
