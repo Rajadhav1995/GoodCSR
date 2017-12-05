@@ -656,6 +656,7 @@ def get_index_contents(slug,report_id):
     contents = OrderedDict()
     index={}
     quarters = {}
+    number_dict ={}
     project = Project.objects.get_or_none(slug=slug)
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
     # by using get_quarters() function getting the previous,current and next quarters list
