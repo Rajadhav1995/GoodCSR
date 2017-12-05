@@ -136,7 +136,7 @@ def html_to_pdf_view(request):
     project_report_id = request.GET.get('report_id')
     answer_list ={}
     answer = ''
-    contents,quarters = get_index_contents(project_slug,project_report_id)
+    contents,quarters,number_dict = get_index_contents(project_slug,project_report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
     project = Project.objects.get_or_none(slug = project_slug)
@@ -221,7 +221,7 @@ def report_detail(request):
 
     answer_list ={}
     answer = ''
-    contents,quarters = get_index_contents(slug,report_id)
+    contents,quarters,number_dict = get_index_contents(slug,report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
     project = Project.objects.get_or_none(slug = slug)
@@ -656,6 +656,7 @@ def get_index_contents(slug,report_id):
     contents = OrderedDict()
     index={}
     quarters = {}
+    number_dict ={}
     project = Project.objects.get_or_none(slug=slug)
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
     # by using get_quarters() function getting the previous,current and next quarters list
@@ -685,7 +686,8 @@ def get_index_contents(slug,report_id):
             quarters['Next Quarter Updates']=sorted_futurequarter_list
         contents['5'] = "Annexure"
         quarters['Annexure']=''
+        number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    return contents,quarters
+    return contents,quarters,number_dict
 

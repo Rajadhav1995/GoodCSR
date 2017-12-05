@@ -75,7 +75,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file">{{i.answer}}</textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="textarea_file">{{i.answer|safe}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
@@ -144,7 +144,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file">{{i.answer}}</textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required=""  class="textarea_file">{{i.answer|safe}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
@@ -327,7 +327,7 @@
 <!--                                    {% endif %}-->
 
 <!--                                    {% endfor %}-->
-<!--                                </div> <!-- paramter div ends-->-->
+<!--                                </div> <!-- paramter div ends-->
 <!--                                <div class="form-group addmilestone click_buttons">-->
 <!--                                    <p>+ add More Parameter</p>-->
 <!--                                </div>-->
@@ -2643,6 +2643,7 @@ $(document).ready(function() {
 <script>
     var request_url = "{{request.get_full_path|safe}}"
     $('#save_and_exit').on('click',function(){
+    $("#loader").show()
     last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
     for(var i=0;i<=last_form_id;i++){
         $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
@@ -2658,6 +2659,7 @@ $(document).ready(function() {
          
         })
       }
+        $("#loader").hide()
         alert('Data is submitted successfully')
       window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
     });
@@ -2670,6 +2672,7 @@ $(document).ready(function() {
     var request_url = "{{request.get_full_path|safe}}"
     var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'
     $('#submit_report').on('click',function(){
+    $("#loader").show()
     last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
     for(var i=0;i<=last_form_id;i++){
        
@@ -2684,9 +2687,47 @@ $(document).ready(function() {
             
         })
       }
+      $("#loader").hide()
       window.location.href = download_url
     });
     
 </script>
 <!-- Script for submit report ends here-->
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+<style>
+#loader {
+    z-index: 9999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#loader {
+    background: rgba(0, 0, 0, 0.8);
+}
+ .cause::before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    margin-right: -0.25em;
+    vertical-align: middle;
+}
+.centered {
+    display: inline-block;
+    vertical-align: middle;
+}
+</style>
+
+    <div id="loader" style="display:none; text-align: center;" class="cause">
+        <div class="centered">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="color:#FFF"></i>
+        </div>
+    </div>
 {% endblock %}

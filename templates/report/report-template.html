@@ -310,9 +310,9 @@ footer{margin:30px 0px; float: left; width: 100%}
                                 {% for k,v in quarters.iteritems %}
 
                                     {% if value == k %}
-                                        {% for k,v in v.iteritems %}
-
-                                    <h3><span>Quarter {{forloop.counter}} - ({{v}})</span><span></span></h3>
+                                        {% for ky,val in v.iteritems %}
+                                             {% get_quarter_names ky number_dict as quarter_name %}
+                                    <h3><span> {{quarter_name}} Quarter - ({{val}})</span><span></span></h3>
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
