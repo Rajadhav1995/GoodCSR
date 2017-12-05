@@ -408,11 +408,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                       {% endfor %}
                       {% endwith %} -->
                     </ul>
-                     <!--        <ul>-->
-                     <!--<!--          {% for i in location %}-->
-                     <!--        <li><span> {{i.location.parent.name}}, {{i.location.name}}, {{i.get_program_type_display}}</span></li>-->
-                     <!--        {% endfor %}-->
-                     <!--        </ul>-->
+                    
                   </div>
                 </div>
                   <br>
@@ -547,9 +543,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 <script type="text/javascript">
     //var loop_count = $('#loop_count').val()
     {% get_date_range j as date_range %}
-    // var wrapper = $(".timeline-slide_" + "{{timeperiod}}"); //Fields wrapper
     var wrapper = $(".timeline-slide_" + "{{date_range.1}}"); //Fields wrapper
-    // var ii = ".timeline-slide_" + "{{date_range.1}}";
     {% get_timeline_json project j as timeline %}
     var lengths = {{timeline.1}};
     var timeline_data= {{timeline.0|safe}}
@@ -660,28 +654,7 @@ No Key Acheivements in this Quarter
                      {% get_date_range j as date_range %}
                      <p>{{forloop.counter | get_ordinal_number}} Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
-                  <!-- <div class="col-md-12">
-                     <div class="row">
-                     <div class="margin_30 prev_banner">
-                         <h5 class="color-red">PARAMETER 1</h5>
-                         <h5 class="color_green">Beneficiary Distribution</h5>
-                         <div>
-                        <div class="col-md-4">
-                        <div class="row">
-                        <img src="/static/img/report/parameter01.jpg" style="width:100%">
-                        </div>
-                         </div>
-                         <div class="col-md-8">
-                        <div class="parameter-textbottom">
-                            <h4 class="color_green">About THis Parameter</h4>
-                            <p>Our mission is to spread education among the underpriviledged women/girls/children/youth to make them acquainted with the blackboard learning system, make them able to read and write at the same time to make them self employed we have introduced the skill development training session so that they acquire the required skill set in order to earn their living. We will conduct free educational classes and also will conduct skill development programs for the undeprivileged women and youth. </p>
-                            </div>
-                         </div>
-                     </div>
-                     
-                     </div>
-                     </div>
-                     </div> -->
+                  
                   <div class="margin_top30 page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
@@ -907,10 +880,6 @@ No Key Acheivements in this Quarter
         {% get_gantt_details v project as taskdict %}
         var jsonData = {{taskdict|safe}}
         var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
-        console.log(g);
-        console.log("amahiti");
-        // console.log(jsonData.tasks);
-        // Get today and tomorrows date
         var cur = new Date();
         var tom = new Date();
         tom.setDate(tom.getDate() + 1);
