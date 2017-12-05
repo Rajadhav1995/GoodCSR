@@ -28,7 +28,7 @@ def to_and(value):
 
 @register.assignment_tag
 def get_previous_question_value(quest,quarter,i,report_obj,quarter_obj):
-    number_dict = {0:"First",1:"second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
+    number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
     heading_label = {'previous-quarter-update':"Previous Quarter Updates",'current-quarter-update':"Current Quarter Updates",'next-quarter-update':"Next Quarter Updates",}
     text = ""
     answer_obj = Answer.objects.get_or_none(question=quest,quarter=quarter_obj[1],content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
