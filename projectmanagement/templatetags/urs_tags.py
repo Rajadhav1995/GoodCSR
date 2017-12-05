@@ -204,7 +204,6 @@ def get_parameter(obj,block_id):
                     pie_chart = 1
     return master_list,master_names,pie_chart
 
-
 @register.filter
 def get_at_index(list, index):
     # this template tag is used to get index value of pie chart data 
