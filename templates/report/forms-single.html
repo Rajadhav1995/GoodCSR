@@ -82,7 +82,7 @@
                            {% endif %}
                            {% endfor%}
                         </div>
-                        <input type="submit" class="report_save " name="cover_page_save" value = "Save"></input>
+                        <input type="submit" class="report_save " name="cover_page_save" id="submit_0" value = "Save"></input>
                      </form>
                      <h3 class="heading">{{locals_list.block2.name}}</h3>
                      <form action="." id='ui-accordion-accordion-panel-1' method="POST" enctype="multipart/form-data">
@@ -150,7 +150,7 @@
                               {% endif %}
                               {% endfor%}
                            </div>
-                           <input type= "submit" class="report_save" name= "project_summary_save" value="Save"></input>
+                           <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>
                         </div>
                         <!-- Previous Quarters Updates starts here                           -->
                         {% for i,v in previousquarter_list.items %}
@@ -597,7 +597,7 @@
                            {% endfor %} <!-- this is for previous question loop ends for edit functionality -->
                            {% endif %} <!-- this if ends here. thsi is to check whether this is add and edit functionality  -->
                            <br>
-                           <button class="report_save">Save</button>
+                           <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>
                         </div>
                      </form>
                      {% endwith %}
@@ -1050,7 +1050,7 @@
                               <!--                           this is for edit functions-->
                            </div>
                            <br>
-                           <button class="report_save">Save</button>
+                           <input type= "submit" class="report_save" id="submit_{{j|add:previous_len}}" value="Save"></input>
                         </div>
                      </form>
                      {% endwith %}
@@ -1327,7 +1327,7 @@
                            <!--                        object loop ends here                   -->
                            {% endif %} <!-- if object is present loop ends here-->
                            <br>
-                           <button class="report_save">Save</button>
+                           <input type= "submit" class="report_save" id="submit_{{future_len}}" value="Save"></input>
                         </div>
                      </form>
                      {% endwith %} <!-- main quarter for loop ends here -->
@@ -1570,283 +1570,362 @@
    {% for i,v in currentquarter_list.items %}
        {% get_gantt_details v projectobj as taskdict %}
        var jsonData = {{taskdict|safe}}
-       console.log(jsonData)
-       var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
-       // console.log(jsonData.tasks);
-       // Get today and tomorrows date
-       var cur = new Date();
-       var tom = new Date();
-       tom.setDate(tom.getDate() + 1);
-       var curDate = cur.getFullYear() + '-' +
-         (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
-         (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
-   
-       var tomDate = tom.getFullYear() + '-' +
-         (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
-         (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
-       // Get today and tomorrows date
-       $.each(jsonData.supercategories, function (i) {
-         superId = 1, activity_type = 'Core', taskCompletion = 0, superName = 'Super Category';
-         if (this.id != null) {
-           superId = this.id;
-         }
-         superName = this.name;
-         var superDesc = this.description;
-         if (superName.toLowerCase() != "location") {
-           g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-             '', superDesc, g));
-         }
-         // console.log("Super");
-         // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-         //   '', superDesc);
-       });
-       $.each(jsonData.activities, function (i) {
-         var activityId = 11,
-           superId = 1,
-           activity_type = 'Core',
-           taskCompletion = 0,
-           activityName = 'Activity';
-         if (this.id != null) {
-           activityId = this.id.toString();
-         }
-         if (this.super_category != null) {
-           superId = this.super_category;
-           if (this.id != null) {
-             activityId = this.super_category.toString() + activityId;
-           }
-         }
-         // console.log("ActID", activityId);
-         activityName = this.name;
-         var activityDesc = this.description;
-         g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
-           1, '', '',
-           activityDesc, g));
-         // console.log("Act");
-         // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
-       });
-       $.each(jsonData.tasks, function (i) {
-         var taskId = 111,
-           tempId = 1,
-           activityId = 11,
-           superId = 1,
-           activity_type = 'Core',
-           taskCompletion = 0,
-           taskName = 'Task',
-           taskStatus = 'gtaskred',
-           eStartDate = curDate,
-           eEndDate = tomDate;
-         if (this.id != null) {
-           taskId = this.id;
-           tempId = this.id;
-         }
-         if (this.activity != null) {
-           activityId = this.activity;
-         }
-         // activity = jsonData.activities.filter(function( i ) {
-         //   if(i.id == activityId){return i.super_category;}
-         // });
-         $.each(jsonData.activities, function () {
-           if (this.id == activityId) {
-             activity_type = this.activity_type;
-             if (this.super_category != null) {
-               superId = this.super_category;
-             }
-           }
-         });
-         if (superId != null && activityId != null && taskId != null) {
-           taskId = superId.toString() + activityId.toString() + taskId.toString();
-         }
-         if (superId != null && activityId != null) {
-           activityId = superId.toString() + activityId.toString();
-         }
-         activityId = parseInt(activityId);
-         // console.log("TaskID", taskId);
-         taskName = this.name;
-         eStartDate = this.expected_start_date;
-         eEndDate = this.expected_end_date;
-         if (activity_type == "Core") {
-           switch (this.status) {
-             case "Ongoing":
-               taskStatus = 'gtaskblue';
-               break;
-             case "Open":
-               taskStatus = 'gtaskyellow';
-               break;
-             case "Close":
-               taskStatus = 'gtaskgreen';
-               break;
-             default:
-               taskStatus = 'gtaskblue';
-               break;
-           };
-         }
-         // For Milestones
-         var completionDate = this.actual_end_date;
-         console.log('Complete date', completionDate);
-         $.each(jsonData.milestones, function (i) {
-           var mileId = 111, mileStatus = 'gmilestone redmile '
-           depTask = [];
-           depTask = this.task;
-           mileName = this.name;
-           if (this.id != null) {
-             mileId = this.id;
-           }
-           // if (depTask.length == 1) {
-           var ln = depTask.length;
-           ln--;
-           console.log('depTask', depTask[0]);
-           if (depTask[ln] == tempId) {
-             var d1 = new Date(eEndDate);
-             var d2 = new Date(eEndDate);
-             d1.setDate(d1.getDate() + 1);
-             d2.setDate(d2.getDate() + 11);
-             var mileStart = d1.getFullYear() + '-' +
-               (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
-               (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
-   
-             var mileEnd = d2.getFullYear() + '-' +
-               (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
-               (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
-             //Check for milestone complete or calculate delay
-             if (completionDate == null) {
-               mileStatus = 'gmilestone redmile '
-             } else {
-               var d3 = new Date(this.overdue);
-               var d4 = new Date(completionDate);
-               var timeDiff = (d3.getTime() + 86400) - d4.getTime();
-               var diffDays = Math.ceil(timeDiff / 86400000);
-               console.log('DiffDays', diffDays);
-               if (diffDays < 0) {
-                 var dur = Math.abs(diffDays);
-                 if (dur < 8) { mileName += " - Delayed by " + dur + " day(s)" };
-                 if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Delayed by " + dur + "+ week(s)" };
-                 if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Delayed by " + dur + "+ month(s)" };
-                 if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Delayed by " + dur + "+ year(s)" };
-                 console.log('Diff days', mileName);
-               } else {
-                 mileStatus = 'gmilestone greenmile '
-                 var dur = Math.abs(diffDays);
-                 if (dur == 0) { mileName += " - On track" };
-                 if (dur < 8) { mileName += " - Ahead by " + dur + " day(s)" };
-                 if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Ahead by " + dur + "+ week(s)" };
-                 if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Ahead by " + dur + "+ month(s)" };
-                 if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Ahead by " + dur + "+ year(s)" };
-                 console.log('Diff days', mileName);
-               }
-             }
-             g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
-               mileStatus, '', 1, '', null, 0, activityId, 1, '', '', '', g));
-           }
-           // } else {
-           //   var prevDate, maxDate;
-           //   $.each(depTask, function () {
-           //     var depValue = this.valueOf();
-           //     $.each(jsonData.tasks,function(){
-           //       if(this.id == depValue){
-   
-           //       }
-           //     });
-           //     console.log('Dep', this.valueOf(), depTask);
-           //   });
-           // }
-           // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
-           //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
-         });
-   
-   
-         //Draw task after drawing milestone
-         g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-           '', 0, 0, activityId, 1, '', '', '', g));
-         // console.log("Task");
-         // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-         //   '', 0, 0, activityId, 1, '', '', '');
-   
-       });
-   
-       g.setShowStartDate(0);
-       g.setShowEndDate(0);
-       g.setShowRes(0);
-       g.setShowDeps(0);
-       g.setShowDur(0);
-       g.setUseToolTip(0);
-       g.setWeekColWidth(50);
-       g.setWeekMajorDateDisplayFormat('mon yyyy');
-       g.setWeekMinorDateDisplayFormat('W w');
-       // g.setScrollTo('today');
-       g.Draw();
-   
-       function collision($div1, $div2) {
-         var x1 = $div1.offset().left;
-         var y1 = $div1.offset().top;
-         var h1 = $div1.outerHeight(true);
-         var w1 = $div1.outerWidth(true);
-         var b1 = y1 + h1;
-         var r1 = x1 + w1;
-         var x2 = $div2.offset().left;
-         var y2 = $div2.offset().top;
-         var h2 = $div2.outerHeight(true);
-         var w2 = $div2.outerWidth(true);
-         var b2 = y2 + h2;
-         var r2 = x2 + w2;
-   
-         if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
-         return true;
-       }
-       var count = 0,
-         padding = 25,
-         arrayTask = [],
-         collide = false;
-       $('.gselector').hide();
-       $(document).ready(function () {
-         var previous = null;
-         var prePrevious = null;
-         var mile = false;
-         $(".gtaskbarcontainer").each(function (index) {
-           currParent = $(this).parent().parent().parent();
-           listParent = currParent.attr('id').replace('row', '');
-           if ($(this).hasClass('gmilecontainer')) {
-             mile = true;
-           }
-           if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
-             .attr('id')) {
-             // console.log("This ID", $(this).attr('id'), mile);
-             if (mile) {
-   
-             }
-             if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
-               $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
-                 if ($(this).css('top') == '-5px') {
-                   $(this).css('top', '0px');
-                 }
-               });
-               collide = true;
-               $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-               if (count == 0) {
-                 $(previous).css('top', '0px');
-                 count++;
-               }
-               listParentDiv = $('#' + listParent);
-               if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
-                 listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
-                 currParent.css({
-                   'height': parseInt(currParent.css('height')) + 25 + 'px',
-                   'vertical-align': 'top'
-                 });
-               }
-             }
-           } else {
-             count = 0;
-             arrayTask = [];
-             collide = false;
-             $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
-               top: '-5px'
-             });
-             mile = false;
-           }
-           prePrevious = previous;
-           previous = this;
-         });
-       });
+    console.log(jsonData);
+    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+    // console.log(jsonData.tasks);
+    // Get today and tomorrows date
+    var cur = new Date();
+    var tom = new Date();
+    tom.setDate(tom.getDate() + 1);
+    var curDate = cur.getFullYear() + '-' +
+      (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
+      (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
+
+    var tomDate = tom.getFullYear() + '-' +
+      (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
+      (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
+    // Get today and tomorrows date
+    $.each(jsonData.supercategories, function (i) {
+      superId = 1, activity_type = 'Core', taskCompletion = 0, superName = 'Super Category';
+      if (this.id != null) {
+        superId = this.id;
+      }
+      superName = this.name;
+      var superDesc = this.description;
+      if (superName.toLowerCase() != "location") {
+        g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+          '', superDesc, g));
+      }
+      // console.log("Super");
+      // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+      //   '', superDesc);
+    });
+    $.each(jsonData.activities, function (i) {
+      var activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0,
+        activityName = 'Activity';
+      if (this.id != null) {
+        activityId = this.id.toString();
+      }
+      if (this.super_category != null) {
+        superId = this.super_category;
+        if (this.id != null) {
+          activityId = this.super_category.toString() + activityId;
+        }
+      }
+      // console.log("ActID", activityId);
+      activityName = this.name;
+      var activityDesc = this.description;
+      g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
+        1, '', '',
+        activityDesc, g));
+      // console.log("Act");
+      // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
+    });
+    $.each(jsonData.tasks, function (i) {
+      var taskId = 111,
+        tempId = 1,
+        activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0,
+        taskName = 'Task',
+        taskStatus = 'gtaskred',
+        eStartDate = curDate,
+        eEndDate = tomDate;
+      if (this.id != null) {
+        taskId = this.id;
+        tempId = this.id;
+      }
+      // added the script 16th-Nov
+      if(this.task_progress != null || this.task_progress != undefined){
+            taskCompletion = this.task_progress;
+      }
+      // ended th script
+      if (this.activity != null) {
+        activityId = this.activity;
+      }
+      // activity = jsonData.activities.filter(function( i ) {
+      //   if(i.id == activityId){return i.super_category;}
+      // });
+      $.each(jsonData.activities, function () {
+        if (this.id == activityId) {
+          activity_type = this.activity_type;
+          if (this.super_category != null) {
+            superId = this.super_category;
+          }
+        }
+      });
+      if (superId != null && activityId != null && taskId != null) {
+        taskId = superId.toString() + activityId.toString() + taskId.toString();
+      }
+      if (superId != null && activityId != null) {
+        activityId = superId.toString() + activityId.toString();
+      }
+      activityId = parseInt(activityId);
+      // console.log("TaskID", taskId);
+      taskName = this.name;
+      eStartDate = this.expected_start_date;
+      eEndDate = this.expected_end_date;
+      if (activity_type == "Core") {
+        switch (this.status) {
+          case "Ongoing":
+            taskStatus = 'gtaskblue';
+            break;
+          case "Open":
+            taskStatus = 'gtaskyellow';
+            break;
+          case "Close":
+            taskStatus = 'gtaskgreen';
+            break;
+          default:
+            taskStatus = 'gtaskblue';
+            break;
+        };
+      }
+      // For Milestones
+      var completionDate = this.actual_end_date;
+      console.log('Complete date', completionDate);
+      $.each(jsonData.milestones, function (i) {
+        var mileId = 111, 
+        mileStatus = 'gmilestone redmile '
+        depTask = [];
+        depTask = this.task;
+        mileName = this.name;
+        if (this.id != null) {
+          mileId = this.id;
+        }
+        // added the script 16th-Nov
+        maxDate = new Date('1970-01-01');		
+        var tempArray = [];		
+        var n = 0;		
+        $.each(depTask, function (index, value) {		
+          console.log('value', n);		
+          tempArray.push({		
+            'id': value		
+          });		
+          for (var i = 0; i < jsonData.tasks.length; i++) {		
+            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {		
+              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();		
+            }		
+            if (i == (depTask.length - 1)) {		
+            		
+              console.log('Array', depTask)		
+              console.log('Max Date',Math.max(tempArray.date));		
+            }		
+          }		
+          n++;		
+        });		
+        console.log("tempArray", tempArray);
+        //end of  the added script
+        // if (depTask.length == 1) {
+        var ln = depTask.length;
+        ln--;
+        console.log('depTask', depTask[0]);
+        if (depTask[ln] == tempId) {
+          var d1 = new Date(eEndDate);
+          var d2 = new Date(eEndDate);
+          d1.setDate(d1.getDate() + 1);
+          d2.setDate(d2.getDate() + 11);
+          var mileStart = d1.getFullYear() + '-' +
+            (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
+            (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
+
+          var mileEnd = d2.getFullYear() + '-' +
+            (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
+            (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
+          //Check for milestone complete or calculate delay
+          if (completionDate == null) {
+            mileStatus = 'gmilestone redmile '
+          } else {
+            var d3 = new Date(this.overdue);
+            var d4 = new Date(completionDate);
+            var timeDiff = (d3.getTime() + 86400) - d4.getTime();
+            var diffDays = Math.ceil(timeDiff / 86400000);
+            console.log('DiffDays', diffDays);
+            if (diffDays < 0) {
+              var dur = rem = Math.abs(diffDays);
+              if (dur < 8) { 
+                mileName += " - Delayed by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) {
+                dur = Math.floor(dur / 7); 
+                //add 16th- Nov
+                rem = Math.floor(rem % 7);
+                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";              
+                };
+                //end
+              if (dur >= 30 && dur < 365) { 
+                dur = Math.floor(dur / 30);
+                //add 16th-Nov
+                rem = Math.floor(rem % 30);
+                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";		
+              };
+                //end 
+              if (dur >= 365) { 
+                dur = Math.floor(dur / 365);
+                //added script 
+                rem = Math.floor(rem % 365);
+                mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
+              };
+              //ended script
+              console.log('Diff days', mileName);
+            } else {
+              mileStatus = 'gmilestone greenmile '
+              var dur = rem = Math.abs(diffDays);
+              if (dur == 0) {
+                 mileName += " - On track"
+              };
+              if (dur < 8) { 
+                mileName += " - Ahead by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) { 
+                dur = Math.floor(dur / 7);
+                rem = Math.floor(rem % 7);//new line
+                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";	//modified
+              };
+              if (dur >= 30 && dur < 365) { 
+                dur = Math.floor(dur / 30);
+                rem = Math.floor(rem % 30);//new line
+                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";//modified
+              };
+              if (dur >= 365) {
+                 dur = Math.floor(dur / 365);
+                rem = Math.floor(rem % 365);//new line
+                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";//modified
+                 };
+              console.log('Diff days', mileName);
+            }
+          }
+          g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
+            mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));//changed null to 100
+        }
+        // } else {
+        //   var prevDate, maxDate;
+        //   $.each(depTask, function () {
+        //     var depValue = this.valueOf();
+        //     $.each(jsonData.tasks,function(){
+        //       if(this.id == depValue){
+
+        //       }
+        //     });
+        //     console.log('Dep', this.valueOf(), depTask);
+        //   });
+        // }
+        // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
+        //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
+      });
+
+
+      //Draw task after drawing milestone
+      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+        '', taskCompletion , 0, activityId, 1, '', '', '', g));
+      // console.log("Task");
+      // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+      //   '', 0, 0, activityId, 1, '', '', '');
+
+    });
+
+    g.setShowStartDate(0);
+    g.setShowEndDate(0);
+    g.setShowRes(0);
+    g.setShowDeps(0);
+    g.setShowDur(0);
+    g.setUseToolTip(0);
+    g.setWeekColWidth(50);
+    g.setWeekMajorDateDisplayFormat('mon yyyy');
+    g.setWeekMinorDateDisplayFormat('W w');
+    g.setScrollTo('today');
+    g.Draw();
+
+    function collision($div1, $div2) {
+      var x1 = $div1.offset().left;
+      var y1 = $div1.offset().top;
+      var h1 = $div1.outerHeight(true);
+      var w1 = $div1.outerWidth(true);
+      var b1 = y1 + h1;
+      var r1 = x1 + w1;
+      var x2 = $div2.offset().left;
+      var y2 = $div2.offset().top;
+      var h2 = $div2.outerHeight(true);
+      var w2 = $div2.outerWidth(true);
+      var b2 = y2 + h2;
+      var r2 = x2 + w2;
+
+      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+      return true;
+    }
+    var count = 0,
+      padding = 25,
+      arrayTask = [],
+      collide = false;
+    $('.gselector').hide();
+    $(document).ready(function () {
+      var previous = null;
+      var prePrevious = null;
+      var mile = false;
+      $(".gtaskbarcontainer").each(function (index) {
+        currParent = $(this).parent().parent().parent();
+        listParent = currParent.attr('id').replace('row', '');
+        if ($(this).hasClass('gmilecontainer')) {
+          mile = true;
+        }
+        if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
+          .attr('id')) {
+          // console.log("This ID", $(this).attr('id'), mile);
+          if (mile) {
+
+          }
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+            $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
+              if ($(this).css('top') == '-5px') {
+                $(this).css('top', '0px');
+              }
+            });
+            collide = true;
+            $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
+            if (count == 0) {
+              $(previous).css('top', '0px');
+              count++;
+            }
+            listParentDiv = $('#' + listParent);
+            if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+              listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
+              currParent.css({
+                'height': parseInt(currParent.css('height')) + 25 + 'px',
+                'vertical-align': 'top'
+              });
+            }
+          }
+        } else {
+          count = 0;
+          arrayTask = [];
+          collide = false;
+          $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
+            top: '-5px'
+          });
+          mile = false;
+        }
+        prePrevious = previous;
+        previous = this;
+      });
+    });
+    // new script 16th-Nov 
+    if (window.location.hash) {
+        setTimeout(function() {
+        $('html, body').scrollTop(0).show();	
+        $('html, body').animate({	
+                scrollTop: $(window.location.hash).offset().top - ($(window).height()/2) }, 1000)
+        },0);
+            $(window.location.hash).trigger('click')
+    $(window.location.hash).click();
+    }
+    else{
+        $('html, body').show();
+    }
+    // end of the script added 16th-Nov
     {% endfor %}
 </script>
 <script>
@@ -2555,12 +2634,17 @@
         $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
             type: 'POST',
             url: request_url,
+            async: false,
             dataType:'html',
             success : function(data){
-            }
+            
+            //$('#ui-accordion-accordion-panel-'+i.toString()).submit();
+            },
+            
+         
         })
       }
-
+        alert('Data is submitted successfully')
       window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
     });
     
@@ -2578,6 +2662,7 @@
             type: 'POST',
             url: request_url,
             dataType:'html',
+            async: false,
             success : function(data){
             }
         })

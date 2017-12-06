@@ -28,7 +28,7 @@ def to_and(value):
 
 @register.assignment_tag
 def get_previous_question_value(quest,quarter,i,report_obj,quarter_obj):
-    number_dict = {0:"First",1:"second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
+    number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
     heading_label = {'previous-quarter-update':"Previous Quarter Updates",'current-quarter-update':"Current Quarter Updates",'next-quarter-update':"Next Quarter Updates",}
     text = ""
     answer_obj = Answer.objects.get_or_none(question=quest,quarter=quarter_obj[1],content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
@@ -105,8 +105,7 @@ def get_timeline_progress(projectobj,v):
     start_date = datetime.strptime(start_date[:19], '%Y-%m-%d').date()
     end_date = datetime.strptime(end_date[:19], '%Y-%m-%d').date()
     timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = start_date,date__lte = end_date ).order_by('date')
-    today = datetime.today()
-    milestone = Milestone.objects.filter(project = projectobj,overdue__lte=today.now())
+    milestone = Milestone.objects.filter(project = projectobj,overdue__gte=start_date,overdue__lte=end_date)
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     return timeline_json,timeline_json_length
 

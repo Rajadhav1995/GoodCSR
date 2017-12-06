@@ -74,7 +74,7 @@ def get_auto_populated_questions(ques_id,project,project_report):
             object_id = project_report.id)
     # details dict is to get the details of two sections on first click of generate report
     details = {'report_type':project_report.get_report_type_display(),
-        'report_duration':project_report.start_date.strftime('%Y-%m-%d')+' TO '+project_report.end_date.strftime('%Y-%m-%d'),
+        'report_duration':project_report.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d")+' TO '+project_report.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),
         'prepared_by':project_report.created_by.attrs.get('first_name')+' '+project_report.created_by.attrs.get('last_name'),'client_name':mapping_view.funder.organization,
         'report_name': project_report.name if project_report.name else '',
         'cover_image': cover_image.attachment_file.url if cover_image else '',
@@ -196,3 +196,9 @@ def get_from_to_dates(date):
         start_date = date_list[0]
         end_date = date_list[1]
     return start_date,end_date
+
+@register.assignment_tag
+def get_quarter_names(key,number_dict):
+    name=''
+    name = number_dict.get(key)
+    return name
