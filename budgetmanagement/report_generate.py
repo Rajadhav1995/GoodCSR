@@ -188,11 +188,17 @@ def html_to_pdf_view(request):
 
 def get_org_report_logo(answer_obj,ques,report_obj):
     from projectmanagement.templatetags import urs_tags
-    org_logo = urs_tags.get_org_logo(report_obj.project)
-    if org_logo:
-        answer = org_logo
-    else :
-        answer = "/static/img/GoodCSR_color_circle.png"
+    org_logo,ngo_logo = urs_tags.get_org_logo(report_obj.project)
+    if ques.slug == "logos":
+        if org_logo:
+            answer = org_logo
+        else :
+            answer = "/static/img/GoodCSR_color_circle.png"
+    elif ques.slug == "client_logo":
+        if ngo_logo:
+            answer = ngo_logo
+        else:
+            answer = "/static/img/GoodCSR_color_circle.png"
     return answer
 
 
