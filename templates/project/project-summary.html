@@ -37,7 +37,7 @@ $(document).ready(function(){
 
 	<div class="image-pad orglogo ">
 	    {% get_org_logo projectobj as org_logo %}
-    	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
+    	<a href="javascript:void(0);"> {% if org_logo.0 %}<img src="{{org_logo.0}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
 <!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
     </div>
     <div class="title-left">
@@ -963,7 +963,7 @@ function confirm_alert(node) {
         $('html, body').show();
     }
     // end of the script added 16th-Nov
-  </script>>
+  </script>
   
   <!-- script for gant chart ends here-->
 <script>
