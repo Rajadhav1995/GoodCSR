@@ -39,9 +39,9 @@
 <!--            <td>{{i.start_date | date:"d-m-Y"}} - {{i.end_date | date:"d-m-Y"}}</td>-->
             <td>{{report_duration.1}}</td>
             <!-- <td>{{i.get_active_display}}</td> -->
-            <td><a class="budget_button" href="/report/detail/?slug={{project.slug}}&report_id={{i.id}}" target="_blank">View Report</button></a></td>
+            <td><a class="budget_button" href="/report/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1" target="_blank">View Report</button></a></td>
 
-            <td><a class="budget_button" href="/report/pdf/view/?slug={{project.slug}}&report_id={{i.id}} ">Download Report</button></a></td>
+            <td><a class="budget_button" href="/report/pdf/view/?slug={{project.slug}}&report_id={{i.id}}&key=2 ">Download Report</button></a></td>
              
             <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}">Edit Report</button></a></td>
             <td><a class="btn btn-danger" href="/project/remove/record/?id={{i.id}}&model=ProjectReport" onclick="return confirm('Are you sure you want to delete the report?')">X</button></a></td>
