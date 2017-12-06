@@ -112,7 +112,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required="" class="textarea_file">{{i.answer|safe}}</textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required="" class="textarea_file">{{i.answer|striptags}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
@@ -160,7 +160,7 @@
                                                     <div class="col-md-12 report_text">
                                                     <p>{{sub.q_text}}</p>
                                                     </div>
-                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{% autoescape on %}{{sub.answer}}{% endautoescape %}</textarea>
+                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|striptags}}</textarea>
                                                     <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
@@ -181,7 +181,7 @@
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
-                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required=""  class="textarea_file">{{i.answer|safe}}</textarea>
+                                            <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required=""  class="textarea_file">{{i.answer|striptags}}</textarea>
                                           <h5><a href="#">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
@@ -556,7 +556,7 @@
                                         <div class="col-md-6 report_text">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="">
-                                                <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}"  class="textarea_file"> {{mileobj.description}}</textarea>
+                                                <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}"  class="textarea_file">{{mileobj.description|striptags}}</textarea>
                                             </div>
                                             <h5><a href="#">Remove</a></h5>
                                         </div>
@@ -949,7 +949,7 @@
                                 <h5><a href="#">Remove</a></h5>
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
-                                <textarea type="text" class="textarea_file" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
+                                <textarea type="text" class="textarea_file" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                         {% endif %}
@@ -984,7 +984,7 @@
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="">
-                                            <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}"> {{mileobj.description}} </textarea>
+                                            <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}">{{mileobj.description|striptags}} </textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -1068,7 +1068,7 @@
                                     <div class="col-md-12 report_text ">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="">
-                                            <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description}}</textarea>
+                                            <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description|striptags}}</textarea>
                                         </div>
                                         <h5><a href="#">Remove</a></h5>
                                     </div>
@@ -1143,7 +1143,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <div class="">
-                                    <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}} </textarea>
+                                    <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
                                 </div>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -1153,7 +1153,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <div class="">
-                                    <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"> {{text}}</textarea>
+                                    <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
                                 </div>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -1360,7 +1360,7 @@
                             <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px">
                                 <p>{{quest.text|title}} </p>
                                 {% get_answer_question quest reportupdates.1 as text %}
-                                <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">  {{text}}</textarea>
+                                <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">{{text|striptags}}</textarea>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
                         {% endif %}
@@ -1458,7 +1458,7 @@
                                 <p>{{quest.text|title}}</p>
                                 <div class="">
                                 {% get_answer_question quest reportupdates.1 as text %}
-                                    <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> {{text}} </textarea>
+                                    <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">{{text|striptags}}</textarea>
                                 </div>
                                 <h5><a href="#">Remove</a></h5>
                             </div>
