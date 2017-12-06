@@ -2076,6 +2076,8 @@ $(document).ready(function() {
     // Get today and tomorrows date
     var cur = new Date();
     var tom = new Date();
+    var project = "";
+    project = jsonData.project[0].slug;
     tom.setDate(tom.getDate() + 1);
     var curDate = cur.getFullYear() + '-' +
       (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
@@ -2133,8 +2135,12 @@ $(document).ready(function() {
         taskCompletion = 0,
         taskName = 'Task',
         taskStatus = 'gtaskred',
+        pStartDate = curDate,
+        pEndDate = tomDate,
         eStartDate = curDate,
-        eEndDate = tomDate;
+        eEndDate = tomDate,
+        slug = "",
+        link = "";
       if (this.id != null) {
         taskId = this.id;
         tempId = this.id;
@@ -2146,6 +2152,9 @@ $(document).ready(function() {
       // ended th script
       if (this.activity != null) {
         activityId = this.activity;
+      }
+      if (this.slug != null) {		
+        slug = this.slug;
       }
       // activity = jsonData.activities.filter(function( i ) {
       //   if(i.id == activityId){return i.super_category;}
@@ -2166,7 +2175,16 @@ $(document).ready(function() {
       }
       activityId = parseInt(activityId);
       // console.log("TaskID", taskId);
+      if ( slug != null && project != ""){		
+        // var domain = "";		
+        // if(window.location.hostname == ""){		
+        //   domain = "http://goodcsrpmu.mahiti.org";		
+        // }		
+        link = "/managing/my-tasks/details/?slug="+project+"&key=projecttasks&status=1#"+slug;		
+      }
       taskName = this.name;
+      pStartDate = this.start_date;		
+      pEndDate = this.end_date;
       eStartDate = this.expected_start_date;
       eEndDate = this.expected_end_date;
       if (activity_type == "Core") {
@@ -2321,7 +2339,7 @@ $(document).ready(function() {
 
       //Draw task after drawing milestone
       g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-        '', taskCompletion , 0, activityId, 1, '', '', '', g));
+        '', taskCompletion , 0, activityId, 1, '', '', '', g ,pStartDate, pEndDate));
       // console.log("Task");
       // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
       //   '', 0, 0, activityId, 1, '', '', '');
@@ -2333,13 +2351,15 @@ $(document).ready(function() {
     g.setShowRes(0);
     g.setShowDeps(0);
     g.setShowDur(0);
-    g.setUseToolTip(0);
+    g.setUseToolTip(1);
     g.setWeekColWidth(50);
     g.setWeekMajorDateDisplayFormat('mon yyyy');
     g.setWeekMinorDateDisplayFormat('W w');
     g.setScrollTo('today');
+    g.setTimer(5);		
+    g.setShowTaskInfoLink(1);
     g.Draw();
-
+    var collideDiv
     function collision($div1, $div2) {
       var x1 = $div1.offset().left;
       var y1 = $div1.offset().top;
@@ -2354,8 +2374,11 @@ $(document).ready(function() {
       var b2 = y2 + h2;
       var r2 = x2 + w2;
 
-      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
-      return true;
+      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2){ return false;}
+      else{
+            collideDiv = $div2;
+             return true;
+    }
     }
     var count = 0,
       padding = 25,
@@ -2364,7 +2387,7 @@ $(document).ready(function() {
     $('.gselector').hide();
     $(document).ready(function () {
       var previous = null;
-      var prePrevious = null;
+      var prePrevious, pre2, pre3= null;
       var mile = false;
       $(".gtaskbarcontainer").each(function (index) {
         currParent = $(this).parent().parent().parent();
@@ -2378,7 +2401,7 @@ $(document).ready(function() {
           if (mile) {
 
           }
-          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious)) || collision($(this), $(pre2)) || collision($(this), $(pre3))) {
             $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
@@ -2408,23 +2431,12 @@ $(document).ready(function() {
           });
           mile = false;
         }
+        pre3 = pre2;
+        pre2 = prePrevious;
         prePrevious = previous;
         previous = this;
       });
     });
-    // new script 16th-Nov 
-    if (window.location.hash) {
-        setTimeout(function() {
-        $('html, body').scrollTop(0).show();	
-        $('html, body').animate({	
-                scrollTop: $(window.location.hash).offset().top - ($(window).height()/2) }, 1000)
-        },0);
-            $(window.location.hash).trigger('click')
-    $(window.location.hash).click();
-    }
-    else{
-        $('html, body').show();
-    }
     // end of the script added 16th-Nov
      {% endfor %}
 </script>
