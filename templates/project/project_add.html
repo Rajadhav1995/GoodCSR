@@ -185,7 +185,7 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="input_fields_wrap">
-                            <button class="add_field_button">Add More</button>
+                            
                             {% if obj %}
                             {% for i in location %}
                             <label>Location {{forloop.counter}}<font color="red">*</font></label>
@@ -288,6 +288,11 @@ width:450px;
                                     {% endif %}
                                   </select>
                             </div>
+                            {% endif %}
+                            {% if location %}
+                            <button class="add_field_button">Add More</button>
+                            {% else %}
+                            <button class="add_field_button btn btn-success"><b>Click Here to Add Location</b></button>
                             {% endif %}
                         </div>
                     </div>
