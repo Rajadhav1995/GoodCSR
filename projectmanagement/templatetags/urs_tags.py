@@ -138,13 +138,15 @@ def get_utlizedline_total(row,projectobj):
 def get_org_logo(projectobj):
     # this template tag is used to get ogrganozation logo
     funderobj = get_funder(projectobj)
-    data = {'company_name':str(funderobj.funder.organization) if funderobj else ''}
+    data = {'company_name':str(funderobj.funder.organization) if funderobj else '',
+            'ngo_name':str(funderobj.implementation_partner.organization if funderobj else '')}
     ''' calling function to return the company logo based on the project'''
     companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
     validation_data = json.loads(companyobj.content)
     front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
-    return org_logo
+    ngo_logo = validation_data.get('ngo_image')
+    return org_logo,ngo_logo
 
 @register.assignment_tag
 def get_activities(projectobj):
