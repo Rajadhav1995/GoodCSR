@@ -189,12 +189,13 @@ def html_to_pdf_view(request):
 def get_org_report_logo(answer_obj,ques,report_obj):
     from projectmanagement.templatetags import urs_tags
     org_logo,ngo_logo = urs_tags.get_org_logo(report_obj.project)
-    if ques.slug == "logos":
+    answer = "/static/img/GoodCSR_color_circle.png"
+    if str(ques.slug) == "client_logo":
         if org_logo:
             answer = org_logo
         else :
             answer = "/static/img/GoodCSR_color_circle.png"
-    elif ques.slug == "client_logo":
+    elif str(ques.slug) == "logos":
         if ngo_logo:
             answer = ngo_logo
         else:
@@ -224,7 +225,7 @@ def report_detail(request):
     slug = request.GET.get('slug')
     image_url = PMU_URL
     report_id = request.GET.get('report_id')
-
+    key = int(request.GET.get('key'))
     answer_list ={}
     answer = ''
     contents,quarters,number_dict = get_index_contents(slug,report_id)
@@ -255,7 +256,10 @@ def report_detail(request):
     previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
     # for basic details of project report we are sending all fields in dictionary 
     answer_list = report_question_list(quest_list,report_obj,project)
-    return render(request,'report/report-template.html',locals())
+    if key == 1:
+        return render(request,'report/report-template.html',locals())
+    else:
+        return render(request,'report/report-template_pdf.html',locals())
 
 def get_quarter_report_logic(projectobj):
     ''' common functionality to get the start date,end date and no of quarter'''
