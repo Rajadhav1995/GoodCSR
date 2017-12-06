@@ -49,7 +49,7 @@ $(document).ready(function(){
     {% endif %}
     <ul>
 
-    	<li><a href="javascript:void(0)"> by: {% if project_funders.funder.organization %} {{project_funders.funder.organization}}  {% else %} {% endif %}</a></li>
+    	<li><a href="javascript:void(0)"> Funded by: {% if project_funders.funder.organization %} {{project_funders.funder.organization}}  {% else %} {% endif %}</a></li>
         <li> <a href="javascript:void(0)">NGO Partner:{% if project_funders.implementation_partner.organization %}{{project_funders.implementation_partner.organization}} {% else %} {{project_funders.implementation_partner.name}}  {% endif %}</a></li>
     </ul>
     </div>
