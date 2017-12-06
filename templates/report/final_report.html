@@ -160,7 +160,7 @@
                                                     <div class="col-md-12 report_text">
                                                     <p>{{sub.q_text}}</p>
                                                     </div>
-                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|safe}}</textarea>
+                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{% autoescape on %}{{sub.answer}}{% endautoescape %}</textarea>
                                                     <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
