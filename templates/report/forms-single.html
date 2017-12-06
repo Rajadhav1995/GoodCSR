@@ -151,7 +151,7 @@
                               {% endfor%}
                            </div>
                            <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>
-                        </div>
+                       
                         <!-- Previous Quarters Updates starts here                           -->
                         {% for i,v in previousquarter_list.items %}
                         {% with forloop.counter as j %}
@@ -598,7 +598,7 @@
                            {% endif %} <!-- this if ends here. thsi is to check whether this is add and edit functionality  -->
                            <br>
                            <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>
-                        </div>
+                       
                      </form>
                      {% endwith %}
                      {% endfor %}
