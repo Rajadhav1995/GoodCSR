@@ -231,21 +231,21 @@
         $("#tranche").validate({
             rules :
             {
-                id_name : {required:true},
+                name : {required:true},
                 //program : {required:true},
-                no_of_beneficiaries : {required:true},
-                target_beneficiaries : {required:true},
-                cause_area : {required:true},
+                planned_amount : {required:true},
+                actual_disbursed_amount : {required:true},
+                recommended_amount : {required:true},
                 id_end_date: { greaterThan: "#id_start_date" },
             },
             messages:
             {
-                id_name : {required : "<font color=#fc282f>Please enter the name</font>"},
+                name : {required : "<font color=#fc282f>Please enter the name</font>"},
                 //program:{required:"<font color=#fc282f>Please select the program</font>"},
-                no_of_beneficiaries:{required:"<font color=#fc282f>Please enter the no of beneficiaries</font>"},
-                target_beneficiaries : {required : "<font color=#fc282f>Please enter primary beneficiary</font>"},
-                cause_area : {required : "<font color=#fc282f>Please enter primary area of focus</font>"},
-                id_end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
+                planned_amount:{required:"<font color=#fc282f>Please enter the planned amount</font>"},
+                actual_disbursed_amount : {required : "<font color=#fc282f>Please enter actual disbursed amount</font>"},
+                recommended_amount : {required : "<font color=#fc282f>Please enter recommended amount</font>"},
+                end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
 
             },
             highlight: function (element) {

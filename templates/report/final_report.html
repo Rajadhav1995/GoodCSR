@@ -4,6 +4,8 @@
 {% load question_tags %}
 <!--{% load urs_tags %}-->
 {% block content %}
+<link rel="stylesheet" href="/static/css/tinyscrollbar.css" type="text/css" media="screen"/>
+
 <link rel="stylesheet" href="/static/css/aria-accordion.css" />
 <link rel="stylesheet" href="/static/css/style-accordion.css" />
 <link rel="stylesheet" href="/static/css/jquery-ui.css">
@@ -158,7 +160,7 @@
                                                     <div class="col-md-12 report_text">
                                                     <p>{{sub.q_text}}</p>
                                                     </div>
-                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|safe}}</textarea>
+                                                    <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{% autoescape on %}{{sub.answer}}{% endautoescape %}</textarea>
                                                     <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
@@ -230,7 +232,8 @@
                                 <p>{{quest.text|title}}</p>
                                     <!-- timeline slider -->
                                     {% if timeline_json != '[]' %}
-                                            <div id="scrollbar1">
+                                        {% to_and v as timeperiod %}
+                                            <div id="scrollbar1_{{timeperiod}}" class ="scrollbar1">
 
                                                     <div class="viewport">
                                                          <div class="overview">
@@ -246,12 +249,12 @@
                                                </div>
                                                </div>
                                                         </div>
-                                                    </div>
+                                                    
                                                     <div class="scrollbar">
                                                     <div class="track">
                                                     <div class="thumb">
                                                     <div class="end">
-                                                    </div></div></div></div>
+                                                    </div></div></div></div></div>
                                         {% endif %}
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
                                 <h5><a href="#">Remove</a></h5>
@@ -437,7 +440,8 @@
                             <div class="col-md-12 report_text " style="padding:0px">
                                 <p>Key Achievements in this quarter</p>
                                     <!-- timeline slider -->
-                                            <div id="scrollbar1">
+                                        {% to_and v as timeperiod %}
+                                            <div id="scrollbar1_{{timeperiod}}" class ="scrollbar1">
 
                                                     <div class="viewport">
                                                          <div class="overview">
@@ -455,12 +459,12 @@
                                                </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                
                                                     <div class="scrollbar">
                                                     <div class="track">
                                                     <div class="thumb">
                                                     <div class="end">
-                                                    </div></div></div></div>
+                                                    </div></div></div></div></div>
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
                                 <h5><a href="#">Remove</a></h5>
                             </div>
@@ -2031,7 +2035,10 @@ $(document).ready(function() {
 
 	$(document).ready(function()
 	{
-		  $("#scrollbar1").tinyscrollbar({ axis: "x"});
+	     {% for i,v in previousquarter_list.items %}
+            {% to_and v as timeperiod %}
+		  $("#scrollbar1_{{timeperiod}}").tinyscrollbar({ axis: "x"});
+		  {% endfor %}
 
 	});
 </script>

@@ -1350,21 +1350,25 @@
       </div>
    </div>
    </div>
+        <div id="loader" style="text-align: center;" class="cause">
+        <div class="centered">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="color:#FFF"></i>
+        </div>
    </div>
 </section>
 <!--Content part Ends-->
 <!--Footer starts-->
-<footer>
-   <div class="row">
-      <div class="f-left">
-         <ul>
-            <li><a href="javascript:void(0);">Privacy Policy</a></li>
-            <li><a href="javascript:void(0);">Terms of Service</a></li>
-         </ul>
-      </div>
-      <div class="f-right">&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</div>
-   </div>
-</footer>
+<!--<footer>-->
+<!--   <div class="row">-->
+<!--      <div class="f-left">-->
+<!--         <ul>-->
+<!--            <li><a href="javascript:void(0);">Privacy Policy</a></li>-->
+<!--            <li><a href="javascript:void(0);">Terms of Service</a></li>-->
+<!--         </ul>-->
+<!--      </div>-->
+<!--      <div class="f-right">&copy; 2017 Good CSR. All Rights Reserved. Privacy Policy Terms of Service</div>-->
+<!--   </div>-->
+<!--</footer>-->
 <!--Footer Ends-->
 </div>
 {% endblock %}
@@ -2629,6 +2633,7 @@
 <script>
     var request_url = "{{request.get_full_path|safe}}"
     $('#save_and_exit').on('click',function(){
+    $("#loader").toggle();
     last_form_id = parseInt($('#template form').last().attr('id').split('-')[4])
     for(var i=0;i<=last_form_id;i++){
         $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
@@ -2644,6 +2649,7 @@
          
         })
       }
+      $("#loader").toggle();
         alert('Data is submitted successfully')
       window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
     });
