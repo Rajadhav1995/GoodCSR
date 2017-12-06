@@ -99,11 +99,20 @@ def pdfconverter(request):
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
     options = {
-    '--load-error-handling': 'skip',
-    '--header-html': '<h1>my header</h1>',
-    '--footer-html': '<h6> my footer </h6>',
-    '--encoding': "utf-8",
-    }
+        'page-size': 'Letter',
+        'margin-top': '0.5in',
+        'margin-right': '0.75in',
+        'margin-bottom': '0.5in',
+        'margin-left': '0.75in',
+        'encoding': "UTF-8",
+        'footer-left': "This is a footer",
+        'footer-font-size':'7',
+        'footer-right': '[page] of [topage]',
+
+        'custom-header' : [
+            ('Accept-Encoding', 'gzip')
+        ],
+        }
     import datetime
     dd = datetime.datetime.today()
     file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
