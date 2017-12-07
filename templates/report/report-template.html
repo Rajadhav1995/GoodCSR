@@ -214,6 +214,12 @@ footer{margin:30px 0px; float: left; width: 100%}
     line-height: 0;
     vertical-align: baseline;
   }
+.timeline_p {
+word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 </style>
 
             </head>
@@ -574,15 +580,15 @@ footer{margin:30px 0px; float: left; width: 100%}
         }
       if (i % 2) {
         if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
-          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       } else {
         if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
-          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       };
     }
@@ -1826,6 +1832,23 @@ No Key Acheivements in this Quarter
 
   });
 </script>
+
+<script>
+
+$(function() {
+    $('p').each(function(i) {
+        if (isEllipsisActive(this)) {
+            $(this).attr("title", $(this).text());
+        }
+    });
+});
+
+function isEllipsisActive(e) {
+     return (e.offsetWidth < e.scrollWidth);
+}
+
+</script>
+
 
 <script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
 <script>
