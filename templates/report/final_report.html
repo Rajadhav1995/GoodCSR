@@ -100,7 +100,7 @@
                                                   <div class="form-group addpicture">
                                                      <img src="/static/img/browse.png">
                                                      <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}"  class="input_file"></input>
-                                                     <h5><a href="#">Remove</a></h5>
+                                                     <div class="col-md-6 report_text"><h5><a href="#">Remove</a></h5></div>
                                                   </div>
                                                </div>
                                            {% endif %}
@@ -204,7 +204,7 @@
                     <!--Previous Quarter updates div starts here-->
                     {% for i,v in previousquarter_list.items %}
                     {% with forloop.counter as j %}
-                    <h3 id="{{j|add:'1'}}"> Previous Quarter Updates :{{v}}</h3>
+                    <h3 id="{{j|add:'1'}}">Previous Quarter Updates :{{v}}</h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
