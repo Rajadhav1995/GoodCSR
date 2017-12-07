@@ -98,11 +98,14 @@ def pdfconverter(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
+    
     options = {
     '--load-error-handling': 'skip',
-    '--header-html': PMU_URL+'/report/pdf/view/header/',
-    '--footer-html':  PMU_URL+'/report/pdf/view/header/',
+    '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
+    '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
+    '--margin-bottom': '15.50',
     '--encoding': "utf-8",
+    '--footer-center': '[page]/[topage]',
     }
     import datetime
     dd = datetime.datetime.today()
@@ -117,4 +120,11 @@ def pdfconverter(request):
     return response
 
 def pdf_header(request):
+    report_id = int(request.GET.get('report_id'))
+    report = ProjectReport.objects.get(id=report_id)
     return render(request,'report/header.html',locals())
+
+def pdf_footer(request):
+    report_id = int(request.GET.get('report_id'))
+    report = ProjectReport.objects.get(id=report_id)
+    return render(request,'report/footer.html',locals())
