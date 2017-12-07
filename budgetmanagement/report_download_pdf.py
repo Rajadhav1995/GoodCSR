@@ -120,11 +120,13 @@ def pdfconverter(request):
     return response
 
 def pdf_header(request):
+    image_url = PMU_URL
     report_id = int(request.GET.get('report_id'))
     report = ProjectReport.objects.get(id=report_id)
     return render(request,'report/header.html',locals())
 
 def pdf_footer(request):
+    image_url = PMU_URL
     report_id = int(request.GET.get('report_id'))
     report = ProjectReport.objects.get(id=report_id)
     return render(request,'report/footer.html',locals())
