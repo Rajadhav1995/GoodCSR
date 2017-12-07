@@ -100,8 +100,8 @@ def pdfconverter(request):
     project = Project.objects.get_or_none(slug = slug)
     options = {
     '--load-error-handling': 'skip',
-    '--header-html': '<h1>my header</h1>',
-    '--footer-html': '<h6> my footer </h6>',
+    '--header-html': PMU_URL+'/report/pdf/view/header/',
+    '--footer-html':  PMU_URL+'/report/pdf/view/header/',
     '--encoding': "utf-8",
     }
     import datetime
@@ -115,3 +115,6 @@ def pdfconverter(request):
         return response
 
     return response
+
+def pdf_header(request):
+    return render(request,'report/header.html',locals())
