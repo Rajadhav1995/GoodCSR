@@ -267,26 +267,11 @@ footer{margin:30px 0px; float: left; width: 100%}
                 
                </header>
                </div>
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+               
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:24px">Index{{taskdict1}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   <div class="margin-50 page_height">
@@ -321,36 +306,15 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <!--Dynamic getting of the contents of index page (END)                  -->
                   </div>
                   <br>
-                  <footer>
-                  <hr>
-                  <img src="/static/img/report/logo.png" style="float:left">
-                  <!-- <h3 style="float:right;margin-top:0px;">2</h3> -->
-                  {% get_page_number 0 as page_number %}
-                  <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+
                </div>
-             </footer>
-               <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-               <!--<header>
-                  <div>
-                  <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                   </div>
-                   </header>-->
+            
+               
                <!--Index page 02 html ends-->
                <!--Index page 03 html starts-->
                <div class="container">
                   <div class="margin_25">
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   <div class='page_height'>
@@ -419,47 +383,22 @@ footer{margin:30px 0px; float: left; width: 100%}
                   </div>
                   </div>
                   </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+
                </div>
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+               
                <!--Index page 03 html ends-->
                <!--Index page 04 html starts-->
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   <div class="location margin-top40 page_height">
                      <p>Objective of the project</p>
                      <h5>{{answer_list.project_objective | striptags}}</h5>
                   </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+                  
                </div>
                
                <!--Index page 04 html ends-->
@@ -471,27 +410,12 @@ footer{margin:30px 0px; float: left; width: 100%}
                 {% if forloop.counter == 1 %}
                 {% get_quarter_sections i as quart_section %}
                 {% for j in quart_section %}
-                <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+                
 
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
 
@@ -615,37 +539,17 @@ No Key Acheivements in this Quarter
                   </div>
                   {% endfor %}
                   </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+                  
                </div>
                
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+              
                <!--Index page 06 html ends-->
                <!--Index page 07 html starts-->
                
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
 
@@ -749,13 +653,7 @@ No Key Acheivements in this Quarter
     </div></div></div>
     
 
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
-                  
+
                </div>
                {% endfor %}
                
@@ -831,27 +729,12 @@ No Key Acheivements in this Quarter
                <!--Index page 08 html starts-->
                {% if i.quarter_type == 2 %}
               {% get_parameter i 4 as pie_data %}
-              <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+              
                <div class='page_height'>
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   
@@ -1283,36 +1166,16 @@ No Key Acheivements in this Quarter
                   {% endfor %}
                   {% endfor %}
                   </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+                  
                </div>
 
                <!--Index page 08 html ends-->
                <!--Index page 09 html starts-->
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+               
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   <div class='page_height'>
@@ -1550,35 +1413,15 @@ No Key Acheivements in this Quarter
                      </h5>
                   </div>
                   </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+                  
                </div>
                <!--Index page 09 html ends-->
                <!--Index page 10 html starts-->
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+               
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   <div class="page_height">
@@ -1596,12 +1439,7 @@ No Key Acheivements in this Quarter
                   </div>
                   
 
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+                  
                </div>
                {% endif %}
                <!--Index page 10 html ends-->
@@ -1609,28 +1447,13 @@ No Key Acheivements in this Quarter
                {% if i.quarter_type == 3 %}
                {% get_next_quarter_sections i as next_quarter %}
                {% for k in next_quarter %}
-                <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
+                
                   {% get_parameter k 5 as pie_data %}
                <div class="container">
                 <div class='page_height'>
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{project.name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   
@@ -1753,12 +1576,7 @@ No Key Acheivements in this Quarter
                   </div>
                   
                   </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+                  
                </div>
                {% endfor %}
                {% endif %}
@@ -1766,26 +1584,10 @@ No Key Acheivements in this Quarter
                 {% endfor %}
                <!--Index page 11 html ends-->
                <!--Index page 12 html-->
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     <div class="float_right">
-                      {% if answer_list.client_logo %}
-                        <img src="{{answer_list.client_logo}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                        {% if answer_list.logos %}
-                        <img src="{{answer_list.logos}}" height = 70 width = 100>
-                        {% else %}
-                        <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 70 width = 100>
-                        {% endif %}
-                     </div>
+                     
                   </div>
                   <hr>
                   <div class='page_height'>
@@ -1793,12 +1595,7 @@ No Key Acheivements in this Quarter
                      <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
                   </div>
                   </div>
-                  <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_last_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
+                  
                </div>
 
 
