@@ -129,9 +129,9 @@ footer{margin:30px 0px; float: left; width: 100%}
 @media screen and (min-width: 1000px) {} 
 @media screen and (min-width: 1200px) {}
 
-.page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
-.header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 800px}
-
+.page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 800px}
+.header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
+.page_break{page-break-after: always;}
 .table-scroll {
   position:relative;
   max-width:100%;
@@ -259,7 +259,6 @@ footer{margin:30px 0px; float: left; width: 100%}
                         <h1>{{answer_list.report_name}}</h1>
                         <h5 style="float:left">by {{answer_list.client_name}}</h5>
                         <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
-                        <hr>
                      </div>
                      <p style="float:left; width:auto">Prepared by {{answer_list.prepared_by}}</p>
                      <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
@@ -273,7 +272,6 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h1 style="font-size:24px">Index{{taskdict1}}</h1>
                      
                   </div>
-                  <hr>
                   <div class="margin-50 page_height">
                     <!--Dynamic getting of the contents of index page (STARTS)                  -->
 
@@ -308,7 +306,7 @@ footer{margin:30px 0px; float: left; width: 100%}
                   <br>
 
                </div>
-            
+              <div class="page_break"></div>
                
                <!--Index page 02 html ends-->
                <!--Index page 03 html starts-->
@@ -316,7 +314,6 @@ footer{margin:30px 0px; float: left; width: 100%}
                   <div class="margin_25">
                      
                   </div>
-                  <hr>
                   <div class='page_height'>
                   <div class="school_project">
                      <div>
@@ -393,7 +390,6 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      
                   </div>
-                  <hr>
                   <div class="location margin-top40 page_height">
                      <p>Objective of the project</p>
                      <h5>{{answer_list.project_objective | striptags}}</h5>
@@ -417,7 +413,6 @@ footer{margin:30px 0px; float: left; width: 100%}
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      
                   </div>
-                  <hr>
 
                   <div class='page_height'>
                   <div class="quarter_updates">
@@ -551,7 +546,6 @@ No Key Acheivements in this Quarter
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      
                   </div>
-                  <hr>
 
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
@@ -736,7 +730,6 @@ No Key Acheivements in this Quarter
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      
                   </div>
-                  <hr>
                   
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
@@ -1177,7 +1170,6 @@ No Key Acheivements in this Quarter
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      
                   </div>
-                  <hr>
                   <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
@@ -1423,7 +1415,7 @@ No Key Acheivements in this Quarter
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      
                   </div>
-                  <hr>
+                  
                   <div class="page_height">
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
@@ -1455,7 +1447,7 @@ No Key Acheivements in this Quarter
                      <h1 style="font-size:20px">{{project.name}}</h1>
                      
                   </div>
-                  <hr>
+                  
                   
                   <div class='page_height'>
                   <div class="quarter_updates">
@@ -1589,7 +1581,7 @@ No Key Acheivements in this Quarter
                      <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                      
                   </div>
-                  <hr>
+                  
                   <div class='page_height'>
                   <div style="margin:15% 0px;float: left;width: 100%;">
                      <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>

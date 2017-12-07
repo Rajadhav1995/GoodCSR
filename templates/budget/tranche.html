@@ -89,7 +89,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
@@ -100,7 +99,6 @@
                                         <select name="recommended_by" required="" class="form-control" id="id_recommended_by">
                                             <option value="">---------</option>
                                         {% for i in recommended_by %}
-
                                         <option value="{{i.id}}" {% if obj.recommended_by.id == i.id %} selected {% endif %}>{{i}}</option>
                                         {% endfor %}
                                         </select>
@@ -236,7 +234,9 @@
                 planned_amount : {required:true},
                 actual_disbursed_amount : {required:true},
                 recommended_amount : {required:true},
-                id_end_date: { greaterThan: "#id_start_date" },
+                recommended_by : {required:true},
+                disbursed_date : {required:true},
+                due_date : {required:true},
             },
             messages:
             {
@@ -245,7 +245,9 @@
                 planned_amount:{required:"<font color=#fc282f>Please enter the planned amount</font>"},
                 actual_disbursed_amount : {required : "<font color=#fc282f>Please enter actual disbursed amount</font>"},
                 recommended_amount : {required : "<font color=#fc282f>Please enter recommended amount</font>"},
-                end_date : {required : "<font color=#fc282f>Please enter the name</font>"},
+                recommended_by : {required : "<font color=#fc282f>Please select User</font>"},
+                disbursed_date : {required : "<font color=#fc282f>Please enter Disbursed Date</font>"},
+                due_date : {required : "<font color=#fc282f>Please enter Due Date</font>"},
 
             },
             highlight: function (element) {
