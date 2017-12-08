@@ -119,6 +119,12 @@ def pdfconverter(request):
 
     return response
 
+    # report_obj=ProjectReport.objects.get(id=report)
+    # question = Question.objects.get(slug='report_name')
+    # ans = Answer.objects.get(question=question,object_id=t.id)
+    # return ans.text
+
+
 def pdf_header(request):
     image_url = PMU_URL
     report_id = int(request.GET.get('report_id'))
