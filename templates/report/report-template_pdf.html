@@ -278,16 +278,21 @@ word-break: break-all;
 
                      <div class="text-head">
                         <h1>{{answer_list.report_name}}</h1>
-                        <h5 style="float:left">by {{answer_list.client_name}}</h5>
-                        <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
+                        <h5 style="float:left;width:100%">by {{answer_list.client_name}}</h5>
+                        
                      </div>
-                     <p style="float:left; width:auto">Prepared by {{answer_list.prepared_by}}</p>
-                     <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+                     <div class="text-head">
+                      <h5 style="color: #232323;float: right;text-align:right;width:100%;font-size: 16px;text-transform: uppercase;padding-bottom:2px solid #dedede">Quarterly Report</h5>
+                      
+                     <p style="float:left; width:auto;font-size: 16px;">Prepared by {{answer_list.prepared_by}}</p>
+                     <p style="text-align:right;width:auto;font-size: 18px; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+                   </div>
                   </div>
                 
                </header>
                </div>
                <div class="page_break"></div>
+               <br><br>
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:24px">Index{{taskdict1}}</h1>
@@ -301,7 +306,7 @@ word-break: break-all;
 
                              <div class="margin-botom35 border_line">
                              {% if value == 'Annexure' %}
-                                <h2>{{value}}</h2>
+                                
                               
                               
                               {% elif value == 'About the project' %}
@@ -355,8 +360,9 @@ word-break: break-all;
                            <p>{{answer_list.implement_ngo}}</p>
                         </div>
                      </div>
-                      <table class="table pmu_formtable">
-            <tr>
+<div>
+                      <table class="table pmu_formtable" >
+            <tr style="padding-top:30px">
                 <td >
                     <p>Total Budget</p>
                     <img src="/static/img/rupee.png"><span>{{answer_list.project_budget | currency}}</span>
@@ -372,6 +378,7 @@ word-break: break-all;
                 </td>
             </tr>
         </table>
+      </div>
                      <!-- Total Budget:<b>{{answer_list.project_budget}}</b> Project Beneficiaries: {{answer_list.no_of_beneficiaries}} Project Duration: {{answer_list.project_duration}} -->
                   </div>
 <!-- ######################### -->
@@ -408,9 +415,10 @@ word-break: break-all;
                <div class="page_break"></div>
                <!--Index page 03 html ends-->
                <!--Index page 04 html starts-->
+               <br><br>
                <div class="container">
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
                   <div class="location margin-top40 page_height">
@@ -540,7 +548,10 @@ word-break: break-all;
                             var month = months[f.getMonth()];
                             var nn = f.getMonth();
                             var ids = obj.id
-                            var date1 = f.getDate()
+                            //var date1 = f.getDate()
+                            var datelist = date.split("-")
+                            var date1 = datelist[2]
+                            var month = datelist[1]
                             //alert(date1);
                             function delete_upload()
                             {
@@ -1506,6 +1517,7 @@ No Key Acheivements in this Quarter
                </div>
                {% endif %}
                <div class="page_break"></div>
+               <br><br>
                <!--Index page 10 html ends-->
                <!--Index page 10 html starts-->
                {% if i.quarter_type == 3 %}
@@ -1517,7 +1529,7 @@ No Key Acheivements in this Quarter
                 
                 <div class='page_height'>
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{project.name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{project.name}} --></h1>
                      
                   </div>
                   
@@ -1647,22 +1659,7 @@ No Key Acheivements in this Quarter
                {% endif %}
                
                 {% endfor %}
-                <div class="page_break"></div>
-               <!--Index page 11 html ends-->
-               <!--Index page 12 html-->
-               <div class="container">
-                  <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     
-                  </div>
-                  
-                  <div class='page_height'>
-                  <div style="margin:15% 0px;float: left;width: 100%;">
-                     <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
-                  </div>
-                  </div>
-                  
-               </div>
+
 
 
 

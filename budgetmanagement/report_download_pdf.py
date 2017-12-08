@@ -119,15 +119,20 @@ def pdfconverter(request):
 
     return response
 
-    # report_obj=ProjectReport.objects.get(id=report)
-    # question = Question.objects.get(slug='report_name')
-    # ans = Answer.objects.get(question=question,object_id=t.id)
-    # return ans.text
+def pdf_header_data():
+    report_obj=ProjectReport.objects.get(id=report)
+    question = Question.objects.get(slug='report_name')
+    ans = Answer.objects.get(question=question,object_id=t.id)
+    return ans.text,
 
 
 def pdf_header(request):
     image_url = PMU_URL
     report_id = int(request.GET.get('report_id'))
+    impl_part_ques = Question.objects.get_or_none(slug='logos')
+    funder_ques = Question.objects.get_or_none(slug='client_logo')
+    impl_ans = Answer.objects.get_or_none(question=impl_part_ques,object_id=report_id)
+    funder_ans = Answer.objects.get_or_none(question=funder_ques,object_id=report_id)
     report = ProjectReport.objects.get(id=report_id)
     return render(request,'report/header.html',locals())
 
