@@ -117,7 +117,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 .tab-resp2 td:last-child  { border-right:none;}
 .tab-resp2 .table-tr td { color:#006861; font-weight:600;}
 
-.budget_section td input, .budget_section td select{height: 36px; border-radius: 5px;border: 1px solid #c4c4c4; font-size: 14px; padding-left: 10px;}
+.budget_section td input, .budget_section td select{ border-radius: 5px;border: 1px solid #c4c4c4; font-size: 14px; padding-left: 10px;}
 .budget_section td:nth-child(2n-2){padding-left:0px; padding: 5px 10px;}
 .budget_section td:nth-child(1) span{background:url('../img/cross-delete-black.png') no-repeat; padding: 0px 2px 4px;}
 .budget_section td:nth-child(1) span:hover{background:url('../img/cross-delete-color.png') no-repeat }
@@ -214,6 +214,12 @@ footer{margin:30px 0px; float: left; width: 100%}
     line-height: 0;
     vertical-align: baseline;
   }
+.timeline_p {
+word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 </style>
 
             </head>
@@ -574,15 +580,15 @@ footer{margin:30px 0px; float: left; width: 100%}
         }
       if (i % 2) {
         if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
-          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       } else {
         if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
-          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       };
     }
@@ -1162,7 +1168,7 @@ No Key Acheivements in this Quarter
                   <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
-        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap">
          <div class="table-responsive">
            <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
             <thead>
@@ -1826,6 +1832,23 @@ No Key Acheivements in this Quarter
 
   });
 </script>
+
+<script>
+
+$(function() {
+    $('p').each(function(i) {
+        if (isEllipsisActive(this)) {
+            $(this).attr("title", $(this).text());
+        }
+    });
+});
+
+function isEllipsisActive(e) {
+     return (e.offsetWidth < e.scrollWidth);
+}
+
+</script>
+
 
 <script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
 <script>
