@@ -98,21 +98,15 @@ def pdfconverter(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
+    
     options = {
-        'page-size': 'Letter',
-        'margin-top': '0.5in',
-        'margin-right': '0.75in',
-        'margin-bottom': '0.5in',
-        'margin-left': '0.75in',
-        'encoding': "UTF-8",
-        'footer-left': "This is a footer",
-        'footer-font-size':'7',
-        'footer-right': '[page] of [topage]',
-
-        'custom-header' : [
-            ('Accept-Encoding', 'gzip')
-        ],
-        }
+    '--load-error-handling': 'skip',
+    '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
+    '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
+    '--margin-bottom': '15.50',
+    '--encoding': "utf-8",
+    '--footer-right': '[page]',
+    }
     import datetime
     dd = datetime.datetime.today()
     file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
@@ -124,3 +118,26 @@ def pdfconverter(request):
         return response
 
     return response
+
+def pdf_header_data():
+    report_obj=ProjectReport.objects.get(id=report)
+    question = Question.objects.get(slug='report_name')
+    ans = Answer.objects.get(question=question,object_id=t.id)
+    return ans.text,
+
+
+def pdf_header(request):
+    image_url = PMU_URL
+    report_id = int(request.GET.get('report_id'))
+    impl_part_ques = Question.objects.get_or_none(slug='logos')
+    funder_ques = Question.objects.get_or_none(slug='client_logo')
+    impl_ans = Answer.objects.get_or_none(question=impl_part_ques,object_id=report_id)
+    funder_ans = Answer.objects.get_or_none(question=funder_ques,object_id=report_id)
+    report = ProjectReport.objects.get(id=report_id)
+    return render(request,'report/header.html',locals())
+
+def pdf_footer(request):
+    image_url = PMU_URL
+    report_id = int(request.GET.get('report_id'))
+    report = ProjectReport.objects.get(id=report_id)
+    return render(request,'report/footer.html',locals())
