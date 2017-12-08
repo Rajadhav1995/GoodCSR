@@ -33,7 +33,7 @@
        .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
       .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
       .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
-      .pmu_formtable td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable td span{font-size:26px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
       .pmu_formtable td p{font-size:14px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
 
       .pmu_formtable_parameter{text-align: center;width: 250px; float:left; border-top:0px solid; margin-bottom: 45px; }
@@ -83,7 +83,7 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
 .location ul li span{color:#232323; font-size: 14px;}
 .location ul{padding-left: 15px;}
 .location{margin-bottom: 60px;margin-top: 30px; float: left; width: 100%;}
-.location h5{color:#363636 ; font-weight: normal; font-size: 14px; font-family: "Work Sans";}
+.location h5{color:#363636 ; font-weight: normal; font-size: 14px; font-family: "Work Sans"; line-height: 5px;}
 footer{margin:30px 0px; float: left; width: 100%}
 .margin-top40{margin-top:40px}
 .quarter_updates h4{font-size: 16px; font-weight: 600}}
@@ -129,6 +129,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 }
 .col-md-4{width: 30%}
 .col-md-8{width: 70%}
+
 @media screen and (min-width: 980px) {} 
 @media screen and (min-width: 992px) {} 
 @media screen and (min-width: 1000px) {} 
@@ -185,9 +186,9 @@ margin-bottom: 20px;}
 .white-box .event-img p { font-size:14px; padding-top:10px; float:left; padding-left:0;}
 .event-circle { float:left; width:24px; height:22px; background:url(../img/event-circle.png) no-repeat center; position:absolute; top:50%; left:50%; margin:-11px 0 0 -12px;} 
 .current-event .event-circle { float:left; width:32px; height:29px; background:url(../img/event-current.png) no-repeat center; top:49%; left:48%;}
-.event-down   { float:left; width:200px; padding:0 8px; border-right:1px solid #fff; position:relative; min-height:440px; }
+.event-down   { float:left; width:200px; padding:0 8px; border-right:1px solid #fff; position:relative; min-height:440px; list-style-type: none; }
 .event-down .event-img    { position:absolute; top:56%;-webkit-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);-moz-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4); background:#fff; padding:10px; width:182px; float:left}
-.event-down .event-img img  { float:left;}
+.event-down .event-img img  { float:left; list-style-type: none;}
 .event-down.red-down .event-img { padding:0 0 10px; text-align:center;}
 .event-down.red-down .event-img img { float:none; margin-top:-17px;}
 .white-box  .event-down.red-down .event-img p { text-align:center; padding:0 10px;} 
@@ -213,7 +214,7 @@ margin-bottom: 20px;}
     border-right: 9px solid transparent;
     border-bottom: 0px solid #fff;z-index:10;
 }
-.event-up {text-align: center;}
+.event-up {text-align: center; list-style-type: none;}
 .event-up.red-down .event-img img{position: relative;top:-12px;}
 
 .parameter-text h4.color_green {  font-size: 14px;}
@@ -225,6 +226,9 @@ margin-bottom: 20px;}
     line-height: 0;
     vertical-align: baseline;
   }
+.gchartgrid{
+  overflow: hidden;
+}
 </style>
 <script>
  var lengths = 0;
@@ -253,8 +257,9 @@ margin-bottom: 20px;}
                         <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
                      </div>
                   </div>
+                 
                   <div class="container">
-                     <div class="margin_top_50">
+                     <div class="margin_top_50" >
                         <ul>
                           {% if answer_list.client_logo %}
                            <li><img src="{{answer_list.client_logo}}" height = 70 width = 100></li>
@@ -276,10 +281,10 @@ margin-bottom: 20px;}
                         
                      </div>
                      <div class="text-head">
-                      <h5 style="color: #232323;float: right;text-align:right;width:100%;font-size: 14px;text-transform: uppercase;padding-bottom:2px solid #dedede">Quarterly Report</h5>
+                      <h5 style="color: #232323;float: right;text-align:right;width:100%;font-size: 16px;text-transform: uppercase;padding-bottom:2px solid #dedede">Quarterly Report</h5>
                       
-                     <p style="float:left; width:auto;font-size: 14px;">Prepared by {{answer_list.prepared_by}}</p>
-                     <p style="text-align:right;width:auto;font-size: 14px; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+                     <p style="float:left; width:auto;font-size: 16px;">Prepared by {{answer_list.prepared_by}}</p>
+                     <p style="text-align:right;width:auto;font-size: 18px; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
                    </div>
                   </div>
                 
@@ -584,12 +589,12 @@ No Key Acheivements in this Quarter
                   </div>
                   {% get_milestones j report_obj 1 as mile %}
                     {% for m in mile %}  
-                  <div class="margin_30 prev_banner milestone1">
+                  <div class=" location margin_30 prev_banner milestone1">
                      <h5 class="color-red">MILESTONE</h5>
                      <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
                      <p><strong>About the Milestone</strong></p>
                      <!-- <div class="location"><h5> {{m.description}} </h5></div> -->
-                     <h5 style="color:#666; font-weight:normal">{{m.description}}</h5>
+                     <h5 style="color:#000; font-weight:normal">{{m.description}}</h5>
                      {% get_mile_images m.id as images %}
                         {% for img in images %}
                      <div class="col-md-6" style="padding:0px">
@@ -1508,6 +1513,7 @@ No Key Acheivements in this Quarter
                </div>
                {% endif %}
                <div class="page_break"></div>
+               <br><br>
                <!--Index page 10 html ends-->
                <!--Index page 10 html starts-->
                {% if i.quarter_type == 3 %}
@@ -1519,7 +1525,7 @@ No Key Acheivements in this Quarter
                 
                 <div class='page_height'>
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{project.name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{project.name}} --></h1>
                      
                   </div>
                   
