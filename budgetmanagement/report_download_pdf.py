@@ -105,7 +105,7 @@ def pdfconverter(request):
     '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
     '--margin-bottom': '15.50',
     '--encoding': "utf-8",
-    '--footer-center': '[page]/[topage]',
+    '--footer-right': '[page]',
     }
     import datetime
     dd = datetime.datetime.today()

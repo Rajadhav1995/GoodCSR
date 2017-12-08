@@ -128,7 +128,7 @@ def get_timeline_json_pdf(projectobj,quarter_obj):
         if timeline_json_length/2 == 0:
             timeloop = int(timeline_json_length/5)
         else:
-            timeloop = int(timeline_json_length/5)
+            timeloop = int(timeline_json_length/5)+1 
     else:
         time_length = timeline_json_length
         timeloop = 1

@@ -166,8 +166,14 @@ footer{margin:30px 0px; float: left; width: 100%}
   background:#f9f9f9;
 }
 
-#time-line-pad  { float:left; width:100%; overflow-y:hidden; overflow-x: scroll;}
+#time-line-pad{ float: left;
+width: 100%;
+overflow-y: hidden;
+overflow-x: hidden;
+margin-bottom: 20px;}
+
 .time-line    { float:left; width: auto; height:440px; position:relative; background:#f1f3e9; }
+.time-line{    width: 100% !important;}
 .time-line-bdr  { float:left; height:6px; background:#d2bf78; /*background:url(../img/timeline-border.png) no-repeat left #d2bf78; border-bottom:6px solid #d2bf78;*/ position: absolute; top:50%; left:0; margin-top:-3px; width:100%;}
 .event-up   { float:left; width:200px; padding:0 8px; border-right:1px solid #fff; position:relative; min-height:440px; background:rgba(0,0,0,0.03); }
 /*.event-up:first-child { padding-left:30px; width:230px;}*/
@@ -230,8 +236,6 @@ word-break: break-all;
  var lengths = 0;
  
 </script>
-
-
 
             </head>
 
@@ -339,13 +343,13 @@ word-break: break-all;
                         <p class="color-red">PROJECT</p>
                         <h1>{{project.name}}</h1>
                      </div>
-                     <div class="col-md-6">
+                     <div class="col-md-6" style="width:50%;float:left">
                         <div class="row">
                            <p class="color-red">DONOR</p>
                            <p>{{answer_list.donor}}</p>
                         </div>
                      </div>
-                     <div class="col-md-6">
+                     <div class="col-md-6" style="width:50%;float:left">
                         <div class="row">
                            <p class="color-red">IMPLEMENTATION NGO</p>
                            <p>{{answer_list.implement_ngo}}</p>
@@ -426,13 +430,14 @@ word-break: break-all;
                 {% get_quarter_sections i as quart_section %}
                 {% for j in quart_section %}
                 
-
+              <div class="page_break"></div>
+              <br><br>
                <div class="container">
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
-                  <div class="page_break"></div>
+                  
                   <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
@@ -488,7 +493,8 @@ word-break: break-all;
                         </div>
                         
                         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-                <script type="text/javascript">
+
+                 <script type="text/javascript">
                     //var loop_count = $('#loop_count').val()
                     {% get_date_range j as date_range %}
                     var wrapper = $(".timeline-slide_" + "{{date_range.1}}"); //Fields wrapper
@@ -503,15 +509,23 @@ word-break: break-all;
                     console.log(timeloop.length)
                    // for(var j=1;j<=timeloop.length;j++)
                     // { 
-                        i=lengths + 1;
-                        lengths = lengths + 5;
-                         
+
+                        i=lengths;
+                        if (timeline_lengths >5){
+                        lengths = lengths + 4;
+                        }
+                        else{
+                            lengths = timeline_lengths;
+                        }
+                         console.log(i)
                         console.log(lengths)
+                        
                         console.log(timeline_data)
                         var wrapper = $(".timeline-slide_" + "{{date_range.1}}"+"_"+{{t}});
                          
-                        for (i; i <=lengths ; i++)
+                        for (i; i < lengths ; i++)
                         {
+                          console.log(i)
                           var obj = timeline_data[i]
                           var name = obj.name;
                           console.log(obj);
@@ -535,15 +549,16 @@ word-break: break-all;
                             }
                           if (i % 2) {
                             if (obj.type == 'image') {
-                            $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+
+                            $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
                             }else{
-                              $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><pclass="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+                              $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
                             };
                           } else {
                             if (obj.type == 'image') {
-                            $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><pclass="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+                            $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
                             }else{
-                              $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><pclass="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+                              $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
                             };
                           };
                          
@@ -552,7 +567,6 @@ word-break: break-all;
                         
                      // }
                 </script>
-                
                         
 {% endfor %}
 <script>
@@ -594,10 +608,10 @@ No Key Acheivements in this Quarter
               <div class="page_break"></div>
                <!--Index page 06 html ends-->
                <!--Index page 07 html starts-->
-               
+               <br><br>
                <div class="container">
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
 
@@ -780,9 +794,10 @@ No Key Acheivements in this Quarter
               {% get_parameter i 4 as pie_data %}
               
                <div class='page_height'>
+                <br><br>
                <div class="container">
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
                   
@@ -1219,10 +1234,10 @@ No Key Acheivements in this Quarter
                <div class="page_break"></div>
                <!--Index page 08 html ends-->
                <!--Index page 09 html starts-->
-               
+               <br><br>
                <div class="container">
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
                   <div class='page_height'>
@@ -1465,10 +1480,10 @@ No Key Acheivements in this Quarter
                <div class="page_break"></div>
                <!--Index page 09 html ends-->
                <!--Index page 10 html starts-->
-               
+               <br><br>
                <div class="container">
                   <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
                   
