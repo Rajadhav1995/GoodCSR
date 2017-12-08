@@ -219,7 +219,19 @@ footer{margin:30px 0px; float: left; width: 100%}
     line-height: 0;
     vertical-align: baseline;
   }
+  .timeline_p {
+word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 </style>
+<script>
+ var lengths = 0;
+ 
+</script>
+
+
 
             </head>
 
@@ -435,84 +447,119 @@ footer{margin:30px 0px; float: left; width: 100%}
                      {% get_timeline_json project j as timeline %}
                      {% if timeline.0 != '[]' %}
                      <div class="col-md-12 report_text " style="padding:0px">
-                                <p>{{quest.text|title}}</p>
-                                    <!-- timeline slider -->
-                                    
-                                            <div id="scrollbar1">
-                <div class="viewport">
-                     <div class="overview">
-                       <div id="time-line-pad">
-            <div class="time-line">
-              <div class="time-line-bdr"></div>
-                <ul>
-                   {% get_date_range j as date_range %}
-                    <div class="timeline-slide_{{date_range.1}}"></div>
+                           <p>{{quest.text|title}}</p>
+                           <!-- timeline slider -->
+                           {% get_date_range j as date_range %}
+                                             {% get_timeline_json_pdf project j as timeline %}
+                                             {% for t in timeline.3 %}
+                           <div id="scrollbar1">
+                              <div class="viewport">
+                                 <div class="overview">
+                                    <div id="time-line-pad">
+                                       <div class="time-line">
+                                          <div class="time-line-bdr"></div>
+                                          <ul>
+                                             
+                                             <div class="timeline-slide_{{date_range.1}}_{{t}}"></div>
+                                             <div>                   </div>
+                                             
+                                          </ul>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="scrollbar">
+                                 <div class="track">
+                                    <div class="thumb">
+                                       <div class="end"></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="scrollbar">
+                              <div class="track">
+                                 <div class="thumb">
+                                    <div class="end">
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
+                        </div>
+                        
+                        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+                <script type="text/javascript">
+                    //var loop_count = $('#loop_count').val()
+                    {% get_date_range j as date_range %}
+                    var wrapper = $(".timeline-slide_" + "{{date_range.1}}"); //Fields wrapper
+                    {% get_timeline_json_pdf project j as timeline %}
                     
-                </ul>
-            </div>
-           </div>
-                    </div>
-                </div>
-                <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                    var timeloop = {{timeline.3}}
+                    var timeline_lengths = {{timeline.1}};
+                    var timeline_data= {{timeline.0|safe}}
+                    var loc_url = '{{image}}'
+                    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    console.log(timeline_lengths);
+                    console.log(timeloop.length)
+                   // for(var j=1;j<=timeloop.length;j++)
+                    // { 
+                        i=lengths + 1;
+                        lengths = lengths + 5;
+                         
+                        console.log(lengths)
+                        console.log(timeline_data)
+                        var wrapper = $(".timeline-slide_" + "{{date_range.1}}"+"_"+{{t}});
+                         
+                        for (i; i <=lengths ; i++)
+                        {
+                          var obj = timeline_data[i]
+                          var name = obj.name;
+                          console.log(obj);
+                          if (obj.url) {
+                            var url = loc_url + obj.url;
+                            }
+                        else{
+                              var url = loc_url + '/' +"/static/img/milestone-icon.png";
+                            };
+                            var date = obj.date
+                            var f = new Date(date);
+                            var month = months[f.getMonth()];
+                            var nn = f.getMonth();
+                            var ids = obj.id
+                            var date1 = f.getDate()
+                            //alert(date1);
+                            function delete_upload()
+                            {
+                                //return confirm("Are you sure you want to delete this item?");
+                                alert("Are you sure?");
+                            }
+                          if (i % 2) {
+                            if (obj.type == 'image') {
+                            $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+                            }else{
+                              $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><pclass="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+                            };
+                          } else {
+                            if (obj.type == 'image') {
+                            $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><pclass="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+                            }else{
+                              $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><pclass="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+                            };
+                          };
+                         
+                        }
+                       
+                        
+                     // }
+                </script>
                 
-       </div>
-                                                    <div class="scrollbar">
-                                                    <div class="track">
-                                                    <div class="thumb">
-                                                    <div class="end">
-                                                    </div></div></div></div>
-                                        
-<!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
-</div>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-<script type="text/javascript">
-    //var loop_count = $('#loop_count').val()
-    {% get_date_range j as date_range %}
-    var wrapper = $(".timeline-slide_" + "{{date_range.1}}"); //Fields wrapper
-    {% get_timeline_json project j as timeline %}
-    var lengths = {{timeline.1}};
-    var timeline_data= {{timeline.0|safe}}
-    var loc_url = '{{image}}'
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    for (var i = 0; i < lengths ; i++)
-    {
-      var obj = timeline_data[i]
-      var name = obj.name;
-      console.log(obj);
-      if (obj.url) {
-        var url = loc_url + obj.url;
-        }
-    else{
-          var url = loc_url + '/' +"/static/img/milestone-icon.png";
-        };
-        var date = obj.date
-        var f = new Date(date);
-        var month = months[f.getMonth()];
-        var nn = f.getMonth();
-        var ids = obj.id
-        var date1 = f.getDate()
-        //alert(date1);
-        function delete_upload()
-        {
-            //return confirm("Are you sure you want to delete this item?");
-            alert("Are you sure?");
-        }
-      if (i % 2) {
-        if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
-        }else{
-          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
-        };
-      } else {
-        if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
-        }else{
-          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
-        };
-      };
-    }
-</script>
+                        
+{% endfor %}
+<script>
+                if("{{forloop.last}}" == 'False'){
+                       lengths = 0;
+                       }
+                </script>
 {% else %}
 No Key Acheivements in this Quarter
 {% endif %}
