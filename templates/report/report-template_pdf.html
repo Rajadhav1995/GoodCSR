@@ -33,7 +33,7 @@
        .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
       .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
       .pmu_formtable td:nth-last-child(1){border-right:0px solid #dedede}
-      .pmu_formtable td span{font-size:26px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
+      .pmu_formtable td span{font-size:34px; color:#00998b; padding-left: 30px;font-family: "Work Sans" }
       .pmu_formtable td p{font-size:14px; font-weight: 600;font-family: "Work Sans"; color:#3a3a3a; }
 
       .pmu_formtable_parameter{text-align: center;width: 250px; float:left; border-top:0px solid; margin-bottom: 45px; }
@@ -102,7 +102,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 /* tab-resp */ 
 .tab-resp1    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 .tab-resp1 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5; font-size: 14px }
-.tab-resp1 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;font-size: 14px}
+.tab-resp1 td { padding:2px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;font-size: 14px}
 .tab-resp1 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
 .tab-resp1 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
 .tab-resp1 td:last-child  { border-right:none;}
@@ -589,7 +589,7 @@ No Key Acheivements in this Quarter
                   </div>
                   {% get_milestones j report_obj 1 as mile %}
                     {% for m in mile %}  
-                  <div class=" location margin_30 prev_banner milestone1">
+                  <div class=" margin_30 prev_banner milestone1">
                      <h5 class="color-red">MILESTONE</h5>
                      <h5 class="color_green" style="margin:0px">{{m.name}}</h5>
                      <p><strong>About the Milestone</strong></p>
@@ -1475,7 +1475,7 @@ No Key Acheivements in this Quarter
     
     </div>
                   </div>
-                  <div class="location margin_top30">
+                  <div class="margin_top30">
                      <p>About The Budget</p>
                      {% get_budget_detail 4 i as budget_detail %}
                      <h5>{{budget_detail}}
@@ -1513,7 +1513,7 @@ No Key Acheivements in this Quarter
                </div>
                {% endif %}
                <div class="page_break"></div>
-               <br><br>
+               
                <!--Index page 10 html ends-->
                <!--Index page 10 html starts-->
                {% if i.quarter_type == 3 %}
@@ -1521,6 +1521,7 @@ No Key Acheivements in this Quarter
                {% for k in next_quarter %}
                 
                   {% get_parameter k 5 as pie_data %}
+                  <br><br>
                <div class="container">
                 
                 <div class='page_height'>
