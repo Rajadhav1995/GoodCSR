@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.sessions.models import Session
+from django.contrib.sessions.modeget_timeline_processls import Session
 from taskmanagement.views import total_tasks_completed,updates
 from taskmanagement.models import Milestone,Activity,Task
 from pmu.settings import (SAMITHA_URL,PMU_URL)
