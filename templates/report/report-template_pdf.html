@@ -272,11 +272,15 @@ margin-bottom: 20px;}
 
                      <div class="text-head">
                         <h1>{{answer_list.report_name}}</h1>
-                        <h5 style="float:left">by {{answer_list.client_name}}</h5>
-                        <h5 style="color: #019875;float: right;font-size: 12px;text-transform: uppercase;">Quarterly Report</h5>
+                        <h5 style="float:left;width:100%">by {{answer_list.client_name}}</h5>
+                        
                      </div>
-                     <p style="float:left; width:auto">Prepared by {{answer_list.prepared_by}}</p>
-                     <p style="text-align:right;width:auto; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+                     <div class="text-head">
+                      <h5 style="color: #232323;float: right;text-align:right;width:100%;font-size: 14px;text-transform: uppercase;padding-bottom:2px solid #dedede">Quarterly Report</h5>
+                      
+                     <p style="float:left; width:auto;font-size: 14px;">Prepared by {{answer_list.prepared_by}}</p>
+                     <p style="text-align:right;width:auto;font-size: 14px; float:right">{{report_obj.start_date|date:'M Y'}} to {{report_obj.end_date|date:'M Y'}}</p>
+                   </div>
                   </div>
                 
                </header>
@@ -296,7 +300,7 @@ margin-bottom: 20px;}
 
                              <div class="margin-botom35 border_line">
                              {% if value == 'Annexure' %}
-                                <h2>{{value}}</h2>
+                                
                               
                               
                               {% elif value == 'About the project' %}
@@ -1645,22 +1649,7 @@ No Key Acheivements in this Quarter
                {% endif %}
                
                 {% endfor %}
-                <div class="page_break"></div>
-               <!--Index page 11 html ends-->
-               <!--Index page 12 html-->
-               <div class="container">
-                  <div class="margin_25">
-                     <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                     
-                  </div>
-                  
-                  <div class='page_height'>
-                  <div style="margin:15% 0px;float: left;width: 100%;">
-                     <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
-                  </div>
-                  </div>
-                  
-               </div>
+
 
 
 
