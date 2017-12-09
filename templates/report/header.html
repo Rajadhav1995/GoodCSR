@@ -14,17 +14,13 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
 	<h4 class="float_left">{{report_name}}</h4>
 
 					<div class="float_right">
-                      {% if funder_ans.attachment_file.url %}
-                        <img src="{{image_url}}/{{funder_ans.attachment_file.url}}" height = 50 width = 70>
-                        {% else %}
+                      
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 50 width = 70>
-                       {% endif %}
+                      
                        
-                        {% if impl_ans.attachment_file.url %}
-                        <img src="{{image_url}}/{{impl_ans.attachment_file.url}}" height = 50 width = 70>
-                        {% else %}
+                      
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" height = 50 width = 70>
-                        {% endif %}
+                      
 
                      </div>
 
