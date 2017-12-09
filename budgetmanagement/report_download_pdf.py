@@ -100,15 +100,17 @@ def pdfconverter(request):
     project = Project.objects.get_or_none(slug = slug)
     
     options = {
+    '--load-error-handling': 'ignore',
     '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
     '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
     '--margin-bottom': '15.50',
+    '--encoding': "utf-8",
     '--footer-right': '[page]',
     }
     import datetime
     dd = datetime.datetime.today()
     file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
-    pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+    pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()
     with fs.open(BASE_DIR +'/static/pdf-reports/'+ file_name) as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
@@ -132,6 +134,9 @@ def pdf_header(request):
     impl_ans = Answer.objects.get_or_none(question=impl_part_ques,object_id=report_id)
     funder_ans = Answer.objects.get_or_none(question=funder_ques,object_id=report_id)
     report = ProjectReport.objects.get(id=report_id)
+    question = Question.objects.get_or_none(slug='report_name')
+    ans = Answer.objects.get_or_none(question=question,object_id=report_id)
+    report_name = ans.text
     # report_name = pdf_header_data(report)
     return render(request,'report/header.html',locals())
 
