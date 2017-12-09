@@ -136,7 +136,8 @@ def pdf_header(request):
     report = ProjectReport.objects.get(id=report_id)
     question = Question.objects.get_or_none(slug='report_name')
     ans = Answer.objects.get_or_none(question=question,object_id=report_id)
-    report_name = ans.text
+    if ans:
+        report_name = ans.text
     # report_name = pdf_header_data(report)
     return render(request,'report/header.html',locals())
 
