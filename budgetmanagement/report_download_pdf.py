@@ -106,7 +106,6 @@ def pdfconverter(request):
     '--margin-bottom': '15.50',
     '--encoding': "utf-8",
     '--footer-right': '[page]',
-    '--no-images':'',
     }
     import datetime
     dd = datetime.datetime.today()
