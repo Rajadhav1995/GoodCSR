@@ -100,13 +100,11 @@ def pdfconverter(request):
     project = Project.objects.get_or_none(slug = slug)
     
     options = {
-    '--load-error-handling': 'ignore',
     '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
     '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
     '--margin-bottom': '15.50',
     '--encoding': "utf-8",
     '--footer-right': '[page]',
-    '--no-images':'',
     }
     import datetime
     dd = datetime.datetime.today()
