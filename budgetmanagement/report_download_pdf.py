@@ -101,7 +101,7 @@ def pdfconverter(request):
     
     options = {
     '--load-error-handling': 'ignore',
-    
+    '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
     '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
     '--margin-bottom': '15.50',
     '--encoding': "utf-8",
