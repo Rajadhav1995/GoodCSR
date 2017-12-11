@@ -100,7 +100,7 @@ def pdfconverter(request):
     project = Project.objects.get_or_none(slug = slug)
     
     options = {
-    '--load-error-handling': 'skip',
+    '--load-error-handling': 'ignore',
     '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
     '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
     '--margin-bottom': '15.50',
@@ -119,7 +119,7 @@ def pdfconverter(request):
 
     return response
 
-def pdf_header_data():
+def pdf_header_data(report):
     report_obj=ProjectReport.objects.get(id=report)
     question = Question.objects.get(slug='report_name')
     ans = Answer.objects.get(question=question,object_id=t.id)
@@ -134,6 +134,11 @@ def pdf_header(request):
     impl_ans = Answer.objects.get_or_none(question=impl_part_ques,object_id=report_id)
     funder_ans = Answer.objects.get_or_none(question=funder_ques,object_id=report_id)
     report = ProjectReport.objects.get(id=report_id)
+    question = Question.objects.get_or_none(slug='report_name')
+    ans = Answer.objects.get_or_none(question=question,object_id=report_id)
+    if ans:
+        report_name = ans.text
+    # report_name = pdf_header_data(report)
     return render(request,'report/header.html',locals())
 
 def pdf_footer(request):
