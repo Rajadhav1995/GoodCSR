@@ -7,7 +7,8 @@ from userprofile.models import (ProjectUserRoleRelationship,)
 from taskmanagement.views import (updates,corp_task_completion_chart,
     total_tasks_completed,corp_total_budget,corp_total_budget_disbursed)
 from menu_decorators import check_loggedin_access
-
+from pmu.settings import PMU_URL
+from django.core.paginator import Paginator,Page
 #create views of dashboard
 
 @check_loggedin_access
@@ -30,4 +31,15 @@ def admin_dashboard(request):
     tasks_progress = corp_task_completion_chart(obj_list)
     total_budget = corp_total_budget(obj_list)
     budget = corp_total_budget_disbursed(obj_list)
+    # projectobj = obj_list
+    image = PMU_URL
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(obj_list, 3)
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+        projectobj = paginator.page(1)
+    except EmptyPage:
+        projectobj = paginator.page(paginator.num_pages)
     return render(request,'corporate_dashboard.html',locals())
