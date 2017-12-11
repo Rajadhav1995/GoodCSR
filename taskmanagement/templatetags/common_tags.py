@@ -202,3 +202,29 @@ def get_quarter_names(key,number_dict):
     name=''
     name = number_dict.get(key)
     return name
+
+@register.assignment_tag
+def get_images(obj):
+    obj = obj
+    attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='Project')).order_by('-created')
+    image = PMU_URL
+    return attachment
+
+@register.assignment_tag
+def get_taskcompletion(obj):
+    total_tasks = completed_tasks = total_milestones = 0
+    milestones = []
+    project = obj
+    tasks = Task.objects.filter(activity__project = project)
+    total_tasks = tasks.count()
+    for t in tasks:
+        if t.status == 2:
+            completed_tasks = completed_tasks + 1
+    if completed_tasks != 0:
+        percent =int((float(completed_tasks) / total_tasks)*100)
+    else:
+        percent = 0
+    if milestones:
+        total_milestones = milestones.count()
+    data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
+    return percent

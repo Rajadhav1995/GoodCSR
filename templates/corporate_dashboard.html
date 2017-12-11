@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load common_tags %}
+{% load urs_tags %}
+{% load humanize %}
 
 {% block section %}
 <div class="clear"></div>
@@ -206,9 +208,355 @@
             </li>
         </ul>
     </div>
+
+    <!-- New Code -->
+	<link type="text/css" rel="stylesheet" href="/static/css/lightslider.min.css" />               
+    <script src="/static/js/lightslider.min.js"></script>
+    {% for i in projectobj %} 
+	<div class="white-box">
+        <h2 class="col-md-10">{{i.name}}</h2><a class="col-md-2 link-pad text-md-center" href="/project/summary/?slug={{i.slug}}&key=summary">View Project</a>
+        <div class="col-md-12 nopadding"  style="background: #f1f3e9;">
+            <div class="col-md-9 nopadding">
+                <div class="col-md-2"  style="margin: 10px 0px;">
+                    <img class="img-responsive my-auto"  style="height: 150px;" src="/static/img/GoodCSR_color_circle.png"/>
+                </div>
+                <div class="col-md-10 ">
+						<ul class="col-md-8 nopadding prj_details">
+						  <li  class="col-md-6 nopadding"> 
+							<p> No. of beneficiaries <br><span> {{i.no_of_beneficiaries}}</span> </p>
+						  </li>
+						  <li  class="col-md-6 nopadding">  
+                            <p> Program duration <br><span>{{i.duration}} months </span><br>
+                            <!-- <span>({{i.start_date}} - {{i.end_date}})</span> </p> -->
+						  </li>
+						  <li  class="col-md-6 nopadding">
+							<p> Total Budget <br><span>₹ {{i.total_budget | intcomma}}</span> </p>
+						  </li>
+						  <li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+							<p>Target Beneficiaries<br><span>
+                                    {% if i.target_beneficiaries.all %}
+                                    {% for j in i.target_beneficiaries.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
+                                    {% else %}
+                                    <span class="col-md-7">N/A</span>
+                                    {% endif %}
+                            </span></p>
+						  </li>
+						  <li class="col-md-12 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+							<p>Cause area<br><span>
+                                    {% if i.cause_area.all %}
+                                    {% for j in i.cause_area.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
+                                    {% else %}
+                                    <span class="col-md-7">N/A</span>
+                                    {% endif %}
+                            </span></p>
+						  </li>
+						</ul>
+                        <div class="col-md-4" style="padding-top: 10px">
+                            {% get_taskcompletion i as totalcompletion %}
+                            <p class="col-md-12 nopadding" style="padding-bottom: 15px; font-size: 16px; font-weight: bold; color: #666;">Total task completion</p>
+                            <div style="padding-left: 40px">
+                            <div class="col-md-12 progress-bar position" data-percent=" {% if totalcompletion %}{{totalcompletion}} {% else %} 0 {% endif %}" data-duration="1000" style="background-color: #f1f3e9; color:#f1f3e9; " data-color="#ccc,#3ca187"></div>
+                            <p class="col-md-12">{%if totalcompletion == 100 %}completed {% else %} in progress{% endif %}</p>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-md-12 nopadding">
+					<div class="col-md-12" style="max-height: 137px; overflow: hidden; text-overflow: ellipsis; ">
+						<p><b>About the Program</b></p>
+							<p>{{i.summary | safe}}</p>
+                            </p>
+					</div>
+				</div>
+            </div>
+            <div class="col-md-3 nopadding" style="border-left: 1px solid #ccc;">
+        		<div class="budget-left-pad" style="width: 100% !important; text-align: center; padding-top: 10px; border-bottom: none;">
+                <h3>Budget</h3>
+                <div id="total_budget{{i.id}}" style="width: 100%;float: none; height: 139px; overflow: hidden; border-bottom: 1px solid #ccc;"></div>
+                <ul>
+                    <li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {% if i.project_budget_details.planned_cost %} {{i.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">Rs. {% if i.project_budget_details.disbursed_cost %} {{i.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if i.project_budget_details.utilized_cost %}Rs.  {{i.project_budget_details.utilized_cost}} {% else %} Rs. 0 {% endif %} </span></li>
+                </ul>
+                </div>
+            </div>
+            {% get_images i as attachment %}
+			<div class="col-md-12">
+			<ul id="responsive" class="timeline-images" style="background-color: #ccc; margin: 10px 0px; border-radius: 5px; min-width: 100%;">
+            {% for j in attachment %}
+            {% if j.attachment_file %}
+			  <li style="padding: 10px 0px;">
+                        <img title="{{j.description}}" class="img-responsive center-block"  style="height: 150px; width: 175px; background-color: #f1f3e9; padding: 5px 0px; border-radius: 5px;" src="{{image}}{{j.attachment_file.url}}"/>              
+              </li>
+            {% endif %}
+            {% endfor %}     
+			</ul>
+			</div>
+        </div>
+    </div>
+    
+    <script src="/static/js/jQuery-plugin-progressbar.js"></script>
+
+    <script>
+    $(".progress-bar").loading();
+    </script>
+
+    <script>
+    $(document).ready(function() {
+        var gaugeOptions{{i.id}} = {
+
+                chart: {
+                    height: 300,
+                    backgroundColor: "#f1f3e9",
+                    plotBackgroundColor: "#f1f3e9",
+                    plotBackgroundImage: "#f1f3e9",
+                    plotBorderWidth: 0,
+                    plotShadow: false
+
+                },
+
+                title: null,
+
+                pane: {
+                    center: ['50%', '47%'],
+                    size: '100%',
+                    startAngle: -90,
+                    endAngle: 90,
+                    background: {
+                        borderWidth: 1,
+                        backgroundColor: '#D0C173',
+                        borderColor: '#D0C173',
+                        innerRadius: '60%',
+                        outerRadius: '100%',
+                        shape: 'arc'
+                    }
+                },
+                tooltip: {
+                    enabled: false
+                },
+                yAxis: {
+                    lineWidth: 0,
+                    minorTickInterval: null,
+                    tickAmount: 0,
+                    title: {
+                        y: -70
+                    },
+                    labels: {
+                        enabled: false
+                    },
+
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                        startAngle: -90,
+                        endAngle: 90,
+                        center: ['50%', '47%']
+                    },
+                    gauge: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                        pivot: {
+                            radius: 0
+
+                        }
+                        ,
+                        dial: {
+                            backgroundColor: '#7A4F59',
+                            borderColor: "#7A4F59",
+                            radius: '105%',
+                            baseWidth: 2,
+                            baseLength: '100%',
+                            baseWidth: 2,
+                            rearLength: '0%',
+                        }
+                    }
+                },
+
+            };
+
+            var utilized{{i.id}} = parseInt({{ i.project_budget_details.utilized_percent }})
+            if ({{ i.project_budget_details.disbursed_percent }} == 0) {
+                var disbursed{{i.id}} = 0
+            }
+    else {
+                if ({{ i.project_budget_details.disbursed_percent }} > {{ i.project_budget_details.utilized_percent }} ) {
+                var disbursed{{i.id}} = {{ i.project_budget_details.disbursed_percent }} -{{ i.project_budget_details.utilized_percent }}
+        }
+        else {
+                var disbursed{{i.id}} = {{ i.project_budget_details.utilized_percent }} - {{ i.project_budget_details.disbursed_percent }}
+        }
+    }
+            var total{{i.id}} = parseInt(100 - (utilized{{i.id}} + disbursed{{i.id}}))
+            console.log("Gauge{{i.id}}", total, utilized, disbursed);
+            // The speed gauge
+            var chartSpeed{{i.id}} = Highcharts.chart('total_budget{{i.id}}', Highcharts.merge(gaugeOptions{{i.id}}, {
+
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                credits: {
+                    enabled: false
+                },
+
+                series: [
+                    {
+                        type: 'pie',
+                        size: '100%',
+
+                        innerSize: '76%',
+                        data: [
+
+                            { y: utilized{{i.id}}, name: 'Utilized', color: '#006861', borderColor: "#006861" },
+                            { y: disbursed{{i.id}}, name: 'Disbursed', color: '#169776', borderColor: "#169776" },
+                            { y: total{{i.id}}, name: 'Total', color: '#D0C173', borderColor: "#D0C173" }
+
+
+                        ]
+                    },
+
+                    {
+                        type: 'gauge',
+                        data: [0],
+
+                    }
+                ],
+                dataLabels: {
+                    enabled: false
+                }
+
+            }));
+
+            // Bring life to the dials
+            setInterval(function () {
+                // Speed
+                var point,
+                    point1,
+                    newVal,
+                    inc;
+
+                if (chartSpeed{{i.id}}) {
+                    point = chartSpeed{{i.id}}.series[0].points[0];
+
+                    point1 = chartSpeed{{i.id}}.series[0].points[1];
+
+                    $.each(chartSpeed{{i.id}}.series, function (i, item) {
+                        if (item.type == 'gauge') {
+
+                            item.setData([["none", point.y]], true);
+
+                        }
+                    });
+                }
+
+            }, 800);
+        });
+    </script>
+    {% endfor %} 
+    {% if projectobj.has_other_pages %}
+    <div class="white-page">
+        <ul class="pagination pagination-sm">
+            {% if projectobj.has_previous %}
+            <li>
+                <a href="?page={{ projectobj.previous_page_number }}">&laquo;</a>
+            </li>
+            {% else %}
+            <li class="disabled">
+                <span>&laquo;</span>
+            </li>
+            {% endif %} {% for i in projectobj.paginator.page_range %} {% if projectobj.number == i %}
+            <li class="active">
+                <span>{{ i }}
+                    <!-- <span class="sr-only">(current)</span> -->
+                </span>
+            </li>
+            {% else %}
+            <li>
+                <a href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %} {% endfor %} {% if projectobj.has_next %}
+            <li>
+                <a href="?page={{ projectobj.next_page_number }}">&raquo;</a>
+            </li>
+            {% else %}
+            <li class="disabled">
+                <span>&raquo;</span>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+	<script>
+    // Script for the image slider 
+	 $(document).ready(function() {
+		$('.timeline-images').lightSlider({
+            item:5,
+            pager: false,
+			loop:false,
+			slideMove:2,
+			easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
+			speed:600,
+			responsive : [
+				{
+					breakpoint:800,
+					settings: {
+						item:3,
+						slideMove:1,
+						slideMargin:6,
+					  }
+				},
+				{
+					breakpoint:480,
+					settings: {
+						item:2,
+						slideMove:1
+					  }
+				}
+			]
+		});  
+      });
+    </script>
+    <style>
+    .white-page ul li{
+        background-color: #fff;
+        padding: 0px 0px;
+    }
+    .white-page ul li a,.white-page ul li span{
+        padding: 0px 10px;
+    } 
+    .white-page ul li.active{
+        background-color: #0b6861;
+        color: #fff;
+    }
+    .white-page .pagination{
+        float: right;
+    }
+    .progress-bar div span{
+        background-color: #f1f3e9;
+    }
+    .prj_details p{
+        font-size: 16px; 
+        font-weight: bold; 
+        color: #666;
+    }
+    .prj_details span{
+        font-size: 14px; 
+        font-weight: normal; 
+        color: #666;
+    }
+    </style>
+	<!-- New Code Ends -->
+
     <div class="white-box">
     	<div class="left-white">
-        	<h2>Task Completion</h2>
+            <h2>Task Completion</h2>
             <div class="progress_bar" > 
                 <div id="Progress_Completion" style="width: 100%;float: left;"></div>
             </div>
@@ -368,7 +716,9 @@ var total_budget = data.total_budget
 var max_budget = Math.max.apply(Math,total_budget)
 var utilized = data.utilized
 var disbursed_budget = (data.disbursed)
-lRange = 0, hRange = 10, lnRange = data.projects.length;
+lRange = 0,hRange = 10;
+if(data.projects.length<10){hRange = data.projects.length}
+lnRange = data.projects.length;
 console.log("hello");
 console.log(disbursed_budget);
 
