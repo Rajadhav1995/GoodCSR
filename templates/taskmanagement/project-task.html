@@ -562,7 +562,14 @@ $(document).ready(function() {
   });
 
 </script>
-
+<script>
+    $(document).ready(function () {
+        if (window.location.hash) {
+            $(window.location.hash).trigger('click');
+            $('html, body').animate({scrollTop:0},'1000');
+        }
+    });
+</script>
 
 
 <!--ZZ-->
