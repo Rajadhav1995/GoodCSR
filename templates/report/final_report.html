@@ -89,7 +89,7 @@
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
-                                                  <h5><a href="#">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}})">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
                                            
@@ -2853,7 +2853,23 @@ $(document).ready(function() {
 </script>
 <!-- Script for submit report ends here-->
 
-
-
+<script>
+    
+    var request_url = "{{request.get_full_path|safe}}"
+    function remove_fields(ids){
+    debugger;
+    $.ajax({
+            url: '/report/removed/fields/',
+            type:'GET',
+            data:{'id':ids,'report_id':"{{request.GET.report_id}}"}
+            dataType:"json",
+            success:function(data){
+                    
+            },
+            
+        });
+       window.location.href = request_url
+    }
+</script>
 
 {% endblock %}
