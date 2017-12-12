@@ -80,8 +80,8 @@ def get_auto_populated_questions(ques_id,project,project_report):
         'cover_image': cover_image.attachment_file.url if cover_image else '',
         'project_title':project.name,'project_budget':project.total_budget,
         'donor':mapping_view.funder.organization,
-        'program_description':project.summary,
-        'project_objective':project.program_aim,
+        'program_description':project.summary if project.summary else '',
+        'project_objective':project.program_aim if project.program_aim else '',
         'implement_ngo':mapping_view.implementation_partner.organization,
         'no_of_beneficiaries':project.no_of_beneficiaries,'project_duration':project.start_date.strftime('%Y-%m-%d')+' TO '+project.end_date.strftime('%Y-%m-%d'),
         'location':project.get_locations()}

@@ -120,8 +120,8 @@ footer{margin:30px 0px; float: left; width: 100%}
 
 .budget_section td input, .budget_section td select{height: 36px; border-radius: 5px;border: 1px solid #c4c4c4; font-size: 14px; padding-left: 10px;}
 .budget_section td:nth-child(2n-2){padding-left:0px; padding: 5px 10px;}
-.budget_section td:nth-child(1) span{background:url('../../img/cross-delete-black.png') no-repeat; padding: 0px 2px 4px;}
-.budget_section td:nth-child(1) span:hover{background:url('../../img/cross-delete-color.png') no-repeat }
+.budget_section td:nth-child(1) span{background:url(../../img/cross-delete-black.png) no-repeat; padding: 0px 2px 4px;}
+.budget_section td:nth-child(1) span:hover{background:url(../../img/cross-delete-color.png) no-repeat }
 .parameter .numeric_parameter li:nth-last-child(1) {
     margin-right: 8px !important;
 }
@@ -537,12 +537,13 @@ margin-bottom: 20px;}
                           console.log(i)
                           var obj = timeline_data[i]
                           var name = obj.name;
+                        var url =  loc_url +"/"+"/static/img/milestone-icon.png";
                           console.log(obj);
                           if (obj.url) {
                             var url = loc_url + obj.url;
                             }
                         else{
-                              var url = loc_url + '/' +"/static/img/milestone-icon.png";
+                            var url =  loc_url +"/"+"/static/img/milestone-icon.png";
                             };
                             var date = obj.date
                             var f = new Date(date);
@@ -562,15 +563,15 @@ margin-bottom: 20px;}
                           if (i % 2) {
                             if (obj.type == 'image') {
 
-                            $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
-                            }else{
-                              $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src='+url+' alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
-                            };
-                          } else {
-                            if (obj.type == 'image') {
-                            $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
-                            }else{
-                              $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src='+url+' alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        }else{
+          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+        };
+      } else {
+        if (obj.type == 'image') {
+        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        }else{
+          $(wrapper).append('<li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
                             };
                           };
                          
