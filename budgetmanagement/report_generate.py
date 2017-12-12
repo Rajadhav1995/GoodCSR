@@ -702,3 +702,12 @@ def get_index_contents(slug,report_id):
         contents[key]=value
     return contents,quarters,number_dict
 
+
+def save_removed_fields(request):
+    import ipdb;ipdb.set_trace()
+    ids = request.GET.get('id')
+    url=request.META.get('HTTP_REFERER')
+    report_id = request.GET.get('report_id')
+    removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report__id= int(report_id))
+#    removed_ques.text = 
+    

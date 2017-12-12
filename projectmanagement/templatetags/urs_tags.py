@@ -342,7 +342,6 @@ def get_last_page_number(page_number):
 
 @register.assignment_tag
 def get_index_page_number(quarter):
-    # import ipdb; ipdb.set_trace()
     lista = [4]
     prev = len(quarter.get('Previous Quarter Updates'))
     cur = len(quarter.get('Current Quarter Updates'))
@@ -380,3 +379,16 @@ def get_index_page_number(quarter):
 def location_split(value, sep = "."):
     parts = value.split(sep)
     return (parts[0], sep.join(parts[1:]))
+
+
+@register.assignment_tag
+def is_ceo_user(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = int(user_id ))
+    ceo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 5)
+    admin_user = user_obj.is_admin_user
+    if ceo_user:
+        status = 0
+    else:
+        status = 1
+    return status
