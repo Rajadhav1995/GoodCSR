@@ -309,9 +309,6 @@ $(document).ready(function(){
         g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
           '', superDesc, g));
       }
-      // console.log("Super");
-      // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-      //   '', superDesc);
     });
     $.each(jsonData.activities, function (i) {
       var activityId = 11,
@@ -367,9 +364,6 @@ $(document).ready(function(){
       if (this.slug != null) {		
         slug = this.slug;
       }
-      // activity = jsonData.activities.filter(function( i ) {
-      //   if(i.id == activityId){return i.super_category;}
-      // });
       $.each(jsonData.activities, function () {
         if (this.id == activityId) {
           activity_type = this.activity_type;
@@ -531,29 +525,10 @@ $(document).ready(function(){
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
             mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));//changed null to 100
         }
-        // } else {
-        //   var prevDate, maxDate;
-        //   $.each(depTask, function () {
-        //     var depValue = this.valueOf();
-        //     $.each(jsonData.tasks,function(){
-        //       if(this.id == depValue){
-
-        //       }
-        //     });
-        //     console.log('Dep', this.valueOf(), depTask);
-        //   });
-        // }
-        // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
-        //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
       });
-
-
       //Draw task after drawing milestone
-      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, link, 0,
         '', taskCompletion , 0, activityId, 1, '', '', '', g ,pStartDate, pEndDate));
-      // console.log("Task");
-      // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-      //   '', 0, 0, activityId, 1, '', '', '');
 
     });
 
@@ -598,7 +573,7 @@ $(document).ready(function(){
     $('.gselector').hide();
     $(document).ready(function () {
       var previous = null;
-      var prePrevious, pre2, pre3= null;
+      var prePrevious;
       var mile = false;
       $(".gtaskbarcontainer").each(function (index) {
         currParent = $(this).parent().parent().parent();
@@ -612,7 +587,7 @@ $(document).ready(function(){
           if (mile) {
 
           }
-          if (collision($(this), $(previous)) || collision($(this), $(prePrevious)) || collision($(this), $(pre2)) || collision($(this), $(pre3))) {
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
             $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
@@ -642,8 +617,6 @@ $(document).ready(function(){
           });
           mile = false;
         }
-        pre3 = pre2;
-        pre2 = prePrevious;
         prePrevious = previous;
         previous = this;
       });
