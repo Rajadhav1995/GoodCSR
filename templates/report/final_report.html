@@ -89,7 +89,7 @@
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
-                                                  <h5><a href="#">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}})">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
                                            
@@ -1878,7 +1878,7 @@
             </div>
         </div>
     </div>
-        <div id="loader" style="text-align: center;" class="cause">
+        <div id="loader" style="text-align: center; display:None;" class="cause">
         <div class="centered">
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="color:#FFF"></i>
         </div>
@@ -2792,34 +2792,34 @@ $(document).ready(function() {
 <script>
     var request_url = "{{request.get_full_path|safe}}"
     $('#save_and_exit').on('click',function(){
+    $("#loader").show();
     last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
     for(var i=0;i<=last_form_id;i++){
         $('#ui-accordion-accordion-panel-'+i.toString()).ajaxSubmit({
             type: 'POST',
             url: request_url,
             async: false,
-            beforeSend: function(){ showLoader(); },
             dataType:'html',
             success : function(data){
-                
-            //$('#ui-accordion-accordion-panel-'+i.toString()).submit();
+               
             },
-            
-         
         });
       }
-      hideLoader();
-      function showLoader(){
-        $("#loader").css('display','');
-      }
       
-      function hideLoader() {
-    setTimeout(function () {
-        $("#loader").css("display", "none");
-    }, 1000);
-}
+     // beforeSend: function(){ showLoader(); }, 
+     //function showLoader(){
+      //  $("#loader").css('display','');
+     // }
+      
+     // function hideLoader() {
+       // setTimeout(function () {
+       // $("#loader").css("display", "none");
+       // }, 1000);
+    //}
+            $("#loader").hide();
       
     alert('Data is submitted successfully')
+    
     window.location.href = "/report/listing/?slug="+"{{request.GET.slug}}"
     });
     
@@ -2853,7 +2853,22 @@ $(document).ready(function() {
 </script>
 <!-- Script for submit report ends here-->
 
-
-
+<script>
+    
+    var request_url = "{{request.get_full_path|safe}}"
+    function remove_fields(ids){
+    $.ajax({
+            url: '/report/removed/fields/',
+            type:'GET',
+            data:{'id':ids,'report_id':"{{request.GET.report_id}}"}
+            dataType:"json",
+            success:function(data){
+                    
+            },
+            
+        });
+       window.location.href = request_url
+    }
+</script>
 
 {% endblock %}
