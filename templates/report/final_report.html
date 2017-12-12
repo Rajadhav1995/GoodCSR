@@ -2853,22 +2853,22 @@ $(document).ready(function() {
 </script>
 <!-- Script for submit report ends here-->
 
-<script>
-    
-    var request_url = "{{request.get_full_path|safe}}"
-    function remove_fields(ids){
-    $.ajax({
-            url: '/report/removed/fields/',
-            type:'GET',
-            data:{'id':ids,'report_id':"{{request.GET.report_id}}"}
-            dataType:"json",
-            success:function(data){
-                    
-            },
-            
-        });
-       window.location.href = request_url
-    }
-</script>
+<!--<script>-->
+<!--    -->
+<!--    var request_url = "{{request.get_full_path|safe}}"-->
+<!--    function remove_fields(ids){-->
+<!--    $.ajax({-->
+<!--            url: '/report/removed/fields/',-->
+<!--            type:'GET',-->
+<!--            data:{'id':ids,'report_id':"{{request.GET.report_id}}"}-->
+<!--            dataType:"json",-->
+<!--            success:function(data){-->
+<!--                    -->
+<!--            },-->
+<!--            -->
+<!--        });-->
+<!--       window.location.href = request_url-->
+<!--    }-->
+<!--</script>-->
 
 {% endblock %}
