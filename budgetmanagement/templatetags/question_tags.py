@@ -75,7 +75,7 @@ def get_parameters_list(quest,quarterreportobj):
     try:
         answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
         answerlist = answerobj.inline_answer
-        parameterlist = ReportParameter.objects.filter(id__in = eval(answerlist))
+        parameterlist = ReportParameter.objects.filter(id__in = eval(answerlist),active=2)
     except:
         parameterlist = []
     return parameterlist
