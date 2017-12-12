@@ -377,3 +377,16 @@ def get_index_page_number(quarter):
 def location_split(value, sep = "."):
     parts = value.split(sep)
     return (parts[0], sep.join(parts[1:]))
+
+
+@register.assignment_tag
+def is_ceo_user(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
+    ceo_user = ProjectUserRoleRelationship.objects.get_or_none(user__id=user_id,role__code = 5)
+    admin_user = user_obj.is_admin_user
+    if ceo_user:
+        status = 0
+    else:
+        status = 1
+    return status
