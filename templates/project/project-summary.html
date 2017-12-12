@@ -711,7 +711,7 @@ function confirm_alert(node) {
         activityId = superId.toString() + activityId.toString();
       }
       activityId = parseInt(activityId);
-      // console.log("TaskID", taskId);
+      // console.log("Slug and project", slug,project);
       if ( slug != null && project != ""){		
         // var domain = "";		
         // if(window.location.hostname == ""){		
@@ -857,30 +857,10 @@ function confirm_alert(node) {
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
             mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));//changed null to 100
         }
-        // } else {
-        //   var prevDate, maxDate;
-        //   $.each(depTask, function () {
-        //     var depValue = this.valueOf();
-        //     $.each(jsonData.tasks,function(){
-        //       if(this.id == depValue){
-
-        //       }
-        //     });
-        //     console.log('Dep', this.valueOf(), depTask);
-        //   });
-        // }
-        // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
-        //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
       });
-
-
       //Draw task after drawing milestone
-      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
+      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, link, 0,
         '', taskCompletion , 0, activityId, 1, '', '', '', g ,pStartDate, pEndDate));
-      // console.log("Task");
-      // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-      //   '', 0, 0, activityId, 1, '', '', '');
-
     });
 
     g.setShowStartDate(0);
@@ -938,7 +918,7 @@ function confirm_alert(node) {
           if (mile) {
 
           }
-          if (collision($(this), $(previous)) || collision($(this), $(prePrevious)) || collision($(this), $(pre2)) || collision($(this), $(pre3))) {
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
             $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
               if ($(this).css('top') == '-5px') {
                 $(this).css('top', '0px');
@@ -968,8 +948,6 @@ function confirm_alert(node) {
           });
           mile = false;
         }
-        pre3 = pre2;
-        pre2 = prePrevious;
         prePrevious = previous;
         previous = this;
       });
