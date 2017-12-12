@@ -192,6 +192,7 @@ def get_parameter(obj,block_id):
     master_list = []
     master_names = []
     pie_chart = ''
+    single_parameter = 0
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
@@ -202,9 +203,11 @@ def get_parameter(obj,block_id):
                 master_names.append(i.keyparameter.name)
                 if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
                     pie_chart = 0
+                    single_parameter = 0
+                    single_parameter = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=report_para[0], start_date__gte=obj.start_date,end_date__lte=obj.end_date).values_list('parameter_value',flat=True))
                 else:
                     pie_chart = 1
-    return master_list,master_names,pie_chart
+    return master_list,master_names,pie_chart,single_parameter
 
 @register.filter
 def get_at_index(list, index):

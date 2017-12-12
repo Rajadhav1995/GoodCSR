@@ -48,6 +48,7 @@ def get_questions(block,project_report):
     question_dict={} 
     report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
     questions = Question.objects.filter(block=block,parent=None,block__block_type=0)
+    # import ipdb; ipdb.set_trace()
     for i in questions:
         answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,

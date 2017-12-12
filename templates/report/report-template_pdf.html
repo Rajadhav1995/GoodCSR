@@ -229,6 +229,13 @@ margin-bottom: 20px;}
 .gchartgrid{
   overflow: hidden !important;
 }
+
+
+thead { display: table-header-group !important; }
+tfoot { display: table-row-group !important; }
+tr { page-break-inside: avoid !important; }
+
+tr { page-break-inside: avoid; overflow: visible !important; }
 </style>
 <script>
  var lengths = 0;
@@ -248,7 +255,7 @@ margin-bottom: 20px;}
                      </div>
                      <div>
                       {% if answer_list.cover_image %}
-                        <img src="{{answer_list.cover_image}}" style="width:100%">
+                        <img src="{{answer_list.cover_image}}" style="width:100%; height:800px">
                       {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" style="width:100%">
                       {% endif %}
@@ -632,6 +639,9 @@ No Key Acheivements in this Quarter
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
             <div class="table-responsive">
+              {% for i in budget_period %}
+              {{i}}
+              {% endfor %}
            <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
             <thead>
             
@@ -649,32 +659,37 @@ No Key Acheivements in this Quarter
               <th>Variance</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody style="display:table-row-group!important;page-break-after: auto!important;">
             {% for j in budget_period %}
-            <tr>
+            <!-- {% if forloop.counter == 20 %}
+            <tr class="page-break"></tr>
+            {% else %} -->
+            <tr style="width:100%; display:table-row!important; page-break-inside:avoid!important;page-break-after: auto!important;">
+            <!-- {% endif %} -->
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}}</td>
-                <td> {{lineitemobj.heading.name}} </td>
-                <td> {{lineitemobj.subheading}} </td>
+                <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center"> {{lineitemobj.category.name}}</td>
+                <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center"> {{lineitemobj.heading.name}} </td>
+                <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center"> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center">{{line_total | get_currency}}</td>
+                <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center" align="center">{{line_total | get_currency}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center">{{utilized_amount | get_currency}}</td>
-                 <td> {{lineitemobj.unit_type}}  </td>
+                <td  style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center"align="center">{{utilized_amount | get_currency}}</td>
+                 <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center"> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_order 1 project as quarter_order %}
                 {% if i == quarter_order %}
                 {% get_quarter_details j i project as line_itemobj %}
-                   <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
-                    <td align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
-                     <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
-                     <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
-                     <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                   <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center" align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
+                    <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center" align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
+                     <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center" align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center" align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
+                     <td style="display:table-cell!important;font-size: 12px;vertical-align: middle;" class="text-center" align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                      {% endif %}
                      {% endfor %}
 
             </tr>
+
             {% endfor %}
 
             </tbody>
@@ -1232,7 +1247,7 @@ No Key Acheivements in this Quarter
                      <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
                      <p style="font-size:13px; margin-top:10px">{{img.description}}</p>
                      {% endif %}
-                  
+                  <div class="page_break"></div>
                   {% endfor %}
                   {% endfor %}
                   </div>
