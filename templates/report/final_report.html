@@ -1878,7 +1878,7 @@
             </div>
         </div>
     </div>
-        <div id="loader" style="text-align: center;" class="cause">
+        <div id="loader" style="text-align: center; display:None;" class="cause">
         <div class="centered">
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="color:#FFF"></i>
         </div>
@@ -2857,7 +2857,6 @@ $(document).ready(function() {
     
     var request_url = "{{request.get_full_path|safe}}"
     function remove_fields(ids){
-    debugger;
     $.ajax({
             url: '/report/removed/fields/',
             type:'GET',
