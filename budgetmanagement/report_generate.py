@@ -634,7 +634,7 @@ def finalreportdesign(request):
     previous_len = len(previousquarter_list)+1
     current_len = len(currentquarter_list)+1
     future_len = previous_len+current_len
-    project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None)
+    project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None,active=2)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
