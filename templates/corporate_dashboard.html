@@ -209,6 +209,8 @@
         </ul>
     </div>
 
+    {% is_ceo_user request as status %}
+    {% if status == 0 %}
     <!-- New Code -->
 	<link type="text/css" rel="stylesheet" href="/static/css/lightslider.min.css" />               
     <script src="/static/js/lightslider.min.js"></script>
@@ -390,7 +392,6 @@
         }
     }
             var total{{i.id}} = parseInt(100 - (utilized{{i.id}} + disbursed{{i.id}}))
-            console.log("Gauge{{i.id}}", total, utilized, disbursed);
             // The speed gauge
             var chartSpeed{{i.id}} = Highcharts.chart('total_budget{{i.id}}', Highcharts.merge(gaugeOptions{{i.id}}, {
 
@@ -554,6 +555,7 @@
     </style>
 	<!-- New Code Ends -->
 
+    {% else %}
     <div class="white-box">
     	<div class="left-white">
             <h2>Task Completion</h2>
@@ -587,6 +589,7 @@
         </div>
         
     </div>   
+    {% endif %}
     <div class="row">
     <div class="white-box-left">
     <div class="table-responsive">
