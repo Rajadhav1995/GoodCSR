@@ -704,13 +704,22 @@ def get_index_contents(slug,report_id):
 
 
 def save_removed_fields(request):
-    import ipdb;ipdb.set_trace()
     from ast import literal_eval
+    quest_ids_list = []
+    removed_list=[]
     ids = literal_eval(request.GET.get('id'))
-    url = literal_eval(request.GET.get('redirect_url'))
+    url = str(request.GET.get('redirect_url'))
     report_id = literal_eval(request.GET.get('report_id'))
+    report_obj = ProjectReport.objects.get_or_none(id=report_id)
+    block_type = literal_eval(request.GET.get('block_type'))
     ques_obj = Question.objects.get_or_none(id=ids)
-    removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report__id= int(report_id))
-    removed_ques.text = ids
+    removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
+    if created:
+        quest_ids_list.append(ids)
+        removed_ques.text = quest_ids_list
+    else:
+        removed_list = literal_eval(removed_ques.text)
+        removed_list.append(ids)
+        removed_ques.text = sorted(removed_list)
     removed_ques.save()
     return HttpResponseRedirect(url)
