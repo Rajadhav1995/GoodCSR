@@ -220,9 +220,6 @@ footer{margin:30px 0px; float: left; width: 100%}
     white-space: nowrap;
     overflow: hidden;
 }
-.gchartgrid{
-  overflow: hidden !important;
-}
 </style>
 
             </head>
@@ -591,7 +588,7 @@ footer{margin:30px 0px; float: left; width: 100%}
         if (obj.type == 'image') {
         $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
-          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+          $(wrapper).append('<li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       };
     }

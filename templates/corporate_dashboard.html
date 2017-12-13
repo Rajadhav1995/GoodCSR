@@ -212,6 +212,7 @@
     {% is_ceo_user request as status %}
     {% if status == 0 %}
     <!-- New Code -->
+    <div class="row">
 	<link type="text/css" rel="stylesheet" href="/static/css/lightslider.min.css" />               
     <script src="/static/js/lightslider.min.js"></script>
     {% for i in projectobj %} 
@@ -553,9 +554,10 @@
         color: #666;
     }
     </style>
+    </div>
 	<!-- New Code Ends -->
-
     {% else %}
+    <div class="row">
     <div class="white-box">
     	<div class="left-white">
             <h2>Task Completion</h2>
@@ -589,6 +591,7 @@
         </div>
         
     </div>   
+    </div>
     {% endif %}
     <div class="row">
     <div class="white-box-left">
