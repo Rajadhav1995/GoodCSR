@@ -12,7 +12,8 @@ from itertools import chain
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
-from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation,ProjectParameter)
+from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation,ProjectParameter,
+                                        ProjectParameterValue)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                                 ReportParameter, Question,Answer,QuarterReportSection)
 from media.models import (Comment,)
@@ -203,7 +204,7 @@ def get_parameter(obj,block_id):
                 master_names.append(i.keyparameter.name)
                 if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
                     pie_chart = 0
-                    single_parameter = 0
+                    import ipdb; ipdb.set_trace()
                     single_parameter = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=report_para[0], start_date__gte=obj.start_date,end_date__lte=obj.end_date).values_list('parameter_value',flat=True))
                 else:
                     pie_chart = 1
@@ -342,6 +343,7 @@ def get_last_page_number(page_number):
 
 @register.assignment_tag
 def get_index_page_number(quarter):
+    # import ipdb; ipdb.set_trace()
     lista = [4]
     prev = len(quarter.get('Previous Quarter Updates'))
     cur = len(quarter.get('Current Quarter Updates'))
@@ -379,16 +381,3 @@ def get_index_page_number(quarter):
 def location_split(value, sep = "."):
     parts = value.split(sep)
     return (parts[0], sep.join(parts[1:]))
-
-
-@register.assignment_tag
-def is_ceo_user(request):
-    user_id = request.session.get('user_id')
-    user_obj = UserProfile.objects.get_or_none(user_reference_id = int(user_id ))
-    ceo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 5)
-    admin_user = user_obj.is_admin_user
-    if ceo_user:
-        status = 0
-    else:
-        status = 1
-    return status
