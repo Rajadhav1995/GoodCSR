@@ -230,7 +230,7 @@ def get_parameter_values(obj,para_obj):
             parameter_type = 0
         else:
             parameter_type = 1
-    return master_list[0],master_names,parameter_type
+    return master_list,master_names,parameter_type
 
 @register.filter
 def get_at_index(list, index):
