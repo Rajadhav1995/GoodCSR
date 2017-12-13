@@ -705,9 +705,12 @@ def get_index_contents(slug,report_id):
 
 def save_removed_fields(request):
     import ipdb;ipdb.set_trace()
-    ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    report_id = request.GET.get('report_id')
-    removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report__id= int(report_id))
-#    removed_ques.text = 
+    import ast
+    ids = ast.literal_eval(request.GET.get('id'))
+    url=ast.literal_eval(request.GET.get('redirect_url'))
+    report_id = ast.literal_eval(request.GET.get('report_id'))
     
+    removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report__id= int(report_id))
+    removed_ques.text = ids
+    removed_ques.save()
+    return HttpResponseRedirect(url)

@@ -82,14 +82,14 @@
                                                     
                                                     <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
                                                     <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
-                                                  <h5><a href="#">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1)">Remove</a></h5>
                                                 </div>  
                                            {% elif sub.q_type == 'APT' %}
                                            
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}})">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1)">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
                                            
@@ -100,7 +100,9 @@
                                                   <div class="form-group addpicture">
                                                      <img src="/static/img/browse.png">
                                                      <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}"  class="input_file"></input>
-                                                     <div class="col-md-6 report_text"><h5><a href="#">Remove</a></h5></div>
+                                                     <div class="col-md-6 report_text">
+                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1)">Remove</a></h5>
+                                                    </div>
                                                   </div>
                                                </div>
                                            {% endif %}
@@ -110,16 +112,16 @@
                                       <p>{{i.q_text}}</p>
                                       {% if i.q_type == 'T' %}
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
-                                          <h5><a href="#">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1)">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
                                             <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required="" class="textarea_file">{{i.answer|striptags}}</textarea>
-                                          <h5><a href="#">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1)">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
                                           <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
                                         {% endif %}                                   
                                           <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}"  class="input_file"></input>
-                                          <h5><a href="#">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1)">Remove</a></h5>
                                       {% endif %}
                                    </div>
                                {% endif %}
@@ -148,20 +150,22 @@
                                                     
                                                     <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
                                                     <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
-                                                  <h5><a href="#">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2)">Remove</a></h5>
                                                 </div>  
                                            {% elif sub.q_type == 'APT' %}
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" ></input>
-                                                  <h5><a href="#">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2)">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'ck' %}
                                                     <div class="col-md-12 report_text">
                                                     <p>{{sub.q_text}}</p>
                                                     </div>
                                                     <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|striptags}}</textarea>
-                                                    <div class="col-md-12 report_text"><h5><a href="#">Remove</a></h5></div>
+                                                    <div class="col-md-12 report_text">
+                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2)">Remove</a></h5>
+                                                    </div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
                                                   <h6>{{sub.q_text}}</h6>
@@ -179,16 +183,16 @@
                                       <p>{{i.q_text}}</p>
                                       {% if i.q_type == 'T' %}
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
-                                          <h5><a href="#">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2)">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
                                             <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required=""  class="textarea_file">{{i.answer|striptags}}</textarea>
-                                          <h5><a href="#">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2)">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
                                               <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
                                         {% endif %}
                                           <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" ></input>
-                                          <h5><a href="#">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2)">Remove</a></h5>
                                       {% endif %}
                                    </div>
                                    {% endif %}
@@ -2831,22 +2835,28 @@ $(document).ready(function() {
 </script>
 <!-- Script for submit report ends here-->
 
-<!--<script>-->
-<!--    -->
-<!--    var request_url = "{{request.get_full_path|safe}}"-->
-<!--    function remove_fields(ids){-->
-<!--    $.ajax({-->
-<!--            url: '/report/removed/fields/',-->
-<!--            type:'GET',-->
-<!--            data:{'id':ids,'report_id':"{{request.GET.report_id}}"}-->
-<!--            dataType:"json",-->
-<!--            success:function(data){-->
-<!--                    -->
-<!--            },-->
-<!--            -->
-<!--        });-->
-<!--       window.location.href = request_url-->
-<!--    }-->
-<!--</script>-->
+<script>
+    
+    var request_url = "{{request.get_full_path|safe}}"
+    function remove_fields(ids,block_type){
+    debugger;
+    $.ajax({
+            url: '/report/removed/fields/',
+            cache: false,
+            type: 'GET',
+            data: { id:ids,
+                    report_id:"{{request.GET.report_id}}",
+                    redirect_url:request_url,
+                    block_type:block_type,
+                    },
+            
+            success: function(data){
+                    
+            },
+            
+        });
+       window.location.href = request_url
+    }
+</script>
 
 {% endblock %}
