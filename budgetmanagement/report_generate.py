@@ -712,8 +712,16 @@ def save_removed_fields(request):
     report_id = literal_eval(request.GET.get('report_id'))
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
     block_type = literal_eval(request.GET.get('block_type'))
+    object_id = request.GET.get('object_id')
     ques_obj = Question.objects.get_or_none(id=ids)
-    removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
+    import ipdb;ipdb.set_trace()
+    if ques_obj.block == 0:
+        removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
+    else:
+        quarter_report = QuarterReportSection.objects.get_or_none(id=object_id)
+        removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
+                block_type = block_type,
+            content_type = ContentType.objects.get_for_model(quarter_report),object_id = literal_eval(object_id))
     if created:
         quest_ids_list.append(ids)
         removed_ques.text = quest_ids_list
