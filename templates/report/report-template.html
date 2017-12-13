@@ -48,7 +48,7 @@
 @import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900');
 body { font-family:"Work Sans";font-weight: normal; color: #232323;font-size: 14px; margin: 0px; padding: 0px;}
 ul{padding-left: 0px}
-
+/*Inline css*/
 
 
 .margin_top_50{margin:50px 0px;float:left; width: 100%}
@@ -102,7 +102,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 /* tab-resp */ 
 .tab-resp1    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 .tab-resp1 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5; font-size: 14px }
-.tab-resp1 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;font-size: 14px}
+.tab-resp1 td { padding:5px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;font-size: 12px}
 .tab-resp1 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
 .tab-resp1 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
 .tab-resp1 td:last-child  { border-right:none;}
@@ -111,7 +111,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 /* tab-resp2 */ 
 .tab-resp2    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 .tab-resp2 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5;  }
-.tab-resp2 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;}
+.tab-resp2 td { padding:5px; font-size:12px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;}
 .tab-resp2 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
 .tab-resp2 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
 .tab-resp2 td:last-child  { border-right:none;}
@@ -1329,15 +1329,15 @@ No Key Acheivements in this Quarter
                   <div class="col-md-12">
                      <div class="row">
                         {% get_parameter i 4 as pie_data %}
-                        
-                        {% if pie_data.0 %}
-                        {% for lol in  pie_data.0 %}
+                        {% for pobj in  pie_data %}
+                        {% get_parameter_values i pobj as parameter_values %}
                         <div class="margin_30 prev_banner">
-                           <h5 class="color-red">PARAMETER 1</h5>
-                           <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
+                           <h5 class="color-red">PARAMETER {{forloop.counter}} </h5>
+                           <h5 class="color_green">{{parameter_values.1.0}}</h5>
                            <div>
-                            {% if pie_data.2 == 1 %}
-                            {% if pie_data.0.0.1.y != 0 %}
+                            
+                            {% if parameter_values.2 == 1 %}
+                            
                               <div class="col-md-4">
                                  <div class="row">
                                     <ul class="key_parameter parameter">
@@ -1352,7 +1352,7 @@ No Key Acheivements in this Quarter
                                     <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
                                  </div>
                               </div>
-                              {% endif %}
+                              
                               {% else %}
                               <ul class="key_parameter parameter">
                                 <!-- <div>
@@ -1361,7 +1361,7 @@ No Key Acheivements in this Quarter
                                 <table class="table pmu_formtable_parameter">
                                   <tr>
                                      <td>
-                                          <p>{{pie_data.1 | get_at_index:forloop.counter0}}</p>
+                                          <p>{{parameter_values.1.0}}</p>
                                           <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
                                       </td>
                                   </tr>
@@ -1390,13 +1390,14 @@ No Key Acheivements in this Quarter
                         <script src="/static/code/modules/solid-gauge.js"></script>
                         <script type="text/javascript">
                            {% get_parameter i 4 as pie_data %}
+                           {% get_parameter_values i pobj as parameter_values %}
                            var new_data_pin = 0;
-                           var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
-                           console.log(data11);
+                           var data11 = {{parameter_values.0 | safe}};
+                           console.log("mahiti.org");
                            var values = "comm{{forloop.counter}}"
-                           var pin_title = {{pin_title_name | safe}}
-                           var pin_title = pin_title[new_data_pin]
-                           new_data_pin++;
+                           var pin_title = "{{parameter_values.1.0.0 | safe}}"
+                           // var pin_title = pin_title[new_data_pin]
+                           
                            Highcharts.chart(values, {
                               chart:{type:'pie', backgroundColor: null,height:288},
                                        credits:{enabled: false},
@@ -1445,7 +1446,7 @@ No Key Acheivements in this Quarter
                                    });
                         </script>
                         {% endfor %}
-                        {% endif %}
+                        
                      </div>
                   </div>
                   <br>

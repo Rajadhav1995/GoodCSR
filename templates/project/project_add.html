@@ -475,6 +475,9 @@ $(document).ready(function() {
     } else {
         var x =Number(loop_count)+1
     }
+    {% if obj and not location %}
+    var x =Number(loop_count);
+    {% endif %}
     //var x =Number(loop_count)+1;
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();

@@ -48,6 +48,7 @@ def get_questions(block,project_report):
     question_dict={} 
     report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
     questions = Question.objects.filter(block=block,parent=None,block__block_type=0)
+    # import ipdb; ipdb.set_trace()
     for i in questions:
         answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,
@@ -228,3 +229,12 @@ def get_taskcompletion(obj):
         total_milestones = milestones.count()
     data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
     return percent
+
+@register.assignment_tag
+def get_parameter_type(obj):
+    for i in obj:
+        if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
+            pie_chart = 0
+        else:
+            pie_chart = 1
+    return pie_chart
