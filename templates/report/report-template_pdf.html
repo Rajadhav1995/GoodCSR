@@ -673,7 +673,7 @@ No Key Acheivements in this Quarter
             </tr>
             </thead>
             {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+            {% if forloop.counter|divisibleby:20 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
                <br><br>
                <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
             
@@ -693,7 +693,7 @@ No Key Acheivements in this Quarter
             </thead><tbody>{% endif %}
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
+                <td> {{lineitemobj.category.name}} </td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
@@ -1266,7 +1266,7 @@ No Key Acheivements in this Quarter
             </tr>
             </thead>
             {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+            {% if forloop.counter|divisibleby:20 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
                <br><br>
                <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
             
@@ -1286,7 +1286,7 @@ No Key Acheivements in this Quarter
             </thead><tbody>{% endif %}
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
+                <td> {{lineitemobj.category.name}} </td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
@@ -1551,7 +1551,7 @@ No Key Acheivements in this Quarter
             </tr>
             </thead>
             {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+            {% if forloop.counter|divisibleby:20 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
                <br><br>
                <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
             
@@ -1571,7 +1571,7 @@ No Key Acheivements in this Quarter
             </thead><tbody>{% endif %}
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
+                <td> {{lineitemobj.category.name}} </td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
@@ -1712,7 +1712,7 @@ No Key Acheivements in this Quarter
                    <div class="margin_top30 page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
-        <div id="" >
+        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" >
          <div class="table_header_page_height">
            <table  cellpadding="0" cellspacing="0" border="0">
             <thead>
@@ -1735,7 +1735,7 @@ No Key Acheivements in this Quarter
             </tr>
             </thead>
             {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+            {% if forloop.counter|divisibleby:20 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
                <br><br>
                <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
             
@@ -1755,7 +1755,7 @@ No Key Acheivements in this Quarter
             </thead><tbody>{% endif %}
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
+                <td> {{lineitemobj.category.name}} </td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
