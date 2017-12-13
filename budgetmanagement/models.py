@@ -230,10 +230,16 @@ class Answer(BaseContent):
     def __str__(self):
         return str(self.id)
 
-OPTION_TYPE = ((1,"Question Type"),(2,"Block type"),(3,"invite"))
+BLOCK_CHOICES= (
+       (0,""),(1,"CP"),(2,"PS"),(3,"PQ"),
+       (4,"CQ"),(5,"NQ"))
 class RemoveQuestion(BaseContent):
     quarter_report = models.ForeignKey(ProjectReport,**OPTIONAL)
+    block_type = models.IntegerField(choices=BLOCK_CHOICES,default=0)
     text = models.TextField(**OPTIONAL) #to tag the removed question or section id's'
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
+    object_id = models.IntegerField(_('object ID'),**OPTIONAL)
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
     
     def __unicode__(self):
         return str(self.text) or str(self.id)
