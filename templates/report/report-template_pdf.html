@@ -138,7 +138,15 @@ footer{margin:30px 0px; float: left; width: 100%}
 
 .page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 800px}
 .header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
-.page_break{page-break-after: always;}
+.table_header_page_height{width:100%; min-height: 200px}
+.page_break  {page-break-before: always !important;display: block; clear: both; }
+
+@media print {
+            tr.page_break_table  { display: block !important; page-break-after: always !important; page-break-inside: avoid !important;}
+        }
+    table{border-collapse: collapse}
+  th,td{padding:5px;border:1px solid #bbb;}      
+
 .table-scroll {
   position:relative;
   max-width:100%;
@@ -231,6 +239,13 @@ margin-bottom: 20px;}
 .gchartgrid{
   overflow: hidden !important;
 }
+
+
+thead { display: table-header-group !important; }
+tfoot { display: table-row-group !important; }
+tr { page-break-inside: avoid !important; }
+
+tr { page-break-inside: avoid; overflow: visible !important; }
 </style>
 <script>
  var lengths = 0;
@@ -250,7 +265,7 @@ margin-bottom: 20px;}
                      </div>
                      <div>
                       {% if answer_list.cover_image %}
-                        <img src="{{answer_list.cover_image}}" style="width:100%">
+                        <img src="{{answer_list.cover_image}}" style="width:100%; height:800px">
                       {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" style="width:100%">
                       {% endif %}
@@ -547,13 +562,14 @@ margin-bottom: 20px;}
                             };
                             var date = obj.date
                             var f = new Date(date);
-                            var month = months[f.getMonth()];
+                            
                             var nn = f.getMonth();
                             var ids = obj.id
                             //var date1 = f.getDate()
                             var datelist = date.split("-")
                             var date1 = datelist[2]
-                            var month = datelist[1]
+                            var month1 = datelist[1]
+                            var month = months[month1-1];
                             //alert(date1);
                             function delete_upload()
                             {
@@ -637,8 +653,9 @@ No Key Acheivements in this Quarter
                   <div class="margin_top30 page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
-            <div class="table-responsive">
-           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+            <div class="table_header_page_height">
+
+           <table cellpadding="0" cellspacing="0" border="1" >
             <thead>
             
             <tr>
@@ -655,11 +672,28 @@ No Key Acheivements in this Quarter
               <th>Variance</th>
             </tr>
             </thead>
-            <tbody>
             {% for j in budget_period %}
+            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+               <br><br>
+               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead><tbody>{% endif %}
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
@@ -681,6 +715,7 @@ No Key Acheivements in this Quarter
                      {% endfor %}
 
             </tr>
+
             {% endfor %}
 
             </tbody>
@@ -1212,8 +1247,8 @@ No Key Acheivements in this Quarter
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" >
-         <div class="table-responsive">
-           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+         <div class="table_header_page_height">
+           <table cellpadding="0" cellspacing="0" border="0">
             <thead>
             
             <tr>
@@ -1230,11 +1265,28 @@ No Key Acheivements in this Quarter
               <th>Variance</th>
             </tr>
             </thead>
-            <tbody>
             {% for j in budget_period %}
-            <tr >
+            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+               <br><br>
+               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead><tbody>{% endif %}
+            <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
@@ -1328,7 +1380,7 @@ No Key Acheivements in this Quarter
                      <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
                      <p style="font-size:13px; margin-top:10px">{{img.description}}</p>
                      {% endif %}
-                  
+                  <div class="page_break"></div>
                   {% endfor %}
                   {% endfor %}
                   </div>
@@ -1352,15 +1404,15 @@ No Key Acheivements in this Quarter
                   <div class="col-md-12">
                      <div class="row">
                         {% get_parameter i 4 as pie_data %}
-                        
-                        {% if pie_data.0 %}
-                        {% for lol in  pie_data.0 %}
+                        {% for pobj in  pie_data %}
+                        {% get_parameter_values i pobj as parameter_values %}
                         <div class="margin_30 prev_banner">
-                           <h5 class="color-red">PARAMETER 1</h5>
-                           <h5 class="color_green">{{pie_data.1 | get_at_index:forloop.counter0}}</h5>
+                           <h5 class="color-red">PARAMETER {{forloop.counter}} </h5>
+                           <h5 class="color_green">{{parameter_values.1.0}}</h5>
                            <div>
-                            {% if pie_data.2 == 1 %}
-                            {% if pie_data.0.0.1.y != 0 %}
+                            
+                            {% if parameter_values.2 == 1 %}
+                            
                               <div class="col-md-4">
                                  <div class="row">
                                     <ul class="key_parameter parameter">
@@ -1375,7 +1427,7 @@ No Key Acheivements in this Quarter
                                     <!-- <img src="/static/img/report/parameter01.jpg" style="width:100%"> -->
                                  </div>
                               </div>
-                              {% endif %}
+                              
                               {% else %}
                               <ul class="key_parameter parameter">
                                 <!-- <div>
@@ -1384,7 +1436,7 @@ No Key Acheivements in this Quarter
                                 <table class="table pmu_formtable_parameter">
                                   <tr>
                                      <td>
-                                          <p>{{pie_data.1 | get_at_index:forloop.counter0}}</p>
+                                          <p>{{parameter_values.1.0}}</p>
                                           <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
                                       </td>
                                   </tr>
@@ -1413,13 +1465,14 @@ No Key Acheivements in this Quarter
                         <script src="/static/code/modules/solid-gauge.js"></script>
                         <script type="text/javascript">
                            {% get_parameter i 4 as pie_data %}
+                           {% get_parameter_values i pobj as parameter_values %}
                            var new_data_pin = 0;
-                           var data11 = {{pie_data.0 | safe}}[{{forloop.counter0}}];
-                           console.log(data11);
+                           var data11 = {{parameter_values.0.0 | safe}};
+                           console.log("mahiti.org");
                            var values = "comm{{forloop.counter}}"
-                           var pin_title = {{pin_title_name | safe}}
-                           var pin_title = pin_title[new_data_pin]
-                           new_data_pin++;
+                           var pin_title = "{{parameter_values.1.0 | safe}}"
+                           // var pin_title = pin_title[new_data_pin]
+                           
                            Highcharts.chart(values, {
                               chart:{type:'pie', backgroundColor: null,height:288},
                                        credits:{enabled: false},
@@ -1468,7 +1521,7 @@ No Key Acheivements in this Quarter
                                    });
                         </script>
                         {% endfor %}
-                        {% endif %}
+                        
                      </div>
                   </div>
                   <br>
@@ -1476,8 +1529,8 @@ No Key Acheivements in this Quarter
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" >
-         <div class="table-responsive">
-           <table class="tab-resp1" id="example11" >
+         <div class="table_header_page_height">
+           <table cellpadding="0" cellspacing="0" border="1" >
             <thead>
             <tr class="sticky-row quarter_color">
 
@@ -1497,25 +1550,42 @@ No Key Acheivements in this Quarter
               <th>Variance</th>
             </tr>
             </thead>
-            <tbody class="budget_section">
             {% for j in budget_period %}
-            <tr class = "data_row">
+            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+               <br><br>
+               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead><tbody>{% endif %}
+            <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
+                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
-                <td align="center" class="sticky-cell">{{line_total}}</td>
+                <td align="center">{{line_total | get_currency}}</td>
                 {% get_utlizedline_total j project as utilized_amount %}
-                <td align="center" class="sticky-cell">{{utilized_amount}}</td>
-                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                <td align="center">{{utilized_amount | get_currency}}</td>
+                 <td> {{lineitemobj.unit_type}}  </td>
 
                 {% for i,v in quarter_list.items %}
                 {% get_quarter_order 2 project as quarter_order %}
                 {% if i == quarter_order %}
                 {% get_quarter_details j i project as line_itemobj %}
-                   <td align="center" class=""> {{line_itemobj.unit}} </td>
-                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                   <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
                      <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
                      <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
@@ -1644,8 +1714,8 @@ No Key Acheivements in this Quarter
                      
                      <div class="white-box">
         <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" >
-         <div class="white-box">
-           <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+         <div class="table_header_page_height">
+           <table  cellpadding="0" cellspacing="0" border="0">
             <thead>
             <tr>
 
@@ -1665,11 +1735,28 @@ No Key Acheivements in this Quarter
               <th>Variance</th>
             </tr>
             </thead>
-            <tbody class="budget_section">
             {% for j in budget_period %}
-            <tr class = "data_row">
+            {% if forloop.counter|divisibleby:25 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
+               <br><br>
+               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
+            
+            <tr>
+              <th>Super Category</th>
+              <th>Heading</th>
+              <th>Subheading</th>
+              <th>Total Planned</th>
+              <th>Total Utilized</th>
+              <th>Units Type</th>
+              <th>Units</th>
+              <th>Rate</th>
+              <th> Planned</th>
+              <th> Utilized</th>
+              <th>Variance</th>
+            </tr>
+            </thead><tbody>{% endif %}
+            <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
-                <td> {{lineitemobj.category.name}}</td>
+                <td> {{lineitemobj.category.name}} {{forloop.counter}}</td>
                 <td> {{lineitemobj.heading.name}} </td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
@@ -1682,8 +1769,8 @@ No Key Acheivements in this Quarter
                 {% get_quarter_order 2 project as quarter_order %}
                 {% if i == quarter_order %}
                 {% get_quarter_details j i project as line_itemobj %}
-                   <td align="center" class=""> {{line_itemobj.unit}} </td>
-                    <td align="center" class=""> {{line_itemobj.rate}}  </td>
+                   <td align="center" class=""> {{line_itemobj.unit | get_currency}} </td>
+                    <td align="center" class=""> {{line_itemobj.rate | get_currency}}  </td>
                      <td align="center" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
                      <td align="center" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
                      <td align="center" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>

@@ -103,7 +103,7 @@ def pdfconverter(request):
     '--load-error-handling': 'ignore',
     '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
     '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
-    '--margin-bottom': '15.50',
+    '--header-spacing': '5.10',
     '--encoding': "utf-8",
     '--footer-right': '[page]',
     }
@@ -141,7 +141,6 @@ def pdf_header(request):
     ans = Answer.objects.get_or_none(question=question,object_id=report_id)
     if ans:
         report_name = ans.text
-    # report_name = pdf_header_data(report)
     return render(request,'report/header.html',locals())
 
 def pdf_footer(request):
