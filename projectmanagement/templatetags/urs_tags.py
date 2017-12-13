@@ -194,6 +194,7 @@ def get_parameter(obj,block_id):
     master_names = []
     pie_chart = ''
     single_parameter = 0
+    report_para = []
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
         from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
@@ -204,11 +205,32 @@ def get_parameter(obj,block_id):
                 master_names.append(i.keyparameter.name)
                 if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
                     pie_chart = 0
-                    import ipdb; ipdb.set_trace()
-                    single_parameter = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=report_para[0], start_date__gte=obj.start_date,end_date__lte=obj.end_date).values_list('parameter_value',flat=True))
+                    
+                    # single_parameter = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=report_para[0], start_date__gte=obj.start_date,end_date__lte=obj.end_date).values_list('parameter_value',flat=True))
                 else:
                     pie_chart = 1
-    return master_list,master_names,pie_chart,single_parameter
+    return report_para
+
+@register.assignment_tag
+def get_parameter_values(obj,para_obj):
+    # this template tag is used to get json data for parameter pie chart 
+    main_list =[]
+    master_list = []
+    master_names = []
+    parameter_type = ''
+    single_parameter = 0
+    report_para = []
+    # report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+    from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
+    if para_obj.keyparameter:
+        main_list = pie_chart_mainlist_report(para_obj.keyparameter,obj.start_date,obj.end_date)
+        master_list.append(main_list)
+        master_names.append(para_obj.keyparameter.name)
+        if para_obj.keyparameter.parameter_type == 'NUM' or para_obj.keyparameter.parameter_type == 'CUR':
+            parameter_type = 0
+        else:
+            parameter_type = 1
+    return master_list[0],master_names,parameter_type
 
 @register.filter
 def get_at_index(list, index):
@@ -381,3 +403,15 @@ def get_index_page_number(quarter):
 def location_split(value, sep = "."):
     parts = value.split(sep)
     return (parts[0], sep.join(parts[1:]))
+
+@register.assignment_tag
+def is_ceo_user(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = int(user_id ))
+    ceo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 5)
+    admin_user = user_obj.is_admin_user
+    if ceo_user:
+        status = 0
+    else:
+        status = 1
+    return status

@@ -229,3 +229,12 @@ def get_taskcompletion(obj):
         total_milestones = milestones.count()
     data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
     return percent
+
+@register.assignment_tag
+def get_parameter_type(obj):
+    for i in obj:
+        if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
+            pie_chart = 0
+        else:
+            pie_chart = 1
+    return pie_chart
