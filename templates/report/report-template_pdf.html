@@ -240,9 +240,9 @@ margin-bottom: 20px;}
     vertical-align: baseline;
   }
 
-/*.gchartgrid{
+.gchartgrid{
   overflow: hidden !important;
-}*/
+}
 
 
 thead { display: table-header-group !important; }
@@ -1555,7 +1555,8 @@ No Key Acheivements in this Quarter
     
     </div>
                   </div>
-                  <div class="margin_top30">
+
+                  <div class="location margin_top30">
                      <p>About The Budget</p>
                      {% get_budget_detail 4 i as budget_detail %}
                      <h5>{{budget_detail}}
