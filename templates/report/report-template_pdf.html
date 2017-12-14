@@ -140,7 +140,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 .header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
 .table_header_page_height{}
 .padding_top30{padding-top: 50px}
-.page_break  {page-break-before: always !important;display: block; clear: both; }
+.page_break  {page-break-before: always !important; }
 .extra_height{
   height: :100px;
 }
@@ -445,7 +445,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                   </div>
                   
                </div>
-               
+               </div>
                <!--Index page 04 html ends-->
                <!--Index page 05 html starts-->
                {% for i in report_quarter %}
@@ -458,12 +458,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 
               <div class="page_break"></div>
                <div class="container">
-                  <div>
-                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
-                     
-                  </div>
                   
-                  <div class='page_height'>
+                  
+                  <div>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
                      {% get_date_range j as date_range %}
@@ -626,7 +623,7 @@ No Key Acheivements in this Quarter
                         {% for img in images %}
                      <div class="col-md-6" style="padding:0px">
                         {% if img.attachment_file %}
-                        <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
+                        <img src="{{image_url}}{{img.attachment_file.url}}" height = 300 width = 400 >
                         <p>{{img.description}}
                         </p>
                         {% endif %}
@@ -641,11 +638,9 @@ No Key Acheivements in this Quarter
               <div class="page_break"></div>
                <!--Index page 06 html ends-->
                <!--Index page 07 html starts-->
+               <div class="">
                <div class="container">
-                  <div>
-                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
-                     
-                  </div>
+                 
 
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Previous Quarter Updates</h4>
@@ -653,7 +648,7 @@ No Key Acheivements in this Quarter
                      <p>{{forloop.counter | get_ordinal_number}} Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   
-                  <div class="page_height">
+                  
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
             <div class=" table_header_page_height">
 
@@ -1318,7 +1313,6 @@ No Key Acheivements in this Quarter
     
     </div>
                   </div>
-                  <div class="page_break"></div>
                   <div class="location margin_top30" style="margin-bottom:0px">
                      {% get_about_quarter i report_obj 4 as abut_parameter %}
                      <p>About The Quarter</p>
@@ -1340,10 +1334,10 @@ No Key Acheivements in this Quarter
                   <div>
                      {% if img.attachment_file %}
                      
-                     <img src="{{image_url}}{{img.attachment_file.url}}" height = 400 width = 500 >
+                     <img src="{{image_url}}{{img.attachment_file.url}}" height = 300 width = 400 >
                      <p style="font-size:13px; margin-top:10px">{{img.description}}</p>
                      {% endif %}
-                  <div class="page_break"></div>
+                  
                   {% endfor %}
                   {% endfor %}
                   </div>
@@ -1353,10 +1347,6 @@ No Key Acheivements in this Quarter
                <!--Index page 08 html ends-->
                <!--Index page 09 html starts-->
                <div class="container">
-                  <div class="margin_25">
-                     <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
-                     
-                  </div>
                   <div class='page_height'>
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
