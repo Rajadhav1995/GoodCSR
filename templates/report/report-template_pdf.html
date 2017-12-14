@@ -138,7 +138,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 
 .page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 850px}
 .header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
-.table_header_page_height{min-height: 1000px;margin-top: 50px;}
+.table_header_page_height{min-height: 200px;margin-top: 50px;}
 .padding_top30{padding-top: 50px}
 .page_break  {page-break-before: always !important;display: block; clear: both; }
 .extra_height{
@@ -680,7 +680,7 @@ No Key Acheivements in this Quarter
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
                 <td> {{lineitemobj.category.name}} </td>
-                <td> {{lineitemobj.heading.name}} -{{forloop.counter}}</td>
+                <td> {{lineitemobj.heading.name}}</td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
                 <td align="center">{{line_total | get_currency}}</td>
