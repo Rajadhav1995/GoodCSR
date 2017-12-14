@@ -636,8 +636,7 @@ No Key Acheivements in this Quarter
                   </div>
                   {% endfor %}
                   </div>
-                  
-               </div>
+
                
               <div class="page_break"></div>
                <!--Index page 06 html ends-->
@@ -1599,7 +1598,7 @@ No Key Acheivements in this Quarter
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
-                  
+                  <div class="page_break">
                   <div class="page_height">
                   <div class="quarter_updates">
                      <h4 style="margin:0px">Current Quarter Updates</h4>
@@ -1643,14 +1642,14 @@ No Key Acheivements in this Quarter
                      {% get_date_range k as date_range %}
                      <p>Third Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
-                  <div class="location margin_top30" style="margin-bottom:0px">
+                  <div class="location" style="margin-bottom:0px">
                      <p>About The Quarter</p>
                      {% get_about_quarter k report_obj 5 as abut_parameter %}
                      <h5>{{abut_parameter}} </h5>
                   </div>
-                   <div class="margin_top30">
+                   <div>
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class=" table_header_page_height">
+                     <div>
 
            <table cellpadding="0" cellspacing="0" border="1" >
             <thead>
@@ -1701,8 +1700,8 @@ No Key Acheivements in this Quarter
           </table>
         </div>  
         </div>
-                     <br>
-                     <div class="white-box">
+        <br><br>
+        <div class="white-box">
     <div class="table-responsive">
     <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
       <thead>
