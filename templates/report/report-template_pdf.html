@@ -52,7 +52,7 @@ ul{padding-left: 0px}
 
 
 
-.margin_top_50{margin:50px 0px;float:left; width: 100%}
+.margin_top_50{float:left; width: 100%}
 .margin_top_50 ul li{float:left;list-style-type: none; margin-left: 30px}
 .margin_top_50 ul li:nth-child(1){border-right:1px solid #dedede;margin-left: 0px}
 .margin_top_50 ul li img{margin-right:30px}
@@ -60,12 +60,12 @@ ul{padding-left: 0px}
 .text-head p{color:#019875; float: right; font-size: 14px;text-transform: uppercase;}
 hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
 .margin_top_50 ul{padding-left: 0px}
-.margin_25{margin: 25px 0px 15px; float:left;width:100%;}
+.margin_25{float:left;width:100%;}
 .margin_25 .float_right{float: right}
-.margin_25 h1{float: left;position: relative; top:35px;font-weight: 600}
+.margin_25 h1{float: left;position: relative; font-weight: 600}
 .margin-botom35 h2{color:#019875; font-weight:600; font-size: 14px; margin-bottom: 5px}
 /*.margin-botom35{margin-bottom: 35px;}*/
-.margin-50{margin:50px 0px; float: left; width:100%}
+.margin-50{float: left; width:100%}
 .margin-botom35 h2 span:nth-last-child(1){float: right;background: #fff; position: relative;color:#232323; top: 10px; padding: 0px 0px 0px 10px;}
 .margin-botom35 h2 span:nth-child(1){background: #fff; position: relative; top: 10px; padding: 0px 10px 0px 0px;}
 .margin-botom35 h3 span:nth-last-child(1){float: right;background: #fff; position: relative; top: 5px; padding: 0px 0px 0px 10px;}
@@ -73,7 +73,7 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
 .margin-botom35 h3{font-weight:600; border-bottom: 1px solid #dedede;width: 100%; font-size: 16px; margin-top:-10px}
 .border_text h2{color:#019875; font-weight:600; border-bottom: 1px solid #dedede;width: 100%}
 .quarter_updates p{border-bottom: 1px solid #dedede ;padding-bottom: 5px; font-size: 14px}
-.quarter_updates{margin-top:20px}
+.quarter_updates{}
 .quarter_updates span{font-size: 14px}
 .color-red{color:#a63967;margin: 0px; }
 .school_project h1{margin: 0px; border-bottom: 1px solid #dedede; padding-bottom: 10px;margin-bottom: 20px; font-size: 20px}
@@ -86,10 +86,10 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
 .location{margin-bottom: 60px;margin-top: 30px; float: left; width: 100%;}
 .location h5{color:#363636 ; font-weight: normal; font-size: 14px; font-family: "Work Sans"; }
 footer{margin:30px 0px; float: left; width: 100%}
-.margin-top40{margin-top:40px}
+.margin-top40{}
 .quarter_updates h4{font-size: 16px; font-weight: 600}}
 .quarter_updates p{color:#424242; font-size: 10px; border-bottom: 1px solid #dedede; padding-bottom: 4px}
-.margin_30{margin: 30px 0px; float: left; width:100%}
+.margin_30{}
 .color_green{font-weight: 600; color:#019875;border-bottom: 1px solid #dedede; padding-bottom: 5px; margin-bottom:10px !important; margin-top: 0px;}
 .color_grey{color:#666666}
 
@@ -98,7 +98,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 .parameter-textbottom{position: absolute; top:180px}
 .parameter-textbottom .color_green{border-bottom: 0px}
 
-.margin_top30{margin-top:30px; float: left; width:100%; height: 100%;}
+.margin_top30{float: left; width:100%; height: 100%;}
 
 /* tab-resp */ 
 .tab-resp1    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
@@ -136,14 +136,18 @@ footer{margin:30px 0px; float: left; width: 100%}
 @media screen and (min-width: 1000px) {} 
 @media screen and (min-width: 1200px) {}
 
-.page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 800px}
+.page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 850px}
 .header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
-.table_header_page_height{width:100%; min-height: 200px}
+.table_header_page_height{min-height: 1000px;margin-top: 50px;}
+.padding_top30{padding-top: 50px}
 .page_break  {page-break-before: always !important;display: block; clear: both; }
+.extra_height{
+  height: :100px;
+}
 
-@media print {
+/*@media print {
             tr.page_break_table  { display: block !important; page-break-after: always !important; page-break-inside: avoid !important;}
-        }
+        }*/
     table{border-collapse: collapse}
   th,td{padding:5px;border:1px solid #bbb;}      
 
@@ -265,7 +269,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                      </div>
                      <div>
                       {% if answer_list.cover_image %}
-                        <img src="{{answer_list.cover_image}}" style="width:100%; height:800px">
+                        <img src="{{answer_list.cover_image}}" style="width:100%; height:750px">
                       {% else %}
                         <img src="{{image_url}}/static/img/GoodCSR_color_circle.png" style="width:100%">
                       {% endif %}
@@ -308,14 +312,13 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                </header>
                </div>
                <div class="page_break"></div>
-               <br><br>
                <div class="container">
-                  <div class="margin_25">
+                  <div>
                      <h1 style="font-size:24px">Index{{taskdict1}}</h1>
                      
                   </div>
                   
-                  <div class="margin-50 page_height">
+                  <div class="page_height">
                     <!--Dynamic getting of the contents of index page (STARTS)                  -->
 
                      {% for key,value in contents.iteritems %}
@@ -346,7 +349,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                      {% endfor %}
                      <!--Dynamic getting of the contents of index page (END)                  -->
                   </div>
-                  <br>
+                  
 
                </div>
               <div class="page_break"></div>
@@ -431,13 +434,12 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                <div class="page_break"></div>
                <!--Index page 03 html ends-->
                <!--Index page 04 html starts-->
-               <br><br>
                <div class="container">
-                  <div class="margin_25">
+                  <div>
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
-                  <div class="location margin-top40 page_height">
+                  <div class="location page_height">
                      <p>Objective of the project</p>
                      <h5>{{answer_list.project_objective | striptags}}</h5>
                   </div>
@@ -455,9 +457,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% for j in quart_section %}
                 
               <div class="page_break"></div>
-              <br><br>
                <div class="container">
-                  <div class="margin_25">
+                  <div>
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
@@ -481,6 +482,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                            {% get_date_range j as date_range %}
                                              {% get_timeline_json_pdf project j as timeline %}
                                              {% for t in timeline.3 %}
+
                            <div id="scrollbar1">
                               <div class="viewport">
                                  <div class="overview">
@@ -596,8 +598,11 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                         
                      // }
                 </script>
-                        
+{% if forloop.counter|divisibleby:2 %}
+<div class="page_break"></div>
+{% endif %}
 {% endfor %}
+
 <script>
                 if("{{forloop.last}}" == 'False'){
                        lengths = 0;
@@ -637,9 +642,8 @@ No Key Acheivements in this Quarter
               <div class="page_break"></div>
                <!--Index page 06 html ends-->
                <!--Index page 07 html starts-->
-               <br><br>
                <div class="container">
-                  <div class="margin_25">
+                  <div>
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
@@ -650,10 +654,9 @@ No Key Acheivements in this Quarter
                      <p>{{forloop.counter | get_ordinal_number}} Quarter {{date_range.0}}<span style="float:right">Key Achievements in this quarter</span></p>
                   </div>
                   
-                  <div class="margin_top30 page_height">
+                  <div class="page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class="white-box">
-            <div class="table_header_page_height">
+            <div class=" table_header_page_height">
 
            <table cellpadding="0" cellspacing="0" border="1" >
             <thead>
@@ -673,28 +676,11 @@ No Key Acheivements in this Quarter
             </tr>
             </thead>
             {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:10 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
-               <br><br>
-               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
             
-            <tr>
-              <th>Super Category</th>
-              <th>Heading</th>
-              <th>Subheading</th>
-              <th>Total Planned</th>
-              <th>Total Utilized</th>
-              <th>Units Type</th>
-              <th>Units</th>
-              <th>Rate</th>
-              <th> Planned</th>
-              <th> Utilized</th>
-              <th>Variance</th>
-            </tr>
-            </thead><tbody>{% endif %}
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
                 <td> {{lineitemobj.category.name}} </td>
-                <td> {{lineitemobj.heading.name}} </td>
+                <td> {{lineitemobj.heading.name}} -{{forloop.counter}}</td>
                 <td> {{lineitemobj.subheading}} </td>
                 {% get_line_total j project as line_total %}
                 <td align="center">{{line_total | get_currency}}</td>
@@ -717,15 +703,16 @@ No Key Acheivements in this Quarter
             </tr>
 
             {% endfor %}
-
+            
             </tbody>
           </table>
         </div>
         </div>
-    <br><br>
+
                      <!-- ------------------------------------------------------- -->
              <div class="white-box">
     <div class="table-responsive">
+      <br>
     <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
       <thead>
       <tr>
@@ -842,9 +829,9 @@ No Key Acheivements in this Quarter
               {% get_parameter i 4 as pie_data %}
               
                <div class='page_height'>
-                <br><br>
+                
                <div class="container">
-                  <div class="margin_25">
+                  <div>
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
@@ -1242,13 +1229,12 @@ No Key Acheivements in this Quarter
 
 
 
-
-                  <div class="margin_top30 page_height">
+                  <div class="page_break"></div>
+                  <div class="page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class="white-box">
-        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" >
-         <div class="table_header_page_height">
-           <table cellpadding="0" cellspacing="0" border="0">
+                     <div class=" table_header_page_height">
+
+           <table cellpadding="0" cellspacing="0" border="1" >
             <thead>
             
             <tr>
@@ -1266,24 +1252,7 @@ No Key Acheivements in this Quarter
             </tr>
             </thead>
             {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:10 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
-               <br><br>
-               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
             
-            <tr>
-              <th>Super Category</th>
-              <th>Heading</th>
-              <th>Subheading</th>
-              <th>Total Planned</th>
-              <th>Total Utilized</th>
-              <th>Units Type</th>
-              <th>Units</th>
-              <th>Rate</th>
-              <th> Planned</th>
-              <th> Utilized</th>
-              <th>Variance</th>
-            </tr>
-            </thead><tbody>{% endif %}
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
                 <td> {{lineitemobj.category.name}} </td>
@@ -1389,7 +1358,6 @@ No Key Acheivements in this Quarter
                <div class="page_break"></div>
                <!--Index page 08 html ends-->
                <!--Index page 09 html starts-->
-               <br><br>
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
@@ -1527,33 +1495,10 @@ No Key Acheivements in this Quarter
                   <br>
                    <div class="margin_top30 page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class="white-box">
-        <div id="" >
-         <div class="table_header_page_height">
+                     <div class=" table_header_page_height">
+
            <table cellpadding="0" cellspacing="0" border="1" >
             <thead>
-            <tr class="sticky-row quarter_color">
-
-              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>
-            </tr>  
-            <tr  class="sticky-row">
-              <th  class="sticky-cell">Super Category</th>
-              <th  class="sticky-cell">Heading</th>
-              <th  class="sticky-cell">Subheading</th>
-              <th  class="sticky-cell">Total Planned</th>
-              <th  class="sticky-cell">Total Utilized</th>
-              <th  class="sticky-cell">Units Type</th>
-              <th>Units</th>
-              <th>Rate</th>
-              <th> Planned</th>
-              <th> Utilized</th>
-              <th>Variance</th>
-            </tr>
-            </thead>
-            {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:10 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
-               <br><br>
-               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
             
             <tr>
               <th>Super Category</th>
@@ -1568,7 +1513,9 @@ No Key Acheivements in this Quarter
               <th> Utilized</th>
               <th>Variance</th>
             </tr>
-            </thead><tbody>{% endif %}
+            </thead>
+            {% for j in budget_period %}
+            
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
                 <td> {{lineitemobj.category.name}} </td>
@@ -1603,6 +1550,7 @@ No Key Acheivements in this Quarter
                      <br>
                      <div class="white-box">
     <div class="table-responsive">
+      <br>
     <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
       <thead>
       <tr>
@@ -1650,10 +1598,9 @@ No Key Acheivements in this Quarter
                   </div>
                   
                </div>
-               <div class="page_break"></div>
+               
                <!--Index page 09 html ends-->
                <!--Index page 10 html starts-->
-               <br><br>
                <div class="container">
                   <div class="margin_25">
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
@@ -1688,7 +1635,6 @@ No Key Acheivements in this Quarter
                {% for k in next_quarter %}
                 
                   {% get_parameter k 5 as pie_data %}
-                  <br><br>
                <div class="container">
                 
                 <div class='page_height'>
@@ -1711,33 +1657,10 @@ No Key Acheivements in this Quarter
                   </div>
                    <div class="margin_top30 page_height">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class="white-box">
-        <div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" >
-         <div class="table_header_page_height">
-           <table  cellpadding="0" cellspacing="0" border="0">
-            <thead>
-            <tr>
+                     <div class=" table_header_page_height">
 
-              <td colspan="6">&nbsp;</td>
-            </tr>  
-            <tr  class="sticky-row">
-              <th>Super Category</th>
-              <th>Heading</th>
-              <th>Subheading</th>
-              <th>Total Planned</th>
-              <th>Total Utilized</th>
-              <th>Units Type</th>
-              <th>Units</th>
-              <th>Rate</th>
-              <th> Planned</th>
-              <th> Utilized</th>
-              <th>Variance</th>
-            </tr>
-            </thead>
-            {% for j in budget_period %}
-            {% if forloop.counter|divisibleby:10 %}</tbody></table> </div><div class="page_break table_header_page_height "></div>
-               <br><br>
-               <table  cellpadding="0" cellspacing="0" border="1" >             <thead>
+           <table cellpadding="0" cellspacing="0" border="1" >
+            <thead>
             
             <tr>
               <th>Super Category</th>
@@ -1752,7 +1675,9 @@ No Key Acheivements in this Quarter
               <th> Utilized</th>
               <th>Variance</th>
             </tr>
-            </thead><tbody>{% endif %}
+            </thead>
+            {% for j in budget_period %}
+            
             <tr>
                 {% get_budget_lineitem j project as lineitemobj %}
                 <td> {{lineitemobj.category.name}} </td>
