@@ -70,10 +70,11 @@
                         <input type="hidden" name="key" value={{key}}>
                         <input type= "hidden" name="div_id" value='0'>
                         <div class="text_accordion">
-                           {% get_questions locals_list.block1 projectreportobj 1 false as ques %}
+                           {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
                            {% for i in ques %}
                                {% if i.q_type == 'OT' %}
-                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 as sub_questions %}
+                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                                   
                                        {% for sub in sub_questions %}
                                         
                                            {% if sub.q_type == 'APT' and sub.q_name == 'report_duration' %}
@@ -139,10 +140,10 @@
                         <input type="hidden" name="key" value={{key}}>
                         <input type= "hidden" name="div_id" value='1'>
                         <div class="text_accordion">
-                           {% get_questions locals_list.block2 projectreportobj 2 false as ques %}
+                           {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
                            {% for i in ques %}
                                {% if i.q_type == 'OT' %}
-                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 as sub_questions %}
+                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
                                        {% for sub in sub_questions %}
                                            {% if sub.q_type == 'APT' and sub.q_name == 'project_duration' %}
                                                 <div class="col-md-6 report_text">
@@ -222,8 +223,8 @@
                         {% getreport_status report_id v 1 as reportupdates %}
                         {% if reportupdates.0 == False %}
 <!--                                if object is not present -->
-                            {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id as final_questionlist %}
-                            {% for quest in final_questionlist %}
+                            {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
+                            {% for quest in final_previous_list.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
@@ -432,8 +433,8 @@
                             {% endfor %} <!-- this is for previous question loop ends for add functionality -->
 
                     {% else %}  <!--  edit functionality starts here -->
-                            {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id as final_questionlist %}
-                            {% for quest in final_questionlist %}
+                            {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_questionlist %}
+                            {% for quest in final_questionlist.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
@@ -716,8 +717,8 @@
                         {% getreport_status report_id v 2 as reportupdates %}
                         {% if reportupdates.0 == False %}
                 <!--                        this is add functionality -->
-                        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id as final_questionlist %}
-                            {% for quest in final_questionlist %}
+                        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
+                            {% for quest in final_questionlist.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
@@ -934,8 +935,8 @@
 
                             {% endfor %} <!-- this for ends for previous question list -->
                     {% else %}
-                        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id as final_questionlist %}
-                            {% for quest in final_questionlist %} <!-- this is for loop for  if object is present -->
+                        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
+                            {% for quest in final_questionlist.0 %} <!-- this is for loop for  if object is present -->
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">
@@ -1569,8 +1570,8 @@
                         <div>
                         {% getreport_status report_id v 3 as reportupdates %}
                         {% if reportupdates.0 == False %}
-                            {% get_final_questions next_questionlist 5 reportupdates.1 v report_id as final_questionlist %}
-                            {% for quest in final_questionlist %}
+                            {% get_final_questions next_questionlist 5 reportupdates.1 v report_id "false" as final_questionlist %}
+                            {% for quest in final_questionlist.0 %}
 
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
@@ -1707,8 +1708,8 @@
                         {% endfor %} <!-- future question for loop ends here -->
                     {% else %} <!--  if object is there -->
 <!--                        if object is der                            -->
-                           {% get_final_questions next_questionlist 5 reportupdates.1 v report_id as final_questionlist %}
-                            {% for quest in final_questionlist %}
+                           {% get_final_questions next_questionlist 5 reportupdates.1 v report_id "false" as final_questionlist %}
+                            {% for quest in final_questionlist.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
                             <div class="col-md-6 report_text">

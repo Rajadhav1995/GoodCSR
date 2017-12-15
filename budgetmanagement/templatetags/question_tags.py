@@ -136,20 +136,27 @@ def get_timeline_json_pdf(projectobj,quarter_obj):
     return timeline_json,timeline_json_length,time_length,range(timeloop)
  
 @register.assignment_tag   
-def get_final_questions(quarter_question_list,block_type,object_id,period,report_id):
+def get_final_questions(quarter_question_list,block_type,object_id,period,report_id,quest_removed):
     quest_list = []
     removed_ques = []
+    remove_obj_id=''
     if object_id != "None":
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period,
         content_type=ContentType.objects.get_for_model(quarter_report),object_id = quarter_report.id)
     else:
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,period=period)
-#    for i in eval(quest_list.text):
-#            removed_ques.append(Question.objects.get_or_none(id=int(i)))
-#    final_quest_list = list(set(quarter_question_list) - set(removed_ques))
-    if quest_list:
-        final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
+    
+    if quest_removed == "false":
+        if quest_list:
+            remove_obj_id = quest_list.id
+            final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
+        else:
+            final_quest_list = quarter_question_list
     else:
-        final_quest_list = quarter_question_list
-    return final_quest_list
+        if quest_list:
+            remove_obj_id = quest_list.id
+            final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
+        else:
+            final_quest_list = quarter_question_list
+    return final_quest_list,remove_obj_id

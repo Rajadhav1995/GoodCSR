@@ -707,9 +707,9 @@ def get_index_contents(slug,report_id):
         contents[key]=value
     return contents,quarters,number_dict
 
-
+from ast import literal_eval
 def save_removed_fields(request):
-    from ast import literal_eval
+    
     quest_ids_list = []
     removed_list=[]
     ids = literal_eval(request.GET.get('id'))
@@ -743,3 +743,16 @@ def save_removed_fields(request):
     removed_ques.save()
     return HttpResponseRedirect(url)
     
+
+def save_added_fields(request):
+    import ipdb;ipdb.set_trace()
+    ids = literal_eval(request.GET.get('id'))
+    url = str(request.GET.get('redirect_url'))
+    remove_quest_obj = RemoveQuestion.objects.get_or_none(id=int(request.GET.get('remove_obj')))
+    if remove_quest_obj:
+        ques_list = eval(remove_quest_obj.text)
+        if ids in ques_list:
+            ques_list.remove(ids)
+            remove_quest_obj.text = ques_list
+            remove_quest_obj.save()
+    return HttpResponseRedirect(url)

@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'pdf/view/header/$',pdf_header),
     url(r'pdf/view/footer/$',pdf_footer),
     url(r'removed/fields/$',save_removed_fields),
+    url(r'adding/fields/$',save_added_fields),
 ]
