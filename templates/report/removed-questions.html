@@ -55,7 +55,7 @@
     <div class="row">
         <div class="generate_boxbg">
             <div class="general_report">
-                <h2>Generate Report</h2> 
+                <h2>Removed Questions Tabs</h2> 
                 <div>
                     <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=removed_template" target="_self">Remove Template</a></p>
                     <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=edit_template" target="_self">Edit Template</a></p>
@@ -70,10 +70,10 @@
                         <input type="hidden" name="key" value={{key}}>
                         <input type= "hidden" name="div_id" value='0'>
                         <div class="text_accordion">
-                           {% get_questions locals_list.block1 projectreportobj 1 false as ques %}
+                           {% get_questions locals_list.block1 projectreportobj 1 "true" as ques %}
                            {% for i in ques %}
-                               {% if i.q_type == 'OT' %}
-                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 as sub_questions %}
+                               {% if i.q_type == 'OT' or i.q_type == 'APT' or i.q_type == 'API' %}
+                                   {% get_auto_populated_questions i.q_id projectobj projectreportobj 1 "true" as sub_questions %}
                                        {% for sub in sub_questions %}
                                         
                                            {% if sub.q_type == 'APT' and sub.q_name == 'report_duration' %}
@@ -139,10 +139,10 @@
                         <input type="hidden" name="key" value={{key}}>
                         <input type= "hidden" name="div_id" value='1'>
                         <div class="text_accordion">
-                           {% get_questions locals_list.block2 projectreportobj 2 false as ques %}
+                           {% get_questions locals_list.block2 projectreportobj 2 "true" as ques %}
                            {% for i in ques %}
                                {% if i.q_type == 'OT' %}
-                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 as sub_questions %}
+                                   {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "true" as sub_questions %}
                                        {% for sub in sub_questions %}
                                            {% if sub.q_type == 'APT' and sub.q_name == 'project_duration' %}
                                                 <div class="col-md-6 report_text">

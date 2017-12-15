@@ -52,14 +52,18 @@ def get_removed_questions(project_report,block_type):
     return removed_ques
     
 @register.assignment_tag 
-def get_questions(block,project_report,block_type):
+def get_questions(block,project_report,block_type,quest_removed):
     # to get the questions that are tagged in that particular section
     question_list = []
     question_dict={} 
     report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
     questions = Question.objects.filter(block=block,parent=None,block__block_type=0)
     removed_questions = get_removed_questions(project_report,block_type)
-    final_questions = list(set(questions) - set(removed_questions))
+    import ipdb;ipdb.set_trace()
+    if quest_removed == 'true':
+        final_questions = removed_questions
+    else:
+        final_questions = list(set(questions) - set(removed_questions))
     for i in sorted(final_questions):
         answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,
@@ -74,14 +78,17 @@ def get_questions(block,project_report,block_type):
     
     
 @register.assignment_tag 
-def get_auto_populated_questions(ques_id,project,project_report,block_type):
+def get_auto_populated_questions(ques_id,project,project_report,block_type,quest_removed):
     # to get the auto populated questions that are tagged to that particular section
     data = {}
     question = Question.objects.get_or_none(id=ques_id)
     sub_quest_list = []
     removed_questions = get_removed_questions(project_report,block_type)
     sub_questions = Question.objects.filter(parent = question,block__block_type=0)
-    final_questions = list(set(sub_questions) - set(removed_questions))
+    if quest_removed == 'true':
+        final_questions = removed_questions
+    else:
+        final_questions = list(set(sub_questions) - set(removed_questions))
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     cover_image = Attachment.objects.get_or_none(description__iexact = "cover image",attachment_type = 1,
             content_type = ContentType.objects.get_for_model(project_report),

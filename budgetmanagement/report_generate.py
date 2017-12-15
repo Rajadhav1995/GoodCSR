@@ -654,11 +654,15 @@ def finalreportdesign(request):
         # redirection to the same page of the form #STARTS
         if key == 'edit_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
+        elif key == 'removed_template':
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
         else:
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1))               
         # ENDS to redirection  
     if key == 'edit_template':
         return render(request,'report/forms-single.html',locals())
+    elif key == 'removed_template':
+        return render(request,'report/removed-questions.html',locals())
     else:
         return render(request,'report/final_report.html',locals())
 
