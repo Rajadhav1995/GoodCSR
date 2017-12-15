@@ -1108,7 +1108,6 @@ No Key Acheivements in this Quarter
           arrayTask = [],
           collide = false;
         $('.gselector').hide();
-        $(document).ready(function () {
           var previous = null;
           var prePrevious = null;
           var mile = false;
@@ -1157,7 +1156,6 @@ No Key Acheivements in this Quarter
             prePrevious = previous;
             previous = this;
           });
-        });
      {% endfor %}
 </script>
 
@@ -1392,10 +1390,10 @@ No Key Acheivements in this Quarter
                            {% get_parameter i 4 as pie_data %}
                            {% get_parameter_values i pobj as parameter_values %}
                            var new_data_pin = 0;
-                           var data11 = {{parameter_values.0 | safe}};
+                           var data11 = {{parameter_values.0.0 | safe}};
                            console.log("mahiti.org");
                            var values = "comm{{forloop.counter}}"
-                           var pin_title = "{{parameter_values.1.0.0 | safe}}"
+                           var pin_title = "{{parameter_values.1.0 | safe}}"
                            // var pin_title = pin_title[new_data_pin]
                            
                            Highcharts.chart(values, {

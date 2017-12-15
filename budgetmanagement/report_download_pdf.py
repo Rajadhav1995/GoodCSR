@@ -103,7 +103,7 @@ def pdfconverter(request):
     '--load-error-handling': 'ignore',
     '--header-html': PMU_URL+'/report/pdf/view/header/?report_id='+report_id,
     '--footer-html':  PMU_URL+'/report/pdf/view/footer/?report_id='+report_id,
-    '--header-spacing': '5.10',
+    '--header-spacing': '20.10',
     '--encoding': "utf-8",
     '--footer-right': '[page]',
     }
