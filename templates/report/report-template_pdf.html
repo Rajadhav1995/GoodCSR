@@ -145,11 +145,21 @@ footer{margin:30px 0px; float: left; width: 100%}
   height: :100px;
 }
 
+
 /*@media print {
             tr.page_break_table  { display: block !important; page-break-after: always !important; page-break-inside: avoid !important;}
         }*/
     table{border-collapse: collapse}
   th,td{padding:5px;border:1px solid #bbb;}      
+
+
+.pmu_formtable td{border-top: 0px !important; border-left: 0px; border-bottom: 0px}
+.pmu_formtable{border-top: 0px !important ;}
+
+
+.pmu_formtable_parameter td{border-top: 0px !important; border-left: 0px; border-bottom: 0px}
+.pmu_formtable_parameter{border-top: 0px !important ;}
+
 
 .table-scroll {
   position:relative;
@@ -650,9 +660,9 @@ No Key Acheivements in this Quarter
                   
                   
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-            <div class=" table_header_page_height">
+            <div class=" table-responsive">
 
-           <table cellpadding="0" cellspacing="0" border="1" >
+           <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
             
             <tr>
@@ -1200,14 +1210,13 @@ No Key Acheivements in this Quarter
         previous = this;
       });
     });
-                                
      {% endfor %}
 </script>
 
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class=" table_header_page_height">
+                     <div class=" table-responsive">
 
-           <table cellpadding="0" cellspacing="0" border="1" >
+           <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
             
             <tr>
@@ -1463,9 +1472,9 @@ No Key Acheivements in this Quarter
                   <br>
                    <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class=" table_header_page_height">
+                     <div class=" table-responsive">
 
-           <table cellpadding="0" cellspacing="0" border="1" >
+           <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
             
             <tr>
@@ -1624,9 +1633,9 @@ No Key Acheivements in this Quarter
                   </div>
                    <div>
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div>
-
-           <table cellpadding="0" cellspacing="0" border="1" >
+                     <div class="table-responsive">
+ 
+           <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
             
             <tr>
