@@ -1,11 +1,14 @@
 from django.conf.urls import url
 from budgetmanagement.report_generate import *
+from budgetmanagement.remove_pdf_view import remove_functionality_pdf_view
 from budgetmanagement.report_download_pdf import (download_report_generation,
 									pdfconverter,pdf_header,pdf_footer)
 
 
+
 urlpatterns = [
     url(r'generation-form/$',report_form),
+    url(r'remove/detail/$',remove_functionality_pdf_view),
     url(r'detail/$',report_detail),
     url(r'^section-form/$',report_section_form),
     url(r'listing/$',report_listing),
@@ -17,4 +20,5 @@ urlpatterns = [
     url(r'pdf/view/header/$',pdf_header),
     url(r'pdf/view/footer/$',pdf_footer),
     url(r'removed/fields/$',save_removed_fields),
+
 ]
