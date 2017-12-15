@@ -605,6 +605,8 @@ def saving_of_quarters_section(request):
         milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,next_itemlist)
     return projectreportobj
 
+
+
 def finalreportdesign(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
@@ -637,8 +639,7 @@ def finalreportdesign(request):
     project_paramterlist = ProjectParameter.objects.filter(project__slug=slug,parent=None,active=2)
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
-    next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
-    
+    next_questionlist  = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
     if request.method == "POST" or request.FILES:
         slug = request.POST.get('slug')
         key = request.POST.get('key')
@@ -713,15 +714,21 @@ def save_removed_fields(request):
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
     block_type = literal_eval(request.GET.get('block_type'))
     object_id = request.GET.get('object_id')
+    period = request.GET.get('period')# this is to get the period for particular quarter so that to differentiate
     ques_obj = Question.objects.get_or_none(id=ids)
-    import ipdb;ipdb.set_trace()
-    if ques_obj.block == 0:
+    if int(ques_obj.block.id) in [1,2]:
         removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
     else:
-        quarter_report = QuarterReportSection.objects.get_or_none(id=object_id)
-        removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
-                block_type = block_type,
-            content_type = ContentType.objects.get_for_model(quarter_report),object_id = literal_eval(object_id))
+        if object_id != "None":
+            quarter_report = QuarterReportSection.objects.get_or_none(id=object_id)
+            removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
+                block_type = block_type,quarter_period = period)
+            removed_ques.content_type = ContentType.objects.get_for_model(quarter_report)
+            removed_ques.object_id = literal_eval(object_id)
+            removed_ques.save()
+        else:
+            removed_ques,created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
+                block_type = block_type,quarter_period = period)
     if created:
         quest_ids_list.append(ids)
         removed_ques.text = quest_ids_list
@@ -731,3 +738,4 @@ def save_removed_fields(request):
         removed_ques.text = sorted(removed_list)
     removed_ques.save()
     return HttpResponseRedirect(url)
+    

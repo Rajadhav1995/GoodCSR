@@ -40,16 +40,27 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
     
+def get_removed_questions(project_report,block_type):
+    # to get the removed questions list for that particular block
+    removed_ques=[]
+    quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
+    if quest_list:
+        for i in eval(quest_list.text):
+            removed_ques.append(Question.objects.get_or_none(id=int(i)))
+    else:
+        removed_ques=[]
+    return removed_ques
     
 @register.assignment_tag 
-def get_questions(block,project_report):
+def get_questions(block,project_report,block_type):
     # to get the questions that are tagged in that particular section
     question_list = []
     question_dict={} 
     report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
     questions = Question.objects.filter(block=block,parent=None,block__block_type=0)
-    # import ipdb; ipdb.set_trace()
-    for i in questions:
+    removed_questions = get_removed_questions(project_report,block_type)
+    final_questions = list(set(questions) - set(removed_questions))
+    for i in sorted(final_questions):
         answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,
             'q_type':i.qtype,'q_name':i.slug}
@@ -63,12 +74,14 @@ def get_questions(block,project_report):
     
     
 @register.assignment_tag 
-def get_auto_populated_questions(ques_id,project,project_report):
+def get_auto_populated_questions(ques_id,project,project_report,block_type):
     # to get the auto populated questions that are tagged to that particular section
     data = {}
     question = Question.objects.get_or_none(id=ques_id)
     sub_quest_list = []
+    removed_questions = get_removed_questions(project_report,block_type)
     sub_questions = Question.objects.filter(parent = question,block__block_type=0)
+    final_questions = list(set(sub_questions) - set(removed_questions))
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     cover_image = Attachment.objects.get_or_none(description__iexact = "cover image",attachment_type = 1,
             content_type = ContentType.objects.get_for_model(project_report),
@@ -87,7 +100,7 @@ def get_auto_populated_questions(ques_id,project,project_report):
         'no_of_beneficiaries':project.no_of_beneficiaries,'project_duration':project.start_date.strftime('%Y-%m-%d')+' TO '+project.end_date.strftime('%Y-%m-%d'),
         'location':project.get_locations()}
     # to get the answers of auto populated questions 
-    sub_quest_list = get_sub_answers(details,sub_questions,project_report,project)
+    sub_quest_list = get_sub_answers(details,sorted(final_questions),project_report,project)
     return sub_quest_list
     
 @register.assignment_tag 
