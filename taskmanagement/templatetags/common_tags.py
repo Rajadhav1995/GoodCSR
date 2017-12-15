@@ -192,10 +192,13 @@ def get_converted_time(created):
 def get_from_to_dates(date):
     start_date =end_date=''
     date_list=[]
-    date_list = date.split(' TO ')
-    if date_list:
-        start_date = date_list[0]
-        end_date = date_list[1]
+    try:
+        date_list = date.split(' TO ')
+        if date_list:
+            start_date = date_list[0]
+            end_date = date_list[1]
+    except:
+        pass
     return start_date,end_date
 
 @register.assignment_tag
