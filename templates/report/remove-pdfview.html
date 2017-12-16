@@ -446,24 +446,24 @@
                 {% endfor %}
             </div>
             <footer>
-                     <hr>
-                     <img src="/static/img/report/logo.png" style="float:left">
-                     {% get_page_number page_number as page_number %}
-                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-                  </footer>
-               </div>
-               <header style="margin-top:50px">
-                  <div>
-                     <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-                  </div>
-               </header>
-            <!--third page -->
+                <hr>
+                <img src="/static/img/report/logo.png" style="float:left">
+                {% get_page_number page_number as page_number %}
+                <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+            </footer>
+        </div>
+        <header style="margin-top:50px">
+            <div>
+                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+            </div>
+        </header>
+        <!--third page -->
         </div>
         <!--                    third page contents ends -->
-<!--        fourth page contents starts-->
+        <!--        fourth page contents starts-->
         <div class="container">
             <div class="margin_25">
-            <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                 <div class="float_right">
                     {% get_questions locals_list.block1 projectreportobj as ques %}
                     {% for i in ques %}
@@ -483,26 +483,367 @@
             </div>
             <hr>
             {% get_questions locals_list.block2 projectreportobj as ques %}
-                    {% for i in ques %}
-                    {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                    {% for sub in sub_questions %}
-                    {% if sub.q_name == 'project_objective' %}
-                  <div class="location margin-top40 page_height">
-                     <p>Objective of the project</p>
-                     <h5>{{sub.answer | striptags}}</h5>
-                  </div>
-                  {% endif %}
-                  {% endfor %}
-                  {% endif %}
-                  {% endfor %}
+            {% for i in ques %}
+            {% if i.q_type == 'OT' %}
+            {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+            {% for sub in sub_questions %}
+            {% if sub.q_name == 'project_objective' %}
+            <div class="location margin-top40 page_height">
+                <p>Objective of the project</p>
+                <h5>{{sub.answer | striptags}}</h5>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            <footer>
+                <hr>
+                <img src="/static/img/report/logo.png" style="float:left">
+                {% get_page_number page_number as page_number %}
+                <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+            </footer>
+        </div>
+        <!--fourth page contents end-->
+        <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
+        {% for i,v in previousquarter_list.items %}
+        {% with forloop.counter as j %}
+        {% getreport_status report_id v 1 as reportupdates %}
+        {% if reportupdates.0 == True %}
+        <header style="margin-top:50px">
+            <div>
+                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+            </div>
+        </header>
+        <div class="container">
+        <div class="margin_25">
+            <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+            <div class="float_right">
+                {% get_questions locals_list.block1 projectreportobj as ques %}
+                {% for i in ques %}
+                {% if i.q_type == 'OT' %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                {% for sub in sub_questions %}
+                {% if sub.q_name == 'client_logo' %}
+                <img src="{{sub.answer}}" height = 70 width = 100></li>
+                {% endif %}
+                {% if sub.q_name == "logos" %}
+                <img src="{{sub.answer}}" height = 70 width = 100></li>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <hr>
+        <div class='page_height'>
+        {% for quest in previous_questionlist %}
+        <div class="">
+            {% if quest.qtype == "APT" %}
+            {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
+            {% if quest.slug == "heading" %}
+            <h4 style="margin:0px">{{text|title}}</h4>
+            {% endif %}
+            {% if quest.slug == "duration" %}
+            <p> Quarter {{text}} </p>
+            {% endif %}
+            {% endif %}
+            {% if quest.slug == "key-achievements-in-this-quarter" %}
+            <div class="margin_30 prev_banner ">
+                <h5 class="color_green">Key Achievements in this quarter</h5>
+                <!-- timeline slider -->
+                {% if timeline_json != '[]' %}
+                <div id="scrollbar1">
+                    <div class="viewport">
+                        <div class="overview">
+                            <div id="time-line-pad">
+                                <div class="time-line">
+                                    <div class="time-line-bdr"></div>
+                                    <ul>
+                                        {% to_and v as timeperiod %}
+                                        <div class="timeline-slide_{{timeperiod}}"></div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollbar">
+                    <div class="track">
+                        <div class="thumb">
+                            <div class="end">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                No Key Acheivements in this Quarter
+                {% endif %}
+            </div>
+            {% endif %}
+            <!--                            this is for milestone section-->
+            {% if quest.slug == "milestone-section" %}
+            {% get_milestone_list quest reportupdates.1 as act_mile_list %} <!-- to loop the number of activity obj -->
+            {% for mileobj in act_mile_list %} <!--  for loop for milestone list -->
+            {% with forloop.counter as m_count %}
+            <div class="margin_30 prev_banner milestone1">
+                {% get_previous_subquestions quest as milestone_questions %}
+                {% for mile_quest in milestone_questions %}
+                {% if mile_quest.slug == "milestone-name" %}
+                <h5 class="color-red">MILESTONE</h5>
+                <h5 class="color_green" style="margin:0px">{{mileobj.name}}</h5>
+                {% endif %}
+                {% if mile_quest.slug == "milestone-description" %}
+                <p><strong>About the Milestone</strong></p>
+                <h5 style="color:#666; font-weight:normal">{{mileobj.description|safe}}</h5>
+                {% endif %}
+                {% endfor %}
+                {% for mile_quest in milestone_questions %}
+                {% get_mile_act_images mileobj as imagelist %}
+                {% if imagelist %}
+                {% for imageobj in imagelist %}
+                <div class="col-md-6" style="padding:0px">
+                    {% if mile_quest.slug == "upload-picture" %}
+                    {% if imageobj.attachment_file %}
+                    <img  src="{{image_url}}{{imageobj.attachment_file.url}}"  height = 400 width = 500 >
+                    {% endif %}
+                    {% endif %}
+                    {% if mile_quest.slug == "picture-description" %}
+                    <p>{{imageobj.description|safe}}</p>
+                    {% endif %}
+                    {% endfor %} <!-- for loop ends for imagelist-->
+                </div>
+                {% endif %}  <!-- ends for imagelist condition -->
+                {% endfor %}  <!-- ends for milestone questions -->
+            </div>
+            {% endwith %}
+            {% endfor %}  <!-- ends for milestonelist -->
+            {% endif %} <!-- end of milestone question loop -->
+        </div>
+        <!-- page height div ends -->
+        {% endfor %} <!--  endfor loop for previous questions list-->
+        <footer>
+            <hr>
+            <img src="/static/img/report/logo.png" style="float:left">
+            {% get_page_number page_number as page_number %}
+            <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+        </footer>
+        <!-- page 5th contents ends here -- >
+        
+    <!--        page 6th contents starts here -->
+                <header style="margin-top:50px">
+                    <div>
+                        <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+                    </div>
+                </header>
+                <div class="container">
+                <div class="margin_25">
+                    <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                    <div class="float_right">
+                        {% get_questions locals_list.block1 projectreportobj as ques %}
+                        {% for i in ques %}
+                        {% if i.q_type == 'OT' %}
+                        {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                        {% for sub in sub_questions %}
+                        {% if sub.q_name == 'client_logo' %}
+                        <img src="{{sub.answer}}" height = 70 width = 100></li>
+                        {% endif %}
+                        {% if sub.q_name == "logos" %}
+                        <img src="{{sub.answer}}" height = 70 width = 100></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <div class='page_height'>
+                    {% for quest in previous_questionlist %}
+                            <div class="">
+                            {% if quest.qtype == "APT" %}
+                            {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
+                            {% if quest.slug == "heading" %}
+                            <h4 style="margin:0px">{{text|title}}</h4>
+                            {% endif %}
+                            {% if quest.slug == "duration" %}
+                            <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+                            {% endif %}
+                            {% endif %}
+                        
+                        {% if quest.slug == "budget-utlization-tranches" %}
+                                     <div class="margin_top30 page_height">
+                                         <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                                         <div class="white-box">
+                                <div class="table-responsive">
+                               <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+                                <thead>
+                                
+                                <tr>
+                                  <th>Super Category</th>
+                                  <th>Heading</th>
+                                  <th>Subheading</th>
+                                  <th>Total Planned</th>
+                                  <th>Total Utilized</th>
+                                  <th>Units Type</th>
+                                  <th>Units</th>
+                                  <th>Rate</th>
+                                  <th> Planned</th>
+                                  <th> Utilized</th>
+                                  <th>Variance</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in budget_period %}
+                                        <tr class = "data_row">
+                                            {% get_budget_lineitem row projectobj as lineitemobj %}
+                                            <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                            <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                            <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                            {% get_line_total row projectobj as line_total %}
+                                            <td align="right" class="sticky-cell">{{line_total}}</td>
+                                            {% get_utlizedline_total row projectobj as utilized_amount %}
+                                            <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                             <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                            {% get_quarter_details row i projectobj as line_itemobj %}
+                                               <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                 <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                 <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                 <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+        </div>
+    <br><br>
+
+
+                     <!-- ------------------------------------------------------- -->
+ 
+<div class="white-box">
+    <div class="table-responsive">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+      <thead>
+      <tr>
+        <th align="center">Tranche No.</th>
+        <th>Due Date</th>
+        <th>Planned Amount</th>
+        <th>Actual Disbursement</th>
+        <th>Recommended Disbursement</th>
+        <th> Utilized</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for i in tranche_list %}
+      {% with forloop.counter as rnum %}
+      <tr>
+        <td>{{rnum}}</td>
+        <td>{{i.due_date|date:"j M Y"}}</td>
+        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+      </tr>
+      {% endwith %}
+      {% endfor %}
+      <tr bgcolor="#f1f3e9" class="table-tr">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+      </tr>
+      </tbody>
+   </table>  
+    </div>
+    </div>
+    </div>
+{% endif %}
+
+
+
+                    {% endfor %} <!-- previous question loops ends here -->
+                </div> <!-- page height div ends -->
                   <footer>
                      <hr>
                      <img src="/static/img/report/logo.png" style="float:left">
                      {% get_page_number page_number as page_number %}
                      <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
                   </footer>
-               </div>
-<!--fourth page contents end-->
-        
+                  
+               </div> <!--  container div ends here -->
+    <!--page 6th contents ends here -->
+            
+                  {% endif %} <!-- if condition to check object is present or not -->
+        {% endwith %} <!-- for loop counter ends here -->
+        {% endfor %} <!-- the main previous quarters loop ends here -->
+
+
+
+        <script type="text/javascript" src="/static/js/jquery.tinyscrollbar.js"></script>
+        <script src="/static/js/jquery.nicescroll.min.js"></script>
+        <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+        <script>
+            $( function() {
+                $("#loader").hide()
+              $( "#accordion" ).accordion({
+                collapsible: true
+              });
+            } );
+        </script>
+        <!--this script is to get the timeline progress -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                //var loop_count = $('#loop_count').val()
+            {% for i,v in previousquarter_list.items %}
+                {% to_and v as timeperiod %}
+                var wrapper = $(".timeline-slide_" + "{{timeperiod}}"); //Fields wrapper
+                {% get_timeline_progress projectobj v as timeline %}
+                var lengths = {{timeline.1}};
+                var ff= {{timeline.0|safe}}
+                var loc_url = '{{image}}'
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                for (var i = 0; i < lengths ; i++)
+                {
+                  var obj = ff[i]
+                  var name = obj.name;
+                  console.log(obj);
+                  if (obj.url) {
+                    var url = loc_url + obj.url;
+                    }
+                else{
+                      var url = loc_url + '/' +"/static/img/milestone-icon.png";
+                    };
+                    var date = obj.date
+                    var f = new Date(date);
+                    var month = months[f.getMonth()];
+                    var nn = f.getMonth();
+                    var ids = obj.id
+                    var date1 = f.getDate()
+                    //alert(date1);
+                    function delete_upload()
+                    {
+                        //return confirm("Are you sure you want to delete this item?");
+                        alert("Are you sure?");
+                    }
+            
+                  if (i % 2) {
+                    if (obj.type == 'image') {
+                    $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+                    }else{
+                      $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+                    };
+                  } else {
+                    if (obj.type == 'image') {
+                    $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+                    }else{
+                      $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+                    };
+                  };
+                }
+                {% endfor %}
+            })
+        </script>
     </body>
