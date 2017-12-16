@@ -260,7 +260,7 @@ def report_detail(request):
     if pdf_key == 1:
         return render(request,'report/report-template.html',locals())
     else:
-        return render(request,'report/report-template_pdf_copy.html',locals())
+        return render(request,'report/report-template_pdf.html',locals())
 
 def get_quarter_report_logic(projectobj):
     ''' common functionality to get the start date,end date and no of quarter'''

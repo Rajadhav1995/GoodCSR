@@ -3,7 +3,7 @@ from budgetmanagement.report_generate import *
 def remove_functionality_pdf_view(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
-    key = request.GET.get('key')
+    pdf_key = int(request.GET.get('key'))
     image = PMU_URL
     #to display the cover page and summary page sections calling the functions by passing request #STARTS)
     locals_list = display_blocks(request)
@@ -32,4 +32,8 @@ def remove_functionality_pdf_view(request):
     contents,quarters,number_dict = get_index_contents(slug,report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    return render(request,'report/remove-pdfview.html',locals())
+    import ipdb; ipdb.set_trace()
+    if pdf_key == 1:
+        return render(request,'report/remove-pdfview.html',locals())
+    else:
+        return render(request,'report/report-template_pdf_copy.html',locals())
