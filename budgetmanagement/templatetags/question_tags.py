@@ -146,17 +146,16 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
         content_type=ContentType.objects.get_for_model(quarter_report),object_id = quarter_report.id)
     else:
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,period=period)
-    
-    if quest_removed == "false":
-        if quest_list:
+    if quest_list:
+        if quest_removed == "false":
             remove_obj_id = quest_list.id
             final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
         else:
-            final_quest_list = quarter_question_list
-    else:
-        if quest_list:
             remove_obj_id = quest_list.id
             final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
-        else:
+    else:
+        if quest_removed == 'false':
             final_quest_list = quarter_question_list
+        else:
+            final_quest_list = []
     return final_quest_list,remove_obj_id

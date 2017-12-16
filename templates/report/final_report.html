@@ -71,11 +71,12 @@
                         <input type= "hidden" name="div_id" value='0'>
                         <div class="text_accordion">
                            {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
-                           {% for i in ques %}
+                            
+                           {% for i in ques.0 %}
                                {% if i.q_type == 'OT' %}
                                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
                                    
-                                       {% for sub in sub_questions %}
+                                       {% for sub in sub_questions.0 %}
                                         
                                            {% if sub.q_type == 'APT' and sub.q_name == 'report_duration' %}
                                                 <div class="col-md-6 report_text">
@@ -141,10 +142,10 @@
                         <input type= "hidden" name="div_id" value='1'>
                         <div class="text_accordion">
                            {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
-                           {% for i in ques %}
+                           {% for i in ques.0 %}
                                {% if i.q_type == 'OT' %}
                                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
-                                       {% for sub in sub_questions %}
+                                       {% for sub in sub_questions.0 %}
                                            {% if sub.q_type == 'APT' and sub.q_name == 'project_duration' %}
                                                 <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>

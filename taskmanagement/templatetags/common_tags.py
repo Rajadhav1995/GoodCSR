@@ -40,34 +40,53 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
     
-def get_removed_questions(project_report,block_type):
+def get_removed_questions(questions,block,project_report,block_type,quest_removed):
     # to get the removed questions list for that particular block 
     removed_ques=[]
+    parent_ques=[]
+    remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
     if quest_list:
+        remove_id = quest_list.id
         for i in eval(quest_list.text):
             ques = Question.objects.get_or_none(id=int(i))
-            if ques.parent != "None": # this is to know whether the question is auto populate or not so that we will append the parent question and get the auto populate removed questions from "get_removed_populate_questions"
-                parent_ques = ques.parent
-                removed_ques.append(parent_ques)
-                removed_ques = list(set(removed_ques))
-            else:# else we will get the list of questions which are not auto populated
+            if ques.parent == None:
                 removed_ques.append(ques)
+        if quest_removed == 'false':
+            final_questions = questions.exclude(id__in =[rmv.id for rmv in removed_ques ]).order_by('id')
+        else:
+            final_quest = questions.filter(id__in = [rmv.id for rmv in removed_ques]).values_list('id',flat=True)
+            main_quest = Question.objects.filter(block=block).exclude(parent=None)[0]
+            final_quest=map(int,final_quest)
+            final_quest.append(int(main_quest.parent.id))
+            final_questions = Question.objects.filter(id__in = final_quest).order_by('id') 
+    elif not quest_list and quest_removed == 'false':
+        remove_id = ''
+        final_questions = questions
     else:
-        removed_ques=[]
-    return removed_ques
+        remove_id = ''
+        final_questions = []
+    return final_questions,remove_id
     
-def get_removed_populate_questions(project_report,block_type):
+def get_removed_populate_questions(questions,project_report,block_type,quest_removed):
     # to get the removed questions list which are auto populated questions for that particular block
     removed_ques=[]
+    remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
-    if quest_list:
+    if quest_list :
+        remove_id = quest_list.id
         for i in eval(quest_list.text):
             ques = Question.objects.get_or_none(id=int(i))
-            removed_ques.append(ques)
+            if ques.parent != None:
+                removed_ques.append(ques)
+        if quest_removed == 'false':
+            final_questions = questions.exclude(id__in = eval(quest_list.text)).order_by('id')
+        else:
+            final_questions = questions.filter(id__in = [rmv.id for rmv in removed_ques]).order_by('id')
     else:
-        removed_ques=[]
-    return removed_ques
+        remove_id =''
+        final_questions = questions
+    return final_questions,remove_id
     
 @register.assignment_tag 
 def get_questions(block,project_report,block_type,quest_removed):
@@ -76,22 +95,17 @@ def get_questions(block,project_report,block_type,quest_removed):
     question_dict={} 
     report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
     questions = Question.objects.filter(block=block,parent=None,block__block_type=0)
-    removed_questions = get_removed_questions(project_report,block_type)
-    if quest_removed == 'true':
-        final_questions = removed_questions
-    else:
-        final_questions = list(set(questions) - set(removed_questions))
-    for i in sorted(final_questions):
+    final_questions,removed_id = get_removed_questions(questions,block,project_report,block_type,quest_removed)
+    for i in final_questions:
         answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,
             'q_type':i.qtype,'q_name':i.slug}
         if answer and (i.qtype == 'T' or i.qtype == 'ck'):
             question_dict['answer'] = answer.text 
         elif i.qtype == 'F':
-            
             question_dict['answer'] = answer.attachment_file.url if answer and answer.attachment_file else ""
         question_list.append(question_dict)
-    return question_list
+    return question_list,removed_id
     
     
 @register.assignment_tag 
@@ -100,13 +114,8 @@ def get_auto_populated_questions(ques_id,project,project_report,block_type,quest
     data = {}
     question = Question.objects.get_or_none(id=ques_id)
     sub_quest_list = []
-    
     sub_questions = Question.objects.filter(parent = question,block__block_type=0)
-    removed_questions = get_removed_populate_questions(project_report,block_type)
-    if quest_removed == 'true':
-        final_questions = removed_questions
-    else:
-        final_questions = sorted(list(set(sub_questions) - set(removed_questions)))
+    final_questions,remove_id = get_removed_populate_questions(sub_questions,project_report,block_type,quest_removed)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     cover_image = Attachment.objects.get_or_none(description__iexact = "cover image",attachment_type = 1,
             content_type = ContentType.objects.get_for_model(project_report),
@@ -126,7 +135,7 @@ def get_auto_populated_questions(ques_id,project,project_report,block_type,quest
         'location':project.get_locations()}
     # to get the answers of auto populated questions 
     sub_quest_list = get_sub_answers(details,final_questions,project_report,project)
-    return sub_quest_list
+    return sub_quest_list,remove_id
     
 @register.assignment_tag 
 def get_milestones(quarter,report_obj,type_id):

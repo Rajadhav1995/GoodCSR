@@ -745,7 +745,6 @@ def save_removed_fields(request):
     
 
 def save_added_fields(request):
-    import ipdb;ipdb.set_trace()
     ids = literal_eval(request.GET.get('id'))
     url = str(request.GET.get('redirect_url'))
     remove_quest_obj = RemoveQuestion.objects.get_or_none(id=int(request.GET.get('remove_obj')))
