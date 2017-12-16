@@ -32,8 +32,8 @@ def remove_functionality_pdf_view(request):
     contents,quarters,number_dict = get_index_contents(slug,report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    import ipdb; ipdb.set_trace()
     if pdf_key == 1:
+        # import ipdb; ipdb.set_trace()
         return render(request,'report/remove-pdfview.html',locals())
     else:
         return render(request,'report/report-template_pdf_copy.html',locals())
