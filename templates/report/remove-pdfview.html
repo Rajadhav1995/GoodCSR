@@ -771,7 +771,6 @@
         {% endfor %} <!-- the main previous quarters loop ends here -->
         <!--page 7th starts here ie.. Current quarter loop starts here, page contains gantt chart,activities loop gantt chart script written at last -->
         <!--Current Quarter Updates starts here -->
-        Meghana {{currentquarter_list}}
         {% for i,v in currentquarter_list.items %}
         {% with forloop.counter as j %}
         {% getreport_status report_id v 2 as reportupdates %}
@@ -1564,6 +1563,244 @@
         {% endif %} <!-- if current quarter updates is created -->
         {% endwith %} <!-- for loop counter ends here -->
         {% endfor %} <!-- the main current quarters loop ends here -->
+        
+<!--Next quarter section starts here -->
+<!--page 10 starts here ie.. about quarter,budget, and about the budget -->
+        {% for i,v in futurequarter_list.items %}
+        {% with forloop.counter as j %}
+        {% getreport_status report_id v 3 as reportupdates %}
+        {% if reportupdates.0 == True %}
+
+        <header style="margin-top:50px">
+            <div>
+                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+            </div>
+        </header>
+        <div class="container">
+        <div class="margin_25">
+            <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+            <div class="float_right">
+                {% get_questions locals_list.block1 projectreportobj as ques %}
+                {% for i in ques %}
+                {% if i.q_type == 'OT' %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                {% for sub in sub_questions %}
+                {% if sub.q_name == 'client_logo' %}
+                <img src="{{sub.answer}}" height = 70 width = 100></li>
+                {% endif %}
+                {% if sub.q_name == "logos" %}
+                <img src="{{sub.answer}}" height = 70 width = 100></li>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <hr>
+        <div class='page_height'>
+        {% for quest in next_questionlist %}
+        <div class="">
+            {% if quest.qtype == "APT" %}
+            {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
+            {% if quest.slug == "heading" %}
+            <h4 style="margin:0px">{{text|title}}</h4>
+            {% endif %}
+            {% if quest.slug == "duration" %}
+            <p> First Quarter {{text}} </p>
+            {% endif %}
+            {% endif %}
+
+<!--                            this is for about the quarter-->
+                        {% if quest.slug == "about-the-quarter" %}
+                              <div class="location margin_top30" style="margin-bottom:0px">
+                                 <p>About The Quarter</p>
+                                {% get_answer_question quest reportupdates.1 as text %}
+                                 <h5>{{text}} </h5>
+                              </div>
+                    {% endif %}
+
+            {% if quest.slug == "budget-utlization-tranches" %}
+            <div class="margin_top30 page_height">
+                <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                <div class="white-box">
+                    <div class="table-responsive">
+                        <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+                            <thead>
+                                <tr>
+                                    <th>Super Category</th>
+                                    <th>Heading</th>
+                                    <th>Subheading</th>
+                                    <th>Total Planned</th>
+                                    <th>Total Utilized</th>
+                                    <th>Units Type</th>
+                                    <th>Units</th>
+                                    <th>Rate</th>
+                                    <th> Planned</th>
+                                    <th> Utilized</th>
+                                    <th>Variance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in budget_period %}
+                                <tr class = "data_row">
+                                    {% get_budget_lineitem row projectobj as lineitemobj %}
+                                    <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                    <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                    <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                    {% get_line_total row projectobj as line_total %}
+                                    <td align="right" class="sticky-cell">{{line_total}}</td>
+                                    {% get_utlizedline_total row projectobj as utilized_amount %}
+                                    <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                    <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                    {% get_quarter_details row i projectobj as line_itemobj %}
+                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                    <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                    <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                    <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br><br>
+                <!-- ------------------------------------------------------- -->
+                <div class="white-box">
+                    <div class="table-responsive">
+                        <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                            <thead>
+                                <tr>
+                                    <th align="center">Tranche No.</th>
+                                    <th>Due Date</th>
+                                    <th>Planned Amount</th>
+                                    <th>Actual Disbursement</th>
+                                    <th>Recommended Disbursement</th>
+                                    <th> Utilized</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in tranche_list %}
+                                {% with forloop.counter as rnum %}
+                                <tr>
+                                    <td>{{rnum}}</td>
+                                    <td>{{i.due_date|date:"j M Y"}}</td>
+                                    <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                    <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                    <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                    <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                </tr>
+                                {% endwith %}
+                                {% endfor %}
+                                <tr bgcolor="#f1f3e9" class="table-tr">
+                                    <td>Total</td>
+                                    <td>&nbsp;</td>
+                                    <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+                {% if quest.slug == "about-the-budget" %}
+                <div class="location margin_top30">
+                    <p>{{quest.text|title}}</p>
+                    {% get_answer_question quest reportupdates.1 as text %}
+                    <h5>{{text}}
+                    </h5>
+                </div>
+                {% endif %}
+
+
+            {% endfor %} <!-- ends for next quarter questions for this page   -->
+            </div>
+        </div>
+        <!-- page height div ends -->
+        <footer>
+            <hr>
+            <img src="/static/img/report/logo.png" style="float:left">
+            {% get_page_number page_number as page_number %}
+            <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+        </footer>
+        <!--page 10 ends here -->
+
+        {% endif %} <!-- if next quarter updates is created -->
+        {% endwith %} <!-- for loop counter ends here -->
+        {% endfor %} <!-- the main next quarters loop ends here -->
+
+
+<!--next quarter section ends -->
+
+<!--Annexure page starts -->
+
+        <header style="margin-top:50px">
+            <div>
+                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
+            </div>
+        </header>
+        <div class="container">
+        <div class="margin_25">
+            <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+            <div class="float_right">
+                {% get_questions locals_list.block1 projectreportobj as ques %}
+                {% for i in ques %}
+                {% if i.q_type == 'OT' %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
+                {% for sub in sub_questions %}
+                {% if sub.q_name == 'client_logo' %}
+                <img src="{{sub.answer}}" height = 70 width = 100></li>
+                {% endif %}
+                {% if sub.q_name == "logos" %}
+                <img src="{{sub.answer}}" height = 70 width = 100></li>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <hr>
+                          <div class='page_height'>
+                  <div style="margin:15% 0px;float: left;width: 100%;">
+                     <h1 class="color_green" style="font-size:40px;border-bottom:0px; text-align:center">ANNEXURE</h1>
+                  </div>
+                  </div>
+                  <footer>
+                     <hr>
+                     <img src="/static/img/report/logo.png" style="float:left">
+                     {% get_last_page_number page_number as page_number %}
+                     <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
+                  </footer>
+               </div>
+
+<!--annexure page ends -->
+
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+<script src="/static/js/jquery.nicescroll.min-bkp.js"></script>
+<script src="/static/js/jquery.scrollbox.js"></script>
+<script src="/static/js/jquery.scrollbox-bkp.js"></script>
+<script src="/static/js/jquery.tinyscrollbar.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+  var li_Count = $('.time-line li').length;
+  $(".time-line").css('width', 200*li_Count);
+  });
+
+  $(document).ready(function()
+  {
+      $("#scrollbar1").tinyscrollbar({ axis: "x"});
+
+  });
+</script>
+
+
 
 
 
@@ -1631,4 +1868,7 @@
                 {% endfor %}
             })
         </script>
+
+
+
     </body>
