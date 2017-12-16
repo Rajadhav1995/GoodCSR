@@ -21,6 +21,14 @@ def remove_functionality_pdf_view(request):
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
+
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+    tranche_list = Tranche.objects.filter(project = projectobj,active=2)
+    tranche_amount = tanchesamountlist(tranche_list)
+    planned_amount = tranche_amount['planned_amount']
+    actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
+    recommended_amount = tranche_amount['recommended_amount']
+    utilized_amount = tranche_amount['utilized_amount']
     contents,quarters,number_dict = get_index_contents(slug,report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
