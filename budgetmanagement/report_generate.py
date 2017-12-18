@@ -708,6 +708,20 @@ def get_index_contents(slug,report_id):
     return contents,quarters,number_dict
 
 from ast import literal_eval
+
+def remove_milesact_child(ques_obj,ids):
+    removed_list = []
+    child_ques = Question.objects.filter(parent = ques_obj.parent).values_list('id',flat=True)
+    if ques_obj.slug == 'milestone-name' or ques_obj.slug == 'activity-name':
+        removed_list = [int(i) for i in child_ques]
+    elif ques_obj.slug == 'upload-picture':
+        removed_list.append(ids)
+        removed_list.append(Question.objects.get_or_none(slug = 'picture-description').id)
+        removed_list.append(ids)
+    else:
+        removed_list.append(ids)
+    return removed_list
+
 def save_removed_fields(request):
     
     quest_ids_list = []
@@ -723,7 +737,7 @@ def save_removed_fields(request):
     if int(ques_obj.block.id) in [1,2]:
         removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
     else:
-        if object_id != "None":
+        if object_id != 'None':
             quarter_report = QuarterReportSection.objects.get_or_none(id=object_id)
             removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
                 block_type = block_type,quarter_period = period)
@@ -733,12 +747,14 @@ def save_removed_fields(request):
         else:
             removed_ques,created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
                 block_type = block_type,quarter_period = period)
+        quest_ids_list = remove_milesact_child(ques_obj,ids)
     if created:
-        quest_ids_list.append(ids)
+#        quest_ids_list.append(ids)
         removed_ques.text = quest_ids_list
     else:
         removed_list = literal_eval(removed_ques.text)
-        removed_list.append(ids)
+#        removed_list.append(ids)
+        removed_list=quest_ids_list        
         removed_ques.text = sorted(removed_list)
     removed_ques.save()
     return HttpResponseRedirect(url)

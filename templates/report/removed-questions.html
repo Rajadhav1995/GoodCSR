@@ -279,14 +279,15 @@
                             <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                                 <div class="col-md-12"></div>
 
-                                {% get_previous_subquestions quest as milestone_questions %}
+                                {% get_previous_subquestions quest as miles_quest_list %}
+                                {% get_previous_removed miles_quest_list "true" final_questionlist.1 as milestone_questions %}
 
                                     <div class="col-md-6 report_text">
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
                                         <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">
-                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
+                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
                                     {% endif %}
 
                                     {% if mile_quest.slug == "upload-picture" %}
@@ -337,7 +338,7 @@
                                         </div>
                                         <div class="link-center">
                                             <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="add_remove_{{i}}_{{j}}">Add</a>
+                                            <a href ="javascript:void(0);" class ="add_remove_{{i}}_{{j}}">Remove</a>
                                         </div>
                                    </div>
                         {% endif %}
@@ -759,7 +760,8 @@
                             <input type="hidden" name="current_parameter_count_1" value="1">
                             <input type="hidden" name="add_section" value="0">
                             <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
-                            {% get_previous_subquestions quest as activity_questions %}
+                            {% get_previous_subquestions quest as act_quest_list %}
+                            {% get_previous_removed act_quest_list "true" final_questionlist.1 as activity_questions %}
                                 <div class="col-md-6 report_text ">
 
                                 {% for act_quest in activity_questions %}
@@ -767,7 +769,7 @@
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
                                         <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
-                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
+                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{act_quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
@@ -776,7 +778,7 @@
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return add_fields({{act_quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
@@ -789,7 +791,7 @@
                                         <div class="form-group upload_text">
                                             <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0">
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return add_fields({{act_quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
@@ -798,7 +800,7 @@
                                         <div class="form-group">
                                             <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return add_fields({{act_quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
                                         <div class="form-group addpicture">
                                             <input type="file" id="file02">
                                         </div>
