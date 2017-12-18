@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'final/design/$',finalreportdesign),
 #    url(r'pdf/view/$',html_to_pdf_view),
     url(r'pdf/view/$',pdfconverter),
+    url(r'pdf/view/new/$',pdfconverter),
     url(r'pdf/view/header/$',pdf_header),
     url(r'pdf/view/footer/$',pdf_footer),
     url(r'removed/fields/$',save_removed_fields),
