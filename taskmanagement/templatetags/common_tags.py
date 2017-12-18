@@ -46,7 +46,7 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     parent_ques=[]
     remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
-    if quest_list:
+    if quest_list and quest_list.text != None:
         remove_id = quest_list.id
         for i in eval(quest_list.text):
             ques = Question.objects.get_or_none(id=int(i))
@@ -65,7 +65,7 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
         final_questions = questions
     else:
         remove_id = ''
-        final_questions = []
+        final_questions = questions
     return final_questions,remove_id
     
 def get_removed_populate_questions(questions,project_report,block_type,quest_removed):
@@ -73,7 +73,7 @@ def get_removed_populate_questions(questions,project_report,block_type,quest_rem
     removed_ques=[]
     remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
-    if quest_list :
+    if quest_list and quest_list.text != None :
         remove_id = quest_list.id
         for i in eval(quest_list.text):
             ques = Question.objects.get_or_none(id=int(i))

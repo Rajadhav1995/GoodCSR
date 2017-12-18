@@ -723,7 +723,7 @@ def save_removed_fields(request):
     if int(ques_obj.block.id) in [1,2]:
         removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
     else:
-        if object_id != "None":
+        if object_id != None:
             quarter_report = QuarterReportSection.objects.get_or_none(id=object_id)
             removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
                 block_type = block_type,quarter_period = period)

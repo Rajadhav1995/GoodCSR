@@ -140,12 +140,12 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
     quest_list = []
     removed_ques = []
     remove_obj_id=''
-    if object_id != "None":
+    if object_id != None:
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period,
         content_type=ContentType.objects.get_for_model(quarter_report),object_id = quarter_report.id)
     else:
-        quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,period=period)
+        quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period)
     if quest_list:
         if quest_removed == "false":
             remove_obj_id = quest_list.id

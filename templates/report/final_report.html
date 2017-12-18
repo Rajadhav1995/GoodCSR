@@ -2853,7 +2853,6 @@ $(document).ready(function() {
     
     var request_url = "{{request.get_full_path|safe}}"
     function remove_fields(ids,block_type,object_id,period){
-    debugger;
     $.ajax({
             url: '/report/removed/fields/',
             type: 'GET',
