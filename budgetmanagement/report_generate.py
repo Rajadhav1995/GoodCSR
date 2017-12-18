@@ -734,6 +734,7 @@ def save_removed_fields(request):
     object_id = request.GET.get('object_id')
     period = request.GET.get('period')# this is to get the period for particular quarter so that to differentiate
     ques_obj = Question.objects.get_or_none(id=ids)
+    import ipdb;ipdb.set_trace()
     if int(ques_obj.block.code) in [1,2]:
         removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
     else:
@@ -755,7 +756,7 @@ def save_removed_fields(request):
     else:
         removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
 #        removed_list.append(ids)
-        removed_list=quest_ids_list        
+        removed_list.extend(quest_ids_list)        
         removed_ques.text = sorted(removed_list)
     removed_ques.save()
     return HttpResponseRedirect(url)
