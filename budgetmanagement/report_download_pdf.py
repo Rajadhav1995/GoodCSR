@@ -98,6 +98,8 @@ def pdfconverter(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
+    key = int(request.GET.get('key'))
+    # 1 for old pdf and 2 for new pdf
     
     options = {
     '--load-error-handling': 'ignore',
@@ -111,7 +113,13 @@ def pdfconverter(request):
     dd = datetime.datetime.today()
     file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
     try:
-        pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+        # pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+        if key == 1:
+            # old report
+            pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+        else:
+            pdfkit.from_url(PMU_URL+'/report/remove/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+
     except:
         return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()

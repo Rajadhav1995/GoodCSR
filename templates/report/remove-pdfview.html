@@ -715,7 +715,8 @@
                         </div>
                     </div>
                     <br><br>
-                    <!-- ------------------------------------------------------- -->
+
+
                     <div class="white-box">
                         <div class="table-responsive">
                             <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
@@ -821,21 +822,27 @@
             {% if quest.slug == "milestones-activities-snapshot" %}
             <div>
                 <div class="col-md-12 report_text " style="padding:0px">
-                    <p class="color_green" style="border-bottom:0px">Milestones & Activities</p>
+                    <p class="color_green" style="border-bottom:0px">Milestones & Activities1</p>
                     <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                     <div class=" white-box ">
+
                         <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'">
                         </div>
                     </div>
                 </div>
             </div>
             <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
+            <script src="/static/js/jquery.min.js"></script>
             <script src="/static/js/jsgantt.js" type="text/javascript"></script>
+            <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+            <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+
             <script>
                 {% get_gantt_details v projectobj as taskdict %}
                 var jsonData = {{taskdict|safe}}
                 console.log(jsonData);
-                var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+                var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
+                alert(g);
                 // console.log(jsonData.tasks);
                 // Get today and tomorrows date
                 var cur = new Date();
@@ -1024,6 +1031,7 @@
                       } else {
                         var d3 = new Date(this.overdue);
                         var d4 = new Date(completionDate);
+                        alert("mahiti");
                         var timeDiff = (d3.getTime() + 86400) - d4.getTime();
                         var diffDays = Math.ceil(timeDiff / 86400000);
                         console.log('DiffDays', diffDays);
