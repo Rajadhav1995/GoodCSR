@@ -281,14 +281,14 @@
                             <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                                 <div class="col-md-12"></div>
 
-                                {% get_previous_subquestions quest as milestone_questions %}
-
+                                {% get_previous_subquestions quest as miles_quest_list %}
+                                {% get_previous_removed miles_quest_list "false" final_previous_list.1 as milestone_questions %}
                                     <div class="col-md-6 report_text">
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
                                         <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                     {% endif %}
 
                                     {% if mile_quest.slug == "upload-picture" %}
@@ -297,7 +297,7 @@
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
                                                 </div>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
 
@@ -310,7 +310,7 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
 
                                         </div>
                                     {% endif %}
@@ -325,7 +325,7 @@
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0"  class="textarea_file"></textarea>
                                             </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
                                     {% endfor %}
@@ -442,7 +442,8 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
-                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                    <h5><a href="javascript:void(0);" onclick="return remove_fields
+                                    ({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -503,7 +504,7 @@
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
                                         <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                     {% endif %}
                                 {% get_mile_act_images mileobj as imagelist %}
                                 {% if imagelist %}
@@ -514,7 +515,7 @@
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}">{% if imageobj.attachment_file %}{{imageobj.attachment_file.url}}{% endif %}
                                                 </div>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
 
@@ -527,7 +528,7 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
 
                                         </div>
                                     {% endif %}
@@ -539,7 +540,7 @@
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
                                                 </div>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
 
@@ -552,7 +553,7 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
 
                                         </div>
                                     {% endif %}
@@ -569,7 +570,7 @@
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}"  class="textarea_file">{{mileobj.description|striptags}}</textarea>
                                             </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
                                     {% endfor %}
@@ -761,7 +762,8 @@
                             <input type="hidden" name="current_parameter_count_1" value="1">
                             <input type="hidden" name="add_section" value="0">
                             <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
-                            {% get_previous_subquestions quest as activity_questions %}
+                            {% get_previous_subquestions quest as act_quest_list %}
+                            {% get_previous_removed act_quest_list "false" final_previous_list.1 as activity_questions %}
                                 <div class="col-md-6 report_text ">
 
                                 {% for act_quest in activity_questions %}
@@ -769,7 +771,7 @@
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
                                         <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
@@ -778,7 +780,7 @@
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
@@ -791,7 +793,7 @@
                                         <div class="form-group upload_text">
                                             <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0">
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
@@ -800,7 +802,7 @@
                                         <div class="form-group">
                                             <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                         <div class="form-group addpicture">
                                             <input type="file" id="file02">
                                         </div>
@@ -1351,7 +1353,7 @@
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
                                         <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
@@ -1360,7 +1362,7 @@
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}">{{mileobj.description|striptags}} </textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
@@ -1375,7 +1377,7 @@
                                         <div class="form-group upload_text">
                                             <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
@@ -1384,7 +1386,7 @@
                                         <div class="form-group">
                                             <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value = "{{imageobj.description}}" >
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
                                         <div class="form-group addpicture">
                                             <input type="file" id="file02">
                                         </div>
