@@ -145,11 +145,21 @@ footer{margin:30px 0px; float: left; width: 100%}
   height: :100px;
 }
 
+
 /*@media print {
             tr.page_break_table  { display: block !important; page-break-after: always !important; page-break-inside: avoid !important;}
         }*/
     table{border-collapse: collapse}
   th,td{padding:5px;border:1px solid #bbb;}      
+
+
+.pmu_formtable td{border-top: 0px !important; border-left: 0px; border-bottom: 0px}
+.pmu_formtable{border-top: 0px !important ;}
+
+
+.pmu_formtable_parameter td{border-top: 0px !important; border-left: 0px; border-bottom: 0px}
+.pmu_formtable_parameter{border-top: 0px !important ;}
+
 
 .table-scroll {
   position:relative;
@@ -431,7 +441,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                   </div>
 
                </div>
-               <div class="page_break"></div>
+               <!-- <div class="page_break"></div> -->
                <!--Index page 03 html ends-->
                <!--Index page 04 html starts-->
                <div class="container">
@@ -439,7 +449,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                      <h1 style="font-size:20px"><!-- {{answer_list.report_name}} --></h1>
                      
                   </div>
-                  <div class="location page_height">
+                  <div class="location">
                      <p>Objective of the project</p>
                      <h5>{{answer_list.project_objective | striptags}}</h5>
                   </div>
@@ -650,7 +660,7 @@ No Key Acheivements in this Quarter
                   
                   
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-            <div class=" table-responsive">
+            <div>
 
            <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
@@ -704,9 +714,9 @@ No Key Acheivements in this Quarter
         <br>
                      <!-- ------------------------------------------------------- -->
              <div class="white-box">
-    <div class="table-responsive">
+    <div>
       
-    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0" style="margin-top:25px;">
       <thead>
       <tr>
         <th align="center">Tranche No.</th>
@@ -967,7 +977,14 @@ No Key Acheivements in this Quarter
         // }    
         link = "/managing/my-tasks/details/?slug="+project+"&key=projecttasks&status=1#"+slug;    
       }
-      taskName = this.name;
+       //Code to abbreviate task names
+      var name = "";
+      var split = this.name.trim().split(" ");
+      for(i=0;i<split.length;i++){
+        name = name + split[i].charAt(0);
+      }
+      taskName = name.toUpperCase();
+      //taskName = this.name;
       pStartDate = this.start_date;   
       pEndDate = this.end_date;
       eStartDate = this.expected_start_date;
@@ -1204,7 +1221,7 @@ No Key Acheivements in this Quarter
 </script>
 
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class=" table-responsive">
+                     <div>
 
            <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
@@ -1257,8 +1274,8 @@ No Key Acheivements in this Quarter
 
                      <br>
                      <div class="white-box">
-    <div class="table-responsive">
-    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+    <div>
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0"  style="margin-top:25px;">
       <thead>
       <tr>
         <th align="center">Tranche No.</th>
@@ -1462,7 +1479,7 @@ No Key Acheivements in this Quarter
                   <br>
                    <div class="margin_top30">
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class=" table-responsive">
+                     <div>
 
            <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
@@ -1515,8 +1532,8 @@ No Key Acheivements in this Quarter
         <br>
                      <br>
                      <div class="white-box">
-    <div class="table-responsive">
-    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+    <div>
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0"  style="margin-top:25px;">
       <thead>
       <tr>
         <th align="center">Tranche No.</th>
@@ -1623,7 +1640,7 @@ No Key Acheivements in this Quarter
                   </div>
                    <div>
                      <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                     <div class="table-responsive">
+                     <div>
  
            <table class="tab-resp1" cellpadding="0" cellspacing="0" border="1" >
             <thead>
@@ -1676,8 +1693,8 @@ No Key Acheivements in this Quarter
         </div>
         <br><br>
         <div class="white-box">
-    <div class="table-responsive">
-    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+    <div>
+    <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0"  style="margin-top:25px;">
       <thead>
       <tr>
         <th align="center">Tranche No.</th>
