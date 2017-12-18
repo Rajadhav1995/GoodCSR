@@ -202,8 +202,8 @@
                     <div>
                         <img src="/static/img/report/header-img.jpg" style="width:100%">
                     </div>
-                    {% get_questions locals_list.block1 projectreportobj as ques %}
-                    {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_name == 'cover_image' %}
                     <div>
                         <img src="{{i.answer}}" style="width:100%">
@@ -215,12 +215,12 @@
                 </div>
                 {% endfor %}
                 <div class="container">
-                    {% for i in ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
                     <div class="margin_top_50">
                         <ul>
-                            {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                            {% for sub in sub_questions %}
+                       {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                            {% for sub in sub_questions.0 %}
                             {% if sub.q_name == 'client_logo' %}
                             <li><img src="{{sub.answer}}" height = 70 width = 100></li>
                             {% endif %}
@@ -236,8 +236,8 @@
                         <h1>{{i.answer}}</h1>
                         {% endif %}
                         {% if i.q_type == 'OT' %}
-                        {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                        {% for sub in sub_questions %}
+                        {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                        {% for sub in sub_questions.0 %}
                         {% if sub.q_name == 'client_name' %}
                         <h5 style="float:left">by {{sub.answer}} </h5>
                         {% endif %}
@@ -251,8 +251,8 @@
                         {% endif %}
                     </div>
                     {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                    {% for sub in sub_questions %}
+                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                    {% for sub in sub_questions.0 %}
                     {% if sub.q_name == 'prepared_by' %}
                     <p style="float:left; width:auto">{{sub.q_text}} {{sub.answer}} </p>
                     {% endif %}
@@ -277,11 +277,11 @@
             <div class="margin_25">
                 <h1 style="font-size:24px">Index</h1>
                 <div class="float_right">
-                    {% get_questions locals_list.block1 projectreportobj as ques %}
-                    {% for i in ques %}
+                    {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                    {% for sub in sub_questions %}
+                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                    {% for sub in sub_questions.0 %}
                     {% if sub.q_name == 'client_logo' %}
                     <img src="{{sub.answer}}" height = 70 width = 100></li>
                     {% endif %}
@@ -332,11 +332,11 @@
         <div class="container">
             <div class="margin_25">
                 <div class="float_right">
-                    {% get_questions locals_list.block1 projectreportobj as ques %}
-                    {% for i in ques %}
+                    {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                    {% for sub in sub_questions %}
+                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                    {% for sub in sub_questions.0 %}
                     {% if sub.q_name == 'client_logo' %}
                     <img src="{{sub.answer}}" height = 70 width = 100></li>
                     {% endif %}
@@ -356,11 +356,11 @@
                         <p class="color-red">PROJECT</p>
                         <h1>{{projectobj.name}}</h1>
                     </div>
-                    {% get_questions locals_list.block2 projectreportobj as ques %}
-                    {% for i in ques %}
+                   {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                    {% for sub in sub_questions %}
+                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
+                    {% for sub in sub_questions.0 %}
                     {% if sub.q_name == "donor" %}
                     <div class="col-md-6">
                         <div class="row">
@@ -380,13 +380,13 @@
                     {% endfor %}
                     {% endif %}
                     {% endfor %}
-                    {% get_questions locals_list.block2 projectreportobj as ques %}
-                    {% for i in ques %}
+                {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
                     <table class="table pmu_formtable">
                         <tr>
-                            {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                            {% for sub in sub_questions %}
+                            {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
+                            {% for sub in sub_questions.0 %}
                             {% if sub.q_name == "project_budget" %}
                             <td >
                                 <p>Total Budget</p>
@@ -417,11 +417,11 @@
                         <div class='numeric_parameter'></div>
                     </ul>
                 </div>
-                {% get_questions locals_list.block2 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == "location" %}
                 <div>
                     <div class="location">
@@ -465,11 +465,11 @@
             <div class="margin_25">
                 <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
                 <div class="float_right">
-                    {% get_questions locals_list.block1 projectreportobj as ques %}
-                    {% for i in ques %}
+                    {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                    {% for sub in sub_questions %}
+                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                    {% for sub in sub_questions.0 %}
                     {% if sub.q_name == 'client_logo' %}
                     <img src="{{sub.answer}}" height = 70 width = 100></li>
                     {% endif %}
@@ -482,11 +482,11 @@
                 </div>
             </div>
             <hr>
-            {% get_questions locals_list.block2 projectreportobj as ques %}
-            {% for i in ques %}
+           {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
+            {% for i in ques.0 %}
             {% if i.q_type == 'OT' %}
-            {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-            {% for sub in sub_questions %}
+           {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
+            {% for sub in sub_questions.0 %}
             {% if sub.q_name == 'project_objective' %}
             <div class="location margin-top40 page_height">
                 <p>Objective of the project</p>
@@ -518,11 +518,11 @@
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
             <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == 'client_logo' %}
                 <img src="{{sub.answer}}" height = 70 width = 100></li>
                 {% endif %}
@@ -536,7 +536,8 @@
         </div>
         <hr>
         <div class='page_height'>
-        {% for quest in previous_questionlist %}
+        {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
+        {% for quest in final_previous_list.0 %}
         <div class="">
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
@@ -638,11 +639,11 @@
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
             <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == 'client_logo' %}
                 <img src="{{sub.answer}}" height = 70 width = 100></li>
                 {% endif %}
@@ -656,7 +657,8 @@
         </div>
         <hr>
         <div class='page_height'>
-            {% for quest in previous_questionlist %}
+            {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
+            {% for quest in final_previous_list.0 %}
             <div class="">
                 {% if quest.qtype == "APT" %}
                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
@@ -785,11 +787,11 @@
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
             <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == 'client_logo' %}
                 <img src="{{sub.answer}}" height = 70 width = 100></li>
                 {% endif %}
@@ -803,7 +805,8 @@
         </div>
         <hr>
         <div class='page_height'>
-        {% for quest in current_questionlist %}
+        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
+        {% for quest in final_questionlist.0 %}
         <div class="">
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
@@ -1254,11 +1257,11 @@
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
             <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == 'client_logo' %}
                 <img src="{{sub.answer}}" height = 70 width = 100></li>
                 {% endif %}
@@ -1272,7 +1275,8 @@
         </div>
         <hr>
         <div class='page_height'>
-        {% for quest in current_questionlist %}
+        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
+        {% for quest in final_questionlist.0 %}
         <div class="">
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
@@ -1520,11 +1524,11 @@
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
             <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == 'client_logo' %}
                 <img src="{{sub.answer}}" height = 70 width = 100></li>
                 {% endif %}
@@ -1538,7 +1542,8 @@
         </div>
         <hr>
         <div class='page_height'>
-            {% for quest in current_questionlist %}
+            {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
+            {% for quest in final_questionlist.0 %}
             <div class="">
                 {% if quest.qtype == "APT" %}
                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
@@ -1588,11 +1593,11 @@
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
             <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == 'client_logo' %}
                 <img src="{{sub.answer}}" height = 70 width = 100></li>
                 {% endif %}
@@ -1606,7 +1611,8 @@
         </div>
         <hr>
         <div class='page_height'>
-        {% for quest in next_questionlist %}
+        {% get_final_questions next_questionlist 5 reportupdates.1 v report_id "false" as final_questionlist %}
+        {% for quest in final_questionlist.0 %}
         <div class="">
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
@@ -1753,11 +1759,11 @@
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
             <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj as ques %}
-                {% for i in ques %}
+                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                {% for i in ques.0 %}
                 {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj as sub_questions %}
-                {% for sub in sub_questions %}
+                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                {% for sub in sub_questions.0 %}
                 {% if sub.q_name == 'client_logo' %}
                 <img src="{{sub.answer}}" height = 70 width = 100></li>
                 {% endif %}

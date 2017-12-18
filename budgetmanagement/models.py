@@ -236,6 +236,7 @@ BLOCK_CHOICES= (
 class RemoveQuestion(BaseContent):
     quarter_report = models.ForeignKey(ProjectReport,**OPTIONAL)
     block_type = models.IntegerField(choices=BLOCK_CHOICES,default=0)
+    quarter_period = models.CharField(max_length=200,**OPTIONAL) # this is to differentiate the quarters before saving all the quarters
     text = models.TextField(**OPTIONAL) #to tag the removed question or section id's'
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
     object_id = models.IntegerField(_('object ID'),**OPTIONAL)
