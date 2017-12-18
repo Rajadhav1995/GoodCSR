@@ -734,7 +734,6 @@ def save_removed_fields(request):
     object_id = request.GET.get('object_id')
     period = request.GET.get('period')# this is to get the period for particular quarter so that to differentiate
     ques_obj = Question.objects.get_or_none(id=ids)
-    import ipdb;ipdb.set_trace()
     if int(ques_obj.block.code) in [1,2]:
         removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
     else:
