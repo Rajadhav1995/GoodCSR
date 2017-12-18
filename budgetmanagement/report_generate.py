@@ -755,7 +755,8 @@ def save_removed_fields(request):
     else:
         removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
 #        removed_list.append(ids)
-        removed_list.extend(quest_ids_list)        
+        for r in quest_ids_list:
+            removed_list.append(r)       
         removed_ques.text = sorted(removed_list)
     removed_ques.save()
     return HttpResponseRedirect(url)
