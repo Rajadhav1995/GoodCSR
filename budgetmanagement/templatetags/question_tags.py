@@ -154,10 +154,13 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
             final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
         else:
             remove_obj_id = quest_list.id
-            final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
             parent_quest = Question.objects.filter(id__in = eval(quest_list.text)).values_list('parent',flat=True)
-            main_quest = Question.objects.filter(id__in = [int(i) for i in parent_quest]).order_by("order")
-            final_quest_list = main_quest
+            for ques in parent_quest:
+                if ques:
+                    final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
+                else:
+                    main_quest = Question.objects.filter(id__in = [int(i) for i in parent_quest if i!=None]).order_by("order")
+                    final_quest_list = main_quest
     else:
         if quest_removed == 'false':
             final_quest_list = quarter_question_list
