@@ -497,7 +497,8 @@
                             <div class="milestone data_row_{{i}}_{{m_count}}">
                                 <div class="col-md-12"></div>
 
-                                {% get_previous_subquestions quest as milestone_questions %}
+                                {% get_previous_subquestions quest as miles_quest_list %}
+                                {% get_previous_removed miles_quest_list "false" final_previous_list.1 as milestone_questions %}
 
                                     <div class="col-md-6 report_text">
                                     {% for mile_quest in milestone_questions %}
@@ -763,7 +764,7 @@
                             <input type="hidden" name="add_section" value="0">
                             <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                             {% get_previous_subquestions quest as act_quest_list %}
-                            {% get_previous_removed act_quest_list "false" final_previous_list.1 as activity_questions %}
+                            {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
                                 <div class="col-md-6 report_text ">
 
                                 {% for act_quest in activity_questions %}
@@ -827,8 +828,8 @@
                         {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">
                                 <div class="milestone para_data_row_{{i}}_1" id="data_row_{{i}}_1">
-                                {% get_previous_subquestions quest as parameter_questions %}
-
+                                {% get_previous_subquestions quest as para_quest_list %}
+                                  {% get_previous_removed para_quest_list "false" final_questionlist.1 as parameter_questions %}
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
@@ -839,7 +840,7 @@
                                             <option value="{{i.id}}">{{i.name}}</option>
                                             {% endfor %}
                                         </select>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 
@@ -850,7 +851,7 @@
                                         <div class="">
                                             <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 
@@ -1345,7 +1346,8 @@
                             {% with forloop.counter as m_count %}
                         
                             <div class="milestone data_row_{{i}}_{{m_count}}">
-                            {% get_previous_subquestions quest as activity_questions %}
+                            {% get_previous_subquestions quest as act_quest_list %}
+                            {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
                                 <div class="col-md-6 report_text ">
 
                                 {% for act_quest in activity_questions %}
@@ -1422,8 +1424,8 @@
                             {% for paramobj in parameters_list %}
                                 {% with forloop.counter as m_count %}
                                 <div class="milestone para_data_row_{{i}}_{{m_count}}">
-                                {% get_previous_subquestions quest as parameter_questions %}
-
+                                {% get_previous_subquestions quest as para_quest_list %}
+                                  {% get_previous_removed para_quest_list "false" final_questionlist.1 as parameter_questions %}
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
 
@@ -1435,7 +1437,7 @@
                                             <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
                                             {% endfor %}
                                         </select>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 
@@ -1446,7 +1448,7 @@
                                         <div class="">
                                             <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description|striptags}}</textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 

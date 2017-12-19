@@ -139,6 +139,7 @@ def get_timeline_json_pdf(projectobj,quarter_obj):
 def get_final_questions(quarter_question_list,block_type,object_id,period,report_id,quest_removed):
     quest_list = []
     removed_ques = []
+    main_quest = []
     block_slug = {3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
     remove_obj_id=''
     if object_id != None:
@@ -153,14 +154,17 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
             remove_obj_id = quest_list.id
             final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
         else:
+            
             remove_obj_id = quest_list.id
+            final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
             parent_quest = Question.objects.filter(id__in = eval(quest_list.text)).values_list('parent',flat=True)
-            for ques in parent_quest:
-                if ques:
-                    final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
-                else:
-                    main_quest = Question.objects.filter(id__in = [int(i) for i in parent_quest if i!=None]).order_by("order")
-                    final_quest_list = main_quest
+            for parent in parent_quest:
+                if parent :
+                    main_quest.append(Question.objects.get_or_none(id=parent))
+            if main_quest:
+                final_list = list(chain(final_quest_list))
+                final_list.extend(list(set(main_quest)))
+                final_quest_list = final_list
     else:
         if quest_removed == 'false':
             final_quest_list = quarter_question_list
@@ -170,6 +174,8 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
     
 @register.assignment_tag
 def get_previous_removed(sub_questions,quest_removed,remove_id):
+    final_list=[]
+    main_quest = []
     try:
         quest_list = RemoveQuestion.objects.get(id=remove_id)
     except:
@@ -179,6 +185,7 @@ def get_previous_removed(sub_questions,quest_removed,remove_id):
             sub_quest_list = sub_questions.exclude(id__in = eval(quest_list.text)).order_by('id')
         else:
             sub_quest_list = sub_questions.filter(id__in = eval(quest_list.text)).order_by('id')
+           
     else:
         sub_quest_list = sub_questions
     return sub_quest_list
