@@ -842,7 +842,6 @@
                 var jsonData = {{taskdict|safe}}
                 console.log(jsonData);
                 var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
-                alert(g);
                 // console.log(jsonData.tasks);
                 // Get today and tomorrows date
                 var cur = new Date();
@@ -1031,7 +1030,6 @@
                       } else {
                         var d3 = new Date(this.overdue);
                         var d4 = new Date(completionDate);
-                        alert("mahiti");
                         var timeDiff = (d3.getTime() + 86400) - d4.getTime();
                         var diffDays = Math.ceil(timeDiff / 86400000);
                         console.log('DiffDays', diffDays);
