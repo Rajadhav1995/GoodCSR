@@ -424,3 +424,16 @@ def report_duration(date_string):
     end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").date()
     report_duration = (start_date.year - end_date.year) * 12 + start_date.month - end_date.month
     return abs(report_duration)
+
+from budgetmanagement.manage_budget import tanchesamountlist
+@register.assignment_tag
+def get_tranches(duration,objects):
+    start_date = duration.split(' to ')[0].rstrip()
+    end_date = duration.split(' to ')[1].rstrip()
+    tranche_obj = objects.filter(due_date__gte=start_date,due_date__lte=end_date)
+    tranche_amount = tanchesamountlist(tranche_obj)
+    # planned_amount = tranche_amount['planned_amount']
+    # actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
+    # recommended_amount = tranche_amount['recommended_amount']
+    # utilized_amount = tranche_amount['utilized_amount']
+    return tranche_obj,tranche_amount

@@ -675,7 +675,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     </div>
                     <br><br>
 
-
+                    {% get_tranches v tranche_list as filtered_tranches %}
+                    {% if filtered_tranches.1.planned_amount %}
                     <div class="white-box">
                         <div>
                             <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0" style="margin-top:25px;">
@@ -690,7 +691,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for i in tranche_list %}
+                                    {% get_tranches v tranche_list as filtered_tranches %}
+                                    
+                                    {% for i in filtered_tranches.0 %}
                                     {% with forloop.counter as rnum %}
                                     <tr>
                                         <td>{{rnum}}</td>
@@ -705,15 +708,16 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                     <tr bgcolor="#f1f3e9" class="table-tr">
                                         <td>Total</td>
                                         <td>&nbsp;</td>
-                                        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 {% endif %}
                 {% endfor %} <!-- previous question loops ends here -->
@@ -1188,7 +1192,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
             {% if quest.slug == "heading" %}
-            <h4 style="margin:0px">{{text|title}} error_curr</h4>
+            <h4 style="margin:0px">{{text|title}} </h4>
             {% endif %}
             {% if quest.slug == "duration" %}
             <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
@@ -1204,7 +1208,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     {% get_previous_subquestions quest as parameter_questions %}
                     {% get_parameter_values reportupdates.1 paramobj as parameter_values %}
                     <div class="margin_30 prev_banner">
-                        <h5 class="color-red">PARAMETER {{forloop.counter}} para_error</h5>
+                        <h5 class="color-red">PARAMETER {{forloop.counter}}</h5>
                         <h5 class="color_green">{{parameter_values.1.0}}</h5>
                         <div>
                             {% for param_quest in parameter_questions %}
@@ -1363,6 +1367,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 </div>
                 <br><br>
                 <!-- ------------------------------------------------------- -->
+                {% get_tranches v tranche_list as filtered_tranches %}
+                {% if filtered_tranches.1.planned_amount %}
                 <div class="white-box">
                     <div>
                         <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0" style="margin-top:25px;">
@@ -1377,7 +1383,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for i in tranche_list %}
+                                {% get_tranches v tranche_list as filtered_tranches %}
+                                    
+                                    {% for i in filtered_tranches.0 %}
                                 {% with forloop.counter as rnum %}
                                 <tr>
                                     <td>{{rnum}}</td>
@@ -1392,19 +1400,20 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                 <tr bgcolor="#f1f3e9" class="table-tr">
                                     <td>Total</td>
                                     <td>&nbsp;</td>
-                                    <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                                    <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 {% endif %}
+                {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
-                    <p>{{quest.text|title}} budget_error</p>
+                    <p>{{quest.text|title}} </p>
                     {% get_answer_question quest reportupdates.1 as text %}
                     <h5>{{text}}
                     </h5>
@@ -1464,7 +1473,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
             {% if quest.slug == "heading" %}
-            <h4 style="margin:0px">{{text|title}} error_curr2</h4>
+            <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
             <p> First Quarter {{text}} </p>
@@ -1526,45 +1535,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     </div>
                 </div>
                 <br><br>
-                <!-- ------------------------------------------------------- -->
-                <div class="white-box">
-                    <div>
-                        <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0" style="margin-top:25px;">
-                            <thead>
-                                <tr>
-                                    <th align="center">Tranche No.</th>
-                                    <th>Due Date</th>
-                                    <th>Planned Amount</th>
-                                    <th>Actual Disbursement</th>
-                                    <th>Recommended Disbursement</th>
-                                    <th> Utilized</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for i in tranche_list %}
-                                {% with forloop.counter as rnum %}
-                                <tr>
-                                    <td>{{rnum}}</td>
-                                    <td>{{i.due_date|date:"j M Y"}}</td>
-                                    <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
-                                    <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
-                                    <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                    <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
-                                </tr>
-                                {% endwith %}
-                                {% endfor %}
-                                <tr bgcolor="#f1f3e9" class="table-tr">
-                                    <td>Total</td>
-                                    <td>&nbsp;</td>
-                                    <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                
+                
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
