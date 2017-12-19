@@ -1893,10 +1893,19 @@
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 <script>
     $( function() {
-        $("#loader").hide()
-      $( "#accordion" ).accordion({
-        collapsible: true
-      });
+        $("#loader").hide();
+        div_id = '{{request.GET.div_id}}'
+        
+      if (div_id == ''){
+        $( "#accordion" ).accordion({
+        active:0  
+        });
+      }
+      else{
+        $( "#accordion" ).accordion({
+        active:parseInt(div_id)  
+        });
+       }
     } );
 </script>
 
@@ -2346,23 +2355,22 @@ $(document).ready(function() {
 <script>
     $(document).ready(function() {
       'use strict';
+          $(window).on('ariaAccordion.initialised', function(event, element) {
+            console.log('initialised');
+          });
 
-      $(window).on('ariaAccordion.initialised', function(event, element) {
-        console.log('initialised');
-      });
+          $('.accordion-group').first().ariaAccordion({
+            contentRole: ['document', 'application', 'document'],
+            expandOnPageLoad: true,
+            slideSpeed: 400
+          });
 
-      $('.accordion-group').first().ariaAccordion({
-        contentRole: ['document', 'application', 'document'],
-        expandOnPageLoad: true,
-        slideSpeed: 400
-      });
-
-      $('.accordion-group').last().ariaAccordion({
-        contentRole: ['document', 'application', 'document'],
-        expandOnPageLoad: true,
-        expandOnlyOne: true,
-        slideSpeed: 800
-      });
+          $('.accordion-group').last().ariaAccordion({
+            contentRole: ['document', 'application', 'document'],
+            expandOnPageLoad: true,
+            expandOnlyOne: true,
+            slideSpeed: 800
+          });
     });
 </script>
 <script>
