@@ -30,6 +30,7 @@
              <!--   <link rel="stylesheet" href="/static/css/tinyscrollbar.css"> -->
                <!-- <link rel="stylesheet" href="/static/css/style.css"> -->
                 <style>
+      .container {width: 960px !important}
       .pmu_formtable{text-align: center;width: 100%; float:left; border-top:0px solid; margin-bottom: 45px; }
        .pmu_formtable tr{padding: 50px;float: left;width:100%;background:#f1f3e9;}
       .pmu_formtable td{border-right:1px solid #dedede; width: 33%; float: left; border-top:0px solid !important}
@@ -288,11 +289,14 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                   </div>
                  {% endfor %}
                   <div class="container">
+
                     {% for i in ques %}
                     {% if i.q_type == 'OT' %}
                      <div class="margin_top_50" >
                         <ul>
                           {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                          {{sub_questions}}
+                          {{sub_questions.0}}
                           {% for sub in sub_questions.0 %}
 
                           {% if sub.q_name == 'client_logo' %}
@@ -378,6 +382,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                   </div>
 
                </div>
+
               <div class="page_break"></div>
                
                <div class="container">
@@ -385,7 +390,6 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                      
                   </div>
                   
-                  <div class='page_height'>
                   <div class="school_project">
                     <div>
                         <p class="color-red">PROJECT</p>
@@ -436,9 +440,11 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                             </td>
                             {% endif %}
                             {% if sub.q_name == "project_duration" %}
+                            {{sub.answer}}
                             <td>
                                 <p>Project Duration</p>
-                                <img src="/static/img/time-calculater.png"><span>{{sub.answer}}<sub style="bottom:0px; font-size: 20px;">months</sub></span>
+                                {% report_duration sub.answer as duration %}
+                                <img src="/static/img/time-calculater.png"><span>{{duration}}<sub style="bottom:0px; font-size: 20px;">months</sub></span>
                             </td>
                             {% endif %}
                             {% endfor %}
@@ -480,7 +486,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endfor %}
                 {% endif %}
                 {% endfor %}
-            </div>
+            
         </div>
         <!--third page -->
        
@@ -672,7 +678,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
                     <div class="white-box">
                         <div>
-                            <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                            <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0" style="margin-top:25px;">
                                 <thead>
                                     <tr>
                                         <th align="center">Tranche No.</th>
@@ -728,7 +734,6 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% with forloop.counter as j %}
         {% getreport_status report_id v 2 as reportupdates %}
         {% if reportupdates.0 == True %}
-        <div class="page_break"></div>.
         <div class="page_break"></div>
         <div class="container">
         <div class="margin_25">
@@ -1172,7 +1177,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <!--page 7th ends here -->
         <!--page 8th starts here -->
         <!--        page 6th contents starts here -->
-       
+        <div class="page_break"></div>
         <div class="container">
 
         
@@ -1199,7 +1204,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     {% get_previous_subquestions quest as parameter_questions %}
                     {% get_parameter_values reportupdates.1 paramobj as parameter_values %}
                     <div class="margin_30 prev_banner">
-                        <h5 class="color-red">PARAMETER {{forloop.counter}} </h5>
+                        <h5 class="color-red">PARAMETER {{forloop.counter}} para_error</h5>
                         <h5 class="color_green">{{parameter_values.1.0}}</h5>
                         <div>
                             {% for param_quest in parameter_questions %}
@@ -1312,7 +1317,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <br>
             {% endif %} <!-- ends for parameter section  -->
             {% if quest.slug == "budget-utlization-tranches" %}
-            <div class="margin_top30 page_height">
+            <div class="margin_top30">
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                 <div class="white-box">
                     <div>
@@ -1360,7 +1365,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 <!-- ------------------------------------------------------- -->
                 <div class="white-box">
                     <div>
-                        <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                        <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0" style="margin-top:25px;">
                             <thead>
                                 <tr>
                                     <th align="center">Tranche No.</th>
@@ -1399,7 +1404,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
-                    <p>{{quest.text|title}}</p>
+                    <p>{{quest.text|title}} budget_error</p>
                     {% get_answer_question quest reportupdates.1 as text %}
                     <h5>{{text}}
                     </h5>
@@ -1476,7 +1481,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     {% endif %}
 
             {% if quest.slug == "budget-utlization-tranches" %}
-            <div class="margin_top30 page_height">
+            <div class="margin_top30">
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                 <div class="white-box">
                     <div>
@@ -1524,7 +1529,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 <!-- ------------------------------------------------------- -->
                 <div class="white-box">
                     <div>
-                        <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                        <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0" style="margin-top:25px;">
                             <thead>
                                 <tr>
                                     <th align="center">Tranche No.</th>

@@ -415,3 +415,12 @@ def is_ceo_user(request):
     else:
         status = 1
     return status
+
+@register.assignment_tag
+def report_duration(date_string):
+    start_date = date_string.split(' TO ')[0].rstrip()
+    end_date = date_string.split(' TO ')[1].rstrip()
+    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d").date()
+    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").date()
+    report_duration = (start_date.year - end_date.year) * 12 + start_date.month - end_date.month
+    return abs(report_duration)
