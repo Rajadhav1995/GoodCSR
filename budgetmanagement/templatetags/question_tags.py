@@ -72,6 +72,16 @@ def get_answer_question(quest,quarterreportobj):
     return text
 
 @register.assignment_tag
+def get_milestones_activities(v,num):
+    start_date = v.split('to')[0].rstrip()
+    end_date = v.split('to')[1].lstrip()
+    if num == 1:
+        milestone_activitieslist = Milestone.objects.filter(active=2)
+    elif num == 2:
+        milestone_activitieslist = Activity.objects.filter(active=2)
+    return milestone_activitieslist
+
+@register.assignment_tag
 def get_parameters_list(quest,quarterreportobj):
     try:
         answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)

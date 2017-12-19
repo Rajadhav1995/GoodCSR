@@ -457,22 +457,28 @@ def get_activities_list(request,quarterreportobj):
 def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result):
 #    this is to save the milestone object
     if int(quarterreportobj.quarter_type) == 1:
-        name = result.get('milestone','')
+        object_id = result.get('milestone','')
         description = result.get('about milestone','')
+        milestoneobj = Milestone.objects.get(id=int(object_id))
+        ma_type = 1
+        content_type = ContentType.objects.get_for_model(milestoneobj)
     else:
-        name = result.get('activity','')
+        object_id = result.get('activity','')
         description = result.get('about the activity','')
+        activityobj = Activity.objects.get(id=int(object_id))
+        ma_type = 2
+        content_type = ContentType.objects.get_for_model(activityobj)
     # here checking for add or edit so that to get the ReportMilestoneActivity object
     # name1 length > 1 then it is the add more of activity/milestone in edit to specify that whether it is edit add more 
     # In edit add more to the name we are appending "-1" so that to know it is add more in edit form
     # for example name = Activity-1_2_0_40_1_1_3 then name.split('-') we will get ['Activity','1'] based on the length of this 
     # we will make sure it is of add more from edit and create a new object for that added activity/milestone
     if int(add_section) == 0 or len(name1) == 2:
-        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description)
+        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,description=description,object_id=object_id,content_type=content_type,ma_type=ma_type)
     else:
         milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
         if milestoneobj:
-            milestoneobj.name = name
+            milestoneobj.object_id = object_id
             milestoneobj.description=description
             milestoneobj.active = 2
             milestoneobj.save()
