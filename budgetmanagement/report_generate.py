@@ -712,7 +712,7 @@ from ast import literal_eval
 def remove_milesact_child(ques_obj,ids):
     removed_list = []
     child_ques = Question.objects.filter(parent = ques_obj.parent).values_list('id',flat=True)
-    if ques_obj.slug == 'milestone-name' or ques_obj.slug == 'activity-name':
+    if ques_obj.slug == 'milestone-name' or ques_obj.slug == 'activity-name' or ques_obj.slug == 'parameter-section':
         removed_list = [int(i) for i in child_ques]
     elif ques_obj.slug == 'upload-picture':
         removed_list.append(ids)
