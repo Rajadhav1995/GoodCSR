@@ -652,9 +652,12 @@ class GanttChartData(APIView):
         taskdict['activities'] = ActivitySerializer(activities, many=True).data
         taskdict['milestones'] = MilestoneSerializer(
             milestones, many=True).data
-        taskdict['supercategories'] = SuperCategorySerializer(
-            supercategories, many=True).data
+#        taskdict['supercategories'] = SuperCategorySerializer(
+#            supercategories, many=True).data
         taskdict['project'] = ProjectSerializer(projects,many=True).data
+        super_categories = SuperCategorySerializer(supercategories, many=True).data
+        super_categories.append({"id":'',"active":'',"created":"","modified":"","name":"","slug":"","description":'',"budget":'',"parent":'',"project":''})
+        taskdict['supercategories'] = super_categories
         return Response(taskdict)
         
         
