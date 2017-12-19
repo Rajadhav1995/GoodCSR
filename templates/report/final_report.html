@@ -1895,6 +1895,7 @@
     $( function() {
         $("#loader").hide();
         div_id = '{{request.GET.div_id}}'
+        
       if (div_id == ''){
         $( "#accordion" ).accordion({
         active:0  
@@ -1902,7 +1903,7 @@
       }
       else{
         $( "#accordion" ).accordion({
-        active:div_id  
+        active:parseInt(div_id)  
         });
        }
     } );
