@@ -748,7 +748,7 @@ def save_removed_fields(request):
         else:
             removed_ques,created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
                 block_type = block_type,quarter_period = period)
-        quest_ids_list = remove_milesact_child(ques_obj,ids)
+    quest_ids_list = remove_milesact_child(ques_obj,ids)
     if created:
 #        quest_ids_list.append(ids)
         removed_ques.text = quest_ids_list
