@@ -223,7 +223,6 @@
                         {% if reportupdates.0 == False %}
 <!--                                if object is not present -->
                             {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "true" as final_questionlist %}
-                            {{final_questionlist.0}}
                             {% for quest in final_questionlist.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
