@@ -135,14 +135,18 @@ class QuarterReportSection(BaseContent):
     def __str__(self):
         return str(self.id)
 
+MA_TYPE = ((1,'Milestone'),(2,'Activity'))
 class ReportMilestoneActivity(BaseContent):
     quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
     name = models.TextField(**OPTIONAL)
     description = models.TextField(**OPTIONAL)
+    ma_type = models.IntegerField(choices=MA_TYPE,**OPTIONAL)
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
+    object_id = models.IntegerField(_('object ID'),**OPTIONAL)
+    relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
 
     def __str__(self):
         return str(self.id)
-
 
 
 PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
