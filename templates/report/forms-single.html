@@ -224,11 +224,18 @@
                               <div class="col-md-12"></div>
                               {% get_previous_subquestions quest as miles_quest_list %}
                                 {% get_previous_removed miles_quest_list "false" final_previous_list.1 as milestone_questions %}
-                              <div class="col-md-6 report_text">
+                              <div class="col-md-6 report_text parameter_section">
                                  {% for mile_quest in milestone_questions %}
                                      {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
-                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">
+<!--                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">-->
+                                    {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
+                                        <select id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
 <!--                                        <h5><a href="#">Remove</a></h5>-->
                                     {% endif %}
                                      {% if mile_quest.slug == "upload-picture" %}
@@ -423,11 +430,18 @@
 
                                 {% get_previous_subquestions quest as milestone_questions %}
 
-                                    <div class="col-md-6 report_text">
+                                    <div class="col-md-6 report_text parameter_section">
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
-                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">
+<!--                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">-->
+                                    {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
+                                        <select id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}" {% if i.id == mileobj.object_id %} selected=selected {% endif %}>{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
 <!--                                        <h5><a href="#">Remove</a></h5>-->
                                     {% endif %}
                                 {% get_mile_act_images mileobj as imagelist %}
@@ -662,11 +676,18 @@
                            <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                               {% get_previous_subquestions quest as act_quest_list %}
                             {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
-                              <div class="col-md-6 report_text ">
+                              <div class="col-md-6 report_text parameter_section">
                                  {% for act_quest in activity_questions %}
                                      {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
-                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
+<!--                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">-->
+                                    {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
+                                        <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
 <!--                                        <h5><a href="#">Remove</a></h5>-->
                                     {% endif %}
                                     
@@ -872,13 +893,20 @@
                             <div class="milestone data_row_{{i}}_{{m_count}}">
                             {% get_previous_subquestions quest as act_quest_list %}
                             {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
-                                <div class="col-md-6 report_text ">
+                                <div class="col-md-6 report_text parameter_section ">
 
                                 {% for act_quest in activity_questions %}
 
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
-                                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
+<!--                                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >-->
+                                        {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
+                                        <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}" {% if i.id == mileobj.object_id %} selected=selected {% endif %}>{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
 <!--                                        <h5><a href="#">Remove</a></h5>-->
                                     {% endif %}
 
