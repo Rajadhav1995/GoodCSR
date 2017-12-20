@@ -72,6 +72,33 @@ def get_answer_question(quest,quarterreportobj):
     return text
 
 @register.assignment_tag
+def get_milestones_activities(v,num,projectobj):
+#    to get the milestone-activities for particular project based on the quarter. 
+    start_date = v.split('to')[0].rstrip()
+    end_date = v.split('to')[1].lstrip()
+    if num == 1:
+        milestone_activitieslist = Milestone.objects.filter(active=2,project=projectobj,overdue__gte = start_date,overdue__lte = end_date)
+    elif num == 2:
+        milestone_activitieslist = Activity.objects.filter(active=2,project=projectobj)
+    return milestone_activitieslist
+
+@register.assignment_tag
+def get_milestone_name(mileobj):
+#    to get the milestone name based on the activity or milestone.
+    name = ''
+    try:
+        if mileobj.ma_type  == 1:
+            obj = Milestone.objects.get_or_none(id = int (mileobj.object_id))
+        elif mileobj.ma_type == 2:
+            obj = Activity.objects.get_or_none(id = int (mileobj.object_id))
+        if obj:
+            name = obj.name
+    except:
+        name = mileobj.name
+    return name
+
+
+@register.assignment_tag
 def get_parameters_list(quest,quarterreportobj):
     try:
         answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
