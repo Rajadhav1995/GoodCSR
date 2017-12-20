@@ -52,7 +52,7 @@ def report_form(request):
             if created or int(project_report.active) == 0 :
                 project_report.active = 2
                 project_report.save()
-                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
+                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id=')
             else:
                 quarter_msg = "Already Report is generated to this Quarter"
     else :

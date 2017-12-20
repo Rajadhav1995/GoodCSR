@@ -85,14 +85,14 @@
                                                     
                                                     <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
                                                     <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0)">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'')">Remove</a></h5>
                                                 </div>  
                                            {% elif sub.q_type == 'APT' %}
                                            
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0)">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'')">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
                                            
@@ -104,7 +104,7 @@
                                                      <img src="/static/img/browse.png">
                                                      <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}"  class="input_file"></input>
                                                      <div class="col-md-6 report_text">
-                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0)">Remove</a></h5>
+                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'')">Remove</a></h5>
                                                     </div>
                                                   </div>
                                                </div>
@@ -115,16 +115,16 @@
                                       <p>{{i.q_text}}</p>
                                       {% if i.q_type == 'T' %}
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0)">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'')">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
                                             <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required="" class="textarea_file">{{i.answer|striptags}}</textarea>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0)">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'')">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
                                           <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
                                         {% endif %}                                   
                                           <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}"  class="input_file"></input>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0)">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'')">Remove</a></h5>
                                       {% endif %}
                                    </div>
                                {% endif %}
@@ -153,13 +153,13 @@
                                                     
                                                     <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp; 
                                                     <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0)">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0,'1')">Remove</a></h5>
                                                 </div>  
                                            {% elif sub.q_type == 'APT' %}
                                                <div class="col-md-6 report_text">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" ></input>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0)">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0,'1')">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'ck' %}
                                                     <div class="col-md-12 report_text">
@@ -167,7 +167,7 @@
                                                     </div>
                                                     <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|striptags}}</textarea>
                                                     <div class="col-md-12 report_text">
-                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0)">Remove</a></h5>
+                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0,'1')">Remove</a></h5>
                                                     </div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner">
@@ -186,16 +186,16 @@
                                       <p>{{i.q_text}}</p>
                                       {% if i.q_type == 'T' %}
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2,0,0)">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2,0,0,'1')">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
                                             <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required=""  class="textarea_file">{{i.answer|striptags}}</textarea>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2,0,0)">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2,0,0,'1')">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
                                               <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
                                         {% endif %}
                                           <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}" ></input>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2,0,0)">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},2,0,0,'1')">Remove</a></h5>
                                       {% endif %}
                                    </div>
                                    {% endif %}
@@ -232,7 +232,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {%  get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -267,7 +267,7 @@
                               </div>
                               {% endif %}
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
-<h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+<h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -288,7 +288,7 @@
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
                                         <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                     {% endif %}
 
                                     {% if mile_quest.slug == "upload-picture" %}
@@ -297,7 +297,7 @@
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
                                                 </div>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
 
@@ -310,7 +310,7 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
 
                                         </div>
                                     {% endif %}
@@ -325,7 +325,7 @@
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0"  class="textarea_file"></textarea>
                                             </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
                                     {% endfor %}
@@ -427,7 +427,7 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                 </div>
                             {% endif %}
 
@@ -443,7 +443,7 @@
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
                                     <h5><a href="javascript:void(0);" onclick="return remove_fields
-                                    ({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                    ({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -478,7 +478,7 @@
                               </div>
                               {% endif %}
 <!--                                <img src="/static/img/image_slideshow.jpg" style="width:100%">-->
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -505,7 +505,7 @@
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
                                         <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                     {% endif %}
                                 {% get_mile_act_images mileobj as imagelist %}
                                 {% if imagelist %}
@@ -516,7 +516,7 @@
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}">{% if imageobj.attachment_file %}{{imageobj.attachment_file.url}}{% endif %}
                                                 </div>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
 
@@ -529,7 +529,7 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
 
                                         </div>
                                     {% endif %}
@@ -541,7 +541,7 @@
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
                                                 </div>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
 
@@ -554,7 +554,7 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
 
                                         </div>
                                     {% endif %}
@@ -571,7 +571,7 @@
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}"  class="textarea_file">{{mileobj.description|striptags}}</textarea>
                                             </div>
-                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                            <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                         </div>
                                     {% endif %}
                                     {% endfor %}
@@ -678,7 +678,7 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                 </div>
                             {% endif %}
 
@@ -728,7 +728,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -740,7 +740,7 @@
                                 <div class=" white-box ">
                             <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
                          </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
 
@@ -750,7 +750,7 @@
 
                                 <p>{{quest.text|title}}</p>
                                 <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
 
@@ -772,7 +772,7 @@
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
                                         <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
@@ -781,7 +781,7 @@
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
@@ -794,7 +794,7 @@
                                         <div class="form-group upload_text">
                                             <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0">
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
@@ -803,7 +803,7 @@
                                         <div class="form-group">
                                             <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                         <div class="form-group addpicture">
                                             <input type="file" id="file02">
                                         </div>
@@ -840,7 +840,7 @@
                                             <option value="{{i.id}}">{{i.name}}</option>
                                             {% endfor %}
                                         </select>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 
@@ -851,7 +851,7 @@
                                         <div class="">
                                             <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 
@@ -914,7 +914,7 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                 </div>
                             {% endif %}
 
@@ -924,7 +924,7 @@
                                 <div class="">
                                     <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                                 </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
                             {% if quest.slug == "risks-mitigation" %}
@@ -933,7 +933,7 @@
                                 <div class="">
                                     <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                                 </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -947,7 +947,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" >
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -960,7 +960,7 @@
                             <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
                             
                          </div>
-                         <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                         <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                             
 <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
@@ -1328,7 +1328,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <textarea type="text" class="textarea_file" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
 
@@ -1356,7 +1356,7 @@
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
                                         <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
@@ -1365,7 +1365,7 @@
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}">{{mileobj.description|striptags}} </textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
@@ -1380,7 +1380,7 @@
                                         <div class="form-group upload_text">
                                             <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
@@ -1389,7 +1389,7 @@
                                         <div class="form-group">
                                             <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value = "{{imageobj.description}}" >
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                         <div class="form-group addpicture">
                                             <input type="file" id="file02">
                                         </div>
@@ -1438,7 +1438,7 @@
                                             <option value="{{i.id}}" {% if i.id == paramobj.keyparameter.id %} selected=selected {% endif %}>{{i.name}}</option>
                                             {% endfor %}
                                         </select>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 
@@ -1449,7 +1449,7 @@
                                         <div class="">
                                             <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description|striptags}}</textarea>
                                         </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                                     {% endif %}
 
@@ -1514,7 +1514,7 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}''{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                             {% endif %}
 
@@ -1525,7 +1525,7 @@
                                 <div class="">
                                     <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
                                 </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
                             {% if quest.slug == "risks-mitigation" %}
@@ -1535,7 +1535,7 @@
                                 <div class="">
                                     <textarea class="textarea_file" type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
                                 </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
 <!--                            this is if object is already exists.-->
                             {% endif %}
@@ -1585,7 +1585,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -1598,7 +1598,7 @@
                                     <div class=" white-box ">
                             <div id="gwContainer_next" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
                          </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
 
@@ -1607,7 +1607,7 @@
                             <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px">
                                 <p>{{quest.text|title}}</p>
                                 <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
 
@@ -1705,7 +1705,7 @@
                                 <div class="">
                                     <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                                 </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -1722,7 +1722,7 @@
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -1735,7 +1735,7 @@
                                 <div class=" white-box ">
                             <div id="gwContainer_next" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
                          </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
 
@@ -1745,7 +1745,7 @@
                                 <p>{{quest.text|title}} </p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">{{text|striptags}}</textarea>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
 
@@ -1832,7 +1832,7 @@
                                     </table>
                                 </div>
                                 <!--<img src="img/table01.png" style="width:100%">-->
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -1844,7 +1844,7 @@
                                 {% get_answer_question quest reportupdates.1 as text %}
                                     <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">{{text|striptags}}</textarea>
                                 </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                             {% endif %}
 
@@ -2865,7 +2865,7 @@ $(document).ready(function() {
 <script type="text/javascript">
     
     var request_url = "{{request.get_full_path|safe}}"
-    function remove_fields(ids,block_type,object_id,period){
+    function remove_fields(ids,block_type,object_id,period,div_id){
     $.ajax({
             url: '/report/removed/fields/',
             type: 'GET',
@@ -2882,7 +2882,7 @@ $(document).ready(function() {
             },
             
         });
-       window.location.href = request_url
+       window.location.href = '/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id
     }
 </script>
 
