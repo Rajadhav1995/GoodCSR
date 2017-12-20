@@ -72,13 +72,13 @@ def get_answer_question(quest,quarterreportobj):
     return text
 
 @register.assignment_tag
-def get_milestones_activities(v,num):
+def get_milestones_activities(v,num,projectobj):
     start_date = v.split('to')[0].rstrip()
     end_date = v.split('to')[1].lstrip()
     if num == 1:
-        milestone_activitieslist = Milestone.objects.filter(active=2)
+        milestone_activitieslist = Milestone.objects.filter(active=2,project=projectobj)
     elif num == 2:
-        milestone_activitieslist = Activity.objects.filter(active=2)
+        milestone_activitieslist = Activity.objects.filter(active=2,project=projectobj)
     return milestone_activitieslist
 
 @register.assignment_tag

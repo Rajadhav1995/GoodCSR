@@ -288,7 +288,7 @@
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
 <!--                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">-->
-                                    {% get_milestones_activities v 1 as milestone_activitieslist %}
+                                    {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
                                         <select id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" >
                                             <option value="0">Select</option>
                                             {% for i in milestone_activitieslist %}
@@ -512,7 +512,7 @@
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
 <!--                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">-->
-                                        {% get_milestones_activities v 1 as milestone_activitieslist %}
+                                        {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
                                         <select id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" >
                                             <option value="0">Select</option>
                                             {% for i in milestone_activitieslist %}
@@ -786,7 +786,7 @@
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
                                         <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
-                                        {% get_milestones_activities v 2 as milestone_activitieslist %}
+                                        {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
                                         <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
                                             <option value="0">Select</option>
                                             {% for i in milestone_activitieslist %}
@@ -1376,7 +1376,7 @@
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
 <!--                                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >-->
-                                        {% get_milestones_activities v 2 as milestone_activitieslist %}
+                                        {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
                                         <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" >
                                             <option value="0">Select</option>
                                             {% for i in milestone_activitieslist %}
