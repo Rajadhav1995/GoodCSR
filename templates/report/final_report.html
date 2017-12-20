@@ -2893,7 +2893,6 @@ $(document).ready(function() {
     
     var request_url = "{{request.get_full_path|safe}}"
     function remove_fields(ids,block_type,object_id,period,div_id){
-    alert(ids)
     $.ajax({
             url: '/report/removed/fields/',
             type: 'GET',
@@ -2906,9 +2905,11 @@ $(document).ready(function() {
                     },
             
             success: function(data){
+                    console.log("remove success")
                     console.log(data)
             },
             error: function(data){
+                console.log("remove error")
                console.log(data)
             }
         });
