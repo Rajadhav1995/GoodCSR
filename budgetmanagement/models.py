@@ -117,6 +117,7 @@ class ProjectReport(BaseContent):
         report_obj = ProjectReport.objects.get_or_none(id=int(self.id))
         quarter_report_del = QuarterReportSection.objects.filter(project__id=report_obj.id).delete()
         answers_del = Answer.objects.filter(object_id=report_obj.id,content_type = ContentType.objects.get_for_model(report_obj)).delete()
+        remove_question = RemoveQuestion.objects.filter(quarter_report = report_obj).delete()
         return locals()
 
 QUARTER_TYPE = ((1,'Previous Quarter Updates'),(2,'Current Quarter Updates'),(3,'Future Quarter Updates'))
