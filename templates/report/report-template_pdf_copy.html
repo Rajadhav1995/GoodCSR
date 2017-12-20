@@ -577,7 +577,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% for mile_quest in milestone_questions %}
                 {% if mile_quest.slug == "milestone-name" %}
                 <h5 class="color-red">MILESTONE</h5>
-                <h5 class="color_green" style="margin:0px">{{mileobj.name}}</h5>
+                {% get_milestone_name mileobj as name %}
+                <h5 class="color_green" style="margin:0px">{{name}}</h5>
                 {% endif %}
                 {% if mile_quest.slug == "milestone-description" %}
                 <p><strong>About the Milestone</strong></p>
@@ -1141,7 +1142,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% for mile_quest in milestone_questions %}
                 {% if mile_quest.slug == "activity-name" %}
                 <h5 class="color-red">ACTIVITY</h5>
-                <h5 class="color_green" style="margin:0px">{{mileobj.name}}</h5>
+                {% get_milestone_name mileobj as name %}
+                <h5 class="color_green" style="margin:0px">{{name}}</h5>
                 {% endif %}
                 {% if mile_quest.slug == "about-the-actvity" %}
                 <p><strong>About the Activity</strong></p>
