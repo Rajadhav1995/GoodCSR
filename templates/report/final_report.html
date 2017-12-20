@@ -2897,8 +2897,7 @@ $(document).ready(function() {
             url: '/report/removed/fields/',
             type: 'GET',
             dataType: "JSON",
-            crossDomain: false,
-            processData: false,
+            crossDomain: true,
             
             data: { id:ids,
                     report_id:"{{request.GET.report_id}}",
