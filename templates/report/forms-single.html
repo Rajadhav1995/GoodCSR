@@ -224,7 +224,7 @@
                               <div class="col-md-12"></div>
                               {% get_previous_subquestions quest as miles_quest_list %}
                                 {% get_previous_removed miles_quest_list "false" final_previous_list.1 as milestone_questions %}
-                              <div class="col-md-6 report_text">
+                              <div class="col-md-6 report_text parameter_section">
                                  {% for mile_quest in milestone_questions %}
                                      {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
@@ -430,7 +430,7 @@
 
                                 {% get_previous_subquestions quest as milestone_questions %}
 
-                                    <div class="col-md-6 report_text">
+                                    <div class="col-md-6 report_text parameter_section">
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
                                         <p>{{mile_quest.text|title}}</p>
@@ -676,7 +676,7 @@
                            <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
                               {% get_previous_subquestions quest as act_quest_list %}
                             {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
-                              <div class="col-md-6 report_text ">
+                              <div class="col-md-6 report_text parameter_section">
                                  {% for act_quest in activity_questions %}
                                      {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
@@ -893,7 +893,7 @@
                             <div class="milestone data_row_{{i}}_{{m_count}}">
                             {% get_previous_subquestions quest as act_quest_list %}
                             {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
-                                <div class="col-md-6 report_text ">
+                                <div class="col-md-6 report_text parameter_section ">
 
                                 {% for act_quest in activity_questions %}
 
