@@ -114,12 +114,12 @@ footer{margin:30px 0px; float: left; width: 100%}
 .tab-resp2    { float:left; width:100%; -moz-border-radius: 5px;-webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 .tab-resp2 th   { background:#f1f3e9; color:#ba5932; text-align:center; font-weight:600; padding:15px 5px 10px; border-right:1px solid #dee0d5;  }
 .tab-resp2 td { padding:5px; font-size:14px; color:#202020; text-align:center; border-right:1px solid #dee0d5; border-bottom:1px solid #dee0d5;}
-.tab-resp2 th:first-child { border-radius:5px 0 0 0; padding-left:20px;}
+.tab-resp2 th:first-child { border-radius:5px 0 0 0; }
 .tab-resp2 th:last-child  { border-radius:0px 5px 0 0; border-right:none;}
 .tab-resp2 td:last-child  { border-right:none;}
 .tab-resp2 .table-tr td { color:#006861; font-weight:600;}
 
-.budget_section td input, .budget_section td select{height: 36px; border-radius: 5px;border: 1px solid #c4c4c4; font-size: 14px; padding-left: 10px;}
+.budget_section td input, .budget_section td select{height: 36px; border-radius: 5px;border: 1px solid #c4c4c4; font-size: 14px;}
 .budget_section td:nth-child(2n-2){padding-left:0px; padding: 5px 10px;}
 .budget_section td:nth-child(1) span{background:url(../../img/cross-delete-black.png) no-repeat; padding: 0px 2px 4px;}
 .budget_section td:nth-child(1) span:hover{background:url(../../img/cross-delete-color.png) no-repeat }
@@ -271,7 +271,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
             <!-- onload="window.print()" -->
             <body >
-              <div class='header_page_height'>
+              <div>
                <header>
 
                   <div class="">
@@ -282,24 +282,24 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     {% for i in ques.0 %}
                      {% if i.q_name == 'cover_image' %}
                      <div>
-                        <img src="{{image_url}}/{{i.answer}}" style="width:100%; height:600px">
-                      
+                        <img src="{{image_url}}/{{i.answer}}" style="width:100%; height:700px">
+                      <div>
+                        <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
+                    </div>
                      </div>
                     {% endif %}
+
                   </div>
                  {% endfor %}
                   <div class="container">
 
-                    {% for i in ques %}
+                    {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
                      <div class="margin_top_50" >
                         <ul>
                           {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
-                          {{sub_questions}}
-                          {{sub_questions.0}}
-                          {% for sub in sub_questions.0 %}
-
-                          {% if sub.q_name == 'client_logo' %}
+                            {% for sub in sub_questions.0 %}
+                            {% if sub.q_name == 'client_logo' %}
                            <li><img src="{{image_url}}/{{sub.answer}}" height = 70 width = 100></li>
                           {% endif %}
 
@@ -352,9 +352,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                </div>
 
                <div class="page_break"></div>
-               <div class="container">
+               <div class="container" style="margin-left:-3px;">
                   <div>
-                     <h1 style="font-size:24px">Index</h1>
+                     <h1 style="font-size:24px;">Index</h1>
                   </div>
                   <div class="page_height">
                     <!--Dynamic getting of the contents of index page (STARTS)                  -->
@@ -385,7 +385,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
               <div class="page_break"></div>
                
-               <div class="container">
+               <div class="container" style="margin-left:-5px;">
                   <div class="margin_25">
                      
                   </div>
@@ -440,7 +440,6 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                             </td>
                             {% endif %}
                             {% if sub.q_name == "project_duration" %}
-                            {{sub.answer}}
                             <td>
                                 <p>Project Duration</p>
                                 {% report_duration sub.answer as duration %}
@@ -493,7 +492,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <!--                    third page contents ends -->
         <!--        fourth page contents starts-->
          <div class="page_break"></div>
-        <div class="container">
+        <div class="container" style="margin-left:-5px;">
             
             
              {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
@@ -520,7 +519,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% getreport_status report_id v 1 as reportupdates %}
         {% if reportupdates.0 == True %}
         <div class="page_break"></div>
-        <div class="container">
+        <div class="container" style="margin-left:-5px;">
         
         <div class='page_height'>
         {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
@@ -614,7 +613,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <!-- page 5th contents ends here -- >
             <!--        page 6th contents starts here -->
         <div class="page_break"></div>
-        <div class="container">
+        <div class="container" style="margin-left:-10px;">
         <div class='page_height'>
             {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
         {% for quest in final_previous_list.0 %}
@@ -633,7 +632,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                     <div class="white-box">
                         <div>
-                            <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+                            <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="1">
                                 <thead>
                                     <tr>
                                         <th>Super Category</th>
@@ -745,7 +744,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <div class='page_height'>
         {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
         {% for quest in final_questionlist.0 %}
-        <div class="">
+        <div style="margin-left:-10px">
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
             {% if quest.slug == "heading" %}
@@ -1188,11 +1187,11 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <div>
         {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
         {% for quest in final_questionlist.0 %}
-        <div class="">
+        <div style="margin-left:-1px;">
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
             {% if quest.slug == "heading" %}
-            <h4 style="margin:0px">{{text|title}} </h4>
+            <h4 style="margin-left:-15px">{{text|title}} </h4>
             {% endif %}
             {% if quest.slug == "duration" %}
             <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
@@ -1202,19 +1201,20 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% if quest.slug == "parameter-section" %}
             <div class="col-md-12">
                 <div class="row">
+                  <div class="margin_30 prev_banner">
                     {% get_parameters_list quest reportupdates.1 as parameters_list %}
                     {% for paramobj in parameters_list %}
                     {% with forloop.counter as m_count %}
                     {% get_previous_subquestions quest as parameter_questions %}
                     {% get_parameter_values reportupdates.1 paramobj as parameter_values %}
-                    <div class="margin_30 prev_banner">
+                    
                         <h5 class="color-red">PARAMETER {{forloop.counter}}</h5>
                         <h5 class="color_green">{{parameter_values.1.0}}</h5>
                         <div>
                             {% for param_quest in parameter_questions %}
                             {% if param_quest.slug == "parameter-selection" %}
                             {% if parameter_values.2 == 1 %}
-                            <div class="col-md-4">
+                            <div class="col-md-4" style="margin-left:-20px">
                                 <div class="row">
                                     <ul class="key_parameter parameter">
                                         <!-- <div class='numeric_parameter'></div> -->
@@ -1248,8 +1248,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                             </div>
                             {% endif %}
                         </div>
-                    </div>
                     {% endfor %} <!-- for loops ends for paramter questions -->
+                    </div>
                     <script type="text/javascript">
                         var new_data_pin = 0;
                         var new_data_pip = 0;
@@ -1412,7 +1412,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endif %}
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
-                <div class="location margin_top30">
+                <div class="location margin_top30" style="margin-left:3px;">
                     <p>{{quest.text|title}} </p>
                     {% get_answer_question quest reportupdates.1 as text %}
                     <h5>{{text}}
@@ -1464,19 +1464,19 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% getreport_status report_id v 3 as reportupdates %}
         {% if reportupdates.0 == True %}
         <div class='page_break'></div>
-        <div class="container">
+        <div class="container" style="margin-left:10px">
         
-        <div>
+        <div style="margin-left:-20px">
         {% get_final_questions next_questionlist 5 reportupdates.1 v report_id "false" as final_questionlist %}
         {% for quest in final_questionlist.0 %}
         <div class="">
             {% if quest.qtype == "APT" %}
             {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
             {% if quest.slug == "heading" %}
-            <h4 style="margin:0px">{{text|title}}</h4>
+            <h4 style="margin:0px" style="margin-left:-15px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> First Quarter {{text}} </p>
+            <p>  First Quarter {{text}} </p>
             {% endif %}
             {% endif %}
 

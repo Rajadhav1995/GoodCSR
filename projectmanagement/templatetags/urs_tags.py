@@ -91,6 +91,7 @@ def get_budget_lineitem(row,projectobj):
         lineitem = BudgetPeriodUnit.objects.get(budget_period = budget_periodobj,active=2)
     except:
         lineitem = None
+    # import ipdb; ipdb.set_trace()
     return lineitem
 
 @register.assignment_tag
