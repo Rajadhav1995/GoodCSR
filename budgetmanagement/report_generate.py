@@ -716,11 +716,11 @@ from ast import literal_eval
 def remove_milesact_child(ques_obj,ids):
     removed_list = []
     child_ques = Question.objects.filter(parent = ques_obj.parent).values_list('id',flat=True)
-    if ques_obj.slug == 'milestone-name' or ques_obj.slug == 'activity-name' or ques_obj.slug == 'parameter-section':
+    if ques_obj.slug == 'milestone-name' or ques_obj.slug == 'activity-name' or ques_obj.slug == 'parameter-selection':
         removed_list = [int(i) for i in child_ques]
     elif ques_obj.slug == 'upload-picture':
         removed_list.append(ids)
-        removed_list.append(Question.objects.get_or_none(slug = 'picture-description').id)
+        removed_list.append(Question.objects.get_or_none(parent = ques_obj.parent,slug = 'picture-description').id)
         removed_list.append(ids)
     else:
         removed_list.append(ids)
@@ -767,13 +767,29 @@ def save_removed_fields(request):
     
 
 def save_added_fields(request):
+    child_quest = []
+    quest_list=[]
+    get_slug = {'upload-picture':'picture-description','picture-description':'upload-picture'}
+    act_mile_slug = {'about-the-actvity':'activity-name','milestone-description':'milestone-name'}
     ids = literal_eval(request.GET.get('id'))
     url = str(request.GET.get('redirect_url'))
     remove_quest_obj = RemoveQuestion.objects.get_or_none(id=int(request.GET.get('remove_obj')))
     if remove_quest_obj:
         ques_list = eval(remove_quest_obj.text)
         if ids in ques_list:
-            ques_list.remove(ids)
+            ques = Question.objects.get_or_none(id = int(ids))
+            if ques.slug == 'activity-name' or ques.slug == 'milestone-name' or ques.slug == 'parameter-selection':
+                child_quest = Question.objects.filter(parent = ques.parent).values_list('id',flat=True)
+            elif ques.slug == 'upload-picture' or ques.slug == 'picture-description':
+                child_quest.append(Question.objects.get_or_none(parent=ques.parent,slug = get_slug.get(ques.slug)).id)
+                child_quest.append(ids)
+            elif ques.slug == 'about-the-actvity' or ques.slug == 'milestone-description':
+                child_quest.append(Question.objects.get_or_none(parent=ques.parent,slug = act_mile_slug.get(ques.slug)).id)
+                child_quest.append(ids)
+            else:
+                ques_list.remove(ids)
+            for child in child_quest:
+                    ques_list.remove(child)
             remove_quest_obj.text = ques_list
             remove_quest_obj.save()
     return HttpResponseRedirect(url)
