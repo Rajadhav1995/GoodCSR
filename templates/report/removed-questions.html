@@ -55,10 +55,10 @@
     <div class="row">
         <div class="generate_boxbg">
             <div class="general_report">
-                <h2>Removed Questions Tabs</h2> 
+                <h2>Removed Fields/ Sections</h2> 
                 <div>
                     <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}" target="_self">Edit Report</a></p>
-                    <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=edit_template" target="_self">Edit Template</a></p>
+<!--                    <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=edit_template" target="_self">Edit Template</a></p>-->
                 </div>
 <!--Cover Page and Project Summary Page div where the questions are made dynamic  STARTS -->
                   <div id="accordion">
@@ -128,7 +128,7 @@
                                {% endif %}
                            {% endfor%}
                         </div>
-                        <input type="submit" class="report_save " name="cover_page_save" id="submit_0" value = "Save"></input>
+<!--                        <input type="submit" class="report_save " name="cover_page_save" id="submit_0" value = "Save"></input>-->
                      </form>
 
                      <h3 id='1'>{{locals_list.block2.name}}</h3>
@@ -199,7 +199,7 @@
                                    {% endif %}
                            {% endfor%}
                         </div>
-                        <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>
+<!--                        <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>-->
                      </form>
 <!--                                             </div>-->
 
@@ -690,7 +690,7 @@
 
 
                               <br>
-                                <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>
+<!--                                <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>-->
                             </div>
                             </form>
                     {% endwith %}
@@ -810,16 +810,16 @@
                                 </div>
                                 {% endfor %}
                             </div>
-                            <div class="form-group addmilestone click_buttons">
-                                 <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aadd_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aadd_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                            </div>
+<!--                            <div class="form-group addmilestone click_buttons">-->
+<!--                                 <div class="link-left">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="aadd_clone_{{i}}_{{j}}">Add more</a>-->
+<!--                                        </div>-->
+<!--                                        <div class="link-center">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="aadd_remove_{{i}}_{{j}}">Remove</a>-->
+<!--                                        </div>-->
+<!--                            </div>-->
                             {% endif %}
 
 <!--                     this is for parameter selection -->
@@ -856,16 +856,16 @@
 
                                     {% endfor %}
                                 </div>
-                                <div class="form-group addmilestone click_buttons">
-                                        <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_add_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_add_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                                </div>
+<!--                                <div class="form-group addmilestone click_buttons">-->
+<!--                                        <div class="link-left">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="para_add_clone_{{i}}_{{j}}">Add more</a>-->
+<!--                                        </div>-->
+<!--                                        <div class="link-center">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="para_add_remove_{{i}}_{{j}}">Remove</a>-->
+<!--                                        </div>-->
+<!--                                </div>-->
                         {% endif %}
 
 <!--                            this is for budget table display-->
@@ -959,6 +959,7 @@
                             <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
                             
                          </div>
+                         <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
                             </div>
                             
 <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
@@ -1399,16 +1400,16 @@
                             </div>
                             {% endwith %}
                             {% endfor %}
-                            <div class="form-group addmilestone click_buttons">
-                                       <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aedit_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aedit_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                                   </div>
+<!--                            <div class="form-group addmilestone click_buttons">-->
+<!--                                       <div class="link-left">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="aedit_clone_{{i}}_{{j}}">Add more</a>-->
+<!--                                        </div>-->
+<!--                                        <div class="link-center">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="aedit_remove_{{i}}_{{j}}">Remove</a>-->
+<!--                                        </div>-->
+<!--                                   </div>-->
 
                             {% endif %}
 
@@ -1455,16 +1456,16 @@
                                 </div>
                                 {% endwith %}
                                 {% endfor %}
-                                <div class="form-group addmilestone click_buttons">
-                                        <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_edit_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_edit_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                                </div>
+<!--                                <div class="form-group addmilestone click_buttons">-->
+<!--                                        <div class="link-left">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="para_edit_clone_{{i}}_{{j}}">Add more</a>-->
+<!--                                        </div>-->
+<!--                                        <div class="link-center">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="para_edit_remove_{{i}}_{{j}}">Remove</a>-->
+<!--                                        </div>-->
+<!--                                </div>-->
                         {% endif %}
 
 <!--                            this is for budget table display-->
@@ -1548,7 +1549,7 @@
 
 <!--                            </div>--> <!-- extra div-->
                             <br>
-                            <input type= "submit" class="report_save" id="submit_{{j|add:previous_len}}" value="Save"></input>
+<!--                            <input type= "submit" class="report_save" id="submit_{{j|add:previous_len}}" value="Save"></input>-->
 
                         </div>
                         </form>
@@ -1653,7 +1654,7 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
+                                
                                 <br>
                                 <div class="table-responsive">
                                     <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
@@ -1791,7 +1792,7 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
+                                
                                 <br>
                                 <div class="table-responsive">
                                     <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
@@ -1854,7 +1855,7 @@
                     {% endif %} <!-- if object is present loop ends here-->
 
                             <br>
-                            <input type= "submit" class="report_save" id="submit_{{future_len}}" value="Save"></input>
+<!--                            <input type= "submit" class="report_save" id="submit_{{future_len}}" value="Save"></input>-->
                         </div>
 
                         </form>
@@ -1865,16 +1866,16 @@
 
                     </div>
                     </div>
-                    <div class="below_buttons">
-                        <hr>
-                        <div style="float:left">
-                            <a href="/report/detail/?slug={{slug}}&report_id={{report_id}}&key=1" target="_blank"><button class="report_save">Preview Report</button></a>
-                        </div>
-                        <div align="right" class="save_exit">
-                            <button class="report_save" id="submit_report">Submit Report</button>
-                            <button class="report_save" id="save_and_exit">Save And Exit</button>
-                        </div>
-                    </div>
+<!--                    <div class="below_buttons">-->
+<!--                        <hr>-->
+<!--                        <div style="float:left">-->
+<!--                            <a href="/report/detail/?slug={{slug}}&report_id={{report_id}}&key=1" target="_blank"><button class="report_save">Preview Report</button></a>-->
+<!--                        </div>-->
+<!--                        <div align="right" class="save_exit">-->
+<!--                            <button class="report_save" id="submit_report">Submit Report</button>-->
+<!--                            <button class="report_save" id="save_and_exit">Save And Exit</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
