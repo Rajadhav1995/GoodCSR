@@ -28,7 +28,6 @@ from django.template.loader import render_to_string
 def report_form(request):
     #to save the report type and duration
     slug =  request.GET.get('slug')
-    import ipdb;ipdb.set_trace()
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     if not project:
         project = Project.objects.get_or_none(slug = request.POST.get('project_slug'))
