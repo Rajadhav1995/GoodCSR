@@ -1298,15 +1298,15 @@
             {% if quest.slug == "parameter-section" %}
             <div class="col-md-12">
                 <div class="row">
+                    <div class="margin_30 prev_banner">
                     {% get_parameters_list quest reportupdates.1 as parameters_list %}
                     {% for paramobj in parameters_list %}
                     {% with forloop.counter as m_count %}
                     {% get_previous_subquestions quest as parameter_questions %}
                     {% get_parameter_values reportupdates.1 paramobj as parameter_values %}
-                    <div class="margin_30 prev_banner">
-                        <h5 class="color-red">PARAMETER {{forloop.counter}}</h5>
+                    
+                        <h5 class="color-red">PARAMETER parameterq {{forloop.counter}}</h5>
                         <h5 class="color_green">{{parameter_values.1.0}}</h5>
-                        <div>
                             {% for param_quest in parameter_questions %}
                             {% if param_quest.slug == "parameter-selection" %}
                             {% if parameter_values.2 == 1 %}
@@ -1315,7 +1315,7 @@
                                     <ul class="key_parameter parameter">
                                         <!-- <div class='numeric_parameter'></div> -->
                                         <!-- <h3>{{chart_name_pip}}</h3> -->
-                                        <div class="right-budget beni-dist">
+                                    <div class="right-budget beni-dist">
                                             <div id="comm{{forloop.counter}}" style="width: 80%;float: left;">
                                             </div>
                                         </div>
@@ -1343,9 +1343,9 @@
                                 </div>
                             </div>
                             {% endif %}
-                        </div>
-                    </div>
                     {% endfor %} <!-- for loops ends for paramter questions -->
+                    </div>
+                    
                     <script type="text/javascript">
                         var new_data_pin = 0;
                         var new_data_pip = 0;

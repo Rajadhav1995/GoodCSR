@@ -110,7 +110,9 @@
             </thead>
             
             <tbody class="budget_section">
+              {{budget_period}}
             {% for j in budget_period %}
+            {{j}}
             <tr class = "data_row">
                 {% get_budget_lineitem j projectobj as lineitemobj %}
                 <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
