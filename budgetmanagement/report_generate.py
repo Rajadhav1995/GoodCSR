@@ -52,7 +52,7 @@ def report_form(request):
             if created or int(project_report.active) == 0 :
                 project_report.active = 2
                 project_report.save()
-                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id))
+                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id=')
             else:
                 quarter_msg = "Already Report is generated to this Quarter"
     else :
@@ -65,8 +65,12 @@ def report_listing(request):
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     report_obj = ProjectReport.objects.filter(project=project,active=2)
     budget_obj = Budget.objects.get_or_none(project=project)
-    from budgetmanagement.manage_budget import get_budget_quarters
-    budget_quarters = get_budget_quarters(budget_obj) 
+    if budget_obj:
+        from budgetmanagement.manage_budget import get_budget_quarters
+        budget_quarters = get_budget_quarters(budget_obj)
+    else:
+        budget_quarters = {} 
+        msg = "Budget is not created." 
     return render(request,'report/listing.html',locals())
 
 def save_section_answers(quest_ids,project_report,request,data,user):

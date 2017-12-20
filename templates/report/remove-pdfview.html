@@ -402,7 +402,8 @@
                             {% if sub.q_name == "project_duration" %}
                             <td>
                                 <p>Project Duration</p>
-                                <img src="/static/img/time-calculater.png"><span>{{sub.answer}}<sub style="bottom:0px; font-size: 20px;">months</sub></span>
+                                {% report_duration sub.answer as duration %}
+                                <img src="/static/img/time-calculater.png"><span>{{duration}}<sub style="bottom:0px; font-size: 20px;">months</sub></span>
                             </td>
                             {% endif %}
                             {% endfor %}
@@ -717,9 +718,11 @@
                     </div>
                     <br><br>
 
-
+                    {% get_tranches v tranche_list as filtered_tranches %}
+                    {% if filtered_tranches.1.planned_amount %}
                     <div class="white-box">
                         <div class="table-responsive">
+                            
                             <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
                                 <thead>
                                     <tr>
@@ -732,7 +735,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for i in tranche_list %}
+                                    {% get_tranches v tranche_list as filtered_tranches %}
+                                    
+                                    {% for i in filtered_tranches.0 %}
                                     {% with forloop.counter as rnum %}
                                     <tr>
                                         <td>{{rnum}}</td>
@@ -744,18 +749,22 @@
                                     </tr>
                                     {% endwith %}
                                     {% endfor %}
+                                    
+                                    
                                     <tr bgcolor="#f1f3e9" class="table-tr">
                                         <td>Total</td>
                                         <td>&nbsp;</td>
-                                        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
                                     </tr>
+                                    
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 {% endif %}
                 {% endfor %} <!-- previous question loops ends here -->
@@ -843,7 +852,6 @@
                 var jsonData = {{taskdict|safe}}
                 console.log(jsonData);
                 var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
-                alert(g);
                 // console.log(jsonData.tasks);
                 // Get today and tomorrows date
                 var cur = new Date();
@@ -1032,7 +1040,6 @@
                       } else {
                         var d3 = new Date(this.overdue);
                         var d4 = new Date(completionDate);
-                        alert("mahiti");
                         var timeDiff = (d3.getTime() + 86400) - d4.getTime();
                         var diffDays = Math.ceil(timeDiff / 86400000);
                         console.log('DiffDays', diffDays);
@@ -1299,7 +1306,7 @@
                     {% get_previous_subquestions quest as parameter_questions %}
                     {% get_parameter_values reportupdates.1 paramobj as parameter_values %}
                     <div class="margin_30 prev_banner">
-                        <h5 class="color-red">PARAMETER {{forloop.counter}} </h5>
+                        <h5 class="color-red">PARAMETER {{forloop.counter}}</h5>
                         <h5 class="color_green">{{parameter_values.1.0}}</h5>
                         <div>
                             {% for param_quest in parameter_questions %}
@@ -1311,7 +1318,7 @@
                                         <!-- <div class='numeric_parameter'></div> -->
                                         <!-- <h3>{{chart_name_pip}}</h3> -->
                                         <div class="right-budget beni-dist">
-                                            <div id="comm{{forloop.counter}}" style="width: 100%;float: left;">
+                                            <div id="comm{{forloop.counter}}" style="width: 80%;float: left;">
                                             </div>
                                         </div>
                                     </ul>
@@ -1458,6 +1465,8 @@
                 </div>
                 <br><br>
                 <!-- ------------------------------------------------------- -->
+                {% get_tranches v tranche_list as filtered_tranches %}
+                    {% if filtered_tranches.1.planned_amount %}
                 <div class="white-box">
                     <div class="table-responsive">
                         <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
@@ -1472,7 +1481,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for i in tranche_list %}
+                                {% get_tranches v tranche_list as filtered_tranches %}
+                                    
+                                    {% for i in filtered_tranches.0 %}
                                 {% with forloop.counter as rnum %}
                                 <tr>
                                     <td>{{rnum}}</td>
@@ -1487,15 +1498,16 @@
                                 <tr bgcolor="#f1f3e9" class="table-tr">
                                     <td>Total</td>
                                     <td>&nbsp;</td>
-                                    <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
+                                    <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                    <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+                {% endif %}
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
@@ -1682,44 +1694,6 @@
                 </div>
                 <br><br>
                 <!-- ------------------------------------------------------- -->
-                <div class="white-box">
-                    <div class="table-responsive">
-                        <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
-                            <thead>
-                                <tr>
-                                    <th align="center">Tranche No.</th>
-                                    <th>Due Date</th>
-                                    <th>Planned Amount</th>
-                                    <th>Actual Disbursement</th>
-                                    <th>Recommended Disbursement</th>
-                                    <th> Utilized</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for i in tranche_list %}
-                                {% with forloop.counter as rnum %}
-                                <tr>
-                                    <td>{{rnum}}</td>
-                                    <td>{{i.due_date|date:"j M Y"}}</td>
-                                    <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
-                                    <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
-                                    <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                    <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
-                                </tr>
-                                {% endwith %}
-                                {% endfor %}
-                                <tr bgcolor="#f1f3e9" class="table-tr">
-                                    <td>Total</td>
-                                    <td>&nbsp;</td>
-                                    <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
