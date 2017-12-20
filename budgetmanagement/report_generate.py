@@ -28,6 +28,7 @@ from django.template.loader import render_to_string
 def report_form(request):
     #to save the report type and duration
     slug =  request.GET.get('slug')
+    import ipdb;ipdb.set_trace()
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     if not project:
         project = Project.objects.get_or_none(slug = request.POST.get('project_slug'))
@@ -65,8 +66,12 @@ def report_listing(request):
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     report_obj = ProjectReport.objects.filter(project=project,active=2)
     budget_obj = Budget.objects.get_or_none(project=project)
-    from budgetmanagement.manage_budget import get_budget_quarters
-    budget_quarters = get_budget_quarters(budget_obj) 
+    if budget_obj:
+        from budgetmanagement.manage_budget import get_budget_quarters
+        budget_quarters = get_budget_quarters(budget_obj)
+    else:
+        budget_quarters = {} 
+        msg = "Budget is not created." 
     return render(request,'report/listing.html',locals())
 
 def save_section_answers(quest_ids,project_report,request,data,user):
