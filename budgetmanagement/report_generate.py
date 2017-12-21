@@ -461,17 +461,18 @@ def get_activities_list(request,quarterreportobj):
 def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result):
 #    this is to save the milestone object
     if int(quarterreportobj.quarter_type) == 1:
+        
         object_id = result.get('milestone','')
         description = result.get('about milestone','')
-        milestoneobj = Milestone.objects.get(id=int(object_id))
+        milestoneobj = Milestone.objects.get_or_none(id=int(object_id))
         ma_type = 1
-        content_type = ContentType.objects.get_for_model(milestoneobj)
+        content_type = ContentType.objects.get_for_model(Milestone)
     else:
         object_id = result.get('activity','')
         description = result.get('about the activity','')
-        activityobj = Activity.objects.get(id=int(object_id))
+        activityobj = Activity.objects.get_or_none(id=int(object_id))
         ma_type = 2
-        content_type = ContentType.objects.get_for_model(activityobj)
+        content_type = ContentType.objects.get_for_model(Activity)
     # here checking for add or edit so that to get the ReportMilestoneActivity object
     # name1 length > 1 then it is the add more of activity/milestone in edit to specify that whether it is edit add more 
     # In edit add more to the name we are appending "-1" so that to know it is add more in edit form
