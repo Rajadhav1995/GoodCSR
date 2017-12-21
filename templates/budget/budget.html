@@ -43,7 +43,7 @@
       	<label>See Data as </label>
         <div class="small-select">
         <select name="lang" id="category_id" class="select_box">
-            <option value="0" name="">Select</option>
+            <option value="0" name="">Category</option>
             {% for i in super_categorylist %}
             <option value="{{i.id}}" name="{{i.name}}">{{i.name}}</option>
             {% endfor %}
@@ -334,11 +334,17 @@ $(document).ready(function(){
         $("#category_id").change(function () {
             var selectedText = $(this).find("option:selected").text();
             var selectedValue = $(this).val();
+            
             $("#budget_table tr.data_row").each(function(){
+            if (selectedText=="Category"){
+                $(this).show();
+            }
+            else{
             if ($(this).text().search(new RegExp(selectedText, "i")) < 0) {
                 $(this).fadeOut();
              } else {
                  $(this).show();
+            }
             }
         });
             
