@@ -3058,21 +3058,22 @@ $(document).ready(function() {
     var request_url = "{{request.get_full_path|safe}}"
     var redirect_url = "/report/final/design/?slug="+'{{projectobj.slug}}'+'&report_id='+'{{request.GET.report_id}}'+'&div_id='+'{{request.GET.div_id}}'               
     function add_fields(ids,remove_obj_id,div_id){
+    var get_data = { id:ids,
+                    report_id:"{{request.GET.report_id}}",
+                    remove_obj:remove_obj_id,
+                    };
     $.ajax({
             url: '/report/adding/fields/',
             type: 'GET',
-            data: { id:ids,
-                    report_id:"{{request.GET.report_id}}",
-                    
-                    remove_obj:remove_obj_id,
-                    },
+            contentType: "application/json; charset=utf-8",
+            data: ,
             
             success: function(data){
-                    
+                    window.location.href = '/report/final/design/?slug={{projectobj.slug}}&report_id={{request.GET.report_id}}&key=removed_template&div_id='+div_id;
             },
             
         });
-       window.location.href = '/report/final/design/?slug={{projectobj.slug}}&report_id={{request.GET.report_id}}&key=removed_template&div_id='+div_id
+       
     }
 </script>
 
