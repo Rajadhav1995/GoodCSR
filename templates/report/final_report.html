@@ -3072,9 +3072,9 @@ $(document).ready(function() {
             data: getdata,
             contentType: "application/json; charset=utf-8",
             success: function(data){
-                    console.log("remove success");
+                    alert("remove success");
                     
-                    console.log(data);
+                    alert(data);
                      window.location.href = 'http://goodcsrpmu.mahiti.org/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id;
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
