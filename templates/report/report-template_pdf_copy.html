@@ -142,9 +142,11 @@ footer{margin:30px 0px; float: left; width: 100%}
 .table_header_page_height{}
 .padding_top30{padding-top: 50px}
 .page_break  {page-break-before: always !important; }
+.page_break_time  {min-height: 350px}
 .extra_height{
   height: :100px;
 }
+
 
 
 /*@media print {
@@ -521,7 +523,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <div class="page_break"></div>
         <div class="container" style="margin-left:-5px;">
         
-        <div class='page_height'>
+        <div class=''>
         {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
         {% for quest in final_previous_list.0 %}
         <div class="">
@@ -647,9 +649,20 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 </script>
                 
 {% if forloop.counter|divisibleby:2 %}
-<div class="page_break"></div>
+<style>
+.page_breaks  {page-break-before: always !important; }
+</style>
+<div class="page_breaks"></div><div style="color:#ffffff">.</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endif %}
 {% endfor %}
+
+<script>
+                if("{{forloop.last}}" == 'False'){
+                       lengths = 0;
+                       }
+</script>
                 {% else %}
                 No Key Acheivements in this Quarter
                 {% endif %}
