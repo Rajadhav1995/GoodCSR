@@ -1,3 +1,4 @@
+{% load common_tags %}
 <!DOCTYPE html>
 <header>
 <style>
@@ -12,15 +13,14 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-bottom: 7px;float: left}
                      
 
 	<h4 class="float_left">{{report_name}}</h4>
-                    <!-- {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %} -->
-
+                    
                     {% for i in block_questions %}
-                    {% if i.q_type == 'OT' %}
+                    {% if i.qtype == 'OT' %}
 					<div class="float_right">
 					
                       
 
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+        {% get_auto_populated_questions i.id  report.project report 1 "false" as sub_questions %}
                     {% for sub in sub_questions.0 %}
                         {% if sub.q_name == 'client_logo' %}
                         <img src="{{sub.answer}}" height = 50 width = 70>

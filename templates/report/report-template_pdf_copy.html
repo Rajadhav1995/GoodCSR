@@ -596,9 +596,6 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                         
                         console.log(timeline_data)
                         var wrapper = $(".timeline-slide_" + "{{timeperiod}}"+"_"+{{t}});
-                        console.log("aadis");
-                        console.log(wrapper);
-                        alert(wrapper);
 
                         for (i; i < lengths ; i++)
                         {
@@ -646,10 +643,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                          
                         }
                        
-                        alert("mahiti");
                      // }
                 </script>
-                {{forloop.counter}}
+                
 {% if forloop.counter|divisibleby:2 %}
 <div class="page_break"></div>
 {% endif %}
