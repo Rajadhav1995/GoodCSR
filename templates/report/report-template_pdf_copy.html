@@ -300,11 +300,11 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                           {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
                             {% for sub in sub_questions.0 %}
                             {% if sub.q_name == 'client_logo' %}
-                           <li><img src="{{image_url}}/{{sub.answer}}" height = 70 width = 100></li>
+                           <li><img src="{{image_url}}{{sub.answer}}" height = 70 width = 100></li>
                           {% endif %}
 
                           {% if sub.q_name == "logos" %}
-                           <li> <img src="{{image_url}}/{{sub.answer}}" height = 70 width = 100></li>
+                           <li> <img src="{{image_url}}{{sub.answer}}" height = 70 width = 100></li>
                           {% endif %}
 
                             {% endfor %}
