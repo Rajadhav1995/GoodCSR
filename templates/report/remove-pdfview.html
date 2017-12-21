@@ -212,8 +212,8 @@
                     <div>
                         <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
                 <div class="container">
                     {% for i in ques.0 %}
                     {% if i.q_type == 'OT' %}
@@ -515,6 +515,7 @@
                 <img src="/static/img/report/bottomslider.jpg" style="width:100%">
             </div>
         </header>
+        </div> 
         <div class="container">
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -624,152 +625,157 @@
         </div>
         <!-- page height div ends -->
         {% endfor %} <!--  endfor loop for previous questions list-->
+        </div>
         <footer>
             <hr>
             <img src="/static/img/report/logo.png" style="float:left">
             {% get_page_number page_number as page_number %}
             <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
         </footer>
-        <!-- page 5th contents ends here -- >
+        </div>
+        
+        <!-- page 5th contents ends here -- > 
             <!--        page 6th contents starts here -->
         <header style="margin-top:50px">
             <div>
                 <img src="/static/img/report/bottomslider.jpg" style="width:100%">
             </div>
         </header>
-        <div class="container">
-        <div class="margin_25">
-            <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-            <div class="float_right">
-                {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
-                {% for i in ques.0 %}
-                {% if i.q_type == 'OT' %}
-                {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
-                {% for sub in sub_questions.0 %}
-                {% if sub.q_name == 'client_logo' %}
-                <img src="{{sub.answer}}" height = 70 width = 100></li>
-                {% endif %}
-                {% if sub.q_name == "logos" %}
-                <img src="{{sub.answer}}" height = 70 width = 100></li>
-                {% endif %}
-                {% endfor %}
-                {% endif %}
-                {% endfor %}
-            </div>
         </div>
-        <hr>
-        <div class='page_height'>
-            {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
-            {% for quest in final_previous_list.0 %}
-            <div class="">
-                {% if quest.qtype == "APT" %}
-                {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
-                {% if quest.slug == "heading" %}
-                <h4 style="margin:0px">{{text|title}}</h4>
-                {% endif %}
-                {% if quest.slug == "duration" %}
-                <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
-                {% endif %}
-                {% endif %}
-                {% if quest.slug == "budget-utlization-tranches" %}
-                <div class="margin_top30 page_height">
-                    <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                    <div class="white-box">
-                        <div class="table-responsive">
-                            <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
-                                <thead>
-                                    <tr>
-                                        <th>Super Category</th>
-                                        <th>Heading</th>
-                                        <th>Subheading</th>
-                                        <th>Total Planned</th>
-                                        <th>Total Utilized</th>
-                                        <th>Units Type</th>
-                                        <th>Units</th>
-                                        <th>Rate</th>
-                                        <th> Planned</th>
-                                        <th> Utilized</th>
-                                        <th>Variance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for row in budget_period %}
-                                    <tr class = "data_row">
-                                        {% get_budget_lineitem row projectobj as lineitemobj %}
-                                        <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                                        <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                                        <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
-                                        {% get_line_total row projectobj as line_total %}
-                                        <td align="right" class="sticky-cell">{{line_total}}</td>
-                                        {% get_utlizedline_total row projectobj as utilized_amount %}
-                                        <td align="right" class="sticky-cell">{{utilized_amount}}</td>
-                                        <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                        {% get_quarter_details row i projectobj as line_itemobj %}
-                                        <td align="right" class=""> {{line_itemobj.unit}} </td>
-                                        <td align="right" class=""> {{line_itemobj.rate}}  </td>
-                                        <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
-                                        <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
-                                        <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+        <div class="container">
+            <div class="margin_25">
+                <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
+                <div class="float_right">
+                    {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
+                    {% for i in ques.0 %}
+                    {% if i.q_type == 'OT' %}
+                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
+                    {% for sub in sub_questions.0 %}
+                    {% if sub.q_name == 'client_logo' %}
+                    <img src="{{sub.answer}}" height = 70 width = 100></li>
+                    {% endif %}
+                    {% if sub.q_name == "logos" %}
+                    <img src="{{sub.answer}}" height = 70 width = 100></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+            <div class='page_height'>
+                {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
+                {% for quest in final_previous_list.0 %}
+                <div class="">
+                    {% if quest.qtype == "APT" %}
+                    {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
+                    {% if quest.slug == "heading" %}
+                    <h4 style="margin:0px">{{text|title}}</h4>
+                    {% endif %}
+                    {% if quest.slug == "duration" %}
+                    <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+                    {% endif %}
+                    {% endif %}
+                    {% if quest.slug == "budget-utlization-tranches" %}
+                    <div class="margin_top30 page_height">
+                        <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                <table class="tab-resp1" id="example11" cellpadding="0" cellspacing="0" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Super Category</th>
+                                            <th>Heading</th>
+                                            <th>Subheading</th>
+                                            <th>Total Planned</th>
+                                            <th>Total Utilized</th>
+                                            <th>Units Type</th>
+                                            <th>Units</th>
+                                            <th>Rate</th>
+                                            <th> Planned</th>
+                                            <th> Utilized</th>
+                                            <th>Variance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in budget_period %}
+                                        <tr class = "data_row">
+                                            {% get_budget_lineitem row projectobj as lineitemobj %}
+                                            <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                            <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                            <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                            {% get_line_total row projectobj as line_total %}
+                                            <td align="right" class="sticky-cell">{{line_total}}</td>
+                                            {% get_utlizedline_total row projectobj as utilized_amount %}
+                                            <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                            <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                            {% get_quarter_details row i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                            <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                            <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                    <br><br>
+                        <br><br>
 
-                    {% get_tranches v tranche_list as filtered_tranches %}
-                    {% if filtered_tranches.1.planned_amount %}
-                    <div class="white-box">
-                        <div class="table-responsive">
-                            
-                            <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
-                                <thead>
-                                    <tr>
-                                        <th align="center">Tranche No.</th>
-                                        <th>Due Date</th>
-                                        <th>Planned Amount</th>
-                                        <th>Actual Disbursement</th>
-                                        <th>Recommended Disbursement</th>
-                                        <th> Utilized</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% get_tranches v tranche_list as filtered_tranches %}
-                                    
-                                    {% for i in filtered_tranches.0 %}
-                                    {% with forloop.counter as rnum %}
-                                    <tr>
-                                        <td>{{rnum}}</td>
-                                        <td>{{i.due_date|date:"j M Y"}}</td>
-                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
-                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
-                                    </tr>
-                                    {% endwith %}
-                                    {% endfor %}
-                                    
-                                    
-                                    <tr bgcolor="#f1f3e9" class="table-tr">
-                                        <td>Total</td>
-                                        <td>&nbsp;</td>
-                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
+                        {% get_tranches v tranche_list as filtered_tranches %}
+                        {% if filtered_tranches.1.planned_amount %}
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                
+                                <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th align="center">Tranche No.</th>
+                                            <th>Due Date</th>
+                                            <th>Planned Amount</th>
+                                            <th>Actual Disbursement</th>
+                                            <th>Recommended Disbursement</th>
+                                            <th> Utilized</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% get_tranches v tranche_list as filtered_tranches %}
+                                        
+                                        {% for i in filtered_tranches.0 %}
+                                        {% with forloop.counter as rnum %}
+                                        <tr>
+                                            <td>{{rnum}}</td>
+                                            <td>{{i.due_date|date:"j M Y"}}</td>
+                                            <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                            <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                            <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                            <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                        </tr>
+                                        {% endwith %}
+                                        {% endfor %}
+                                        
+                                        
+                                        <tr bgcolor="#f1f3e9" class="table-tr">
+                                            <td>Total</td>
+                                            <td>&nbsp;</td>
+                                            <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                            <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                            <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                            <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+                        {% endif %}
                     </div>
                     {% endif %}
+                    </div>
+                    {% endfor %} <!-- previous question loops ends here -->
                 </div>
-                {% endif %}
-                {% endfor %} <!-- previous question loops ends here -->
-            </div>
-            <!-- page height div ends -->
+                <!-- page height div ends -->
             <footer>
                 <hr>
                 <img src="/static/img/report/logo.png" style="float:left">
@@ -793,6 +799,7 @@
                 <img src="/static/img/report/bottomslider.jpg" style="width:100%">
             </div>
         </header>
+        </div>
         <div class="container">
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -1245,6 +1252,7 @@
             {% endwith %}
             {% endfor %}  <!-- ends for milestonelist -->
             {% endif %} <!-- end of milestone question loop -->
+            </div>
             {% endfor %} <!-- ends for current quarter questions for this page   -->
         </div>
         <!-- page height div ends -->
@@ -1254,6 +1262,7 @@
             {% get_page_number page_number as page_number %}
             <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
         </footer>
+        </div>
         <!--page 7th ends here -->
         <!--page 8th starts here -->
         <!--        page 6th contents starts here -->
@@ -1262,6 +1271,7 @@
                 <img src="/static/img/report/bottomslider.jpg" style="width:100%">
             </div>
         </header>
+        </div>
         <div class="container">
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -1508,6 +1518,7 @@
                     </div>
                 </div>
                 {% endif %}
+                </div>
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
@@ -1517,6 +1528,7 @@
                     </h5>
                 </div>
                 {% endif %}
+                </div>
                 {% endfor %} <!-- ends for current quarter questions for this page   -->
             </div>
             <!-- page height div ends -->
@@ -1534,6 +1546,7 @@
                 <img src="/static/img/report/bottomslider.jpg" style="width:100%">
             </div>
         </header>
+        </div>
         <div class="container">
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -1586,6 +1599,7 @@
             {% get_page_number page_number as page_number %}
             <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
         </footer>
+        </div>
         <!--page 9 ends here -->
         {% endif %} <!-- if current quarter updates is created -->
         {% endwith %} <!-- for loop counter ends here -->
@@ -1603,6 +1617,7 @@
                 <img src="/static/img/report/bottomslider.jpg" style="width:100%">
             </div>
         </header>
+        </div>
         <div class="container">
         <div class="margin_25">
             <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
@@ -1704,9 +1719,9 @@
                 </div>
                 {% endif %}
 
-
-            {% endfor %} <!-- ends for next quarter questions for this page   -->
             </div>
+            {% endfor %} <!-- ends for next quarter questions for this page   -->
+            
         </div>
         <!-- page height div ends -->
         <footer>
@@ -1715,6 +1730,7 @@
             {% get_page_number page_number as page_number %}
             <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
         </footer>
+        </div>
         <!--page 10 ends here -->
 
         {% endif %} <!-- if next quarter updates is created -->
@@ -1862,3 +1878,4 @@
 
 
     </body>
+</html>
