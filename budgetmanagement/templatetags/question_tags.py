@@ -147,9 +147,12 @@ def get_timeline_json(projectobj,quarter_obj):
     
 @register.assignment_tag
 def get_timeline_json_pdf(projectobj,quarter_obj):
-    timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = quarter_obj.start_date,date__lte = quarter_obj.end_date ).order_by('date')
+    start_date = quarter_obj.split(' to ')[0].rstrip()
+    end_date = quarter_obj.split(' to ')[1].rstrip()
+    # import ipdb; ipdb.set_trace()
+    timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = start_date,date__lte = end_date ).order_by('date')
     today = datetime.today()
-    milestone = Milestone.objects.filter(project = projectobj,overdue__gte = quarter_obj.start_date,overdue__lte = quarter_obj.end_date)
+    milestone = Milestone.objects.filter(project = projectobj,overdue__gte = start_date,overdue__lte = end_date)
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     if timeline_json_length >5:
         time_length = 5

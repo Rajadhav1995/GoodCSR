@@ -1228,14 +1228,14 @@
                 {% get_mile_act_images mileobj as imagelist %}
                 {% if imagelist %}
                 {% for imageobj in imagelist %}
-                <div class="col-md-6" style="padding:0px">
+                <div>
                     {% if mile_quest.slug == "upload-picture" %}
                     {% if imageobj.attachment_file %}
                     <img  src="{{image_url}}{{imageobj.attachment_file.url}}"  height = 400 width = 500 >
                     {% endif %}
                     {% endif %}
                     {% if mile_quest.slug == "picture-description" %}
-                    <p>{{imageobj.description|safe}}</p>
+                    <p style="font-size:13px; margin-top:10px">{{imageobj.description|safe}} aadis</p>
                     {% endif %}
                     {% endfor %} <!-- for loop ends for imagelist-->
                 </div>
