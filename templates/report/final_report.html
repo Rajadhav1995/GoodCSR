@@ -3059,15 +3059,15 @@ $(document).ready(function() {
     function remove_fields(ids,block_type,object_id,period,div_id){
         var getdata = { id:ids,
                     report_id:"{{request.GET.report_id}}",
-                    redirect_url: request_url,
+                    
                     block_type:block_type,
                     object_id:object_id,
                     period:period,
                     };
-          console.log('post data is ');
+          console.log('get data is ');
           console.log(JSON.stringify(getdata));
-    /*$.ajax({
-            url: '/report/removed/fields/',
+    $.ajax({
+            url: 'http://goodcsrpmu.mahiti.org/report/removed/fields/',
             type: 'GET',
             data: getdata,
             contentType: "application/json; charset=utf-8",
@@ -3082,7 +3082,7 @@ $(document).ready(function() {
                console.log(errorThrown);
             }
         });
-       window.location.href = '/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id;*/
+       //window.location.href = '/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id;
     }
 </script>
 
