@@ -44,28 +44,47 @@
         <div class="small-select">
 
         <select name="lang" id="category_id" class="select_box">
-            <option value="0" name="">Category</option>
+            <option value="0" name=""> Super Category</option>
             {% for i in super_categorylist %}
             <option value="{{i.id}}" name="{{i.name}}">{{i.name}}</option>
             {% endfor %}
         </select>
         </div>
-        <!-- <div class="dropdown user select-down budget_chart">
+
+        <div class="small-select">
+        <select name="lang" class="select_box ">
+            <option>2016</option>
+            <option>2017</option>
+        </select>
+        </div>
+        <div class="dropdown user select-down budget_chart">
             <a href="javascript:void(0);" class="dropdown-toggle" >
-              <p>Select Category</p>
+              <p>Select Quarters</p>
               <i class="fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu1" style="display:none;">
             
-              {% for i in category_names %}
+              <li class="user-header">
+                <input class="check-box" type="checkbox" id="one" />
+                <label for="one"><span><span></span></span> Quarter1</label>
+              </li>
               <li>
                 <input class="check-box" type="checkbox" id="two" />
-                <label for="two"><span><span></span></span>{{i.name}}</label>
+                <label for="two"><span><span></span></span> Quarter2</label>
               </li>
-              {% endfor %}
+              <li>  
+                <input class="check-box" type="checkbox" id="three" />
+                <label for="three"><span><span></span></span> Quarter3</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="four" />
+                <label for="four"><span><span></span></span> Quarter4</label>  
+              </li>
               
             </ul>
-          </div> -->
+          </div>
+
+
 
         <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
@@ -328,7 +347,7 @@ $(document).ready(function(){
             var selectedValue = $(this).val();
             
             $("#budget_table tr.data_row").each(function(){
-            if (selectedText=="Category"){
+            if (selectedText=="Super Category"){
                 $(this).show();
             }
             else{
