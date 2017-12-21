@@ -2862,7 +2862,7 @@
 <!-- Script for submit report starts -->
 <script>
     var request_url = "{{request.get_full_path|safe}}"
-    var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'
+    var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'+'&key=2'
     $('#submit_report').on('click',function(){
     last_form_id = parseInt($('#template form').last().attr('id').split('-')[4])
     for(var i=0;i<=last_form_id;i++){
