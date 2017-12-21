@@ -800,4 +800,4 @@ def save_added_fields(request):
                     ques_list.remove(child)
             remove_quest_obj.text = ques_list
             remove_quest_obj.save()
-    return Response({'status':'ok'})
+    return JsonResponse({'status':'ok'})

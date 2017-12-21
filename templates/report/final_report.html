@@ -3059,22 +3059,16 @@ $(document).ready(function() {
     function remove_fields(ids,block_type,object_id,period,div_id){
         var getdata = { id:ids,
                     report_id:"{{request.GET.report_id}}",
-                    
                     block_type:block_type,
                     object_id:object_id,
                     period:period,
                     };
-          console.log('get data is ');
-          console.log(JSON.stringify(getdata));
     $.ajax({
             url: '/report/removed/fields/',
             type: 'GET',
             data: getdata,
             contentType: "application/json; charset=utf-8",
             success: function(data){
-                    alert("remove success");
-                    
-                    alert(data);
                      window.location.href = 'http://goodcsrpmu.mahiti.org/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id;
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
