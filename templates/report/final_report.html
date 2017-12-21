@@ -393,7 +393,7 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
                                             <thead>
                                             <tr class="sticky-row">
@@ -434,6 +434,46 @@
                                         </tbody>
                                         </table>
                                     </div>
+                                    <br><br>
+                                {% get_tranches v tranche_list as filtered_tranches %}
+                                {% if filtered_tranches.1.planned_amount %}
+                                <div class="table-responsive">
+                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                      <thead>
+                                      <tr>
+                                        <th align="center">Tranche No.</th>
+                                        <th>Due Date</th>
+                                        <th>Planned Amount</th>
+                                        <th>Actual Disbursement</th>
+                                        <th>Recommended Disbursement</th>
+                                        <th> Utilized</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in filtered_tranches.0 %}
+                                      {% with forloop.counter as rnum %}
+                                      <tr>
+                                        <td>{{rnum}}</td>
+                                        <td>{{i.due_date}}</td>
+                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                      </tr>
+                                      {% endwith %}
+                                      {% endfor %}
+                                      <tr bgcolor="#f1f3e9" class="table-tr">
+                                        <td>Total</td>
+                                        <td>&nbsp;</td>
+                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                </div>
+                                {% endif %}
                                     <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                 </div>
                             {% endif %}
@@ -652,7 +692,7 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
                                             <thead>
                                             <tr class="sticky-row">
@@ -692,6 +732,46 @@
                                         </tbody>
                                         </table>
                                     </div>
+                                <br>
+                                {% get_tranches v tranche_list as filtered_tranches %}
+                                {% if filtered_tranches.1.planned_amount %}
+                                <div class="table-responsive">
+                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                      <thead>
+                                      <tr>
+                                        <th align="center">Tranche No.</th>
+                                        <th>Due Date</th>
+                                        <th>Planned Amount</th>
+                                        <th>Actual Disbursement</th>
+                                        <th>Recommended Disbursement</th>
+                                        <th> Utilized</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in filtered_tranches.0 %}
+                                      {% with forloop.counter as rnum %}
+                                      <tr>
+                                        <td>{{rnum}}</td>
+                                        <td>{{i.due_date}}</td>
+                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                      </tr>
+                                      {% endwith %}
+                                      {% endfor %}
+                                      <tr bgcolor="#f1f3e9" class="table-tr">
+                                        <td>Total</td>
+                                        <td>&nbsp;</td>
+                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                </div>
+                                {% endif %}
                                     <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
                                 </div>
                             {% endif %}
@@ -785,7 +865,7 @@
 
                                     {% if act_quest.slug == "activity-name" %}
                                         <p>{{act_quest.text|title}}</p>
-                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
+<!--                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">-->
                                         {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
                                         <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
                                             <option value="0">Select</option>
@@ -895,7 +975,7 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
                                             <thead>
                                             <tr class="sticky-row">
@@ -935,6 +1015,46 @@
                                         </tbody>
                                         </table>
                                     </div>
+                                    <br>
+                                {% get_tranches v tranche_list as filtered_tranches %}
+                                {% if filtered_tranches.1.planned_amount %}
+                                <div class="table-responsive">
+                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                      <thead>
+                                      <tr>
+                                        <th align="center">Tranche No.</th>
+                                        <th>Due Date</th>
+                                        <th>Planned Amount</th>
+                                        <th>Actual Disbursement</th>
+                                        <th>Recommended Disbursement</th>
+                                        <th> Utilized</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in filtered_tranches.0 %}
+                                      {% with forloop.counter as rnum %}
+                                      <tr>
+                                        <td>{{rnum}}</td>
+                                        <td>{{i.due_date}}</td>
+                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                      </tr>
+                                      {% endwith %}
+                                      {% endfor %}
+                                      <tr bgcolor="#f1f3e9" class="table-tr">
+                                        <td>Total</td>
+                                        <td>&nbsp;</td>
+                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                </div>
+                                {% endif %}
                                     <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                 </div>
                             {% endif %}
@@ -991,7 +1111,6 @@
                                 {% for i,v in currentquarter_list.items %}
                                     {% get_gantt_details v projectobj as taskdict %}
                                     var jsonData = {{taskdict|safe}}
-                                console.log(jsonData);
                                 var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
                                 // console.log(jsonData.tasks);
                                 // Get today and tomorrows date
@@ -1501,7 +1620,7 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                                 <div class="col-md-12 report_text " style="padding:0px">
                                     <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
                                             <thead>
                                             <tr class="sticky-row">
@@ -1541,6 +1660,46 @@
                                         </tbody>
                                         </table>
                                     </div>
+                                    <br>
+                                {% get_tranches v tranche_list as filtered_tranches %}
+                                {% if filtered_tranches.1.planned_amount %}
+                                <div class="table-responsive">
+                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                      <thead>
+                                      <tr>
+                                        <th align="center">Tranche No.</th>
+                                        <th>Due Date</th>
+                                        <th>Planned Amount</th>
+                                        <th>Actual Disbursement</th>
+                                        <th>Recommended Disbursement</th>
+                                        <th> Utilized</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in filtered_tranches.0 %}
+                                      {% with forloop.counter as rnum %}
+                                      <tr>
+                                        <td>{{rnum}}</td>
+                                        <td>{{i.due_date}}</td>
+                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                      </tr>
+                                      {% endwith %}
+                                      {% endfor %}
+                                      <tr bgcolor="#f1f3e9" class="table-tr">
+                                        <td>Total</td>
+                                        <td>&nbsp;</td>
+                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                </div>
+                                {% endif %}
                                     <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}''{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                             {% endif %}
@@ -1642,7 +1801,7 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                             <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
                                             <thead>
                                             <tr class="sticky-row">
@@ -1682,46 +1841,49 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                
-                                <br>
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
-                                      <thead>
-                                      <tr>
-                                        <th align="center">Tranche No.</th>
-                                        <th>Due Date</th>
-                                        <th>Planned Amount</th>
-                                        <th>Actual Disbursement</th>
-                                        <th>Recommended Disbursement</th>
-                                        <th> Utilized</th>
-                                      </tr>
-                                      </thead>
-                                      <tbody>
-                                      {% for i in tranche_list %}
-                                      {% with forloop.counter as rnum %}
-                                      <tr>
-                                        <td>{{rnum}}</td>
-                                        <td>{{i.due_date}}</td>
-                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
-                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
-                                      </tr>
-                                      {% endwith %}
-                                      {% endfor %}
-                                      <tr bgcolor="#f1f3e9" class="table-tr">
-                                        <td>Total</td>
-                                        <td>&nbsp;</td>
-                                        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
-                                      </tr>
-                                      </tbody>
-                                    </table>
-                                </div>
+<!--                                {% get_tranches v tranche_list as filtered_tranches %}-->
+<!--                                {% if filtered_tranches.1.planned_amount %}-->
+<!--                                <div class="table-responsive">-->
+<!--                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">-->
+<!--                                      <thead>-->
+<!--                                      <tr>-->
+<!--                                        <th align="center">Tranche No.</th>-->
+<!--                                        <th>Due Date</th>-->
+<!--                                        <th>Planned Amount</th>-->
+<!--                                        <th>Actual Disbursement</th>-->
+<!--                                        <th>Recommended Disbursement</th>-->
+<!--                                        <th> Utilized</th>-->
+<!--                                      </tr>-->
+<!--                                      </thead>-->
+<!--                                      <tbody>-->
+<!--                                      {% for i in filtered_tranches.0 %}-->
+<!--                                      {% with forloop.counter as rnum %}-->
+<!--                                      <tr>-->
+<!--                                        <td>{{rnum}}</td>-->
+<!--                                        <td>{{i.due_date}}</td>-->
+<!--                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>-->
+<!--                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>-->
+<!--                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>-->
+<!--                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
+<!--                                      </tr>-->
+<!--                                      {% endwith %}-->
+<!--                                      {% endfor %}-->
+<!--                                      <tr bgcolor="#f1f3e9" class="table-tr">-->
+<!--                                        <td>Total</td>-->
+<!--                                        <td>&nbsp;</td>-->
+<!--                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>-->
+<!--                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>-->
+<!--                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>-->
+<!--                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
+<!--                                      </tr>-->
+<!--                                      </tbody>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+<!--                                {% endif %}-->
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
+
                                 <!--<img src="img/table01.png" style="width:100%">-->
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}')">Remove</a></h5>
+                                
                             </div>
                             {% endif %}
 
@@ -1780,7 +1942,7 @@
                             {% if quest.slug == "budget-utlization-tranches" %}
                             <div class="col-md-12 report_text " style="padding:0px">
                                 <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap">
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
                                             <thead>
                                             <tr class="sticky-row">
@@ -1820,48 +1982,51 @@
                                         </tbody>
                                         </table>
                                     </div>
-                                
-                                <br>
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
-                                      <thead>
-                                      <tr>
-                                        <th align="center">Tranche No.</th>
-                                        <th>Due Date</th>
-                                        <th>Planned Amount</th>
-                                        <th>Actual Disbursement</th>
-                                        <th>Recommended Disbursement</th>
-                                        <th> Utilized</th>
-                                      </tr>
-                                      </thead>
-                                      <tbody>
-                                      {% for i in tranche_list %}
-                                      {% with forloop.counter as rnum %}
-                                      <tr>
-                                        <td>{{rnum}}</td>
-                                        <td>{{i.due_date}}</td>
-                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
-                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
-                                      </tr>
-                                      {% endwith %}
-                                      {% endfor %}
-                                      <tr bgcolor="#f1f3e9" class="table-tr">
-                                        <td>Total</td>
-                                        <td>&nbsp;</td>
-                                        <td>Rs. {% if planned_amount %} {{planned_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if recommended_amount %} {{recommended_amount}}{% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if utilized_amount %}{{utilized_amount}} {% else %} 0 {% endif %}</td>
-                                      </tr>
-                                      </tbody>
-                                    </table>
-                                </div>
-                                <!--<img src="img/table01.png" style="width:100%">-->
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
-                            </div>
-                            {% endif %}
+                                <br>
+<!--                                {% get_tranches v tranche_list as filtered_tranches %}-->
+<!--                                {% if filtered_tranches.1.planned_amount %}-->
+<!--                                <div class="table-responsive">-->
+<!--                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">-->
+<!--                                      <thead>-->
+<!--                                      <tr>-->
+<!--                                        <th align="center">Tranche No.</th>-->
+<!--                                        <th>Due Date</th>-->
+<!--                                        <th>Planned Amount</th>-->
+<!--                                        <th>Actual Disbursement</th>-->
+<!--                                        <th>Recommended Disbursement</th>-->
+<!--                                        <th> Utilized</th>-->
+<!--                                      </tr>-->
+<!--                                      </thead>-->
+<!--                                      <tbody>-->
+<!--                                      {% for i in filtered_tranches.0 %}-->
+<!--                                      {% with forloop.counter as rnum %}-->
+<!--                                      <tr>-->
+<!--                                        <td>{{rnum}}</td>-->
+<!--                                        <td>{{i.due_date}}</td>-->
+<!--                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>-->
+<!--                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>-->
+<!--                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>-->
+<!--                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
+<!--                                      </tr>-->
+<!--                                      {% endwith %}-->
+<!--                                      {% endfor %}-->
+<!--                                      <tr bgcolor="#f1f3e9" class="table-tr">-->
+<!--                                        <td>Total</td>-->
+<!--                                        <td>&nbsp;</td>-->
+<!--                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>-->
+<!--                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>-->
+<!--                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>-->
+<!--                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
+<!--                                      </tr>-->
+<!--                                      </tbody>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+<!--                                {% endif %}-->
+<!--                                <!--<img src="img/table01.png" style="width:100%">-->
+<!--                                -->
+<!--                            </div>-->
+<!--                            {% endif %}-->
 
                         <!--this is for about paramter section-->
                         {% if quest.slug == "about-the-budget" %}
@@ -1897,7 +2062,7 @@
                     <div class="below_buttons">
                         <hr>
                         <div style="float:left">
-                            <a href="/report/detail/?slug={{slug}}&report_id={{report_id}}&key=1" target="_blank"><button class="report_save">Preview Report</button></a>
+                            <a href="/report/remove/detail/?slug={{slug}}&report_id={{report_id}}&key=1" target="_blank"><button class="report_save">Preview Report</button></a>
                         </div>
                         <div align="right" class="save_exit">
                             <button class="report_save" id="submit_report">Submit Report</button>
@@ -1953,7 +2118,6 @@ $(document).ready(function() {
     {
       var obj = ff[i]
       var name = obj.name;
-      console.log(obj);
       if (obj.url) {
         var url = loc_url + obj.url;
         }
@@ -2484,7 +2648,6 @@ $(document).ready(function() {
     {% for i,v in futurequarter_list.items %}
         {% get_gantt_details v projectobj as taskdict %}
         var jsonData = {{taskdict|safe}}
-        console.log(jsonData)
         var g = new JSGantt.GanttChart(document.getElementById('gwContainer_next'), 'week');
         // console.log(jsonData.tasks);
         // Get today and tomorrows date
@@ -2891,26 +3054,32 @@ $(document).ready(function() {
 
 <script type="text/javascript">
     
-    var request_url = "{{request.get_full_path|safe}}"
+    var request_url = "{{request.get_full_path|safe}}";
+
     function remove_fields(ids,block_type,object_id,period,div_id){
-    $.ajax({
-            url: '/report/removed/fields/',
-            type: 'GET',
-            data: { id:ids,
+        var getdata = { id:ids,
                     report_id:"{{request.GET.report_id}}",
-                    redirect_url:request_url,
                     block_type:block_type,
                     object_id:object_id,
                     period:period,
-                    },
-            
+                    };
+    $.ajax({
+            url: '/report/removed/fields/',
+            type: 'GET',
+            data: getdata,
+            contentType: "application/json; charset=utf-8",
             success: function(data){
-                    
+                     window.location.href = 'http://goodcsrpmu.mahiti.org/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id;
             },
-            
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                console.log("remove error")
+               //console.log(XMLHttpRequest.responseText);
+               console.log(XMLHttpRequest);
+               console.log(errorThrown);
+            }
         });
-       window.location.href = '/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id
+      
     }
 </script>
 
-{% endblock %}
+{% endblock %}/report/final/design/?slug=building-a-sustainable-project

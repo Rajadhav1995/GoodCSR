@@ -461,17 +461,18 @@ def get_activities_list(request,quarterreportobj):
 def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result):
 #    this is to save the milestone object
     if int(quarterreportobj.quarter_type) == 1:
+        
         object_id = result.get('milestone','')
         description = result.get('about milestone','')
-        milestoneobj = Milestone.objects.get(id=int(object_id))
+        milestoneobj = Milestone.objects.get_or_none(id=int(object_id))
         ma_type = 1
-        content_type = ContentType.objects.get_for_model(milestoneobj)
+        content_type = ContentType.objects.get_for_model(Milestone)
     else:
         object_id = result.get('activity','')
         description = result.get('about the activity','')
-        activityobj = Activity.objects.get(id=int(object_id))
+        activityobj = Activity.objects.get_or_none(id=int(object_id))
         ma_type = 2
-        content_type = ContentType.objects.get_for_model(activityobj)
+        content_type = ContentType.objects.get_for_model(Activity)
     # here checking for add or edit so that to get the ReportMilestoneActivity object
     # name1 length > 1 then it is the add more of activity/milestone in edit to specify that whether it is edit add more 
     # In edit add more to the name we are appending "-1" so that to know it is add more in edit form
@@ -731,9 +732,9 @@ def remove_milesact_child(ques_obj,ids):
     else:
         removed_list.append(ids)
     return removed_list
-
+from django.http import JsonResponse
 def save_removed_fields(request):
-    
+#    import ipdb;ipdb.set_trace()
     quest_ids_list = []
     removed_list=[]
     ids = literal_eval(request.GET.get('id'))
@@ -744,6 +745,7 @@ def save_removed_fields(request):
     object_id = request.GET.get('object_id')
     period = request.GET.get('period')# this is to get the period for particular quarter so that to differentiate
     ques_obj = Question.objects.get_or_none(id=ids)
+    
     if int(ques_obj.block.code) in [1,2]:
         removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
     else:
@@ -769,7 +771,7 @@ def save_removed_fields(request):
             removed_list.append(r)       
         removed_ques.text = sorted(removed_list)
     removed_ques.save()
-    return HttpResponseRedirect(url)
+    return JsonResponse({'status':'ok'})
     
 
 def save_added_fields(request):
@@ -778,7 +780,7 @@ def save_added_fields(request):
     get_slug = {'upload-picture':'picture-description','picture-description':'upload-picture'}
     act_mile_slug = {'about-the-actvity':'activity-name','milestone-description':'milestone-name'}
     ids = literal_eval(request.GET.get('id'))
-    url = str(request.GET.get('redirect_url'))
+#    url = str(request.GET.get('redirect_url'))
     remove_quest_obj = RemoveQuestion.objects.get_or_none(id=int(request.GET.get('remove_obj')))
     if remove_quest_obj:
         ques_list = eval(remove_quest_obj.text)
@@ -798,4 +800,4 @@ def save_added_fields(request):
                     ques_list.remove(child)
             remove_quest_obj.text = ques_list
             remove_quest_obj.save()
-    return HttpResponseRedirect(url)
+    return JsonResponse({'status':'ok'})
