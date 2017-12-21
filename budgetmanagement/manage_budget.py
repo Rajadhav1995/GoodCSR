@@ -364,6 +364,7 @@ def budgetview(request):
             return HttpResponseRedirect('/manage/project/budget/category/add/?slug='+str(project_slug)+'&budget_id='+str(int(budgetobj.id)))
         if not budget_period:
             return HttpResponseRedirect('/manage/project/budget/lineitem/add/?slug='+str(project_slug)+'&budget_id='+str(int(budgetobj.id)))
+        category_names = SuperCategory.objects.filter(project=projectobj).exclude(parent=None)
     return render(request,"budget/budget.html",locals())
 
 

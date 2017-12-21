@@ -146,6 +146,7 @@ def pdf_header(request):
     funder_ans = Answer.objects.get_or_none(question=funder_ques,object_id=report_id)
     report = ProjectReport.objects.get(id=report_id)
     question = Question.objects.get_or_none(slug='report_name')
+    block_questions = Question.objects.filter(block__slug='cover-page')
     ans = Answer.objects.get_or_none(question=question,object_id=report_id)
     if ans:
         report_name = ans.text
