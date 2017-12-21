@@ -42,9 +42,11 @@
       <div class="select-area">
       	<label>See Data as </label>
         <div class="small-select">
-        <select name="lang" class="select_box ">
-            <option>2016</option>
-            <option>2017</option>
+        <select name="lang" id="category_id" class="select_box">
+            <option value="0" name="">Select</option>
+            {% for i in super_categorylist %}
+            <option value="{{i.id}}" name="{{i.name}}">{{i.name}}</option>
+            {% endfor %}
         </select>
         </div>
         <div class="dropdown user select-down budget_chart">
@@ -83,7 +85,7 @@
     
     <div class="white-box">
     	<div id="" class="sticky-table sticky-headers sticky-ltr-cells table-wrap" style="max-height:400px">
-           <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+           <table class="table table-striped table-striped " id="budget_table" cellpadding="0" cellspacing="0" border="0">
             <thead>
             <tr class="sticky-row quarter_color">
 
@@ -277,6 +279,7 @@ function showCheckboxes() {
 }
     </script>
 
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#horizontalTab').easyResponsiveTabs({
@@ -324,6 +327,25 @@ $(document).ready(function(){
     });
 });
 </script>
+
+<!--script for filter category -->
+<script type="text/javascript">
+    $(function () {
+        $("#category_id").change(function () {
+            var selectedText = $(this).find("option:selected").text();
+            var selectedValue = $(this).val();
+            $("#budget_table tr.data_row").each(function(){
+            if ($(this).text().search(new RegExp(selectedText, "i")) < 0) {
+                $(this).fadeOut();
+             } else {
+                 $(this).show();
+            }
+        });
+            
+        });
+    });
+</script>
+
 
 <!---datepicker script-->
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
