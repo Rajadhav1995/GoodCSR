@@ -1700,7 +1700,7 @@
                                     </table>
                                 </div>
                                 {% endif %}
-                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}''{{j|add:previous_len}}')">Remove</a></h5>
+                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                                     </div>
                             {% endif %}
 
@@ -3028,7 +3028,7 @@ $(document).ready(function() {
 <!-- Script for submit report starts -->
 <script>
     var request_url = "{{request.get_full_path|safe}}"
-    var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'
+    var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'+'&key=2'
     $('#submit_report').on('click',function(){
     $("#loader").show()
     last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
@@ -3082,4 +3082,4 @@ $(document).ready(function() {
     }
 </script>
 
-{% endblock %}/report/final/design/?slug=building-a-sustainable-project
+{% endblock %}
