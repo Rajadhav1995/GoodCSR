@@ -518,7 +518,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             
         </div>
         <!--fourth page contents end-->
-        <div class="page_break"></div>
+        <div class="page_break"></div>.
         <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
         {% for i,v in previousquarter_list.items %}
         {% with forloop.counter as j %}
@@ -733,7 +733,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endif %}
                 {% endif %}
                 {% if quest.slug == "budget-utlization-tranches" %}
-                {% if budget_period.count >= 31 %}
+                {% if budget_period.count >= 17 %}
                 <div class="margin_top30 budget_height">
                 {% else %}
                 <div class="margin_top30 page_height">
