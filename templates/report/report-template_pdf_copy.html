@@ -734,10 +734,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% if quest.slug == "budget-utlization-tranches" %}
                 {% if budget_period.count >= 31 %}
                 <div class="margin_top30 budget_height">
-                {{budget_period.count}} aadis
                 {% else %}
                 <div class="margin_top30 page_height">
-                  not more
                 {% endif %}
 
                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
@@ -843,7 +841,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% endif %} <!-- if condition to check object is present or not -->
 
         {% endwith %} <!-- for loop counter ends here -->
-        <div class="page_break"></div>.
+        <div class="page_break"></div>
         {% endfor %} <!-- the main previous quarters loop ends here -->
         <!--page 7th starts here ie.. Current quarter loop starts here, page contains gantt chart,activities loop gantt chart script written at last -->
         <!--Current Quarter Updates star.ts here -->
