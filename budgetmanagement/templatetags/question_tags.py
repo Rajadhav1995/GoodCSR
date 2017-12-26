@@ -92,7 +92,9 @@ def get_milestone_name(mileobj):
         elif mileobj.ma_type == 2:
             obj = Activity.objects.get_or_none(id = int (mileobj.object_id))
         if obj:
-            name = obj.name
+            name = obj.name if obj.name else ''
+        else:
+            name = mileobj.name
     except:
         name = mileobj.name
     return name

@@ -139,7 +139,11 @@ def budget_tranche(request):
     user_id = request.session.get('user_id')
     project = Project.objects.get_or_none(slug=slug)
     tt = ProjectUserRoleRelationship.objects.filter(project=project)
-    recommended_by = UserProfile.objects.filter(id__in=[i.user.id for i in tt])
+    funder = ProjectFunderRelation.objects.get(project=project)
+    list1 = [i.user.id for i in tt]
+    list1.append(int(funder.funder.id))
+    list1.append(int(funder.implementation_partner.id))
+    recommended_by = UserProfile.objects.filter(id__in=list(set(list1)))
     if request.method == 'POST':
         tranche_id = request.POST.get('tranche_id')
         try:
