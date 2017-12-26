@@ -138,6 +138,7 @@ footer{margin:30px 0px; float: left; width: 100%}
 @media screen and (min-width: 1200px) {}
 
 .page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 850px}
+.budget_height{width:100%; min-height: 2550px}
 .header_page_height{/*margin:50px 0px; float: left;*/ width:100%; min-height: 1000px}
 .table_header_page_height{}
 .padding_top30{padding-top: 50px}
@@ -272,7 +273,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             </head>
 
             <!-- onload="window.print()" -->
-            <body >
+            <body>
               <div>
                <header>
 
@@ -285,14 +286,15 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                      {% if i.q_name == 'cover_image' %}
                      <div>
                         <img src="{{image_url}}/{{i.answer}}" style="width:100%; height:700px">
+                      </div>
                       <div>
                         <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
                     </div>
                      </div>
                     {% endif %}
-
+                    {% endfor %}
                   </div>
-                 {% endfor %}
+                 
                   <div class="container">
 
                     {% for i in ques.0 %}
@@ -354,10 +356,11 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                </div>
 
                <div class="page_break"></div>
+
                <div class="container" style="margin-left:-3px;">
-                  <div>
-                     <h1 style="font-size:24px;">Index</h1>
-                  </div>
+                <div>
+                   <h1 style="font-size:24px;">Index</h1>
+                </div>
                   <div class="page_height">
                     <!--Dynamic getting of the contents of index page (STARTS)                  -->
 
@@ -515,12 +518,12 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             
         </div>
         <!--fourth page contents end-->
+        <div class="page_break"></div>.
         <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
         {% for i,v in previousquarter_list.items %}
         {% with forloop.counter as j %}
         {% getreport_status report_id v 1 as reportupdates %}
         {% if reportupdates.0 == True %}
-        <div class="page_break"></div>
         <div class="container" style="margin-left:-5px;">
         
         <div class=''>
@@ -545,6 +548,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
                  {% get_timeline_json_pdf projectobj v as timeline %}
                  {% for t in timeline.3 %}
+                 {% if forloop.counter|divisibleby:2 %}
+                 <div class="page_height">
+                  {% endif %}
                 <div id="scrollbar1">
                     <div class="viewport">
                         <div class="overview">
@@ -649,11 +655,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 </script>
                 
 {% if forloop.counter|divisibleby:2 %}
-<style>
-.page_breaks  {page-break-before: always !important; }
-</style>
-<div class="page_breaks"></div><div style="color:#ffffff">.</div>
-
+</div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endif %}
 {% endfor %}
@@ -712,6 +714,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% endfor %} <!--  endfor loop for previous questions list-->
         </div>
         </div>
+        </div>
         <!-- page 5th contents ends here -- >
             <!--        page 6th contents starts here -->
         <div class="page_break"></div>
@@ -730,7 +733,12 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endif %}
                 {% endif %}
                 {% if quest.slug == "budget-utlization-tranches" %}
+                {% if budget_period.count >= 17 %}
+                <div class="margin_top30 budget_height">
+                {% else %}
                 <div class="margin_top30 page_height">
+                {% endif %}
+
                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                     <div class="white-box">
                         <div>
@@ -827,26 +835,27 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             
         </div>
         </div>
+        </div>
+
         <!--  container div ends here -->
         <!--page 6th contents ends here -->
         {% endif %} <!-- if condition to check object is present or not -->
-        {% endwith %} <!-- for loop counter ends here -->
-        <div class="page_break"></div>.
 
+        {% endwith %} <!-- for loop counter ends here -->
+        <div class="page_break"></div>
         {% endfor %} <!-- the main previous quarters loop ends here -->
         <!--page 7th starts here ie.. Current quarter loop starts here, page contains gantt chart,activities loop gantt chart script written at last -->
         <!--Current Quarter Updates star.ts here -->
-        <div class="page_break"></div>.
+        <!-- <div class="page_break"></div>. -->
         {% for i,v in currentquarter_list.items %}
-
         {% with forloop.counter as j %}
-        {% getreport_status report_id v 2 as reportupdates %}
-        {% if reportupdates.0 == True %}
         
+        {% getreport_status report_id v 2 as reportupdates %}
+        {% if reportupdates.0 == True %} 
         <div class="container">
         <div class="margin_25">
         
-        <div class='page_height'>
+        <div class=''>
         {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
         {% for quest in final_questionlist.0 %}
         <div style="margin-left:-10px">
@@ -1277,7 +1286,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endif %} <!-- end of milestone question loop -->
             
         </div>
-        {% endfor %} <!-- ends for current quarter questions for this page   -->
+        {% endfor %} <!-- ends for current quarter questions for this 
+        page   -->
         </div>
         </div>
         </div>
@@ -1338,7 +1348,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                     <tr>
                                         <td>
                                             <p>{{parameter_values.1.0}}</p>
-                                            <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
+                                            <img src="/static/img/user.png"><span>{{parameter_values.3 | intcomma}}</span>
                                         </td>
                                     </tr>
                                 </table>
