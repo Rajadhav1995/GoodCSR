@@ -57,6 +57,7 @@
             <td>{{i.project.name}}</td>
             <td>{% if i.due_date %}{{i.due_date}}{% else %} - {% endif %}</td>
             <td>{% if i.disbursed_date %}{{i.disbursed_date}}{% else %} - {% endif %}</td>
+            
             <td><a class="budget_button" href="/project/budget/tranche/?slug={{slug}}&tranche_id={{i.id}}"><i class="fa fa-edit"></i> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Tranche" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a></td>
             <td>
             </td>
