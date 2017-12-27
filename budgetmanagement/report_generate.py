@@ -804,6 +804,7 @@ from itertools import chain
 def save_added_fields(request):
     child_quest = []
     quest_list=[]
+    child_quest_list=[]
     get_slug = {'upload-picture':'picture-description','picture-description':'upload-picture'}
     act_mile_slug = {'about-the-actvity':'activity-name','milestone-description':'milestone-name'}
     ids = literal_eval(request.GET.get('id'))
@@ -815,16 +816,20 @@ def save_added_fields(request):
             ques = Question.objects.get_or_none(id = int(ids))
             if ques.slug == 'activity-name' or ques.slug == 'milestone-name' or ques.slug == 'parameter-selection':
                 child_quest = Question.objects.filter(parent = ques.parent).values_list('id',flat=True)
+                child_quest_list=list(chain(child_quest))
             elif ques.slug == 'upload-picture' or ques.slug == 'picture-description':
                 child_quest.append(Question.objects.get_or_none(parent=ques.parent,slug = get_slug.get(ques.slug)).id)
                 child_quest.append(ids)
+                child_quest_list=list(chain(child_quest))
             elif ques.slug == 'about-the-actvity' or ques.slug == 'milestone-description':
                 child_quest.append(Question.objects.get_or_none(parent=ques.parent,slug = act_mile_slug.get(ques.slug)).id)
                 child_quest.append(ids)
+                child_quest_list=list(chain(child_quest))
             else:
                 ques_list.remove(ids)
+                child_quest_list.append(ids)
             for child in child_quest:
                     ques_list.remove(child)
             remove_quest_obj.text = ques_list
             remove_quest_obj.save()
-    return JsonResponse({'status':'ok','ids_list':list(chain(child_quest))})
+    return JsonResponse({'status':'ok','ids_list':child_quest_list})
