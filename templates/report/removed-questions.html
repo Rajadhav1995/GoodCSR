@@ -3119,7 +3119,6 @@ $(document).ready(function() {
     var request_url = "{{request.get_full_path|safe}}"
     var redirect_url = "/report/final/design/?slug="+'{{projectobj.slug}}'+'&report_id='+'{{request.GET.report_id}}'+'&div_id='+'{{request.GET.div_id}}'               
     function add_fields(ids,remove_obj_id,div_id){
-    debugger;
     $.ajax({
             url: '/report/adding/fields/',
             type: 'GET',
@@ -3132,10 +3131,8 @@ $(document).ready(function() {
             contentType: "application/json; charset=utf-8",
             success: function(data){
                     var qid = data.ids_list;
-                    alert(qid);
                 for (i=0;i<qid.length;i++){
                     $('#ques_'+qid[i]).hide();
-                    console.log(qid[i]);
                 }
                     //window.location.href = '/report/final/design/?slug={{projectobj.slug}}&report_id={{request.GET.report_id}}&key=removed_template&div_id='+div_id
             },
