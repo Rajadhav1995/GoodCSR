@@ -214,13 +214,15 @@ def get_parameter(obj,block_id):
 
 @register.assignment_tag
 def get_parameter_values(obj,para_obj):
+
     # this template tag is used to get json data for parameter pie chart 
     main_list =[]
     master_list = []
     master_names = []
     parameter_type = ''
-    single_parameter = 0
+    numeric_parameter_value = 0
     report_para = []
+
     # report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
     from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
     if para_obj.keyparameter:
@@ -229,9 +231,13 @@ def get_parameter_values(obj,para_obj):
         master_names.append(para_obj.keyparameter.name)
         if para_obj.keyparameter.parameter_type == 'NUM' or para_obj.keyparameter.parameter_type == 'CUR':
             parameter_type = 0
+            numeric_parameter = ProjectParameterValue.objects.filter(keyparameter=para_obj.keyparameter,start_date__gte=obj.start_date,end_date__lte=obj.end_date).values_list('parameter_value',flat=True)
+            numeric_parameter_value = sum([int(i) for i in numeric_parameter])
+
         else:
             parameter_type = 1
-    return master_list,master_names,parameter_type
+
+    return master_list,master_names,parameter_type,numeric_parameter_value
 
 @register.filter
 def get_at_index(list, index):

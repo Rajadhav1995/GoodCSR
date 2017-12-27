@@ -458,17 +458,39 @@ def get_activities_list(request,quarterreportobj):
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
     return act_count
 
+def get_milestones_activitieslist(quarterreportobj,num,result):
+#    to get the milestone-activities for particular project based on the quarter. 
+    start_date = quarterreportobj.start_date
+    end_date = quarterreportobj.end_date
+    projectobj = quarterreportobj.project.project
+    if num == 1:
+        milestone_activitieslist = Milestone.objects.filter(active=2,project= Project.objects.get(id=projectobj.id),overdue__gte = start_date,overdue__lte = end_date)
+        if milestone_activitieslist:
+            object_id = result.get('milestone','')
+            name = None
+        else:
+            name = result.get('milestone','')
+            object_id = 0
+    elif num == 2:
+        milestone_activitieslist = Activity.objects.filter(active=2,project= Project.objects.get(id=projectobj.id))
+        if milestone_activitieslist:
+            name = None
+            object_id = result.get('activity','')
+        else:
+            object_id = 0
+            name = result.get('activity','')
+    return object_id,name
+
 def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result):
 #    this is to save the milestone object
     if int(quarterreportobj.quarter_type) == 1:
-        
-        object_id = result.get('milestone','')
+        object_id,name = get_milestones_activitieslist(quarterreportobj,1,result)
         description = result.get('about milestone','')
         milestoneobj = Milestone.objects.get_or_none(id=int(object_id))
         ma_type = 1
         content_type = ContentType.objects.get_for_model(Milestone)
     else:
-        object_id = result.get('activity','')
+        object_id,name = get_milestones_activitieslist(quarterreportobj,2,result)
         description = result.get('about the activity','')
         activityobj = Activity.objects.get_or_none(id=int(object_id))
         ma_type = 2
@@ -479,12 +501,15 @@ def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,res
     # for example name = Activity-1_2_0_40_1_1_3 then name.split('-') we will get ['Activity','1'] based on the length of this 
     # we will make sure it is of add more from edit and create a new object for that added activity/milestone
     if int(add_section) == 0 or len(name1) == 2:
-        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,description=description,object_id=object_id,content_type=content_type,ma_type=ma_type)
+        milestoneobj = ReportMilestoneActivity.objects.create(quarter=quarterreportobj,name=name,description=description,object_id=object_id,content_type=content_type,ma_type=ma_type)
     else:
         milestoneobj = ReportMilestoneActivity.objects.get_or_none(id=int(mile_id))
         if milestoneobj:
+            milestoneobj.name = name
             milestoneobj.object_id = object_id
             milestoneobj.description=description
+            milestoneobj.content_type = content_type
+            milestoneobj.ma_type = ma_type
             milestoneobj.active = 2
             milestoneobj.save()
     return milestoneobj

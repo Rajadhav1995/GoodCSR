@@ -41,10 +41,10 @@
 	<div class="content-top margin-top">
       <div class="select-area">
       	<label>See Data as </label>
-        <div class="small-select">
+        <div class="small-select category">
 
         <select name="lang" id="category_id" class="select_box">
-            <option value="0" name=""> Super Category</option>
+            <option value="0" name="Super Category">Super Category</option>
             {% for i in super_categorylist %}
             <option value="{{i.id}}" name="{{i.name}}">{{i.name}}</option>
             {% endfor %}
@@ -346,8 +346,9 @@ $(document).ready(function(){
             var selectedText = $(this).find("option:selected").text();
             var selectedValue = $(this).val();
             
+            
             $("#budget_table tr.data_row").each(function(){
-            if (selectedText=="Super Category"){
+            if (selectedText == "Super Category"){
                 $(this).show();
             }
             else{
