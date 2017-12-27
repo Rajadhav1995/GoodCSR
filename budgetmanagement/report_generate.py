@@ -676,6 +676,7 @@ def finalreportdesign(request):
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist  = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
+    all_questionlist = Question.objects.filter(active=2).values_list('id',flat=True)
     if request.method == "POST" or request.FILES:
         slug = request.POST.get('slug')
         key = request.POST.get('key')
@@ -789,15 +790,16 @@ def save_removed_fields(request):
     if created:
 #        quest_ids_list.append(ids)
         removed_ques.text = quest_ids_list
+        removed_list = quest_ids_list
     else:
         removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
-#        removed_list.append(ids)
         for r in quest_ids_list:
             removed_list.append(r)       
         removed_ques.text = sorted(removed_list)
     removed_ques.save()
-    return JsonResponse({'status':'ok'})
+    return JsonResponse({'status':'ok','ids_list':sorted(removed_list)})
     
+from itertools import chain
 
 def save_added_fields(request):
     child_quest = []
@@ -825,4 +827,4 @@ def save_added_fields(request):
                     ques_list.remove(child)
             remove_quest_obj.text = ques_list
             remove_quest_obj.save()
-    return JsonResponse({'status':'ok'})
+    return JsonResponse({'status':'ok','ids_list':list(chain(child_quest))})
