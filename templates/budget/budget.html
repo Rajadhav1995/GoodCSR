@@ -40,10 +40,13 @@
     </div>
 	<div class="content-top margin-top">
       <div class="select-area">
+         <form id="filter_form" action=".?slug={{project_slug}}" method = "post" >{% csrf_token %}
+                 <input type="hidden" name="slug" value="{{project_slug}}">
+                <input type="hidden" name="budget_id" value="{{budget_id}}">
       	<label>See Data as </label>
         <div class="small-select category">
 
-        <select name="lang" id="category_id" class="select_box">
+        <select name="Category_name" id="category_id" class="select_box">
             <option value="0" name="Super Category">Super Category</option>
             {% for i in super_categorylist %}
             <option value="{{i.id}}" name="{{i.name}}">{{i.name}}</option>
@@ -51,39 +54,49 @@
         </select>
         </div>
 
+<!--        <div class="small-select">-->
+<!--        <select name="lang" id="year_id" class="select_box ">-->
+<!--            <option value="0" name="Select Year">Select Year</option>-->
+<!--            <option>2016</option>-->
+<!--            <option>2017</option>-->
+<!--        </select>-->
+<!--        </div>-->
         <div class="small-select">
-        <select name="lang" class="select_box ">
-            <option>2016</option>
-            <option>2017</option>
-        </select>
+                <select name="year" id="year_id" class = "select_box" >
+                    <option value = "Select Year">Select Year</option>
+                    {% for i in years_list %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
         </div>
         <div class="dropdown user select-down budget_chart">
             <a href="javascript:void(0);" class="dropdown-toggle" >
               <p>Select Quarters</p>
               <i class="fa fa-angle-down"></i>
             </a>
-            <ul class="dropdown-menu1" style="display:none;">
-            
+            <ul  name= "selected_quarter_list" id="selected_quarter_list" class="dropdown-menu1" style="display:none;">
+            {% for i,j in filter_quarter_list.items %}
+            {% with forloop.counter as rnum %}
               <li class="user-header">
-                <input class="check-box" type="checkbox" id="one" />
-                <label for="one"><span><span></span></span> Quarter1</label>
+                <input class="check-box" type="checkbox" id="{{rnum}}" name="selected_quarter_list" value= "{{rnum}}" />
+                <label for="{{rnum}}"><span><span></span></span> Quarter{{rnum}}</label>
               </li>
-              <li>
-                <input class="check-box" type="checkbox" id="two" />
-                <label for="two"><span><span></span></span> Quarter2</label>
-              </li>
-              <li>  
-                <input class="check-box" type="checkbox" id="three" />
-                <label for="three"><span><span></span></span> Quarter3</label>
-              </li>
-              <li>  
-                <input class="check-box" type="checkbox" id="four" />
-                <label for="four"><span><span></span></span> Quarter4</label>  
-              </li>
-              
+              {% endwith %}
+              {% endfor %}
+<!--              <li>-->
+<!--                <input class="check-box" type="checkbox" id="two" />-->
+<!--                <label for="two"><span><span></span></span> Quarter2</label>-->
+<!--              </li>-->
+<!--              <li>  -->
+<!--                <input class="check-box" type="checkbox" id="three" />-->
+<!--                <label for="three"><span><span></span></span> Quarter3</label>-->
+<!--              </li>-->
+<!--              <li>  -->
+<!--                <input class="check-box" type="checkbox" id="four" />-->
+<!--                <label for="four"><span><span></span></span> Quarter4</label>  -->
+<!--              </li>-->
             </ul>
           </div>
-
 
 
         <!--<select name="lang" class="select_box ">
@@ -91,6 +104,7 @@
             <option>Quarter1</option>
             <option>Quarter2</option>
         </select>-->
+        </form>
          </div>
     </div>
     
@@ -102,7 +116,9 @@
 
               <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>	
             {% for i,j in quarter_list.items %}
-              <td class = "table-head" colspan="5">{{j}}</td>
+            {% with forloop.counter as rnum %}
+              <td class = "filter_{{rnum}} table-head" colspan="5">{{j}}</td>
+              {% endwith %}
               {% endfor %}
             </tr>  
             <tr  class="sticky-row">
@@ -113,11 +129,13 @@
               <th  class="sticky-cell">Total Utilized</th>
               <th  class="sticky-cell">Units Type</th>
                 {% for i,j in quarter_list.items %}
-              <th>Units</th>
-              <th>Rate</th>
-              <th> Planned</th>
-              <th> Utilized</th>
-              <th>Variance</th>
+                {% with forloop.counter as rnum %}
+              <th class="filter_{{rnum}}">Units</th>
+              <th class="filter_{{rnum}}">Rate</th>
+              <th class="filter_{{rnum}}"> Planned</th>
+              <th class="filter_{{rnum}}"> Utilized</th>
+              <th class="filter_{{rnum}}">Variance</th>
+              {% endwith %}
               {% endfor %}
             </tr>
             </thead>
@@ -135,12 +153,14 @@
                 <td align="right" class="sticky-cell">{{utilized_amount | get_currency}}</td>
                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
                 {% for i,v in quarter_list.items %}
+                {% with forloop.counter as rnum %}
                 {% get_quarter_details j i projectobj as line_itemobj %}
-                   <td align="right" class=""> {{line_itemobj.unit | get_currency}} </td>
-                    <td align="right" class=""> {{line_itemobj.rate | get_currency}}  </td>
-                     <td align="right" class=""> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
-                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
-                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                   <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {{line_itemobj.unit | get_currency}} </td>
+                    <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {{line_itemobj.rate | get_currency}}  </td>
+                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
+                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                     {% endwith %}
                      {% endfor %}
             </tr>
             {% endfor %}
@@ -341,12 +361,31 @@ $(document).ready(function(){
 
 <!--script for filter category -->
 <script type="text/javascript">
+   $(document).ready(function(){
+        
+       $(".check-box").click(function(){
+       $('#selected_quarter_list .check-box:checkbox').each(function(){
+       
+       if($(this).prop("checked") == true)
+           {
+           selectedText = $(this).val();
+           $('.filter_'+selectedText).show()
+           }
+       else{
+           selectedText = $(this).val();
+           $('.filter_'+selectedText).fadeOut()
+           }
+       
+       });
+       });
+   });
+</script>
+
+<script type="text/javascript">
     $(function () {
         $("#category_id").change(function () {
             var selectedText = $(this).find("option:selected").text();
             var selectedValue = $(this).val();
-            
-            
             $("#budget_table tr.data_row").each(function(){
             if (selectedText == "Super Category"){
                 $(this).show();
@@ -361,6 +400,37 @@ $(document).ready(function(){
         });
             
         });
+
+        $("#year_id").change(function () {
+            var selectedText = $(this).find("option:selected").text();
+            var selectedValue = $(this).val();
+            
+            $("#budget_table td.table-head").each(function()
+            {
+                if (selectedText == "Select Year")
+                {
+                    $("[class^=filter_]").show()
+                }
+                else{
+                if ($(this).text().search(new RegExp(selectedText, "i")) < 0) 
+                {
+                    $(this).fadeOut();
+                    selectedclass = $(this)["0"].className.split(" ")[0]
+                    $('.'+selectedclass).fadeOut()
+                     
+                 } 
+                 else 
+                 {
+                     $(this).show();
+                     selectedclass = $(this)["0"].className.split(" ")[0]
+                     $('.'+selectedclass).show()
+                }
+            }
+        });
+            
+        });
+
+
     });
 </script>
 
