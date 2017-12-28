@@ -83,18 +83,6 @@
               </li>
               {% endwith %}
               {% endfor %}
-<!--              <li>-->
-<!--                <input class="check-box" type="checkbox" id="two" />-->
-<!--                <label for="two"><span><span></span></span> Quarter2</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="three" />-->
-<!--                <label for="three"><span><span></span></span> Quarter3</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="four" />-->
-<!--                <label for="four"><span><span></span></span> Quarter4</label>  -->
-<!--              </li>-->
             </ul>
           </div>
 
@@ -360,13 +348,15 @@ $(document).ready(function(){
 </script>
 
 <!--script for filter category -->
+
 <script type="text/javascript">
-   $(document).ready(function(){
+
         
-       $(".check-box").click(function(){
-       $('#selected_quarter_list .check-box:checkbox').each(function(){
+        function quarteryear(){
+            $('#selected_quarter_list .check-box:checkbox').each(function(){
        
        if($(this).prop("checked") == true)
+        
            {
            selectedText = $(this).val();
            $('.filter_'+selectedText).show()
@@ -377,8 +367,11 @@ $(document).ready(function(){
            }
        
        });
+        }
+        
+       $(".check-box").click(function(){
+       quarteryear()
        });
-   });
 </script>
 
 <script type="text/javascript">
@@ -433,6 +426,35 @@ $(document).ready(function(){
 
     });
 </script>
+
+<script>
+$(document).ready(function(){
+            $('#year_id').change(function(){
+               var year = this.value;
+               $.ajax({
+                   url : '/manage/quarter/list/',
+                   type : 'GET',
+                   dataType : 'json',
+                   data: {'year':year,'budget_id':parseInt({{budgetobj.id}})},
+                   success : function(data) {
+                            var quarter_dict = data.quarter_list
+                            $('#selected_quarter_list').find('.user-header').remove().end();
+                          for (var key in quarter_dict) {
+                                if (quarter_dict.hasOwnProperty(key)) {
+                                    key = parseInt(key) + 1
+                                    $('#selected_quarter_list').append("<li class='user-header'><input class='check-box'type='checkbox' id='"+key+ "'name='selected_quarter_list' onclick='return quarteryear()' value='"+ key +"' /><label for='"+key+"'><span><span></span></span> Quarter"+key+"</label></li>");
+                                }
+        }
+                   },
+                       error : function() {
+                       console.log('error');
+                   }
+                });
+    });
+    });
+
+</script>
+
 
 
 <!---datepicker script-->
