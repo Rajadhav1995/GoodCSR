@@ -31,7 +31,6 @@ def admin_dashboard(request):
     tasks_progress = corp_task_completion_chart(obj_list)
     total_budget = corp_total_budget(obj_list)
     budget = corp_total_budget_disbursed(obj_list)
-    # projectobj = obj_list
     image = PMU_URL
     page = request.GET.get('page', 1)
 
