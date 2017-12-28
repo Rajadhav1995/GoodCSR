@@ -60,15 +60,9 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
             final_quest=map(int,final_quest)
             final_quest.append(int(main_quest.parent.id))
             final_questions = Question.objects.filter(id__in = final_quest).order_by('id') 
-    elif not quest_list and quest_removed == 'false':
-        remove_id = ''
-        final_questions = questions
     elif not quest_list and quest_removed == 'true':
         remove_id = ''
         final_questions =[]
-    else:
-        remove_id = ''
-        final_questions = questions
     return final_questions,remove_id
     
 def get_removed_populate_questions(questions,project_report,block_type,quest_removed):
@@ -86,9 +80,6 @@ def get_removed_populate_questions(questions,project_report,block_type,quest_rem
             final_questions = questions.exclude(id__in = eval(quest_list.text)).order_by('id')
         else:
             final_questions = questions.filter(id__in = [rmv.id for rmv in removed_ques]).order_by('id')
-    elif not quest_list and quest_removed == 'false':
-        remove_id = ''
-        final_questions = questions
     elif not quest_list and quest_removed == 'true':
         remove_id = ''
         final_questions =[]

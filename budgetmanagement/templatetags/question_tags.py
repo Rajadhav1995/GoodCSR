@@ -166,7 +166,28 @@ def get_timeline_json_pdf(projectobj,quarter_obj):
         time_length = timeline_json_length
         timeloop = 1
     return timeline_json,timeline_json_length,time_length,range(timeloop)
- 
+
+def get_removed_quest_list(quest_removed,quest_list,quarter_question_list):
+#    splitted the below function
+    remove_obj_id=''
+    main_quest = []
+    if quest_removed == "false":
+        remove_obj_id = quest_list.id
+        final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
+    else:
+        remove_obj_id = quest_list.id
+        final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
+        parent_quest = Question.objects.filter(id__in = eval(quest_list.text)).values_list('parent',flat=True)
+        for parent in parent_quest:
+            if parent :
+                main_quest.append(Question.objects.get_or_none(id=parent))
+        if main_quest:
+            final_list = list(chain(final_quest_list))
+            final_list.extend(list(set(main_quest)))
+            final_quest_list = final_list
+    return final_quest_list,remove_obj_id
+
+
 @register.assignment_tag   
 def get_final_questions(quarter_question_list,block_type,object_id,period,report_id,quest_removed):
     quest_list = []
@@ -182,26 +203,12 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period)
 
     if quest_list:
-        if quest_removed == "false":
-            remove_obj_id = quest_list.id
-            final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
-        else:
-            
-            remove_obj_id = quest_list.id
-            final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
-            parent_quest = Question.objects.filter(id__in = eval(quest_list.text)).values_list('parent',flat=True)
-            for parent in parent_quest:
-                if parent :
-                    main_quest.append(Question.objects.get_or_none(id=parent))
-            if main_quest:
-                final_list = list(chain(final_quest_list))
-                final_list.extend(list(set(main_quest)))
-                final_quest_list = final_list
+#        calling the function to reduce the complexity: meghana
+        final_quest_list,remove_obj_id = get_removed_quest_list(quest_removed,quest_list,quarter_question_list)
     else:
+        final_quest_list = []
         if quest_removed == 'false':
             final_quest_list = quarter_question_list
-        else:
-            final_quest_list = []
     return final_quest_list,remove_obj_id
     
 @register.assignment_tag
