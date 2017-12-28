@@ -111,6 +111,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     url=request.META.get('HTTP_REFERER')
     add = "False"
     edit=''
+    task_progress =''
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     form=eval(m_form)
