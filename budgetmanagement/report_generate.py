@@ -822,6 +822,7 @@ def save_added_fields(request):
     act_mile_slug = {'about-the-actvity':'activity-name','milestone-description':'milestone-name'}
     ids = literal_eval(request.GET.get('id'))
     tab=request.GET.get('tab')
+
     remove_quest_obj = RemoveQuestion.objects.get_or_none(id=int(request.GET.get('remove_obj')))
     ques_list = eval(remove_quest_obj.text)
     if tab == 'true':
