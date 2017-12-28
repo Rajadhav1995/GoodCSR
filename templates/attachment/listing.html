@@ -5,6 +5,19 @@
 <style>
 .budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
 </style>
+<script>
+function exportToForm(){
+  var selectedText = document.getElementById("activate_tagator2").value;
+  $("#dest tr.data_row").each(function(){
+    if ($(this).text().search(new RegExp(selectedText, "i")) < 0) {
+        $(this).fadeOut();
+     } else {
+         $(this).show();
+    }
+});
+
+}
+</script>
 <!--Green pad Ends-->
 <!--Content part starts-->
 <section class="content-part">
@@ -14,7 +27,7 @@
       	<label>Search</label>
    
 		<input id="activate_tagator2" type="text" class="form-control" placeholder="Name or Type" data-tagator-show-all-options-on-focus="true" data-tagator-autocomplete="['Budget', 'Report', 'Document', 'Files', 'Budget', 'Report', 'Document', 'Task', 'Worksheet']">
-        <img src="/static/img/search-icon.png">
+        <img onclick="javascript:exportToForm()" src="/static/img/search-icon.png">
          </div>
         <!--<form>
           <div class="multiselect">
@@ -58,7 +71,7 @@
   </thead>
   <tbody>
     {% for i in attachment %}
-    <tr>
+    <tr class="data_row">
       <td align="center">
       {% if i.attachment_type == 2 %}
         {% if i.document_type == 1 %}<!-- excel -->
@@ -118,6 +131,31 @@
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 
+<script type="text/javascript">
+alert("aaaa");
+    $(function () {
+        $("#activate_tagator2").change(function () {
+            alert(this);
+            var selectedText = $(this).text();
+            var selectedValue = $(this).val();
+            
+            
+            $("#dest tr.data_row").each(function(){
+            if (selectedText == "Super Category"){
+                $(this).show();
+            }
+            else{
+            if ($(this).text().search(new RegExp(selectedText, "i")) < 0) {
+                $(this).fadeOut();
+             } else {
+                 $(this).show();
+            }
+            }
+        });
+            
+        });
+    });
+</script>
 <script>
 //Toggle
 		
@@ -227,6 +265,8 @@ $(document).ready(function() {
     });
 });
 </script>
+
+
 </body>
 </html>
 

@@ -16,9 +16,9 @@
             	<h3>Budget</h3>
                  <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
-                	<li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">Rs. {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}Rs.  {{projectobj.project_budget_details.utilized_cost}} {% else %} Rs.0 {% endif %} </span></li>
+                	<li><span class="yellow-circle"></span> Planned <span class="right-li">₹ {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">₹ {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}₹  {{projectobj.project_budget_details.utilized_cost}} {% else %} ₹ 0 {% endif %} </span></li>
                 </ul>
             </div>
             <div class="budget-right-pad">
@@ -176,20 +176,20 @@
       <tr>
         <td>{{rnum}}</td>
         <td>{{i.due_date}}</td>
-        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount | get_currency}} {% else %} 0 {% endif %}</td>
-        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount | get_currency}}  {% else %} 0 {% endif %} </td>
-        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount | get_currency}}  {% else %} 0 {% endif %} </td>
-        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount | get_currency}}  {% else %} 0 {% endif %} </td>
+        <td> ₹ {% if  i.planned_amount %} {{i.planned_amount | get_currency}} {% else %} 0 {% endif %}</td>
+        <td> ₹ {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount | get_currency}}  {% else %} 0 {% endif %} </td>
+        <td> ₹ {% if  i.recommended_amount %} {{i.recommended_amount | get_currency}}  {% else %} 0 {% endif %} </td>
+        <td> ₹ {% if  i.utilized_amount %} {{i.utilized_amount | get_currency}}  {% else %} 0 {% endif %} </td>
       </tr>
       {% endwith %}
       {% endfor %}
       <tr bgcolor="#f1f3e9" class="table-tr">
         <td>Total</td>
         <td>&nbsp;</td>
-        <td>Rs. {% if planned_amount %} {{planned_amount | get_currency}} {% else %} 0 {% endif %} </td>
-        <td>Rs. {% if actual_disbursed_amount %}{{actual_disbursed_amount | get_currency}} {% else %} 0 {% endif %} </td>
-        <td>Rs. {% if recommended_amount %} {{recommended_amount | get_currency}}{% else %} 0 {% endif %} </td>
-        <td>Rs. {% if utilized_amount %}{{utilized_amount | get_currency}} {% else %} 0 {% endif %}</td>
+        <td>₹ {% if planned_amount %} {{planned_amount | get_currency}} {% else %} 0 {% endif %} </td>
+        <td>₹ {% if actual_disbursed_amount %}{{actual_disbursed_amount | get_currency}} {% else %} 0 {% endif %} </td>
+        <td>₹ {% if recommended_amount %} {{recommended_amount | get_currency}}{% else %} 0 {% endif %} </td>
+        <td>₹ {% if utilized_amount %}{{utilized_amount | get_currency}} {% else %} 0 {% endif %}</td>
       </tr>
       </tbody>
 	</table>  

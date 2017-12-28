@@ -500,7 +500,9 @@ def project_summary(request):
     data = {'project_id':int(obj.id),'company_name':str(funderobj.funder.organization) if funderobj else '','start_date':'','end_date':''}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
+    number_json1 = number_json
     number_json = json.dumps(number_json)
+
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):
