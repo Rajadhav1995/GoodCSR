@@ -93,15 +93,15 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
 
-def get_form_saved(form,edit,task_progress,model_name,user,m_form,project,m):
+def get_form_saved(form,edit,task_progress,user,project,form_dict):
     if form.is_valid():
         f=form.save(commit=False)
-        if m_form == 'TaskForm':
+        if form_dict.get('m_form') == 'TaskForm':
             f.task_progress = task_progress
         from projectmanagement.common_method import unique_slug_generator
         f.slug = unique_slug_generator(f,edit)
         f.save()
-        if model_name == 'Activity' or model_name == 'Task':
+        if form_dict.get('model_name') == 'Activity' or form_dict.get('model_name') == 'Task':
             f.created_by = user
             f.save()
         form.save_m2m()
@@ -126,7 +126,8 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             end_date = form.data['end_date']
         except:
             pass
-        form_saved=get_form_saved(form,edit,task_progress,model_name,user,m_form,project,m)
+        form_dict = {'m_form':m_form,'m':m,'model_name':model_name}
+        form_saved=get_form_saved(form,edit,task_progress,user,project,form_dict)
         return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)
