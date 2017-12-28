@@ -9,6 +9,7 @@ from taskmanagement.models import Task
 from budgetmanagement.models import *
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
 from pmu.settings import PMU_URL
+from ast import literal_eval
 
 @register.assignment_tag
 def get_details(obj):
@@ -297,3 +298,21 @@ def get_parameter_type(obj):
         else:
             pie_chart = 1
     return pie_chart
+ 
+@register.assignment_tag    
+def get_block_tab_removed(questions,block_type,report_obj):
+    tab_removed = ''
+    removed_id = ''
+    remove_obj=RemoveQuestion.objects.get_or_none(quarter_report= report_obj,block_type=block_type)
+    if remove_obj:
+        removed_list = literal_eval(remove_obj.text)
+        remove_id = remove_obj.id if str(remove_obj.text) != '[]' else ''
+        if set(removed_list) == set(questions):
+            tab_removed = 'true'
+        else:
+            tab_removed = 'false'
+    else:
+        tab_removed = 'false'
+        remove_id = ''
+    return tab_removed,remove_id
+        

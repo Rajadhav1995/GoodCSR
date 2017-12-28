@@ -17,10 +17,12 @@
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
         <h3>Project Report List - <a href ="/project/summary/?slug={{request.GET.slug}}&key=summary">{{project.name}}</a></h3>
-        <div style="float: right;"><a class="budget_button iframe" href="/report/generation-form/?slug={{project.slug}}&key=add">Create new Project Report</a></div>
+       
         <!-- <a href='/report/pdf/view/'>view</a> -->
     {% if msg %}
         <h3> {{msg}} <a style="text-decoration:underline;color:#169776" href= '/manage/project/budget/create/?slug={{project.slug}}'>Click here to create Budget</a> </h3>
+    {% else %}
+         <div style="float: right;"><a class="budget_button iframe" href="/report/generation-form/?slug={{project.slug}}&key=add">Create new Project Report</a></div>
     {% endif %}
     {% if report_obj %}
     <table id="example1" class="table table-striped table-bordered textalign_boottom" cellspacing="0" width="100%">
