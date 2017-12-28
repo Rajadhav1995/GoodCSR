@@ -443,7 +443,6 @@ function numberWithCommas(x) {
 
             {% if master_pip %}
             {% for rofl in master_pip %}
-            
              <td>
               <div style="width:300px;">
                 <div class="right-budget beni-dist beni-dist1">
@@ -1239,6 +1238,8 @@ Highcharts.chart(values, {
 <script type="text/javascript">
 {% for pip in master_sh.PIP %}
 var data2 = {{pip | safe}};
+console.log("mahiti_s");
+console.log(data2);
 var values = "Beneficary_distribution_" + (new_data_pip).toString()
 var pip_title = {{pip_title_name | safe}}
 var pip_title = pip_title[new_data_pip]
@@ -1266,6 +1267,7 @@ Highcharts.chart(values, {
                         formatter: function() {
                             return this.y;
                     }
+                  }
                 }
             },
             legend: {
@@ -1288,7 +1290,7 @@ Highcharts.chart(values, {
                 data: data2
 
             }]
-        });
+});
 {% endfor %}
 </script>
 
