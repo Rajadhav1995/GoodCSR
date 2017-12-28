@@ -41,6 +41,10 @@
     display: inline-block;
     vertical-align: middle;
 }
+
+.tab_remove {
+    float: right;
+}
 </style>
 
 
@@ -62,8 +66,11 @@
                 </div>
 <!--Cover Page and Project Summary Page div where the questions are made dynamic  STARTS -->
                   <div id="accordion">
-                     <h3 id='0'>{{locals_list.block1.name}}</h3>
-                     <form action="." method="POST" enctype="multipart/form-data">
+                     {% get_previous_tab_quests 1 as quest_list %}
+                        {% get_block_tab_removed quest_list 1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
+                     <h3 id='0' class="tab_0">{{locals_list.block1.name}}  <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',1,0,0,'0')">Remove</a></h3>
+                     <form action="." class="tab_0" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -132,9 +139,15 @@
                         </div>
                         <input type="submit" class="report_save " name="cover_page_save" id="submit_0" value = "Save"></input>
                      </form>
+                     {% endif %}
 
-                     <h3 id='1'>{{locals_list.block2.name}}</h3>
-                     <form action="." method="POST" enctype="multipart/form-data">
+
+                    {% get_previous_tab_quests 2 as quest_list %}
+                      {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
+                       {% if tab_removed.0 == 'false' %}
+
+                     <h3 id='1' class="tab_1" >{{locals_list.block2.name}} <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',2,0,0,'1')">Remove</a></h3>
+                     <form action="." class="tab_1" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -203,6 +216,7 @@
                         </div>
                         <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>
                      </form>
+                     {% endif %}
 <!--                                             </div>-->
 
             <!--Cover page and Project Summary Sections div                   -->
@@ -211,8 +225,12 @@
                     <!--Previous Quarter updates div starts here-->
                     {% for i,v in previousquarter_list.items %}
                     {% with forloop.counter as j %}
-                    <h3 id="{{j|add:'1'}}">Previous Quarter Updates :{{v}}</h3>
-                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
+                    {% get_previous_tab_quests 3 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
+                        
+                    <h3 id="{{j|add:'1'}}" class = "tab_{{j|add:'1'}}">Previous Quarter Updates :{{v}}  <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h3>
+                        <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{j|add:'1'}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
@@ -804,6 +822,7 @@
                                 <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>
                             </div>
                             </form>
+                      {% endif %}
                     {% endwith %}
                     {% endfor %}
                     <!--previous quarters div ends here-->
@@ -812,8 +831,11 @@
                         <!--Current Quarter Updates starts here -->
                     {% for i,v in currentquarter_list.items %}
                     {% with forloop.counter as j %}
-                        <h3 id={{j|add:previous_len}} >Current Quarter Updates :{{v}}</h3>
-                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
+                      {% get_previous_tab_quests 4 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
+                        <h3 id={{j|add:previous_len}} class = "tab_{{j|add:previous_len}}" >Current Quarter Updates :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h3>
+                        <form action=".?slug={{slug}}&report_id={{report_id}}" class = "tab_{{j|add:previous_len}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="activity-pic-count_1" value="1">
@@ -1769,7 +1791,7 @@
 
                         </div>
                         </form>
-
+                     {% endif %}
                     {% endwith %}
                     {% endfor %} <!-- currentquarter for loop ends -->
                         <!-- ends Current Quarter Updates-->
@@ -1778,8 +1800,11 @@
                         <!--starts Next Quarter Plan -->
                    {% for i,v in futurequarter_list.items|slice:"1" %}
                     {% with forloop.counter as j %}
-                        <h3 id={{future_len}}>Next Quarter Plan :{{v}}</h3>
-                        <form action=".?slug={{slug}}&report_id={{report_id}}" method = "post" enctype="multipart/form-data">
+                        {% get_previous_tab_quests 5 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
+                        <h3 id={{future_len}} class = "tab_{{future_len}}">Next Quarter Plan :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h3>
+                        <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{future_len}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -2080,6 +2105,7 @@
                         </div>
 
                         </form>
+                        {% endif %}
                         {% endwith %} <!-- main quarter for loop ends here -->
                         {% endfor %}
                         <!--ends nexrt quarter updates -->
@@ -2112,6 +2138,9 @@
 <script type="text/javascript" src="/static/js/jquery.tinyscrollbar.js"></script>
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+
+
+
 <script>
     $( function() {
         $("#loader").hide();
@@ -3090,6 +3119,7 @@ $(document).ready(function() {
                     block_type:block_type,
                     object_id:object_id,
                     period:period,
+                    tab:"false",
                     };
         var q_id = String(ids);
     $.ajax({
@@ -3112,6 +3142,36 @@ $(document).ready(function() {
             }
         });
 
+    }
+</script>
+
+<script type="text/javascript">
+    function remove_tabs(questions,block_type,object_id,period,div_id){
+        var quest_list = questions;
+        var section = div_id;
+        alert(quest_list);
+            $.ajax({
+            url: '/report/removed/fields/',
+            type: 'GET',
+            data: { id:quest_list,
+                    report_id:"{{request.GET.report_id}}",
+                    block_type:block_type,
+                    object_id:object_id,
+                    period:period,
+                    tab:"true",
+                    },
+            contentType: "application/json; charset=utf-8",
+            success: function(data){
+                alert('success');
+                $('.tab_'+section).hide();
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                console.log("remove error")
+               console.log(XMLHttpRequest);
+               console.log(errorThrown);
+            }
+        });
+            
     }
 </script>
 

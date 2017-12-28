@@ -65,50 +65,58 @@ def add_taskmanagement(request,model_name,m_form):
     url=request.META.get('HTTP_REFERER')
     add = "True"
     edit=''
-    try:
-        project = Project.objects.get(slug = request.GET.get('slug'))
-    except:
-        project = Project.objects.get(slug= request.POST.get('slug_project'))
+    project = Project.objects.get(slug = request.GET.get('slug'))
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget = Budget.objects.get_or_none(project = project,active=2)
     form=eval(m_form)
-    if budget:
-        if request.method=='POST':
-            if m_form == 'TaskForm':
-                task_progress = update_task_completion(request,add,status=None) 
-            form=form(user_id,project.id,request.POST,request.FILES)
-#            end_date = form.data['end_date']
-            if form.is_valid():
-                f=form.save(commit=False)
-                if m_form == 'Task_form':
-                    f.task_progress = task_progress 
-                from projectmanagement.common_method import unique_slug_generator
-                f.slug = unique_slug_generator(f,edit)
-                f.save()
-                if model_name == 'Activity' or model_name == 'Task':
-                    f.created_by = user
-                    f.save()
-                form.save_m2m()
-                return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-        else:
-            form=form(user_id,project.id)
-    else:
+    if not budget:
         message = "Budget is not added"
+        return render(request,'taskmanagement/base_forms.html',locals())
+    if request.method=='POST':
+        if m_form == 'TaskForm':
+            task_progress = update_task_completion(request,add,status=None) 
+        form=form(user_id,project.id,request.POST,request.FILES)
+        if form.is_valid():
+            f=form.save(commit=False)
+            if m_form == 'Task_form':
+                f.task_progress = task_progress 
+            from projectmanagement.common_method import unique_slug_generator
+            f.slug = unique_slug_generator(f,edit)
+            f.save()
+            if model_name == 'Activity' or model_name == 'Task':
+                f.created_by = user
+                f.save()
+            form.save_m2m()
+            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+    else:
+        form=form(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
+
+def get_form_saved(form,edit,task_progress,user,project,form_dict):
+    if form.is_valid():
+        f=form.save(commit=False)
+        if form_dict.get('m_form') == 'TaskForm':
+            f.task_progress = task_progress
+        from projectmanagement.common_method import unique_slug_generator
+        f.slug = unique_slug_generator(f,edit)
+        f.save()
+        if form_dict.get('model_name') == 'Activity' or form_dict.get('model_name') == 'Task':
+            f.created_by = user
+            f.save()
+        form.save_m2m()
+        return 'true'
 
 def edit_taskmanagement(request,model_name,m_form,slug):
     url=request.META.get('HTTP_REFERER')
     add = "False"
     edit=''
+    task_progress =''
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     form=eval(m_form)
-    m=eval(model_name).objects.get_or_none(slug = slug)
-    try:
-        project = Project.objects.get(slug =request.GET.get('key') )
-    except:
-        project = Project.objects.get(slug = request.POST.get('slug_project'))
+    m=eval(model_name).objects.get_or_none(slug = str(slug))
+    project = Project.objects.get(slug =request.GET.get('slug') )
     if request.method == 'POST':
         if m_form == 'TaskForm':
             task_progress = m.task_progress 
@@ -118,18 +126,9 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             end_date = form.data['end_date']
         except:
             pass
-        if form.is_valid():
-            f=form.save(commit=False)
-            if m_form == 'TaskForm':
-                f.task_progress = task_progress
-            from projectmanagement.common_method import unique_slug_generator
-            f.slug = unique_slug_generator(f,edit)
-            f.save()
-            if model_name == 'Activity' or model_name == 'Task':
-                f.created_by = user
-                f.save()
-            form.save_m2m()
-            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        form_dict = {'m_form':m_form,'m':m,'model_name':model_name}
+        form_saved=get_form_saved(form,edit,task_progress,user,project,form_dict)
+        return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)
     if model_name == 'Task':

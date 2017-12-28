@@ -78,7 +78,6 @@ def save_section_answers(quest_ids,project_report,request,data,user):
     answer=None
     for ques in sorted(quest_ids):
         question = Question.objects.get_or_none(id = int(ques))
-#        if question.slug != "report_type" and question.slug != "report_duration" :
         answer, created = Answer.objects.get_or_create(question =question,
             content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user = user )
         
@@ -689,6 +688,8 @@ def finalreportdesign(request):
         # redirection to the same page of the form #STARTS
         if key == 'edit_template' or key == 'removed_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
+#        elif key == 'removed_template':
+#            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
         else:
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1))               
         # ENDS to redirection  
@@ -754,11 +755,36 @@ def remove_milesact_child(ques_obj,ids):
     else:
         removed_list.append(ids)
     return removed_list
+
+def tabstatus(tab,ids,questions,ques_obj):
+#    split functionality of save removed fields part 1
+    if tab == 'true':
+        quest_ids_list = ids
+        for i in questions:
+            if i not in quest_ids_list:
+                quest_ids_list.append(int(i.id))
+    else:
+        quest_ids_list = remove_milesact_child(ques_obj,ids)
+    return quest_ids_list
+
+def get_removed_list(quest_ids_list,removed_ques,created):
+#    split functionality of save removed fields part 2
+    if created:
+        removed_ques.text = quest_ids_list
+        removed_list = quest_ids_list
+    else:
+        removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
+        for r in quest_ids_list:
+            removed_list.append(r)       
+        removed_ques.text = sorted(removed_list)
+    return removed_list
+
 from django.http import JsonResponse
 def save_removed_fields(request):
-#    import ipdb;ipdb.set_trace()
     quest_ids_list = []
+    block_slug = {1:"cover-page",2:"project-summary-sheet",3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
     removed_list=[]
+    questions=[]
     ids = literal_eval(request.GET.get('id'))
     url = str(request.GET.get('redirect_url'))
     report_id = literal_eval(request.GET.get('report_id'))
@@ -766,12 +792,21 @@ def save_removed_fields(request):
     block_type = literal_eval(request.GET.get('block_type'))
     object_id = request.GET.get('object_id')
     period = request.GET.get('period')# this is to get the period for particular quarter so that to differentiate
-    ques_obj = Question.objects.get_or_none(id=ids)
+    tab = request.GET.get('tab')
     
-    if int(ques_obj.block.code) in [1,2]:
+    try:
+        ques_obj = Question.objects.get_or_none(id=ids)
+    except:
+        ques_obj = None
+    if ques_obj and int(ques_obj.block.code) in [1,2]:
+        
+        removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
+    elif not ques_obj and block_type in [1,2]:
+        questions = Question.objects.filter(active = 2,block__slug=block_slug.get(block_type)).order_by('id')
         removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,block_type=block_type)
     else:
-        if object_id != 'None':
+        questions = Question.objects.filter(active = 2,block__slug=block_slug.get(block_type)).exclude(parent=None).order_by('id')
+        if object_id != 'None' and str(object_id) != '':
 
             quarter_report = QuarterReportSection.objects.get_or_none(id=object_id)
             removed_ques, created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
@@ -782,15 +817,8 @@ def save_removed_fields(request):
         else:
             removed_ques,created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
                 block_type = block_type,quarter_period = period)
-    quest_ids_list = remove_milesact_child(ques_obj,ids)
-    if created:
-        removed_ques.text = quest_ids_list
-        removed_list = quest_ids_list
-    else:
-        removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
-        for r in quest_ids_list:
-            removed_list.append(r)       
-        removed_ques.text = sorted(removed_list)
+    quest_ids_list = tabstatus(tab,ids,questions,ques_obj) #    split functionality of save removed fields part 1
+    removed_list = get_removed_list(quest_ids_list,removed_ques,created) #    split functionality of save removed fields part 2
     removed_ques.save()
     return JsonResponse({'status':'ok','ids_list':sorted(removed_list)})
     
@@ -803,10 +831,14 @@ def save_added_fields(request):
     get_slug = {'upload-picture':'picture-description','picture-description':'upload-picture'}
     act_mile_slug = {'about-the-actvity':'activity-name','milestone-description':'milestone-name'}
     ids = literal_eval(request.GET.get('id'))
-#    url = str(request.GET.get('redirect_url'))
+    tab=request.GET.get('tab')
+
     remove_quest_obj = RemoveQuestion.objects.get_or_none(id=int(request.GET.get('remove_obj')))
-    if remove_quest_obj:
-        ques_list = eval(remove_quest_obj.text)
+    ques_list = eval(remove_quest_obj.text)
+    if tab == 'true':
+        remove_quest_obj.text = []
+        remove_quest_obj.save()
+    else:
         if ids in ques_list:
             ques = Question.objects.get_or_none(id = int(ids))
             if ques.slug == 'activity-name' or ques.slug == 'milestone-name' or ques.slug == 'parameter-selection':
@@ -823,8 +855,8 @@ def save_added_fields(request):
             else:
                 ques_list.remove(ids)
                 child_quest_list.append(ids)
-            for child in child_quest:
-                    ques_list.remove(child)
-            remove_quest_obj.text = ques_list
-            remove_quest_obj.save()
+        for child in child_quest:
+                ques_list.remove(child)
+        remove_quest_obj.text = ques_list
+        remove_quest_obj.save()
     return JsonResponse({'status':'ok','ids_list':child_quest_list})

@@ -37,6 +37,7 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
 
 def project_location(request,obj,location):
     # this function is to add or edit location for project
+    import ipdb; ipdb.set_trace()
     rem_id = request.POST.get('rem_id')
     city_var = request.POST.get('city_var')
     if rem_id != '':
@@ -500,7 +501,9 @@ def project_summary(request):
     data = {'project_id':int(obj.id),'company_name':str(funderobj.funder.organization) if funderobj else '','start_date':'','end_date':''}
     rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
     taskdict = ast.literal_eval(json.dumps(rdd.content))
+    number_json1 = number_json
     number_json = json.dumps(number_json)
+
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):

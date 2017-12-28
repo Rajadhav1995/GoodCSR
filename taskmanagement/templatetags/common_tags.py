@@ -9,6 +9,7 @@ from taskmanagement.models import Task
 from budgetmanagement.models import *
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
 from pmu.settings import PMU_URL
+from ast import literal_eval
 
 @register.assignment_tag
 def get_details(obj):
@@ -44,6 +45,7 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     # to get the removed questions list for that particular block 
     removed_ques=[]
     parent_ques=[]
+    final_questions=[]
     remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
     if quest_list and quest_list.text != None:
@@ -60,15 +62,9 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
             final_quest=map(int,final_quest)
             final_quest.append(int(main_quest.parent.id))
             final_questions = Question.objects.filter(id__in = final_quest).order_by('id') 
-    elif not quest_list and quest_removed == 'false':
-        remove_id = ''
-        final_questions = questions
     elif not quest_list and quest_removed == 'true':
         remove_id = ''
         final_questions =[]
-    else:
-        remove_id = ''
-        final_questions = questions
     return final_questions,remove_id
     
 def get_removed_populate_questions(questions,project_report,block_type,quest_removed):
@@ -86,9 +82,6 @@ def get_removed_populate_questions(questions,project_report,block_type,quest_rem
             final_questions = questions.exclude(id__in = eval(quest_list.text)).order_by('id')
         else:
             final_questions = questions.filter(id__in = [rmv.id for rmv in removed_ques]).order_by('id')
-    elif not quest_list and quest_removed == 'false':
-        remove_id = ''
-        final_questions = questions
     elif not quest_list and quest_removed == 'true':
         remove_id = ''
         final_questions =[]
@@ -297,3 +290,21 @@ def get_parameter_type(obj):
         else:
             pie_chart = 1
     return pie_chart
+ 
+@register.assignment_tag    
+def get_block_tab_removed(questions,block_type,report_obj):
+    tab_removed = ''
+    removed_id = ''
+    remove_obj=RemoveQuestion.objects.get_or_none(quarter_report= report_obj,block_type=block_type)
+    if remove_obj:
+        removed_list = literal_eval(remove_obj.text)
+        remove_id = remove_obj.id if str(remove_obj.text) != '[]' else ''
+        if set(removed_list) == set(questions):
+            tab_removed = 'true'
+        else:
+            tab_removed = 'false'
+    else:
+        tab_removed = 'false'
+        remove_id = ''
+    return tab_removed,remove_id
+        
