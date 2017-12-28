@@ -755,8 +755,30 @@ def remove_milesact_child(ques_obj,ids):
     else:
         removed_list.append(ids)
     return removed_list
-    
-    
+
+def tabstatus(tab,ids,questions,ques_obj):
+#    split functionality of save removed fields part 1
+    if tab == 'true':
+        quest_ids_list = ids
+        for i in questions:
+            if i not in quest_ids_list:
+                quest_ids_list.append(int(i.id))
+    else:
+        quest_ids_list = remove_milesact_child(ques_obj,ids)
+    return quest_ids_list
+
+def get_removed_list(quest_ids_list,removed_ques):
+#    split functionality of save removed fields part 2
+    if created:
+        removed_ques.text = quest_ids_list
+        removed_list = quest_ids_list
+    else:
+        removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
+        for r in quest_ids_list:
+            removed_list.append(r)       
+        removed_ques.text = sorted(removed_list)
+    return removed_list
+
 from django.http import JsonResponse
 def save_removed_fields(request):
     quest_ids_list = []
@@ -794,21 +816,8 @@ def save_removed_fields(request):
         else:
             removed_ques,created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
                 block_type = block_type,quarter_period = period)
-    if tab == 'true':
-        quest_ids_list = ids
-        for i in questions:
-            if i not in quest_ids_list:
-                quest_ids_list.append(int(i.id))
-    else:
-        quest_ids_list = remove_milesact_child(ques_obj,ids)
-    if created:
-        removed_ques.text = quest_ids_list
-        removed_list = quest_ids_list
-    else:
-        removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
-        for r in quest_ids_list:
-            removed_list.append(r)       
-        removed_ques.text = sorted(removed_list)
+    quest_ids_list = tabstatus(tab,ids,questions,ques_obj) #    split functionality of save removed fields part 1
+    removed_list = get_removed_list(quest_ids_list,removed_ques) #    split functionality of save removed fields part 2
     removed_ques.save()
     return JsonResponse({'status':'ok','ids_list':sorted(removed_list)})
     
