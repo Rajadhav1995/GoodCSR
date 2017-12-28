@@ -45,6 +45,7 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     # to get the removed questions list for that particular block 
     removed_ques=[]
     parent_ques=[]
+    final_questions=[]
     remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
     if quest_list and quest_list.text != None:

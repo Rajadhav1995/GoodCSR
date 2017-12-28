@@ -767,7 +767,7 @@ def tabstatus(tab,ids,questions,ques_obj):
         quest_ids_list = remove_milesact_child(ques_obj,ids)
     return quest_ids_list
 
-def get_removed_list(quest_ids_list,removed_ques):
+def get_removed_list(quest_ids_list,removed_ques,created):
 #    split functionality of save removed fields part 2
     if created:
         removed_ques.text = quest_ids_list
@@ -784,6 +784,7 @@ def save_removed_fields(request):
     quest_ids_list = []
     block_slug = {1:"cover-page",2:"project-summary-sheet",3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
     removed_list=[]
+    questions=[]
     ids = literal_eval(request.GET.get('id'))
     url = str(request.GET.get('redirect_url'))
     report_id = literal_eval(request.GET.get('report_id'))
@@ -817,7 +818,7 @@ def save_removed_fields(request):
             removed_ques,created = RemoveQuestion.objects.get_or_create(quarter_report= report_obj,
                 block_type = block_type,quarter_period = period)
     quest_ids_list = tabstatus(tab,ids,questions,ques_obj) #    split functionality of save removed fields part 1
-    removed_list = get_removed_list(quest_ids_list,removed_ques) #    split functionality of save removed fields part 2
+    removed_list = get_removed_list(quest_ids_list,removed_ques,created) #    split functionality of save removed fields part 2
     removed_ques.save()
     return JsonResponse({'status':'ok','ids_list':sorted(removed_list)})
     
