@@ -116,7 +116,6 @@ class ScreenshotMedia(BaseContent):
 
     report_parameter = models.ForeignKey(ReportParameter,**OPTIONAL)
     attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
-#    image_type = models.IntegerField('IMAGE_TYPE',choices=IMAGE_TYPE,**OPTIONAL)
     img_file_path = models.CharField(max_length = 300,**OPTIONAL)
     content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'),null=True,blank=True)

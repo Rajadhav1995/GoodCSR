@@ -34,29 +34,29 @@ def report_form(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget_obj = Budget.objects.get_or_none(project=project)
-    if budget_obj:
-        from budgetmanagement.manage_budget import get_budget_quarters
-        budget_quarters = get_budget_quarters(budget_obj) 
-        if request.method == 'POST':
-            data = request.POST
-            report_id=data.get('report_id')
-            project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
-            quarter_ids = data.get('quarter_type')
-            dates = budget_quarters[int(quarter_ids)]
-            dates_list = dates.split(' to ')
-            budget_end_date = dates_list[1] if dates_list else '' 
-            budget_start_date = dates_list[0] if dates_list else '' 
-            project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
-                report_type = data.get('report_type'),start_date  = budget_start_date,
-                name = project_obj.name,end_date = budget_end_date)
-            if created or int(project_report.active) == 0 :
-                project_report.active = 2
-                project_report.save()
-                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id=')
-            else:
-                quarter_msg = "Already Report is generated to this Quarter"
-    else :
+    if not budget_obj:
         msg = "Budget is not created"
+        return render(request,'report/report-form.html',locals())
+    from budgetmanagement.manage_budget import get_budget_quarters
+    budget_quarters = get_budget_quarters(budget_obj) 
+    if request.method == 'POST':
+        data = request.POST
+        report_id=data.get('report_id')
+        project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
+        quarter_ids = data.get('quarter_type')
+        dates = budget_quarters[int(quarter_ids)]
+        dates_list = dates.split(' to ')
+        budget_end_date = dates_list[1] if dates_list else '' 
+        budget_start_date = dates_list[0] if dates_list else '' 
+        project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
+            report_type = data.get('report_type'),start_date  = budget_start_date,
+            name = project_obj.name,end_date = budget_end_date)
+        if created or int(project_report.active) == 0 :
+            project_report.active = 2
+            project_report.save()
+            return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id=')
+        else:
+            quarter_msg = "Already Report is generated to this Quarter"
     return render(request,'report/report-form.html',locals())
 
 def report_listing(request):
@@ -114,7 +114,6 @@ def report_section_form(request):
             quest_names.append(i.slug+'_end_'+str(i.id))
         else:
             quest_names.append(i.slug+'_'+str(i.id))
-#    quest_names = set(i.slug+'_'+str(i.id) for i in quest_list)# to get the question names with the ids so that to save the data 
     if not report_obj:
         report_obj = ProjectReport.objects.get_or_none(id = request.POST.get('report_id'))
     if request.method == 'POST' or request.method == 'FILES':
@@ -319,7 +318,6 @@ def get_quarters(projectobj):
                 futurequarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
             elif sd < report_start_date and ed < report_start_date:
                 previousquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
-    print budget_quarters,report_start_date,report_end_date
     return previousquarter_list,currentquarter_list,futurequarter_list
 
 def get_quarter_report(request,itemlist,quarter):
@@ -689,9 +687,7 @@ def finalreportdesign(request):
         projectreportobj = saving_of_quarters_section(request)
         projectobj = projectreportobj.project
         # redirection to the same page of the form #STARTS
-        if key == 'edit_template':
-            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
-        elif key == 'removed_template':
+        if key == 'edit_template' or key == 'removed_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
         else:
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1))               
@@ -788,7 +784,6 @@ def save_removed_fields(request):
                 block_type = block_type,quarter_period = period)
     quest_ids_list = remove_milesact_child(ques_obj,ids)
     if created:
-#        quest_ids_list.append(ids)
         removed_ques.text = quest_ids_list
         removed_list = quest_ids_list
     else:
