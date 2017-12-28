@@ -676,6 +676,7 @@ def finalreportdesign(request):
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist  = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
+    all_questionlist = Question.objects.filter(active=2).values_list('id',flat=True)
     if request.method == "POST" or request.FILES:
         slug = request.POST.get('slug')
         key = request.POST.get('key')
@@ -789,19 +790,21 @@ def save_removed_fields(request):
     if created:
 #        quest_ids_list.append(ids)
         removed_ques.text = quest_ids_list
+        removed_list = quest_ids_list
     else:
         removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
-#        removed_list.append(ids)
         for r in quest_ids_list:
             removed_list.append(r)       
         removed_ques.text = sorted(removed_list)
     removed_ques.save()
-    return JsonResponse({'status':'ok'})
+    return JsonResponse({'status':'ok','ids_list':sorted(removed_list)})
     
+from itertools import chain
 
 def save_added_fields(request):
     child_quest = []
     quest_list=[]
+    child_quest_list=[]
     get_slug = {'upload-picture':'picture-description','picture-description':'upload-picture'}
     act_mile_slug = {'about-the-actvity':'activity-name','milestone-description':'milestone-name'}
     ids = literal_eval(request.GET.get('id'))
@@ -813,16 +816,20 @@ def save_added_fields(request):
             ques = Question.objects.get_or_none(id = int(ids))
             if ques.slug == 'activity-name' or ques.slug == 'milestone-name' or ques.slug == 'parameter-selection':
                 child_quest = Question.objects.filter(parent = ques.parent).values_list('id',flat=True)
+                child_quest_list=list(chain(child_quest))
             elif ques.slug == 'upload-picture' or ques.slug == 'picture-description':
                 child_quest.append(Question.objects.get_or_none(parent=ques.parent,slug = get_slug.get(ques.slug)).id)
                 child_quest.append(ids)
+                child_quest_list=list(chain(child_quest))
             elif ques.slug == 'about-the-actvity' or ques.slug == 'milestone-description':
                 child_quest.append(Question.objects.get_or_none(parent=ques.parent,slug = act_mile_slug.get(ques.slug)).id)
                 child_quest.append(ids)
+                child_quest_list=list(chain(child_quest))
             else:
                 ques_list.remove(ids)
+                child_quest_list.append(ids)
             for child in child_quest:
                     ques_list.remove(child)
             remove_quest_obj.text = ques_list
             remove_quest_obj.save()
-    return JsonResponse({'status':'ok'})
+    return JsonResponse({'status':'ok','ids_list':child_quest_list})
