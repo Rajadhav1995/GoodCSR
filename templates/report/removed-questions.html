@@ -77,7 +77,7 @@
                                        {% for sub in sub_questions.0 %}
                                         
                                            {% if sub.q_type == 'APT' and sub.q_name == 'report_duration' %}
-                                                <div class="col-md-6 report_text">
+                                                <div class="col-md-6 report_text" id="ques_{{sub.q_id}}">
                                                   <p>{{sub.q_text}}</p>
                                                     {% get_from_to_dates sub.answer as duration %}
                                                     
@@ -87,14 +87,14 @@
                                                 </div>  
                                            {% elif sub.q_type == 'APT' %}
                                            
-                                               <div class="col-md-6 report_text">
+                                               <div class="col-md-6 report_text" id="ques_{{sub.q_id}}">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
                                                   <h5><a href="javascript:void(0);" onclick="return add_fields({{sub.q_id}},'{{sub_questions.1}}','')">Add</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
                                            
-                                               <div class="logo-partner">
+                                               <div class="logo-partner" id="ques_{{sub.q_id}}">
                                                   <h6>{{sub.q_text}}</h6>
                                                   <img src="{{sub.answer}}" style="">
                                                   <!--                                                                <img src="{{sub.answer}}"  alt="" title="" height='117px' width = '100px' />-->
@@ -109,7 +109,7 @@
                                            {% endif %}
                                        {% endfor %}
                                {% else %}
-                                   <div class="col-md-6 report_text">
+                                   <div class="col-md-6 report_text" id="ques_{{i.q_id}}">
                                       <p>{{i.q_text}}</p>
                                       {% if i.q_type == 'T' %}
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
@@ -285,13 +285,26 @@
                                     <div class="col-md-6 report_text">
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
+                                        <div class="report_text" id="ques_{{mile_quest.id}}">
                                         <p>{{mile_quest.text|title}}</p>
+<!--                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">-->
+                                    {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
+                                    {% if milestone_activitieslist %}
+                                        <select id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% else %}
                                         <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" class="input_section">
+                                        {% endif %}
                                          <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
+                                         </div>
                                     {% endif %}
 
                                     {% if mile_quest.slug == "upload-picture" %}
-                                        <div class="report_text">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
@@ -301,7 +314,7 @@
                                     {% endif %}
 
                                     {% if mile_quest.slug == "picture-description" %}
-                                        <div class=" report_text">
+                                        <div class=" report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
@@ -319,7 +332,7 @@
 
                                 {% for mile_quest in milestone_questions %}
                                 {% if mile_quest.slug == "milestone-description" %}
-                                        <div class="col-md-6 report_text">
+                                        <div class="col-md-6 report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0"  class="textarea_file"></textarea>
@@ -331,16 +344,16 @@
 
 
                             </div> <!-- milestone class -->
-                                  <div class="form-group addmilestone click_buttons">
-                                       <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="add_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="add_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                                   </div>
+<!--                                  <div class="form-group addmilestone click_buttons">-->
+<!--                                       <div class="link-left">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="add_clone_{{i}}_{{j}}">Add more</a>-->
+<!--                                        </div>-->
+<!--                                        <div class="link-center">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="add_remove_{{i}}_{{j}}">Remove</a>-->
+<!--                                        </div>-->
+<!--                                   </div>-->
                         {% endif %}
 <!--                            this is for parameter selection -->
 <!--                        {% if quest.slug == "parameter-section" %}-->
@@ -541,25 +554,38 @@
                                     <div class="col-md-6 report_text">
                                     {% for mile_quest in milestone_questions %}
                                     {% if mile_quest.slug == "milestone-name" %}
+                                        <div class="report_text" id="ques_{{mile_quest.id}}">
                                         <p>{{mile_quest.text|title}}</p>
-                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">
-                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
+
+<!--                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value="{{mileobj.name}}" class="input_section">-->
+                                        {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
+                                        {% if milestone_activitieslist %}
+                                        <select id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}" {% if i.id == mileobj.object_id %} selected=selected {% endif %}>{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% else %}
+                                        <input type="text " id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" value= "{% if mileobj.name %} {{mileobj.name}} {% endif %}" class="input_section">
+                                        {% endif %}
+                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
                                     {% endif %}
                                 {% get_mile_act_images mileobj as imagelist %}
                                 {% if imagelist %}
                                 {% for imageobj in imagelist %}
                                     {% if mile_quest.slug == "upload-picture" %}
-                                        <div class="report_text">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}">{% if imageobj.attachment_file %}{{imageobj.attachment_file.url}}{% endif %}
                                                 </div>
-                                                   <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
+                                                   <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
                                         </div>
                                     {% endif %}
 
                                     {% if mile_quest.slug == "picture-description" %}
-                                        <div class=" report_text">
+                                        <div class=" report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
@@ -567,24 +593,24 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                             <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
+                                             <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
 
                                         </div>
                                     {% endif %}
                                 {% endfor %} <!--  this ends for image loop -->
                                 {% else %}
                                     {% if mile_quest.slug == "upload-picture" %}
-                                        <div class="report_text">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
                                                 </div>
-                                                   <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
+                                                   <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
                                         </div>
                                     {% endif %}
 
                                     {% if mile_quest.slug == "picture-description" %}
-                                        <div class=" report_text">
+                                        <div class=" report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
@@ -592,7 +618,7 @@
                                             <div class="form-group addpicture">
                                                     <input type="file" id="input05">
                                                 </div>
-                                             <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
+                                             <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
 
                                         </div>
                                     {% endif %}
@@ -604,12 +630,12 @@
 
                                 {% for mile_quest in milestone_questions %}
                                 {% if mile_quest.slug == "milestone-description" %}
-                                        <div class="col-md-6 report_text">
+                                        <div class="col-md-6 report_text" id="ques_{{mile_quest.id}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}"  class="textarea_file">{{mileobj.description|striptags}}</textarea>
                                             </div>
-                                             <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
+                                             <h5><a href="javascript:void(0);" onclick="return add_fields({{mile_quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
                                         </div>
                                     {% endif %}
                                     {% endfor %}
@@ -618,16 +644,16 @@
                             </div> <!-- milestone class -->
                             {% endwith %}
                             {% endfor %} <!--  this for loop for number of milestones-->
-                                  <div class="form-group addmilestone click_buttons">
-                                       <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="edit_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="edit_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                                   </div>
+<!--                                  <div class="form-group addmilestone click_buttons">-->
+<!--                                       <div class="link-left">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="edit_clone_{{i}}_{{j}}">Add more</a>-->
+<!--                                        </div>-->
+<!--                                        <div class="link-center">-->
+<!--                                            <input type="hidden"/>-->
+<!--                                            <a href ="javascript:void(0);" class ="edit_remove_{{i}}_{{j}}">Remove</a>-->
+<!--                                        </div>-->
+<!--                                   </div>-->
 
                         {% endif %}
 <!--                            this is for parameter selection -->
@@ -848,13 +874,26 @@
                                 {% for act_quest in activity_questions %}
 
                                     {% if act_quest.slug == "activity-name" %}
+                                    <div class=" report_text" id="ques_{{act_quest.id}}">
                                         <p>{{act_quest.text|title}}</p>
+<!--                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">-->
+                                        {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
+                                        {%  if milestone_activitieslist %}
+                                        <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% else %}
                                         <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
+                                        {% endif %}
                                          <h5><a href="javascript:void(0);" onclick="return add_fields({{act_quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
+                                         </div>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
-                                    <div class=" report_text">
+                                    <div class=" report_text" id="ques_{{act_quest.id}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
@@ -867,7 +906,7 @@
                                 {% for act_quest in activity_questions %}
                                 <div class="col-md-6 report_text">
                                 {% if act_quest.slug == "upload-picture" %}
-                                    <div class=" report_text">
+                                    <div class=" report_text" id="ques_{{act_quest.id}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group upload_text">
                                             <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0">
@@ -876,7 +915,7 @@
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
-                                    <div class=" report_text">
+                                    <div class=" report_text" id="ques_{{act_quest.id}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
                                             <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
@@ -912,6 +951,7 @@
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
+                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
                                             <option value="0">Select</option>
@@ -920,12 +960,13 @@
                                             {% endfor %}
                                         </select>
                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{param_quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
+                                        </div>
                                     </div>
                                     {% endif %}
 
 
                                     {% if param_quest.slug == "about-parameter" %}
-                                    <div class="col-md-12 report_text ">
+                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="">
                                             <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
@@ -1473,13 +1514,25 @@
                                 {% for act_quest in activity_questions %}
 
                                     {% if act_quest.slug == "activity-name" %}
+                                    <div class=" report_text" id="ques_{{act_quest.id}}">
                                         <p>{{act_quest.text|title}}</p>
-                                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >
+<!--                                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{{mileobj.name}}" >-->
+                                    {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
+                                        {% if  milestone_activitieslist %}
+                                        <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}" {% if i.id == mileobj.object_id %} selected=selected {% endif %}>{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% else %}
+                                        <input type="text " class="input_section" id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value="{% if mileobj.name %} {{mileobj.name}} {% endif %}" >
+                                        {% endif %}
                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{act_quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
-                                    <div class=" report_text">
+                                    <div class=" report_text" id="ques_{{act_quest.id}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}">{{mileobj.description|striptags}} </textarea>
@@ -1492,7 +1545,7 @@
                                 {% get_mile_act_images mileobj as imagelist %}
                                 {% for imageobj in imagelist %}
                                 {% for act_quest in activity_questions %}
-                                <div class="col-md-6 report_text">
+                                <div class="col-md-6 report_text" id="ques_{{act_quest.id}}">
                                 {% if act_quest.slug == "upload-picture" %}
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}} </p>
@@ -1503,7 +1556,7 @@
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
-                                    <div class=" report_text">
+                                    <div class=" report_text" id="ques_{{act_quest.id}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
                                             <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value = "{{imageobj.description}}" >
@@ -1550,6 +1603,7 @@
                                     {% if param_quest.slug == "parameter-selection" %}
 
                                     <div class="col-md-6 report_text parameter_section">
+                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
                                             <option value="0">Select</option>
@@ -1558,12 +1612,13 @@
                                             {% endfor %}
                                         </select>
                                         <h5><a href="javascript:void(0);" onclick="return add_fields({{param_quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
+                                        </div>
                                     </div>
                                     {% endif %}
 
 
                                     {% if param_quest.slug == "about-parameter" %}
-                                    <div class="col-md-12 report_text ">
+                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="">
                                             <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description|striptags}}</textarea>
@@ -3032,7 +3087,6 @@ $(document).ready(function() {
     
     var request_url = "{{request.get_full_path|safe}}"
     function remove_fields(ids,block_type,object_id,period){
-    debugger;
     $.ajax({
             url: '/report/removed/fields/',
             type: 'GET',
@@ -3053,7 +3107,14 @@ $(document).ready(function() {
     }
 </script>
 
-
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--    var ids_list = "{{all_questionlist|safe}}"-->
+<!--    for(i=0;i<ids_list.length;i++){-->
+<!--        $("#ques_"+ids_list[0]).hide();-->
+<!--    }-->
+<!--    });-->
+<!--</script>-->
 <script type="text/javascript">
     var request_url = "{{request.get_full_path|safe}}"
     var redirect_url = "/report/final/design/?slug="+'{{projectobj.slug}}'+'&report_id='+'{{request.GET.report_id}}'+'&div_id='+'{{request.GET.div_id}}'               
@@ -3061,14 +3122,19 @@ $(document).ready(function() {
     $.ajax({
             url: '/report/adding/fields/',
             type: 'GET',
+            
             data: { id:ids,
                     report_id:"{{request.GET.report_id}}",
                     
                     remove_obj:remove_obj_id,
                     },
-            
+            contentType: "application/json; charset=utf-8",
             success: function(data){
-                    window.location.href = '/report/final/design/?slug={{projectobj.slug}}&report_id={{request.GET.report_id}}&key=removed_template&div_id='+div_id
+                    var qid = data.ids_list;
+                for (i=0;i<qid.length;i++){
+                    $('#ques_'+qid[i]).hide();
+                }
+                    //window.location.href = '/report/final/design/?slug={{projectobj.slug}}&report_id={{request.GET.report_id}}&key=removed_template&div_id='+div_id
             },
             
         });

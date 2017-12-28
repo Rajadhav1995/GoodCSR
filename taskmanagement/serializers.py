@@ -9,7 +9,6 @@ class TaskSerializer(serializers.ModelSerializer):
     expected_end_date = serializers.DateTimeField()
     active = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
-#    project_slug = serializers.SerailizerMethodField()
 
     class Meta:
         model = Task
@@ -21,9 +20,6 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj):
         return obj.get_status_display()
-    
-#    def get_project_slug(self, obj):
-#        return obj.project.slug
 
 
 class ActivitySerializer(serializers.ModelSerializer):
