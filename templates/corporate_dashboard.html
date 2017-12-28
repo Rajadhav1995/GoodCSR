@@ -103,7 +103,7 @@
             <li>
               <h3>No. of Beneficiaries</h3>
                  <img class="key-image" src="/static/img/key-icon2.png" alt="">
-                <h4 class="title-pad">{% if total_beneficiaries %}{{total_beneficiaries}} {% endif %}</h4> 
+                <h4 class="title-pad">{% if total_beneficiaries %}{{total_beneficiaries | intcomma}} {% endif %}</h4> 
             </li>
             <li>
               <h3>% Total budget disbursed<span></span></h3>
