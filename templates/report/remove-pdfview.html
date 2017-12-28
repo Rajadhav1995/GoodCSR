@@ -508,6 +508,9 @@
         <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
         {% for i,v in previousquarter_list.items %}
         {% with forloop.counter as j %}
+        {% get_previous_tab_quests 3 as ques_list %}
+          {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
+            {% if tab_removed.0 == 'false' %}
         {% getreport_status report_id v 1 as reportupdates %}
         {% if reportupdates.0 == True %}
         <header style="margin-top:50px">
@@ -785,6 +788,7 @@
         </div>
         <!--  container div ends here -->
         <!--page 6th contents ends here -->
+        {% endif %}
         {% endif %} <!-- if condition to check object is present or not -->
         {% endwith %} <!-- for loop counter ends here -->
         {% endfor %} <!-- the main previous quarters loop ends here -->
@@ -792,6 +796,9 @@
         <!--Current Quarter Updates starts here -->
         {% for i,v in currentquarter_list.items %}
         {% with forloop.counter as j %}
+        {% get_previous_tab_quests 4 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
         {% getreport_status report_id v 2 as reportupdates %}
         {% if reportupdates.0 == True %}
         <header style="margin-top:50px">
@@ -1601,6 +1608,7 @@
         </footer>
         </div>
         <!--page 9 ends here -->
+        {% endif %}
         {% endif %} <!-- if current quarter updates is created -->
         {% endwith %} <!-- for loop counter ends here -->
         {% endfor %} <!-- the main current quarters loop ends here -->
@@ -1609,6 +1617,9 @@
 <!--page 10 starts here ie.. about quarter,budget, and about the budget -->
         {% for i,v in futurequarter_list.items %}
         {% with forloop.counter as j %}
+        {% get_previous_tab_quests 5 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
         {% getreport_status report_id v 3 as reportupdates %}
         {% if reportupdates.0 == True %}
 
@@ -1732,7 +1743,7 @@
         </footer>
         </div>
         <!--page 10 ends here -->
-
+        {% endif %}
         {% endif %} <!-- if next quarter updates is created -->
         {% endwith %} <!-- for loop counter ends here -->
         {% endfor %} <!-- the main next quarters loop ends here -->
