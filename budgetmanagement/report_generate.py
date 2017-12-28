@@ -753,6 +753,8 @@ def remove_milesact_child(ques_obj,ids):
     else:
         removed_list.append(ids)
     return removed_list
+    
+    
 from django.http import JsonResponse
 def save_removed_fields(request):
     quest_ids_list = []
