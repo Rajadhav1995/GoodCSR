@@ -91,7 +91,6 @@ def get_budget_lineitem(row,projectobj):
         lineitem = BudgetPeriodUnit.objects.get(budget_period = budget_periodobj,active=2)
     except:
         lineitem = None
-    # import ipdb; ipdb.set_trace()
     return lineitem
 
 @register.assignment_tag
@@ -206,8 +205,6 @@ def get_parameter(obj,block_id):
                 master_names.append(i.keyparameter.name)
                 if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
                     pie_chart = 0
-                    
-                    # single_parameter = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=report_para[0], start_date__gte=obj.start_date,end_date__lte=obj.end_date).values_list('parameter_value',flat=True))
                 else:
                     pie_chart = 1
     return report_para
@@ -223,7 +220,6 @@ def get_parameter_values(obj,para_obj):
     numeric_parameter_value = 0
     report_para = []
 
-    # report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
     from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
     if para_obj.keyparameter:
         main_list = pie_chart_mainlist_report(para_obj.keyparameter,obj.start_date,obj.end_date)
@@ -398,7 +394,6 @@ def get_index_page_number(quarter):
     page_obj = Answer.objects.get(text__iexact='index_count')
     page_number = page_obj.object_id
     page_obj.object_id = 1
-    # import ipdb; ipdb.set_trace()
     function_count = int(page_obj.inline_answer)
     page_obj.inline_answer = function_count
 
@@ -439,8 +434,4 @@ def get_tranches(duration,objects):
     end_date = duration.split(' to ')[1].rstrip()
     tranche_obj = objects.filter(due_date__gte=start_date,due_date__lte=end_date)
     tranche_amount = tanchesamountlist(tranche_obj)
-    # planned_amount = tranche_amount['planned_amount']
-    # actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
-    # recommended_amount = tranche_amount['recommended_amount']
-    # utilized_amount = tranche_amount['utilized_amount']
     return tranche_obj,tranche_amount

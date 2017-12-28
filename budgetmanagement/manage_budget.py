@@ -211,6 +211,8 @@ def get_year_quarterlist(selected_year,budget_id):
         ed = ed - timedelta(days=1)
         if ed > budget_enddate:
             ed = budget_enddate
+        if str(selected_year) == "Select Year":
+            quarter_list.update({i:sd.strftime("%b %Y")+"-"+ed.strftime("%b %Y")})
         if str(sd.year) == str(selected_year) or str(ed.year) == str(selected_year):
             quarter_list.update({i:sd.strftime("%b %Y")+"-"+ed.strftime("%b %Y")})
         sd = ed + timedelta(days=1)

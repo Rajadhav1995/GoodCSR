@@ -34,6 +34,9 @@ def report_form(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget_obj = Budget.objects.get_or_none(project=project)
+    if not budget_obj:
+        msg = "Budget is not created"
+        return render(request,'report/report-form.html',locals())
     from budgetmanagement.manage_budget import get_budget_quarters
     budget_quarters = get_budget_quarters(budget_obj) 
     if request.method == 'POST':
@@ -314,7 +317,6 @@ def get_quarters(projectobj):
                 futurequarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
             elif sd < report_start_date and ed < report_start_date:
                 previousquarter_list.update({i:str(sd.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))+" to "+str(ed.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"))})
-    print budget_quarters,report_start_date,report_end_date
     return previousquarter_list,currentquarter_list,futurequarter_list
 
 def get_quarter_report(request,itemlist,quarter):
