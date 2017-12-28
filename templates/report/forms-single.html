@@ -23,6 +23,10 @@
                      <p align="right" class="edit_templete"><a href="#">Edit Templete</a></p>
                      </div>-->
                   <div id="template" >
+                    {% get_previous_tab_quests 1 as quest_list %}
+                        {% get_block_tab_removed quest_list 1 projectreportobj as tab_removed %}
+                        
+                        {% if tab_removed.0 == 'false' %}
                      <h3 class="heading">{{locals_list.block1.name}}</h3>
                      <form action="." id='ui-accordion-accordion-panel-0' method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -84,6 +88,11 @@
                         </div>
                         <input type="submit" class="report_save " name="cover_page_save" id="submit_0" value = "Save"></input>
                      </form>
+                     {% endif %}
+                     
+                     {% get_previous_tab_quests 2 as quest_list %}
+                      {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
+                       {% if tab_removed.0 == 'false' %}
                      <h3 class="heading">{{locals_list.block2.name}}</h3>
                      <form action="." id='ui-accordion-accordion-panel-1' method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -153,10 +162,13 @@
                               {% endfor%}
                            </div>
                            <input type= "submit" class="report_save" name= "project_summary_save" id="submit_1" value="Save"></input>
-                       
+                       {% endif %}
                         <!-- Previous Quarters Updates starts here                           -->
                         {% for i,v in previousquarter_list.items %}
                         {% with forloop.counter as j %}
+                           {% get_previous_tab_quests 3 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
                         <h3 class="heading"> Previous Quarter Updates :{{v}}</h3>
                      <form action=".?slug={{slug}}&report_id={{report_id}}" id='ui-accordion-accordion-panel-{{j|add:'2'}}' method = "post">
                         {% csrf_token %}
@@ -703,12 +715,16 @@
                            <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>
                        
                      </form>
+                     {% endif %}
                      {% endwith %}
                      {% endfor %}
                      <!-- Previous quarter updates ends here -->
                      <!-- current quarter upodates starts here -->
                      {% for i,v in currentquarter_list.items %}
                      {% with forloop.counter as j %}
+                        {% get_previous_tab_quests 4 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
                      <h3 class="heading">Current Quarter Updates :{{v}}</h3>
                      <form action=".?slug={{slug}}&report_id={{report_id}}" id='ui-accordion-accordion-panel-{{j|add:previous_len}}' method = "post">
                         {% csrf_token %}
@@ -1265,12 +1281,17 @@
                            <input type= "submit" class="report_save" id="submit_{{j|add:previous_len}}" value="Save"></input>
                         </div>
                      </form>
+                     {% endif %}
                      {% endwith %}
                      {% endfor %}
+                     </div>
                      <!--   End of current quarter updates                     -->
                      <!-- Next quarter updates starts here            -->
                      {% for i,v in futurequarter_list.items|slice:"1" %}
                      {% with forloop.counter as j %}
+                     {% get_previous_tab_quests 5 as ques_list %}
+                      {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
+                        {% if tab_removed.0 == 'false' %}
                      <h3 class="heading">Next Quarter Plan :{{v}}</h3>
                      <form action=".?slug={{slug}}&report_id={{report_id}}" id='ui-accordion-accordion-panel-{{j|add:current_len}}' method = "post">
                         {% csrf_token %}
@@ -1549,6 +1570,7 @@
                            <input type= "submit" class="report_save" id="submit_{{future_len}}" value="Save"></input>
                         </div>
                      </form>
+                     {% endif %}
                      {% endwith %} <!-- main quarter for loop ends here -->
                      {% endfor %}
                      <!--ends nexrt quarter updates -->

@@ -3161,7 +3161,6 @@ $(document).ready(function() {
     function add_tabs(questions,remove_obj_id,div_id){
         var quest_list = questions;
         var section = div_id;
-        alert(quest_list);
             $.ajax({
             url: '/report/adding/fields/',
             type: 'GET',
@@ -3172,7 +3171,7 @@ $(document).ready(function() {
                     },
             contentType: "application/json; charset=utf-8",
             success: function(data){
-                alert('success');
+                alert('added successfully');
                 $('.tab_'+section).hide();
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown){

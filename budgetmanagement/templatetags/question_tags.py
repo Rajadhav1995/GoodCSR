@@ -174,7 +174,7 @@ def get_removed_quest_list(quest_removed,quest_list,quarter_question_list):
     main_quest = []
     if quest_removed == "false":
         remove_obj_id = quest_list.id
-        final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id')
+        final_quest_list = quarter_question_list.exclude(id__in= literal_eval(quest_list.text)).order_by('id') if quest_list.text != '[]' else ''
     else:
         remove_obj_id = quest_list.id
         final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
@@ -203,7 +203,7 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
     else:
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period)
     
-    if quest_list:
+    if quest_list and quest_list.text :
 
 #        calling the function to reduce the complexity: meghana
         final_quest_list,remove_obj_id = get_removed_quest_list(quest_removed,quest_list,quarter_question_list)
@@ -211,7 +211,8 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
         final_quest_list = []
         if quest_removed == 'false':
             final_quest_list = quarter_question_list
-    return sorted(list(set(final_quest_list))),remove_obj_id
+    final_quest_list = get_sorted_list(final_quest_list)
+    return final_quest_list,remove_obj_id
     
 @register.assignment_tag
 def get_previous_removed(sub_questions,quest_removed,remove_id):
@@ -251,7 +252,7 @@ def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
     else:
         remove_obj = RemoveQuestion.objects.get_or_none(quarter_report= report_obj,
                 block_type = int(block_type),quarter_period = str(period))
-    if remove_obj :
+    if remove_obj and remove_obj.text :
         removed_list = literal_eval(remove_obj.text)
         remove_id = remove_obj.id if str(remove_obj.text) != '[]' else ''
         if set(removed_list) == set(ques_list):
@@ -262,3 +263,11 @@ def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
         tab_removed = 'false'
         remove_id = ''
     return tab_removed,remove_id
+
+
+def get_sorted_list(final_quest_list):
+    ids_list = []
+    for i in final_quest_list:
+        ids_list.append(i.id)
+    final_list = Question.objects.filter(id__in=list(set(ids_list))).order_by('id')
+    return final_list
