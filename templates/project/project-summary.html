@@ -314,7 +314,9 @@ $(document).ready(function() {
     {
       var obj = ff[i]
       var title = obj.title;
-      var wrapper         = $(".numeric_parameter_"+ title); //Fields wrapper
+      var title1 = title[0];
+      alert(title1)
+      var wrapper         = $(".numeric_parameter_"+ title[0] + "_" + title[1]); //Fields wrapper
       console.log(obj);
       if (obj.type == 'CUR') {
         var url = loc_url + '/' + "static/img/budget-icon.png";
@@ -422,7 +424,7 @@ function numberWithCommas(x) {
           {% for i in number_json1 %}
 
           <td>
-          <div class='numeric_parameter_{{i.title}}'  style="width:300px;"></div
+          <div class='numeric_parameter_{{i.title.0}}_{{i.title.1}}'  style="width:300px;"></div
             >
           </td>
           {% endfor %}
