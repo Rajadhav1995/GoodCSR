@@ -93,14 +93,29 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
 
+def get_form_saved(form,edit,task_progress,model_name,user,m_form,project,m):
+    if form.is_valid():
+        f=form.save(commit=False)
+        if m_form == 'TaskForm':
+            f.task_progress = task_progress
+        from projectmanagement.common_method import unique_slug_generator
+        f.slug = unique_slug_generator(f,edit)
+        f.save()
+        if model_name == 'Activity' or model_name == 'Task':
+            f.created_by = user
+            f.save()
+        form.save_m2m()
+        return 'true'
+
 def edit_taskmanagement(request,model_name,m_form,slug):
     url=request.META.get('HTTP_REFERER')
     add = "False"
     edit=''
+    task_progress =''
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     form=eval(m_form)
-    m=eval(model_name).objects.get_or_none(slug = slug)
+    m=eval(model_name).objects.get_or_none(slug = str(slug))
     project = Project.objects.get(slug =request.GET.get('slug') )
     if request.method == 'POST':
         if m_form == 'TaskForm':
@@ -111,18 +126,8 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             end_date = form.data['end_date']
         except:
             pass
-        if form.is_valid():
-            f=form.save(commit=False)
-            if m_form == 'TaskForm':
-                f.task_progress = task_progress
-            from projectmanagement.common_method import unique_slug_generator
-            f.slug = unique_slug_generator(f,edit)
-            f.save()
-            if model_name == 'Activity' or model_name == 'Task':
-                f.created_by = user
-                f.save()
-            form.save_m2m()
-            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        form_saved=get_form_saved(form,edit,task_progress,model_name,user,m_form,project,m)
+        return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
          form=form(user_id,project.id,instance=m)
     if model_name == 'Task':
