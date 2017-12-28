@@ -353,20 +353,26 @@ $(document).ready(function(){
 
         
         function quarteryear(){
+            var numberOfChecked = $('#selected_quarter_list .check-box:checkbox:checked').length;
+            var totalCheckboxes = $('#selected_quarter_list .check-box:checkbox').length;
+            var numberNotChecked = totalCheckboxes - numberOfChecked;
             $('#selected_quarter_list .check-box:checkbox').each(function(){
-       
-       if($(this).prop("checked") == true)
-        
+                   if($(this).prop("checked") == true)
+                    
+                       {
+                       selectedText = $(this).val();
+                       $('.filter_'+selectedText).show()
+                       }
+                   else{
+                       selectedText = $(this).val();
+                       $('.filter_'+selectedText).fadeOut()
+                       }
+                   
+                   });
+           if (numberNotChecked == totalCheckboxes)
            {
-           selectedText = $(this).val();
-           $('.filter_'+selectedText).show()
+            $("[class^=filter_]").show()
            }
-       else{
-           selectedText = $(this).val();
-           $('.filter_'+selectedText).fadeOut()
-           }
-       
-       });
         }
         
        $(".check-box").click(function(){
