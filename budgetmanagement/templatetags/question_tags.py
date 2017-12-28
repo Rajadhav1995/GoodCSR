@@ -12,7 +12,8 @@ from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,QuarterReportSection,
                                     BudgetPeriodUnit,Question,Block,Answer,
-                                    ReportParameter,ReportMilestoneActivity,RemoveQuestion)
+                                    ReportParameter,ReportMilestoneActivity,RemoveQuestion,
+                                    ProjectReport)
 from media.models import (Comment,)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity,Milestone
@@ -201,15 +202,16 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
         content_type=ContentType.objects.get_for_model(quarter_report),object_id = quarter_report.id)
     else:
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period)
-
+    
     if quest_list:
+
 #        calling the function to reduce the complexity: meghana
         final_quest_list,remove_obj_id = get_removed_quest_list(quest_removed,quest_list,quarter_question_list)
     else:
         final_quest_list = []
         if quest_removed == 'false':
             final_quest_list = quarter_question_list
-    return final_quest_list,remove_obj_id
+    return sorted(list(set(final_quest_list))),remove_obj_id
     
 @register.assignment_tag
 def get_previous_removed(sub_questions,quest_removed,remove_id):
@@ -228,3 +230,35 @@ def get_previous_removed(sub_questions,quest_removed,remove_id):
     else:
         sub_quest_list = sub_questions
     return sub_quest_list
+    
+@register.assignment_tag
+def get_previous_tab_quests(block_id):
+    block_slug = {1:"cover-page",2:"project-summary-sheet",3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
+    block = int(block_id)
+    ques_ids_list =Question.objects.filter(active=2,block__slug=block_slug.get(block)).values_list('id',flat=True).order_by('id')
+    return map(int,(list(chain(ques_ids_list))))
+    
+@register.assignment_tag
+def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
+    tab_removed = ''
+    removed_list = []
+    if object_id != 'None' and str(object_id) != '':
+        report_obj = QuarterReportSection.objects.get_or_none(id=object_id)
+        remove_obj = RemoveQuestion.objects.filter(active=2,quarter_report= report_obj,
+                block_type = block_type,quarter_period = period,
+                content_type = ContentType.objects.get_for_model(quarter_report),
+                object_id = literal_eval(object_id))
+    else:
+        remove_obj = RemoveQuestion.objects.get_or_none(quarter_report= report_obj,
+                block_type = int(block_type),quarter_period = str(period))
+    if remove_obj :
+        removed_list = literal_eval(remove_obj.text)
+        remove_id = remove_obj.id if str(remove_obj.text) != '[]' else ''
+        if set(removed_list) == set(ques_list):
+            tab_removed = 'true'
+        else:
+            tab_removed = 'false'
+    else:
+        tab_removed = 'false'
+        remove_id = ''
+    return tab_removed,remove_id
