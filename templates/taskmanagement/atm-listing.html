@@ -122,14 +122,14 @@
 
 <script>
 function activity(name,slug,act_id,super_cat_id) {
-    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?key="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
+    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
 }
 function task(name,slug,task_id,act_id,super_id) {
-    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?key="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
+    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
 }
 
 function milestone(name,slug,mile_id,task_ids) {
-    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?key="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
+    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
 }
 </script>
 
