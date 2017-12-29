@@ -460,6 +460,7 @@
                         {% endif %}
                         <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:'1'}}')">Add</a></h5>
                      </div>
+
                      {% endif %}
                      {% endfor %} <!-- this is for previous question loop ends for add functionality -->
                      {% else %}  <!--  edit functionality starts here -->
@@ -603,7 +604,7 @@
                            {% endif %}
                            {% endfor %}
                         </div>
-                        <!-- milestone class -->
+                    </div><!-- milestone class -->
                         {% endwith %}
                         {% endfor %} <!--  this for loop for number of milestones-->
                         <!--                                  <div class="form-group addmilestone click_buttons">-->
@@ -743,8 +744,8 @@
                         {% endif %} <!-- this if ends here. thsi is to check whether this is add and edit functionality  -->
                         <br>
                         <!--                                <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>-->
-<!--                     </div>-->
-                 
+                     </div>
+
                </form>
                {% endwith %}
                {% endfor %}
