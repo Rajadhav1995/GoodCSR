@@ -106,7 +106,6 @@ def edit_attachment(request):
     '''
     ids = request.GET.get('id')
     obj_id =  request.GET.get('obj_id')
-    # import ipdb; ipdb.set_trace()
     if request.method == 'GET':
         slug = Project.objects.get_or_none(id=obj_id).slug
     model =  request.GET.get('model')
@@ -133,8 +132,6 @@ def edit_attachment(request):
             keywords = add_keywords(keys,obj,attach_model,1)
         except:
             pass
-        import ipdb; ipdb.set_trace()
-        # ?slug=aditya-sample&model=Project
         return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(request.GET.get('slug'),model))
     return render(request,'attachment/doc_upload.html',locals())
 
