@@ -359,6 +359,29 @@ $(document).ready(function(){
            if (numberNotChecked == totalCheckboxes)
            {
             $("[class^=filter_]").show()
+            var selectedText = $("#year_id").find("option:selected").text();
+            $("#budget_table td.table-head").each(function()
+            {
+                if (selectedText == "Select Year")
+                {
+                    $("[class^=filter_]").show()
+                }
+                else{
+                if ($(this).text().search(new RegExp(selectedText, "i")) < 0) 
+                {
+                    $(this).fadeOut();
+                    selectedclass = $(this)["0"].className.split(" ")[0]
+                    $('.'+selectedclass).fadeOut()
+                     
+                 } 
+                 else 
+                 {
+                     $(this).show();
+                     selectedclass = $(this)["0"].className.split(" ")[0]
+                     $('.'+selectedclass).show()
+                }
+            }
+        });
            }
            else{
            $('#selected_quarter_list .check-box:checkbox').each(function()
@@ -406,7 +429,7 @@ $(document).ready(function(){
         $("#year_id").change(function () {
             var selectedText = $(this).find("option:selected").text();
             var selectedValue = $(this).val();
-            
+
             $("#budget_table td.table-head").each(function()
             {
                 if (selectedText == "Select Year")
