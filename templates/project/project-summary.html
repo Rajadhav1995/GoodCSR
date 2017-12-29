@@ -74,6 +74,7 @@ $(document).ready(function(){
 .key-image-budget {
     margin-top: 81px;
 }
+.first_section3 .float_section{float: left;margin: 0px 10px}
 /*.key-image{
   margin-top: -10px;
 }
@@ -412,16 +413,22 @@ function numberWithCommas(x) {
 <!--        </form>-->
         {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
+        
+        
         <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
         </div>
 
         <ul class="key_parameter parameter">
-          <div class="table-responsive" style="width:auto;">
+          {% if parameter_count >= 4 %}
+          <div class="table-responsive second_section3" style="width:auto;">
+            {% else %}
+            <div class="table-responsive first_section3" style="width:auto;">
+            {% endif %}
           <table class="table">
           {% for i in number_json1 %}
 
-          <td style="width:300px;">
+          <td style="width:300px;" class="float_section">
           <div class='numeric_parameter_{{i.title.0}}_{{i.title.1}}'  style="width:300px;"></div
             >
           </td>
@@ -429,7 +436,7 @@ function numberWithCommas(x) {
 
             {% if master_pin %}
             {% for lol in  master_pin %}
-            <td style="width:300px;">
+            <td style="width:300px;" class="float_section">
               <div style="width:300px;">
             	<!-- <h3>{{chart_name_pip}}</h3> -->
                 <div class="right-budget beni-dist">
@@ -443,7 +450,7 @@ function numberWithCommas(x) {
 
             {% if master_pip %}
             {% for rofl in master_pip %}
-             <td style="width:300px;">
+             <td style="width:300px;" class="float_section">
               <div style="width:300px;">
                 <div class="right-budget beni-dist beni-dist1">
                 <div id="{{rofl}}" style="width: 100%;float: left;"></div>
