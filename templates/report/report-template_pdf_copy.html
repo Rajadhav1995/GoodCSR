@@ -274,6 +274,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
             <!-- onload="window.print()" -->
             <body>
+            {% get_previous_tab_quests 1 as quest_list %}
+                    {% get_block_tab_removed quest_list 1 projectreportobj as tab_removed %}
+                      {% if tab_removed.0 == 'false' %}
               <div>
                <header>
 
@@ -354,6 +357,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                   </div>
                </header>
                </div>
+               {% endif %}
 
                <div class="page_break"></div>
 
@@ -389,7 +393,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                </div>
 
               <div class="page_break"></div>
-               
+               {% get_previous_tab_quests 2 as quest_list %}
+                {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
+                {% if tab_removed.0 == 'false' %}
                <div class="container" style="margin-left:-5px;">
                   <div class="margin_25">
                      
@@ -492,13 +498,16 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endfor %}
             
         </div>
+        {% endif %}
         <!--third page -->
        
         <!--                    third page contents ends -->
         <!--        fourth page contents starts-->
          <div class="page_break"></div>
         <div class="container" style="margin-left:-5px;">
-            
+            {% get_previous_tab_quests 2 as quest_list %}
+            {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
+            {% if tab_removed.0 == 'false' %}
             
              {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
             {% for i in ques.0 %}
@@ -515,14 +524,17 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endfor %}
             {% endif %}
             {% endfor %}
-            
+            {% endif %}
         </div>
         <!--fourth page contents end-->
         <div class="page_break"></div>.
         <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
         {% for i,v in previousquarter_list.items %}
         {% with forloop.counter as j %}
-        {% getreport_status report_id v 1 as reportupdates %}
+        {% get_previous_tab_quests 3 as ques_list %}
+        {% getreport_status report_id v 1 as reportupdates %}   
+        {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
+        {% if tab_removed.0 == 'false' %}
         {% if reportupdates.0 == True %}
         <div class="container" style="margin-left:-5px;">
         
@@ -839,6 +851,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
         <!--  container div ends here -->
         <!--page 6th contents ends here -->
+        {% endif %}
         {% endif %} <!-- if condition to check object is present or not -->
 
         {% endwith %} <!-- for loop counter ends here -->
@@ -850,7 +863,10 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% for i,v in currentquarter_list.items %}
         {% with forloop.counter as j %}
         
+        {% get_previous_tab_quests 4 as ques_list %}
         {% getreport_status report_id v 2 as reportupdates %}
+        {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
+        {% if tab_removed.0 == 'false' %}
         {% if reportupdates.0 == True %} 
         <div class="container">
         <div class="margin_25">
@@ -1568,6 +1584,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <!-- page height div ends -->
 
         <!--page 9 ends here -->
+        {% endif %}
         {% endif %} <!-- if current quarter updates is created -->
         {% endwith %} <!-- for loop counter ends here -->
         {% endfor %} <!-- the main current quarters loop ends here -->
@@ -1577,7 +1594,10 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         
         {% for i,v in futurequarter_list.items %}
         {% with forloop.counter as j %}
+        {% get_previous_tab_quests 5 as ques_list %}
         {% getreport_status report_id v 3 as reportupdates %}
+        {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
+        {% if tab_removed.0 == 'false' %}
         {% if reportupdates.0 == True %}
         <div class='page_break'></div>
         <div class="container" style="margin-left:10px">
@@ -1673,7 +1693,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         <!-- page height div ends -->
 
         <!--page 10 ends here -->
-
+        {% endif %}
         {% endif %} <!-- if next quarter updates is created -->
         {% endwith %} <!-- for loop counter ends here -->
         {% endfor %} <!-- the main next quarters loop ends here -->

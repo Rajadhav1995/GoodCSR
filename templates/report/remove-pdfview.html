@@ -528,9 +528,10 @@
         {% for i,v in previousquarter_list.items %}
         {% with forloop.counter as j %}
         {% get_previous_tab_quests 3 as ques_list %}
-          {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
-            {% if tab_removed.0 == 'false' %}
-        {% getreport_status report_id v 1 as reportupdates %}
+        {% getreport_status report_id v 1 as reportupdates %}   
+        {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
+        {% if tab_removed.0 == 'false' %}
+        
         {% if reportupdates.0 == True %}
         <header style="margin-top:50px">
             <div>
@@ -816,9 +817,10 @@
         {% for i,v in currentquarter_list.items %}
         {% with forloop.counter as j %}
         {% get_previous_tab_quests 4 as ques_list %}
-                      {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
-                        {% if tab_removed.0 == 'false' %}
         {% getreport_status report_id v 2 as reportupdates %}
+        {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
+        {% if tab_removed.0 == 'false' %}
+        
         {% if reportupdates.0 == True %}
         <header style="margin-top:50px">
             <div>
@@ -1637,9 +1639,10 @@
         {% for i,v in futurequarter_list.items %}
         {% with forloop.counter as j %}
         {% get_previous_tab_quests 5 as ques_list %}
-                      {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
-                        {% if tab_removed.0 == 'false' %}
         {% getreport_status report_id v 3 as reportupdates %}
+        {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
+        {% if tab_removed.0 == 'false' %}
+        
         {% if reportupdates.0 == True %}
 
         <header style="margin-top:50px">
