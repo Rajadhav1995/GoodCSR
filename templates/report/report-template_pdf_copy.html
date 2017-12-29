@@ -392,10 +392,11 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
                </div>
 
-              <div class="page_break"></div>
+              
                {% get_previous_tab_quests 2 as quest_list %}
                 {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
                 {% if tab_removed.0 == 'false' %}
+                <div class="page_break"></div>
                <div class="container" style="margin-left:-5px;">
                   <div class="margin_25">
                      
@@ -498,17 +499,17 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endfor %}
             
         </div>
-        {% endif %}
+        
         <!--third page -->
        
         <!--                    third page contents ends -->
         <!--        fourth page contents starts-->
-         <div class="page_break"></div>
-        <div class="container" style="margin-left:-5px;">
+         
             {% get_previous_tab_quests 2 as quest_list %}
             {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
             {% if tab_removed.0 == 'false' %}
-            
+            <div class="page_break"></div>
+              <div class="container" style="margin-left:-5px;">
              {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
             {% for i in ques.0 %}
             {% if i.q_type == 'OT' %}
@@ -526,8 +527,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endfor %}
             {% endif %}
         </div>
+        {% endif %}
         <!--fourth page contents end-->
-        <div class="page_break"></div>.
+        
         <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
         {% for i,v in previousquarter_list.items %}
         {% with forloop.counter as j %}
@@ -536,6 +538,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
         {% if tab_removed.0 == 'false' %}
         {% if reportupdates.0 == True %}
+        <div class="page_break"></div>.
         <div class="container" style="margin-left:-5px;">
         
         <div class=''>
