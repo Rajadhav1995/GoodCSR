@@ -60,7 +60,7 @@
             <div id="accordion">
                {% get_previous_tab_quests 1 as quest_list %}
                {% get_block_tab_removed quest_list 1 projectreportobj as tab_removed %}
-               <h3 id='0' >{{locals_list.block1.name}} {% if tab_removed.0 == 'true'%}<a class ="tab_remove tab_0" onclick="return add_tabs('{{quest_list|safe}}','{{tab_removed.1}}','0')">ADD</a>{% endif %}</h3>
+               <h3 id='0' >{{locals_list.block1.name}} {% if tab_removed.0 == 'true'%}<a class ="tab_remove tab_0" onclick="return add_tabs('{{quest_list|safe}}','{{tab_removed.1}}','0')">+</a>{% endif %}</h3>
                <form action="." class="tab_0" method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
                   <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
@@ -127,7 +127,7 @@
                <!--    Project summary sheet starts here                 -->
                {% get_previous_tab_quests 2 as quest_list %}
                {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
-               <h3 id='1' >{{locals_list.block2.name}}{% if tab_removed.0 == 'true'%}<a class ="tab_remove tab_1" onclick="return add_tabs('{{quest_list|safe}}','{{tab_removed.1}}','1')">ADD</a>{% endif %}</h3>
+               <h3 id='1' >{{locals_list.block2.name}}{% if tab_removed.0 == 'true'%}<a class ="tab_remove tab_1" onclick="return add_tabs('{{quest_list|safe}}','{{tab_removed.1}}','1')">+</a>{% endif %}</h3>
                <form action="." class="tab_1" method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
                   <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
@@ -204,7 +204,7 @@
                {% with forloop.counter as j %}
                {% get_previous_tab_quests 3 as ques_list %}
                {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
-               <h3 id="{{j|add:'1'}}" class="tab_{{j|add:'1'}}">Previous Quarter Updates :{{v}} {% if tab_removed.0 == 'true' %}<a class ="tab_remove tab_{{j|add:'1'}}" onclick="return add_tabs('{{ques_list|safe}}','{{tab_removed.1}}','{{j|add:'1'}}')">ADD</a>{% endif %}</h3>
+               <h3 id="{{j|add:'1'}}" class="tab_{{j|add:'1'}}">Previous Quarter Updates :{{v}} {% if tab_removed.0 == 'true' %}<a class ="tab_remove tab_{{j|add:'1'}}" onclick="return add_tabs('{{ques_list|safe}}','{{tab_removed.1}}','{{j|add:'1'}}')">+</a>{% endif %}</h3>
                <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{j|add:'1'}}" method = "post" enctype="multipart/form-data">
                   {% csrf_token %}
                   <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -743,7 +743,7 @@
                         {% endif %} <!-- this if ends here. thsi is to check whether this is add and edit functionality  -->
                         <br>
                         <!--                                <input type= "submit" class="report_save" id="submit_{{j|add:'1'}}" value="Save"></input>-->
-                     </div>
+<!--                     </div>-->
                  
                </form>
                {% endwith %}
@@ -754,7 +754,7 @@
                {% with forloop.counter as j %}
                {% get_previous_tab_quests 4 as ques_list %}
                {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
-               <h3 id={{j|add:previous_len}} class="tab_{{j|add:previous_len}}">Current Quarter Updates :{{v}} {% if tab_removed.0 == 'true'%}<a class ="tab_remove tab_{{j|add:previous_len}}" onclick="return add_tabs('{{ques_list|safe}}','{{tab_removed.1}}','{{j|add:previous_len}}')">ADD</a>{% endif %}</h3>
+               <h3 id={{j|add:previous_len}} class="tab_{{j|add:previous_len}}">Current Quarter Updates :{{v}} {% if tab_removed.0 == 'true'%}<a class ="tab_remove tab_{{j|add:previous_len}}" onclick="return add_tabs('{{ques_list|safe}}','{{tab_removed.1}}','{{j|add:previous_len}}')">+</a>{% endif %}</h3>
                <form action=".?slug={{slug}}&report_id={{report_id}}" class = "tab_{{j|add:previous_len}}" method = "post" enctype="multipart/form-data">
                {% csrf_token %}
                <input type="hidden" name="activity_count_1" value="1">
@@ -1669,7 +1669,7 @@
                {% with forloop.counter as j %}
                {% get_previous_tab_quests 5 as ques_list %}
                {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
-               <h3 id={{future_len}} class="tab_{{future_len}}">Next Quarter Plan :{{v}} {% if tab_removed.0 == 'true' %}<a class ="tab_remove tab_{{future_len}}" onclick="return add_tabs('{{ques_list|safe}}','{{tab_removed.1}}','{{future_len}}')">ADD</a>{% endif %}</h3>
+               <h3 id={{future_len}} class="tab_{{future_len}}">Next Quarter Plan :{{v}} {% if tab_removed.0 == 'true' %}<a class ="tab_remove tab_{{future_len}}" onclick="return add_tabs('{{ques_list|safe}}','{{tab_removed.1}}','{{future_len}}')">+</a>{% endif %}</h3>
                <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{future_len}}" method = "post" enctype="multipart/form-data">
                {% csrf_token %}
                <input type="hidden" name="activity_count_1" value="1">

@@ -69,7 +69,7 @@
                      {% get_previous_tab_quests 1 as quest_list %}
                         {% get_block_tab_removed quest_list 1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
-                     <h3 id='0' class="tab_0">{{locals_list.block1.name}}  <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',1,0,0,'0')">Remove</a></h3>
+                     <h3 id='0' class="tab_0">{{locals_list.block1.name}}  <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',1,0,0,'0')">X</a></h3>
                      <form action="." class="tab_0" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
@@ -146,7 +146,7 @@
                       {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
                        {% if tab_removed.0 == 'false' %}
 
-                     <h3 id='1' class="tab_1" >{{locals_list.block2.name}} <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',2,0,0,'1')">Remove</a></h3>
+                     <h3 id='1' class="tab_1" >{{locals_list.block2.name}} <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',2,0,0,'1')">X</a></h3>
                      <form action="." class="tab_1" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
@@ -230,7 +230,7 @@
                       {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
                         
-                    <h3 id="{{j|add:'1'}}" class = "tab_{{j|add:'1'}}">Previous Quarter Updates :{{v}}  <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h3>
+                    <h3 id="{{j|add:'1'}}" class = "tab_{{j|add:'1'}}">Previous Quarter Updates :{{v}}  <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">X</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{j|add:'1'}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -836,7 +836,7 @@
                       {% getreport_status report_id v 2 as reportupdates %}
                       {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
-                        <h3 id={{j|add:previous_len}} class = "tab_{{j|add:previous_len}}" >Current Quarter Updates :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h3>
+                        <h3 id={{j|add:previous_len}} class = "tab_{{j|add:previous_len}}" >Current Quarter Updates :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">X</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class = "tab_{{j|add:previous_len}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
@@ -1806,7 +1806,7 @@
                         {% getreport_status report_id v 3 as reportupdates %}
                       {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
-                        <h3 id={{future_len}} class = "tab_{{future_len}}">Next Quarter Plan :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h3>
+                        <h3 id={{future_len}} class = "tab_{{future_len}}">Next Quarter Plan :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">X</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{future_len}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
