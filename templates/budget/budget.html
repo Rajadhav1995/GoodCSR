@@ -40,7 +40,7 @@
     </div>
 	<div class="content-top margin-top">
       <div class="select-area">
-         <form id="filter_form" action=".?slug={{project_slug}}" method = "post" >{% csrf_token %}
+         <form id=" " action=".?slug={{project_slug}}" method = "post" >{% csrf_token %}
                  <input type="hidden" name="slug" value="{{project_slug}}">
                 <input type="hidden" name="budget_id" value="{{budget_id}}">
       	<label>See Data as </label>
@@ -356,7 +356,13 @@ $(document).ready(function(){
             var numberOfChecked = $('#selected_quarter_list .check-box:checkbox:checked').length;
             var totalCheckboxes = $('#selected_quarter_list .check-box:checkbox').length;
             var numberNotChecked = totalCheckboxes - numberOfChecked;
-            $('#selected_quarter_list .check-box:checkbox').each(function(){
+           if (numberNotChecked == totalCheckboxes)
+           {
+            $("[class^=filter_]").show()
+           }
+           else{
+           $('#selected_quarter_list .check-box:checkbox').each(function()
+           {
                    if($(this).prop("checked") == true)
                     
                        {
@@ -369,9 +375,6 @@ $(document).ready(function(){
                        }
                    
                    });
-           if (numberNotChecked == totalCheckboxes)
-           {
-            $("[class^=filter_]").show()
            }
         }
         
