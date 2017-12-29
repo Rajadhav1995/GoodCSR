@@ -793,7 +793,6 @@ def save_removed_fields(request):
     object_id = request.GET.get('object_id')
     period = request.GET.get('period')# this is to get the period for particular quarter so that to differentiate
     tab = request.GET.get('tab')
-    
     try:
         ques_obj = Question.objects.get_or_none(id=ids)
     except:
