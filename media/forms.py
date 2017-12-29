@@ -34,7 +34,7 @@ class ImageUpload(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
     class Meta:
         model = Attachment
-        fields  = ('date','description','attachment_file')
+        fields  = ('date','description','attachment_file','name')
 
 class ContactPersonForm(forms.ModelForm):
     '''

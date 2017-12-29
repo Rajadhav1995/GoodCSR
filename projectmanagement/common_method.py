@@ -29,6 +29,9 @@ def add_keywords(keys,obj,model,edit):
     '''
     if edit==1:
         delete = FileKeywords.objects.filter(content_type=ContentType.objects.get(model=model),object_id=obj.id)
+        for i in delete:
+            i.active = 0
+            i.save()
     key_list = Keywords.objects.filter(active=2)
     for i in keys:
         key_obj = Keywords.objects.get_or_none(name__iexact=i.strip())

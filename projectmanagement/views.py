@@ -38,7 +38,6 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
 
 def project_location(request,obj,location):
     # this function is to add or edit location for project
-    import ipdb; ipdb.set_trace()
     rem_id = request.POST.get('rem_id')
     city_var = request.POST.get('city_var')
     if rem_id != '':
