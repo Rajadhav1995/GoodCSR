@@ -69,7 +69,7 @@
                      {% get_previous_tab_quests 1 as quest_list %}
                         {% get_block_tab_removed quest_list 1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
-                     <h3 id='0' class="tab_0">{{locals_list.block1.name}}  <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',1,0,0,'0')">Remove</a></h3>
+                     <h3 id='0' class="tab_0">{{locals_list.block1.name}}  <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',1,0,0,'0')">X</a></h3>
                      <form action="." class="tab_0" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}" >
@@ -146,7 +146,7 @@
                       {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
                        {% if tab_removed.0 == 'false' %}
 
-                     <h3 id='1' class="tab_1" >{{locals_list.block2.name}} <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',2,0,0,'1')">Remove</a></h3>
+                     <h3 id='1' class="tab_1" >{{locals_list.block2.name}} <a class ="tab_remove" onclick="return remove_tabs('{{quest_list|safe}}',2,0,0,'1')">X</a></h3>
                      <form action="." class="tab_1" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="slug" value="{{slug}}" id="{{project_slug}}">
@@ -226,10 +226,11 @@
                     {% for i,v in previousquarter_list.items %}
                     {% with forloop.counter as j %}
                     {% get_previous_tab_quests 3 as ques_list %}
+                        {% getreport_status report_id v 1 as reportupdates %}
                       {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
                         
-                    <h3 id="{{j|add:'1'}}" class = "tab_{{j|add:'1'}}">Previous Quarter Updates :{{v}}  <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h3>
+                    <h3 id="{{j|add:'1'}}" class = "tab_{{j|add:'1'}}">Previous Quarter Updates :{{v}}  <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">X</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{j|add:'1'}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
@@ -239,7 +240,7 @@
                         <input type="hidden" name="block_type" value="3">
                         <input type="hidden" name="object_id" value="{{reportupdates.1}}">
                         <div>
-                        {% getreport_status report_id v 1 as reportupdates %}
+                        
                         {% if reportupdates.0 == False %}
 <!--                                if object is not present -->
                             {% get_final_questions previous_questionlist 3 reportupdates.1 v report_id "false" as final_previous_list %}
@@ -338,9 +339,9 @@
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
                                             </div>
-                                            <div class="form-group addpicture">
-                                                    <input type="file" id="input05">
-                                                </div>
+<!--                                            <div class="form-group addpicture">-->
+<!--                                                    <input type="file" id="input05">-->
+<!--                                                </div>-->
                                             <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
 
                                         </div>
@@ -612,9 +613,9 @@
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
                                             </div>
-                                            <div class="form-group addpicture">
-                                                    <input type="file" id="input05">
-                                                </div>
+<!--                                            <div class="form-group addpicture">-->
+<!--                                                    <input type="file" id="input05">-->
+<!--                                                </div>-->
                                             <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
 
                                         </div>
@@ -637,9 +638,9 @@
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
                                             </div>
-                                            <div class="form-group addpicture">
-                                                    <input type="file" id="input05">
-                                                </div>
+<!--                                            <div class="form-group addpicture">-->
+<!--                                                    <input type="file" id="input05">-->
+<!--                                                </div>-->
                                             <h5><a href="javascript:void(0);" onclick="return remove_fields({{mile_quest.id}},3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">Remove</a></h5>
 
                                         </div>
@@ -832,9 +833,10 @@
                     {% for i,v in currentquarter_list.items %}
                     {% with forloop.counter as j %}
                       {% get_previous_tab_quests 4 as ques_list %}
+                      {% getreport_status report_id v 2 as reportupdates %}
                       {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
-                        <h3 id={{j|add:previous_len}} class = "tab_{{j|add:previous_len}}" >Current Quarter Updates :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h3>
+                        <h3 id={{j|add:previous_len}} class = "tab_{{j|add:previous_len}}" >Current Quarter Updates :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">X</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class = "tab_{{j|add:previous_len}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
@@ -848,7 +850,7 @@
                         <input type="hidden" name="object_id" value="{{reportupdates.1}}">
                         <div>
 
-                        {% getreport_status report_id v 2 as reportupdates %}
+                        
                         {% if reportupdates.0 == False %}
                 <!--                        this is add functionality -->
                         {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
@@ -947,9 +949,9 @@
                                             <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
                                         </div>
                                         <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                        <div class="form-group addpicture">
-                                            <input type="file" id="file02">
-                                        </div>
+<!--                                        <div class="form-group addpicture">-->
+<!--                                            <input type="file" id="file02">-->
+<!--                                        </div>-->
                                     </div>
                                 {% endif %}
                                 </div>
@@ -1585,9 +1587,9 @@
                                             <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value = "{{imageobj.description}}" >
                                         </div>
                                         <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                        <div class="form-group addpicture">
-                                            <input type="file" id="file02">
-                                        </div>
+<!--                                        <div class="form-group addpicture">-->
+<!--                                            <input type="file" id="file02">-->
+<!--                                        </div>-->
                                     </div>
                                 {% endif %}
                                 </div>
@@ -1801,9 +1803,10 @@
                    {% for i,v in futurequarter_list.items|slice:"1" %}
                     {% with forloop.counter as j %}
                         {% get_previous_tab_quests 5 as ques_list %}
+                        {% getreport_status report_id v 3 as reportupdates %}
                       {% get_quarter_tab_removed ques_list v 5 reportupdates.1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
-                        <h3 id={{future_len}} class = "tab_{{future_len}}">Next Quarter Plan :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h3>
+                        <h3 id={{future_len}} class = "tab_{{future_len}}">Next Quarter Plan :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">X</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{future_len}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="activity_count_1" value="1">
@@ -1814,7 +1817,7 @@
                         <input type="hidden" name="block_type" value="5">
                         <input type="hidden" name="object_id" value="{{reportupdates.1}}">
                         <div>
-                        {% getreport_status report_id v 3 as reportupdates %}
+                        
                         {% if reportupdates.0 == False %}
                             {% get_final_questions next_questionlist 5 reportupdates.1 v report_id "false" as final_questionlist %}
                             {% for quest in final_questionlist.0 %}
@@ -2991,31 +2994,31 @@ $(document).ready(function() {
         text : 'Upload'
     });
 </script>
-   <script type="text/javascript">
-        $('#input05').filestyle({
-            text : '+ add Picture'
-        });
+<!--   <script type="text/javascript">-->
+<!--        $('#input05').filestyle({-->
+<!--            text : '+ add Picture'-->
+<!--        });-->
 
-        $('#input04').filestyle({
-            text : '+ add Milestone'
-        });
-       $('#file01').filestyle({
-            text : '+ Upload Image'
-        });
+<!--        $('#input04').filestyle({-->
+<!--            text : '+ add Milestone'-->
+<!--        });-->
+<!--       $('#file01').filestyle({-->
+<!--            text : '+ Upload Image'-->
+<!--        });-->
 
-        $('#file02').filestyle({
-            text : '+ add more picture'
-        });
-        $('#imge01').filestyle({
-            text : '+ add more picture'
-        });
-        $('#imge02').filestyle({
-            text : '+ add more picture'
-        });
-        $('#imge03').filestyle({
-            text : '+ add more picture'
-        });
-   </script>
+<!--        $('#file02').filestyle({-->
+<!--            text : '+ add more picture'-->
+<!--        });-->
+<!--        $('#imge01').filestyle({-->
+<!--            text : '+ add more picture'-->
+<!--        });-->
+<!--        $('#imge02').filestyle({-->
+<!--            text : '+ add more picture'-->
+<!--        });-->
+<!--        $('#imge03').filestyle({-->
+<!--            text : '+ add more picture'-->
+<!--        });-->
+<!--   </script>-->
 
 
 <!--<script>-->

@@ -196,14 +196,14 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
     main_quest = []
     block_slug = {3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
     remove_obj_id=''
-    if object_id != None:
+    if object_id != None :
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period,
         content_type=ContentType.objects.get_for_model(quarter_report),object_id = quarter_report.id)
     else:
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period)
     
-    if quest_list and quest_list.text :
+    if quest_list and quest_list.text and quest_list.text != '[]' :
 
 #        calling the function to reduce the complexity: meghana
         final_quest_list,remove_obj_id = get_removed_quest_list(quest_removed,quest_list,quarter_question_list)
@@ -243,12 +243,12 @@ def get_previous_tab_quests(block_id):
 def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
     tab_removed = ''
     removed_list = []
-    if object_id != 'None' and str(object_id) != '':
-        report_obj = QuarterReportSection.objects.get_or_none(id=object_id)
-        remove_obj = RemoveQuestion.objects.filter(active=2,quarter_report= report_obj,
+    if object_id != 'None' and str(object_id) != '' and object_id != None:
+        quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
+        remove_obj = RemoveQuestion.objects.get_or_none(active=2,quarter_report= report_obj,
                 block_type = block_type,quarter_period = period,
                 content_type = ContentType.objects.get_for_model(quarter_report),
-                object_id = literal_eval(object_id))
+                object_id = quarter_report.id)
     else:
         remove_obj = RemoveQuestion.objects.get_or_none(quarter_report= report_obj,
                 block_type = int(block_type),quarter_period = str(period))
