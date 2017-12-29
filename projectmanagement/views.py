@@ -9,7 +9,8 @@ from calendar import monthrange
 from projectmanagement.models import *
 from projectmanagement.forms import *
 from budgetmanagement.forms import get_tranche_form,TrancheForms
-from budgetmanagement.models import Tranche,ProjectReport
+from budgetmanagement.models import (Tranche,ProjectReport,Budget,
+                                    ProjectBudgetPeriodConf,BudgetPeriodUnit)
 from media.models import Attachment,Keywords,FileKeywords,ProjectLocation
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -124,6 +125,31 @@ def project_list(request):
     obj_list = userprojectlist(logged_user_obj)
     return render(request,'project/listing.html',locals())
 
+def get_project_budget_utilized_amount(projectobj,budgetobj):
+#    to get the project utilized amount for budget 
+    budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('id', flat=True)
+    budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist).values_list('utilized_unit_cost', flat=True)
+    budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
+    final_budget_period_utilizedamount = sum(map(int,budget_period_utilizedamount))
+    return final_budget_period_utilizedamount
+
+def auto_update_tranche_amount(final_budget_utilizedamount,project):
+    tranchelist = Tranche.objects.filter(project=project,active=2).order_by("disbursed_date")
+    for i in tranchelist:
+        i.utilized_amount = 0
+        i.save()
+        if final_budget_utilizedamount > 0:
+            if i.actual_disbursed_amount< final_budget_utilizedamount:
+                i.utilized_amount = i.actual_disbursed_amount
+                i.save()
+                final_budget_utilizedamount = final_budget_utilizedamount-i.utilized_amount
+            else:
+                i.utilized_amount = final_budget_utilizedamount 
+                i.save()
+                final_budget_utilizedamount = 0
+    return tranchelist
+
+
 def budget_tranche(request):
     '''
     This function is for Add budget tranche
@@ -157,6 +183,9 @@ def budget_tranche(request):
             obj.project = project
             obj.recommended_by = UserProfile.objects.get(id=request.POST.get('recommended_by'))
             obj.save()
+            budgetobj = Budget.objects.latest_one(project = project,active=2)
+            final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
+            auto_update_tranche_amount(final_budget_utilizedamount,project)
             return HttpResponseRedirect('/project/tranche/list/?slug=%s' %slug)
     return render(request,'budget/tranche.html',locals())
 
@@ -167,7 +196,7 @@ def tranche_list(request):
     slug =  request.GET.get('slug')
     obj = Project.objects.get(slug=slug)
     user_id = request.session.get('user_id')
-    tranche_list = Tranche.objects.filter(project=obj,active=2)
+    tranche_list = Tranche.objects.filter(project=obj,active=2).order_by("disbursed_date")
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user,obj)
@@ -351,6 +380,12 @@ def remove_record(request):
     deact = model.objects.get(id=ids).switch()
     if request.GET.get('model') == 'ProjectReport':
         deleting_objects = model.objects.get(id=ids).delete_report_answers()
+    if request.GET.get('model') == 'Tranche':
+        deact = model.objects.get(id=ids)
+        project = Project.objects.get(id=int(deact.project.id))
+        budgetobj = Budget.objects.latest_one(project = project,active=2)
+        final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
+        auto_update_tranche_amount(final_budget_utilizedamount,project)
     return HttpResponseRedirect(url)
 
 def manage_parameter_values(request):
