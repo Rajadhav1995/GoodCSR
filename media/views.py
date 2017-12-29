@@ -20,7 +20,7 @@ def list_document(request):
     except:
         ids = request.GET.get('id')
         obj = model.objects.get(id=ids)
-    attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model'))).order_by('-created')
+    attachment = Attachment.objects.filter(active=2,object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model'))).order_by('-created')
     image = PMU_URL
     key = request.GET.get('key')
     user_id = request.session.get('user_id')
@@ -106,7 +106,8 @@ def edit_attachment(request):
     '''
     ids = request.GET.get('id')
     obj_id =  request.GET.get('obj_id')
-    slug = Project.objects.get(id=obj_id).slug
+    if request.method == 'GET':
+        slug = Project.objects.get_or_none(id=obj_id).slug
     model =  request.GET.get('model')
     obj = Attachment.objects.get(id=ids)
     if obj.attachment_type==2:
@@ -131,7 +132,7 @@ def edit_attachment(request):
             keywords = add_keywords(keys,obj,attach_model,1)
         except:
             pass
-        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
+        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(request.GET.get('slug'),model))
     return render(request,'attachment/doc_upload.html',locals())
 
 def city_list(request):

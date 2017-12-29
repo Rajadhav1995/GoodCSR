@@ -27,7 +27,6 @@ width:450px;
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-                {{slug}}aadis
               {% if key == 1 %}
               <h3 class="border_line">Add Document</h3>
               {% else %}
@@ -46,6 +45,7 @@ width:450px;
             <form autocomplete="off" id="prog_edit" action="/upload/doc/?model={{model}}&slug={{slug}}&key={{key}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
             {% endif %}
             {% csrf_token %}
+
 
                             {% if key == 1 %}
                                 <div class="row">

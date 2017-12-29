@@ -417,11 +417,11 @@ function numberWithCommas(x) {
         </div>
 
         <ul class="key_parameter parameter">
-          <div class="table-responsive">
+          <div class="table-responsive" style="width:auto;">
           <table class="table">
           {% for i in number_json1 %}
 
-          <td>
+          <td style="width:300px;">
           <div class='numeric_parameter_{{i.title.0}}_{{i.title.1}}'  style="width:300px;"></div
             >
           </td>
@@ -429,7 +429,7 @@ function numberWithCommas(x) {
 
             {% if master_pin %}
             {% for lol in  master_pin %}
-            <td>
+            <td style="width:300px;">
               <div style="width:300px;">
             	<!-- <h3>{{chart_name_pip}}</h3> -->
                 <div class="right-budget beni-dist">
@@ -443,7 +443,7 @@ function numberWithCommas(x) {
 
             {% if master_pip %}
             {% for rofl in master_pip %}
-             <td>
+             <td style="width:300px;">
               <div style="width:300px;">
                 <div class="right-budget beni-dist beni-dist1">
                 <div id="{{rofl}}" style="width: 100%;float: left;"></div>
