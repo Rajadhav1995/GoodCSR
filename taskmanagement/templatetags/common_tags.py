@@ -65,6 +65,9 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     elif not quest_list and quest_removed == 'true':
         remove_id = ''
         final_questions =[]
+    else:
+        remove_id =''
+        final_questions = questions
     return final_questions,remove_id
     
 def get_removed_populate_questions(questions,project_report,block_type,quest_removed):

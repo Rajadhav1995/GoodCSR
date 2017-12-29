@@ -3149,7 +3149,6 @@ $(document).ready(function() {
     function remove_tabs(questions,block_type,object_id,period,div_id){
         var quest_list = questions;
         var section = div_id;
-        alert(quest_list);
             $.ajax({
             url: '/report/removed/fields/',
             type: 'GET',
@@ -3162,7 +3161,7 @@ $(document).ready(function() {
                     },
             contentType: "application/json; charset=utf-8",
             success: function(data){
-                alert('success');
+                alert('Removed successfully');
                 $('.tab_'+section).hide();
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown){
