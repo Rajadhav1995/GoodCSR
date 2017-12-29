@@ -287,6 +287,9 @@ def budgetutilization(request):
             line_item_updated_values = upload_budget_utlized(line_itemlist,i,request,budget_periodobj)
             budget_periodobj.__dict__.update(line_item_updated_values)
             budget_periodobj.save()
+        from projectmanagement.views import get_project_budget_utilized_amount,auto_update_tranche_amount
+        final_budget_utilizedamount = get_project_budget_utilized_amount(projectobj,budgetobj)
+        auto_update_tranche_amount(final_budget_utilizedamount,projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/budget_utilization.html",locals())
 
@@ -360,7 +363,7 @@ def budgetview(request):
         budget_periodconflist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).order_by("id")
         span_length = len(budget_period)
         budget_planned_amount,budget_utilized_amount = budget_amount_list(budgetobj,projectobj,quarter_list)
-        tranche_list = Tranche.objects.filter(project = projectobj,active=2)
+        tranche_list = Tranche.objects.filter(project = projectobj,active=2).order_by("disbursed_date")
         tranche_amount = tanchesamountlist(tranche_list)
         planned_amount = tranche_amount['planned_amount']
         actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
