@@ -110,6 +110,8 @@ def edit_attachment(request):
         slug = Project.objects.get_or_none(id=obj_id).slug
     model =  request.GET.get('model')
     obj = Attachment.objects.get(id=ids)
+    keys_list = FileKeywords.objects.filter(active=2,object_id=ids).values_list('key__name',flat=True)
+    keyss = ', '.join(keys_list)
     if obj.attachment_type==2:
         #key 1 for Document upload
         form = AttachmentForm(instance = obj)
@@ -129,6 +131,7 @@ def edit_attachment(request):
         try:
             keys = request.POST.get('keywords').split(',')
             attach_model = 'Attachment'
+
             keywords = add_keywords(keys,obj,attach_model,1)
         except:
             pass
