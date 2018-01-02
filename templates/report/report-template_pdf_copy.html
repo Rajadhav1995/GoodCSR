@@ -858,7 +858,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% endif %} <!-- if condition to check object is present or not -->
 
         {% endwith %} <!-- for loop counter ends here -->
-        <div class="page_break"></div>
+        
         {% endfor %} <!-- the main previous quarters loop ends here -->
         <!--page 7th starts here ie.. Current quarter loop starts here, page contains gantt chart,activities loop gantt chart script written at last -->
         <!--Current Quarter Updates star.ts here -->
@@ -871,6 +871,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         {% get_quarter_tab_removed ques_list v 4 reportupdates.1 projectreportobj as tab_removed %}
         {% if tab_removed.0 == 'false' %}
         {% if reportupdates.0 == True %} 
+        <div class="page_break"></div>
         <div class="container">
         <div class="margin_25">
         
