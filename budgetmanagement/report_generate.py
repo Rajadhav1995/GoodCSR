@@ -701,6 +701,8 @@ def finalreportdesign(request):
         return render(request,'report/final_report.html',locals())
 
 from collections import OrderedDict
+from budgetmanagement.templatetags import question_tags
+from taskmanagement.templatetags import common_tags
 def get_index_contents(slug,report_id):
 # to get the index contents dynamically by using a dictionay passing the contents
     contents = OrderedDict()
@@ -709,34 +711,38 @@ def get_index_contents(slug,report_id):
     number_dict ={}
     project = Project.objects.get_or_none(slug=slug)
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
-    # by using get_quarters() function getting the previous,current and next quarters list
-    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(report_obj)
-    # based on the answer object created to the report,if answer object is created to that report
-    # then we will display the contents which are present
+    
+    ques_list = question_tags.get_previous_tab_quests(2)
+    tab_removed,removed_id = common_tags.get_block_tab_removed(ques_list,2,report_obj)
     cover_summary_answers = answer=Answer.objects.filter(question__block__block_type=0,
         content_type = ContentType.objects.get_for_model(report_obj),object_id=report_id)
+    from common_method import get_index_quarter
+    # by using get_index_quarters() function getting the previous,current and next quarters list
+    # based on the answer object created to the report,if answer object is created to that report
+    # then we will display the contents which are present
+    previousquarter_list,currentquarter_list,futurequarter_list = get_index_quarter(report_obj)
     # if answer object is present for the particular report then add "About the Project" to the dict
-    if cover_summary_answers:
+    if cover_summary_answers and tab_removed == 'false':
         contents['1']= 'About the project'
         quarters['About the project'] = ''
         # if previous quarter then add to contents dict and in quarters dict give the list of quarters to that previous quarter
         # so that we can render the quarters based on the name of the content and iterate it
         # same way for current and next quarters is done
-        if previousquarter_list:
-            contents['2'] = 'Previous Quarter Updates'
-            quarters['Previous Quarter Updates'] = previousquarter_list
-        if currentquarter_list:
-            contents['3'] = 'Current Quarter Updates'
-            quarters['Current Quarter Updates'] = currentquarter_list
-        if futurequarter_list:
-            contents['4'] = 'Next Quarter Updates'
-            import operator
-            # here we getting all next quarter so we taking first quarter 
-            sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])
-            quarters['Next Quarter Updates']=sorted_futurequarter_list
-        contents['5'] = "Annexure"
-        quarters['Annexure']=''
-        number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
+    if previousquarter_list:
+        contents['2'] = 'Previous Quarter Updates'
+        quarters['Previous Quarter Updates'] = previousquarter_list
+    if currentquarter_list:
+        contents['3'] = 'Current Quarter Updates'
+        quarters['Current Quarter Updates'] = currentquarter_list
+    if futurequarter_list:
+        contents['4'] = 'Next Quarter Updates'
+        import operator
+        # here we getting all next quarter so we taking first quarter 
+        sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])
+        quarters['Next Quarter Updates']=sorted_futurequarter_list
+    contents['5'] = "Annexure"
+    quarters['Annexure']=''
+    number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
     return contents,quarters,number_dict
