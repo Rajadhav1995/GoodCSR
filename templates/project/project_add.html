@@ -240,7 +240,8 @@ width:450px;
                             </div>
                             <br>
                             {% endfor %}
-                            {% else %}
+                            {% endif %}
+                            {% if not location  %}
                             <label>Location {{forloop.counter}}<font color="red">*</font></label>
                             <div>
                                 <select class="form-control" onchange="get_city(this.value,1);" name="state_1" id="state" required>
@@ -373,7 +374,11 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
+                    {% if location %}
                     <input style="width: 10px;" value="{{location.count}}" name="name_count" id="activity_count" type="hidden"/>
+                    {% else %}
+                    <input style="width: 10px;" value="1" name="name_count" id="activity_count" type="hidden"/>
+                    {% endif %}
                     <input style="width: 0px;" value="" name="rem_id" id="rem_id" type="hidden"/>
                     <input style="width: 0px;" value="" name="city_var" id="city_var" type="hidden"/>
 
@@ -467,7 +472,7 @@ $(document).ready(function() {
     {% if location %}
     var loop_count = {{location.count}}
     {% else %}
-    var loop_count = 0
+    var loop_count = 1
     {% endif %}
     var loop_count = Number(loop_count);
     if (loop_count > 0) {
