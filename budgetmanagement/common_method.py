@@ -37,3 +37,34 @@ def key_parameter_chart(obj,parameter_id):
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
     
     return master_pip,master_pin,pin_title_name,pip_title_name,master_sh
+    
+import pytz
+from budgetmanagement.models import Answer ,QuarterReportSection
+from budgetmanagement.templatetags import question_tags
+def get_index_quarter(report_obj):
+    previousquarter_list={}
+    currentquarter_list={}
+    futurequarter_list={}
+    block_type = {1:3,2:4,3:5}
+    quarter_lists=Answer.objects.filter(
+        content_type = ContentType.objects.get_for_model(report_obj),object_id=report_obj.id).exclude(quarter=None).values_list('quarter',flat=True)
+    quarter_sections = QuarterReportSection.objects.filter(active=2,id__in = list(set(quarter_lists)))
+    
+    for i in quarter_sections:
+        sd = i.start_date
+        ed = i.end_date
+        period = str(sd.strftime("%Y-%m-%d"))+' to '+str(ed.strftime("%Y-%m-%d"))
+        blocks = block_type.get(i.quarter_type)
+        ques_list = question_tags.get_previous_tab_quests(blocks)
+        tab_removed,removed_id = question_tags.get_quarter_tab_removed(ques_list,period,blocks,i,report_obj)
+        if i.quarter_type == 1 and tab_removed == 'false':
+            previousquarter_list.update({int(i.quarter_order):period})
+        elif i.quarter_type == 2 and tab_removed == 'false':
+            currentquarter_list.update({int(i.quarter_order):period})
+        elif i.quarter_type == 3 and tab_removed == 'false':
+            futurequarter_list.update({int(i.quarter_order):period})
+    return previousquarter_list,currentquarter_list,futurequarter_list
+    
+    
+    
+

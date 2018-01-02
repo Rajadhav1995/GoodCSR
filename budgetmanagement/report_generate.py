@@ -701,6 +701,8 @@ def finalreportdesign(request):
         return render(request,'report/final_report.html',locals())
 
 from collections import OrderedDict
+from budgetmanagement.templatetags import question_tags
+from taskmanagement.templatetags import common_tags
 def get_index_contents(slug,report_id):
 # to get the index contents dynamically by using a dictionay passing the contents
     contents = OrderedDict()
@@ -709,19 +711,28 @@ def get_index_contents(slug,report_id):
     number_dict ={}
     project = Project.objects.get_or_none(slug=slug)
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
-    # by using get_quarters() function getting the previous,current and next quarters list
-    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(report_obj)
+    # this two functions get_previous_tab_quests and get_block_tab_removed 
+    # are used so that to get to know whether the tab is removed or not with out saving the report
+    # this also works if the form is saved so that in dex page if project summary sections is removed
+    # to remove that in index we are passing directly the block id as 2 and getting the values
+    ques_list = question_tags.get_previous_tab_quests(2)
+    tab_removed,removed_id = common_tags.get_block_tab_removed(ques_list,2,report_obj)
+    cover_summary_answers = Answer.objects.filter(question__block__slug = 'project-summary-sheet',
+        content_type = ContentType.objects.get_for_model(report_obj),object_id=report_id)
+    answers = Answer.objects.filter(content_type = ContentType.objects.get_for_model(report_obj),object_id=report_id)
+    from common_method import get_index_quarter
+    # by using get_index_quarters() function getting the previous,current and next quarters list
     # based on the answer object created to the report,if answer object is created to that report
     # then we will display the contents which are present
-    cover_summary_answers = answer=Answer.objects.filter(question__block__block_type=0,
-        content_type = ContentType.objects.get_for_model(report_obj),object_id=report_id)
+    previousquarter_list,currentquarter_list,futurequarter_list = get_index_quarter(report_obj)
     # if answer object is present for the particular report then add "About the Project" to the dict
-    if cover_summary_answers:
-        contents['1']= 'About the project'
-        quarters['About the project'] = ''
-        # if previous quarter then add to contents dict and in quarters dict give the list of quarters to that previous quarter
-        # so that we can render the quarters based on the name of the content and iterate it
-        # same way for current and next quarters is done
+    if answers:
+        if cover_summary_answers and tab_removed == 'false':
+            contents['1']= 'About the project'
+            quarters['About the project'] = ''
+            # if previous quarter then add to contents dict and in quarters dict give the list of quarters to that previous quarter
+            # so that we can render the quarters based on the name of the content and iterate it
+            # same way for current and next quarters is done
         if previousquarter_list:
             contents['2'] = 'Previous Quarter Updates'
             quarters['Previous Quarter Updates'] = previousquarter_list
@@ -736,7 +747,7 @@ def get_index_contents(slug,report_id):
             quarters['Next Quarter Updates']=sorted_futurequarter_list
         contents['5'] = "Annexure"
         quarters['Annexure']=''
-        number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
+    number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
     return contents,quarters,number_dict
