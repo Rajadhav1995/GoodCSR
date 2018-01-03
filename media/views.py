@@ -8,7 +8,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from pmu.settings import PMU_URL
 from projectmanagement.models import Project,Boundary
-from media.forms import AttachmentForm,ImageUpload
+from media.forms import AttachmentForm,ImageUpload,ImageUploadTimeline
 from projectmanagement.common_method import unique_slug_generator,add_keywords
 
 def list_document(request):
