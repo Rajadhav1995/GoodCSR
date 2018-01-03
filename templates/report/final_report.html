@@ -86,24 +86,24 @@
                                        {% for sub in sub_questions.0 %}
 
                                            {% if sub.q_type == 'APT' and sub.q_name == 'report_duration' %}
-                                                <div class="col-md-6 report_text" id="ques_{{sub.q_id}}">
+                                                <div class="col-md-6 report_text" id="ques_{{sub.q_id}}_0">
                                                   <p>{{sub.q_text}}</p>
                                                     {% get_from_to_dates sub.answer as duration %}
 
                                                     <input type = 'text' name = "{{sub.q_name}}_start_{{sub.q_id}}" value = "{{duration.0}}" class="input_datepicker" ></input> &nbsp; &nbsp;To &nbsp; &nbsp;
                                                     <input type = 'text' name = "{{sub.q_name}}_end_{{sub.q_id}}" value = "{{duration.1}}" class="input_datepicker"></input>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'0')">Remove</a></h5>
                                                 </div>
                                            {% elif sub.q_type == 'APT' %}
 
-                                               <div class="col-md-6 report_text" id="ques_{{sub.q_id}}">
+                                               <div class="col-md-6 report_text" id="ques_{{sub.q_id}}_0">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section"></input>
-                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'')">Remove</a></h5>
+                                                  <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'0')">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'API' %}
 
-                                               <div class="logo-partner" id="ques_{{sub.q_id}}">
+                                               <div class="logo-partner" id="ques_{{sub.q_id}}_0">
                                                   <h6>{{sub.q_text}}</h6>
                                                   <img src="{{sub.answer}}" style="">
                                                   <!--                                                                <img src="{{sub.answer}}"  alt="" title="" height='117px' width = '100px' />-->
@@ -111,27 +111,27 @@
                                                      <img src="/static/img/browse.png">
                                                      <input type="file" name= "{{sub.q_name}}_{{sub.q_id}}"  class="input_file"></input>
                                                      <div class="col-md-6 report_text">
-                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'')">Remove</a></h5>
+                                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},1,0,0,'0')">Remove</a></h5>
                                                     </div>
                                                   </div>
                                                </div>
                                            {% endif %}
                                        {% endfor %}
                                {% else %}
-                                   <div class="col-md-6 report_text" id="ques_{{i.q_id}}">
+                                   <div class="col-md-6 report_text" id="ques_{{i.q_id}}_0">
                                       <p>{{i.q_text}}</p>
                                       {% if i.q_type == 'T' %}
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'')">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'0')">Remove</a></h5>
                                       {% elif i.q_type == 'ck' %}
                                             <textarea name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer|safe}}" required="" class="textarea_file">{{i.answer|striptags}}</textarea>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'')">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'0')">Remove</a></h5>
                                       {% elif i.q_type == 'F' %}
                                         {% if i.answer %}
                                           <img src="{{image_url}}{{i.answer}}"  alt="" title="" height='117px' width = '100px' />
                                         {% endif %}
                                           <input type = "file" name= "{{i.q_name}}_{{i.q_id}}" id = "{{i.q_name}}_{{i.q_id}}"  class="input_file"></input>
-                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'')">Remove</a></h5>
+                                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{i.q_id}},1,0,0,'0')">Remove</a></h5>
                                       {% endif %}
                                    </div>
                                {% endif %}
@@ -160,7 +160,7 @@
                                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
                                        {% for sub in sub_questions.0 %}
                                            {% if sub.q_type == 'APT' and sub.q_name == 'project_duration' %}
-                                                <div class="col-md-6 report_text" id="ques_{{sub.q_id}}">
+                                                <div class="col-md-6 report_text" id="ques_{{sub.q_id}}_1">
                                                   <p>{{sub.q_text}}</p>
                                                     {% get_from_to_dates sub.answer as duration %}
 
@@ -169,13 +169,13 @@
                                                   <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0,'1')">Remove</a></h5>
                                                 </div>
                                            {% elif sub.q_type == 'APT' %}
-                                               <div class="col-md-6 report_text" id="ques_{{sub.q_id}}">
+                                               <div class="col-md-6 report_text" id="ques_{{sub.q_id}}_1">
                                                   <p>{{sub.q_text}}</p>
                                                   <input type = 'text' name = "{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer}}" class="input_section" ></input>
                                                   <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0,'1')">Remove</a></h5>
                                                </div>
                                            {% elif sub.q_type == 'ck' %}
-                                                    <div class="col-md-12 report_text" id="ques_{{sub.q_id}}">
+                                                    <div class="col-md-12 report_text" id="ques_{{sub.q_id}}_1">
                                                     <p>{{sub.q_text}}</p>
                                                     
                                                     <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|striptags}}</textarea>
@@ -184,7 +184,7 @@
                                                     </div>
                                                     </div>
                                            {% elif sub.q_type == 'API' %}
-                                               <div class="logo-partner" id="ques_{{sub.q_id}}">
+                                               <div class="logo-partner" id="ques_{{sub.q_id}}_1">
                                                   <h6>{{sub.q_text}}</h6>
                                                   <img src="{{sub.answer}}" style="">
                                                   <!--                                                                <img src="{{sub.answer}}"  alt="" title="" height='117px' width = '100px' />-->
@@ -196,7 +196,7 @@
                                            {% endif %}
                                        {% endfor %}
                                {% else %}
-                                   <div class="col-md-6 report_text" id="ques_{{i.q_id}}">
+                                   <div class="col-md-6 report_text" id="ques_{{i.q_id}}_1">
                                       <p>{{i.q_text}}</p>
                                       {% if i.q_type == 'T' %}
                                           <input type="text" name="{{i.q_name}}_{{i.q_id}}" id="{{i.q_name}}_{{i.q_id}}" value = "{{i.answer}}" required="" class="input_section"></input>
@@ -248,7 +248,7 @@
                             {% for quest in final_previous_list.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
-                            <div class="col-md-6 report_text" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{j|add:'1'}}">
                                 <p>{{quest.text|title}}</p>
                                 {%  get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
@@ -258,7 +258,7 @@
 
 <!--                            this is for key achievements -->
                             {% if quest.slug == "key-achievements-in-this-quarter" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
                                 <p>{{quest.text|title}}</p>
                                     <!-- timeline slider -->
                                     {% if timeline_json != '[]' %}
@@ -307,7 +307,7 @@
                                     <div class="col-md-6 report_text parameter_section">
                                     {% for mile_quest in milestone_questions %} 
                                     {% if mile_quest.slug == "milestone-name" %}
-                                        <div class="report_text" id="ques_{{mile_quest.id}}">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                         <p>{{mile_quest.text|title}}</p>
                                         {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
                                         {% if milestone_activitieslist %}
@@ -325,7 +325,7 @@
                                     {% endif %}
 
                                     {% if mile_quest.slug == "upload-picture" %}
-                                        <div class="report_text" id="ques_{{mile_quest.id}}">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
@@ -335,7 +335,7 @@
                                     {% endif %}
 
                                     {% if mile_quest.slug == "picture-description" %}
-                                        <div class=" report_text" id="ques_{{mile_quest.id}}">
+                                        <div class=" report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
@@ -354,7 +354,7 @@
                                      
                                 {% for mile_quest in milestone_questions %}
                                 {% if mile_quest.slug == "milestone-description" %}
-                                        <div class="col-md-6 report_text" id="ques_{{mile_quest.id}}">
+                                        <div class="col-md-6 report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_0"  class="textarea_file"></textarea>
@@ -418,7 +418,7 @@
 <!--                            this is for budget table display-->
 
                             {% if quest.slug == "budget-utlization-tranches" %}
-                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
                                     <p>{{quest.text|title}}</p>
                                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
@@ -512,7 +512,7 @@
                             {% for quest in final_questionlist.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
-                            <div class="col-md-6 report_text" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{j|add:'1'}}">
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_1_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
@@ -523,7 +523,7 @@
 
 <!--                            this is for key achievements-->
                             {% if quest.slug == "key-achievements-in-this-quarter" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
                                 <p>Key Achievements in this quarter</p>
                                     <!-- timeline slider -->
                                         {% if timeline_json != '[]' %}
@@ -579,7 +579,7 @@
 
                                     
                                     {% if mile_quest.slug == "milestone-name" %}
-                                        <div class="report_text" id="ques_{{mile_quest.id}}">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                         <p>{{mile_quest.text|title}}</p>
                                         {% get_milestones_activities v 1 projectobj as milestone_activitieslist %}
                                         {% if milestone_activitieslist %}
@@ -599,7 +599,7 @@
                                 {% if imagelist %}
                                 {% for imageobj in imagelist %}
                                     {% if mile_quest.slug == "upload-picture" %}
-                                        <div class="report_text" id="ques_{{mile_quest.id}}">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}">{% if imageobj.attachment_file %}{{imageobj.attachment_file.url}}{% endif %}
@@ -609,7 +609,7 @@
                                     {% endif %}
 
                                     {% if mile_quest.slug == "picture-description" %}
-                                        <div class=" report_text" id="ques_{{mile_quest.id}}">
+                                        <div class=" report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.description}}" class="input_section">
@@ -624,7 +624,7 @@
                                 {% endfor %} <!--  this ends for image loop -->
                                 {% else %}
                                     {% if mile_quest.slug == "upload-picture" %}
-                                        <div class="report_text" id="ques_{{mile_quest.id}}">
+                                        <div class="report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                                   <div class="form-group upload_text">
                                                     <input type="file" id = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name = "{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0">
@@ -634,7 +634,7 @@
                                     {% endif %}
 
                                     {% if mile_quest.slug == "picture-description" %}
-                                        <div class=" report_text" id="ques_{{mile_quest.id}}">
+                                        <div class=" report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="form-group">
                                                 <input type="text " class="form_section" id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_1_1_0" class="input_section">
@@ -655,7 +655,7 @@
 
                                 {% for mile_quest in milestone_questions %}
                                 {% if mile_quest.slug == "milestone-description" %}
-                                        <div class="col-md-6 report_text" id="ques_{{mile_quest.id}}">
+                                        <div class="col-md-6 report_text" id="ques_{{mile_quest.id}}_{{j|add:'1'}}">
                                             <p>{{mile_quest.text|title}}</p>
                                             <div class="">
                                                 <textarea id="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}" name="{{mile_quest.text}}_1_{{i}}_{{mile_quest.id}}_{{j}}_{{m_count}}_{{mileobj.id}}"  class="textarea_file">{{mileobj.description|striptags}}</textarea>
@@ -725,7 +725,7 @@
 <!--                            this is for budget table display-->
 
                             {% if quest.slug == "budget-utlization-tranches" %}
-                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
                                     <p>{{quest.text|title}}</p>
                                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
@@ -858,7 +858,7 @@
                             {% for quest in final_questionlist.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
-                            <div class="col-md-6 report_text" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
@@ -868,7 +868,7 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                                 <div class=" white-box ">
@@ -880,7 +880,7 @@
 
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
-                            <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
 
                                 <p>{{quest.text|title}}</p>
                                 <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
@@ -904,7 +904,7 @@
                                 {% for act_quest in activity_questions %}
 
                                     {% if act_quest.slug == "activity-name" %}
-                                        <div class=" report_text" id="ques_{{act_quest.id}}">
+                                        <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
                                         {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
                                         {%  if milestone_activitieslist %}
@@ -922,7 +922,7 @@
                                     {% endif %}
 
                                     {% if act_quest.slug == "about-the-actvity" %}
-                                    <div class=" report_text" id="ques_{{act_ques.id}}">
+                                    <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
@@ -933,7 +933,7 @@
                                 {% endfor %}
                                 </div>
                                 {% for act_quest in activity_questions %}
-                                <div class="col-md-6 report_text" id="ques_{{act_ques.id}}">
+                                <div class="col-md-6 report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
                                 {% if act_quest.slug == "upload-picture" %}
                                     <div class=" report_text">
                                         <p>{{act_quest.text|title}}</p>
@@ -944,7 +944,7 @@
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
-                                    <div class=" report_text" id="ques_{{act_ques.id}}">
+                                    <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
                                             <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
@@ -979,7 +979,7 @@
                                     {% for param_quest in parameter_questions %}
                                     {% if param_quest.slug == "parameter-selection" %}
                                     <div class="col-md-6 report_text parameter_section">
-                                        <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
+                                        <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
                                             <option value="0">Select</option>
@@ -994,7 +994,7 @@
 
 
                                     {% if param_quest.slug == "about-parameter" %}
-                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
+                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="">
                                             <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
@@ -1020,7 +1020,7 @@
 <!--                            this is for budget table display-->
 
                             {% if quest.slug == "budget-utlization-tranches" %}
-                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                     <p>{{quest.text|title}}</p>
                                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
@@ -1107,7 +1107,7 @@
                             {% endif %}
 
                             {% if quest.slug == "about-the-budget" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
                                 <div class="">
                                     <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
@@ -1116,7 +1116,7 @@
                             </div>
                             {% endif %}
                             {% if quest.slug == "risks-mitigation" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
                                 <div class="">
                                     <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
@@ -1131,7 +1131,7 @@
                             {% for quest in final_questionlist.0 %} <!-- this is for loop for  if object is present -->
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
-                            <div class="col-md-6 report_text" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" >
@@ -1141,7 +1141,7 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                                 <div class=" white-box ">
@@ -1510,7 +1510,7 @@
 
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
-                            <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
@@ -1541,7 +1541,7 @@
                                 {% for act_quest in activity_questions %}
 
                                     {% if act_quest.slug == "activity-name" %}
-                                    <div class=" report_text" id="ques_{{act_ques.id}}">
+                                    <div class=" report_text" id="ques_{{act_ques.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
                                         {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
                                         {% if  milestone_activitieslist %}
@@ -1558,7 +1558,7 @@
                                     </div>
                                     {% endif %}
                                     {% if act_quest.slug == "about-the-actvity" %}
-                                    <div class=" report_text" id="ques_{{act_ques.id}}">
+                                    <div class=" report_text" id="ques_{{act_ques.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="">
                                             <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" value = "{{mileobj.description}}">{{mileobj.description|striptags}} </textarea>
@@ -1573,7 +1573,7 @@
                                 {% for act_quest in activity_questions %}
                                 <div class="col-md-6 report_text" >
                                 {% if act_quest.slug == "upload-picture" %}
-                                    <div class=" report_text" id="ques_{{act_ques.id}}">
+                                    <div class=" report_text" id="ques_{{act_ques.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}} </p>
                                         <div class="form-group upload_text">
                                             <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value="{{imageobj.attachment_file}}"> {{imageobj.attachment_file}}
@@ -1582,7 +1582,7 @@
                                     </div>
                                 {% endif %}
                                 {% if act_quest.slug == "picture-description" %}
-                                    <div class=" report_text" id="ques_{{act_ques.id}}">
+                                    <div class=" report_text" id="ques_{{act_ques.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
                                         <div class="form-group">
                                             <input type="text "  class="form_section input_section" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}_{{imageobj.id}}" value = "{{imageobj.description}}" >
@@ -1629,7 +1629,7 @@
                                     {% if param_quest.slug == "parameter-selection" %}
 
                                     <div class="col-md-6 report_text parameter_section">
-                                        <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
+                                        <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" >
                                             <option value="0">Select</option>
@@ -1644,7 +1644,7 @@
 
 
                                     {% if param_quest.slug == "about-parameter" %}
-                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}">
+                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
                                         <p>{{param_quest.text|title}}</p>
                                         <div class="">
                                             <textarea  class="textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_{{paramobj.id}}">{{paramobj.description|striptags}}</textarea>
@@ -1672,7 +1672,7 @@
 <!--                            this is for budget table display-->
 
                             {% if quest.slug == "budget-utlization-tranches" %}
-                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                     <p>{{quest.text|title}}</p>
                                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
@@ -1759,7 +1759,7 @@
                             {% endif %}
 
                             {% if quest.slug == "about-the-budget" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <div class="">
@@ -1769,7 +1769,7 @@
                             </div>
                             {% endif %}
                             {% if quest.slug == "risks-mitigation" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <div class="">
@@ -1825,7 +1825,7 @@
 
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
-                            <div class="col-md-6 report_text" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
@@ -1836,7 +1836,7 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                                     <div class=" white-box ">
@@ -1848,7 +1848,7 @@
 
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
-                            <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
                                 <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
@@ -1857,7 +1857,7 @@
 
                         <!--this is for budget and tranches table -->
                             {% if quest.slug == "budget-utlization-tranches" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
                                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
@@ -1947,7 +1947,7 @@
 
                         <!--this is for about paramter section-->
                         {% if quest.slug == "about-the-budget" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
                                 <div class="">
                                     <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
@@ -1965,7 +1965,7 @@
                             {% for quest in final_questionlist.0 %}
 <!--                             this is for auto populate text -->
                             {% if quest.qtype == "APT" %}
-                            <div class="col-md-6 report_text" id="ques_{{quest.id}}">
+                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{future_len}}"">
                                 <p>{{quest.text|title}}</p>
                                 {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
                                 <input type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" class="input_section">
@@ -1976,7 +1976,7 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                                 <div class=" white-box ">
@@ -1988,7 +1988,7 @@
 
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
-                            <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}} </p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">{{text|striptags}}</textarea>
@@ -1998,7 +1998,7 @@
 
                         <!--this is for budget and tranches table -->
                             {% if quest.slug == "budget-utlization-tranches" %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
                                     <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
                                         <table class="table table-boardered table-striped table-striped budget_table">
@@ -2087,7 +2087,7 @@
 
                         <!--this is for about paramter section-->
                         {% if quest.slug == "about-the-budget" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}">
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
                                 <div class="">
                                 {% get_answer_question quest reportupdates.1 as text %}
@@ -3134,9 +3134,9 @@ $(document).ready(function() {
             success: function(data){
                 var qid = data.ids_list;
                 for (i=0;i<qid.length;i++){
-                    $('#ques_'+qid[i]).hide();
+                    $('#ques_'+qid[i]+'_'+div_id).hide();
                 }
-                     //window.location.href = '/report/final/design/?slug={{request.GET.slug}}&report_id={{projectreportobj.id}}&div_id='+div_id;
+                    
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
                 console.log("remove error")
