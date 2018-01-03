@@ -10,6 +10,7 @@ from budgetmanagement.models import *
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
 from pmu.settings import PMU_URL
 from ast import literal_eval
+from itertools import chain
 
 @register.assignment_tag
 def get_details(obj):
@@ -53,9 +54,13 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
         for i in eval(quest_list.text):
             ques = Question.objects.get_or_none(id=int(i))
             if ques.parent == None:
+                parent_ques.append(ques)
+            else:
                 removed_ques.append(ques)
+            
         if quest_removed == 'false':
             final_questions = questions.exclude(id__in =[rmv.id for rmv in removed_ques ]).order_by('id')
+            fianl_questions = list(chain(final_questions)).extend(list(chain(questions.filter(id__in = [pt.id for pt in parent_ques]).order_by('id'))))
         else:
             final_quest = questions.filter(id__in = [rmv.id for rmv in removed_ques]).values_list('id',flat=True)
             main_quest = Question.objects.filter(block=block).exclude(parent=None)[0]
