@@ -341,9 +341,9 @@ $(function () {
 });
 </script>
 <script>
-$("#id_document_type").change(function () {
-        var file_type = this.value;
-    });
+// $("#id_document_type").change(function () {
+//         var file_type = this.value;
+//     });
 </script>
 <script>
 
@@ -367,29 +367,29 @@ var file_type = $('#id_document_type').val();
 
                 if ($.inArray(extension, options.allowedExtensions) == -1) {
                     //options.error();
-                    if (file_type==1) {
-                        $(this).focus();
-                        document.getElementById('file_error').innerHTML="<br>Please Upload .xlsx or .xls or .csv file formats only "
-                    alert("Please upload valid Excel(.csv,.xlsx,.xls) file");}
-                    else if (file_type==2) {
-                        $(this).focus();
-                        document.getElementById('file_error').innerHTML="<br>Please Upload .pdf file format only "
-                    alert("Please upload valid PDF(.pdf) file");} 
-                    else if (file_type==3) {
-                        $(this).focus();
-                        document.getElementById('file_error').innerHTML="<br>Please Upload .ppt or .pptx file formats only "
-                    alert("Please upload valid PPT(.ppt,.pptx) file");} 
-                    else if (file_type==4) {
-                        $(this).focus();
-                        document.getElementById('file_error').innerHTML="<br>Please Upload .doc/.docx file formats only "
-                    alert("Please upload valid Document(.doc or .docx) file");} 
+                    // if (file_type==1) {
+                    //     $(this).focus();
+                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .xlsx or .xls or .csv file formats only "
+                    // alert("Please upload valid Excel(.csv,.xlsx,.xls) file");}
+                    // else if (file_type==2) {
+                    //     $(this).focus();
+                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .pdf file format only "
+                    // alert("Please upload valid PDF(.pdf) file");} 
+                    // else if (file_type==3) {
+                    //     $(this).focus();
+                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .ppt or .pptx file formats only "
+                    // alert("Please upload valid PPT(.ppt,.pptx) file");} 
+                    // else if (file_type==4) {
+                    //     $(this).focus();
+                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .doc/.docx file formats only "
+                    // alert("Please upload valid Document(.doc or .docx) file");} 
 
-                    else {
+                    // else {
                         $(this).focus();
                         document.getElementById('file_error').innerHTML="<br>Please Upload JPEG/PNG/GIF Image file formats only "
                     alert("Please upload valid Image file");
 
-                    }
+                    // }
                 } else {
                     document.getElementById('file_error').innerHTML=""
 
