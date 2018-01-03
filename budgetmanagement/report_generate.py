@@ -787,7 +787,7 @@ def get_removed_list(quest_ids_list,removed_ques,created):
         removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
         for r in quest_ids_list:
             removed_list.append(r)       
-        removed_ques.text = sorted(removed_list)
+        removed_ques.text = sorted(list(set(removed_list)))
     return removed_list
 
 from django.http import JsonResponse
