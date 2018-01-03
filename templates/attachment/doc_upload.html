@@ -347,7 +347,7 @@ $("#id_document_type").change(function () {
 </script>
 <script>
 
-// var file_type = $('#id_document_type').val();
+var file_type = $('#id_document_type').val();
 (function($) {
     $.fn.checkFileType = function(options) {
         var defaults = {
@@ -401,69 +401,69 @@ $("#id_document_type").change(function () {
     };
 
 })(jQuery);
-$("#id_document_type").change(function () {
-        var file_type = this.value;
-    });
-if (file_type==1) {
-    $(function() {
-    $('#id_attachment_file').checkFileType({
-        allowedExtensions: ['xlsx', 'xls','csv'],
-        success: function() {
-            alert('Success');
-        },
-        error: function() {
-            alert('Error');
-        }
-    });
+// $("#id_document_type").change(function () {
+//         var file_type = this.value;
+//     });
+// if (file_type==1) {
+//     $(function() {
+//     $('#id_attachment_file').checkFileType({
+//         allowedExtensions: ['xlsx', 'xls','csv'],
+//         success: function() {
+//             alert('Success');
+//         },
+//         error: function() {
+//             alert('Error');
+//         }
+//     });
 
-});
-};
-if (file_type==2) {
-    $(function() {
-    $('#id_attachment_file').checkFileType({
-        allowedExtensions: ['pdf'],
-        success: function() {
-            alert('Success');
-        },
-        error: function() {
-            alert('Error');
-        }
-    });
+// });
+// };
+// if (file_type==2) {
+//     $(function() {
+//     $('#id_attachment_file').checkFileType({
+//         allowedExtensions: ['pdf'],
+//         success: function() {
+//             alert('Success');
+//         },
+//         error: function() {
+//             alert('Error');
+//         }
+//     });
 
-});
-};
+// });
+// };
 
-if (file_type==4) {
-    $(function() {
-    $('#id_attachment_file').checkFileType({
-        allowedExtensions: ['doc','docx','txt'],
-        success: function() {
-            alert('Success');
-        },
-        error: function() {
-            alert('Error');
-        }
-    });
+// if (file_type==4) {
+//     $(function() {
+//     $('#id_attachment_file').checkFileType({
+//         allowedExtensions: ['doc','docx','txt'],
+//         success: function() {
+//             alert('Success');
+//         },
+//         error: function() {
+//             alert('Error');
+//         }
+//     });
 
-});
-};
-if (file_type==3) {
-    $(function() {
-    $('#id_attachment_file').checkFileType({
-        allowedExtensions: ['ppt', 'pptx'],
-        success: function() {
-            alert('Success');
-        },
-        error: function() {
-            alert('Error');
-        }
-    });
+// });
+// };
+// if (file_type==3) {
+//     $(function() {
+//     $('#id_attachment_file').checkFileType({
+//         allowedExtensions: ['ppt', 'pptx'],
+//         success: function() {
+//             alert('Success');
+//         },
+//         error: function() {
+//             alert('Error');
+//         }
+//     });
 
-});
-};
+// });
+// };
 
 
-if (file_type==undefined) {
+// if (file_type==undefined) {
 $(function() {
     $('#id_attachment_file').checkFileType({
         allowedExtensions: ['jpg', 'jpeg','png','gif'],
@@ -476,7 +476,7 @@ $(function() {
     });
 
 });
-};
+// };
 </script>
 
 <script type="text/javascript">
