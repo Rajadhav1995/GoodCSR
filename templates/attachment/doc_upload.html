@@ -214,8 +214,6 @@ jQuery("input#id_attachment_file").change(function () {
 <script type="text/javascript">
         function errorvalidate() {
             var error = document.getElementById('file_error').innerHTML;
-            console.log("aditya");
-            console.log(error);
             var size = parseFloat($("#id_attachment_file")[0].files[0].size / 1024).toFixed(2);
             if (size > 5000) {
                 alert("File size must be less than 5 MB");
@@ -242,6 +240,7 @@ jQuery("input#id_attachment_file").change(function () {
     });
   });
 </script>
+
 
 <script type="text/javascript">
 $(document).ready(function() {
