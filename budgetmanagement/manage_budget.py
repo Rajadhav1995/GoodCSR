@@ -226,6 +226,33 @@ def year_quarter_list(request):
     response = {'quarter_list':quarter_list}
     return JsonResponse(response)
 
+def get_month_quarterlist(selected_year,budget_id):
+    ''' provide the qquarter list based on year choosen in report utlization'''
+    budgetobj = Budget.objects.get_or_none(id = budget_id)
+    ed = budgetobj.end_date
+    budget_enddate = budgetobj.end_date
+    sd = budgetobj.actual_start_date
+    no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/1)
+    
+    month_list = []
+    for i in range(int(no_of_quarters)):
+        ed = sd+relativedelta.relativedelta(months=1)
+        ed = ed - timedelta(days=1)
+        if ed > budget_enddate:
+            ed = budget_enddate
+        if str(sd.year) == str(selected_year) :
+            month_list.append(sd.strftime("%B"))
+        sd = ed + timedelta(days=1)
+    return month_list
+
+def month_quarter_list(request):
+    ''' Ajax call function for month filter'''
+    selected_year = request.GET.get('year')
+    budget_id = request.GET.get('budget_id')
+    month_list = get_month_quarterlist(selected_year,budget_id)
+    response = {'month_list':month_list}
+    print response
+    return JsonResponse(response)
 
 def upload_budget_utlized(line_itemlist,i,request,budget_periodobj):
     ''' function to upload the utlized amount based on row and quarter'''

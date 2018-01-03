@@ -38,23 +38,41 @@ def report_form(request):
         msg = "Budget is not created"
         return render(request,'report/report-form.html',locals())
     from budgetmanagement.manage_budget import get_budget_quarters
+    sd = budget_obj.start_date.year
+    ed = budget_obj.end_date.year
+    difference = ed-sd
+    years_list = [sd+i for i in range(difference)]
+    years_list.append(ed)
     budget_quarters = get_budget_quarters(budget_obj) 
     if request.method == 'POST':
+        month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
+                      'June':6,'July':7,'August':8,'September':9,
+                      'October':10,'November':11,'December':12}
         data = request.POST
         report_id=data.get('report_id')
         project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
         quarter_ids = data.get('quarter_type')
         dates = budget_quarters[int(quarter_ids)]
         dates_list = dates.split(' to ')
-        budget_end_date = dates_list[1] if dates_list else '' 
-        budget_start_date = dates_list[0] if dates_list else '' 
+        report_type = int(data.get('report_type'))
+        if report_type == 2:
+            month_name = data.get('select_month')
+            year = data.get('select_year')
+            month = month_dict.get(month_name)
+            budget_start_date = str(year)+"-"+str(month)+"-"+str(1)
+            budget_end_date = str(year)+"-"+str(month)+"-"+str(30)
+            project_report = 0
+        else:
+            budget_end_date = dates_list[1] if dates_list else '' 
+            budget_start_date = dates_list[0] if dates_list else '' 
         project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
             report_type = data.get('report_type'),start_date  = budget_start_date,
             name = project_obj.name,end_date = budget_end_date)
         if created or int(project_report.active) == 0 :
             project_report.active = 2
             project_report.save()
-            return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id=')
+            key = "monthly-report" if report_type==2 else ""
+            return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id='+'&key='+key)
         else:
             quarter_msg = "Already Report is generated to this Quarter"
     return render(request,'report/report-form.html',locals())
@@ -697,6 +715,8 @@ def finalreportdesign(request):
         return render(request,'report/forms-single.html',locals())
     elif key == 'removed_template':
         return render(request,'report/removed-questions.html',locals())
+    elif key == 'monthly-report':
+        return render(request,'report/monthly_report.html',locals())
     else:
         return render(request,'report/final_report.html',locals())
 
