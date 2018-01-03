@@ -119,6 +119,7 @@ def edit_attachment(request):
     else:
         form = ImageUpload(instance = obj)
         key=2
+    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         instance = get_object_or_404(Attachment, id=ids)
         if key==1:
@@ -126,6 +127,7 @@ def edit_attachment(request):
         else:
             form = ImageUpload(request.POST, request.FILES or None, instance=instance)
         if form.is_valid():
+
             obj = form.save(commit=False)
             obj.save()
         try:

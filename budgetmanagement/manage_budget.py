@@ -340,7 +340,7 @@ def budget_supercategory_value(projectobj,budgetobj):
 
 @check_loggedin_access
 def budgetview(request):
-    '''  Redirecting to the budget summary page '''
+    '''  Redirecting to the budget summary page based on the budget object creation status '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
@@ -350,12 +350,12 @@ def budgetview(request):
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user,projectobj)
     key = request.GET.get('key')
-    sd = budgetobj.start_date.year
-    ed = budgetobj.end_date.year
-    difference = ed-sd
-    years_list = [sd+i for i in range(difference)]
-    years_list.append(ed)
     if budgetobj:
+        sd = budgetobj.start_date.year
+        ed = budgetobj.end_date.year
+        difference = ed-sd
+        years_list = [sd+i for i in range(difference)]
+        years_list.append(ed)
         quarter_list = get_budget_quarters(budgetobj)
         filter_quarter_list = quarter_list
         quarter_names = get_budget_quarter_names(budgetobj)
