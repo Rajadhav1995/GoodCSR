@@ -348,6 +348,7 @@ $(function () {
 <script>
 
 var file_type = $('#id_document_type').val();
+
 (function($) {
     $.fn.checkFileType = function(options) {
         var defaults = {
@@ -385,10 +386,11 @@ var file_type = $('#id_document_type').val();
                     // alert("Please upload valid Document(.doc or .docx) file");} 
 
                     // else {
+                        if (file_type==undefined) {
                         $(this).focus();
                         document.getElementById('file_error').innerHTML="<br>Please Upload JPEG/PNG/GIF Image file formats only "
                     alert("Please upload valid Image file");
-
+                    };
                     // }
                 } else {
                     document.getElementById('file_error').innerHTML=""
