@@ -8,7 +8,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from pmu.settings import PMU_URL
 from projectmanagement.models import Project,Boundary
-from media.forms import AttachmentForm,ImageUpload
+from media.forms import AttachmentForm,ImageUpload,ImageUploadTimeline
 from projectmanagement.common_method import unique_slug_generator,add_keywords
 
 def list_document(request):
@@ -39,9 +39,9 @@ def timeline_upload(request):
         project = Project.objects.get(slug = request.POST.get('slug'))
     except:
         project = Project.objects.get(slug=slug)
-    form = ImageUpload()
+    form = ImageUploadTimeline()
     if request.method=='POST':
-        form=ImageUpload(request.POST,request.FILES)
+        form=ImageUploadTimeline(request.POST,request.FILES)
         if form.is_valid():
             f=form.save()
             f.attachment_type = 1
@@ -54,7 +54,7 @@ def timeline_upload(request):
         else :
             return HttpResponseRedirect('/project/summary/?slug='+project.slug)
     else:
-        form=ImageUpload()
+        form=ImageUploadTimeline()
     timeline = 1
     return render(request,'taskmanagement/forms.html',locals())
 

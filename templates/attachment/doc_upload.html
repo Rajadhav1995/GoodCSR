@@ -79,7 +79,7 @@ width:450px;
                                                 <label>Upload File</label><br>
                                                 {{form.attachment_file}}
                                                 {{ form.attachment_file.errors }}
-                                                <div style="margin-top: -10px;"><b><font color=#fc282f><span id="file_error"></span></font></b></div>
+                                                <div style="margin-top: -5px;"><b><font color=#fc282f><span id="file_error"></span></font></b></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,7 +139,7 @@ width:450px;
                                     </div>
                                 </div>
                           <a class="btn btn-success" href="/upload/list/?slug={{slug}}&model={{model}}" style="position: relative;left: 40%;padding:3px 15px;height: 30px; line-height: 25px;">Cancel</button></a>
-                        <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" style="position: absolute;left: 47%;padding:3px 15px; height: 30px; line-height: 25px;"/>
+                        <input class="budget_button" type="submit" value="Save" onclick="return errorvalidate();" style="position: absolute;left: 47%;padding:3px 15px; height: 30px; line-height: 25px;"/>
                        
 
                     </form>
@@ -199,7 +199,7 @@ jQuery("input#id_attachment_file").change(function () {
         var size = parseFloat($("#id_attachment_file")[0].files[0].size / 1024).toFixed(2);
         //alert(size + " KB.");
         if (size > 5000) {
-            alert("File size must be less than 5 MB");
+            alert("File size must be less than 5 MBss");
             document.getElementById('file_error').innerHTML="File Size must be less than 5 MB"
         } else{
             document.getElementById('file_error').innerHTML=""
@@ -212,14 +212,21 @@ jQuery("input#id_attachment_file").change(function () {
 </script>
 
 <script type="text/javascript">
-        function ddlValidate() {
+        function errorvalidate() {
+            var error = document.getElementById('file_error').innerHTML;
+            console.log("aditya");
+            console.log(error);
             var size = parseFloat($("#id_attachment_file")[0].files[0].size / 1024).toFixed(2);
             if (size > 5000) {
                 alert("File size must be less than 5 MB");
                 document.getElementById('file_error').innerHTML="File Size must be less than 5 MB"
                 return false;
-            } else{
-                document.getElementById('file_error').innerHTML=""
+            } else if (error==''){
+                return true;
+            } else {
+                alert("Please select correct file format");
+                return false;
+                //document.getElementById('file_error').innerHTML="";
             };
 
         };
@@ -342,12 +349,15 @@ $(function () {
 </script>
 
 <script>
+
 var file_type;
+{% if key == 1 %}
+file_type = 1;
+{% endif %}
 $("#id_document_type").change(function () {
         file_type = this.value;
         //alert(file_type);
     });
-
 
 $('#id_attachment_file').on('change', function() {
     if (file_type==1) {
@@ -427,6 +437,7 @@ $(function() {
 
 (function($) {
     $.fn.checkFileType = function(options) {
+        
         var defaults = {
             allowedExtensions: [],
             success: function() {},
@@ -435,13 +446,11 @@ $(function() {
         options = $.extend(defaults, options);
 
         return this.each(function() {
-// alert('hi');
-            $(this).on('change', function() {
                 var file_type = $('#id_document_type').val();
                 var value = $(this).val(),
                     file = value.toLowerCase(),
                     extension = file.substring(file.lastIndexOf('.') + 1);
-                    //alert(options.allowedExtensions);
+                    // alert(options.allowedExtensions);
                 if ($.inArray(extension, options.allowedExtensions) == -1) {
                     //options.error();
                     if (file_type==1) {
@@ -476,7 +485,7 @@ $(function() {
 
                 }
 
-            });
+            //});
 
         });
     };

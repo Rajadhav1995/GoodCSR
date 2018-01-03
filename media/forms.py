@@ -36,6 +36,17 @@ class ImageUpload(forms.ModelForm):
         model = Attachment
         fields  = ('description','attachment_file','name')
 
+class ImageUploadTimeline(forms.ModelForm):
+    '''
+    This is model form to upload Image for Project
+    '''
+    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
+    date = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true','placeholder':'Please Select Date'}), required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
+    class Meta:
+        model = Attachment
+        fields  = ('date','description','attachment_file','name')
+
 class ContactPersonForm(forms.ModelForm):
     '''
     This is model form is to save contact information of visitor 
