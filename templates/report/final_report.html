@@ -177,10 +177,11 @@
                                            {% elif sub.q_type == 'ck' %}
                                                     <div class="col-md-12 report_text" id="ques_{{sub.q_id}}">
                                                     <p>{{sub.q_text}}</p>
-                                                    </div>
+                                                    
                                                     <textarea name="{{sub.q_name}}_{{sub.q_id}}" id="{{sub.q_name}}_{{sub.q_id}}" value = "{{sub.answer|safe}}" required=""  class="textarea_file">{{sub.answer|striptags}}</textarea>
                                                     <div class="col-md-12 report_text">
                                                         <h5><a href="javascript:void(0);" onclick="return remove_fields({{sub.q_id}},2,0,0,'1')">Remove</a></h5>
+                                                    </div>
                                                     </div>
                                            {% elif sub.q_type == 'API' %}
                                                <div class="logo-partner" id="ques_{{sub.q_id}}">
