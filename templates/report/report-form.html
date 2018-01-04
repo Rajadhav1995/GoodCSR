@@ -100,7 +100,7 @@ ul li {
                                         <label>Report Type<font color="red">*</font></label>
                                         <select class="form-control" name="report_type" id="report_type" required>
                                         <option  value="1" >Quarterly</option>
-<!--                                        <option  value="2" >Monthly</option>-->
+                                        <option  value="2" >Monthly</option>
                                         </select>
                                         </div>
                                     </div>
@@ -120,7 +120,38 @@ ul li {
                                             </div>
                                         </div>
                                     </div>
-                               
+
+                                  <div class="row" id="year_list">
+                                        <div class="col-md-6 nopadding">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                <label>Select Year<font color="red">*</font></label>
+                                                <select class="form-control" name="select_year" id="select_year" required>
+                                                {% for i in years_list %}
+                                                    <option  value="{{i}}">{{i}}</option>
+                                                {% endfor %}
+                                                </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                  <div class="row" id="select_month">
+                                        <div class="col-md-6 nopadding">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                <label>Select Month<font color="red">*</font></label>
+                                                <select class="form-control" name="select_month" id="selected_month_list" required>
+                                                {% for i in years_list %}
+                                                    <option  value="{{i}}">{{i}}</option>
+                                                {% endfor %}
+                                                </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
 
                                 <input class="budget_button" type="submit" value="Submit" onclick="return email_valid();" /></a>  
                                 
@@ -146,6 +177,50 @@ ul li {
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script src='https://www.google.com/recaptcha/api.js'></script>
+
+<script type = "text/javascript">
+        $('#year_list').hide();
+        $('#select_month').hide();
+        $('#report_type').change(function(){
+        var i = $('#report_type').val();
+        if (i==2)
+        {
+         $('#report_duration').hide();
+         $('#year_list').show();
+        }
+        else{
+            $('#report_duration').show();
+            $('#year_list').hide();
+        }
+    });
+
+</script>
+
+<script>
+            $('#select_year').change(function(){
+               $('#select_month').show();
+               var year = this.value;
+               $.ajax({
+                   url : '/manage/month/list/',
+                   type : 'GET',
+                   dataType : 'json',
+                   data: {'year':year,'budget_id':parseInt({{budget_obj.id}})},
+                   success : function(data) {
+                            var month_list  = data.month_list
+                            $('#selected_month_list').find('option').remove().end();
+                          for (var month in month_list) {
+                                    $('#selected_month_list').append("<option value='"+month_list[month]+"'>"+month_list[month]+"</option>")
+                                }
+                   },
+                       error : function() {
+                       console.log('error');
+                   }
+                });
+                
+                
+    });
+
+</script>
 
 
 {% endif %}
