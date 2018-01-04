@@ -105,6 +105,7 @@ def edit_attachment(request):
     This function is to edit Image/Document
     '''
     ids = request.GET.get('id')
+    image = PMU_URL
     obj_id =  request.GET.get('obj_id')
     if request.method == 'GET':
         slug = Project.objects.get_or_none(id=obj_id).slug
