@@ -317,7 +317,6 @@ def get_quarters(projectobj):
     budget_obj = Budget.objects.get_or_none(project=project)
     if budget_obj:
         from budgetmanagement.manage_budget import get_budget_quarters
-        
         budget_quarters = get_budget_quarters(budget_obj)
         for i,k in budget_quarters.iteritems():
             sd = k.split('to')[0]
@@ -716,6 +715,8 @@ def finalreportdesign(request):
     elif key == 'removed_template':
         return render(request,'report/removed-questions.html',locals())
     elif key == 'monthly-report':
+        from budgetmanagement.common_method import get_monthly_logic
+        previous,current,future = get_monthly_logic(projectreportobj,budgetobj)
         return render(request,'report/monthly_report.html',locals())
     else:
         return render(request,'report/final_report.html',locals())
@@ -807,7 +808,7 @@ def get_removed_list(quest_ids_list,removed_ques,created):
         removed_list = literal_eval(removed_ques.text) if removed_ques.text else []
         for r in quest_ids_list:
             removed_list.append(r)       
-        removed_ques.text = sorted(removed_list)
+        removed_ques.text = sorted(list(set(removed_list)))
     return removed_list
 
 from django.http import JsonResponse

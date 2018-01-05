@@ -103,7 +103,10 @@ function exportToForm(){
 
       <!-- <td>Task: Dhenuki Labours Unit</td> -->
       <td align="center">{{i.created}}</td>
-      <td align="right"> <!-- <a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a> --> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Attachment" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a> </td>
+      <td align="right">
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
+       <a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Attachment" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>{% endif %} </td>
       <!-- <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td> -->
     </tr>
     {% endfor %}

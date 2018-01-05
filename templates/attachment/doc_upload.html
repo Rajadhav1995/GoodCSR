@@ -71,19 +71,42 @@ width:450px;
                                 </div>
                             </div> -->
 
-
+{% if key == 2 %}
                             <div class="row">
                                         <div class="col-md-6 nopadding">
                                             <div class="col-md-12">
                                                 <div class="form-group">
+                                                {% if ids %}
+                                                
+                                                <label>Change File</label><br>
+                                                <img src="{{image}}/{{obj.attachment_file.url}}" height=128px width=128px>
+                                                {% else %}
                                                 <label>Upload File</label><br>
+                                                {% endif %}
+                                                
                                                 {{form.attachment_file}}
                                                 {{ form.attachment_file.errors }}
-                                                <br><br><b><font color=#fc282f><span id="file_error"></span></font></b>
+                                                <div style="margin-top: -5px;"><b><font color=#fc282f><span id="file_error"></span></font></b></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+{% else %}
+                                <div class="row">
+                                        <div class="col-md-6 nopadding">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                
+                                                <a href="{{image}}/{{obj.attachment_file.url}}"><u>{{obj.name}}{% if ids %}</u> : <u>{% endif %}{{obj.attachment_file.name}}</u></a>
+                                                <br>
+                                                {{form.attachment_file}}
+                                                {{ form.attachment_file.errors }}
+                                                <div style="margin-top: -5px;"><b><font color=#fc282f><span id="file_error"></span></font></b></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+{% endif %}
 
 
                                 <div class="row">
@@ -139,7 +162,7 @@ width:450px;
                                     </div>
                                 </div>
                           <a class="btn btn-success" href="/upload/list/?slug={{slug}}&model={{model}}" style="position: relative;left: 40%;padding:3px 15px;height: 30px; line-height: 25px;">Cancel</button></a>
-                        <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" style="position: absolute;left: 47%;padding:3px 15px; height: 30px; line-height: 25px;"/>
+                        <input class="budget_button" type="submit" value="Save" onclick="return errorvalidate();" style="position: absolute;left: 47%;padding:3px 15px; height: 30px; line-height: 25px;"/>
                        
 
                     </form>
@@ -212,14 +235,19 @@ jQuery("input#id_attachment_file").change(function () {
 </script>
 
 <script type="text/javascript">
-        function ddlValidate() {
+        function errorvalidate() {
+            var error = document.getElementById('file_error').innerHTML;
             var size = parseFloat($("#id_attachment_file")[0].files[0].size / 1024).toFixed(2);
             if (size > 5000) {
                 alert("File size must be less than 5 MB");
                 document.getElementById('file_error').innerHTML="File Size must be less than 5 MB"
                 return false;
-            } else{
-                document.getElementById('file_error').innerHTML=""
+            } else if (error==''){
+                return true;
+            } else {
+                alert("Please select correct file format");
+                return false;
+                //document.getElementById('file_error').innerHTML="";
             };
 
         };
@@ -235,6 +263,7 @@ jQuery("input#id_attachment_file").change(function () {
     });
   });
 </script>
+
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -340,132 +369,79 @@ $(function () {
     });*/
 });
 </script>
-<script>
-// $("#id_document_type").change(function () {
-//         var file_type = this.value;
-//     });
-</script>
+
 <script>
 
-var file_type = $('#id_document_type').val();
+var file_type;
+{% if key == 1 %}
+file_type = 1;
+{% endif %}
+$("#id_document_type").change(function () {
+        file_type = this.value;
+        //alert(file_type);
+    });
 
-(function($) {
-    $.fn.checkFileType = function(options) {
-        var defaults = {
-            allowedExtensions: [],
-            success: function() {},
-            error: function() {}
-        };
-        options = $.extend(defaults, options);
+$('#id_attachment_file').on('change', function() {
+    if (file_type==1) {
+    $(function() {
+    $('#id_attachment_file').checkFileType({
+        allowedExtensions: ['xlsx', 'xls','csv'],
+        success: function() {
+            alert('Success');
+        },
+        error: function() {
+            alert('Error');
+        }
+    });
 
-        return this.each(function() {
+});
+};
+if (file_type==2) {
+    $(function() {
+    $('#id_attachment_file').checkFileType({
+        allowedExtensions: ['pdf'],
+        success: function() {
+            alert('Success');
+        },
+        error: function() {
+            alert('Error');
+        }
+    });
 
-            $(this).on('change', function() {
-                var file_type = $('#id_document_type').val();
-                var value = $(this).val(),
-                    file = value.toLowerCase(),
-                    extension = file.substring(file.lastIndexOf('.') + 1);
+});
+};
 
-                if ($.inArray(extension, options.allowedExtensions) == -1) {
-                    //options.error();
-                    // if (file_type==1) {
-                    //     $(this).focus();
-                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .xlsx or .xls or .csv file formats only "
-                    // alert("Please upload valid Excel(.csv,.xlsx,.xls) file");}
-                    // else if (file_type==2) {
-                    //     $(this).focus();
-                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .pdf file format only "
-                    // alert("Please upload valid PDF(.pdf) file");} 
-                    // else if (file_type==3) {
-                    //     $(this).focus();
-                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .ppt or .pptx file formats only "
-                    // alert("Please upload valid PPT(.ppt,.pptx) file");} 
-                    // else if (file_type==4) {
-                    //     $(this).focus();
-                    //     document.getElementById('file_error').innerHTML="<br>Please Upload .doc/.docx file formats only "
-                    // alert("Please upload valid Document(.doc or .docx) file");} 
+if (file_type==4) {
+    $(function() {
+    $('#id_attachment_file').checkFileType({
+        allowedExtensions: ['doc','docx','txt'],
+        success: function() {
+            alert('Success');
+        },
+        error: function() {
+            alert('Error');
+        }
+    });
 
-                    // else {
-                        if (file_type==undefined) {
-                        $(this).focus();
-                        document.getElementById('file_error').innerHTML="<br>Please Upload JPEG/PNG/GIF Image file formats only "
-                    alert("Please upload valid Image file");
-                    };
-                    // }
-                } else {
-                    document.getElementById('file_error').innerHTML=""
+});
+};
+if (file_type==3) {
+    $(function() {
+    $('#id_attachment_file').checkFileType({
+        allowedExtensions: ['ppt', 'pptx'],
+        success: function() {
+            alert('Success');
+        },
+        error: function() {
+            alert('Error');
+        }
+    });
 
-                }
-
-            });
-
-        });
-    };
-
-})(jQuery);
-// $("#id_document_type").change(function () {
-//         var file_type = this.value;
-//     });
-// if (file_type==1) {
-//     $(function() {
-//     $('#id_attachment_file').checkFileType({
-//         allowedExtensions: ['xlsx', 'xls','csv'],
-//         success: function() {
-//             alert('Success');
-//         },
-//         error: function() {
-//             alert('Error');
-//         }
-//     });
-
-// });
-// };
-// if (file_type==2) {
-//     $(function() {
-//     $('#id_attachment_file').checkFileType({
-//         allowedExtensions: ['pdf'],
-//         success: function() {
-//             alert('Success');
-//         },
-//         error: function() {
-//             alert('Error');
-//         }
-//     });
-
-// });
-// };
-
-// if (file_type==4) {
-//     $(function() {
-//     $('#id_attachment_file').checkFileType({
-//         allowedExtensions: ['doc','docx','txt'],
-//         success: function() {
-//             alert('Success');
-//         },
-//         error: function() {
-//             alert('Error');
-//         }
-//     });
-
-// });
-// };
-// if (file_type==3) {
-//     $(function() {
-//     $('#id_attachment_file').checkFileType({
-//         allowedExtensions: ['ppt', 'pptx'],
-//         success: function() {
-//             alert('Success');
-//         },
-//         error: function() {
-//             alert('Error');
-//         }
-//     });
-
-// });
-// };
+});
+};
 
 
-// if (file_type==undefined) {
+if (file_type==undefined) {
 $(function() {
     $('#id_attachment_file').checkFileType({
         allowedExtensions: ['jpg', 'jpeg','png','gif'],
@@ -478,9 +454,67 @@ $(function() {
     });
 
 });
-// };
-</script>
+};
+});
 
+(function($) {
+    $.fn.checkFileType = function(options) {
+        
+        var defaults = {
+            allowedExtensions: [],
+            success: function() {},
+            error: function() {}
+        };
+        options = $.extend(defaults, options);
+
+        return this.each(function() {
+                var file_type = $('#id_document_type').val();
+                var value = $(this).val(),
+                    file = value.toLowerCase(),
+                    extension = file.substring(file.lastIndexOf('.') + 1);
+                    // alert(options.allowedExtensions);
+                if ($.inArray(extension, options.allowedExtensions) == -1) {
+                    //options.error();
+                    if (file_type==1) {
+                        $(this).focus();
+                        document.getElementById('file_error').innerHTML="<br>Please Upload .xlsx or .xls or .csv file formats only "
+                    // alert("Please upload valid Excel(.csv,.xlsx,.xls) file");
+                }
+                    else if (file_type==2) {
+                        $(this).focus();
+                        document.getElementById('file_error').innerHTML="<br>Please Upload .pdf file format only "
+                    // alert("Please upload valid PDF(.pdf) file");
+                } 
+                    else if (file_type==3) {
+                        $(this).focus();
+                        document.getElementById('file_error').innerHTML="<br>Please Upload .ppt or .pptx file formats only "
+                    // alert("Please upload valid PPT(.ppt,.pptx) file");
+                } 
+                    else if (file_type==4) {
+                        $(this).focus();
+                        document.getElementById('file_error').innerHTML="<br>Please Upload .doc/.docx file formats only "
+                    // alert("Please upload valid Document(.doc or .docx) file");
+                } 
+
+                    else {
+                        $(this).focus();
+                        document.getElementById('file_error').innerHTML="<br>Please Upload JPEG/PNG/GIF Image file formats only "
+                    // alert("Please upload valid Image file");
+
+                    }
+                } else {
+                    document.getElementById('file_error').innerHTML=""
+
+                }
+
+            //});
+
+        });
+    };
+
+})(jQuery);
+
+</script>
 <script type="text/javascript">
     $(document).ready(function(){
         // $('select[multiple=multiple]').multiSelect()
@@ -490,7 +524,11 @@ $(function() {
                 name : {required:true, maxlength: 300},
                 date : {required:true},
                 description : {required:true},
+                {% if ids %}
+                attachment_file : {required:false},
+                {% else %}
                 attachment_file : {required:true},
+                {% endif %}
                 
             },
             messages:
