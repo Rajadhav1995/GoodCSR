@@ -4,6 +4,7 @@ def remove_functionality_pdf_view(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     pdf_key = int(request.GET.get('key'))
+    report_type = int(request.GET.get('report_type'))
     image = PMU_URL
     #to display the cover page and summary page sections calling the functions by passing request #STARTS)
     locals_list = display_blocks(request)
@@ -13,15 +14,19 @@ def remove_functionality_pdf_view(request):
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
     answer_list = report_question_list(quest_list,projectreportobj,projectobj)
-    previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
-    
-    if projectreportobj:
-        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-#    to display the index page 
+    if report_type == 1:
+        previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
+        if projectreportobj:
+            previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+        #    to display the index page 
+    elif report_type == 2:
+        # here logic for monthly report
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
 
+        
+        pass
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
     tranche_list = Tranche.objects.filter(project = projectobj,active=2)
     tranche_amount = tanchesamountlist(tranche_list)
@@ -33,7 +38,6 @@ def remove_functionality_pdf_view(request):
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
     if pdf_key == 1:
-        # import ipdb; ipdb.set_trace()
         return render(request,'report/remove-pdfview.html',locals())
     else:
         return render(request,'report/report-template_pdf_copy.html',locals())
