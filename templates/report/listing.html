@@ -47,8 +47,11 @@
             <td><a class="budget_button" href="/report/remove/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1&report_type={{i.report_type}}" target="_blank">View Report</button></a></td>
 
             <td><a target="_blank" class="budget_button" href="/report/pdf/view/?slug={{project.slug}}&report_id={{i.id}}&key=2 ">Download Report</button></a></td>
-             
-            <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}">Edit Report</button></a></td>
+             {% if i.report_type == 2 %}
+            <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}&key=monthly-report">Edit Report</button></a></td>
+             {% else %}
+                <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}">Edit Report</button></a></td>
+             {% endif %}
             <td><a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=ProjectReport" onclick="return confirm('Are you sure you want to delete the report?')">X</button></a></td>
 
 
