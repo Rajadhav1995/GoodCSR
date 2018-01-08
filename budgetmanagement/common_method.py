@@ -65,33 +65,65 @@ def get_index_quarter(report_obj):
             futurequarter_list.update({int(i.quarter_order):period})
     return previousquarter_list,currentquarter_list,futurequarter_list
     
-def get_months_classified(total_months,month_dict,report_month):
-    current_month = previous_month = future_month = ''
-    for mnth in total_months:
-        if mnth == report_month: 
-            current_month = month_dict.get(report_month)
-        elif mnth < report_month:
-            pre_month = report_month-1
-            previous_month = month_dict.get(pre_month)
-        elif mnth > report_month :
-            post_month = report_month+1
-            future_month = month_dict.get(post_month)
+def get_months_classified(month_dict,years_dict,report_month,report_year,budget_obj):
+    previous_month = {}
+    current_month = {}
+    future_month = {}
+    month_logic = {1:12,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:1}
+    mnths_list = years_dict.get(report_year)
+    if report_month in mnths_list:
+        if mnths_list.index(report_month) == 0 and report_year == budget_obj.start_date.year:
+            pre_mnth = month_logic.get(report_month) - 1
+            post_mnth = month_logic.get(report_month) + 1
+            current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+            future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
+            
+        elif mnths_list.index(report_month) == 0 and budget_obj.start_date.year < report_year:
+            diff = report_year - budget_obj.start_date.year
+            pre_mnth = month_logic.get(report_month)
+            post_mnth =report_month+1
+            previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year - diff)}
+            current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+            future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
+            
+        elif mnths_list.index(report_month) == mnths_list.index(mnths_list[-1]) and report_year== budget_obj.end_date.year:
+            pre_mnth = month_logic.get(report_month) - 1
+            post_mnth = month_logic.get(report_month) + 1
+            previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year)}
+            current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+        
+        elif mnths_list.index(report_month) == mnths_list.index(mnths_list[-1]) and report_year > budget_obj.end_date.year:
+            diff = report_year - budget_obj.start_date.year
+            pre_mnth = month_logic.get(report_month)
+            post_mnth = last_month_logic.get(report_month)
+            previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year - diff)}
+            current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+            future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
+        
+        else:
+            pre_mnth = month_logic.get(report_month) - 1
+            post_mnth = month_logic.get(report_month) + 1   
+            previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year)}
+            current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+            future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
+        
     return previous_month,current_month,future_month
    
-from datetime import datetime, timedelta
-from calendar import monthrange
-def monthdelta(df):
-    d1 = df[0]
-    d2 = df[1]
-    delta = 0
-    while True:
-        mdays = monthrange(d1.year, d1.month)[1]
-        d1 += timedelta(days=mdays)
-        if d1 <= d2:
-            delta += 1
-        else:
-            break
-    return delta 
+def get_years_list(year_diff,s_year,e_year,sm,em):
+    years_dict = {}
+    mnth_list = []
+    for yr in range(year_diff):
+            year = s_year+yr
+            if year == s_year :
+                mnth_list = [i for i in range(sm,13)]
+                years_dict.update({year:mnth_list})
+            elif year == e_year :
+                mnth_list = [i for i in range(1,em)]
+                years_dict.update({year:mnth_list})
+            else:
+                mnth_list = [i for i in range(1,13)]
+                years_dict.update({year:mnth_list})
+    return years_dict
     
 from datetime import datetime
 from dateutil import relativedelta
@@ -103,48 +135,30 @@ def get_budget_months(budget_obj):
     mnth_list = []
     s_year = budget_obj.start_date.year
     e_year = budget_obj.end_date.year
-    date1 = datetime.strptime(budget_obj.start_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
-    date2 = datetime.strptime(budget_obj.end_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
-    rel = relativedelta.relativedelta(date2, date1)
-    rel.months
-    df = [date1,date2]
-    delta = monthdelta(df)
     if s_year == e_year:
-        mnth_list = [sm+i for i in range(delta)]
+        mnth_list = [i for i in range(sm,13)]
         mnth_list.append(em)
         years_dict = {s_year:mnth_list}
     else:
         year_diff = (e_year - s_year)+1
-        years_list = [s_year+i for i in range(year_diff)]
-        for yr in years_list:
-            if yr == s_year :
-                mnth_list = [i for i in range(sm,13)]
-                years_dict.update({yr:mnth_list})
-            elif yr == e_year :
-                mnth_list = [i for i in range(13)]
-                years_dict.update({yr:mnth_list})
-            else:
-                mnth_list = [i for i in range(em,em+1)]
-                years_dict.update({yr:mnth_list})
+        years_dict = get_years_list(year_diff,s_year,e_year,sm,em)
     return years_dict
-    
+
 def get_monthly_logic(report_obj,budget_obj):
     total_months=[]
     years_list = []
-    current_month = previous_month = future_month = ''
-    month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
-                      'June':6,'July':7,'August':8,'September':9,
-                      'October':10,'November':11,'December':12}
+    current_month ={}
+    previous_month = {}
+    future_month = {}
+    month_dict = {1:'January',2:'February',3:'March',4:'April',5:'May',
+                      6:'June',7:'July',8:'August',9:'September',
+                      10:'October',11:'November',12:'December'}
     report_month= report_obj.start_date.month
-#    report_em = report_obj.end_date.month
     report_year = report_obj.start_date.year
-#    report_ey = report_obj.end_date.year
     budget_month = budget_obj.start_date.month
     budget_end_month = budget_obj.end_date.month
     budget_year = budget_obj.start_date.year
     budget_end_year = budget_obj.end_date.year
-    budget_months = get_budget_months(budget_obj)
-    
-#    previous_month,current_month,future_month = get_months_classified(total_months,month_dict,report_month)
-    
+    years_dict = get_budget_months(budget_obj)
+    previous_month,current_month,future_month = get_months_classified(month_dict,years_dict,report_month,report_year,budget_obj)
     return previous_month,current_month,future_month

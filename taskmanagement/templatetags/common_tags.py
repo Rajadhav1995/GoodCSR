@@ -315,4 +315,18 @@ def get_block_tab_removed(questions,block_type,report_obj):
         tab_removed = 'false'
         remove_id = ''
     return tab_removed,remove_id
-        
+    
+from calendar import monthrange
+@register.assignment_tag   
+def get_monthly_date(period):
+    month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
+                      'June':6,'July':7,'August':8,'September':9,
+                      'October':10,'November':11,'December':12}
+    year = int(period.split(' ')[1])
+    mnth = period.split(' ')[0]
+    month = month_dict.get(mnth)
+    days = monthrange(year, month)[1]
+    start_date = str(year)+"-"+str(month)+"-"+str(1)
+    end_date = str(year)+"-"+str(month)+"-"+str(days)
+    period = start_date+' to '+ end_date
+    return period
