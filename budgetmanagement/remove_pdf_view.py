@@ -21,12 +21,10 @@ def remove_functionality_pdf_view(request):
         #    to display the index page 
     elif report_type == 2:
         # here logic for monthly report
+        pass
     previous_questionlist = Question.objects.filter(active = 2,block__slug="previous-quarter-update",parent=None).order_by("order")
     current_questionlist = Question.objects.filter(active = 2,block__slug="current-quarter-update",parent=None).order_by("order")
     next_questionlist = Question.objects.filter(active = 2,block__slug="next-quarter-update",parent=None).order_by("order")
-
-        
-        pass
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
     tranche_list = Tranche.objects.filter(project = projectobj,active=2)
     tranche_amount = tanchesamountlist(tranche_list)

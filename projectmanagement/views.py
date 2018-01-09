@@ -275,6 +275,8 @@ def edit_parameter(request):
         para_type = request.POST.get('para_type')
         loop_count = request.POST.get('loop_count')
         name_count = request.POST.get('name_count')
+        parent_obj.name = request.POST.get('name')
+        parent_obj.instructions = request.POST.get('instruction')
         if rem_id != '':
             rem_id_list = map(int,str(rem_id).split(','))
             del_para = delete_parameter(rem_id_list)
@@ -295,6 +297,7 @@ def edit_parameter(request):
                 create_parameter = ProjectParameter.objects.create(name=request.POST.get(name),project=parent_obj.project,\
                             parent=parent_obj,instructions=request.POST.get(instruction),aggregation_function=agg_type,\
                             parameter_type=parent_obj.parameter_type)
+        parent_obj.save()
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parent_obj.project.slug)
     return render(request,'project/edit_key_parameter.html',locals())
 
