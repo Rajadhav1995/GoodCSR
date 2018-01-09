@@ -258,11 +258,13 @@ width:450px;
                                     {% endfor %}
                                   </select>
 
-                                  <select class="form-control" name="city1_1" id="city1_1" required>
+                                  <select class="form-control" name="city1_1aad" id="city1_1" required>
+                                    <option selected disabled hidden>Select City</option>
                                     {% for i in city_list %}
                                     {% if obj.location.id == i.id %}
                                     <option value="{{i.id}}" selected>{{i.name}}</option>
                                     {% else %}
+
                                     <option value="{{i.id}}">{{i.name}}</option>
                                     {% endif %}
                                     {{i.location}}
@@ -293,7 +295,7 @@ width:450px;
                             {% if location %}
                             <button class="add_field_button">Add More</button>
                             {% else %}
-                            <button class="add_field_button btn btn-success"><b>Click Here to Add Location</b></button>
+                            <button class="add_field_button btn btn-success"><b>Click Here to Add More Location</b></button>
                             {% endif %}
                         </div>
                     </div>
@@ -443,7 +445,7 @@ function get_city(value,index){
                 var res = data.res;
                 //$('#city').html(data);
                 $('#city1_'+ index).find('option').remove().end();
-                $('<option>', {value : "" }).html("---------").appendTo('#city1_'+ index);
+                $('<option>', {value : "" }).html("Select City").appendTo('#city1_'+ index);
                 for (i=0;i<res.length;i++) {
                     $('<option>', {value : res[i].id }).html(res[i].name).appendTo('#city1_'+ index);
                 }
@@ -461,6 +463,7 @@ function get_city(value,index){
     $( "#id_end_date").datepicker();
   } );
   </script>
+
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -488,7 +491,7 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            $(wrapper).append('<br><label>Location '+ x +'<font color="red">*</font></label><div><select class="form-control" onchange="get_city(this.value,'+x +');" name="state_'+ x +'" id="state" required>{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'" required>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
+            $(wrapper).append('<br><label>Location '+ x +'<font color="red">*</font></label><div><select class="form-control" onchange="get_city(this.value,'+x +');" id="state" name="state_'+ x +'" required >{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'" required><option selected disabled hidden>Select City</option>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
 
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
@@ -504,7 +507,7 @@ $(document).ready(function() {
 
 
 <style>
-.error{color:red; min-width: 200px;}
+.error{color:red !important; min-width: 200px;}
 </style>
   <div class="control-sidebar-bg"></div>
 

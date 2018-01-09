@@ -49,7 +49,7 @@
 <!--            <td>{{i.start_date | date:"d-m-Y"}} - {{i.end_date | date:"d-m-Y"}}</td>-->
             <td>{{report_duration.1}}</td>
             <!-- <td>{{i.get_active_display}}</td> -->
-            <td><a class="budget_button" href="/report/remove/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1" target="_blank">View Report</button></a></td>
+            <td><a class="budget_button" href="/report/remove/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1&report_type={{i.report_type}}" target="_blank">View Report</button></a></td>
 
             <td><a target="_blank" class="budget_button" href="/report/pdf/view/?slug={{project.slug}}&report_id={{i.id}}&key=2 ">Download Report</button></a></td>
              {% if i.report_type == 2 %}

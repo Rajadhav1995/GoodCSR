@@ -368,7 +368,6 @@ def get_last_page_number(page_number):
 
 @register.assignment_tag
 def get_index_page_number(quarter):
-    # import ipdb; ipdb.set_trace()
     lista = [4]
     prev = len(quarter.get('Previous Quarter Updates'))
     cur = len(quarter.get('Current Quarter Updates'))

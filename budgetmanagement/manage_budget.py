@@ -251,7 +251,6 @@ def month_quarter_list(request):
     budget_id = request.GET.get('budget_id')
     month_list = get_month_quarterlist(selected_year,budget_id)
     response = {'month_list':month_list}
-    print response
     return JsonResponse(response)
 
 def upload_budget_utlized(line_itemlist,i,request,budget_periodobj):
