@@ -22,7 +22,7 @@ from pmu.settings import PMU_URL
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-
+from calendar import monthrange
 
 
 def report_form(request):
@@ -59,8 +59,9 @@ def report_form(request):
             month_name = data.get('select_month')
             year = data.get('select_year')
             month = month_dict.get(month_name)
+            days = monthrange(int(year), month)[1]
             budget_start_date = str(year)+"-"+str(month)+"-"+str(1)
-            budget_end_date = str(year)+"-"+str(month)+"-"+str(30)
+            budget_end_date = str(year)+"-"+str(month)+"-"+str(days)
             project_report = 0
         else:
             budget_end_date = dates_list[1] if dates_list else '' 

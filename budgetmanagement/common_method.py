@@ -69,12 +69,12 @@ def get_months_classified(month_dict,years_dict,report_month,report_year,budget_
     previous_month = {}
     current_month = {}
     future_month = {}
-    month_logic = {1:12,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:1}
+    month_logic = {1:12,2:1,3:2,4:3,5:4,6:5,7:6,8:7,9:8,10:9,11:10,12:11}
+    last_month_logic = {1:12,12:1}
     mnths_list = years_dict.get(report_year)
     if report_month in mnths_list:
         if mnths_list.index(report_month) == 0 and report_year == budget_obj.start_date.year:
-            pre_mnth = month_logic.get(report_month) - 1
-            post_mnth = month_logic.get(report_month) + 1
+            post_mnth =report_month+1
             current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
             future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
             
@@ -82,27 +82,43 @@ def get_months_classified(month_dict,years_dict,report_month,report_year,budget_
             diff = report_year - budget_obj.start_date.year
             pre_mnth = month_logic.get(report_month)
             post_mnth =report_month+1
-            previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year - diff)}
-            current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
-            future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
+            if diff >1:
+                pre_mnth = last_month_logic.get(report_month)
+                previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year-1)}
+                current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+            else:
+                previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year - diff)}
+                current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+                future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
             
         elif mnths_list.index(report_month) == mnths_list.index(mnths_list[-1]) and report_year== budget_obj.end_date.year:
-            pre_mnth = month_logic.get(report_month) - 1
-            post_mnth = month_logic.get(report_month) + 1
+            pre_mnth = month_logic.get(report_month)
             previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year)}
             current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
         
         elif mnths_list.index(report_month) == mnths_list.index(mnths_list[-1]) and report_year > budget_obj.end_date.year:
+            
             diff = report_year - budget_obj.start_date.year
             pre_mnth = month_logic.get(report_month)
             post_mnth = last_month_logic.get(report_month)
             previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year - diff)}
             current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
             future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
+            
+        elif mnths_list.index(report_month) == mnths_list.index(mnths_list[-1]) and (report_year == budget_obj.start_date.year or budget_obj.start_date.year < report_year):
+            diff = budget_obj.end_date.year - report_year 
+            pre_mnth = month_logic.get(report_month)
+            post_mnth = last_month_logic.get(report_month)
+            previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year)}
+            current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
+            if diff >1:
+                future_month = {2:month_dict.get(post_mnth)+' '+str(report_year + 1)}
+            else:
+                future_month = {2:month_dict.get(post_mnth)+' '+str(report_year + diff)}
         
         else:
-            pre_mnth = month_logic.get(report_month) - 1
-            post_mnth = month_logic.get(report_month) + 1   
+            pre_mnth = month_logic.get(report_month) 
+            post_mnth = report_month + 1   
             previous_month = {0:month_dict.get(pre_mnth)+' '+str(report_year)}
             current_month = {1:month_dict.get(report_month)+' '+str(report_year)}
             future_month = {2:month_dict.get(post_mnth)+' '+str(report_year)}
