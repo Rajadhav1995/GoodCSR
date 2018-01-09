@@ -66,6 +66,7 @@ def get_index_quarter(report_obj):
     return previousquarter_list,currentquarter_list,futurequarter_list
     
 def get_months_classified(month_dict,years_dict,report_month,report_year,budget_obj):
+    #this is to get the dict of the previous,current and next months 
     previous_month = {}
     current_month = {}
     future_month = {}
@@ -126,6 +127,7 @@ def get_months_classified(month_dict,years_dict,report_month,report_year,budget_
     return previous_month,current_month,future_month
    
 def get_years_list(year_diff,s_year,e_year,sm,em):
+# this is to get the years of the budget and list of months of that particular year in a dict
     years_dict = {}
     mnth_list = []
     for yr in range(year_diff):
@@ -144,6 +146,7 @@ def get_years_list(year_diff,s_year,e_year,sm,em):
 from datetime import datetime
 from dateutil import relativedelta
 def get_budget_months(budget_obj):
+    # this is to get the months and years based on the budget start and end date
     sm = budget_obj.start_date.month
     em = budget_obj.end_date.month
     mnth_diff = em-sm
@@ -161,6 +164,7 @@ def get_budget_months(budget_obj):
     return years_dict
 
 def get_monthly_logic(report_obj,budget_obj):
+    #this is to get the previous,current and next months dict
     total_months=[]
     years_list = []
     current_month ={}
