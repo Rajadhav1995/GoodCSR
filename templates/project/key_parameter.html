@@ -102,7 +102,8 @@ width:450px;
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>{{i.name}} <font color="red">*</font></label>
-                                            <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}" required>{% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
+                                            <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}" maxlength="8" required><br>
+                                            {% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -339,7 +340,7 @@ $("#para_type").change(function () {
     
 </script>
 <style>
-.error{color:red; min-width: 200px;}
+.error{color:red !important; min-width: 200px;}
 </style>
   <div class="control-sidebar-bg"></div>
 <script>
@@ -350,6 +351,12 @@ function RemoveProduct() {
             return true;
         }
     }
+</script>
+
+<script>
+$.extend($.validator.messages, {  
+    maxlength: $.validator.format("Please enter less than {0} numbers in input field ")
+});
 </script>
 
 </div>
