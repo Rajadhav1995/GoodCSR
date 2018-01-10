@@ -1155,6 +1155,7 @@
 
                               <script src="/static/js/jsgantt.js" type="text/javascript"></script>
                             <script>
+                                alert("aa");
                                 {% for i,v in currentquarter_list.items %}
                                     {% get_gantt_details v projectobj as taskdict %}
                                     var jsonData = {{taskdict|safe}}

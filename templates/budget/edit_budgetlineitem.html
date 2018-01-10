@@ -79,9 +79,9 @@
                             <td class="sticky-cell"> <input type="text" class="unit-type" name = "unit-type_{{j}}" value="{{lineitemobj.unit_type}}"></td>
                                 {% for i,v in quarter_list.items %}
                                 {% get_quarter_details j i projectobj as line_itemobj %}
-                               <td> <input type="number" name = "unit_{{i}}_{{line_itemobj.id}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
-                                <td><input type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
-                                 <td> <input type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
+                               <td> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{line_itemobj.id}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
+                                <td><input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
+                                 <td> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
                                  
 <!--                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{line_itemobj.id}}_{{j}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>-->
 <!--                                 <td> <input type="number" name ="variance_{{i}}_{{line_itemobj.id}}_{{j}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>-->

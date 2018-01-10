@@ -61,12 +61,12 @@
                                     </select>
                                 </td>
                                 <td class="sticky-cell"><input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}"></td>
-                                <td class="sticky-cell"><input type="number" class = "linetotal" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"></td>
+                                <td class="sticky-cell"><input type="number" class = "linetotal" value="0" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"></td>
                                 <td class="sticky-cell"><input type="text" class="unit-type" name = "unit-type_{{j}}" id="unit-type_{{j}}"> </td>
                                 {% for i,v in quarter_list.items %}
-                                <td class=""> <input type="number" name = "unit_{{i}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" > </td>
-                                <td class=""> <input type="number" name = "rate_{{i}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}"> </td>
-                                <td class=""> <input type="number" name = "planned-cost_{{i}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" > </td>
+                                <td class=""> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{j}}" value="0" class="unit" id="unit_{{i}}_{{j}}"  > </td>
+                                <td class=""> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{j}}" value="0" class="rate" id="rate_{{i}}_{{j}}" > </td>
+                                <td class=""> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='search'}" type="number" name = "planned-cost_{{i}}_{{j}}" value="0" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" > </td>
                                 <!--                 <td> <input type="number" name = "utilized-cost_{{i}}_{{j}}"> </td>-->
                                 {% endfor %}
                             </tr>
