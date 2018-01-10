@@ -540,7 +540,6 @@ def project_summary(request):
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     number_json1 = number_json
     number_json = json.dumps(number_json)
-
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):

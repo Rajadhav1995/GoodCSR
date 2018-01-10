@@ -434,3 +434,8 @@ def get_tranches(duration,objects):
     tranche_obj = objects.filter(due_date__gte=start_date,due_date__lte=end_date)
     tranche_amount = tanchesamountlist(tranche_obj)
     return tranche_obj,tranche_amount
+
+@register.assignment_tag
+def get_funder_mapping(projectobj):
+    mapping = ProjectFunderRelation.objects.get_or_none(project=projectobj)
+    return mapping

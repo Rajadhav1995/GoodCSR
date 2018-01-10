@@ -258,7 +258,7 @@ width:450px;
                                     {% endfor %}
                                   </select>
 
-                                  <select class="form-control" name="city1_1aad" id="city1_1" required>
+                                  <select class="form-control" name="city1_1" id="city1_1" required>
                                     <option selected disabled hidden>Select City</option>
                                     {% for i in city_list %}
                                     {% if obj.location.id == i.id %}
@@ -385,7 +385,7 @@ width:450px;
                     <input style="width: 0px;" value="" name="city_var" id="city_var" type="hidden"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
-                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                        <a class="btn btn-success" href="/project/list/">Cancel</button></a>
                     </div>
                 </div>
             </div>
