@@ -227,15 +227,25 @@ def get_gantt_details(v,projectobj):
     return taskdict
 
 @register.assignment_tag     
-def get_report_quarters(start_date,end_date,budget_quarters):
+def get_report_quarters(report_type,start_date,end_date,budget_quarters):
+    month_dict = {1:'January',2:'February',3:'March',4:'April',5:'May',
+                      6:'June',7:'July',8:'August',9:'September',
+                      10:'October',11:'November',12:'December'}
     report_duration=quarter_duration=''
-    end_date = end_date.replace(tzinfo=pytz.utc)
-    conver_time = end_date.astimezone(pytz.timezone('Asia/Kolkata'))
-    for k in budget_quarters.keys():
-        value = budget_quarters[k].split(' to ')[-1]
-        if value == conver_time.strftime('%Y-%m-%d'):
-            report_duration = int(k)+1
-            quarter_duration = budget_quarters[k]
+    if report_type == 1:
+        end_date = end_date.replace(tzinfo=pytz.utc)
+        conver_time = end_date.astimezone(pytz.timezone('Asia/Kolkata'))
+        for k in budget_quarters.keys():
+            value = budget_quarters[k].split(' to ')[-1]
+            if value == conver_time.strftime('%Y-%m-%d'):
+                report_duration = int(k)+1
+                quarter_duration = budget_quarters[k]
+    else:
+        report_date = start_date.replace(tzinfo=pytz.utc)
+        conver_time = report_date.astimezone(pytz.timezone('Asia/Kolkata'))
+        month = month_dict.get(conver_time.month)
+        year = conver_time.year
+        report_duration = month+' '+str(year)
     return report_duration,quarter_duration
     
 @register.assignment_tag
@@ -315,4 +325,18 @@ def get_block_tab_removed(questions,block_type,report_obj):
         tab_removed = 'false'
         remove_id = ''
     return tab_removed,remove_id
-        
+    
+from calendar import monthrange
+@register.assignment_tag   
+def get_monthly_date(period):
+    month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
+                      'June':6,'July':7,'August':8,'September':9,
+                      'October':10,'November':11,'December':12}
+    year = int(period.split(' ')[1])
+    mnth = period.split(' ')[0]
+    month = month_dict.get(mnth)
+    days = monthrange(year, month)[1]
+    start_date = str(year)+"-"+str(month)+"-"+str(1)
+    end_date = str(year)+"-"+str(month)+"-"+str(days)
+    period = start_date+' to '+ end_date
+    return period
