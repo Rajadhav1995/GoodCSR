@@ -2,13 +2,14 @@ from rest_framework import serializers
 from models import *
 from budgetmanagement.models import SuperCategory
 from projectmanagement.models import Project
-
+import pytz
 
 class TaskSerializer(serializers.ModelSerializer):
     expected_start_date = serializers.DateTimeField()
     expected_end_date = serializers.DateTimeField()
     active = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
+    start_date = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
@@ -20,6 +21,10 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj):
         return obj.get_status_display()
+    
+    def get_start_date(self,obj):
+        
+        return obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
 
 
 class ActivitySerializer(serializers.ModelSerializer):
