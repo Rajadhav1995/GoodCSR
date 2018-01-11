@@ -128,7 +128,6 @@ def get_months_classified(years_dict,report_obj,budget_obj):
             previous_month={}
         elif report_month == e_mnth and report_year == e_year :
             future_month={}
-    print previous_month,current_month,future_month
     return previous_month,current_month,future_month
                    
 def get_years_list(year_diff,s_year,e_year,sm,em):
