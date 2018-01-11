@@ -662,8 +662,7 @@ under 0 Milestones</h5>
 <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Cookie|Satisfy|Kelly+Slab|Overlock" rel="stylesheet">
   <!-- jsGanttImproved App -->
-  <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
-  <script src="/static/js/jsgantt.js" type="text/javascript"></script>
+  
   <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
 <script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
 <script type="text/javascript" src="/static/js/common.js" /></script>
@@ -684,10 +683,11 @@ function confirm_alert(node) {
 */
 </script>
 <!-- script for gantt chart starts here-->
-
+{% if taskdict %}
 <script>
+    
     var jsonData = {{taskdict|safe}}
-    console.log(jsonData);
+    
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -1053,8 +1053,9 @@ function confirm_alert(node) {
     }
 
     $(document).ready(function(){ganttRedo();})
+    
   </script>
-  
+  {% endif %}
   <!-- script for gant chart ends here-->
 <script>
 //Toggle
