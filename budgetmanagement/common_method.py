@@ -65,6 +65,24 @@ def get_index_quarter(report_obj):
             futurequarter_list.update({int(i.quarter_order):period})
     return previousquarter_list,currentquarter_list,futurequarter_list
     
+def get_month_dict(data):
+    year = data.get('year')
+    s_year = data.get('s_year')
+    e_year = data.get('e_year')
+    post_mnth = data.get('post_mnth')
+    pre_mnth = data.get('pre_mnth')
+    report_year = data.get('report_year')
+    month = ''
+    if (year < e_year and year > s_year) or e_year == year:
+        sd = str(year) + "-"+str(post_mnth) + "-"+str(01)
+        ed = str(year) + "-"+str(post_mnth) + "-"+str(30)
+        month = str(sd)+" to "+str(ed)
+    else:
+        sd = str(report_year) + "-"+str(post_mnth) + "-"+str(01)
+        ed = str(report_year) + "-"+str(post_mnth) + "-"+str(30)
+        month = str(sd)+" to "+str(ed)
+    return month
+    
 def get_months_classified(years_dict,report_obj,budget_obj):
     #this is to get the dict of the previous,current and next months 
     month_dict = {0:'',1:'January',2:'February',3:'March',4:'April',5:'May',
@@ -89,7 +107,6 @@ def get_months_classified(years_dict,report_obj,budget_obj):
         previous_month[0] = str(sd)+" to "+str(ed)
         sd = str(report_year)+'-'+str(report_month)+'-'+str(01)
         ed = str(report_year) + "-"+str(report_month) + "-"+str(30)
-#        current_month[1] =month_dict.get(report_month)+' '+str(report_year)
         current_month[1] = str(sd)+" to "+str(ed)
         sd = str(report_year)+'-'+str(post_mnth)+'-'+str(01)
         ed = str(report_year) + "-"+str(post_mnth) + "-"+str(30)
@@ -97,31 +114,16 @@ def get_months_classified(years_dict,report_obj,budget_obj):
         if report_month == 12:
             pre_mnth = report_month -1
             post_mnth = 1
-            year = report_year+1 
-            if (year < e_year and year > s_year) or e_year == year:
-                sd = str(year) + "-"+str(post_mnth) + "-"+str(01)
-                ed = str(year) + "-"+str(post_mnth) + "-"+str(30)
-#                future_month[2] = month_dict.get(post_mnth)+' '+str(year)
-                future_month[2] = str(sd)+" to "+str(ed)
-            else:
-#                future_month[2]=month_dict.get(post_mnth)+' '+str(report_year) 
-                sd = str(report_year) + "-"+str(post_mnth) + "-"+str(01)
-                ed = str(report_year) + "-"+str(post_mnth) + "-"+str(30)
-                future_month[2] = str(sd)+" to "+str(ed)
+            year = report_year+1
+            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,'s_year':s_year,'report_year':report_year}
+            future_month[2] = get_month_dict(data) 
+            
         elif report_month == 1:
             pre_mnth = 12
             post_mnth = report_month +1
             year = report_year-1 
-            if (year < e_year and year > s_year) or s_year == year :
-                sd = str(year) + "-"+str(pre_mnth) + "-"+str(01)
-                ed = str(year) + "-"+str(pre_mnth) + "-"+str(30)
-                previous_month[0] = str(sd)+" to "+str(ed)
-#                previous_month[0] = month_dict.get(pre_mnth)+' '+str(year)
-            else:
-                sd = str(report_year) + "-"+str(post_mnth) + "-"+str(01)
-                ed = str(report_year) + "-"+str(post_mnth) + "-"+str(30)
-                previous_month[0] = str(sd)+" to "+str(ed)
-#                previous_month[0]=month_dict.get(pre_mnth)+' '+str(report_year)
+            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,'s_year':s_year,'report_year':report_year}
+            previous_month[0] = get_month_dict(data) 
         elif report_month == s_mnth and report_year == s_year :
             previous_month={}
         elif report_month == e_mnth and report_year == e_year :
