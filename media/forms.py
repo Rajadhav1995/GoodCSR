@@ -32,6 +32,7 @@ class AttachmentForm(forms.ModelForm):
             "file": MyClearableFileInput(),
         }
 
+
 class ImageUpload(forms.ModelForm):
     '''
     This is model form to upload Image for Project
