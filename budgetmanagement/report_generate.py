@@ -413,6 +413,7 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
             'end_date':end_date,
             'quarter_order':quarter,
             }
+            
             quarterreportobj = QuarterReportSection.objects.get_or_none(project=projectreportobj,quarter_type = quarter_type,quarter_order = quarter )
             if not quarterreportobj:
                 quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
@@ -617,7 +618,12 @@ def saving_of_quarters_section(request):
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
     projectobj = projectreportobj.project
-    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    if projectreportobj.report_type == 1:
+        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    elif projectreportobj.report_type == 2:
+        from budgetmanagement.common_method import get_monthly_logic
+        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+        previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
 #    to save the previous quarter updates:
     quarter_list = previousquarter_list
     previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
@@ -679,8 +685,12 @@ def finalreportdesign(request):
 #     tranches detail ends 
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))#based on report id filter the project report obj
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
-    if projectreportobj:
+    if projectreportobj.report_type == 1:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    elif projectreportobj.report_type == 2:
+        from budgetmanagement.common_method import get_monthly_logic
+        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+        previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
 #      timeline progress 
     image = PMU_URL
 #      timeline progress ends 
