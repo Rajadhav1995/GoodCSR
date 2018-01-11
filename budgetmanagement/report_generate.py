@@ -539,6 +539,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         milestone.active = 0
         milestone.save()
     act_count = get_activities_list(request,quarterreportobj)
+    parent_milestone_question = None
     for i in act_count:
         result = {}
         name1 = []
@@ -558,7 +559,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     milestone_ids = map(int,milestone_ids)
     milestone_answer_dict = {
             'quarter':quarterreportobj,
-            'question':Question.objects.get_or_none(id=int(parent_milestone_question.id)),
+            'question':Question.objects.get_or_none(id=int(parent_milestone_question.id)) if parent_milestone_question else None,
             'inline_answer':milestone_ids,
             'content_type':ContentType.objects.get_for_model(projectreportobj),
             'object_id':projectreportobj.id,
@@ -683,14 +684,8 @@ def finalreportdesign(request):
 #     tranches detail ends 
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))#based on report id filter the project report obj
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
-    if projectreportobj.report_type == 1:
+    if projectreportobj:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-        key = ""
-    elif projectreportobj.report_type == 2:
-        from budgetmanagement.common_method import get_monthly_logic
-        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
-        previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
-        key == 'monthly-report'
 #      timeline progress 
     image = PMU_URL
 #      timeline progress ends 
@@ -707,6 +702,14 @@ def finalreportdesign(request):
         key = request.POST.get('key')
         projectobj = Project.objects.get_or_none(slug=slug)#based on slug filter the project obj
         projectreportobj = ProjectReport.objects.get_or_none(id= request.POST.get('report_id'))
+        if projectreportobj.report_type == 1:
+            previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+            key = ""
+        elif projectreportobj.report_type == 2:
+            from budgetmanagement.common_method import get_monthly_logic
+            budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+            previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
+            key == 'monthly-report'
         div_id = request.POST.get('div_id')
         #to save the two sections data based the save of two sections calling the report_section_form()
         cover_page_locals = report_section_form(request)
