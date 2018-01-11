@@ -423,7 +423,7 @@ $(document).ready(function(){
         depTask = this.task;
         mileName = this.name;
         if (this.id != null) {
-          mileId = this.id;
+          mileId = activityId.toString() + this.id.toString();
         }
         maxDate = new Date('1970-01-01');
         var tempArray = [];
@@ -561,7 +561,7 @@ $(document).ready(function(){
     g.setTimer(5);
     g.setShowTaskInfoLink(1);
     g.Draw();
-    var collideDiv
+    var collideDiv;
     function collision($div1, $div2) {
       var x1 = $div1.offset().left;
       var y1 = $div1.offset().top;
@@ -587,66 +587,101 @@ $(document).ready(function(){
       arrayTask = [],
       collide = false;
     <!-- $('.gselector').hide(); -->
-    function ganttRedo() {
-      var previous = null;
-      var prePrevious= null; 
-      var pre1,pre2,pre3,pre4,pre5,pre6,pre7 = null;
-      var mile = false;
-      $(".gtaskbarcontainer").each(function (index) {
-        currParent = $(this).parent().parent().parent();
-        listParent = currParent.attr('id').replace('row', '');
-        if ($(this).hasClass('gmilecontainer')) {
-          mile = true;
-        }
-        if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
-          .attr('id')) {
-          // console.log("This ID", $(this).attr('id'), mile);
-          if (mile) {
+      function ganttRedo() {
+        var previous = null;
+        var p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 = null;
+        var mile = false;
+        $(".gtaskbarcontainer").each(function (index) {
+          currParent = $(this).parent().parent().parent();
+          listParent = currParent.attr('id').replace('row', '');
+          if ($(this).hasClass('gmilecontainer')) {
+            mile = true;
+          }
+          if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
+            .attr('id')) {
+            collide = false;
+            if (collision($(this), $(previous))) {
+              collide = true;
+            } else if (collision($(this), $(p1))) {
+              collide = true;
+            } else if (p2 != undefined && collision($(this), $(p2))) {
+              collide = true;
+            } else if (p3 != undefined && collision($(this), $(p3))) {
+              collide = true;
+            } else if (p4 != undefined && collision($(this), $(p4))) {
+              collide = true;
+            } else if (p5 != undefined && collision($(this), $(p5))) {
+              collide = true;
+            } else if (p6 != undefined && collision($(this), $(p6))) {
+              collide = true;
+            } else if (p7 != undefined && collision($(this), $(p7))) {
+              collide = true;
+            } else if (p8 != undefined && collision($(this), $(p8))) {
+              collide = true;
+            } else if (p9 != undefined && collision($(this), $(p9))) {
+              collide = true;
+            } else if (p10 != undefined && collision($(this), $(p10))) {
+              collide = true;
+            } else if (p11 != undefined && collision($(this), $(p11))) {
+              collide = true;
+            } else if (p12 != undefined && collision($(this), $(p12))) {
+              collide = true;
+            } else if (p13 != undefined && collision($(this), $(p13))) {
+              collide = true;
+            } else if (p14 != undefined && collision($(this), $(p14))) {
+              collide = true;
+            } else if (p15 != undefined && collision($(this), $(p15))) {
+              collide = true;
+            }
 
-          }
-          if (collision($(this), $(previous)) || collision($(this), $(prePrevious)) || collision($(this), $(pre1)) || collision($(this), $(pre2)) || collision($(this), $(pre3)) || collision($(this), $(pre4)) || collision($(this), $(pre5)) || collision($(this), $(pre6)) || collision($(this), $(pre7)) ) {
-            $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
-              if ($(this).css('top') == '-5px') {
-                $(this).css('top', '0px');
-              }
-            });
-            collide = true;
-            $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-            if (count == 0) {
-              $(previous).css('top', '0px');
-              count++;
-            }
-            listParentDiv = $('#' + listParent);
-            if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
-              listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
-              currParent.css({
-                'height': parseInt(currParent.css('height')) + 25 + 'px',
-                'vertical-align': 'top'
+            if (collide) {
+              $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
+                if ($(this).css('top') == '-5px') {
+                  $(this).css('top', '0px');
+                }
               });
+              $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
+              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
+              if (count == 0) {
+                $(previous).css('top', '0px');
+                count++;
+              }
+              listParentDiv = $('#' + listParent);
+              if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+                listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
+                currParent.css({
+                  'height': parseInt(currParent.css('height')) + 25 + 'px',
+                  'vertical-align': 'top'
+                });
+              }
             }
+          } else {
+            count = 0;
+            arrayTask = [];
+            collide = false;
+            $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
+              top: '-5px'
+            });
+            mile = false;
           }
-        } else {
-          count = 0;
-          arrayTask = [];
-          collide = false;
-          $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
-            top: '-5px'
-          });
-          mile = false;
-        }
-        pre7 = pre6;
-        pre6 = pre5;
-        pre5 = pre4;
-        pre4 = pre3;
-        pre3 = pre2;
-        pre2 = pre1;
-        pre1 = prePrevious;
-        prePrevious = previous;
-        previous = this;
-      });
-    }
-    
-    $(document).ready(function(){ganttRedo();})
+          p15 = p14;
+          p14 = p13;
+          p13 = p12;
+          p12 = p11;
+          p11 = p10;
+          p10 = p9;
+          p9 = p8;
+          p8 = p7;
+          p7 = p6;
+          p6 = p5;
+          p5 = p4;
+          p4 = p3;
+          p3 = p2;
+          p2 = p1;
+          p1 = previous;
+          previous = this;
+        });
+      }
   </script>
 <!--script for super categories starts -->
 
