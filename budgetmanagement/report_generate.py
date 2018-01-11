@@ -34,9 +34,6 @@ def report_form(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget_obj = Budget.objects.get_or_none(project=project)
-    if not budget_obj:
-        msg = "Budget is not created"
-        return render(request,'report/report-form.html',locals())
     from budgetmanagement.manage_budget import get_budget_quarters
     sd = budget_obj.start_date.year
     ed = budget_obj.end_date.year
@@ -63,16 +60,17 @@ def report_form(request):
             budget_start_date = str(year)+"-"+str(month)+"-"+str(1)
             budget_end_date = str(year)+"-"+str(month)+"-"+str(days)
             project_report = 0
+            key = "monthly-report"
         else:
             budget_end_date = dates_list[1] if dates_list else '' 
             budget_start_date = dates_list[0] if dates_list else '' 
+            key = ""
         project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
             report_type = data.get('report_type'),start_date  = budget_start_date,
             name = project_obj.name,end_date = budget_end_date)
         if created or int(project_report.active) == 0 :
             project_report.active = 2
             project_report.save()
-            key = "monthly-report" if report_type==2 else ""
             return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id='+'&key='+key)
         else:
             quarter_msg = "Already Report is generated to this Quarter"
@@ -413,6 +411,7 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
             'end_date':end_date,
             'quarter_order':quarter,
             }
+            
             quarterreportobj = QuarterReportSection.objects.get_or_none(project=projectreportobj,quarter_type = quarter_type,quarter_order = quarter )
             if not quarterreportobj:
                 quarterreportobj = QuarterReportSection.objects.create(**quarter_report_dict)
@@ -617,7 +616,12 @@ def saving_of_quarters_section(request):
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
     projectobj = projectreportobj.project
-    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    if projectreportobj.report_type == 1:
+        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    elif projectreportobj.report_type == 2:
+        from budgetmanagement.common_method import get_monthly_logic
+        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+        previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
 #    to save the previous quarter updates:
     quarter_list = previousquarter_list
     previous_itemlist = [str(k) for k,v in request.POST.items() if '_1_' in str(k) if k.split('_')[1]=='1']
@@ -679,8 +683,14 @@ def finalreportdesign(request):
 #     tranches detail ends 
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))#based on report id filter the project report obj
     previousquarter_list,currentquarter_list,futurequarter_list = {},{},{}
-    if projectreportobj:
+    if projectreportobj.report_type == 1:
         previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+        key = ""
+    elif projectreportobj.report_type == 2:
+        from budgetmanagement.common_method import get_monthly_logic
+        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+        previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
+        key == 'monthly-report'
 #      timeline progress 
     image = PMU_URL
 #      timeline progress ends 
@@ -706,10 +716,8 @@ def finalreportdesign(request):
         # redirection to the same page of the form #STARTS
         if key == 'edit_template' or key == 'removed_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
-#        elif key == 'removed_template':
-#            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
         else:
-            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1))               
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1)+'&key='+key)               
         # ENDS to redirection  
     if key == 'edit_template':
         return render(request,'report/forms-single.html',locals())
