@@ -40,8 +40,6 @@ class TaskSerializer(serializers.ModelSerializer):
         if obj.actual_end_date:
             date = obj.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
             return date
-#    def get_actual_end_date(self,obj):
-#        return obj.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
 
 
 class ActivitySerializer(serializers.ModelSerializer):

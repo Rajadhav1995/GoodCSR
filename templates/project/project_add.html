@@ -205,7 +205,8 @@ width:450px;
                                     {{i.location}}
                                     {% endfor %}
                                   </select>
-                                  <select class="form-control" name="city1_{{forloop.counter}}" id="city1_{{forloop.counter}}" required>
+                                  <select class="form-control" name="city1_{{forloop.counter}}" id="city1_{{forloop.counter}}">
+                                    <option selected disabled hidden>Select City</option>
                                     {% for j in city_list %}
                                     {% if j.id == i.location.id %}
                                     <option value="{{i.location.id}}" selected>{{i.location.name}}</option>
@@ -258,7 +259,7 @@ width:450px;
                                     {% endfor %}
                                   </select>
 
-                                  <select class="form-control" name="city1_1aad" id="city1_1" required>
+                                  <select class="form-control" name="city1_1" id="city1_1" >
                                     <option selected disabled hidden>Select City</option>
                                     {% for i in city_list %}
                                     {% if obj.location.id == i.id %}
@@ -385,7 +386,7 @@ width:450px;
                     <input style="width: 0px;" value="" name="city_var" id="city_var" type="hidden"/>
 
                         <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
-                        <a class="btn btn-success" href="/project/list/">Back</button></a>
+                        <a class="btn btn-success" href="/project/list/">Cancel</button></a>
                     </div>
                 </div>
             </div>
@@ -491,7 +492,7 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            $(wrapper).append('<br><label>Location '+ x +'<font color="red">*</font></label><div><select class="form-control" onchange="get_city(this.value,'+x +');" id="state" name="state_'+ x +'" required >{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'" required><option selected disabled hidden>Select City</option>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
+            $(wrapper).append('<br><label>Location '+ x +'<font color="red">*</font></label><div><select class="form-control" onchange="get_city(this.value,'+x +');" id="state" name="state_'+ x +'" required >{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'"><option selected disabled hidden>Select City</option>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
 
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }

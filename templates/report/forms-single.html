@@ -2176,7 +2176,7 @@
    {% for i,v in futurequarter_list.items %}
        {% get_gantt_details v projectobj as taskdict %}
        var jsonData = {{taskdict|safe}}
-       var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+       var g = new JSGantt.GanttChart(document.getElementById('gwContainer_next'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
     var cur = new Date();
@@ -3009,3 +3009,4 @@
 <!-- Script for submit report ends here-->
 
 {% endblock %}
+
