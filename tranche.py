@@ -27,15 +27,10 @@ def auto_update_tranche_amount(final_budget_utilizedamount,project):
     return tranchelist
 
 def updatetranche():
+    # this function is to update tranche
     projectlist = Project.objects.filter(active=2)
     for project in projectlist:
             budgetobj = Budget.objects.latest_one(project = project,active=2)
             if budgetobj:
                 final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
                 updatedobj = auto_update_tranche_amount(final_budget_utilizedamount,project)
-                if updatedobj:
-                    print "-----successfully updated for project", project.name,project.id
-                else:
-                    print "----no tranches",project.name,project.id
-            else:
-                print "*****Budget is not created for the project",project.name,project.id

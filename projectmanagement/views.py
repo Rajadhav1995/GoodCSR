@@ -29,9 +29,13 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
     #this function is to manage project location 
     for i in range(location_count):
         city = 'city1_'+str(i+1)
+        state = 'state_'+str(i+1)
         location_type = 'type_'+str(i+1)
         if city not in city_var_list:
-            boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(city))
+            if request.POST.get(city):
+                boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(city))
+            else:
+                boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(state))
             if boundary_obj:
                 location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
     del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
@@ -75,6 +79,7 @@ def create_project(request):
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
+    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         try:
             instance = get_object_or_404(Project, slug=slug)
