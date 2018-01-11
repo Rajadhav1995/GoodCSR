@@ -273,7 +273,11 @@ def report_detail(request):
     recommended_amount = tranche_amount['recommended_amount']
     utilized_amount = tranche_amount['utilized_amount']
     projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
-    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    if projectreportobj.report_type == 1:
+        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    else:
+        from budgetmanagement.common_method import get_monthly_logic
+        previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
     # for basic details of project report we are sending all fields in dictionary 
     answer_list = report_question_list(quest_list,report_obj,project)
     if pdf_key == 1:
