@@ -79,7 +79,6 @@ def create_project(request):
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
-    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         try:
             instance = get_object_or_404(Project, slug=slug)
