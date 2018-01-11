@@ -55,21 +55,8 @@
             <td><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></td>
             {% get_funder_mapping i as funder_mapping %}
 
-            <td>
-                <!-- {% if funder_mapping.implementation_partner.attrs.first_name %} -->
-                {{funder_mapping.implementation_partner.attrs.first_name}} {{funder_mapping.implementation_partner.attrs.last_name}}
-                <!-- {% else %} -->
-                <!-- {{funder_mapping.implementation_partner}} -->
-                <!-- {% endif %} -->
-            </td>
-            <td>
-                <!-- {% if funder_mapping.funder.attrs.first_name %} -->
-                {{funder_mapping.funder.attrs.first_name}} {{funder_mapping.funder.attrs.last_name}}
-                <!-- {% else %} -->
-                <!-- {{funder_mapping.funder}} -->
-                <!-- {% endif %} -->
-            </td>
-            
+            <td>{{funder_mapping.implementation_partner.organization}} </td>
+            <td>{{funder_mapping.funder.organization}}</td>            
             <td>{{i.get_active_display}}</td>
             <td><a class="budget_button" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
             <td><a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>  <!-- <a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a> -->  <!-- <a class="budget_button" href="/report/listing/?slug={{i.slug}}"> Manage Reports</a> --> <a href="/project/remove/record/?id={{i.id}}&model=Project" type="button" title="Delete Project" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')"><b>x</b></a>

@@ -39,6 +39,8 @@ def signout(request):
     return HttpResponseRedirect('/')
 
 def homepage(request):
+    if request.session.get('user_id'):
+        return HttpResponseRedirect('/dashboard/')
     banner_images = Section.objects.filter(article__slug='banner-images', active=2)
     features = Section.objects.filter(article__slug='features')
     midpart_image = Section.objects.filter(article__slug='midpart')
