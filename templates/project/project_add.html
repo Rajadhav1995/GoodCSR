@@ -190,13 +190,30 @@ width:450px;
                             {% for i in location %}
                             <label>Location {{forloop.counter}}<font color="red">*</font></label>
                             <div class = "con_{{i.id}}">
-                                
+                                {% if i.location.boundary_level == 2 %}
                                 <select class="form-control" onchange="get_city(this.value,{{forloop.counter}});" name="state_{{forloop.counter}}" id="state_{{forloop.counter}}" required>
                                     
                                     <option disabled selected value> Select State </option>
                                     
                                     {% for j in state_list %}
-                                    {% if j.id == i.location.parent.id %}
+
+                                    {% if j.id == i.location.id  %}
+                                    
+                                    <option value="{{i.location.id}}" selected>{{i.location.name}}</option>
+                                    {% else %}
+                                    <option value="{{j.id}}">{{j.name}}</option>
+                                    {% endif %}
+                                    {{i.location}}
+                                    {% endfor %}
+                                  </select>
+                                  {% else %}
+                                  <select class="form-control" onchange="get_city(this.value,{{forloop.counter}});" name="state_{{forloop.counter}}" id="state_{{forloop.counter}}" required>
+                                    
+                                    <option disabled selected value> Select State </option>
+                                    
+                                    {% for j in state_list %}
+                                    
+                                    {% if j.id == i.location.parent.id  %}
                                     
                                     <option value="{{i.location.parent.id}}" selected>{{i.location.parent.name}}</option>
                                     {% else %}
@@ -205,6 +222,7 @@ width:450px;
                                     {{i.location}}
                                     {% endfor %}
                                   </select>
+                                  {% endif %}
                                   <select class="form-control" name="city1_{{forloop.counter}}" id="city1_{{forloop.counter}}">
                                     <option selected disabled hidden>Select City</option>
                                     {% for j in city_list %}
@@ -427,8 +445,10 @@ $('body').on('click','.btnRemove',function() {
     
     document.getElementById("rem_id").value = [rem_id];
     document.getElementById("city_var").value = [city_var];
+    alert("Location removed successfully");
 });
 document.getElementById("rem_id").value = [rem_id];
+
 </script>
 <script>
 function get_city(value,index){

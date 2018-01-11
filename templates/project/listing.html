@@ -56,18 +56,10 @@
             {% get_funder_mapping i as funder_mapping %}
 
             <td>
-                <!-- {% if funder_mapping.implementation_partner.attrs.first_name %} -->
-                {{funder_mapping.implementation_partner.attrs.first_name}} {{funder_mapping.implementation_partner.attrs.last_name}}
-                <!-- {% else %} -->
-                <!-- {{funder_mapping.implementation_partner}} -->
-                <!-- {% endif %} -->
+                {{funder_mapping.implementation_partner.organization}} 
             </td>
             <td>
-                <!-- {% if funder_mapping.funder.attrs.first_name %} -->
-                {{funder_mapping.funder.attrs.first_name}} {{funder_mapping.funder.attrs.last_name}}
-                <!-- {% else %} -->
-                <!-- {{funder_mapping.funder}} -->
-                <!-- {% endif %} -->
+                {{funder_mapping.funder.organization}}
             </td>
             
             <td>{{i.get_active_display}}</td>
