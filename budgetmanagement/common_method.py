@@ -72,14 +72,19 @@ def get_month_dict(data):
     post_mnth = data.get('post_mnth')
     pre_mnth = data.get('pre_mnth')
     report_year = data.get('report_year')
+    key = data.get('key')
     month = ''
+    if key == 'future':
+        mnth = post_mnth
+    else:
+        mnth = pre_mnth
     if (year < e_year and year > s_year) or e_year == year:
-        sd = str(year) + "-"+str(post_mnth) + "-"+str(01)
-        ed = str(year) + "-"+str(post_mnth) + "-"+str(30)
+        sd = str(year) + "-"+str(mnth) + "-"+str(01)
+        ed = str(year) + "-"+str(mnth) + "-"+str(30)
         month = str(sd)+" to "+str(ed)
     else:
-        sd = str(report_year) + "-"+str(post_mnth) + "-"+str(01)
-        ed = str(report_year) + "-"+str(post_mnth) + "-"+str(30)
+        sd = str(report_year) + "-"+str(mnth) + "-"+str(01)
+        ed = str(report_year) + "-"+str(mnth) + "-"+str(30)
         month = str(sd)+" to "+str(ed)
     return month
     
@@ -115,14 +120,16 @@ def get_months_classified(years_dict,report_obj,budget_obj):
             pre_mnth = report_month -1
             post_mnth = 1
             year = report_year+1
-            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,'s_year':s_year,'report_year':report_year}
+            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,
+                    's_year':s_year,'report_year':report_year,'key':'future'}
             future_month[2] = get_month_dict(data) 
             
         elif report_month == 1:
             pre_mnth = 12
             post_mnth = report_month +1
             year = report_year-1 
-            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,'s_year':s_year,'report_year':report_year}
+            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,
+            's_year':s_year,'report_year':report_year,'key':'previous'}
             previous_month[0] = get_month_dict(data) 
         elif report_month == s_mnth and report_year == s_year :
             previous_month={}
