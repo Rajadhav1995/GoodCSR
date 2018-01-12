@@ -3282,7 +3282,7 @@ $(document).ready(function() {
 <!-- Script for submit report starts -->
 <script>
     var request_url = "{{request.get_full_path|safe}}"
-    var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'+'&key=2'
+    var download_url = '/report/pdf/view/?slug='+'{{request.GET.slug}}'+'&report_id='+'{{projectreportobj.id}}'+'&key=2&report_type={{projectreportobj.report_type}}'
     $('#submit_report').on('click',function(){
     $("#loader").show()
     last_form_id = parseInt($('#accordion form').last().attr('id').split('-')[4])
