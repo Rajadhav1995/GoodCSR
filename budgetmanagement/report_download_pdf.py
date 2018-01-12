@@ -118,7 +118,7 @@ def pdfconverter(request):
             # old report
             pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
         else:
-            pdfkit.from_url(PMU_URL+'/report/remove/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+            pdfkit.from_url(PMU_URL+'/report/remove/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2'+ '&report_type='+'1', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
 
     except:
         return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)

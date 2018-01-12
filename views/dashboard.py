@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from itertools import chain
 from projectmanagement.models import (UserProfile,Project,ProjectFunderRelation)
+from media.models import ProjectLocation
 from userprofile.models import (ProjectUserRoleRelationship,)
 from taskmanagement.views import (updates,corp_task_completion_chart,
     total_tasks_completed,corp_total_budget,corp_total_budget_disbursed)
@@ -13,6 +14,8 @@ from django.core.paginator import Paginator,Page
 
 @check_loggedin_access
 def admin_dashboard(request):
+    state_count = {}
+    uu={}
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     from projectmanagement.templatetags import urs_tags
@@ -33,7 +36,9 @@ def admin_dashboard(request):
     budget = corp_total_budget_disbursed(obj_list)
     image = PMU_URL
     page = request.GET.get('page', 1)
-
+    location_obj = ProjectLocation.objects.filter(active=2)
+    # for i in location_obj:
+        # state_count.update({str(i.location.parent.name):1})
     paginator = Paginator(obj_list, 3)
     try:
         projectobj = paginator.page(page)
