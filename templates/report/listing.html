@@ -51,7 +51,7 @@
             <!-- <td>{{i.get_active_display}}</td> -->
             <td><a class="budget_button" href="/report/remove/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1&report_type={{i.report_type}}" target="_blank">View Report</button></a></td>
 
-            <td><a target="_blank" class="budget_button" href="/report/pdf/view/?slug={{project.slug}}&report_id={{i.id}}&key=2 ">Download Report</button></a></td>
+            <td><a target="_blank" class="budget_button" href="/report/pdf/view/?slug={{project.slug}}&report_id={{i.id}}&key=2&report_type={{i.report_type}} ">Download Report</button></a></td>
              {% if i.report_type == 2 %}
             <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}&key=monthly-report">Edit Report</button></a></td>
              {% else %}
