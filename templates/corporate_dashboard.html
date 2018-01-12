@@ -694,8 +694,9 @@
 
 <script>
 $(document).ready(function() {
-
-var map_data=[{name:'AN',nap:20},{name:'MH',nap:10},{name:'AP',nap:30},{name:'MP',nap:30}];
+var map_data = {{json_data | safe}}
+console.log('mahitiitiititii');
+console.log(map_data);
 console.log(map_data[0]);
         // Titles on Hover
         var titles = document.getElementsByClassName("active-map-area");
@@ -709,7 +710,7 @@ console.log(map_data[0]);
                 var highlight = document.getElementsByClassName("map-area-IN-"+k.name);
                 console.log("Highlight",highlight[0].attributes.fill);
                 highlight[0].setAttribute('fill', '#D8C47F');
-                highlight[0].innerHTML = "<title>"+highlight[0].getAttribute("aria-label")+"-  "+k.nap+"</title>";
+                // highlight[0].innerHTML = "<title>"+highlight[0].getAttribute("aria-label")+"-  "+k.nap+"</title>";
                 console.log("Highlight2",highlight[0].attributes.fill);
             }
         });
