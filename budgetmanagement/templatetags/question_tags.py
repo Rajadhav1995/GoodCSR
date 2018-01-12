@@ -32,15 +32,17 @@ def to_and(value):
 def get_previous_question_value(quest,quarter,i,report_obj,quarter_obj):
     number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}
     heading_label = {'previous-quarter-update':"Previous Quarter Updates",'current-quarter-update':"Current Quarter Updates",'next-quarter-update':"Next Quarter Updates",}
+    month_label = {'previous-quarter-update':"Previous Month Updates",'current-quarter-update':"Current Month Updates",'next-quarter-update':"Next Month Updates",}
     text = ""
     answer_obj = Answer.objects.get_or_none(question=quest,quarter=quarter_obj[1],content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
     if answer_obj:
         text = answer_obj.text 
     else:
         if quest.slug == "heading":
-            text = heading_label.get(quest.block.slug)
+            text = heading_label.get(quest.block.slug) if report_obj.report_type == 1 else month_label.get(quest.block.slug)
         elif quest.slug == "sub-heading":
-            text = number_dict.get(i) + " Quarter Updates" 
+            extra_text = " Quarter Updates" if report_obj.report_type == 1 else " Month Updates"
+            text = number_dict.get(i) + extra_text 
         elif quest.slug == "duration":
             text = quarter
     return text
