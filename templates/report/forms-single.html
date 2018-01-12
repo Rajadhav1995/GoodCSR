@@ -169,7 +169,7 @@
                            {% get_previous_tab_quests 3 as ques_list %}
                       {% get_quarter_tab_removed ques_list v 3 reportupdates.1 projectreportobj as tab_removed %}
                         {% if tab_removed.0 == 'false' %}
-                        <h3 class="heading"> Previous Quarter Updates :{{v}}</h3>
+                        <h3 class="heading"> Previous {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {% endif %} Updates :{{v}}</h3>
                      <form action=".?slug={{slug}}&report_id={{report_id}}" id='ui-accordion-accordion-panel-{{j|add:'2'}}' method = "post">
                         {% csrf_token %}
                         <input type="hidden" name="milestone_count_1" value="1">
