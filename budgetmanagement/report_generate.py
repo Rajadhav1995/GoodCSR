@@ -744,6 +744,7 @@ def finalreportdesign(request):
         return render(request,'report/removed-questions.html',locals())
     elif key == 'monthly-report':
         from budgetmanagement.common_method import get_monthly_logic
+        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
         previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
         return render(request,'report/monthly_report.html',locals())
     else:
