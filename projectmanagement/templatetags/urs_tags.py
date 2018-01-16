@@ -104,12 +104,29 @@ def get_quarter_order(quarter_type,projectobj):
 
 @register.assignment_tag
 def get_quarter_details(row,quarter,projectobj):
-    # this template tag is used to get quarter details
+    # this template tag is used to get budget lineitems details
     try:
         line_itemobj = BudgetPeriodUnit.objects.get(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     except:
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj
+
+@register.assignment_tag
+def get_month_quarter_details(row,v,quarter,projectobj):
+    # this template tag is used to get budget lineitems details
+    from datetime import datetime
+    start_date = v.split('to')[0].rstrip()
+    end_date = v.split('to')[1].lstrip()
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    budget_periodobj = ProjectBudgetPeriodConf.objects.get_or_none(project = projectobj,row_order = int(row),active=2,start_date__lte = start_date,end_date__gte = end_date)
+    
+    try:
+        line_itemobj = BudgetPeriodUnit.objects.get(row_order = int(row),budget_period__project=projectobj,active=2,budget_period=budget_periodobj)
+    except:
+        line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),budget_period__project=projectobj,active=2,budget_period=budget_periodobj)
+    return line_itemobj
+
 
 @register.assignment_tag
 def get_comment(line_itemobj):
