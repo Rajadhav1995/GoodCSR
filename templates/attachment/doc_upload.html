@@ -113,7 +113,7 @@ width:450px;
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Attachment Name</label>
+                                            <label>Attachment Name<font color="red">*</font></label>
                                             {{form.name}}
                                             {{ form.name.errors }}
                                             </div>
@@ -125,13 +125,14 @@ width:450px;
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Attachment Description</label>
+                                            <label>Attachment Description<font color="red">*</font></label>
                                             {{form.description}}
                                     {{ form.description.errors }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
 
                         <div class="row">
                                     <div class="col-md-6 nopadding">
@@ -153,7 +154,7 @@ width:450px;
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Keywords</label>
+                                            <label>Keywords<font color="red">*</font></label>
                                             <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
                                 <p style="color:grey ;">
                                     (Please press Enter or TAB or ',' after typing each keyword)
@@ -293,7 +294,7 @@ $(document).ready(function() {
 
 
 <style>
-.error{color:red; min-width: 200px;}
+.error{color:red !important; min-width: 200px;}
 </style>
   <div class="control-sidebar-bg"></div>
 

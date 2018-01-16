@@ -1,5 +1,6 @@
 from projectmanagement.views import pie_chart_mainlist,aggregate_project_parameters
 from projectmanagement.models import *
+from calendar import monthrange
 
 def key_parameter_chart(obj,parameter_id):
 	
@@ -72,16 +73,30 @@ def get_month_dict(data):
     post_mnth = data.get('post_mnth')
     pre_mnth = data.get('pre_mnth')
     report_year = data.get('report_year')
+    key = data.get('key')
     month = ''
+    if key == 'future':
+        mnth = post_mnth
+    else:
+        mnth = pre_mnth
     if (year < e_year and year > s_year) or e_year == year:
-        sd = str(year) + "-"+str(post_mnth) + "-"+str(01)
-        ed = str(year) + "-"+str(post_mnth) + "-"+str(30)
+        days = monthrange(int(year),mnth)[1]
+        sd = str(year) + "-"+str(mnth) + "-"+str(01)
+        ed = str(year) + "-"+str(mnth) + "-"+str(days)
         month = str(sd)+" to "+str(ed)
     else:
-        sd = str(report_year) + "-"+str(post_mnth) + "-"+str(01)
-        ed = str(report_year) + "-"+str(post_mnth) + "-"+str(30)
+        days = monthrange(int(year),mnth)[1]
+        sd = str(year) + "-"+str(mnth) + "-"+str(01)
+        ed = str(year) + "-"+str(mnth) + "-"+str(days)
         month = str(sd)+" to "+str(ed)
     return month
+    
+def get_days_month(report_year,mnth):
+    if mnth != 0 and mnth != 13:      
+        days = monthrange(int(report_year),mnth)[1]
+    else:
+        days = 30
+    return days
     
 def get_months_classified(years_dict,report_obj,budget_obj):
     #this is to get the dict of the previous,current and next months 
@@ -102,27 +117,32 @@ def get_months_classified(years_dict,report_obj,budget_obj):
     if report_month in mnths_list:
         pre_mnth = report_month -1
         post_mnth = report_month +1
+        pre_days = get_days_month(report_year,pre_mnth)
         sd = str(report_year)+'-'+str(pre_mnth)+'-'+str(01)
-        ed = str(report_year) + "-"+str(pre_mnth) + "-"+str(30)
+        ed = str(report_year) + "-"+str(pre_mnth) + "-"+str(pre_days)
         previous_month[0] = str(sd)+" to "+str(ed)
+        cur_days = get_days_month(report_year,report_month)
         sd = str(report_year)+'-'+str(report_month)+'-'+str(01)
-        ed = str(report_year) + "-"+str(report_month) + "-"+str(30)
+        ed = str(report_year) + "-"+str(report_month) + "-"+str(cur_days)
         current_month[1] = str(sd)+" to "+str(ed)
+        fur_days = get_days_month(report_year,post_mnth)
         sd = str(report_year)+'-'+str(post_mnth)+'-'+str(01)
-        ed = str(report_year) + "-"+str(post_mnth) + "-"+str(30)
+        ed = str(report_year) + "-"+str(post_mnth) + "-"+str(fur_days)
         future_month[2] = str(sd)+" to "+str(ed)
         if report_month == 12:
             pre_mnth = report_month -1
             post_mnth = 1
             year = report_year+1
-            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,'s_year':s_year,'report_year':report_year}
+            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,
+                    's_year':s_year,'report_year':report_year,'key':'future'}
             future_month[2] = get_month_dict(data) 
             
         elif report_month == 1:
             pre_mnth = 12
             post_mnth = report_month +1
             year = report_year-1 
-            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,'s_year':s_year,'report_year':report_year}
+            data = {'pre_mnth':pre_mnth,'post_mnth':post_mnth,'e_year':e_year,'year':year,
+            's_year':s_year,'report_year':report_year,'key':'previous'}
             previous_month[0] = get_month_dict(data) 
         elif report_month == s_mnth and report_year == s_year :
             previous_month={}
