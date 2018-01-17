@@ -99,10 +99,10 @@ def get_months_classified(years_dict,report_obj,budget_obj):
                       6:'June',7:'July',8:'August',9:'September',
                       10:'October',11:'November',12:'December',13:''}
     last_month_logic = {1:12,12:1}
-    previous_month = {0:''}
-    current_month = {1:''}
-    future_month = {2:''}
-    report_month = report_obj.start_date.month
+    previous_month = {}
+    current_month = {}
+    future_month = {}
+    report_month = int(report_obj.start_date.month)+1
     report_year = report_obj.start_date.year
     s_mnth = budget_obj.start_date.month
     e_mnth = budget_obj.end_date.month
@@ -110,6 +110,9 @@ def get_months_classified(years_dict,report_obj,budget_obj):
     e_year = budget_obj.end_date.year
     mnths_list = years_dict.get(report_year)
     if report_month in mnths_list:
+        previous_month = {0:''}
+        current_month = {1:''}
+        future_month = {2:''}
         pre_mnth = report_month -1
         post_mnth = report_month +1
         pre_days = get_days_month(report_year,pre_mnth)
@@ -166,7 +169,7 @@ from datetime import datetime
 from dateutil import relativedelta
 def get_budget_months(budget_obj):
     # this is to get the months and years based on the budget start and end date
-    sm = budget_obj.start_date.month
+    sm = budget_obj.actual_start_date.month
     em = budget_obj.end_date.month
     mnth_diff = em-sm
     years_dict={}

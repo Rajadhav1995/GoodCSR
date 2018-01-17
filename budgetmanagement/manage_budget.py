@@ -233,7 +233,7 @@ def get_month_quarterlist(selected_year,budget_id):
     budget_enddate = budgetobj.end_date
     sd = budgetobj.actual_start_date
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/1)
-    
+
     month_list = []
     for i in range(int(no_of_quarters)):
         ed = sd+relativedelta.relativedelta(months=1)
