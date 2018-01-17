@@ -12,13 +12,14 @@ from taskmanagement.models import *
 from budgetmanagement.models import *
 from projectmanagement.models import UserProfile,Project
 from userprofile.models import (ProjectUserRoleRelationship,)
-
+# forms for taskmanagement
 
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
 STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 MILESTONE_CHOICES=((0,' '),(1, 'Open'), (3, 'Ongoing'),)
 
 class ActivityForm(forms.ModelForm):
+    # form to add activities
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
     project = forms.ModelChoiceField(queryset = Project.objects.filter(active=2),required=True,widget=forms.Select(attrs={'class': 'form-control'}),label='')
     activity_type = forms.ChoiceField(choices = ACTIVITY_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}),required=False)
@@ -32,6 +33,7 @@ class ActivityForm(forms.ModelForm):
         fields  = ('name','super_category','activity_type','description','status','assigned_to','subscribers','project')
 
     def __init__(self,user_id,project_id,*args, **kwargs):
+        # server side validation for adding activity 
         self.user = user_id
         self.project = project_id
         super(ActivityForm, self).__init__(*args, **kwargs)
@@ -45,6 +47,7 @@ class ActivityForm(forms.ModelForm):
         self.fields['assigned_to'].queryset = UserProfile.objects.filter(active=2)
     
     def clean(self):
+        # differentiating activity name and supercategory
         cleaned_data = super(ActivityForm,self).clean()
         super_category= cleaned_data.get("super_category")
         name = cleaned_data.get("name")
@@ -57,6 +60,7 @@ class ActivityForm(forms.ModelForm):
         
 
 class TaskForm(forms.ModelForm):
+    # this form is to add task
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     super_category = forms.ModelMultipleChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     activity = forms.ModelChoiceField(queryset= Activity.objects.filter(active = 2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
@@ -99,6 +103,8 @@ class TaskForm(forms.ModelForm):
             ])
     
     def clean(self):
+        # server side validation for
+        # while adding task
         cleaned_data = super(TaskForm,self).clean()
         start_date = cleaned_data.get("start_date")
         end_date = cleaned_data.get("end_date")
@@ -126,6 +132,7 @@ class TaskForm(forms.ModelForm):
             self._errors["actual_end_date"] = self.error_class([msg])
 
 class MilestoneForm(forms.ModelForm):
+    # form to add milestone
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
     super_category = forms.ModelMultipleChoiceField(queryset= SuperCategory.objects.filter(active = 2).exclude(parent = None),required=False, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
     activity =forms.ModelMultipleChoiceField(queryset= Activity.objects.filter(active = 2),required=False, widget = forms.SelectMultiple(attrs = {'class': 'test'}))
@@ -140,6 +147,7 @@ class MilestoneForm(forms.ModelForm):
 
 
     def __init__(self,user_id,project_id,*args, **kwargs):
+
         self.user = user_id
         self.project = project_id
         super(MilestoneForm, self).__init__(*args, **kwargs)
@@ -162,6 +170,8 @@ class MilestoneForm(forms.ModelForm):
             ('project',self.fields['project'])
             ])
     def clean(self):
+        # server side validation for
+        # while adding milestone
         cleaned_data = super(MilestoneForm,self).clean()
         name = cleaned_data.get("name")
         task = cleaned_data.get("task")

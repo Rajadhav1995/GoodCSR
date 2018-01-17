@@ -23,7 +23,7 @@ from projectmanagement.models import BaseContent
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
 STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 
-
+# Activity model
 class Activity(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)
     super_category = models.ForeignKey("budgetmanagement.SuperCategory",**OPTIONAL)
@@ -43,7 +43,7 @@ class Activity(BaseContent):
     def __str__(self):
         return str(self.name)
 
-
+# task model
 class Task(BaseContent):
     name = models.CharField(max_length=600,**OPTIONAL)
     activity = models.ForeignKey(Activity)
@@ -92,6 +92,7 @@ class Task(BaseContent):
             attach=[]
         return attach
 
+# milestone model
 class Milestone(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)
     name = models.CharField(max_length=300,**OPTIONAL)
