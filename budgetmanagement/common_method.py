@@ -112,8 +112,8 @@ def get_months_classified(years_dict,report_obj,budget_obj):
     previous_month = {}
     current_month = {}
     future_month = {}
-    report_month = int(report_obj.start_date.month)+1
-    report_year = report_obj.start_date.year
+    report_month = int(report_obj.start_date.month)+1 if not report_obj.start_date.month == 12 else 1
+    report_year = report_obj.start_date.year if not report_obj.start_date.month == 12 else int(report_obj.start_date.year)+1
     s_mnth,s_year = get_budget_month_year(budget_obj)
     e_mnth = budget_obj.end_date.month
     e_year = budget_obj.end_date.year
