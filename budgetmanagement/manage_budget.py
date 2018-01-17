@@ -232,6 +232,13 @@ def get_month_quarterlist(selected_year,budget_id):
     ed = budgetobj.end_date
     budget_enddate = budgetobj.end_date
     sd = budgetobj.actual_start_date
+    if sd.day >= 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        month =  1 if sd.month == 12 else sd.month+1
+        sd = sd.replace(day=01,month = month,year=year)
+    elif sd.day < 15:
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
+
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/1)
 
     month_list = []
