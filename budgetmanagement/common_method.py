@@ -92,7 +92,17 @@ def get_days_month(report_year,mnth):
     else:
         days = 30
     return days
-    
+
+def get_budget_month_year(budgetobj):
+    sd = budgetobj.actual_start_date
+    if sd.day >= 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        month =  1 if sd.month == 12 else sd.month+1
+        sd = sd.replace(day=01,month = month,year=year)
+    elif sd.day < 15:
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
+    return sd.month,sd.year
+
 def get_months_classified(years_dict,report_obj,budget_obj):
     #this is to get the dict of the previous,current and next months 
     month_dict = {0:'',1:'January',2:'February',3:'March',4:'April',5:'May',
@@ -104,9 +114,8 @@ def get_months_classified(years_dict,report_obj,budget_obj):
     future_month = {}
     report_month = int(report_obj.start_date.month)+1
     report_year = report_obj.start_date.year
-    s_mnth = budget_obj.start_date.month
+    s_mnth,s_year = get_budget_month_year(budget_obj)
     e_mnth = budget_obj.end_date.month
-    s_year = budget_obj.start_date.year
     e_year = budget_obj.end_date.year
     mnths_list = years_dict.get(report_year)
     if report_month in mnths_list:
