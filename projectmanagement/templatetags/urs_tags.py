@@ -356,8 +356,13 @@ def get_currency(amount):
     locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
     group_amount = 0
     if amount:
-        group_amount = locale.currency( int(amount), grouping=True )
-        group_amount = group_amount[4:-3]
+        group_amount = locale.currency( float(amount), grouping=True )
+        group_amount = group_amount[4:]
+        amount_type = group_amount[-2:]
+        if int(amount_type) == 0:
+            group_amount = group_amount[:-3]
+        else:
+            group_amount = group_amount
     return group_amount
 
 @register.filter
@@ -456,3 +461,7 @@ def get_tranches(duration,objects):
 def get_funder_mapping(projectobj):
     mapping = ProjectFunderRelation.objects.get_or_none(project=projectobj)
     return mapping
+
+@register.filter
+def remove_spcl_char(string):
+    return ''.join(e for e in string if e.isalnum())

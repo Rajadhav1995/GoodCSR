@@ -10,7 +10,7 @@ def projectuserslist(request):
     This function is to add show project list, created by logged in user and it will show all project list to admin
     '''
     project_slug = request.GET.get('slug')
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(project__slug=project_slug)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2,project__slug=project_slug)
     return render(request,'project/project_user_list.html',locals())
 
 def projectuseradd(request):

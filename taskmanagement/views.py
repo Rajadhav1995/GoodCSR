@@ -375,6 +375,9 @@ def my_tasks_details(request):
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
+        task_activities = Task.objects.filter(id__in=task_ids)
+        activity_list=set([i.activity for i in task_activities])
+        category_list = set([i.activity.super_category for i in task_activities])
     else:
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
@@ -383,7 +386,6 @@ def my_tasks_details(request):
         closed_tasks = Task.objects.filter(status=2).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
-        
         task_ids = [int(i.id) for i in task_listing]
     projectobj = project
     user_obj = user

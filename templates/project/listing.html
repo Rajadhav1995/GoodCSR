@@ -52,14 +52,14 @@
         
         {% for i in obj_list %}
         <tr>
-            <td><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></td>
+            <td style='width:38%;'><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></td>
             {% get_funder_mapping i as funder_mapping %}
 
             <td>{{funder_mapping.implementation_partner.organization}} </td>
             <td>{{funder_mapping.funder.organization}}</td>            
             <td>{{i.get_active_display}}</td>
             <td><a class="budget_button" href="/project/add/?slug={{i.slug}}">Edit</button></a></td>
-            <td><a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>  <!-- <a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a> -->  <!-- <a class="budget_button" href="/report/listing/?slug={{i.slug}}"> Manage Reports</a> --> <a href="/project/remove/record/?id={{i.id}}&model=Project" type="button" title="Delete Project" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')"><b>x</b></a>
+            <td style='width: 13%;'><a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>  <!-- <a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a> -->  <!-- <a class="budget_button" href="/report/listing/?slug={{i.slug}}"> Manage Reports</a> --> <a href="/project/remove/record/?id={{i.id}}&model=Project" type="button" title="Delete Project" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')"><b>x</b></a>
            
             </td>
         </tr>
