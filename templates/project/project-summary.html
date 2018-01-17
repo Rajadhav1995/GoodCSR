@@ -95,7 +95,7 @@ $(document).ready(function(){
     <div class="title-left">
     {% get_funder projectobj as project_funders %}
      {% if project_funders.project %}
-    <h4><a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">{{project_funders.project.name}} <p></a></h4>
+    <h4><a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">{{project_funders.project.name}} ⓘ<p></a></h4>
     {% else %}
     <h4><a href = '#'>Project Name </a></h4>
     {% endif %}
@@ -317,7 +317,8 @@ $(document).ready(function() {
     {
       var obj = ff[i]
       var title = obj.title;
-      var wrapper         = $(".numeric_parameter_"+ title[0] + "_" + title[1]); //Fields wrapper
+      var title_id = title.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "")
+      var wrapper         = $(".numeric_parameter_"+ title_id); //Fields wrapper
       console.log(obj);
       if (obj.type == 'CUR') {
         var url = loc_url + '/' + "static/img/budget-icon.png";
@@ -431,8 +432,8 @@ function numberWithCommas(x) {
           {% for i in number_json1 %}
 
           <td style="width:300px;" class="float_section">
-          <div class='numeric_parameter_{{i.title.0}}_{{i.title.1}}'  style="width:300px;"></div
-            >
+
+          <div class='numeric_parameter_{{i.title|remove_spcl_char }}'  style="width:300px;"></div>
           </td>
           {% endfor %}
 

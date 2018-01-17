@@ -180,6 +180,7 @@ def projectlineitemadd(request):
                                'row_order':int(i),
                                'quarter_order':int(quarter),
                                }
+                    # import ipdb; ipdb.set_trace()
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
@@ -328,14 +329,14 @@ def budget_amount_list(budgetobj,projectobj,quarter_list):
         budget_period_plannedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('planned_unit_cost', flat=True)
         budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('utilized_unit_cost', flat=True)
         budget_period_plannedamount = map(lambda x:x if x else 0,budget_period_plannedamount)
-        final_budget_period_plannedamount = sum(map(int,budget_period_plannedamount))
+        final_budget_period_plannedamount = sum(map(float,budget_period_plannedamount))
         budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
-        final_budget_period_utilizedamount = sum(map(int,budget_period_utilizedamount))
+        final_budget_period_utilizedamount = sum(map(float,budget_period_utilizedamount))
         quarter_planned_amount.update({i:final_budget_period_plannedamount})
         quarter_utilized_amount.update({i:final_budget_period_utilizedamount})
     budget_period_plannedamount = quarter_planned_amount.values()
     budget_period_utilizedamount = quarter_utilized_amount.values()
-    return map(int,budget_period_plannedamount),map(int,budget_period_utilizedamount)
+    return map(int,budget_period_plannedamount),map(float,budget_period_utilizedamount)
 
 def tanchesamountlist(tranche_list):
      ''' to get the tranches detail amount'''
@@ -359,7 +360,7 @@ def budget_supercategory_value(projectobj,budgetobj):
     for i in project_category_list:
         total_amount_list = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj,budget_period__project=projectobj,category=i,active=2).values_list('planned_unit_cost',flat=True)
         total_amount_list = map(lambda x:x if x else 0,total_amount_list)
-        total_amount_number = map(int,total_amount_list)
+        total_amount_number = map(float,total_amount_list)
         total_amount = sum(total_amount_number)
         final_project_category_list.append({'name':i.name,'y':int(total_amount),'color':random.choice(colors)})
     return final_project_category_list

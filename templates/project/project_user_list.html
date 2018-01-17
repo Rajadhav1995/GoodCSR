@@ -30,7 +30,9 @@
             <td>{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td>{{i.role.name}}
             <td>{{i.get_active_display}}</td>
-            <td><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}&key=manage">Edit</a></td>
+            <td><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}&key=manage">Edit</a>
+            <a href="/project/remove/record/?id={{i.id}}&model=ProjectUserRoleRelationship" type="button" title="Delete Project" class="btn btn-danger" onclick="return confirm('Are you sure you want to Delete')"><b>x</b></a>
+        </td>
         </tr>
         {% endfor %}
     </table>
