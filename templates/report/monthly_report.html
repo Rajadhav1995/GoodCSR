@@ -260,7 +260,7 @@
 <!--                            this is for key achievements -->
                             {% if quest.slug == "key-achievements-in-this-quarter" %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
-                                <p>{{quest.text|title}}</p>
+                                <p>Key Achievements In This Month</p>
                                     <!-- timeline slider -->
                                     {% if timeline_json != '[]' %}
                               <div id="scrollbar1">
@@ -525,7 +525,7 @@
 <!--                            this is for key achievements-->
                             {% if quest.slug == "key-achievements-in-this-quarter" %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
-                                <p>Key Achievements in this quarter</p>
+                                <p>Key Achievements In This Month</p>
                                     <!-- timeline slider -->
                                         {% if timeline_json != '[]' %}
                               <div id="scrollbar1">
@@ -883,7 +883,7 @@
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
 
-                                <p>{{quest.text|title}}</p>
+                                <p>About The Month</p>
                                 <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
@@ -1513,7 +1513,7 @@
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}')">Remove</a></h5>
-                                <p>{{quest.text|title}}</p>
+                                <p>About The Month</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <textarea type="text" class="textarea_file" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
@@ -1851,7 +1851,7 @@
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{future_len}}">
-                                <p>{{quest.text|title}}</p>
+                                <p>About The Month</p>
                                 <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
@@ -1991,7 +1991,7 @@
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{future_len}}">
-                                <p>{{quest.text|title}} </p>
+                                <p>About The Month </p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                 <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">{{text|striptags}}</textarea>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
