@@ -25,12 +25,13 @@
                     <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <tr class="sticky-row">
-                              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>	
+                              <td class = "sticky-cell table_first" colspan="7">&nbsp;</td>	
                               {% for i,j in quarter_list.items %}
                                     <td class="table-head" colspan="3">{{j}}</th>
                             {% endfor %}
                             </tr>
                             <tr class="sticky-row">
+                                 <th class="sticky-cell">&nbsp;</th>
                                 <th class="sticky-cell">&nbsp;</th>
                                 <th class="sticky-cell">Super Category</th>
                                 <th class="sticky-cell">Heading</th>
@@ -50,8 +51,9 @@
                         <tbody class="budget_section">
                         {% for j in budget_period %}
                         {% with forloop.counter as rnum %}
-                        <tr class = "data_row">
+                        <tr id="data_row_{{j}}" class = "data_row">
                             {% get_budget_lineitem j projectobj as lineitemobj %}
+                            <td class="sticky-cell">{% if rnum != 1 %}<span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> {% endif %}</td>
                             <td class="sticky-cell"><span class="init">{{rnum}}<span></td>
                             
                             <td class="sticky-cell">
@@ -228,9 +230,11 @@
                     
                     var c = count;
                     var tR = $('.data_row:last').clone();
+                    var lastid = $(".data_row:last").attr("id");
                     count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
-                    $(tR).find('td input, td select').each(function(){
+                    $(tR).attr('id', "data_row_"+count);
+                    $(tR).find('td input, td select, td span').each(function(){
                       $(this).val('')
                       if ($(this).attr('name')){
                            if ($(this).attr('name').split('_').length == 3){
@@ -242,6 +246,9 @@
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+count);
                               $(this).attr('id', name[0]+"_"+count);
+                              if (name[0].startsWith('removerow') == true){
+                                    $(this).attr('onclick', "return removerow("+count+")");
+                                }
                             }
                             else if ($(this).attr('name').split('_').length == 4){
                               var name = $(this).attr('name').split('_');
@@ -266,12 +273,22 @@
                         alert("Please add atleast one record")
                       }
                 }
+
             $(".add_clone").on("click", clone);
             $(".remove").on("click", remove);
     
     });
 </script>
 
+<script>
+                function removerow(j){
+                 //var split_id = id.split("_");
+                 //var deleteindex = split_id[1];
+
+                  // Remove <div> with id
+                  $("#data_row_" + j).remove();
+                }
+</script>
 
 <script>
 //Toggle
