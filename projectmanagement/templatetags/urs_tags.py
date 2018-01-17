@@ -249,7 +249,6 @@ def get_parameter_values(obj,para_obj):
 
         else:
             parameter_type = 1
-
     return master_list,master_names,parameter_type,numeric_parameter_value
 
 @register.filter
