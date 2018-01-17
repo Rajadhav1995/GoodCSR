@@ -84,19 +84,7 @@ def get_month_dict(data):
     ed = str(year) + "-"+str(mnth) + "-"+str(days)
     month = str(sd)+" to "+str(ed)
     return month
-'''
-    if (year < e_year and year > s_year) or e_year == year:
-        days = monthrange(int(year),mnth)[1]
-        sd = str(year) + "-"+str(mnth) + "-"+str(01)
-        ed = str(year) + "-"+str(mnth) + "-"+str(days)
-        month = str(sd)+" to "+str(ed)
-    else:
-        days = monthrange(int(year),mnth)[1]
-        sd = str(year) + "-"+str(mnth) + "-"+str(01)
-        ed = str(year) + "-"+str(mnth) + "-"+str(days)
-        month = str(sd)+" to "+str(ed)
-    
-'''
+
 
 def get_days_month(report_year,mnth):
     if mnth != 0 and mnth != 13:      
