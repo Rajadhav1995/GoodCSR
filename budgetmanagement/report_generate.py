@@ -665,6 +665,14 @@ def saving_of_quarters_section(request):
         milestone_list,parameter_list,pic_list,quarterreportobj = get_report_based_quarter(request,quarter_list,projectreportobj,next_itemlist)
     return projectreportobj
 
+def get_report_quarterlist(projectreportobj,projectobj):
+    if projectreportobj.report_type == 1:
+        previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
+    elif projectreportobj.report_type == 2:
+        from budgetmanagement.common_method import get_monthly_logic
+        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+        previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
+    return previousquarter_list,currentquarter_list,futurequarter_list
 
 
 def finalreportdesign(request):
@@ -727,23 +735,14 @@ def finalreportdesign(request):
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1)+'&key='+key)               
         # ENDS to redirection  
     if key == 'edit_template':
-        if projectreportobj.report_type == 1:
-            previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-        elif projectreportobj.report_type == 2:
-            from budgetmanagement.common_method import get_monthly_logic
-            budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
-            previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
+        previousquarter_list,currentquarter_list,futurequarter_list = get_report_quarterlist(projectreportobj,projectobj)
         return render(request,'report/forms-single.html',locals())
     elif key == 'removed_template':
-        if projectreportobj.report_type == 1:
-            previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-        elif projectreportobj.report_type == 2:
-            from budgetmanagement.common_method import get_monthly_logic
-            budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
-            previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
+        previousquarter_list,currentquarter_list,futurequarter_list = get_report_quarterlist(projectreportobj,projectobj)
         return render(request,'report/removed-questions.html',locals())
     elif key == 'monthly-report':
         from budgetmanagement.common_method import get_monthly_logic
+        budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
         previousquarter_list,currentquarter_list,futurequarter_list = get_monthly_logic(projectreportobj,budgetobj)
         return render(request,'report/monthly_report.html',locals())
     else:

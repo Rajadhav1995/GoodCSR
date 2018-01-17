@@ -246,6 +246,7 @@ def get_report_quarters(report_type,start_date,end_date,budget_quarters):
         month = month_dict.get(conver_time.month)
         year = conver_time.year
         report_duration = month+' '+str(year)
+        quarter_duration=str(start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime('%Y-%m-%d'))+' to '+str(end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime('%Y-%m-%d'))
     return report_duration,quarter_duration
     
 @register.assignment_tag

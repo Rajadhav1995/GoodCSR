@@ -234,6 +234,7 @@
                     <h3 id="{{j|add:'1'}}" class = "tab_{{j|add:'1'}}">Previous Month Updates :{{v}}  <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',3,'{{reportupdates.1}}','{{v}}','{{j|add:'1'}}')">x</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class="tab_{{j|add:'1'}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        <input type="hidden" name="slug" value={{slug}}>
                         <input type="hidden" name="report_id" value="{{report_id}}" id="{{report_id}}">
                         <input type="hidden" name="key" value={{key}}>
                         <input type="hidden" name="div_id" value="{{j|add:'1'}}">
@@ -450,7 +451,7 @@
                                                 {% get_utlizedline_total row projectobj as utilized_amount %}
                                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
                                                     <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                                      <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -756,7 +757,7 @@
                                                 {% get_utlizedline_total row projectobj as utilized_amount %}
                                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
                                                     <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                                      <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -839,6 +840,7 @@
                         <h3 id={{j|add:previous_len}} class = "tab_{{j|add:previous_len}}" >Current Month Updates :{{v}} <a class ="tab_remove" onclick="return remove_tabs('{{ques_list|safe}}',4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">x</a></h3>
                         <form action=".?slug={{slug}}&report_id={{report_id}}" class = "tab_{{j|add:previous_len}}" method = "post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        <input type="hidden" name="slug" value={{slug}}>
                         <input type="hidden" name="activity_count_1" value="1">
                         <input type="hidden" name="activity-pic-count_1" value="1">
 <!--                        <input type="hidden" name="current_parameter_count_1" value="1">-->
@@ -1050,7 +1052,7 @@
                                                 {% get_utlizedline_total row projectobj as utilized_amount %}
                                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
                                                     <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                                      <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -1702,7 +1704,7 @@
                                                 {% get_utlizedline_total row projectobj as utilized_amount %}
                                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
                                                     <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                                      <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -1816,6 +1818,7 @@
                         <input type="hidden" name="period" value="{{v}}">
                         <input type="hidden" name="block_type" value="5">
                         <input type="hidden" name="object_id" value="{{reportupdates.1}}">
+                        <input type="hidden" name="slug" value={{slug}}>
                         <div>
                         
                         {% if reportupdates.0 == False %}
@@ -1887,7 +1890,7 @@
                                                 {% get_utlizedline_total row projectobj as utilized_amount %}
                                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
                                                     <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                                      <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -2028,7 +2031,7 @@
                                                 {% get_utlizedline_total row projectobj as utilized_amount %}
                                                 <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                                  <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                                {% get_quarter_details row i projectobj as line_itemobj %}
+                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
                                                     <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                                      <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -2120,7 +2123,7 @@
                     <div class="below_buttons">
                         <hr>
                         <div style="float:left">
-                            <a href="/report/remove/detail/?slug={{slug}}&report_id={{report_id}}&key=1" target="_blank"><button class="report_save">Preview Report</button></a>
+                            <a href="/report/remove/detail/?slug={{slug}}&report_id={{report_id}}&key=1&report_type={{projectreportobj.report_type}}" target="_blank"><button class="report_save">Preview Report</button></a>
                         </div>
                         <div align="right" class="save_exit">
                             <button class="report_save" id="submit_report">Download Report</button>
