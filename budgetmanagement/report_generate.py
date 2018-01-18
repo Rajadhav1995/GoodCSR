@@ -732,7 +732,7 @@ def finalreportdesign(request):
         if key == 'edit_template' or key == 'removed_template':
             return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&key='+str(key))
         else:
-            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1)+'&key='+key)               
+            return HttpResponseRedirect('/report/final/design/?slug='+projectobj.slug+'&report_id='+str(projectreportobj.id)+'&div_id='+str(int(div_id)+1)+'&key='+key)
         # ENDS to redirection  
     if key == 'edit_template':
         previousquarter_list,currentquarter_list,futurequarter_list = get_report_quarterlist(projectreportobj,projectobj)
