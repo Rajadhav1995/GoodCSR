@@ -1424,18 +1424,19 @@
                                     </ul>
                                 </div>
                             </div>
-                            {% else %}
+                            {% endif %}
+                            {% if parameter_values.2 == 0 %}
                             <ul class="key_parameter parameter">
                                 <table class="table pmu_formtable_parameter">
                                     <tr>
                                         <td>
                                             <p>{{parameter_values.1.0}}</p>
-                                            <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
+                                            <img src="/static/img/user.png"><span>{{parameter_values.3 | intcomma}}</span>
                                         </td>
                                     </tr>
                                 </table>
                             </ul>
-                            {% endif %} <!-- this is for parameter type identification -->
+                            {% endif %} <!-- this is for parameter type identification --> 
                             {% endif %} <!-- if loop ends for paramater selection -->
                             {% if param_quest.slug == "about-parameter" %}
                             <div class="col-md-8">

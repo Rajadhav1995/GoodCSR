@@ -249,7 +249,6 @@ def get_parameter_values(obj,para_obj):
 
         else:
             parameter_type = 1
-
     return master_list,master_names,parameter_type,numeric_parameter_value
 
 @register.filter
@@ -333,6 +332,7 @@ def get_risk_mitigation(obj):
 import datetime
 @register.assignment_tag
 def get_date_range(obj):
+    # get date range from quarter range
     quarter = QuarterReportSection.objects.get(id=obj.id)
     duration = ''
     if quarter:
@@ -342,17 +342,20 @@ def get_date_range(obj):
 
 @register.assignment_tag
 def get_quarter_sections(obj):
+    # get quarter sections
     quarter_section = QuarterReportSection.objects.filter(quarter_type=1,project=obj.project).order_by('quarter_order')
     return quarter_section
 
 @register.assignment_tag
 def get_next_quarter_sections(obj):
+    #  get next quarter sections
     quarter_section = QuarterReportSection.objects.filter(quarter_type=3,project=obj.project).order_by('quarter_order')
     return quarter_section
 
 import locale
 @register.filter
 def get_currency(amount):
+    # get amount in form of currency
     locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
     group_amount = 0
     if amount:
@@ -367,12 +370,14 @@ def get_currency(amount):
 
 @register.filter
 def get_ordinal_number(number):
+    #  this filter will return ordinal number
     ordinal = {1:"First",2:"Second",3:"Third",4:"Fourth",5:"Fifth"}
     # this template tag is used to get text ordinal (eg if we pass '1' then we will get 'First')
     return ordinal.get(int(number))
 
 @register.assignment_tag
 def get_page_number(page_number):
+    # this template tag is to increment page number for repor view
     page_obj = Answer.objects.get(text__iexact='page_count')
     page_number = page_obj.object_id
     page_obj.object_id = page_number + 1
@@ -381,6 +386,7 @@ def get_page_number(page_number):
 
 @register.assignment_tag
 def get_last_page_number(page_number):
+    # this template tag is to reset page number counter
     page_obj = Answer.objects.get(text__iexact='page_count')
     page_number = page_obj.object_id
     page_obj.object_id = 1
@@ -390,6 +396,7 @@ def get_last_page_number(page_number):
 
 @register.assignment_tag
 def get_index_page_number(quarter):
+    # this template tag is to rerurn index page number
     lista = [4]
     prev = len(quarter.get('Previous Quarter Updates'))
     cur = len(quarter.get('Current Quarter Updates'))
@@ -424,11 +431,13 @@ def get_index_page_number(quarter):
 
 @register.filter
 def location_split(value, sep = "."):
+    # this filter is to separate location
     parts = value.split(sep)
     return (parts[0], sep.join(parts[1:]))
 
 @register.assignment_tag
 def is_ceo_user(request):
+    # this function is to check user is ceo or not
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get_or_none(user_reference_id = int(user_id ))
     ceo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 5)
@@ -441,6 +450,7 @@ def is_ceo_user(request):
 
 @register.assignment_tag
 def report_duration(date_string):
+    #  get report duration
     start_date = date_string.split(' TO ')[0].rstrip()
     end_date = date_string.split(' TO ')[1].rstrip()
     start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -451,6 +461,7 @@ def report_duration(date_string):
 from budgetmanagement.manage_budget import tanchesamountlist
 @register.assignment_tag
 def get_tranches(duration,objects):
+    # get tranches
     start_date = duration.split(' to ')[0].rstrip()
     end_date = duration.split(' to ')[1].rstrip()
     tranche_obj = objects.filter(due_date__gte=start_date,due_date__lte=end_date)
@@ -464,4 +475,6 @@ def get_funder_mapping(projectobj):
 
 @register.filter
 def remove_spcl_char(string):
+    # this filter is to remove all special chars from string
+    #  we are using this to give id
     return ''.join(e for e in string if e.isalnum())
