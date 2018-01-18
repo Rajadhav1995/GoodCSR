@@ -42,7 +42,7 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>Project Name</label>
+                    <label>Project Name<font color="red">*</font></label>
                     {{form.name}}
                     
                         </div>{% if form.errors %}
@@ -57,7 +57,7 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>{{form.total_budget.label_tag}}</label>
+                    <label>{{form.total_budget.label_tag}}<font color="red">*</font></label>
                     {{form.total_budget}}
                     </div>
                 </div>
@@ -68,7 +68,7 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>{{form.no_of_beneficiaries.label_tag}}</label>
+                    <label>{{form.no_of_beneficiaries.label_tag}}<font color="red">*</font></label>
                     {{form.no_of_beneficiaries}}
                     </div>
                 </div>
@@ -79,7 +79,7 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>{{form.summary.label_tag}}</label>
+                    <label>{{form.summary.label_tag}}<font color="red">*</font></label>
                     {{form.summary}}
                     </div>
                 </div>
@@ -90,7 +90,7 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>Aim of the Program</label>
+                    <label>Aim of the Program<font color="red">*</font></label>
                     {{form.program_aim}}
                     {{form.program_aim.errors}}
                     </div>
@@ -261,8 +261,9 @@ width:450px;
                             {% endfor %}
                             {% endif %}
                             {% if not location  %}
-                            <label>Location {{forloop.counter}}<font color="red">*</font></label>
+                            <label>Location {{forloop.counter}}<font color="red"></font></label>
                             <div>
+                                <label><small>Select State</small><font color="red">*</font></label>
                                 <select class="form-control" onchange="get_city(this.value,1);" name="state_1" id="state" required>
                                     {% if not ids %}
                                     <option disabled selected value> Select State </option>
@@ -276,7 +277,7 @@ width:450px;
                                     {{i.location}}
                                     {% endfor %}
                                   </select>
-
+                                  <label><small>Select City</small><font color="red"></font></label>
                                   <select class="form-control" name="city1_1" id="city1_1" >
                                     <option selected disabled hidden>Select City</option>
                                     {% for i in city_list %}
@@ -289,6 +290,7 @@ width:450px;
                                     {{i.location}}
                                     {% endfor %}
                                   </select>
+                                  <label><small>Location Type</small><font color="red">*</font></label>
                                   <select class="form-control" name="type_1" required>
                                     {% if not ids %}
                                     <option disabled selected value> Select Location Type </option>
@@ -314,6 +316,7 @@ width:450px;
                             {% if location %}
                             <button class="add_field_button">Add More</button>
                             {% else %}
+                            <br>
                             <button class="add_field_button btn btn-success"><b>Click Here to Add More Location</b></button>
                             {% endif %}
                         </div>
@@ -512,7 +515,7 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            $(wrapper).append('<br><label>Location '+ x +'<font color="red">*</font></label><div><select class="form-control" onchange="get_city(this.value,'+x +');" id="state" name="state_'+ x +'" required >{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'"><option selected disabled hidden>Select City</option>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
+            $(wrapper).append('<br><br><label>Location '+ x +'<font color="red">*</font></label><div><label><small>Select State</small><font color="red">*</font></label><select class="form-control" onchange="get_city(this.value,'+x +');" id="state" name="state_'+ x +'" required >{% if not ids %}<option disabled selected value> Select State </option>{% endif %}{% for i in state_list %}{% if obj.location.parent.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><label><small>Select District</small><font color="red"></font></label><select class="form-control" name="city1_'+ x +'" id="city1_'+ x +'"><option selected disabled hidden>Select City</option>{% for i in city_list %}{% if obj.location.id == i.id %}<option value="{{i.id}}" selected>{{i.name}}</option>{% else %}<option value="{{i.id}}">{{i.name}}</option>{% endif %}{{i.location}}{% endfor %}</select><label><small>Location Type</small><font color="red">*</font></label><select class="form-control" name="type_'+ x +'" required>{% if not ids %}<option disabled selected value> Select Location Type </option>{% endif %}{% if obj.program_type == 0 %}<option value="0" slected>Urban</option>{% else %}<option value="0">Urban</option>{% endif %}{% if obj.program_type == 1 %}<option value="1" selected>Semi-Urban</option>{% else %}<option value="1">Semi-Urban</option>{% endif %}{% if obj.program_type == 2 %}<option value="2" selected>Rural</option>{% else %}<option value="2">Rural</option>{% endif %}</select></div>')
 
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }

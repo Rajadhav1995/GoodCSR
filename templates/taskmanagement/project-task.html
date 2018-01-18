@@ -5,24 +5,27 @@
 {% block content %}
 
 <div class="clear"></div>
+
 <!--Content part starts-->
 <section class="content-part">
    <div class="row">
       <div class="left-task">
 
-        <div class="select-area">
-        <div class="small-select">
-        <div><label>See Data as </label></div>
-                <select name="year" id="year_id" class = "select_box" >
-                    <option value = "Select Year">Activity</option>
+        
+        <div class="col-md-12">
+        <div class='col-md-2'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 25px;margin-left: 0px;">Activity</label></div>
+        <div class="col-md-4">
+                <select name="year" id="year_id" class = "form-control" >
+                    <option value = "Select Year">Select</option>
                     {% for i in activity_list %}
                     <option value="{{i.id}}">{{i.name}}</option>
                     {% endfor %}
                 </select>
         </div>
-        <div class="small-select">
-                <select name="year" id="category_dropdown" class = "select_box" >
-                    <option value = "Select Year">Supercategory</option>
+        <div class='col-md-2'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 15px;margin-left: 0px;">Super Category</label></div>
+        <div class="col-md-4">
+                <select name="year" id="category_dropdown" class = "form-control" >
+                    <option value = "Select Year">Select</option>
                     {% for i in category_list %}
                     <option value="{{i}}">{{i}}</option>
                     {% endfor %}
@@ -61,7 +64,7 @@
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li>
+               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -74,7 +77,7 @@
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li>
+               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -87,7 +90,7 @@
             <ul>
                {% if remain_tasks %}
                {% for t in remain_tasks %}
-               <li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}}</span></a></li>
+               <div class="activity act_{{t.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -323,7 +326,7 @@
     var as = $(this).find("option:selected").text();
     var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
     $('.activity').hide();
-    if (ddd == 'Activity') {
+    if (ddd == 'Select') {
       $('.activity').show();
     }else{
       $('.act_'+ddd).show();
@@ -336,7 +339,7 @@
     var as = $(this).find("option:selected").text();
     var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
     $('.category').hide();
-    if (ddd == 'Supercategory') {
+    if (ddd == 'Select') {
       $('.activity').show();
     }else{
       $('.cat_'+ddd).show();
