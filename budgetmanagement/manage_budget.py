@@ -482,6 +482,35 @@ def budget_lineitem_update(budget_parameters):
         budget_lineitem_obj.save()
     return budget_lineitem_obj
 
+def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj):
+    for quarter,value in quarter_list.items():
+        start_date = value.split('to')[0].rstrip()
+        end_date = value.split('to')[1].lstrip()
+        result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
+        if result["subheading"]:
+            budget_dict = {
+                       'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
+                       'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
+                       'subheading':result['subheading'],
+                       'unit':result['unit'],
+                       'unit_type':result['unit-type'],
+                       'rate':result['rate'],
+                       'planned_unit_cost':result['planned-cost'],
+                       'start_date':start_date,
+                       'end_date':end_date,
+                       'row_order':int(j),
+                       'quarter_order':int(quarter),
+                       }
+            budget_parameters = {'budgetperiodid':budgetperiodid,
+                                'budget_dict':budget_dict,
+                                'result':result,'start_date':start_date,
+                                'end_date':end_date,'j':j,'budgetobj':budgetobj,
+                                'projectobj':projectobj,'request':request,
+                                'quarter':quarter}
+            budget_saving = budget_lineitem_update(budget_parameters)
+    return line_itemlist
+
+
 def budgetlineitemedit(request):
     '''  Function to edit the budget line item'''
     project_slug = request.GET.get('slug')
@@ -507,31 +536,9 @@ def budgetlineitemedit(request):
         for j in range((int(count)+1)):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(j))]
             if line_itemlist:
-                for quarter,value in quarter_list.items():
-                    start_date = value.split('to')[0].rstrip()
-                    end_date = value.split('to')[1].lstrip()
-                    result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
-                    if result["subheading"]:
-                        budget_dict = {
-                                   'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
-                                   'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
-                                   'subheading':result['subheading'],
-                                   'unit':result['unit'],
-                                   'unit_type':result['unit-type'],
-                                   'rate':result['rate'],
-                                   'planned_unit_cost':result['planned-cost'],
-                                   'start_date':start_date,
-                                   'end_date':end_date,
-                                   'row_order':int(j),
-                                   'quarter_order':int(quarter),
-                                   }
-                        budget_parameters = {'budgetperiodid':budgetperiodid,
-                                            'budget_dict':budget_dict,
-                                            'result':result,'start_date':start_date,
-                                            'end_date':end_date,'j':j,'budgetobj':budgetobj,
-                                            'projectobj':projectobj,'request':request,
-                                            'quarter':quarter}
-                        budget_saving = budget_lineitem_update(budget_parameters)
+#                splitted the code to reduce the sonar issues
+                budget_saving = update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj)
+
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&edit=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/edit_budgetlineitem.html",locals())
