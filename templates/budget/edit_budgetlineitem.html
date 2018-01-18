@@ -284,9 +284,13 @@
                 function removerow(j){
                  //var split_id = id.split("_");
                  //var deleteindex = split_id[1];
-
+                    var result = confirm("Are you sure to delete this row?");
+                    if (result) {
+                        //Logic to delete the item
+                        $("#data_row_" + j).remove();
+                    }
                   // Remove <div> with id
-                  $("#data_row_" + j).remove();
+                  
                 }
 </script>
 
