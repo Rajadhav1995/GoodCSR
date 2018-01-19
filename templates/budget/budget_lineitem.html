@@ -41,8 +41,8 @@
                         <tbody class="budget_section">
                             {% for j in "123456"%}
                             {% with forloop.counter as rnum %}
-                            <tr class = "data_row">
-                                <td class="sticky-cell"><span></span></td>
+                            <tr id="data_row_{{j}}" class = "data_row">
+                                <td class="sticky-cell">{% if rnum != 1 %}<span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> {% endif %}</td>
                                 <td class="sticky-cell"><span class="init">{{rnum}}</span></td>
                                 <td class="sticky-cell">
                                     <select name="location_{{j}}" id="location_{{j}}" class="location">
@@ -197,6 +197,20 @@
     });
     
 </script>
+
+<script>
+                function removerow(j){
+                 //var split_id = id.split("_");
+                 //var deleteindex = split_id[1];
+                    var result = confirm("Are you sure to delete this row?");
+                    if (result) {
+                        //Logic to delete the item
+                        $("#data_row_" + j).remove();
+                    }
+                  // Remove <div> with id
+                  
+                }
+</script>
 <!--/*script for add more functionality-->
 <script type="text/javascript">
     $(document).ready(function(){
@@ -206,6 +220,7 @@
                     var tR = $('.data_row:last').clone();
                     count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
+                    $(tR).attr('id', "data_row_"+count);
                     $(tR).find('td input, td select').each(function(){
                       if ($(this).attr('name')){
                            if ($(this).attr('name').split('_').length == 3){
@@ -217,6 +232,10 @@
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+count);
                               $(this).attr('id', name[0]+"_"+count);
+                              if (name[0].startsWith('removerow') == true)
+                              {
+                              $(this).attr('onclick', "return removerow("+count+")");
+                              }
                             }
                       }
                     });

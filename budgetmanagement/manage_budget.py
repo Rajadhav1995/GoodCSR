@@ -161,27 +161,28 @@ def projectlineitemadd(request):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i+1))]
             for quarter,value in quarter_list.items():
                 result = get_lineitem_result(line_itemlist,quarter,request)
-                if result["subheading"]:
-                    budget_period = value
-                    start_date = budget_period.split('to')[0].rstrip()
-                    end_date = budget_period.split('to')[1].lstrip()
-                    budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(i))
-                    budget_dict = {'created_by':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))),
-                               'budget_period':budget_periodobj,
-                               'category':SuperCategory.objects.get_or_none(id = result['location']),
-                               'heading':MasterCategory.objects.get_or_none(id = result['heading']),
-                               'subheading':result['subheading'],
-                               'unit':result['unit'],
-                               'unit_type':result['unit-type'],
-                               'rate':result['rate'],
-                               'planned_unit_cost':result['planned-cost'],
-                               'start_date':start_date,
-                               'end_date':end_date,
-                               'row_order':int(i),
-                               'quarter_order':int(quarter),
-                               }
-                    # import ipdb; ipdb.set_trace()
-                    budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
+                if line_itemlist:
+                    if result["subheading"]:
+                        budget_period = value
+                        start_date = budget_period.split('to')[0].rstrip()
+                        end_date = budget_period.split('to')[1].lstrip()
+                        budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(i))
+                        budget_dict = {'created_by':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))),
+                                   'budget_period':budget_periodobj,
+                                   'category':SuperCategory.objects.get_or_none(id = result['location']),
+                                   'heading':MasterCategory.objects.get_or_none(id = result['heading']),
+                                   'subheading':result['subheading'],
+                                   'unit':result['unit'],
+                                   'unit_type':result['unit-type'],
+                                   'rate':result['rate'],
+                                   'planned_unit_cost':result['planned-cost'],
+                                   'start_date':start_date,
+                                   'end_date':end_date,
+                                   'row_order':int(i),
+                                   'quarter_order':int(quarter),
+                                   }
+                        # import ipdb; ipdb.set_trace()
+                        budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/budget_lineitem.html",locals())
