@@ -94,7 +94,7 @@ margin-top: -6px;
                {% if remain_tasks %}
                {% for t in remain_tasks %}
 
-               <div class="project proj_{{t.activity.project.name}}"><li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}}</span></a></li></div>
+               <div class="project proj_{{t.activity.project.name | remove_spcl_char}}"><li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
