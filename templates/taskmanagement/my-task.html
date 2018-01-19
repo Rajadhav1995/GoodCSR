@@ -9,6 +9,10 @@ height: 30px !important;
 line-height: 24px;
 padding: 5px;
 font-size: 14px;
+margin-top: -6px;
+}
+.bar_height{
+  height: 35px !important;
 }
 </style>
     <section class="green-pad green-height">
@@ -29,11 +33,12 @@ font-size: 14px;
 <section class="content-part">
    <div class="row">
       <div class="left-task">
-         <div class="content-top content-top-task">
+         <div class="content-top content-top-task bar_height">
           <div class="col-md-12">
-        <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 0px;">Project</label></div>
+            <div class="col-md-4"></div>
+        <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: -3px;margin-left: 35px;">Select Project:</label></div>
         <div class="col-md-5 nopadding">
-                <select style="margin-left: -15px;" name="year" id="proj_select" class = "form-control small_height" >
+                <select style="margin-left: 15px;" name="year" id="proj_select" class = "form-control small_height" >
                     <option value = "Select Year">Select</option>
                     {% for i in project_list %}
                     <option value="{{i.id}}">{{i.name}}</option>
