@@ -180,7 +180,6 @@ def projectlineitemadd(request):
                                'row_order':int(i),
                                'quarter_order':int(quarter),
                                }
-                    # import ipdb; ipdb.set_trace()
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
