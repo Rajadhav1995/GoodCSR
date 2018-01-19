@@ -4,6 +4,17 @@
 
 {% block content %}
 
+<style>
+.small_height{
+  height: 30px !important;
+line-height: 24px;
+padding: 5px;
+font-size: 14px;
+}
+.padding_dropdown{
+
+}
+</style>
 <div class="clear"></div>
 
 <!--Content part starts-->
@@ -13,19 +24,19 @@
 
         
         <div class="col-md-12">
-        <div class='col-md-2'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 25px;margin-left: 0px;">Activity</label></div>
-        <div class="col-md-4">
-                <select name="year" id="year_id" class = "form-control" >
+        <div class='col-md-2 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 0px;">Activity</label></div>
+        <div class="col-md-3 nopadding">
+                <select style="margin-left: -15px;" name="year" id="year_id" class = "form-control small_height" >
                     <option value = "Select Year">Select</option>
                     {% for i in activity_list %}
                     <option value="{{i.id}}">{{i.name}}</option>
                     {% endfor %}
                 </select>
         </div>
-        <div class='col-md-2'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 15px;margin-left: 0px;">Super Category</label></div>
-        <div class="col-md-4">
-                <select name="year" id="category_dropdown" class = "form-control" >
-                    <option value = "Select Year">Select</option>
+        <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 15px;">Super Category</label></div>
+        <div class="col-md-4 padding_left">
+                <select name="year" id="category_dropdown" class = "form-control small_height" >
+                    <option value = "Select Year"><small>Select</small></option>
                     {% for i in category_list %}
                     <option value="{{i}}">{{i}}</option>
                     {% endfor %}
