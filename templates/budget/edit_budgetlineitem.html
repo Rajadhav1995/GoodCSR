@@ -101,33 +101,21 @@
                      <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                         </thead>
+                          <tr class="sticky-row">
                         <tbody class="budget_section">
-                        <tr id="" class = "">
-                            <td class="sticky-cell" colspan="7"></td>
-                            <td class="sticky-cell"><span class="init"><span></td>
-                            
-                            <td class="sticky-cell">
-                                   
-                            </td>
-                            <td class="sticky-cell">
-                                    
-                            </td>
-                            
-<!--                            <td class="fixed-side"> {{lineitemobj.category.name}}</td>-->
-<!--                            <td class="fixed-side"> {{lineitemobj.heading.name}} </td>-->
-                            <td class="sticky-cell"> </td>
+                      
+                            <td class="sticky-cell" style="padding:10px 11px;top:0px" ></td>
 
-                            <td class="sticky-cell"><input type="number" class = "linetotal" name = "lastrow_linetotal" id="lastrow_linetotal" readonly="readonly" value="{{line_total}}"></td>
-                            <td class="sticky-cell"> </td>
+                            <td class="sticky-cell"  style="top:0px;padding-left:390px;padding-right:123px"><input type="number" class = "linetotal" name = "lastrow_linetotal" id="lastrow_linetotal" readonly="readonly" value="{{line_total}}"></td>
 
                             {% for i,v in quarter_list.items %}
-                               <td> </td>
-                                <td> </td>
-                                 <td> <input type="number" name = "lastrow_linetotal" class ="planned-cost" id="lastrow_linetotal" readonly="readonly" value ="lastrow_linetotal"> </td>
+                            
+                                 <td style="top:0px;padding-left:326px;padding-right:8px" > <input type="number" name = "quarter_linetotal_{{i}}" class ="planned-cost" id="quarter_linetotal_{{i}}" readonly="readonly" value =""> </td>
                                  <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
                             {% endfor %}
-                        </tr>
+                        
                         </tbody>
+                        </tr>
                     </table>
 </div>
 
@@ -223,11 +211,27 @@
        }
    });
 </script>
+
 <script>
-    $(document).ready(function()
-    {
+$(window).on('load', function() {
         function totalcount()
         {
+        alert("hi")
+        linetotal_amount = 0
+        $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            $("#lastrow_linetotal").val(parseInt(linetotal_amount));
+        }
+    function quartercount()
+    });
+
+</script>
+
+<script>
+        function totalcount()
+        {
+        alert("hi")
         linetotal_amount = 0
         $("[id^=linetotal_]").each(function(){
                 linetotal_amount = +linetotal_amount + +$(this).val()
@@ -236,8 +240,28 @@
         }
         $(document).on("change,blur, keyup", ".rate", totalcount);
         $(document).on("change,blur, keyup", ".unit", totalcount);
-    });
     
+</script>
+
+
+<script>
+    $(document).ready(function()
+    {
+        function quartercount()
+        {
+        {% for i,v in quarter_list.items %}
+            quartertotal_amount = 0
+            $('[id^=planned-cost_{{i}}]').each(function(){
+                    quartertotal_amount = +quartertotal_amount + +$(this).val()
+                    $("#quarter_linetotal_{{i}}").val(parseInt(quartertotal_amount));
+                })
+        {% endfor %}
+        }
+
+    
+        $(document).on("change,blur, keyup", ".rate", quartercount);
+        $(document).on("change,blur, keyup", ".unit", quartercount);
+    });
 </script>
 
 
