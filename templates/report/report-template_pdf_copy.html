@@ -499,16 +499,10 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% endfor %}
             
         </div>
-        
-        <!--third page -->
-       
-        <!--                    third page contents ends -->
-        <!--        fourth page contents starts-->
-         
-            {% get_previous_tab_quests 2 as quest_list %}
+        {% get_previous_tab_quests 2 as quest_list %}
             {% get_block_tab_removed quest_list 2 projectreportobj as tab_removed %}
             {% if tab_removed.0 == 'false' %}
-            <div class="page_break"></div>
+            
               <div class="container" style="margin-left:-5px;">
              {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
             {% for i in ques.0 %}
@@ -527,6 +521,12 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endfor %}
             {% endif %}
         </div>
+        <!--third page -->
+       
+        <!--                    third page contents ends -->
+        <!--        fourth page contents starts-->
+         
+            
         {% endif %}
         <!--fourth page contents end-->
         
