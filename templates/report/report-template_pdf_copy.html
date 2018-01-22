@@ -558,7 +558,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
             {% if quest.slug == "key-achievements-in-this-quarter" %}
             <div class="margin_30 prev_banner ">
-                <h5 class="color_green">Key Achievements in this quarter</h5>
+                <h5 class="color_green">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</h5>
                 <!-- timeline slider -->
                 {% if timeline_json != '[]' %}
 
