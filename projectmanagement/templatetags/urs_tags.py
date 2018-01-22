@@ -476,5 +476,5 @@ def get_funder_mapping(projectobj):
 @register.filter
 def remove_spcl_char(string):
     # this filter is to remove all special chars from string
-    #  we are using this to give id
+    #  we are using this to give class name or id
     return ''.join(e for e in string if e.isalnum())
