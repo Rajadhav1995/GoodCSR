@@ -206,6 +206,21 @@
                     if (result) {
                         //Logic to delete the item
                         $("#data_row_" + j).remove();
+                        
+//---------------------to change the count of number 
+                    var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
                     }
                   // Remove <div> with id
                   
@@ -221,8 +236,8 @@
                     count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
                     $(tR).attr('id', "data_row_"+count);
-                     $(tR).find('td input, td select, td span').each(function(){
-                     $(this).val('')
+                    $(tR).find('td input, td select td span').each(function(){
+                    $(this).val('')
                       if ($(this).attr('name')){
                            if ($(this).attr('name').split('_').length == 3){
                               var name = $(this).attr('name').split('_');
@@ -243,6 +258,21 @@
                     $('input[name=count]').val(count)
                     $(tR).find('td span.init').text(count);
                     $(tR).insertAfter('.data_row:last');
+
+//---------------------to change the count of number 
+                    var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
                     }
                 function remove(){
                     var count = $('input[name=count').val();

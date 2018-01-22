@@ -96,7 +96,42 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                </div>
+                    
+<!--                    for extra row-->
+                     <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                        </thead>
+                        <tbody class="budget_section">
+                        <tr id="" class = "">
+                            <td class="sticky-cell" colspan="7"></td>
+                            <td class="sticky-cell"><span class="init"><span></td>
+                            
+                            <td class="sticky-cell">
+                                   
+                            </td>
+                            <td class="sticky-cell">
+                                    
+                            </td>
+                            
+<!--                            <td class="fixed-side"> {{lineitemobj.category.name}}</td>-->
+<!--                            <td class="fixed-side"> {{lineitemobj.heading.name}} </td>-->
+                            <td class="sticky-cell"> </td>
+
+                            <td class="sticky-cell"><input type="number" class = "linetotal" name = "lastrow_linetotal" id="lastrow_linetotal" readonly="readonly" value="{{line_total}}"></td>
+                            <td class="sticky-cell"> </td>
+
+                            {% for i,v in quarter_list.items %}
+                               <td> </td>
+                                <td> </td>
+                                 <td> <input type="number" name = "lastrow_linetotal" class ="planned-cost" id="lastrow_linetotal" readonly="readonly" value ="lastrow_linetotal"> </td>
+                                 <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
+                            {% endfor %}
+                        </tr>
+                        </tbody>
+                    </table>
+</div>
+
+                
         </div>
         
         <div class="click_buttons">
@@ -188,6 +223,24 @@
        }
    });
 </script>
+<script>
+    $(document).ready(function()
+    {
+        function totalcount()
+        {
+        linetotal_amount = 0
+        $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            $("#lastrow_linetotal").val(parseInt(linetotal_amount));
+        }
+        $(document).on("change,blur, keyup", ".rate", totalcount);
+        $(document).on("change,blur, keyup", ".unit", totalcount);
+    });
+    
+</script>
+
+
 
 <script>
     $(document).ready(function()
@@ -269,6 +322,22 @@
                     var ct = parseInt($('input[name=count]').val()) + parseInt(1)
                     $(tR).find('td span.init').text(ct);
                     $(tR).insertAfter('.data_row:last');
+
+//---------------------to change the count of number 
+                    var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
+
                     }
                 function remove(){
                     var count = $('input[name=count').val();
@@ -292,14 +361,32 @@
                 function removerow(j){
                  //var split_id = id.split("_");
                  //var deleteindex = split_id[1];
+                 
                     var result = confirm("Are you sure to delete this row?");
                     if (result) {
                         //Logic to delete the item
                         $("#data_row_" + j).remove();
+                        
+                        var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
+                            
+                            
                     }
                   // Remove <div> with id
                   
                 }
+                
 </script>
 
 <script>
