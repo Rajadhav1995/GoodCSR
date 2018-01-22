@@ -552,7 +552,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> Quarter {{text}} </p>
+            <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} </p>
             {% endif %}
             {% endif %}
 
@@ -682,6 +682,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                        }
 </script>
                 {% else %}
+                {% if projectreportobj.report_type == 1 %} No Key Acheivements in this Quarter{% else %} No Key Acheivements in this Month {% endif %}
                 No Key Acheivements in this Quarter
                 {% endif %}
             </div>
@@ -745,7 +746,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 <h4 style="margin:0px">{{text|title}}</h4>
                 {% endif %}
                 {% if quest.slug == "duration" %}
-                <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+                <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</span> </p>
                 {% endif %}
                 {% endif %}
                 {% if quest.slug == "budget-utlization-tranches" %}
@@ -890,7 +891,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> First Quarter {{text}} </p>
+
+            <p> {% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
             {% endif %}
             {% endif %}
             <!--for gantt chart div -->
@@ -1405,7 +1407,10 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <h4 style="margin-left:-15px">{{text|title}} </h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+
+            
+
+            <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</span> </p>
             {% endif %}
             {% endif %}
             <!--                     this is for parameter selection -->
