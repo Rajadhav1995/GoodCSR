@@ -387,6 +387,7 @@ def my_tasks_details(request):
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
+        project_list = Project.objects.filter(active=2)
     projectobj = project
     user_obj = user
     key = request.GET.get('key')

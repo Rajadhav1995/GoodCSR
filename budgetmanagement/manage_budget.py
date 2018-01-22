@@ -181,7 +181,6 @@ def projectlineitemadd(request):
                                    'row_order':int(i),
                                    'quarter_order':int(quarter),
                                    }
-                        # import ipdb; ipdb.set_trace()
                         budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
@@ -459,7 +458,7 @@ def budget_lineitem_update(budget_parameters):
         budget_lineitem_obj.__dict__.update(budget_dict)
         budget_lineitem_obj.save()
         utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
-        planned_cost = int(result['planned-cost']) if result['planned-cost'] else 0 
+        planned_cost = float(result['planned-cost']) if result['planned-cost'] else 0 
         budget_lineitem_obj.variance = planned_cost - int(utilized_amount)
         budget_lineitem_obj.save()
     else:
@@ -477,7 +476,7 @@ def budget_lineitem_update(budget_parameters):
                    'row_order':int(j),
                    'quarter_order':int(quarter),
                    'budget_period_id':budget_periodobj.id,
-                   'variance':int(budget_lineitem_obj.planned_unit_cost) if budget_lineitem_obj.planned_unit_cost else 0
+                   'variance':float(budget_lineitem_obj.planned_unit_cost) if budget_lineitem_obj.planned_unit_cost else 0
                    }
         budget_lineitem_obj.__dict__.update(budget_extra_values)
         budget_lineitem_obj.save()

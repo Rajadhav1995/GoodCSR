@@ -77,13 +77,13 @@
 <!--                            <td class="fixed-side"> {{lineitemobj.heading.name}} </td>-->
                             <td class="sticky-cell"> <input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}" value="{{lineitemobj.subheading}}">  </td>
                             {% get_line_total j projectobj as line_total %}
-                            <td class="sticky-cell"><input type="number" class = "linetotal" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly" value="{{line_total}}"></td>
+                            <td class="sticky-cell"><input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" class = "linetotal" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly" value="{{line_total}}"></td>
                             <td class="sticky-cell"> <input type="text" class="unit-type" name = "unit-type_{{j}}" value="{{lineitemobj.unit_type}}"></td>
                                 {% for i,v in quarter_list.items %}
                                 {% get_quarter_details j i projectobj as line_itemobj %}
-                               <td> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{line_itemobj.id}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
-                                <td><input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
-                                 <td> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
+                               <td> <input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{line_itemobj.id}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
+                                <td><input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
+                                 <td> <input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
                                  
 <!--                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{line_itemobj.id}}_{{j}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>-->
 <!--                                 <td> <input type="number" name ="variance_{{i}}_{{line_itemobj.id}}_{{j}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>-->
@@ -259,7 +259,7 @@
                 $("#planned-cost_"+i+"_"+j).val('');
             }
             else{
-                $("#planned-cost_"+i+"_"+j).val(parseInt(total));
+                $("#planned-cost_"+i+"_"+j).val(parseFloat(total));
             }
             
             var linetotal = 0
@@ -267,7 +267,7 @@
                 linetotal = +linetotal + +$(this).val()
             })
             
-            $("#linetotal_"+j).val(parseInt(linetotal));
+            $("#linetotal_"+j).val(parseFloat(linetotal));
         }
         $(document).on("change,blur, keyup", ".rate", updatePrice);
         $(document).on("change,blur, keyup", ".unit", updatePrice);
@@ -294,19 +294,27 @@
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+name[1]+"_"+" "+"_"+count);
                               $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                              this.value='0'
                             }
                             else if ($(this).attr('name').split('_').length == 2){
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+count);
                               $(this).attr('id', name[0]+"_"+count);
+                              if (name[0]=='linetotal') {
+                                
+                                this.value=0;
+                              };
+                              
                               if (name[0].startsWith('removerow') == true){
                                     $(this).attr('onclick', "return removerow("+count+")");
                                 }
                             }
                             else if ($(this).attr('name').split('_').length == 4){
+                              
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+name[1]+"_"+""+"_"+count);
                               $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                              this.value='0'
                             }
                       }
                     });
@@ -314,6 +322,22 @@
                     var ct = parseInt($('input[name=count]').val()) + parseInt(1)
                     $(tR).find('td span.init').text(ct);
                     $(tR).insertAfter('.data_row:last');
+
+//---------------------to change the count of number 
+                    var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
+
                     }
                 function remove(){
                     var count = $('input[name=count').val();
@@ -337,14 +361,32 @@
                 function removerow(j){
                  //var split_id = id.split("_");
                  //var deleteindex = split_id[1];
+                 
                     var result = confirm("Are you sure to delete this row?");
                     if (result) {
                         //Logic to delete the item
                         $("#data_row_" + j).remove();
+                        
+                        var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
+                            
+                            
                     }
                   // Remove <div> with id
                   
                 }
+                
 </script>
 
 <script>
