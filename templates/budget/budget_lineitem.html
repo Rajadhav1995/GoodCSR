@@ -61,12 +61,12 @@
                                     </select>
                                 </td>
                                 <td class="sticky-cell"><input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}"></td>
-                                <td class="sticky-cell"><input type="number" step=any class = "linetotal" value="0" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"></td>
+                                <td class="sticky-cell"><input type="number" step="0.001"  ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" class = "linetotal" value="0" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"></td>
                                 <td class="sticky-cell"><input type="text" class="unit-type" name = "unit-type_{{j}}" id="unit-type_{{j}}"> </td>
                                 {% for i,v in quarter_list.items %}
-                                <td class=""> <input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{j}}" value="0" class="unit" id="unit_{{i}}_{{j}}"  > </td>
-                                <td class=""> <input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{j}}" value="0" class="rate" id="rate_{{i}}_{{j}}" > </td>
-                                <td class=""> <input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='search'}" type="number" name = "planned-cost_{{i}}_{{j}}" value="0" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" > </td>
+                                <td class=""> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{j}}" value="0" class="unit" id="unit_{{i}}_{{j}}"  > </td>
+                                <td class=""> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{j}}" value="0" class="rate" id="rate_{{i}}_{{j}}" > </td>
+                                <td class=""> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='search'}" type="number" name = "planned-cost_{{i}}_{{j}}" value="0" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" > </td>
                                 <!--                 <td> <input type="number" name = "utilized-cost_{{i}}_{{j}}"> </td>-->
                                 {% endfor %}
                             </tr>
@@ -225,6 +225,34 @@
     
 </script>
 
+<script>
+    $(document).ready(function()
+    {
+        function validate_decimal_unit()
+        {
+            var unit = $("#unit_"+i+"_"+j).val();
+            var unit_split = unit.split('.');
+            if (unit_split[1]){
+                match = (/(\d{0,5})[^.]*((?:\.\d{0,3})?)/g).exec(unit.replace(/[^\d.]/g, ''));
+                var val1 = match[1] + match[2]
+                $("#unit_"+i+"_"+j).val(val1);
+            }
+        }
+        function validate_decimal_rate()
+        {
+            var rate = $("#rate_"+i+"_"+j).val();
+            var unit_split = rate.split('.');
+            if (unit_split[1]){
+                match = (/(\d{0,5})[^.]*((?:\.\d{0,3})?)/g).exec(rate.replace(/[^\d.]/g, ''));
+                var val1 = match[1] + match[2]
+            $("#rate_"+i+"_"+j).val(val1);
+        }
+    }
+        $(document).on("change,blur, keyup", ".rate", validate_decimal_rate);
+        $(document).on("change,blur, keyup", ".unit", validate_decimal_unit);
+    });
+
+</script>
 <script>
                 function removerow(j){
                  //var split_id = id.split("_");

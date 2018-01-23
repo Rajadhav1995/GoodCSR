@@ -817,7 +817,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                         <th>Planned Amount</th>
                                         <th>Actual Disbursement</th>
                                         <th>Recommended Disbursement</th>
-                                        <th> Utilized</th>
+                                        <!-- <th> Utilized</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -831,7 +831,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                         <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
                                         <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
                                         <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                        <!-- <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td> -->
                                     </tr>
                                     {% endwith %}
                                     {% endfor %}
@@ -841,7 +841,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                         <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
                                         <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
                                         <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                        <!-- <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td> -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -1599,7 +1599,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                     <th>Planned Amount</th>
                                     <th>Actual Disbursement</th>
                                     <th>Recommended Disbursement</th>
-                                    <th> Utilized</th>
+                                    <!-- <th> Utilized</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -1613,7 +1613,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                     <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
                                     <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
                                     <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                    <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                    <!-- <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td> -->
                                 </tr>
                                 {% endwith %}
                                 {% endfor %}
@@ -1623,7 +1623,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                     <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
                                     <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
                                     <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
-                                    <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                    <!-- <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td> -->
                                 </tr>
                             </tbody>
                         </table>
