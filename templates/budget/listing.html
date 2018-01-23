@@ -61,9 +61,10 @@
             <td>{% if i.actual_disbursed_amount %}{{i.actual_disbursed_amount}}{% else %} - {% endif %}</td>
             
             {% get_user_permission request as user_obj %}
-
+            {% pmo_role request as pmo_access %}
+            
             <td>
-                {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 %}
+                {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
                 <a class="budget_button" href="/project/budget/tranche/?slug={{slug}}&tranche_id={{i.id}}"><i class="fa fa-edit"></i> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Tranche" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>
                 {% endif %}
             </td>

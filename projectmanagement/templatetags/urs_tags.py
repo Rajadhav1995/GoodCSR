@@ -478,3 +478,16 @@ def remove_spcl_char(string):
     # this filter is to remove all special chars from string
     #  we are using this to give class name or id
     return ''.join(e for e in string if e.isalnum())
+
+@register.assignment_tag
+def pmo_role(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
+    project = Project.objects.get_or_none(slug=request.GET.get('slug'))
+    # import ipdb; ipdb.set_trace()
+    pmo_user = ProjectUserRoleRelationship.objects.get_or_none(active=2,project=project,role=3,user=user_obj)
+    if pmo_user:
+        option = 1
+    else:
+        option = 0
+    return option
