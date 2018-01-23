@@ -53,7 +53,7 @@
                         {% with forloop.counter as rnum %}
                         <tr id="data_row_{{j}}" class = "data_row">
                             {% get_budget_lineitem j projectobj as lineitemobj %}
-                            <td class="sticky-cell">{% if rnum != 1 %}<a type="button" title="Click here to delete the row" class="btn btn-danger delete_function"><span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> </a> {% endif %}</td>
+                            <td class="sticky-cell"><a type="button" title="Click here to delete the row" class="btn btn-danger delete_function"><span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> </a> </td>
                             <td class="sticky-cell"><span class="init">{{rnum}}<span></td>
                             
                             <td class="sticky-cell">
@@ -348,23 +348,27 @@ $(document).ready(function (){
                     if (result) {
                         //Logic to delete the item
                         $("#data_row_" + j).remove();
-                        quartercount();
-                        totalcount();
                         
                         var count_div = $("[id^=data_row_]").length;
                         abc = 0;
-                        for (i=0;i<=count_div;i++){
+                        for (i=0;i <= count_div;i++){
                             var tR = $('#data_row_'+i)
+                            alert(tR.length+"i value"+i)
                             if (tR.length != 0){
-                            $(tR).find('td span.init').each(function(){
-                                var ct = parseInt(abc+1)
-                                abc++
-                                $(this).text(ct)
+                                //alert(abc+"meghana")
+                                    $(tR).find('td span.init').each(function(){
+                                    var ct = parseInt(abc+1)
+                                    abc++
+                                    $(this).text(ct)
                                 
                         })
                     }
+                        else{
+                        alert("hi"+abc)
+                        }
                             }
-                            
+                        quartercount();
+                        totalcount();
                            
                     }
                   // Remove <div> with id
