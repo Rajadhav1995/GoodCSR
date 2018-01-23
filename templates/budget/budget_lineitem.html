@@ -42,7 +42,7 @@
                             {% for j in "123456"%}
                             {% with forloop.counter as rnum %}
                             <tr id="data_row_{{j}}" class = "data_row">
-                                <td class="sticky-cell">{% if rnum != 1 %}<a type="button" title="Click here to delete the row" class="btn btn-danger delete_function"<span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> </a>{% endif %}</td>
+                                <td class="sticky-cell">{% if rnum != 1 %}<a type="button" title="Click here to delete the row" class="btn btn-danger delete_function"><span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> </a>{% endif %}</td>
                                 <td class="sticky-cell"><span class="init">{{rnum}}</span></td>
                                 <td class="sticky-cell">
                                     <select name="location_{{j}}" id="location_{{j}}" class="location">
@@ -154,40 +154,6 @@
     });
 </script>
 
-<script>
-        function totalcount()
-        {
-        linetotal_amount = 0
-        $("[id^=linetotal_]").each(function(){
-                linetotal_amount = +linetotal_amount + +$(this).val()
-            })
-            $("#lastrow_linetotal").val(parseInt(linetotal_amount));
-        }
-        $(document).on("change,blur, keyup", ".rate", totalcount);
-        $(document).on("change,blur, keyup", ".unit", totalcount);
-    
-</script>
-
-
-<script>
-    $(document).ready(function()
-    {
-        function quartercount()
-        {
-        {% for i,v in quarter_list.items %}
-            quartertotal_amount = 0
-            $('[id^=planned-cost_{{i}}]').each(function(){
-                    quartertotal_amount = +quartertotal_amount + +$(this).val()
-                    $("#quarter_linetotal_{{i}}").val(parseInt(quartertotal_amount));
-                })
-        {% endfor %}
-        }
-
-    
-        $(document).on("change,blur, keyup", ".rate", quartercount);
-        $(document).on("change,blur, keyup", ".unit", quartercount);
-    });
-</script>
 
 <script type="text/javascript">
     $(document).ready(function () 
@@ -250,6 +216,8 @@
             })
             
             $("#linetotal_"+j).val(parseFloat(linetotal));
+                quartercount();
+                totalcount();
         }
         $(document).on("change,blur, keyup", ".rate", updatePrice);
         $(document).on("change,blur, keyup", ".unit", updatePrice);
@@ -265,6 +233,8 @@
                     if (result) {
                         //Logic to delete the item
                         $("#data_row_" + j).remove();
+                        quartercount();
+                        totalcount();
                         
 //---------------------to change the count of number 
                     var count_div = $("[id^=data_row_]").length;
@@ -349,4 +319,35 @@
     
     });
 </script>
+
+<script>
+        function totalcount()
+        {
+        linetotal_amount = 0
+        $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            $("#lastrow_linetotal").val(parseInt(linetotal_amount));
+        }
+        $(document).on("change,blur, keyup", ".rate", totalcount);
+        $(document).on("change,blur, keyup", ".unit", totalcount);
+    
+</script>
+
+
+<script>
+        function quartercount()
+        {
+        {% for i,v in quarter_list.items %}
+            quartertotal_amount = 0
+            $('[id^=planned-cost_{{i}}]').each(function(){
+                    quartertotal_amount = +quartertotal_amount + +$(this).val()
+                    $("#quarter_linetotal_{{i}}").val(parseInt(quartertotal_amount));
+                })
+        {% endfor %}
+        }
+        $(document).on("change,blur, keyup", ".rate", quartercount);
+        $(document).on("change,blur, keyup", ".unit", quartercount);
+</script>
+
 {% endblock %}
