@@ -42,7 +42,7 @@
                             {% for j in "123456"%}
                             {% with forloop.counter as rnum %}
                             <tr id="data_row_{{j}}" class = "data_row">
-                                <td class="sticky-cell">{% if rnum != 1 %}<span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> {% endif %}</td>
+                                <td class="sticky-cell">{% if rnum != 1 %}<a type="button" title="Click here to delete the row" class="btn btn-danger delete_function"<span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow'>X</span> </a>{% endif %}</td>
                                 <td class="sticky-cell"><span class="init">{{rnum}}</span></td>
                                 <td class="sticky-cell">
                                     <select name="location_{{j}}" id="location_{{j}}" class="location">
@@ -74,6 +74,29 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
+<!--                    for extra row-->
+                     <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                        </thead>
+                          <tr class="sticky-row">
+                        <tbody class="budget_section">
+                      
+                            <td class="sticky-cell" style="padding:10px 20.5px;top:0px" ></td>
+
+                            <td class="sticky-cell"  style="top:0px;padding-left:390px;padding-right:123px"><input type="number" class = "linetotal" name = "lastrow_linetotal" id="lastrow_linetotal" readonly="readonly" value="{{line_total}}"></td>
+
+                            {% for i,v in quarter_list.items %}
+                            
+                                 <td style="top:0px;padding-left:326px;padding-right:8px" > <input type="number" name = "quarter_linetotal_{{i}}" class ="planned-cost" id="quarter_linetotal_{{i}}" readonly="readonly" value =""> </td>
+                                 <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
+                            {% endfor %}
+                        
+                        </tbody>
+                        </tr>
+                    </table>
+
+
                 </div>
             </div>
             <div class="click_buttons">
@@ -83,7 +106,7 @@
                 </div>
                 <div class="link-center">
                     <input type="hidden"/>
-                    <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>
+<!--                    <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>-->
                 </div>
                 <div class="link-right">
                     <input type="submit" value="Save Budget Lineitems" class="btn btn-success">
@@ -130,6 +153,42 @@
         });
     });
 </script>
+
+<script>
+        function totalcount()
+        {
+        linetotal_amount = 0
+        $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            $("#lastrow_linetotal").val(parseInt(linetotal_amount));
+        }
+        $(document).on("change,blur, keyup", ".rate", totalcount);
+        $(document).on("change,blur, keyup", ".unit", totalcount);
+    
+</script>
+
+
+<script>
+    $(document).ready(function()
+    {
+        function quartercount()
+        {
+        {% for i,v in quarter_list.items %}
+            quartertotal_amount = 0
+            $('[id^=planned-cost_{{i}}]').each(function(){
+                    quartertotal_amount = +quartertotal_amount + +$(this).val()
+                    $("#quarter_linetotal_{{i}}").val(parseInt(quartertotal_amount));
+                })
+        {% endfor %}
+        }
+
+    
+        $(document).on("change,blur, keyup", ".rate", quartercount);
+        $(document).on("change,blur, keyup", ".unit", quartercount);
+    });
+</script>
+
 <script type="text/javascript">
     $(document).ready(function () 
     {
