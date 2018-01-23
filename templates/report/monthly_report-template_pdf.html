@@ -286,6 +286,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                      </div>
                      {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
                     {% for i in ques.0 %}
+                    
                      {% if i.q_name == 'cover_image' %}
                      <div>
                         <img src="{{image_url}}/{{i.answer}}" style="width:100%; height:700px">
