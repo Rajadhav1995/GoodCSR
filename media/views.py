@@ -11,8 +11,11 @@ from projectmanagement.models import Project,Boundary
 from media.forms import AttachmentForm,ImageUpload,ImageUploadTimeline
 from projectmanagement.common_method import unique_slug_generator,add_keywords
 
+# this views is to manage media
+
 def list_document(request):
     # this function will list documents of project
+    # 
     slug =  request.GET.get('slug')
     model = eval(request.GET.get('model'))
     try:
@@ -31,7 +34,9 @@ def list_document(request):
     return render(request,'attachment/listing.html',locals())
 	
 def timeline_upload(request):
-    # this function is to upload images in timeline (for project summary page)
+    # this function is to upload images in 
+    # timeline (for project summary page)
+    # 
     slug = request.GET.get('slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
@@ -120,7 +125,6 @@ def edit_attachment(request):
     else:
         form = ImageUpload(instance = obj)
         key=2
-    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         instance = get_object_or_404(Attachment, id=ids)
         if key==1:
@@ -142,6 +146,8 @@ def edit_attachment(request):
     return render(request,'attachment/doc_upload.html',locals())
 
 def city_list(request):
+    # this function returns all city list as per 
+    # state selection in project add form
     results ={}
     if request.is_ajax():
         ids =  request.GET.get('state_id')

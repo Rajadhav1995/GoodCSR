@@ -27,6 +27,7 @@ from calendar import monthrange
 
 def report_form(request):
     #to save the report type and duration
+    # 
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     if not project:
@@ -77,7 +78,8 @@ def report_form(request):
     return render(request,'report/report-form.html',locals())
 
 def report_listing(request):
-# listing of the generated reports in the lisiting page
+    # listing of the generated reports in the lisiting page
+    # 
     slug =  request.GET.get('slug')
     project = Project.objects.get_or_none(slug = request.GET.get('slug'))
     report_obj = ProjectReport.objects.filter(project=project,active=2)
@@ -91,7 +93,8 @@ def report_listing(request):
     return render(request,'report/listing.html',locals())
 
 def save_section_answers(quest_ids,project_report,request,data,user):
-# common function to save the two sections data in answer table 
+    # common function to save the 
+    # two sections data in answer table 
     answer=None
     for ques in sorted(quest_ids):
         question = Question.objects.get_or_none(id = int(ques))
@@ -113,7 +116,9 @@ def save_section_answers(quest_ids,project_report,request,data,user):
     return answer
 
 def report_section_form(request):
-    # to save the two sections cover page and project summary page data
+    # to save the two sections cover page 
+    # and project summary page data
+    # 
     report_id = request.GET.get('report_id')
     image_url = PMU_URL
     quest_names=[]
@@ -149,7 +154,9 @@ from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
 def html_to_pdf_view(request):
     # this function is to generate pdf with css and images.
-    # here we are passing same variables which we are sending in report_detail function
+    # here we are passing same variables which 
+    # we are sending in report_detail function
+    # 
     project_slug = request.GET.get('slug')
     image_url = PMU_URL
     project_report_id = request.GET.get('report_id')
@@ -286,7 +293,9 @@ def report_detail(request):
         return render(request,'report/report-template_pdf.html',locals())
 
 def get_quarter_report_logic(projectobj):
-    ''' common functionality to get the start date,end date and no of quarter'''
+    # common functionality to get the start date,
+    # end date and no of quarter
+    # 
     sd = projectobj.start_date
     projectobj_enddate = projectobj.end_date
     if sd.day >= 15:
@@ -303,7 +312,10 @@ def get_quarter_report_logic(projectobj):
 
 import pytz
 def get_quarters(projectobj):
-    ''' To get the quarter list i this format 2017-10-01 to 2017-12-31 '''
+    # this function is to get all quarters as per 
+    # budget start date and budget end date
+    # To get the quarter list i this format 2017-10-01 to 2017-12-31
+    # 
     import datetime
     from datetime import datetime
     data = get_quarter_report_logic(projectobj)
@@ -340,6 +352,7 @@ def get_quarters(projectobj):
     return previousquarter_list,currentquarter_list,futurequarter_list
 
 def get_quarter_report(request,itemlist,quarter):
+    # this function is to get quarter report
     result = {}
     for line in itemlist:
         if str(quarter) == line.split('_')[2]:
@@ -350,7 +363,9 @@ def get_quarter_report(request,itemlist,quarter):
 
 
 def display_blocks(request):
-# this is to get the two blocks cover page and project summary page so that to display the questions in dynamic
+    # this is to get the two blocks cover page and project 
+    # summary page so that to display the questions in dynamic
+    # 
     project_slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     survey = Survey.objects.get(id=1)
@@ -363,9 +378,11 @@ def display_blocks(request):
     return (locals())
     
 
-#this is the actual report saving we are using 
+
 
 def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,projectreportobj,user_obj,quarter):
+    #this is the actual report saving we are using 
+    # 
     milestone_list = []
     pic_list = []
     parameter_list = []
@@ -397,6 +414,8 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
     return milestone_list,parameter_list,pic_list
 
 def get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist):
+    # this funtion is to get report based quarter
+    # 
     milestone_list=[]
     parameter_list=[]
     pic_list=[]
@@ -424,7 +443,8 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
     return milestone_list,parameter_list,pic_list,quarterreportobj
 
 def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarterreportobj):
-#    Common functionality to save the images
+    #    Common functionality to save the images
+    # 
     imageobj = None
     milestone_images = {}
     act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
@@ -468,7 +488,8 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
     return imageobj
 
 def get_activities_list(request,quarterreportobj):
-#    to get activities or milestones list
+    #    to get activities or milestones list
+    # 
     if int(quarterreportobj.quarter_type) == 1:
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Milest')]
         # to get the last digit of the add more activity/milestone so that to loop and check condition
@@ -477,7 +498,9 @@ def get_activities_list(request,quarterreportobj):
     return act_count
 
 def get_milestones_activitieslist(quarterreportobj,num,result):
-#    to get the milestone-activities for particular project based on the quarter. 
+    #    to get the milestone-activities for particular 
+    # project based on the quarter. 
+    # 
     start_date = quarterreportobj.start_date
     end_date = quarterreportobj.end_date
     projectobj = quarterreportobj.project.project
@@ -500,7 +523,8 @@ def get_milestones_activitieslist(quarterreportobj,num,result):
     return object_id,name
 
 def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result):
-#    this is to save the milestone object
+    #    this is to save the milestone object
+    # 
     if int(quarterreportobj.quarter_type) == 1:
         object_id,name = get_milestones_activitieslist(quarterreportobj,1,result)
         description = result.get('about milestone','')
@@ -535,6 +559,9 @@ def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,res
 
 
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
+    # 
+    # this function is to save milestone activity
+    # 
     mil_activity_count = obj_count_list.get('milestone_count')
     pic_count = obj_count_list.get('milestone_pic_count')
     milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
