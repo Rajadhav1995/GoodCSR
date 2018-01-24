@@ -8,11 +8,28 @@
 <!--Content part starts-->
 <section class="content-part">
   <div class="row">
+  <div class="white-box">
+    <div id="pvaContainer" style="width: 100%;float: left;">Planned vs Actual Task Completion Graph</div>
+  </div>
+  <div class=" white-box ">
   <div id="Super_Completion" style="width: 100%;float: left;">Super Category Completion</div>
+  </div>
   <div class=" white-box ">
 <!--      <img src="/static/img/wip-img.jpg" alt="">-->
-        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
-    </div>
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed  </li>
+              <li><span class="taskO"></span> In progress </li>
+              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
+        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px';position: 'relative'; height: 'auto'; width:'100%';"></div>
+        </div>
+  </div>
 <div class="green-box">
    <div class="green-box-lft">
       <h2>Activities</h2>
@@ -586,7 +603,7 @@ $(document).ready(function(){
       padding = 25,
       arrayTask = [],
       collide = false;
-    <!-- $('.gselector').hide(); -->
+      //$('.gselector').hide();
       function ganttRedo() {
         var previous = null;
         var p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 = null;
@@ -777,6 +794,99 @@ $(document).ready(function(){
 </script>
 
 <!--script for super categories end -->
+
+<!-- script for planned vs actual start -->
+
+<script>
+  var pvaData=[];
+  var pvaSorted=[];
+    temp = {{ser_hist|safe}}
+    $.each(temp,function(i){
+      pvaData[i] = temp[i].fields;
+    });
+    //Sort object array by date
+    pvaData.sort(function(a,b){
+      return new Date(b.modified) - new Date(a.modified);
+    });
+    //Remove the time for each day
+    $.each(pvaData,function(){
+      var d = this.modified;
+      this.modified = new Date(d);
+      this.modified.setHours(0, 0, 0, 0);
+    })
+    //Get rows with unique date and task
+    var flags = {},i;
+    for( i=0; i<pvaData.length; i++) {
+        if( flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()]) continue;
+        flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
+        console.log("Dates",new Date(pvaData[i].modified))
+        pvaSorted.push(pvaData[i]);
+    }
+    var chartData=[];
+    $.each(pvaSorted,function(){
+      chartData.push([(new Date(this.modified)).getTime(), parseInt(this.task_progress), this.name])
+    })
+    console.log("PVA",pvaData,pvaSorted,chartData);
+    PVAChart = Highcharts.chart('pvaContainer', {
+
+      title: {
+          text: 'Planned vs Actual Task Completion'
+      },
+      xAxis: {
+          type: 'datetime',
+          dateTimeLabelFormats: { // don't display the dummy year
+              month: '%b %Y',
+              year: '%Y'
+          },
+          title: {
+              text: 'Date'
+          }
+      },
+
+      yAxis: {
+          title: {
+              text: 'Task Completion %'
+          }
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle'
+      },
+
+      plotOptions: {
+          series: {
+              label: {
+                  connectorAllowed: false
+              },
+              pointStart: 2010
+          }
+      },
+
+      series: [{
+        name: 'Actual',
+        data: chartData
+    }],
+
+      responsive: {
+          rules: [{
+              condition: {
+                  maxWidth: 500
+              },
+              chartOptions: {
+                  legend: {
+                      layout: 'horizontal',
+                      align: 'center',
+                      verticalAlign: 'bottom'
+                  }
+              }
+          }]
+      }
+
+    });
+</script>
+<!-- script for planned vs actual ends -->
+
 <link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
 <script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
 
