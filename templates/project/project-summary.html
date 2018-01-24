@@ -588,6 +588,7 @@ under 0 Milestones</h5>
             <td style="width:26%;">{% if project_funders.implementation_partner.designation %}{{project_funders.implementation_partner.designation}} {% else %} - {% endif %}</td>
             <td style="width:19%;">Implementation Partner
                 {% get_user_permission request as user_obj %}
+                {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
             <td style="width:10%;"><a class="btn btn-primary">Edit</a></td>{% endif %}
       </tr>
