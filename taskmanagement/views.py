@@ -652,6 +652,7 @@ def get_ancestors(task):
 
 
 def related_tasks(project_id, i_task=None, activity=None, milestone=None):
+    # 
     tasks = Task.objects.filter(activity__project=project_id)
     task = Task.objects.get(pk=i_task)
     if (task is None):

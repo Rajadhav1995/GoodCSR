@@ -10,6 +10,7 @@ from userprofile.models import (ProjectUserRoleRelationship,RoleTypes)
 
 BUDGET_TYPE = ((1,'Yearly'),(2,'Quarterly'),(3,'Half Yearly'))
 STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
+# this is form for adding and editing project
 class ProjectForm(forms.ModelForm):
 	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
 	target_beneficiaries = forms.ModelMultipleChoiceField(queryset = MasterCategory.objects.filter(parent__slug='target-beneficiarys'),
@@ -31,6 +32,7 @@ class ProjectForm(forms.ModelForm):
         			'project_status','duration','summary','program_aim','no_of_beneficiaries','cause_area','target_beneficiaries')
 
 	def clean(self):
+		# this is to validate project name
 		cleaned_data = self.cleaned_data
 		if Project.objects.filter(name=cleaned_data['name']).exclude(pk=self.instance.id).count() > 0:
 			try:
@@ -45,12 +47,17 @@ class ProjectForm(forms.ModelForm):
 
 
 class ProjectMappingForm(forms.ModelForm):
+	# this form is to map funder and implementation 
+	# parnert with the project
+	# 
 	class Meta:
 		model = ProjectFunderRelation
 		fields  = ('project','funder','implementation_partner','total_budget')
 
 class ProjectUserRoleRelationshipForm(forms.ModelForm):
-
+	# this form is to map funder and implementation 
+	# parnert with the project
+	# 
     user = forms.ModelChoiceField(queryset=UserProfile.objects.filter(),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
     role = forms.ModelChoiceField(queryset=RoleTypes.objects.filter(active=2),required=True, widget = forms.Select(attrs={'class': 'form-control'}))
 
@@ -65,6 +72,8 @@ PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
                           ('PER','Percent'),
                           ('CUR','Currency'))
 class ProjectParameterForm(forms.ModelForm):
+	# this form is to add project parameter
+	# 
 	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
 	budget_type = forms.ChoiceField(choices = PARAMETER_TYPE_CHOICES,widget = forms.Select(attrs={'class': 'form-control'}))
 	class Meta:
