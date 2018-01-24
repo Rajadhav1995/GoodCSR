@@ -484,7 +484,6 @@ def pmo_role(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
     project = Project.objects.get_or_none(slug=request.GET.get('slug'))
-    # import ipdb; ipdb.set_trace()
     pmo_user = ProjectUserRoleRelationship.objects.get_or_none(active=2,project=project,role=3,user=user_obj)
     if pmo_user:
         option = 1
