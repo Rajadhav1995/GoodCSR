@@ -87,7 +87,6 @@ def add_taskmanagement(request,model_name,m_form):
             task_progress = update_task_completion(request,add,status=None)
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
-            import ipdb; ipdb.set_trace()
             f=form.save(commit=False)
             # if m_form == 'Task_form':
             f.task_progress = task_progress
