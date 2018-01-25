@@ -40,3 +40,4 @@ def remove_functionality_pdf_view(request):
         return render(request,'report/remove-pdfview.html',locals())
     else:
         return render(request,'report/report-template_pdf_copy.html',locals())
+# 
