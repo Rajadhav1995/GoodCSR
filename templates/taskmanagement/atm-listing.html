@@ -822,10 +822,31 @@ $(document).ready(function(){
         console.log("Dates",new Date(pvaData[i].modified))
         pvaSorted.push(pvaData[i]);
     }
-    var chartData=[];
-    $.each(pvaSorted,function(){
-      chartData.push([(new Date(this.modified)).getTime(), parseInt(this.task_progress), this.name])
+    //Count for each day and store in the array
+    var map = pvaSorted.reduce(function(map, elem) { 
+      var date = elem.modified;
+      var count = +elem.task_progress;
+      console.log("Poya",map[date])
+      if(map[date]%100==0){
+      map[date] = (map[date] || 0) + count;
+      }else{
+      map[date] = 0 + count;
+      }
+      return map 
+    }, {}) 
+    console.log("Map2",pvaSorted,map) 
+    var cArray = Object.keys(map).map(function(elem) {
+    return { date: elem, count: map[elem]/100 }
     })
+    console.log("Map",cArray)
+    var chartData = [];
+    var Cprev = [{date:"",count:0}];
+    $.each(cArray,function(n,i){
+      chartData.push([(new Date(this.date)).getTime(),(this.count+Cprev.count)]);
+      console.log("Value",Cprev,"this",(this.count+Cprev.count))
+      if(n>-1){Cprev = cArray[(n)];}
+    })
+    chartData.reverse();
     console.log("PVA",pvaData,pvaSorted,chartData);
     PVAChart = Highcharts.chart('pvaContainer', {
 
@@ -849,18 +870,20 @@ $(document).ready(function(){
           }
       },
       legend: {
-          layout: 'vertical',
           align: 'right',
-          verticalAlign: 'middle'
+          verticalAlign: 'top'
       },
-
+      exporting: {
+        enabled: false
+      },
       plotOptions: {
           series: {
               label: {
                   connectorAllowed: false
               },
               pointStart: 2010
-          }
+          },
+          exporting: false
       },
 
       series: [{
