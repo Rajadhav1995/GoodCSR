@@ -16,7 +16,7 @@ from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation
                                         ProjectParameterValue)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                                 ReportParameter, Question,Answer,QuarterReportSection)
-from media.models import (Comment,)
+from media.models import (Comment,Attachment)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
 from media.models import (Attachment,ScreenshotMedia)
@@ -490,3 +490,12 @@ def pmo_role(request):
     else:
         option = 0
     return option
+
+@register.assignment_tag
+def get_line_attach(line_itemobj):
+    # to get the attachemnt of the budget line item
+    try:
+        attach = Attachment.objects.get_or_none(content_type=ContentType.objects.get_for_model(line_itemobj),object_id=int(line_itemobj.id))
+    except:
+        attach = None
+    return attach

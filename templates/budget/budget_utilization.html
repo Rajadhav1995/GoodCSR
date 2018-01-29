@@ -46,7 +46,7 @@
             <p> Update Budget Utilized Items</p>
 
 {% if quarter_key %}
-<form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" >{% csrf_token %}
+<form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" enctype="multipart/form-data" >{% csrf_token %}
 <input type="hidden" name="count" value="{{span_length}}">
 
         <div id="boxscroll1" class="table-scroll">
@@ -59,7 +59,7 @@
                             <tr class="sticky-row">
                               <td class = "sticky-cell table_first" colspan="5">&nbsp;</td>	
                               {% for i,j in quarter_list.items %}
-                                    <td class="table-head" colspan="6">{{j}}</th>
+                                    <td class="table-head" colspan="7">{{j}}</th>
                             {% endfor %}
                             </tr>
                             <tr class="sticky-row">
@@ -77,6 +77,7 @@
                                 <th> Total Utilized </th>
                                 <th> Variance </th>
                                 <th> Comment </th>
+                                <th> Attachment </th>
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -106,7 +107,10 @@
                                  {% get_comment line_itemobj as comment %}
                                   <td> <input type="text" name = "comment_{{i}}_{{j}}_{{line_itemobj.id}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
                                  <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
+                                 {% get_line_attach line_itemobj as attach %}
+                                 <td><input type="file" name = "attach_{{i}}_{{j}}_{{line_itemobj.id}}" id="attach_{{i}}_{{j}}" value="{% if attach %}{{attach.attachment_file}} {% else %} {% endif %}">{% if attach %}{{attach.attachment_file.url}} {% endif %}</td>
                                  {% endfor %}
+                                
                         </tr>
                         {% endwith %}
                         {% endfor %}
