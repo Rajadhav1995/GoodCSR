@@ -11,6 +11,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 
 def feedback(request):
+    # this function is to save and edit feedback form
+    # in homepage
+    # 
     form = ContactPersonForm()
     if request.method=='POST':
         form = ContactPersonForm(request.POST)
@@ -18,13 +21,14 @@ def feedback(request):
         if form.is_valid():
             obj = form.save()
             obj.save()
+            # sending email to user who given feedback
             html_message = loader.render_to_string(
                       BASE_DIR+'/templates/homepage/send_program.html',
                       {
                           'full_name': obj.name,
                        })
             send_mail('Samhita GoodCSRs Project Management Module- DEMO','', 'care@goodcsr.in', [obj.email],html_message=html_message)
-
+            # sending email to admin 
             html_message = loader.render_to_string(
                       BASE_DIR+'/templates/homepage/email_template_admin.html',
                       {
@@ -41,6 +45,8 @@ def feedback(request):
 
 from django.http import JsonResponse
 def email_validation(request):
+    # this function is to validate email 
+    # 
     email = request.GET.get('uname', None)
     data = {
         'is_taken': ContactPersonInformation.objects.filter(email__iexact=email).exists()

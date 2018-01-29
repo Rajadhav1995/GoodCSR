@@ -2,7 +2,8 @@ from django.conf.urls import url
 from .views import *
 from .forms import *
 
-
+# URLS for Task management
+# 
 urlpatterns = [
 #    url(r'^(?P<model_name>.*)/listing/$',listing),
     url(r'^listing/$',listing),

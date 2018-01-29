@@ -94,6 +94,9 @@ def get_days_month(report_year,mnth):
     return days
 
 def get_budget_month_year(budgetobj):
+    # 
+    # this function is to get budget as per month
+    # 
     sd = budgetobj.actual_start_date
     if sd.day >= 15:
         year = sd.year+1 if sd.month == 12 else sd.year
@@ -104,7 +107,9 @@ def get_budget_month_year(budgetobj):
     return sd.month,sd.year
 
 def get_months_classified(years_dict,report_obj,budget_obj):
+    # 
     #this is to get the dict of the previous,current and next months 
+    # 
     month_dict = {0:'',1:'January',2:'February',3:'March',4:'April',5:'May',
                       6:'June',7:'July',8:'August',9:'September',
                       10:'October',11:'November',12:'December',13:''}
@@ -158,7 +163,8 @@ def get_months_classified(years_dict,report_obj,budget_obj):
     return previous_month,current_month,future_month
                    
 def get_years_list(year_diff,s_year,e_year,sm,em):
-# this is to get the years of the budget and list of months of that particular year in a dict
+# this is to get the years of the budget and list of 
+# months of that particular year in a dict
     years_dict = {}
     mnth_list = []
     for yr in range(year_diff):
@@ -178,6 +184,7 @@ from datetime import datetime
 from dateutil import relativedelta
 def get_budget_months(budget_obj):
     # this is to get the months and years based on the budget start and end date
+    # 
     sm = budget_obj.actual_start_date.month
     em = budget_obj.end_date.month
     mnth_diff = em-sm
@@ -196,6 +203,7 @@ def get_budget_months(budget_obj):
 
 def get_monthly_logic(report_obj,budget_obj):
     #this is to get the previous,current and next months dict
+    # 
     total_months=[]
     years_list = []
     current_month ={}
@@ -204,3 +212,106 @@ def get_monthly_logic(report_obj,budget_obj):
     years_dict = get_budget_months(budget_obj)
     previous_month,current_month,future_month = get_months_classified(years_dict,report_obj,budget_obj)
     return previous_month,current_month,future_month
+
+
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
