@@ -133,7 +133,7 @@ width:450px;
                                     </div>
                                 </div>
 
-
+                                
                         <div class="row">
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
@@ -222,12 +222,21 @@ jQuery("input#id_attachment_file").change(function () {
     if (typeof ($("#id_attachment_file")[0].files) != "undefined") {
         var size = parseFloat($("#id_attachment_file")[0].files[0].size / 1024).toFixed(2);
         //alert(size + " KB.");
-        if (size > 5000) {
+        {% if key == 1 %}
+        if (size > 5120) {
             alert("File size must be less than 5 MB");
             document.getElementById('file_error').innerHTML="File Size must be less than 5 MB"
         } else{
             document.getElementById('file_error').innerHTML=""
         };
+        {% else %}
+        if (size > 1024) {
+            alert("File size must be less than 1 MB");
+            document.getElementById('file_error').innerHTML="File Size must be less than 1 MB"
+        } else{
+            document.getElementById('file_error').innerHTML=""
+        };
+        {% endif %}
 
     } else {
         alert("This browser does not support HTML5.");

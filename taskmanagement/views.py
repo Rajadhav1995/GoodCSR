@@ -26,6 +26,8 @@ from pmu.settings import PMU_URL
 # Create your views here.
 
 def listing(request):
+    # this function is for listing 
+    # all tasks, milestones and activities
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
@@ -46,12 +48,17 @@ def listing(request):
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def update_task_completion(request,add,status):
+    # this function is to update status of
+    # task as per status choice selected by user
     task_progress = ''
     if add == 'True':
         if request.POST.get('status') == '3':
             task_progress = '10'
         elif request.POST.get('status') == '1':
             task_progress = '0'
+        elif request.POST.get('status') == '2':
+            task_progress = '100'
+
     else:
         if int(status) == 2 and request.POST.get('status') == '1' :
             task_progress = '90'
@@ -62,6 +69,8 @@ def update_task_completion(request,add,status):
     return task_progress
 
 def add_taskmanagement(request,model_name,m_form):
+    # this function is to add task 
+    # as well as manage tasks(edit)
     url=request.META.get('HTTP_REFERER')
     add = "True"
     edit=''
@@ -75,12 +84,12 @@ def add_taskmanagement(request,model_name,m_form):
         return render(request,'taskmanagement/base_forms.html',locals())
     if request.method=='POST':
         if m_form == 'TaskForm':
-            task_progress = update_task_completion(request,add,status=None) 
+            task_progress = update_task_completion(request,add,status=None)
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save(commit=False)
-            if m_form == 'Task_form':
-                f.task_progress = task_progress 
+            # if m_form == 'Task_form':
+            f.task_progress = task_progress
             from projectmanagement.common_method import unique_slug_generator
             f.slug = unique_slug_generator(f,edit)
             f.save()
@@ -94,6 +103,8 @@ def add_taskmanagement(request,model_name,m_form):
     return render(request,'taskmanagement/base_forms.html',locals())
 
 def get_form_saved(form,edit,task_progress,user,project,form_dict):
+    # this function is for saving form
+    # 
     if form.is_valid():
         f=form.save(commit=False)
         if form_dict.get('m_form') == 'TaskForm':
@@ -108,6 +119,8 @@ def get_form_saved(form,edit,task_progress,user,project,form_dict):
         return 'true'
 
 def edit_taskmanagement(request,model_name,m_form,slug):
+    # this function is to edit task 
+    # 
     url=request.META.get('HTTP_REFERER')
     add = "False"
     edit=''
@@ -137,6 +150,8 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         return render(request,'taskmanagement/base_forms.html',locals())
 
 def active_change(request,model_name):
+    # this is common function to change status of object
+    # 
     ids = request.GET.get('id')
     status = request.GET.get('status')
     url=request.META.get('HTTP_REFERER')
@@ -154,19 +169,18 @@ def active_change(request,model_name):
 
 from django.http import JsonResponse
 def task_dependencies(request):
-#to get the startdate as project start date on selecting the activity and list the tasks based on activities
+    #to get the startdate as project start date on selecting 
+    # the activity and list the tasks based on activities
     start_date = ''
     tasks = []
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
-    try:
-        
+    try:    
         obj = Activity.objects.get_or_none(active=2,id= int(ids))
         project = Project.objects.get_or_none(id = obj.project.id)
         tasks = Task.objects.filter(active=2,activity__project=project)
         start_date = project.start_date.strftime('%Y-%m-%d')
-        
     except:
         obj = None
     if not tasks:
@@ -175,8 +189,10 @@ def task_dependencies(request):
         tasks = [{'id':i.id,'name':i.name} for i in tasks]
     return JsonResponse({"project_start_date":start_date,'tasks_dependency': tasks})
 
-# to compute start date of the tasks dependent
+
 def task_auto_computation_date(request):
+    # to compute start date of the tasks dependent
+    # 
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
@@ -189,7 +205,9 @@ def task_auto_computation_date(request):
     return JsonResponse({"computation_date":end_date})
 
 def milestone_overdue(request):     
-# to get the overdue of the milestone i.e getting the max end date of the tasks tagged to the milestone
+    # to get the overdue of the milestone i.e getting 
+    # the max end date of the tasks tagged to the milestone
+    # 
     task_ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
@@ -202,6 +220,8 @@ def milestone_overdue(request):
 from datetime import datetime
 #slug = Project slug and this is to display in project summary dashboard
 def total_tasks_completed(slug):
+    # this function is to calculate total task completed
+    # 
     total_tasks = completed_tasks=total_milestones = 0
     milestones = []
     project = Project.objects.get_or_none(slug = slug)
@@ -223,7 +243,8 @@ def total_tasks_completed(slug):
 
 
 def my_tasks_listing(project,user,status):
-# to get the tasks which is overdue to today 
+    # to get the tasks which is overdue to today 
+    # 
     today = datetime.today().date()
     task_lists=[]
     activities = Activity.objects.filter(project = project)
@@ -235,6 +256,7 @@ def my_tasks_listing(project,user,status):
     
 def get_project_updates(project,uploads):
     #get project updates 
+    # 
     if project.history.latest():
         attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
         for a in attach_lists:
@@ -244,13 +266,15 @@ def get_project_updates(project,uploads):
     
 def get_tasks_status(project,task,uploads):
     #to get the task status updates 
+    # 
     if task.status == 2 and task.history.latest():
         uploads.append({'project_name':project.name,'task_name':task.name,'attach':'',
             'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest(),'file_type':''})
     return uploads
  
 def updates(obj_list):
-# to get the recent updates of the projects 
+    # to get the recent updates of the projects 
+    # 
     formats = '%H:%M %p'
     uploads = []
     task_completed = {}
@@ -274,7 +298,8 @@ def updates(obj_list):
     return uploads
         
 def corp_task_completion_chart(obj_list):
-# to get the task  and completion progress bar in the corporate dashboard
+    # to get the task  and completion progress 
+    # bar in the corporate dashboard
     data={}
     task_completion={}
     complete_status = []
@@ -307,7 +332,8 @@ def task_offset_date(task):
     
 
 def corp_total_budget(obj_list):
-# bar chart for the total budget in corporate dashboard
+    # bar chart for the total budget in corporate dashboard
+    # 
     total_budget=[]
     utilized_budget=[]
     project_list=[]
@@ -328,6 +354,7 @@ def corp_total_budget(obj_list):
     return corp_budget
 
 def corp_total_budget_disbursed(obj_list):
+    # 
     total_budget=[]
     utilized_budget=[]
     total_disbursed={}
@@ -357,6 +384,8 @@ def corp_total_budget_disbursed(obj_list):
 
 
 def my_tasks_details(request):
+    #  to get my task details
+    # 
     image_url = PMU_URL
     status=request.GET.get('status')
     today = datetime.today().date()
@@ -375,6 +404,9 @@ def my_tasks_details(request):
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
+        task_activities = Task.objects.filter(id__in=task_ids)
+        activity_list=set([i.activity for i in task_activities])
+        category_list = set([i.activity.super_category for i in task_activities])
     else:
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
@@ -383,8 +415,8 @@ def my_tasks_details(request):
         closed_tasks = Task.objects.filter(status=2).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
-        
         task_ids = [int(i.id) for i in task_listing]
+        project_list = Project.objects.filter(active=2)
     projectobj = project
     user_obj = user
     key = request.GET.get('key')
@@ -394,6 +426,8 @@ def my_tasks_details(request):
         return render(request,'taskmanagement/my-task.html',locals())
     
 def create_task_progress(request,task):
+    # this function is to create task progress
+    # 
     if task.task_progress == '100' and task.task_progress < request.POST.get('tea1'):
         task.status = 1
         task.actual_end_date = None
@@ -416,13 +450,15 @@ def create_task_progress(request,task):
     return task
     
 def task_comments(request):
-# to save the updates of tasks like attachments / progress bar / comments
+    # to save the updates of tasks like 
+    # attachments / progress bar / comments
+    # 
     msg =""
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
     url=request.META.get('HTTP_REFERER')
     MAX_UPLOAD_SIZE = "5242880"
-#   "2621440" 
+    #   "2621440" 
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
@@ -463,6 +499,8 @@ from dateutil import parser
 from datetime import timedelta, time
 
 def get_tasks_objects(request):
+    # tis is to get task objects
+    # 
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
@@ -511,6 +549,7 @@ class ExpectedDatesCalculator():
             self.data = {}
 
     # Helper function gets next weekday if next day is weekend
+    # 
     @staticmethod
     def next_weekday(somedate):
         ret = somedate + timedelta(days=1)
@@ -523,7 +562,9 @@ class ExpectedDatesCalculator():
 
     def populate_expected_start_end_date(self, itask=None):
         # Get expected start_date of dependent tasks
+        # 
         # returns the same task with expected dates populated
+        # 
         if(itask is None):
             taskid = self.task.id
             itask = self.task
@@ -588,6 +629,8 @@ class ExpectedDatesCalculator():
         return expected_start_date,expected_end_date
 
 def get_descendants(task):
+    # this funtion is to get descendants
+    # 
     descendants = Task.objects.filter(task_dependency=task.id)
     ret_descendants = Task.objects.filter(
         task_dependency=task.id)
@@ -598,6 +641,8 @@ def get_descendants(task):
 
 
 def get_ancestors(task):
+    # this funtion is to get ancentors
+    # 
     ancestors = task.task_dependency
     ret_ancestors = task.task_dependency
     for ancestor in ancestors.all():
@@ -606,6 +651,7 @@ def get_ancestors(task):
 
 
 def related_tasks(project_id, i_task=None, activity=None, milestone=None):
+    # 
     tasks = Task.objects.filter(activity__project=project_id)
     task = Task.objects.get(pk=i_task)
     if (task is None):
@@ -663,6 +709,7 @@ class GanttChartData(APIView):
         
 def convert_budget(val):
     """Convert the Values to Rs,Lakhs,Crores."""
+    # 
     import locale
     import re
     loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
@@ -681,6 +728,8 @@ def convert_budget(val):
 
 from django.http import JsonResponse        
 def get_activites_list(request):
+    # this funtion is to get activity list
+    # 
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj = None
@@ -691,6 +740,8 @@ def get_activites_list(request):
     
 from django.http import JsonResponse
 def get_super_selected(request):
+    # this funtion is to get super selected
+    # 
     ids = request.GET.get('id')
     form = request.GET.get('form')
     url=request.META.get('HTTP_REFERER')
@@ -705,6 +756,8 @@ def get_super_selected(request):
     
 from django.http import JsonResponse
 def get_activity_selected(request):
+    # this funtion is to get selected activity
+    # 
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj_list = Task.objects.filter(id__in = eval(ids))
@@ -712,6 +765,8 @@ def get_activity_selected(request):
     return JsonResponse({"activity":activity})
 
 def get_assigned_users(user,project):
+    # this funtion is to get assigned users
+    # 
     project_obj = Project.objects.filter(created_by=user)
     tasks = Task.objects.filter(activity__project = project,assigned_to = user)
     if project_obj and tasks:
@@ -724,6 +779,7 @@ def get_assigned_users(user,project):
         
 from django.http import JsonResponse
 def get_activity_tasks(request):
+    # this funtion is to get activity tasks
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     obj_list = Activity.objects.filter(id__in = eval(ids)).values_list('id',flat=True)
@@ -733,6 +789,8 @@ def get_activity_tasks(request):
 
 from django.http import JsonResponse
 def tasks_max_end_date(request):
+    # this funtion is to get maximum date of task and end date of task
+    # 
     ids = request.GET.get('id')
     url=request.META.get('HTTP_REFERER')
     tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)

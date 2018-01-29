@@ -55,12 +55,15 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
             ques = Question.objects.get_or_none(id=int(i))
             if ques.parent == None:
                 parent_ques.append(ques)
+#                added by meghana
+                removed_ques.append(ques)
+#                ends
             else:
                 removed_ques.append(ques)
-            
         if quest_removed == 'false':
             final_questions = questions.exclude(id__in =[rmv.id for rmv in removed_ques ]).order_by('id')
             fianl_questions = list(chain(final_questions)).extend(list(chain(questions.filter(id__in = [pt.id for pt in parent_ques]).order_by('id'))))
+            
         else:
             final_quest = questions.filter(id__in = [rmv.id for rmv in removed_ques]).values_list('id',flat=True)
             main_quest = Question.objects.filter(block=block).exclude(parent=None)[0]
@@ -116,8 +119,7 @@ def get_questions(block,project_report,block_type,quest_removed):
             question_dict['answer'] = answer.attachment_file.url if answer and answer.attachment_file else ""
         question_list.append(question_dict)
     return question_list,removed_id
-    
-    
+
 @register.assignment_tag 
 def get_auto_populated_questions(ques_id,project,project_report,block_type,quest_removed):
     # to get the auto populated questions that are tagged to that particular section

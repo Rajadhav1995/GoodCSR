@@ -25,12 +25,13 @@
                     <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
                         <thead>
                             <tr class="sticky-row">
-                              <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>	
+                              <td class = "sticky-cell table_first" colspan="7">&nbsp;</td>	
                               {% for i,j in quarter_list.items %}
                                     <td class="table-head" colspan="3">{{j}}</th>
                             {% endfor %}
                             </tr>
                             <tr class="sticky-row">
+                                 <th class="sticky-cell">&nbsp;</th>
                                 <th class="sticky-cell">&nbsp;</th>
                                 <th class="sticky-cell">Super Category</th>
                                 <th class="sticky-cell">Heading</th>
@@ -50,8 +51,9 @@
                         <tbody class="budget_section">
                         {% for j in budget_period %}
                         {% with forloop.counter as rnum %}
-                        <tr class = "data_row">
+                        <tr id="data_row_{{j}}" class = "data_row">
                             {% get_budget_lineitem j projectobj as lineitemobj %}
+                            <td class="sticky-cell"><a type="button" title="Click here to delete the row" class="btn btn-danger delete_function budget"><span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow' style="color:#fff">X</span> </a> </td>
                             <td class="sticky-cell"><span class="init">{{rnum}}<span></td>
                             
                             <td class="sticky-cell">
@@ -75,13 +77,13 @@
 <!--                            <td class="fixed-side"> {{lineitemobj.heading.name}} </td>-->
                             <td class="sticky-cell"> <input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}" value="{{lineitemobj.subheading}}">  </td>
                             {% get_line_total j projectobj as line_total %}
-                            <td class="sticky-cell"><input type="number" class = "linetotal" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly" value="{{line_total}}"></td>
+                            <td class="sticky-cell"><input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" class = "linetotal" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly" value="{{line_total}}"></td>
                             <td class="sticky-cell"> <input type="text" class="unit-type" name = "unit-type_{{j}}" value="{{lineitemobj.unit_type}}"></td>
                                 {% for i,v in quarter_list.items %}
                                 {% get_quarter_details j i projectobj as line_itemobj %}
-                               <td> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{line_itemobj.id}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
-                                <td><input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
-                                 <td> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
+                               <td> <input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{line_itemobj.id}}_{{j}}" class="unit" id="unit_{{i}}_{{j}}" value="{{line_itemobj.unit}}" > </td>
+                                <td><input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "rate_{{i}}_{{line_itemobj.id}}_{{j}}" class="rate" id="rate_{{i}}_{{j}}" value="{{line_itemobj.rate}}"> </td>
+                                 <td> <input step=any onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "planned-cost_{{i}}_{{line_itemobj.id}}_{{j}}" class ="planned-cost" id="planned-cost_{{i}}_{{j}}" readonly="readonly" value ="{{line_itemobj.planned_unit_cost}}"> </td>
                                  
 <!--                                 <td> <input type="number" name = "utilized-unit-cost_{{i}}_{{line_itemobj.id}}_{{j}}"  id = "utilized-cost_{{i}}_{{j}}" class = "utilized-cost" value="{{line_itemobj.utilized_unit_cost}}"> </td>-->
 <!--                                 <td> <input type="number" name ="variance_{{i}}_{{line_itemobj.id}}_{{j}}" id="variance_{{i}}_{{j}}" readonly="readonly" value="{{line_itemobj.variance}}"> </td>-->
@@ -94,7 +96,30 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                </div>
+                    
+<!--                    for extra row-->
+                     <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                        </thead>
+                          <tr class="sticky-row">
+                        <tbody class="budget_section">
+                      
+                            <td class="sticky-cell" style="padding:10px 13px;top:0px" ></td>
+
+                            <td class="sticky-cell"  style="top:0px;padding-left:391px;padding-right:123px"> <label style="position: absolute;left: 9%;top: 13px;color:#029876;font-weight:bold;font-size:16px;">Total</label><input type="number" class = "linetotal" name = "lastrow_linetotal" id="lastrow_linetotal" readonly="readonly" value="{{line_total}}" style="border:0px;color:#029876;font-weight:bold;font-size:16px;"></td>
+
+                            {% for i,v in quarter_list.items %}
+                            
+                                 <td style="top:0px;padding-left:326px;padding-right:8px" > <input type="number" name = "quarter_linetotal_{{i}}" class ="planned-cost" id="quarter_linetotal_{{i}}" readonly="readonly" value ="" style="border:0px;color:#029876;font-weight:bold;font-size:16px;"> </td>
+                                 <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
+                            {% endfor %}
+                        
+                        </tbody>
+                        </tr>
+                    </table>
+</div>
+
+                
         </div>
         
         <div class="click_buttons">
@@ -104,7 +129,7 @@
             </div>
             <div class="link-center">
                 <input type="hidden"/>
-                <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>
+<!--                <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>-->
             </div>
 
             <div class="link-right">
@@ -129,6 +154,14 @@
        $("#filter_form").submit();
        });
    });
+</script>
+
+<script>
+$(document).ready(function (){
+  quartercount();
+  
+  totalcount();
+});
 </script>
 
 <script type = "text/javascript">
@@ -187,6 +220,9 @@
    });
 </script>
 
+
+
+
 <script>
     $(document).ready(function()
     {
@@ -204,7 +240,7 @@
                 $("#planned-cost_"+i+"_"+j).val('');
             }
             else{
-                $("#planned-cost_"+i+"_"+j).val(parseInt(total));
+                $("#planned-cost_"+i+"_"+j).val(parseFloat(total));
             }
             
             var linetotal = 0
@@ -212,7 +248,9 @@
                 linetotal = +linetotal + +$(this).val()
             })
             
-            $("#linetotal_"+j).val(parseInt(linetotal));
+            $("#linetotal_"+j).val(parseFloat(linetotal));
+            quartercount();
+            totalcount();
         }
         $(document).on("change,blur, keyup", ".rate", updatePrice);
         $(document).on("change,blur, keyup", ".unit", updatePrice);
@@ -228,25 +266,37 @@
                     
                     var c = count;
                     var tR = $('.data_row:last').clone();
+                    var lastid = $(".data_row:last").attr("id");
                     count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
-                    $(tR).find('td input, td select').each(function(){
+                    $(tR).attr('id', "data_row_"+count);
+                    $(tR).find('td input, td select, td span, td a span').each(function(){
                       $(this).val('')
                       if ($(this).attr('name')){
                            if ($(this).attr('name').split('_').length == 3){
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+name[1]+"_"+" "+"_"+count);
                               $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                              this.value='0'
                             }
                             else if ($(this).attr('name').split('_').length == 2){
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+count);
                               $(this).attr('id', name[0]+"_"+count);
+                              if (name[0]=='linetotal') {
+                                
+                                this.value=0;
+                              };
+                              if (name[0].startsWith('removerow') == true){
+                                    $(this).attr('onclick', "return removerow("+count+")");
+                                }
                             }
                             else if ($(this).attr('name').split('_').length == 4){
+                              
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+name[1]+"_"+""+"_"+count);
                               $(this).attr('id', name[0]+"_"+name[1]+"_"+count);
+                              this.value='0'
                             }
                       }
                     });
@@ -254,6 +304,22 @@
                     var ct = parseInt($('input[name=count]').val()) + parseInt(1)
                     $(tR).find('td span.init').text(ct);
                     $(tR).insertAfter('.data_row:last');
+
+//---------------------to change the count of number 
+                    var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
+
                     }
                 function remove(){
                     var count = $('input[name=count').val();
@@ -266,12 +332,78 @@
                         alert("Please add atleast one record")
                       }
                 }
+
             $(".add_clone").on("click", clone);
             $(".remove").on("click", remove);
     
     });
 </script>
 
+<script>
+                function removerow(j){
+                 //var split_id = id.split("_");
+                 //var deleteindex = split_id[1];
+                 
+                    var result = confirm("Are you sure to delete this row?");
+                    if (result) {
+                        //Logic to delete the item
+                        $("#data_row_" + j).remove();
+                        var lastid = $(".data_row:last").attr("id");
+                        //var count_div = $("[id^=data_row_]").length;
+                        var count_div = lastid.split('_')[2]
+                        abc = 0;
+                        for (i=0;i <= count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                                //alert(abc+"meghana")
+                                    $(tR).find('td span.init').each(function(){
+                                    var ct = parseInt(abc+1)
+                                    abc++
+                                    $(this).text(ct)
+                                
+                        })
+                    }
+                            }
+                        quartercount();
+                        totalcount();
+                           
+                    }
+                  // Remove <div> with id
+                  
+                }
+                
+</script>
+
+<script>
+        function totalcount()
+        {
+        linetotal_amount = 0
+        $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            $("#lastrow_linetotal").val(parseInt(linetotal_amount));
+        }
+        $(document).on("change,blur, keyup", ".rate", totalcount);
+        $(document).on("change,blur, keyup", ".unit", totalcount);
+    
+</script>
+
+
+<script>
+        function quartercount()
+        {
+        {% for i,v in quarter_list.items %}
+            quartertotal_amount = 0
+            $('[id^=planned-cost_{{i}}]').each(function(){
+                    quartertotal_amount = +quartertotal_amount + +$(this).val()
+                    $("#quarter_linetotal_{{i}}").val(parseInt(quartertotal_amount));
+                })
+        {% endfor %}
+        }
+        $(document).on("change,blur, keyup", ".rate", quartercount);
+        $(document).on("change,blur, keyup", ".unit", quartercount);
+
+</script>
 
 <script>
 //Toggle

@@ -24,9 +24,10 @@ from common_method import unique_slug_generator,add_keywords
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 from menu_decorators import check_loggedin_access
 
-
+# Views for projectmanagement
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
     #this function is to manage project location 
+    # 
     for i in range(location_count):
         city = 'city1_'+str(i+1)
         state = 'state_'+str(i+1)
@@ -41,7 +42,9 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
     del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
 
 def project_location(request,obj,location):
-    # this function is to add or edit location for project
+    # this function is to add or 
+    # edit location for project
+    # 
     rem_id = request.POST.get('rem_id')
     city_var = request.POST.get('city_var')
     if rem_id != '':
@@ -54,7 +57,8 @@ def project_location(request,obj,location):
         city_var_list = []
     if location:
         [ i.switch() for i in location]
-    #if user not clicks on addmore location then by default it will take 1 location count
+    #if user not clicks on addmore location then by default it will 
+    # take 1 location count
     try:
         location_count = int(request.POST.get('name_count'))
     except:
@@ -64,7 +68,7 @@ def project_location(request,obj,location):
 
 def create_project(request):
     #Create and edit project (with dynamic activities)
-    
+    # 
     user_id = request.session.get('user_id')
     try:
         slug =  request.GET.get('slug')
@@ -77,6 +81,7 @@ def create_project(request):
         form = ProjectForm()
         location = ''
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
+    # 
     partner = UserProfile.objects.filter(active=2,organization_type=2)
     state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
     if request.method == 'POST':
@@ -105,6 +110,7 @@ def create_project(request):
 
 def funder_mapping(funder,implementation_partner,total_budget,obj):
     #this function is to map implementation partner and funder
+    # 
     implementation_partner = UserProfile.objects.get(id=implementation_partner)
     mapping = ProjectFunderRelation.objects.get_or_none(project=obj)
     # mapping of implementation partner and funder for project
@@ -137,6 +143,7 @@ def get_project_budget_utilized_amount(projectobj,budgetobj):
     return final_budget_period_utilizedamount
 
 def auto_update_tranche_amount(final_budget_utilizedamount,project):
+    # this function is to auto updte tranche amount
     tranchelist = Tranche.objects.filter(project=project,active=2).order_by("disbursed_date")
     for i in tranchelist:
         i.utilized_amount = 0
@@ -256,18 +263,18 @@ def add_parameter(request):
     return render(request,'project/add_key_parameter.html',locals())
 
 def delete_parameter(rem_id_list):
-    '''
-    this function is to delete parameter. Pass parameter id in list
-    '''
+    # this function is to delete parameter. 
+    # Pass parameter id in list
+    # 
     for i in rem_id_list:
         rem_obj = ProjectParameter.objects.get(id=i)
         rem_obj.switch()
         value_obj = ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
 
 def edit_parameter(request):
-    '''
-    This function is to Edit(add parameter, remove parameter and modify existing paramter)
-    '''
+    # This function is to Edit(add parameter, remove 
+    # parameter and modify existing paramter)
+# 
     rem_id_list = []
     form = ProjectParameterForm()
     ids =  int(request.GET.get('id'))
@@ -306,9 +313,9 @@ def edit_parameter(request):
     return render(request,'project/edit_key_parameter.html',locals())
 
 def upload_parameter(request):
-    '''
-    This function is to add values to key parameter which are added by admin (parameters number is dynamic)
-    '''
+    # This function is to add values to key parameter which 
+    # are added by admin (parameters number is dynamic)
+    # 
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
@@ -351,9 +358,9 @@ def upload_parameter(request):
     return render(request,'project/key_parameter.html',locals())
 
 def manage_parameter(request):
-    '''
-    This function is to manange(list) all key parameter for perticular project
-    '''
+    # This function is to manange(list) all 
+    # key parameter for perticular project
+    # 
     slug =  request.GET.get('slug')
     parameter = ProjectParameter.objects.filter(active= 2,project__slug=slug,parent=None)
     parameter_count = parameter.count()
@@ -361,9 +368,8 @@ def manage_parameter(request):
     return render(request,'project/parameter_list.html',locals())
 
 def manage_parameter_values1(request):
-    '''
-    This function not in use
-    '''
+    # This function not in use
+    # 
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
     parameter_count = ProjectParameter.objects.filter(active= 2,parent=parameter).count() + 1
@@ -377,9 +383,9 @@ def manage_parameter_values1(request):
     return render(request,'project/parameter_value_list.html',locals())
 
 def remove_record(request):
-    '''
-    This is common method to delete(deactivate) record from db. Pass model name and its id
-    '''
+    # This is common method to delete(deactivate) record from db. 
+    # Pass model name and its id
+    # 
     url=request.META.get('HTTP_REFERER')
     ids =  request.GET.get('id')
     model =  eval(request.GET.get('model'))
@@ -395,9 +401,9 @@ def remove_record(request):
     return HttpResponseRedirect(url)
 
 def manage_parameter_values(request):
-    '''
-    This function is to get all parameter values for perticular key parameter
-    '''
+    # This function is to get all parameter values 
+    # for perticular key parameter
+    # 
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
     project = ProjectParameter.objects.get(id=ids).project
@@ -431,9 +437,9 @@ def manage_parameter_values(request):
     return render(request,'project/parameter_value_list.html',locals())
 
 def aggregate_project_parameters(param, values):
-    '''
-    Function to do calculations as per user selection (for key parameter values)
-    '''
+    # Function to do calculations as per 
+    # user selection (for key parameter values)
+    # 
     ret={}
     aggr=0
     if param.aggregation_function=='ADD':
@@ -469,7 +475,9 @@ def aggregate_project_parameters(param, values):
     return aggr
 
 def project_total_budget(slug):
-# to display the total budget ,disbursed,utilized percent in project summary page
+    # to display the total budget ,disbursed,
+    # utilized percent in project summary page
+    # 
     from taskmanagement.views import convert_budget
     try:
         project = Project.objects.get(slug=slug)
@@ -490,11 +498,14 @@ def project_total_budget(slug):
 
 def timeline_listing(obj):
 # lisiting of timeline images function
+# 
     attach = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(obj),
         object_id = obj.id,active=2,attachment_type= 1,timeline_progress=True).order_by('date')
     return attach
 
 def get_timeline_process(timeline,milestone):
+    # this function is to get json data for timeline progrsss
+    # in project summary page
     timeline_json = []
     for i in timeline:
         data = {'date':i.date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),'type':'image','name':i.description,'url':i.attachment_file.url if i.attachment_file else '','id':i.id}
@@ -511,6 +522,7 @@ def get_timeline_process(timeline,milestone):
 def project_summary(request):
 # to display the project details in project summary page                    
 #Displaying pie chart detail
+# 
     image_url = PMU_URL
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')
@@ -518,7 +530,7 @@ def project_summary(request):
     obj = Project.objects.get(slug = slug)
     projectobj = obj
     activity = Activity.objects.filter(project=obj)
-    projectuserlist = ProjectUserRoleRelationship.objects.filter(project=obj)
+    projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2,project=obj)
     tasks = total_tasks_completed(obj.slug)
     updates_list = updates(Project.objects.filter(slug=slug))
     budget = project_total_budget(obj.slug)
@@ -547,9 +559,9 @@ def project_summary(request):
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):
-    '''
-    This function is to get pie chart information in json data (both pie chart type)
-    '''
+    # This function is to get pie chart information 
+    # in json data (both pie chart type)
+    # 
     name_list = []
     para_name = {}
     pin_title_name = []
@@ -583,9 +595,9 @@ def parameter_pie_chart(parameter_obj):
     return master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh
 
 def pie_chart_mainlist(obj):
-    '''
-    This function is to get pie chart information in json data (both pie chart type)
-    '''
+    # This function is to get pie chart information 
+    # in json data (both pie chart type)
+    # 
     colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     main_list = []
     counter =0
@@ -619,6 +631,7 @@ def pie_chart_mainlist_report(obj,start_date,end_date):
 
 def delete_upload_image(request):
     # this function is to delete image from timeline                                
+    # 
     url=request.META.get('HTTP_REFERER')
     ids = request.GET.get('id')
     attach = Attachment.objects.get_or_none(id=int(ids))

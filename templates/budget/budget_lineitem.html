@@ -41,8 +41,8 @@
                         <tbody class="budget_section">
                             {% for j in "123456"%}
                             {% with forloop.counter as rnum %}
-                            <tr class = "data_row">
-                                <td class="sticky-cell"><span></span></td>
+                            <tr id="data_row_{{j}}" class = "data_row">
+                                <td class="sticky-cell">{% if rnum != 1 %}<a type="button" title="Click here to delete the row" class="btn btn-danger delete_function budget"><span  onclick='return removerow({{j}})' name='removerow_{{j}}' id='removerow_{{j}}' class='removerow' style="color:#fff">X</span> </a>{% endif %}</td>
                                 <td class="sticky-cell"><span class="init">{{rnum}}</span></td>
                                 <td class="sticky-cell">
                                     <select name="location_{{j}}" id="location_{{j}}" class="location">
@@ -61,7 +61,7 @@
                                     </select>
                                 </td>
                                 <td class="sticky-cell"><input type="text" class ="subheading" id="subheading_{{j}}" name="subheading_{{j}}"></td>
-                                <td class="sticky-cell"><input type="number" class = "linetotal" value="0" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"></td>
+                                <td class="sticky-cell"><input type="number" step="0.001"  ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" class = "linetotal" value="0" name = "linetotal_{{j}}" id="linetotal_{{j}}" readonly="readonly"></td>
                                 <td class="sticky-cell"><input type="text" class="unit-type" name = "unit-type_{{j}}" id="unit-type_{{j}}"> </td>
                                 {% for i,v in quarter_list.items %}
                                 <td class=""> <input onfocus="if(this.value == '0') {this.value=''}" onblur="if(this.value == ''){this.value ='0'}" type="number" name = "unit_{{i}}_{{j}}" value="0" class="unit" id="unit_{{i}}_{{j}}"  > </td>
@@ -74,6 +74,29 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
+<!--                    for extra row-->
+                     <table class="table table-striped table-striped " id="example1" cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                        </thead>
+                          <tr class="sticky-row">
+                        <tbody class="budget_section">
+                      
+                            <td class="sticky-cell" style="padding:10px 13px;top:0px" ></td>
+
+                            <td class="sticky-cell"  style="top:0px;padding-left:391px;padding-right:123px"> <label style="position: absolute;left: 9%;top: 13px;color:#029876;font-weight:bold;font-size:16px;">Total</label><input type="number" class = "linetotal" name = "lastrow_linetotal" id="lastrow_linetotal" readonly="readonly" value="{{line_total}}" style="border:0px;color:#029876;font-weight:bold;font-size:16px;"></td>
+
+                            {% for i,v in quarter_list.items %}
+                            
+                                 <td style="top:0px;padding-left:326px;padding-right:8px" > <input type="number" name = "quarter_linetotal_{{i}}" class ="planned-cost" id="quarter_linetotal_{{i}}" readonly="readonly" value ="" style="border:0px;color:#029876;font-weight:bold;font-size:16px;"> </td>
+                                 <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
+                            {% endfor %}
+                        
+                        </tbody>
+                        </tr>
+                    </table>
+
+
                 </div>
             </div>
             <div class="click_buttons">
@@ -83,7 +106,7 @@
                 </div>
                 <div class="link-center">
                     <input type="hidden"/>
-                    <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>
+<!--                    <a href ="javascript:void(0);" class ="link-pad1 remove">Remove</a>-->
                 </div>
                 <div class="link-right">
                     <input type="submit" value="Save Budget Lineitems" class="btn btn-success">
@@ -130,6 +153,8 @@
         });
     });
 </script>
+
+
 <script type="text/javascript">
     $(document).ready(function () 
     {
@@ -177,25 +202,88 @@
             var rate = parseFloat($("#rate_"+i+"_"+j).val());
             var unit = parseFloat($("#unit_"+i+"_"+j).val());
             var total = (rate) * (unit);
-            //var total = total.toFixed(2);
+            var total = total.toFixed(2);
             if (total.toString() == 'NaN'){
                 $("#planned-cost_"+i+"_"+j).val('');
             }
             else{
-                $("#planned-cost_"+i+"_"+j).val(parseInt(total));
+                $("#planned-cost_"+i+"_"+j).val(parseFloat(total));
             }
             
             var linetotal = 0
-            $("[id^=planned-cost_][id$=_"+parseInt(j)+"]").each(function(){
+            $("[id^=planned-cost_][id$=_"+parseFloat(j)+"]").each(function(){
                 linetotal = +linetotal + +$(this).val()
             })
             
-            $("#linetotal_"+j).val(parseInt(linetotal));
+            $("#linetotal_"+j).val(parseFloat(linetotal));
+                quartercount();
+                totalcount();
         }
         $(document).on("change,blur, keyup", ".rate", updatePrice);
         $(document).on("change,blur, keyup", ".unit", updatePrice);
     });
     
+</script>
+
+<script>
+    $(document).ready(function()
+    {
+        function validate_decimal_unit()
+        {
+            var unit = $("#unit_"+i+"_"+j).val();
+            var unit_split = unit.split('.');
+            if (unit_split[1]){
+                match = (/(\d{0,5})[^.]*((?:\.\d{0,3})?)/g).exec(unit.replace(/[^\d.]/g, ''));
+                var val1 = match[1] + match[2]
+                $("#unit_"+i+"_"+j).val(val1);
+            }
+        }
+        function validate_decimal_rate()
+        {
+            var rate = $("#rate_"+i+"_"+j).val();
+            var unit_split = rate.split('.');
+            if (unit_split[1]){
+                match = (/(\d{0,5})[^.]*((?:\.\d{0,3})?)/g).exec(rate.replace(/[^\d.]/g, ''));
+                var val1 = match[1] + match[2]
+            $("#rate_"+i+"_"+j).val(val1);
+        }
+    }
+        $(document).on("change,blur, keyup", ".rate", validate_decimal_rate);
+        $(document).on("change,blur, keyup", ".unit", validate_decimal_unit);
+    });
+
+</script>
+<script>
+                function removerow(j){
+                 //var split_id = id.split("_");
+                 //var deleteindex = split_id[1];
+                    var result = confirm("Are you sure to delete this row?");
+                    if (result) {
+                        //Logic to delete the item
+                        $("#data_row_" + j).remove();
+                        quartercount();
+                        totalcount();
+                        
+//---------------------to change the count of number 
+                       var lastid = $(".data_row:last").attr("id");
+                        //var count_div = $("[id^=data_row_]").length;
+                        var count_div = lastid.split('_')[2]
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
+                    }
+                  // Remove <div> with id
+                  
+                }
 </script>
 <!--/*script for add more functionality-->
 <script type="text/javascript">
@@ -206,7 +294,9 @@
                     var tR = $('.data_row:last').clone();
                     count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
-                    $(tR).find('td input, td select').each(function(){
+                    $(tR).attr('id', "data_row_"+count);
+                    $(tR).find('td input, td select td span').each(function(){
+                    $(this).val('')
                       if ($(this).attr('name')){
                            if ($(this).attr('name').split('_').length == 3){
                               var name = $(this).attr('name').split('_');
@@ -217,12 +307,31 @@
                               var name = $(this).attr('name').split('_');
                               $(this).attr('name', name[0]+"_"+count);
                               $(this).attr('id', name[0]+"_"+count);
+                              if (name[0].startsWith('removerow') == true)
+                              {
+                              $(this).attr('onclick', "return removerow("+count+")");
+                              }
                             }
                       }
                     });
                     $('input[name=count]').val(count)
                     $(tR).find('td span.init').text(count);
                     $(tR).insertAfter('.data_row:last');
+
+//---------------------to change the count of number 
+                    var count_div = $("[id^=data_row_]").length;
+                        abc = 0;
+                        for (i=0;i<=count_div;i++){
+                            var tR = $('#data_row_'+i)
+                            if (tR.length != 0){
+                            $(tR).find('td span.init').each(function(){
+                                var ct = parseInt(abc+1)
+                                abc++
+                                $(this).text(ct)
+                                
+                        })
+                    }
+                            }
                     }
                 function remove(){
                     var count = $('input[name=count').val();
@@ -240,4 +349,35 @@
     
     });
 </script>
+
+<script>
+        function totalcount()
+        {
+        linetotal_amount = 0
+        $("[id^=linetotal_]").each(function(){
+                linetotal_amount = +linetotal_amount + +$(this).val()
+            })
+            $("#lastrow_linetotal").val(parseInt(linetotal_amount));
+        }
+        $(document).on("change,blur, keyup", ".rate", totalcount);
+        $(document).on("change,blur, keyup", ".unit", totalcount);
+    
+</script>
+
+
+<script>
+        function quartercount()
+        {
+        {% for i,v in quarter_list.items %}
+            quartertotal_amount = 0
+            $('[id^=planned-cost_{{i}}]').each(function(){
+                    quartertotal_amount = +quartertotal_amount + +$(this).val()
+                    $("#quarter_linetotal_{{i}}").val(parseInt(quartertotal_amount));
+                })
+        {% endfor %}
+        }
+        $(document).on("change,blur, keyup", ".rate", quartercount);
+        $(document).on("change,blur, keyup", ".unit", quartercount);
+</script>
+
 {% endblock %}

@@ -95,7 +95,7 @@ $(document).ready(function(){
     <div class="title-left">
     {% get_funder projectobj as project_funders %}
      {% if project_funders.project %}
-    <h4><a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">{{project_funders.project.name}} <p></a></h4>
+    <h4><a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">{{project_funders.project.name}} ⓘ<p></a></h4>
     {% else %}
     <h4><a href = '#'>Project Name </a></h4>
     {% endif %}
@@ -317,7 +317,8 @@ $(document).ready(function() {
     {
       var obj = ff[i]
       var title = obj.title;
-      var wrapper         = $(".numeric_parameter_"+ title[0] + "_" + title[1]); //Fields wrapper
+      var title_id = title.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "")
+      var wrapper         = $(".numeric_parameter_"+ title_id); //Fields wrapper
       console.log(obj);
       if (obj.type == 'CUR') {
         var url = loc_url + '/' + "static/img/budget-icon.png";
@@ -431,8 +432,8 @@ function numberWithCommas(x) {
           {% for i in number_json1 %}
 
           <td style="width:300px;" class="float_section">
-          <div class='numeric_parameter_{{i.title.0}}_{{i.title.1}}'  style="width:300px;"></div
-            >
+
+          <div class='numeric_parameter_{{i.title|remove_spcl_char }}'  style="width:300px;"></div>
           </td>
           {% endfor %}
 
@@ -548,9 +549,20 @@ under 0 Milestones</h5>
     </div>
 
     <div class=" white-box ">
-<!--    	<img src="/static/img/wip-img.jpg" alt="">-->
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed  </li>
+              <li><span class="taskO"></span> In progress </li>
+              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
-    </div>
+        </div>
+  </div>
     <div class="white-box-left user-list-box">
     <div class="table-responsive">
     <table class="table-resp" cellpadding="0" cellspacing="0" border="0">
@@ -576,6 +588,7 @@ under 0 Milestones</h5>
             <td style="width:26%;">{% if project_funders.implementation_partner.designation %}{{project_funders.implementation_partner.designation}} {% else %} - {% endif %}</td>
             <td style="width:19%;">Implementation Partner
                 {% get_user_permission request as user_obj %}
+                {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
             <td style="width:10%;"><a class="btn btn-primary">Edit</a></td>{% endif %}
       </tr>

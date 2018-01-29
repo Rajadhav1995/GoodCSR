@@ -209,7 +209,7 @@
                     {% for i in ques.0 %}
                     {% if i.q_name == 'cover_image' %}
                     <div>
-                        <img src="{{i.answer}}" style="width:100%">
+                        <img src="{{image_url}}/{{i.answer}}" style="width:100%">
                     </div>
                     {% endif %}
                     <div>
@@ -495,32 +495,19 @@
                     {% if sub.q_name == "logos" %}
                     <img src="{{sub.answer}}" height = 70 width = 100></li>
                     {% endif %}
+                    {% if sub.q_name == 'project_objective' %}
+            <div class="location margin-top40 page_height">
+                <p>Objective of the project</p>
+                <h5>{{sub.answer | striptags}}</h5>
+            </div>
+            {% endif %}
                     {% endfor %}
                     {% endif %}
                     {% endfor %}
                 </div>
             </div>
             <hr>
-           {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
-            {% for i in ques.0 %}
-            {% if i.q_type == 'OT' %}
-           {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
-            {% for sub in sub_questions.0 %}
-            {% if sub.q_name == 'project_objective' %}
-            <div class="location margin-top40 page_height">
-                <p>Objective of the project</p>
-                <h5>{{sub.answer | striptags}}</h5>
-            </div>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-            {% endfor %}
-            <footer>
-                <hr>
-                <img src="/static/img/report/logo.png" style="float:left">
-                {% get_page_number page_number as page_number %}
-                <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-            </footer>
+
         </div>
         {% endif %}
         <!--fourth page contents end-->
@@ -570,7 +557,7 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> Quarter {{text}} </p>
+            <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} </p>
             {% endif %}
             {% endif %}
             {% if quest.slug == "key-achievements-in-this-quarter" %}
@@ -696,7 +683,7 @@
                     <h4 style="margin:0px">{{text|title}}</h4>
                     {% endif %}
                     {% if quest.slug == "duration" %}
-                    <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+                    <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">Key Achievements in this quarter</span> </p>
                     {% endif %}
                     {% endif %}
                     {% if quest.slug == "budget-utlization-tranches" %}
@@ -863,7 +850,7 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> First Quarter {{text}} </p>
+            <p> {% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {{text}} {% endif %} </p>
             {% endif %}
             {% endif %}
             <!--for gantt chart div -->
@@ -874,10 +861,20 @@
                     <p class="color_green" style="border-bottom:0px">Milestones & Activities1</p>
                     <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                     <div class=" white-box ">
-
-                        <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'">
-                        </div>
-                    </div>
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed  </li>
+              <li><span class="taskO"></span> In progress </li>
+              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
+        <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+        </div>
+  </div>
                 </div>
             </div>
             <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
@@ -1393,7 +1390,7 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+            <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">Key Achievements in this quarter</span> </p>
             {% endif %}
             {% endif %}
             <!--                     this is for parameter selection -->
@@ -1424,18 +1421,19 @@
                                     </ul>
                                 </div>
                             </div>
-                            {% else %}
+                            {% endif %}
+                            {% if parameter_values.2 == 0 %}
                             <ul class="key_parameter parameter">
                                 <table class="table pmu_formtable_parameter">
                                     <tr>
                                         <td>
                                             <p>{{parameter_values.1.0}}</p>
-                                            <img src="/static/img/user.png"><span>{{23 | intcomma}}</span>
+                                            <img src="/static/img/user.png"><span>{{parameter_values.3 | intcomma}}</span>
                                         </td>
                                     </tr>
                                 </table>
                             </ul>
-                            {% endif %} <!-- this is for parameter type identification -->
+                            {% endif %} <!-- this is for parameter type identification --> 
                             {% endif %} <!-- if loop ends for paramater selection -->
                             {% if param_quest.slug == "about-parameter" %}
                             <div class="col-md-8">
@@ -1672,7 +1670,7 @@
                 <h4 style="margin:0px">{{text|title}}</h4>
                 {% endif %}
                 {% if quest.slug == "duration" %}
-                <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+                <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">Key Achievements in this quarter</span> </p>
                 {% endif %}
                 {% endif %}
                 <!--                     this is for parameter selection -->
@@ -1748,7 +1746,7 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> First Quarter {{text}} </p>
+            <p> {% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {{text}} {% endif %} </p>
             {% endif %}
             {% endif %}
 
@@ -1811,6 +1809,54 @@
                     </div>
                 </div>
                 <br><br>
+                        {% get_tranches v tranche_list as filtered_tranches %}
+                        {% if filtered_tranches.1.planned_amount %}
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                
+                                <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th align="center">Tranche No.</th>
+                                            <th>Due Date</th>
+                                            <th>Planned Amount</th>
+                                            <th>Actual Disbursement</th>
+                                            <th>Recommended Disbursement</th>
+<!--                                            <th> Utilized</th>-->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% get_tranches v tranche_list as filtered_tranches %}
+                                        
+                                        {% for i in filtered_tranches.0 %}
+                                        {% with forloop.counter as rnum %}
+                                        <tr>
+                                            <td>{{rnum}}</td>
+                                            <td>{{i.due_date|date:"j M Y"}}</td>
+                                            <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                            <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                            <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+<!--                                            <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
+                                        </tr>
+                                        {% endwith %}
+                                        {% endfor %}
+                                        
+                                        
+                                        <tr bgcolor="#f1f3e9" class="table-tr">
+                                            <td>Total</td>
+                                            <td>&nbsp;</td>
+                                            <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                            <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                            <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+<!--                                            <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
                 <!-- ------------------------------------------------------- -->
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}

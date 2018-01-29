@@ -3,6 +3,8 @@ from models import *
 from budgetmanagement.models import SuperCategory
 from projectmanagement.models import Project
 import pytz
+# this serializer file is for getting json data for Gantt chart
+# from Task, milestone, activities
 
 class TaskSerializer(serializers.ModelSerializer):
     expected_start_date = serializers.DateTimeField()

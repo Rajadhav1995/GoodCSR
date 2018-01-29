@@ -15,6 +15,8 @@ import json
 
 @check_loggedin_access
 def admin_dashboard(request):
+    # this function is to show detail view of dashboard
+    # 
     state_count = {}
     uu={}
     user_id = request.session.get('user_id')

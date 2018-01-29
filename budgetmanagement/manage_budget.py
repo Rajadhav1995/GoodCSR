@@ -161,7 +161,7 @@ def projectlineitemadd(request):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i+1))]
             for quarter,value in quarter_list.items():
                 result = get_lineitem_result(line_itemlist,quarter,request)
-                if result["subheading"]:
+                if line_itemlist and result["subheading"] :
                     budget_period = value
                     start_date = budget_period.split('to')[0].rstrip()
                     end_date = budget_period.split('to')[1].lstrip()
@@ -232,8 +232,15 @@ def get_month_quarterlist(selected_year,budget_id):
     ed = budgetobj.end_date
     budget_enddate = budgetobj.end_date
     sd = budgetobj.actual_start_date
+    if sd.day >= 15:
+        year = sd.year+1 if sd.month == 12 else sd.year
+        month =  1 if sd.month == 12 else sd.month+1
+        sd = sd.replace(day=01,month = month,year=year)
+    elif sd.day < 15:
+        sd = sd.replace(day=01,month = sd.month,year=sd.year)
+
     no_of_quarters = math.ceil(float(((ed.year - sd.year) * 12 + ed.month - sd.month))/1)
-    
+
     month_list = []
     for i in range(int(no_of_quarters)):
         ed = sd+relativedelta.relativedelta(months=1)
@@ -328,14 +335,14 @@ def budget_amount_list(budgetobj,projectobj,quarter_list):
         budget_period_plannedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('planned_unit_cost', flat=True)
         budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist,quarter_order=i).values_list('utilized_unit_cost', flat=True)
         budget_period_plannedamount = map(lambda x:x if x else 0,budget_period_plannedamount)
-        final_budget_period_plannedamount = sum(map(int,budget_period_plannedamount))
+        final_budget_period_plannedamount = sum(map(float,budget_period_plannedamount))
         budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
-        final_budget_period_utilizedamount = sum(map(int,budget_period_utilizedamount))
+        final_budget_period_utilizedamount = sum(map(float,budget_period_utilizedamount))
         quarter_planned_amount.update({i:final_budget_period_plannedamount})
         quarter_utilized_amount.update({i:final_budget_period_utilizedamount})
     budget_period_plannedamount = quarter_planned_amount.values()
     budget_period_utilizedamount = quarter_utilized_amount.values()
-    return map(int,budget_period_plannedamount),map(int,budget_period_utilizedamount)
+    return map(int,budget_period_plannedamount),map(float,budget_period_utilizedamount)
 
 def tanchesamountlist(tranche_list):
      ''' to get the tranches detail amount'''
@@ -359,7 +366,7 @@ def budget_supercategory_value(projectobj,budgetobj):
     for i in project_category_list:
         total_amount_list = BudgetPeriodUnit.objects.filter(budget_period__budget = budgetobj,budget_period__project=projectobj,category=i,active=2).values_list('planned_unit_cost',flat=True)
         total_amount_list = map(lambda x:x if x else 0,total_amount_list)
-        total_amount_number = map(int,total_amount_list)
+        total_amount_number = map(float,total_amount_list)
         total_amount = sum(total_amount_number)
         final_project_category_list.append({'name':i.name,'y':int(total_amount),'color':random.choice(colors)})
     return final_project_category_list
@@ -426,6 +433,7 @@ def inactivatingthelineitems(projectobj,lineobj_list):
 def get_budget_edit_result(line_itemlist,quarter,request):
     '''  Function to prepare the result list'''
     result = {}
+    budgetperiodid = None
     for line in line_itemlist:
         line_list = line.split('_')
         if  len(line_list) >= 3:
@@ -449,7 +457,7 @@ def budget_lineitem_update(budget_parameters):
         budget_lineitem_obj.__dict__.update(budget_dict)
         budget_lineitem_obj.save()
         utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
-        planned_cost = int(result['planned-cost']) if result['planned-cost'] else 0 
+        planned_cost = float(result['planned-cost']) if result['planned-cost'] else 0 
         budget_lineitem_obj.variance = planned_cost - int(utilized_amount)
         budget_lineitem_obj.save()
     else:
@@ -467,11 +475,40 @@ def budget_lineitem_update(budget_parameters):
                    'row_order':int(j),
                    'quarter_order':int(quarter),
                    'budget_period_id':budget_periodobj.id,
-                   'variance':int(budget_lineitem_obj.planned_unit_cost) if budget_lineitem_obj.planned_unit_cost else 0
+                   'variance':float(budget_lineitem_obj.planned_unit_cost) if budget_lineitem_obj.planned_unit_cost else 0
                    }
         budget_lineitem_obj.__dict__.update(budget_extra_values)
         budget_lineitem_obj.save()
     return budget_lineitem_obj
+
+def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj):
+    for quarter,value in quarter_list.items():
+        start_date = value.split('to')[0].rstrip()
+        end_date = value.split('to')[1].lstrip()
+        result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
+        if result["subheading"]:
+            budget_dict = {
+                       'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
+                       'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
+                       'subheading':result['subheading'],
+                       'unit':result['unit'],
+                       'unit_type':result['unit-type'],
+                       'rate':result['rate'],
+                       'planned_unit_cost':result['planned-cost'],
+                       'start_date':start_date,
+                       'end_date':end_date,
+                       'row_order':int(j),
+                       'quarter_order':int(quarter),
+                       }
+            budget_parameters = {'budgetperiodid':budgetperiodid,
+                                'budget_dict':budget_dict,
+                                'result':result,'start_date':start_date,
+                                'end_date':end_date,'j':j,'budgetobj':budgetobj,
+                                'projectobj':projectobj,'request':request,
+                                'quarter':quarter}
+            budget_saving = budget_lineitem_update(budget_parameters)
+    return line_itemlist
+
 
 def budgetlineitemedit(request):
     '''  Function to edit the budget line item'''
@@ -497,31 +534,10 @@ def budgetlineitemedit(request):
         final_result = inactivatingthelineitems(projectobj,lineobj_list)
         for j in range((int(count)+1)):
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(j))]
-            for quarter,value in quarter_list.items():
-                start_date = value.split('to')[0].rstrip()
-                end_date = value.split('to')[1].lstrip()
-                result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
-                if result["subheading"]:
-                    budget_dict = {
-                               'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
-                               'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
-                               'subheading':result['subheading'],
-                               'unit':result['unit'],
-                               'unit_type':result['unit-type'],
-                               'rate':result['rate'],
-                               'planned_unit_cost':result['planned-cost'],
-                               'start_date':start_date,
-                               'end_date':end_date,
-                               'row_order':int(j),
-                               'quarter_order':int(quarter),
-                               }
-                    budget_parameters = {'budgetperiodid':budgetperiodid,
-                                        'budget_dict':budget_dict,
-                                        'result':result,'start_date':start_date,
-                                        'end_date':end_date,'j':j,'budgetobj':budgetobj,
-                                        'projectobj':projectobj,'request':request,
-                                        'quarter':quarter}
-                    budget_saving = budget_lineitem_update(budget_parameters)
+            if line_itemlist:
+#                splitted the code to reduce the sonar issues
+                budget_saving = update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj)
+
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&edit=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/edit_budgetlineitem.html",locals())

@@ -86,7 +86,7 @@ ul li {
             {% else %}
             <div class="box-body">
                 {% if quarter_msg %}
-                    <h3 class border_linr">Already reported is generated for this quarter. <a style="text-decoration:underline;color:#169776" href= '/report/remove/detail/?slug={{project_obj.slug}}&report_id={{project_report.id}}&key=1&report_type={{project_report.report_type}}'>View the Report Here </a> or if u want to edit the report click here <a style="text-decoration:underline;color:#169776" href= '/report/final/design/?slug={{project_obj.slug}}&report_id={{project_report.id}}'>Edit the Report</a></h3>
+                    <h3 class border_linr">Already reported is generated for this quarter. <a style="text-decoration:underline;color:#169776" href= '/report/remove/detail/?slug={{project_obj.slug}}&report_id={{project_report.id}}&key=1&report_type={{project_report.report_type}}'>View the Report Here </a> or if u want to edit the report click here <a style="text-decoration:underline;color:#169776" href= '/report/final/design/?slug={{project_obj.slug}}&report_id={{project_report.id}}&key={{key}}'>Edit the Report</a></h3>
                     <a class="btn btn-success" href="/report/listing/?slug={{project_obj.slug}}" style="margin-right:5px;float: right;  padding:3px 15px;">Back</a>
                 {% else %}
                     <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
@@ -187,6 +187,8 @@ ul li {
         {
          $('#report_duration').hide();
          $('#year_list').show();
+         var year = $('#select_year').val();
+         get_year(year)
         }
         else{
             $('#report_duration').show();
@@ -196,10 +198,10 @@ ul li {
 
 </script>
 
+
 <script>
-            $('#select_year').change(function(){
-               $('#select_month').show();
-               var year = this.value;
+            function get_year(year){
+                $('#select_month').show();
                $.ajax({
                    url : '/manage/month/list/',
                    type : 'GET',
@@ -216,6 +218,11 @@ ul li {
                        console.log('error');
                    }
                 });
+            
+            }
+            $('#select_year').change(function(){
+               
+                get_year(this.value)
                 
                 
     });

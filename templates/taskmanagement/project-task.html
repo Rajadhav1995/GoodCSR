@@ -3,11 +3,46 @@
 {% load urs_tags %}
 
 {% block content %}
+
+<style>
+.small_height{
+  height: 30px !important;
+line-height: 24px;
+padding: 5px;
+font-size: 14px;
+}
+.padding_dropdown{
+
+}
+</style>
 <div class="clear"></div>
+
 <!--Content part starts-->
 <section class="content-part">
    <div class="row">
       <div class="left-task">
+
+        
+        <div class="col-md-12">
+        <div class='col-md-2 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 0px;">Activity</label></div>
+        <div class="col-md-3 nopadding">
+                <select style="margin-left: -15px;" name="year" id="year_id" class = "form-control small_height" >
+                    <option value = "Select Year">Select</option>
+                    {% for i in activity_list %}
+                    <option value="{{i.id}}">{{i.name}}</option>
+                    {% endfor %}
+                </select>
+        </div>
+        <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 15px;">Super Category</label></div>
+        <div class="col-md-4 padding_left">
+                <select name="year" id="category_dropdown" class = "form-control small_height" >
+                    <option value = "Select Year"><small>Select</small></option>
+                    {% for i in category_list %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+        </div>
+      </div>
          <div class="content-top content-top-task">
 <!--            <div class="select-area">-->
 <!--               <label>Sort by </label>-->
@@ -20,6 +55,7 @@
 <!--               </div>-->
 <!--            </div>-->
          </div>
+
          <div id="boxscroll-pad">
             <div class="task-head">
                <h4>Overdue</h4>
@@ -28,7 +64,7 @@
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}}</span></a></li>
+               <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% endif %}
             </ul>
@@ -39,7 +75,7 @@
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li>
+               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -52,7 +88,7 @@
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li>
+               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -65,7 +101,7 @@
             <ul>
                {% if remain_tasks %}
                {% for t in remain_tasks %}
-               <li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}}</span></a></li>
+               <div class="activity act_{{t.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li><a href="javascript:void(0);">No tasks</a></li>
@@ -295,6 +331,33 @@
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+<script>
+ $('#year_id').on("change",function () {
+    var as = $(this).find("option:selected").text();
+    var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
+    $('.activity').hide();
+    if (ddd == 'Select') {
+      $('.activity').show();
+    }else{
+      $('.act_'+ddd).show();
+    };
+  })
+</script>
+
+<script>
+ $('#category_dropdown').on("change",function () {
+    var as = $(this).find("option:selected").text();
+    var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
+    $('.category').hide();
+    if (ddd == 'Select') {
+      $('.activity').show();
+    }else{
+      $('.cat_'+ddd).show();
+    };
+    
+  })
+</script>
 
 <script>
    //Toggle

@@ -232,7 +232,7 @@
                      <!--                            this is for key achievements -->
                      {% if quest.slug == "key-achievements-in-this-quarter" %}
                      <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
-                        <p>{{quest.text|title}}</p>
+                        {% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}
                         <!-- timeline slider -->
                         {% if timeline_json != '[]' %}
                         <div id="scrollbar1">
@@ -409,7 +409,11 @@
                                     {% get_utlizedline_total row projectobj as utilized_amount %}
                                     <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                    {% get_quarter_details row i projectobj as line_itemobj %}
+                                      {% if projectreportobj.report_type == 1 %}
+                                      {% get_quarter_details row i projectobj as line_itemobj %}
+                                      {% else %}
+                                       {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                      {% endif %}
                                     <td align="right" class=""> {{line_itemobj.unit}} </td>
                                     <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -479,7 +483,7 @@
                      <!--                            this is for key achievements-->
                      {% if quest.slug == "key-achievements-in-this-quarter" %}
                      <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:'1'}}">
-                        <p>Key Achievements in this quarter</p>
+                        {% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}
                         <!-- timeline slider -->
                         {% if timeline_json != '[]' %}
                         <div id="scrollbar1">
@@ -689,7 +693,11 @@
                                        {% get_utlizedline_total row projectobj as utilized_amount %}
                                        <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                        <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                       {% get_quarter_details row i projectobj as line_itemobj %}
+                                          {% if projectreportobj.report_type == 1 %}
+                                          {% get_quarter_details row i projectobj as line_itemobj %}
+                                          {% else %}
+                                           {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                          {% endif %}
                                        <td align="right" class=""> {{line_itemobj.unit}} </td>
                                        <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                        <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -790,15 +798,27 @@
                    <p>{{quest.text|title}}</p>
                    <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                    <div class=" white-box ">
-                   <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
-                   </div>
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed  </li>
+              <li><span class="taskO"></span> In progress </li>
+              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
+        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+        </div>
+  </div>
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
                </div>
                {% endif %}
                <!--                            this is for about the quarter-->
                {% if quest.slug == "about-the-quarter" %}
                <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
-                   <p>{{quest.text|title}}</p>
+                   {% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}
                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
                </div>
@@ -956,7 +976,11 @@
                {% get_utlizedline_total row projectobj as utilized_amount %}
                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-               {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% if projectreportobj.report_type == 1 %}
+                  {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% else %}
+                   {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                  {% endif %}
                <td align="right" class=""> {{line_itemobj.unit}} </td>
                <td align="right" class=""> {{line_itemobj.rate}}  </td>
                <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -1046,8 +1070,20 @@
                    <p>{{quest.text|title}}</p>
                    <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                    <div class=" white-box ">
-                   <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
-                   </div>
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed  </li>
+              <li><span class="taskO"></span> In progress </li>
+              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
+        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+        </div>
+  </div>
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
                </div>
                <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
@@ -1408,7 +1444,7 @@
                {% if quest.slug == "about-the-quarter" %}
                <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}')">Add</a></h5>
-                   <p>{{quest.text|title}}</p>
+                   {% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}
                    {% get_answer_question quest reportupdates.1 as text %}
                    <textarea type="text" class="textarea_file" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}">{{text|striptags}}</textarea>
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
@@ -1582,7 +1618,11 @@
                {% get_utlizedline_total row projectobj as utilized_amount %}
                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-               {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% if projectreportobj.report_type == 1 %}
+                  {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% else %}
+                   {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                  {% endif %}
                <td align="right" class=""> {{line_itemobj.unit}} </td>
                <td align="right" class=""> {{line_itemobj.rate}}  </td>
                <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -1710,7 +1750,7 @@
                <!--                            this is for about the quarter-->
                {% if quest.slug == "about-the-quarter" %}
                <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{future_len}}">
-                   <p>{{quest.text|title}}</p>
+                   {% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}
                    <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{future_len}}')">Add</a></h5>
                </div>
@@ -1748,7 +1788,11 @@
                {% get_utlizedline_total row projectobj as utilized_amount %}
                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-               {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% if projectreportobj.report_type == 1 %}
+                  {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% else %}
+                   {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                  {% endif %}
                <td align="right" class=""> {{line_itemobj.unit}} </td>
                <td align="right" class=""> {{line_itemobj.rate}}  </td>
                <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -1760,45 +1804,45 @@
                </table>
                </div>
                <br>
-               <!--                                {% get_tranches v tranche_list as filtered_tranches %}-->
-               <!--                                {% if filtered_tranches.1.planned_amount %}-->
-               <!--                                <div class="table-responsive">-->
-               <!--                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">-->
-               <!--                                      <thead>-->
-               <!--                                      <tr>-->
-               <!--                                        <th align="center">Tranche No.</th>-->
-               <!--                                        <th>Due Date</th>-->
-               <!--                                        <th>Planned Amount</th>-->
-               <!--                                        <th>Actual Disbursement</th>-->
-               <!--                                        <th>Recommended Disbursement</th>-->
-               <!--                                        <th> Utilized</th>-->
-               <!--                                      </tr>-->
-               <!--                                      </thead>-->
-               <!--                                      <tbody>-->
-               <!--                                      {% for i in filtered_tranches.0 %}-->
-               <!--                                      {% with forloop.counter as rnum %}-->
-               <!--                                      <tr>-->
-               <!--                                        <td>{{rnum}}</td>-->
-               <!--                                        <td>{{i.due_date}}</td>-->
-               <!--                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>-->
-               <!--                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
-               <!--                                      </tr>-->
-               <!--                                      {% endwith %}-->
-               <!--                                      {% endfor %}-->
-               <!--                                      <tr bgcolor="#f1f3e9" class="table-tr">-->
-               <!--                                        <td>Total</td>-->
-               <!--                                        <td>&nbsp;</td>-->
-               <!--                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>-->
-               <!--                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
-               <!--                                      </tr>-->
-               <!--                                      </tbody>-->
-               <!--                                    </table>-->
-               <!--                                </div>-->
-               <!--                                {% endif %}-->
+                                               {% get_tranches v tranche_list as filtered_tranches %}
+                                               {% if filtered_tranches.1.planned_amount %}
+                                               <div class="table-responsive">
+                                                   <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                                     <thead>
+                                                     <tr>
+                                                       <th align="center">Tranche No.</th>
+                                                       <th>Due Date</th>
+                                                       <th>Planned Amount</th>
+                                                       <th>Actual Disbursement</th>
+                                                       <th>Recommended Disbursement</th>
+<!--                                                       <th> Utilized</th>-->
+                                                     </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                     {% for i in filtered_tranches.0 %}
+                                                     {% with forloop.counter as rnum %}
+                                                     <tr>
+                                                       <td>{{rnum}}</td>
+                                                       <td>{{i.due_date}}</td>
+                                                       <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                                       <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                                       <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+<!--                                                       <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
+                                                     </tr>
+                                                     {% endwith %}
+                                                     {% endfor %}
+                                                     <tr bgcolor="#f1f3e9" class="table-tr">
+                                                       <td>Total</td>
+                                                       <td>&nbsp;</td>
+                                                       <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                                       <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                                       <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+<!--                                                       <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
+                                                     </tr>
+                                                     </tbody>
+                                                   </table>
+                                               </div>
+                                               {% endif %}
                <!--<img src="img/table01.png" style="width:100%">-->
                <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{future_len}}')">Add</a></h5>
                </div>
@@ -1841,7 +1885,7 @@
                <!--                            this is for about the quarter-->
                {% if quest.slug == "about-the-quarter" %}
                <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{future_len}}">
-                   <p>{{quest.text|title}} </p>
+                   {% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}
                    {% get_answer_question quest reportupdates.1 as text %}
                    <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file">{{text|striptags}}</textarea>
                    <<h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{future_len}}')">Add</a></h5>
@@ -1880,7 +1924,11 @@
                {% get_utlizedline_total row projectobj as utilized_amount %}
                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-               {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% if projectreportobj.report_type == 1 %}
+                  {% get_quarter_details row i projectobj as line_itemobj %}
+                  {% else %}
+                   {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                  {% endif %}
                <td align="right" class=""> {{line_itemobj.unit}} </td>
                <td align="right" class=""> {{line_itemobj.rate}}  </td>
                <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
@@ -1892,45 +1940,45 @@
                </table>
                </div>
                <br>
-               <!--                                {% get_tranches v tranche_list as filtered_tranches %}-->
-               <!--                                {% if filtered_tranches.1.planned_amount %}-->
-               <!--                                <div class="table-responsive">-->
-               <!--                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">-->
-               <!--                                      <thead>-->
-               <!--                                      <tr>-->
-               <!--                                        <th align="center">Tranche No.</th>-->
-               <!--                                        <th>Due Date</th>-->
-               <!--                                        <th>Planned Amount</th>-->
-               <!--                                        <th>Actual Disbursement</th>-->
-               <!--                                        <th>Recommended Disbursement</th>-->
-               <!--                                        <th> Utilized</th>-->
-               <!--                                      </tr>-->
-               <!--                                      </thead>-->
-               <!--                                      <tbody>-->
-               <!--                                      {% for i in filtered_tranches.0 %}-->
-               <!--                                      {% with forloop.counter as rnum %}-->
-               <!--                                      <tr>-->
-               <!--                                        <td>{{rnum}}</td>-->
-               <!--                                        <td>{{i.due_date}}</td>-->
-               <!--                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>-->
-               <!--                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
-               <!--                                      </tr>-->
-               <!--                                      {% endwith %}-->
-               <!--                                      {% endfor %}-->
-               <!--                                      <tr bgcolor="#f1f3e9" class="table-tr">-->
-               <!--                                        <td>Total</td>-->
-               <!--                                        <td>&nbsp;</td>-->
-               <!--                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>-->
-               <!--                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>-->
-               <!--                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
-               <!--                                      </tr>-->
-               <!--                                      </tbody>-->
-               <!--                                    </table>-->
-               <!--                                </div>-->
-               <!--                                {% endif %}-->
+                                               {% get_tranches v tranche_list as filtered_tranches %}
+                                               {% if filtered_tranches.1.planned_amount %}
+                                               <div class="table-responsive">
+                                                   <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                                     <thead>
+                                                     <tr>
+                                                       <th align="center">Tranche No.</th>
+                                                       <th>Due Date</th>
+                                                       <th>Planned Amount</th>
+                                                       <th>Actual Disbursement</th>
+                                                       <th>Recommended Disbursement</th>
+<!--                                                       <th> Utilized</th>-->
+                                                     </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                     {% for i in filtered_tranches.0 %}
+                                                     {% with forloop.counter as rnum %}
+                                                     <tr>
+                                                       <td>{{rnum}}</td>
+                                                       <td>{{i.due_date}}</td>
+                                                       <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                                       <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                                       <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+<!--                                                       <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
+                                                     </tr>
+                                                     {% endwith %}
+                                                     {% endfor %}
+                                                     <tr bgcolor="#f1f3e9" class="table-tr">
+                                                       <td>Total</td>
+                                                       <td>&nbsp;</td>
+                                                       <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                                       <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                                       <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+<!--                                                       <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
+                                                     </tr>
+                                                     </tbody>
+                                                   </table>
+                                               </div>
+                                               {% endif %}
                <!--<img src="img/table01.png" style="width:100%">-->
                <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{future_len}}')">Add</a></h5>
                </div>
