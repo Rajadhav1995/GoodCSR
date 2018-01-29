@@ -515,6 +515,7 @@ def get_tasks_objects(request):
     expected_end_date = max(start_dates).strftime('%Y-%m-%d')
     return JsonResponse({"calculation":expected_end_date})
 
+import pytz
 class ExpectedDatesCalculator():
 
     """ This class takes a task  or a list of tasks ActiveQuery Objects and
@@ -609,16 +610,16 @@ class ExpectedDatesCalculator():
             expected_end_date = main_task.end_date
             if(len(dep_dates) > 0):
                 expected_start_date,expected_end_date = self.get_expected_dates(dep_dates,main_task)
-            ret = {'expected_start_date': expected_start_date,
-                   'expected_end_date': expected_end_date}
+            ret = {'expected_start_date': expected_start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')),
+                   'expected_end_date': expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))}
             self.data[taskid] = ret
             main_task.expected_start_date = ret['expected_start_date']
             main_task.expected_end_date = ret['expected_end_date']
             return main_task
 
     def get_expected_dates(self,dep_dates,main_task):
-        expected_start_date = main_task.start_date
-        expected_end_date = main_task.end_date
+        expected_start_date = main_task.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        expected_end_date = main_task.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         for dep in dep_dates:
             expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
                 dep.expected_end_date) > expected_start_date) else expected_start_date
@@ -681,7 +682,9 @@ class GanttChartData(APIView):
         end_date = request.data.get('end_date')
         if start_date and end_date:
             # this is to get gant chart in  the report form according to the quarters
-            tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date)
+            tasks = Task.objects.filter(activity__project=i_project_id,actual_start_date__gte=start_date,actual_end_date__lte=end_date)
+            if not tasks:
+                tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date)
             activities = Activity.objects.filter(id__in=[i.activity.id for i in tasks])
             milestones = Milestone.objects.filter(task__id__in=[i.id for i in tasks])
             projects = Project.objects.filter(id=i_project_id)

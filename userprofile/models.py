@@ -138,8 +138,8 @@ class RoleConfig(BaseContent):
                      'search', 'mlist', 'generate',
                      'task_status',]:
             if perm in perms:
-                self.__setattr__(perm, 2)
+                self.__setattr__(perm, True)
             else:
-                self.__setattr__(perm, 0)
+                self.__setattr__(perm, False)
         self.save()
 

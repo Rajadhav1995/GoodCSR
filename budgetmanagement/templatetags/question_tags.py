@@ -280,7 +280,7 @@ def get_budget_period(projectobj,budgetobj,v):
     end_date = v.split('to')[1].lstrip()
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
-    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2,start_date__lte = start_date,end_date__gte = end_date).values_list('row_order', flat=True).distinct()
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2,start_date = start_date,end_date = end_date).values_list('row_order', flat=True).distinct()
     return budget_period
 
 @register.assignment_tag
