@@ -19,6 +19,11 @@ width:450px;
         <div class="col-md-12">
       <h3 class="border_line">Manage Role</h3><br>
         </div>
+                    {% if key == 'project_edit_user' %}
+                    <form id="ic_form" class="form-horizantal budget_form" action="/project/manage/funder/?slug={{project_slug}}" method = "post" >{% csrf_token %}
+                        <input type="hidden" name="slug" value="{{project_slug}}">
+                        <input type="hidden" name="key" value="{{redirect_key}}">
+                    {% endif %}
                     {% if key == 'edit' %}
                         
                         <form id="ic_form" class="form-horizantal budget_form" action="/manage/project/role/edit/?objid={{objid}}" method = "post" >{% csrf_token %}
@@ -42,6 +47,36 @@ width:450px;
                         </div>
                         </div> -->
 
+                        {% if key == 'project_edit_user' %}
+                        <div id="impl_partner_div">
+                        <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Implementation Partner<span class="required" style="color:red">*</span></label>
+                                            <select class="form-control" name="implementation_partner" id="implementation_partner" required><option selected disabled>Select Implementation Partner</option>{% for i in partner %}<option {% if proj_funder_obj.implementation_partner.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                                            {{ form.user.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="funder_div">
+                                <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>Funder<span class="required" style="color:red">*</span></label>
+                                            <select class="form-control" name="funder" id="funder"><option selected disabled>Select Funder</option>{% for i in funder_user %}<option {% if proj_funder_obj.funder.id == i.id %}selected="selected" {% endif %} value="{{i.id}}" >{{i.organization}}</option>{% endfor %}</select>
+                                            {{ form.user.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                        {% else %}
                         <div class="row">
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
@@ -65,8 +100,8 @@ width:450px;
                                         </div>
                                     </div>
                                 </div>
-
-
+                        {% endif %}
+ 
                                 <div class="col-md-12">
                                     <div class="form-group">
                                     {% if key == "add" %}
@@ -86,9 +121,8 @@ width:450px;
     </div>
 </div>
 </div>
+
 </section>
-
-
 {% endblock %}
 {% block script %}
 
@@ -96,7 +130,17 @@ width:450px;
 <script type="text/javascript" src="/static/js/jquery.validate.js"></script>
 
 <script type="text/javascript">
-        
+$(document).ready(function() {
+    {% if project_funder == '1' %}
+    $("#impl_partner_div").hide();
+    {% endif %}
+    {% if project_funder == '0' %}
+    $("#funder_div").hide();
+    {% endif %}
+});
+</script>
+
+<script type="text/javascript">
     $(document).ready(function(){
                 $('select[multiple=multiple]').multiSelect()
         $("#ic_form").validate({
