@@ -161,7 +161,7 @@ def manage_role(request, pk):
     # managing roles of user 
     # --------------#
     role = RoleTypes.objects.get(pk=pk)
-    confs = [i[0] for i in role.get_role_config()]
+    confs = [i for i in role.get_role_config()]
 
     if request.method == 'POST':
         perm_data = [(conf, request.POST.getlist(str(conf.id)))
@@ -173,6 +173,7 @@ def manage_role(request, pk):
         # ]
         for conf,perms in perm_data:
             if 'edit' in perms and 'view' != perms :
+                import ipdb;ipdb.set_trace();
                 perms.append('view')
                 conf.update(perms)
 
