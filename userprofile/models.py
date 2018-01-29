@@ -87,6 +87,23 @@ class ProjectUserRoleRelationship(BaseContent):
     def __str__(self):
         return self.project.name
 
+class UserRoles(BaseContent):
+    #----------------------#
+    #Userroles model
+    # user is a one-to-one field
+    #role_type is  a manytomany field
+    #------------------------#
+    user = models.OneToOneField(UserProfile,related_name ="user_role_relation", blank=True, null=True)
+    role_type = models.ManyToManyField(RoleTypes, blank=True)
+    email = models.EmailField()
+
+
+    def __unicode__(self):
+        return self.email
+
+    class Meta:
+        verbose_name_plural = 'User Roles'
+
 class RoleConfig(BaseContent):
     #-----------------------#
     # role config model
