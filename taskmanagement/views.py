@@ -682,7 +682,9 @@ class GanttChartData(APIView):
         end_date = request.data.get('end_date')
         if start_date and end_date:
             # this is to get gant chart in  the report form according to the quarters
-            tasks = Task.objects.filter(activity__project=i_project_id,actual_start_date__gte=start_date,end_date__lte=end_date)
+            tasks = Task.objects.filter(activity__project=i_project_id,actual_start_date__gte=start_date,actual_end_date__lte=end_date)
+            if not tasks:
+                tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date)
             activities = Activity.objects.filter(id__in=[i.activity.id for i in tasks])
             milestones = Milestone.objects.filter(task__id__in=[i.id for i in tasks])
             projects = Project.objects.filter(id=i_project_id)
