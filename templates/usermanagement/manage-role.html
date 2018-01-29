@@ -1,25 +1,22 @@
-{% extends "manage/base.html" %}
-{% load urs_tags %}
+{% extends "base.html" %}
+{% load roles_tags %}
 
 {% block title %}Role{% endblock %}
 
-{% block midpart %}
+{% block content %}
 
 <!-- page content -->
-<div id="content" class="col-lg-10 col-sm-10" style="width:100%">
+<section class="content-part forms_section">
   
   <div class="row">
     <div class="box col-md-12">
       <div class="box-inner">
-	<div class="box-header well" data-original-title="">
+	                <div class="box-header well" data-original-title="">
 	
-                        <h2><a href="/usermanagement/list/role/">User Management</a> - Role ({{role}})</h2>
-                <div class="box-cancel">
-                        <ul class="nav navbar-right panel_toolbox">
-                         <a href="/usermanagement/list/role/" class=" btn-danger btn-xs" >Cancel</a>
-                            <input type="submit" form="id_form" class=" btn-success btn-xs save-text" value="Save"/>
-                            
-                        </ul>
+                        <h3><a href="/usermanagement/list/role/">User Management</a> - Role ({{role}})</h3>
+                    <div style="float: right;">
+                         <input type="submit" form="id_form" class=" btn-success btn-xs save-text" value="Save"/>
+                         <a href="/usermanagement/list/role/" type="button" class=" btn-danger btn-xs" >Cancel</a>
                     </div>
                     </div>
                         <div class="clearfix"></div>
@@ -76,10 +73,7 @@
                 </div>
             </div>
         </div>
-
-    </div>
-
-</div>
+</section>
 <!-- /page content -->
 
 
