@@ -272,3 +272,23 @@ def get_sorted_list(final_quest_list):
         ids_list.append(i.id)
     final_list = Question.objects.filter(id__in=list(set(ids_list))).order_by('id')
     return final_list
+
+@register.assignment_tag
+def get_budget_period(projectobj,budgetobj,v):
+    from datetime import datetime
+    start_date = v.split('to')[0].rstrip()
+    end_date = v.split('to')[1].lstrip()
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2,start_date__lte = start_date,end_date__gte = end_date).values_list('row_order', flat=True).distinct()
+    return budget_period
+
+@register.assignment_tag
+def get_row_details(row,quarter,projectobj):
+    # this template tag is used to get budget lineitems details
+    try:
+        line_itemobj = BudgetPeriodUnit.objects.get(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
+    except:
+        line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
+    return line_itemobj
+

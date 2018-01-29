@@ -1,0 +1,125 @@
+{% extends "manage/base.html" %}
+
+{% block title %} {{model|title}} {% endblock %}
+
+{% block rightcontent %}
+
+<script type="text/javascript" src="/static/js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+<link rel="stylesheet" href="/static/fancybox/css/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/fancybox/js/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="/static/fancybox/js/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
+
+
+<div id="content" class="col-lg-10 col-sm-10" style="width:100%">
+  
+  <div class="row">
+    <div class="box col-md-12">
+      <div class="box-inner">
+	<div class="box-header well" data-original-title="">
+          <h2><i class="glyphicon"></i>User Management - {{model|capfirst}}</h2>
+          <div class="box-icon">
+	    
+            <!-- /manage/add/country/<a href="/manage/add/{{model}}/" class="btn btn-round btn-default" target="popup"> -->
+	    
+	    <script type="text/javascript">$(function() {
+	        $(".fancybox").fancybox({type : 'iframe'});
+            });</script>
+            <!-- page content -->
+<!--                                        {% if model != 'roleconfig' %}-->
+<!--                                                <a href="/usermanagement/add/{{model}}/" title="Add {{model|capfirst}}" class="btn fancybox btn-xs btn-round btn-default"><i class="glyphicon glyphicon-plus-sign">-->
+<!--                                                     Add {{model|capfirst}} </i></a>-->
+	  </div>
+	</div>
+<!--                                        {% endif %}-->
+<!--                                        {% if model = 'roleconfig' %}-->
+<!--                                                <a href="/usermanagement/add/{{model}}/{{pid}}" title="Add {{model|capfirst}}" class="btn fancybox btn-xs btn-round btn-default">-->
+<!--                                                    <i class="glyphicon glyphicon-plus-sign"> Add {{model|capfirst}}</i></a>-->
+<!--	  </div>-->
+<!--	</div></a>-->
+<!--                                                </a>-->
+<!--                                        {% endif %}-->
+                                        
+                                    <div class="clearfix"></div>
+
+                                <div class="box-content">
+                                    <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+                                        <thead>
+                                            <tr class="headings">
+                                            {% if model == 'menu' %}
+                                                <th class="column-title">Name </th>
+                                                <th class="column-title">Parent Link </th>
+                                                <th class="column-title">Link </th>
+                                                <th class="column-title no-link last"><span class="nobr">Action</span></th>
+                                            {% endif %}
+                                            {% if model == 'role' %}
+                                                <th class="column-title">Name </th>
+                                                <th class="column-title no-link last"><span class="nobr">Action</span></th>
+                                            {% endif %}
+                                            {% if model == 'user' %}
+                                                <th class="column-title">First name </th>
+                                                <th class="column-title">Last name </th>
+                                                <th class="column-title">Email </th>
+                                                <th class="column-title">Role type </th>
+<!--                                                <th class="column-title no-link last"><span class="nobr">Action</span></th>-->
+                                            {% endif %}
+                                            </tr>
+                                        </thead>
+
+                            <tbody>
+                        {% for obj in object_list %}
+                                <tr class="even pointer">
+                                {% if model == 'menu' %}
+                                    <td class=" ">{{obj.name}}</td>
+                                    <td class=" ">{{obj.parent.name}}</td>
+                                    <td class=" ">{{obj.link}}</td>
+                                    <td class=" last">
+                                        <a href="/usermanagement/edit/menu/{{obj.id}}" title="Edit" class="btn fancybox btn-xs btn-info">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+                                             Edit
+                                        </a>
+                                    </td>
+                                {% endif %}
+                                {% if model == 'role' %}
+                                    <td class=" ">{{obj.name}}</td>
+                                    <td class=" last">
+<!--                                        <a href="/usermanagement/edit/role/{{obj.id}}" title="Edit" class="btn fancybox btn-xs btn-info">-->
+<!--                                            <i class="glyphicon glyphicon-edit icon-white"></i> Edit-->
+<!--                                        </a> |-->
+                                        <a href="/usermanagement/manage/role/{{obj.id}}" title="Manage" class="btn btn-danger deactivate">
+                                            <i class="glyphicon glyphicon-edit icon-white"></i> Manage Permissions
+                                        </a>
+<!--                                        <a href="/usermanagement/manage/menu/{{obj.id}}" title="Manage" class="btn btn-danger deactivate">-->
+<!--                                            <i class="glyphicon glyphicon-edit icon-white"></i>Manage Menu-->
+<!--                                        </a>-->
+                                    </td>
+                                {% endif %}
+                                {% if model == 'user' %}
+                                    <td class=" ">{{obj.first_name}}</td>
+                                    <td class=" ">{{obj.last_name}}</td>
+                                    <td class=" ">{{obj.email}}</td>
+                                    <td class=" ">{% for ii in obj.role_type.all%} {{ii}}{% if not forloop.last %},{% else %}.{% endif %} {% endfor%}</td>
+<!--                                    <td class=" last">-->
+<!--                                        <a href="/usermanagement/edit/user/{{obj.id}}" title="Edit" class="btn fancybox btn-xs btn-info">-->
+<!--                                            <i class="glyphicon glyphicon-edit icon-white"></i>-->
+<!--                                            Edit-->
+<!--                                        </a>-->
+<!--                                    </td>-->
+                                {% endif %}
+                                </tr>
+                        {% endfor %}
+                                            </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- /page content -->
+
+
+
+{% endblock %}

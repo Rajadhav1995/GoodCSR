@@ -1,0 +1,128 @@
+{% extends "manage/base.html" %}
+{% load urs_tags %}
+
+{% block title %}Role{% endblock %}
+
+{% block midpart %}
+
+<!-- page content -->
+<div id="content" class="col-lg-10 col-sm-10" style="width:100%">
+  
+  <div class="row">
+    <div class="box col-md-12">
+      <div class="box-inner">
+	<div class="box-header well" data-original-title="">
+                        <h2><a href="/usermanagement/list/role/">User Management</a> - Role : {{role}}</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+<!--                            <input type="submit" form="id_form" class="uibutton submit_form" value="Save"/>-->
+<!--                            <a href="/usermanagement/list/role/" class="uibutton submit_form" >Cancel</a>-->
+                        </ul>
+                        <div class="clearfix"></div>
+
+                    <div class="box-content">
+                        <table class="table table-striped responsive-utilities jambo_table bulk_action">
+                            <thead>
+                                <tr class="headings">
+                                    <th class="column-title">Menu</th>
+                                    <th class="column-title">Status</th>
+                                    <th class="column-title">Action</th>
+                                </tr>
+                            </thead>
+
+                <tbody>
+
+            {% for i in confs %}
+                    <tr class="even pointer">
+                        <td class=" ">
+                            {% if i.menu.parent %}
+                                {{ i.menu.parent|title }} - {{i.menu.name|title}}
+                            {% else %}
+                                {{ i.menu.name }}  
+                            {% endif %}
+                        </td>
+                        <td class="status-{{i.id}}">
+                                  
+                                  <span class="label-success label label-default deactivate-{{i.id}}" {% if i.active = 0 %}style="display:none"{% endif %}>Enable</span>
+                                  
+                                  <span class="label-default label label-danger activate-{{i.id}}" {% if i.active = 2 %}style="display:none"{% endif %}>Disable</span> 
+                                  
+                                </td>
+                                
+                        
+                        
+                        <td class=" ">
+                            
+                                                          <a class="btn btn-success activate-{{i.id}}" id="button-active" {% if i.active = 2 %}style="display:none"{% endif %} href="#" onclick="return activate({{i.id}});">
+                                    <i class="glyphicon glyphicon-ok icon-white"></i>
+                                    Enable
+                                  </a>
+
+                                  
+                                  <a class="btn btn-danger deactivate-{{i.id}}" id="button-active" {% if i.active = 0 %}style="display:none"{% endif %} href="#" onclick="return activate({{i.id}});">
+                                    <i class="glyphicon glyphicon-remove icon-white"></i>
+                                    Disable
+                                  </a>
+                                  </td>
+                    </tr>
+            {% endfor %}
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- /page content -->
+
+
+
+
+<script>
+function myFunction() {
+    var x = confirm("Do You want to update role permission?");
+    if (x == true ){
+        window.location.href='/'
+    } else {
+        return false;
+    }
+}
+
+$(function(){
+    $('#id_form').submit(function(){
+        return myFunction()
+    })
+})
+</script>
+
+<script type="text/javascript">
+function activate(val){
+    $.ajax({
+    
+        type: 'GET', 
+        url: '/usermanagement/manage/active/'+val+'/',
+        success: function(data) {
+            console.log(data.status)  
+            if(data.status) { 
+                $('.activate-'+val).hide();
+                $('.deactivate-'+val).show();
+            } 
+            else {
+                $('.activate-'+val).show();
+                $('.deactivate-'+val).hide();
+            }
+        },
+        failure: function(data) { 
+            alert('Got an error ');
+        }
+    });   
+}
+
+</script> 
+
+{% endblock %}
+
+
+

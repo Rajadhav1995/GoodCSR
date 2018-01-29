@@ -1,0 +1,230 @@
+{% extends "index.html" %}
+{% block title %}{{model|title}}{% endblock %}
+{% block midpart     %}
+
+
+
+<div class="clear"></div>
+<div class="onecolumn">
+    <div class="header">
+        <div class="head_h1">
+<!--        <h2>{{model}} Reminder Record</h2>-->
+    
+    
+    <h2>List {{model}}s</h2>
+         </div>
+                   &nbsp
+         </div>
+    <div class=" clear"></div>
+        <div style="text-align: left; float: left;">
+                    {% if model != 'roleconfig' %}
+                        <a class= "uibutton large submit_form" href="/usermanagement/add/{{model}}/" >Add {{model}}</a>
+                    {% endif %}
+                        {% if model == 'roleconfig' %}
+                <a class= "uibutton large submit_form" href="/usermanagement/add/{{model}}/{{pid}}" >Add {{model}}</a>
+                        {% endif %}
+            </div>
+
+        <div class="content">
+        <form>
+            <div class="tableName">
+            {% if model == 'role' or model == 'menu' %}
+            
+            <table class="display data_table2">
+            {% endif %}
+            {% if model == 'roleconfig' %}
+                <table class="display data_table7">
+            {% endif %}
+            {% if model == 'user' %}
+                <table class="display data_table6">
+            {% endif %}
+                    <thead>
+                        <tr>
+                            {% if model == 'role' %}
+                            <th><div class="th_wrapp">Name</div></th>
+                            <th><div class="th_wrapp">Created on</div></th>
+                            <th><div class="th_wrapp">Updated On</div></th>
+                           {% endif  %}
+
+                           {% if model == 'menu' %}
+                           <th><div class="th_wrapp">Name</div></th>
+                           <th><div class="th_wrapp">Parent</div></th>
+                           <th><div class="th_wrapp">Link</div></th>
+                          {% endif  %}
+
+                          {% if model == 'roleconfig' %}
+                          <th><div class="th_wrapp">Role</div></th>
+                          <th><div class="th_wrapp">Menu</div></th>
+                          <th><div class="th_wrapp">View</div></th>
+                          <th><div class="th_wrapp">Add</div></th>
+                          <th><div class="th_wrapp">Edit</div></th>
+                          <th><div class="th_wrapp">Delete</div></th>
+                          {% endif  %}
+
+                          {% if model == 'user' %}
+                          <th><div class="th_wrapp">First Name</div></th>
+                          <th><div class="th_wrapp">Last Name</div></th>    
+                          <th><div class="th_wrapp">Email</div></th>
+                          <th><div class="th_wrapp">Role_Types</div></th>
+                          {% endif %}
+
+                          <th><div class="th_wrapp">status</div></th>
+                          <th><div class="th_wrapp">Action</div></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in object_list %}
+                            <tr class="gradeA">
+                            
+                                    {% if model == 'role' %}
+                                    <td>{{i.name}}</td>
+                                    <td>{{i.created_on}}</td>
+                                    <td>{{ i.modified_on }}</td>
+                                   {% endif %}
+                                   
+                                  {% if model == 'menu' %}
+                                  <td>{{i.name}}</td>
+                                  <td>{{i.parent.name}}</td>
+                                  <td>{{i.link}}</td>
+                                  {% endif %}
+                                  
+                                  {% if model == 'roleconfig' %}
+                                  
+                                  <td>{{i.role.name}}</td>
+                                  <td>{{i.menu.name}}</td>
+                                  <td>{{i.view}}</td>
+                                  <td>{{i.add}}</td>
+                                  <td>{{i.edit}}</td>
+                                  <td>{{i.delete}}</td>
+                                  {% endif %}
+
+                                  {% if model == 'user' %}
+
+
+                                    <td>{{i.first_name}}</td>
+                                    <td>{{i.last_name}}</td>
+                                    <td>{{i.email}}</td>
+                                    <td>
+                                    {% for i in  i.role_type.all %}
+                                    {{i.name}}{% if not forloop.last%},{% endif %}
+                                    {% endfor %}
+                                    </td>
+                                  {% endif %}
+                                    <td>{{i.get_active_display}}</td>
+                                    <td class="center">
+                                        <span>
+                                          {% if model != 'roleconfig' %}
+                                            <a href="/usermanagement/edit/{{model}}/{{i.id}}"  original-title="Edit" title="Edit">
+                                                <img src="/static/zice/images/icon/shortcut/icons/edit.png">
+                                            </a>
+                                            <a href="/usermanagement/active/{{model}}/{{i.id}}"
+                                             original-title="Edit" title="Edit">
+                                                <img src="/static/zice/images/icon/icon_delete.png" class="reminder-detail">
+                                            </a>
+                                            {% endif %}
+                                            {% if model == 'roleconfig' %}
+                                            <a href="/usermanagement/edit/{{model}}/{{i.id}}/{{pid}}"  original-title="Edit" title="Edit">
+                                                <img src="/static/zice/images/icon/shortcut/icons/edit.png">
+                                            </a>
+                                            <a href="/usermanagement/active/{{model}}/{{i.id}}/{{pid}}"
+                                             original-title="Edit" title="Edit">
+                                                <img src="/static/zice/images/icon/icon_delete.png" class="reminder-detail">
+                                            </a>
+                                            {% endif %}
+                                        {% if model == 'role' %}
+                                            <a href="/usermanagement/manage/role/{{i.id}}" title="Manage">
+                                                <img src="/static/zice/images/icon/shortcut/icons/manage.png">
+                                            </a>
+                                        {% endif %}
+
+
+                                        </span>
+                                    </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<section class="comm_cont m_top">-->
+<!--    <div class="row">-->
+<!--      <div class="col-lg-12">-->
+<!--        <div class="table_head">-->
+<!--          <h2 class="form_titles">{{model}}</h2>-->
+<!--        </div>-->
+<!--	-->
+<!--	<a href="/usermanagement/add/{{model}}/"> Add {{model}}</a>-->
+<!--        <table class="table table-bordered">-->
+
+<!--          <thead>-->
+<!--            <tr class="success">-->
+<!--            {% if model == 'menus'%}-->
+<!--	      <th><i class="fa fa-caret-down"></i>Name</th>-->
+<!--	      <th><i class="fa fa-caret-down"></i>Link</th>-->
+<!--	    {% elif model == 'role' %}-->
+<!--	      <th><i class="fa fa-caret-down"></i>Name</th>-->
+<!--	    {% elif model == 'user' %}-->
+<!--	      <th><i class="fa fa-caret-down"></i>First Name</th>-->
+<!--	      <th><i class="fa fa-caret-down"></i>Last Name</th>	      -->
+<!--	      -->
+<!--	    {% endif %}-->
+<!--	      <th><i class="fa fa-caret-down"></i>Status</th>-->
+<!--	      <th><i class="fa fa-caret-down"></i>Actions</th>-->
+<!--            </tr>-->
+<!--	  </thead>-->
+
+<!--	  <tbody>-->
+<!--            {% for i in object_list %}-->
+<!--            <tr>-->
+<!--            {% if model == 'menus' or model == 'role'%}-->
+<!--              <td>{{i.name}}</td>-->
+<!--	      {% elif model == 'user' %}-->
+<!--	      <td>{{i.first_name}}</td>-->
+<!--	      <td>{{i.last_name}}</td>-->
+<!--	      {% endif %}-->
+<!--              <td>{% if i.active == 2 %}Active{% else %}Inactive{% endif %}</td>-->
+<!--              <td>-->
+<!--                <a href="/usermanagement/edit/{{model}}/{{i.id}}">-->
+<!--                  <button type="button" class="btn btn-primary">edit</button>-->
+<!--                </a>-->
+<!--                <a href="/usermanagement/active/{{model}}/{{i.id}}">-->
+<!--                  <button type="button" class="btn btn-primary">{% if i.active == 2 %}Active{% else %}Inactive{% endif %}</button>-->
+<!--                </a>-->
+<!--		{% if model == 'role'%}-->
+<!--                <a href="/usermanagement/manage/role/{{i.id}}/">-->
+<!--                  <button type="button" class="btn btn-primary">manage</button>-->
+<!--                </a>-->
+<!--        {% endif %}-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            {% endfor %}-->
+<!--	  </tbody>-->
+<!--	</table>-->
+<!--	-->
+<!--      </div>-->
+<!--      -->
+<!--      -->
+<!--    </div>-->
+<!--    -->
+<!--    -->
+<!--</section>-->
+
+{% endblock %}

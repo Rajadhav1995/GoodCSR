@@ -708,27 +708,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    {% get_budget_period projectobj budgetobj v as budget_period  %}
                                         {% for row in budget_period %}
                                         <tr class = "data_row">
-                                            {% get_budget_lineitem row projectobj as lineitemobj %}
-                                            <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                                            <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                                            <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
-                                            {% get_line_total row projectobj as line_total %}
-                                            <td align="right" class="sticky-cell">{{line_total}}</td>
-                                            {% get_utlizedline_total row projectobj as utilized_amount %}
-                                            <td align="right" class="sticky-cell">{{utilized_amount}}</td>
-                                            <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                            {% if projectreportobj.report_type == 1 %}
-                                            {% get_quarter_details row i projectobj as line_itemobj %}
-                                            {% else %}
-                                            {% get_month_quarter_details row v i projectobj as line_itemobj %}
-                                            {% endif %}
+                                            {% get_row_details row i projectobj as lineitemobj %}
+                                    <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                    <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                    <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                    {% get_line_total row projectobj as line_total %}
+                                    <td align="right" class="sticky-cell">{{line_total}}</td>
+                                    {% get_utlizedline_total row projectobj as utilized_amount %}
+                                    <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                    <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                    {% if projectreportobj.report_type == 1 %}
+                                            <td align="right" class=""> {{lineitemobj.unit}} </td>
+                                            <td align="right" class=""> {{lineitemobj.rate}}  </td>
+                                            <td align="right" class=""> {{lineitemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if lineitemobj.utilized_unit_cost %} {{lineitemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if lineitemobj.variance %} {{lineitemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    {% else %}
+                                        {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                             <td align="right" class=""> {{line_itemobj.unit}} </td>
                                             <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                             <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
                                             <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
                                             <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                            {% endif %}
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -1538,9 +1543,10 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            {% get_budget_period projectobj budgetobj v as budget_period  %}
                                 {% for row in budget_period %}
                                 <tr class = "data_row">
-                                    {% get_budget_lineitem row projectobj as lineitemobj %}
+                                    {% get_row_details row i projectobj as lineitemobj %}
                                     <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
                                     <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
@@ -1550,15 +1556,19 @@
                                     <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
                                     {% if projectreportobj.report_type == 1 %}
-                                            {% get_quarter_details row i projectobj as line_itemobj %}
-                                            {% else %}
-                                            {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{lineitemobj.unit}} </td>
+                                            <td align="right" class=""> {{lineitemobj.rate}}  </td>
+                                            <td align="right" class=""> {{lineitemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if lineitemobj.utilized_unit_cost %} {{lineitemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if lineitemobj.variance %} {{lineitemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    {% else %}
+                                        {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                            <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                            <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             {% endif %}
-                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
-                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
-                                    <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
-                                    <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
-                                    <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -1781,9 +1791,10 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% get_budget_period projectobj budgetobj v as budget_period  %}
                                 {% for row in budget_period %}
                                 <tr class = "data_row">
-                                    {% get_budget_lineitem row projectobj as lineitemobj %}
+                                    {% get_row_details row i projectobj as lineitemobj %}
                                     <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
                                     <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
@@ -1793,15 +1804,20 @@
                                     <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
                                     {% if projectreportobj.report_type == 1 %}
-                                            {% get_quarter_details row i projectobj as line_itemobj %}
-                                            {% else %}
-                                            {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{lineitemobj.unit}} </td>
+                                            <td align="right" class=""> {{lineitemobj.rate}}  </td>
+                                            <td align="right" class=""> {{lineitemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if lineitemobj.utilized_unit_cost %} {{lineitemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if lineitemobj.variance %} {{lineitemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    {% else %}
+                                        {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                            <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                            <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             {% endif %}
-                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
-                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
-                                    <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
-                                    <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
-                                    <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    
                                 </tr>
                                 {% endfor %}
                             </tbody>
