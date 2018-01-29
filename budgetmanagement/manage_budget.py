@@ -9,7 +9,7 @@ from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from projectmanagement.models import (Project,MasterCategory,UserProfile)
 from .models import (Budget,SuperCategory,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                     Tranche,)
-from media.models import (Comment,)
+from media.models import (Comment,Attachment)
 from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
@@ -271,11 +271,17 @@ def upload_budget_utlized(line_itemlist,i,request,budget_periodobj):
                 line_item_updated_values.update({'utilized_unit_cost':request.POST.getlist(j)[0]})
             elif str(item_list[0]) == "variance": 
                 line_item_updated_values.update({item_list[0]:request.POST.getlist(j)[0]})
-            else:
+            elif str(item_list[0]) == "comment":
                 text =request.POST.getlist(j)[0]
                 commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
                 commentobj.text = text
                 commentobj.save()
+            else:
+                if request.FILES.get(j):
+                    upload = request.FILES.getlist(j)[0]
+                    attachobj,created = Attachment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
+                    attachobj.attachment_file = upload
+                    attachobj.save()
     return line_item_updated_values
 
 
@@ -316,6 +322,10 @@ def budgetutilization(request):
         lineobj_list = filter(None,request.POST.getlist("line_obj"))
         for i in lineobj_list:
             line_itemlist = [str(k) for k,v in request.POST.items() if k.endswith('_'+str(i))]
+            #
+            # list to get the file attachments 
+            line_itemlist.extend( [str(k) for k,v in request.FILES.items() if k.endswith('_'+str(i))])
+            
             budget_periodobj = BudgetPeriodUnit.objects.get_or_none(id=int(i))
             line_item_updated_values = upload_budget_utlized(line_itemlist,i,request,budget_periodobj)
             budget_periodobj.__dict__.update(line_item_updated_values)
