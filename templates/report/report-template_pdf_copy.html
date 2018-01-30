@@ -300,7 +300,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     {% for i in ques.0 %}
                      {% if i.q_name == 'cover_image' %}
                      <div>
-                        <img src="{{image_url}}/{{i.answer}}" style="width:100%; height:700px">
+                        <img src="{{image_url}}{{i.answer}}" style="width:100%; height:700px">
                       </div>
                       <div>
                         <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
