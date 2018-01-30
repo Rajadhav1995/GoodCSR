@@ -234,7 +234,7 @@ def report_question_list(report_quest_list,report_obj,project):
     answer_list = {}
     image_url = PMU_URL
     for ques in report_quest_list:
-        answer_obj = Answer.objects.get_or_none(question =ques,
+        answer_obj = Answer.objects.get_or_none(active=2,question =ques,
                         content_type = ContentType.objects.get_for_model(report_obj),object_id = report_obj.id)
         if answer_obj and (ques.qtype == 'T' or ques.qtype == 'APT' or ques.qtype == 'ck'):
             answer = answer_obj.text

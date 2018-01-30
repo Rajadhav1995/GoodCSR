@@ -264,6 +264,18 @@ tfoot { display: table-row-group !important; }
 tr { page-break-inside: avoid !important; }
 
 tr { page-break-inside: avoid; overflow: visible !important; }
+
+.legendContainer {margin: 0px !important; display: inline-block; padding: 0px;}
+.legend { list-style: none; margin: 0px !important; display: inline-block; float: right; right: 0px; }
+.legend li { float: left; margin-right: 5px; font-size: 10px; }
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; border-radius: 100%;}
+
+.legend .taskC { background-color: #006C90; }
+.legend .taskO { background-color: #3C9FBA; }
+.legend .taskB { background-color: #FFFFFF; }
+.legend .taskN { background-color: #92918F; }
+.legend .mileC { background-color: #169876; }
+.legend .mileD { background-color: #a73f5c; }
 </style>
 <script>
  var lengths = 0;
@@ -511,7 +523,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% for sub in sub_questions.0 %}
             
             {% if sub.q_name == 'project_objective' %}
-            <div class="location margin-top40 page_height">
+            <div class="location margin-top40">
                 <p>Objective of the project</p>
                 <h5>{{sub.answer | striptags}}</h5>
             </div>

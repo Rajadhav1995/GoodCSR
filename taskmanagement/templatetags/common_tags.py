@@ -110,7 +110,7 @@ def get_questions(block,project_report,block_type,quest_removed):
     questions = Question.objects.filter(block=block,parent=None,block__block_type=0)
     final_questions,removed_id = get_removed_questions(questions,block,project_report,block_type,quest_removed)
     for i in final_questions:
-        answer = Answer.objects.get_or_none(question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+        answer = Answer.objects.get_or_none(active=2,question = i,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
         question_dict = {'q_id':i.id,'q_text':i.text,
             'q_type':i.qtype,'q_name':i.slug}
         if answer and (i.qtype == 'T' or i.qtype == 'ck'):
@@ -183,7 +183,7 @@ def get_sub_answers(details,sub_questions,project_report,project):
     keys = details.keys()
     for sub in sub_questions:
         data = {'q_id':sub.id,'q_text':sub.text,'q_type':sub.qtype,'q_name':sub.slug}
-        answer_obj = Answer.objects.get_or_none(question=sub,content_type=ContentType.objects.get_for_model(project_report),object_id=project_report.id)
+        answer_obj = Answer.objects.get_or_none(active=2,question=sub,content_type=ContentType.objects.get_for_model(project_report),object_id=project_report.id)
         if answer_obj and (sub.qtype == 'T' or sub.qtype == 'APT' or sub.qtype == 'ck'):# if answer_obj is there get answers according to the question type
             data['answer']= answer_obj.text 
         elif answer_obj and answer_obj.attachment_file :

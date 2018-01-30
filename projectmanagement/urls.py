@@ -4,6 +4,7 @@ from projectmanagement.views import (create_project,project_list,
     budget_tranche,key_parameter,tranche_list,add_parameter,edit_parameter,
     upload_parameter,manage_parameter,manage_parameter_values,project_summary,
     delete_upload_image,remove_record,)
+from projectmanagement.manage_roles import manage_funder_relation
 
 urlpatterns = [
     url(r'^add/$',create_project),
@@ -19,5 +20,5 @@ urlpatterns = [
     url(r'^parameter/edit/$',edit_parameter),
     url(r'^delete/upload/image/$',delete_upload_image),
     url(r'^remove/record/$',remove_record),
-
+    url(r'^manage/funder/$',manage_funder_relation),
 ]
