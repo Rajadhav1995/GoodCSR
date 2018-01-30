@@ -108,7 +108,24 @@
                                   <td> <input type="text" name = "comment_{{i}}_{{j}}_{{line_itemobj.id}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
                                  <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
                                  {% get_line_attach line_itemobj as attach %}
-                                 <td><input type="file" name = "attach_{{i}}_{{j}}_{{line_itemobj.id}}" id="attach_{{i}}_{{j}}" value="{% if attach %}{{attach.attachment_file}} {% else %} {% endif %}">{% if attach %}{{attach.attachment_file.url}} {% endif %}</td>
+                                 <td><input type="file" class = 'file_input_id' style="border: 0px;" name = "attach_{{i}}_{{j}}_{{line_itemobj.id}}" id="attach_{{i}}_{{j}}" onchange = "return attach_error()" value="{% if attach %}{{attach.attachment_file}} {% else %} {% endif %}">{% if attach %}<a href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a> {% endif %}</td>
+                                     
+                                 <script type="text/javascript">
+                                    function attach_error(){
+                                        $('#error').hide();
+                                        var attach_list = $('input[type=file]').trigger('click');
+                                        for(i=0;i<attach_list.length;i++){
+                                            if($(attach_list[i]).val() != ""){
+                                                if(attach_list[i].files[0].size > 1000000)
+                                                {
+                                                    $('#error').show();
+                                                    $('#error').addClass('error_cls')
+                                                    alert('File size should not exceed more than 1 Mb')
+                                                }
+                                            }
+                                        }
+                                    };
+                                 </script>
                                  {% endfor %}
                                 
                         </tr>
@@ -116,6 +133,7 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    <div id = "error"> * File size should not exceed more than 1 Mb </div>
                 </div>
         </div>
         
@@ -143,6 +161,7 @@
        $("#filter_form").submit();
        });
    });
+   $('#error').hide();
 </script>
 
 <script type = "text/javascript">
@@ -319,6 +338,8 @@ $(document).ready(function(){
     });
     
 </script>
-
+<style>
+.error_cls{color:red;}
+</style>
 
 {% endblock %}
