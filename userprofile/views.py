@@ -173,7 +173,6 @@ def manage_role(request, pk):
         # ]
         for conf,perms in perm_data:
             if 'edit' in perms and 'view' != perms :
-                import ipdb;ipdb.set_trace();
                 perms.append('view')
                 conf.update(perms)
 
