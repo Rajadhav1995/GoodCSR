@@ -88,8 +88,8 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save(commit=False)
-            # if m_form == 'Task_form':
-            f.task_progress = task_progress
+            if m_form == 'Task_form':
+                f.task_progress = task_progress
             from projectmanagement.common_method import unique_slug_generator
             f.slug = unique_slug_generator(f,edit)
             f.save()

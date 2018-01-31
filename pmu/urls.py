@@ -59,7 +59,7 @@ userroles_patterns = ([
     url(r'^active/(?P<model>(:?roleconfig))/(?P<pk>\d+)/(?P<pid>\d+)/$', UserActive.as_view()),
     url(r'^manage/role/(?P<pk>\d+)/$', manage_role),
     url(r'^manage/menu/(?P<pk>\d+)/$', manage_menu),
-    url(r'^manage/active/(?P<pk>\d+)/$', Active),
+    url(r'^manage/active/(?P<pk>\d+)/$', object_active),
 
 ])
 
