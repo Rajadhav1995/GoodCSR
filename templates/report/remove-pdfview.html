@@ -562,7 +562,7 @@
             {% endif %}
             {% if quest.slug == "key-achievements-in-this-quarter" %}
             <div class="margin_30 prev_banner ">
-                <h5 class="color_green">Key Achievements in this quarter</h5>
+                <h5 class="color_green">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</h5>
                 <!-- timeline slider -->
                 {% if timeline_json != '[]' %}
                 <div id="scrollbar1">
@@ -1300,7 +1300,7 @@
             <!--                            this is for about the quarter-->
             {% if quest.slug == "about-the-quarter" %}
             <div class="location margin_top30" style="margin-bottom:0px">
-                <p>{{quest.text|title}}</p>
+                <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                 {% get_answer_question quest reportupdates.1 as text %}
                 <h5 >{{text}}</h5>
             </div>
@@ -1763,7 +1763,7 @@
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                               <div class="location margin_top30" style="margin-bottom:0px">
-                                 <p>About The Quarter</p>
+                                 <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                  <h5>{{text}} </h5>
                               </div>

@@ -1354,7 +1354,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <!--                            this is for about the quarter-->
             {% if quest.slug == "about-the-quarter" %}
             <div class="location margin_top30" style="margin-bottom:0px">
-                <p>{{quest.text|title}}</p>
+                <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                 {% get_answer_question quest reportupdates.1 as text %}
                 <h5 >{{text}}</h5>
             </div>
@@ -1729,7 +1729,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                               <div class="location margin_top30" style="margin-bottom:0px">
-                                 <p>About The Quarter</p>
+                                 <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                  <h5>{{text}} </h5>
                               </div>
