@@ -136,14 +136,19 @@ ga('send', 'pageview');
               </li>
               <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
         {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True %}
+        {% pmo_role request as pmo_access %}
+        {% if user_obj.is_admin_user == True or pmo_access == 2 %}
         <li class="user-wrap"><a href="javascript:void(0);">
                 Settings
                 <i class="fa fa-angle-down"></i></a>
                 <!--<div class="details" id="marketPlace">-->
                   <ul>
                         <li><a href="/project/list/">Project List</a></li>
+                        {% if pmo_access == 2 %}
+
+                        {% else %}
                         <li><a href="/project/add/">Add New Project</a></li>
+                        {% endif %}
                         <!-- <li><a href="/usermanagement/list/role">Role</a></li> -->
 <!--                        <li><a href="/managing/Task/listing/">Tasks</a></li>-->
 <!--                    	<li><a href="/managing/Milestone/listing/">Milestone</a></li>-->
