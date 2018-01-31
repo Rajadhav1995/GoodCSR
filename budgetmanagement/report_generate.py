@@ -826,8 +826,10 @@ def get_index_contents(slug,report_id):
         if futurequarter_list:
             if report_obj.report_type==1:
                 contents['4'] = 'Next Quarter Updates'
+                quarters['Next Month Updates'] = futurequarter_list
             else:
-                contents['4'] = 'Next MOnth Updates'
+                contents['4'] = 'Next Month Updates'
+                quarters['Next Month Updates'] = futurequarter_list
             import operator
             # here we getting all next quarter so we taking first quarter 
             sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])
