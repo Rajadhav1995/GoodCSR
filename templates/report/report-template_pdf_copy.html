@@ -385,9 +385,9 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                             <div class="margin-botom35 border_line">
                              {% if value == 'Annexure' %}
                               {% elif value == 'About the project' %}
-                                <h2>{{value}}</h2>
+                                <h2>{% if projectreportobj.report_type == 1 %} {{value}} {% else %} Month Updates {% endif %}</h2>
                              {% else %}
-                                <h2>{{value}}</h2>
+                                <h2>{% if projectreportobj.report_type == 1 %} {{value}} {% else %} Month Updates {% endif %}</h2>
                               {% endif %}
                               {% for k,v in quarters.iteritems %}
                               {% if value == k %}
@@ -929,7 +929,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
           <ul class="legend">
               <li><span class="taskC"></span> Completed  </li>
               <li><span class="taskO"></span> InProgress </li>
-              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskB"></span> Not-Started </li>
               <li><span class="taskN"></span> Non-Core </li>
               <li><span class="mileC"></span> On-Time Milestone </li>
               <li><span class="mileD"></span> Delayed Milestone </li>
@@ -1585,7 +1585,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                                     {% else %}
                                         {% get_month_budget_period projectobj budgetobj v as budget_period  %}
                                     {% endif %}
-                                    
+
                                         {% for row in budget_period %}
                                         <tr class = "data_row">
                                             {% get_row_details row i projectobj as lineitemobj %}
