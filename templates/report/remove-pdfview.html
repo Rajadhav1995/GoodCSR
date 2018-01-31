@@ -712,7 +712,8 @@
                                         {% get_budget_period projectobj budgetobj v as budget_period  %}
                                     {% else %}
                                         {% get_month_budget_period projectobj budgetobj v as budget_period  %}
-                                        {% endif %}
+                                    {% endif %}
+
                                         {% for row in budget_period %}
                                         <tr class = "data_row">
                                             {% get_row_details row i projectobj as lineitemobj %}
@@ -763,8 +764,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% get_tranches v tranche_list as filtered_tranches %}
                                         
-                                        {% get_budget_period projectobj budgetobj v as budget_period  %}
                                         {% for i in filtered_tranches.0 %}
                                         {% with forloop.counter as rnum %}
                                         <tr>
