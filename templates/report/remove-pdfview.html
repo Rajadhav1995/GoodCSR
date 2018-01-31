@@ -308,9 +308,9 @@
                     {% if value == 'Annexure' %}
                     <h2>{{value}}</h2>
                     {% elif value == 'About the project' %}
-                    <h2>{% if projectreportobj.report_type == 1 %} {{value}} {% else %} Month Updates {% endif %}</h2>
+                    <h2>{{value}}</h2>
                     {% else %}
-                    <h2>{% if projectreportobj.report_type == 1 %} {{value}} {% else %} Month Updates {% endif %}</h2>
+                    <h2>{{value}}</h2>
                     {% endif %}
                     {% for k,v in quarters.iteritems %}
                     {% if value == k %}
