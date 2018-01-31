@@ -494,8 +494,10 @@ def pmo_role(request):
 @register.assignment_tag
 def get_line_attach(line_itemobj):
     # to get the attachemnt of the budget line item
+    attach_dict = {'image_url':'','name':''}
     try:
         attach = Attachment.objects.get_or_none(content_type=ContentType.objects.get_for_model(line_itemobj),object_id=int(line_itemobj.id))
+        attach_dict = {'image_url':attach.attachment_file.url,'name':attach.attachment_file.name.split('/')[-1]}
     except:
         attach = None
-    return attach
+    return attach_dict

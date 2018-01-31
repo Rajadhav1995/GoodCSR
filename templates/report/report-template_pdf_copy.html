@@ -264,6 +264,18 @@ tfoot { display: table-row-group !important; }
 tr { page-break-inside: avoid !important; }
 
 tr { page-break-inside: avoid; overflow: visible !important; }
+
+.legendContainer {margin: 0px !important; display: inline-block; padding: 0px;}
+.legend { list-style: none; margin: 0px !important; display: inline-block; float: right; right: 0px; }
+.legend li { float: left; margin-right: 5px; font-size: 10px; }
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; border-radius: 100%;}
+
+.legend .taskC { background-color: #006C90; }
+.legend .taskO { background-color: #3C9FBA; }
+.legend .taskB { background-color: #FFFFFF; }
+.legend .taskN { background-color: #92918F; }
+.legend .mileC { background-color: #169876; }
+.legend .mileD { background-color: #a73f5c; }
 </style>
 <script>
  var lengths = 0;
@@ -288,7 +300,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                     {% for i in ques.0 %}
                      {% if i.q_name == 'cover_image' %}
                      <div>
-                        <img src="{{image_url}}/{{i.answer}}" style="width:100%; height:700px">
+                        <img src="{{image_url}}{{i.answer}}" style="width:100%; height:700px">
                       </div>
                       <div>
                         <img src="/static/img/report/bottomslider.jpg" style="width:100%;margin-top: -1px;">
@@ -511,7 +523,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% for sub in sub_questions.0 %}
             
             {% if sub.q_name == 'project_objective' %}
-            <div class="location margin-top40 page_height">
+            <div class="location margin-top40">
                 <p>Objective of the project</p>
                 <h5>{{sub.answer | striptags}}</h5>
             </div>
@@ -897,7 +909,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endif %}
             {% if quest.slug == "duration" %}
 
-            <p> {% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
+            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
             {% endif %}
             {% endif %}
             <!--for gantt chart div -->
@@ -1342,7 +1354,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <!--                            this is for about the quarter-->
             {% if quest.slug == "about-the-quarter" %}
             <div class="location margin_top30" style="margin-bottom:0px">
-                <p>{{quest.text|title}}</p>
+                <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                 {% get_answer_question quest reportupdates.1 as text %}
                 <h5 >{{text}}</h5>
             </div>
@@ -1710,14 +1722,14 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <h4 style="margin:0px" style="margin-left:-20px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p>  First Quarter {{text}} </p>
+            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
             {% endif %}
             {% endif %}
 
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                               <div class="location margin_top30" style="margin-bottom:0px">
-                                 <p>About The Quarter</p>
+                                 <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                  <h5>{{text}} </h5>
                               </div>
