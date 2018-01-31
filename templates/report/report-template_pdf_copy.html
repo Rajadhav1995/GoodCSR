@@ -909,7 +909,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endif %}
             {% if quest.slug == "duration" %}
 
-            <p> test{% if projectreportobj.report_type == 1 %} First Quarter 11{{text}}{% else %} Month {% endif %} </p>
+            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
             {% endif %}
             {% endif %}
             <!--for gantt chart div -->
@@ -1722,7 +1722,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <h4 style="margin:0px" style="margin-left:-20px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p>  First Quarter {{text}} </p>
+            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
             {% endif %}
             {% endif %}
 
