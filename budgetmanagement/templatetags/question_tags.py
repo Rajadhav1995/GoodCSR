@@ -284,6 +284,12 @@ def get_budget_period(projectobj,budgetobj,v):
     return budget_period
 
 @register.assignment_tag
+def get_month_budget_period(projectobj,budgetobj,v):
+    from datetime import datetime
+    budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
+    return budget_period
+    
+@register.assignment_tag
 def get_row_details(row,quarter,projectobj):
     # this template tag is used to get budget lineitems details
     try:
@@ -291,4 +297,3 @@ def get_row_details(row,quarter,projectobj):
     except:
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj
-
