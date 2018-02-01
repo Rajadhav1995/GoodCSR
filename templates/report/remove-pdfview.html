@@ -458,11 +458,18 @@
                     </div>
                 </div>
                 {% endif %}
+                {% if sub.q_name == 'project_objective' %}
+            <div class="location margin-top40">
+                <p>Objective of the project</p>
+                <h5>{{sub.answer | striptags}}</h5>
+            </div>
+            {% endif %}
                 {% endfor %}
                 {% endif %}
                 {% endfor %}
             </div>
             
+
             <footer>
                 <hr>
                 <img src="/static/img/report/logo.png" style="float:left">
@@ -470,45 +477,11 @@
                 <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
             </footer>
         </div>
-        <header style="margin-top:50px">
-            <div>
-                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-            </div>
-        </header>
         <!--third page -->
         </div>
         <!--                    third page contents ends -->
         <!--        fourth page contents starts-->
         
-        <div class="container">
-            <div class="margin_25">
-                <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                <div class="float_right">
-                    {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
-                    {% for i in ques.0 %}
-                    {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
-                    {% for sub in sub_questions.0 %}
-                    {% if sub.q_name == 'client_logo' %}
-                    <img src="{{sub.answer}}" height = 70 width = 100></li>
-                    {% endif %}
-                    {% if sub.q_name == "logos" %}
-                    <img src="{{sub.answer}}" height = 70 width = 100></li>
-                    {% endif %}
-                    {% if sub.q_name == 'project_objective' %}
-            <div class="location margin-top40 page_height">
-                <p>Objective of the project</p>
-                <h5>{{sub.answer | striptags}}</h5>
-            </div>
-            {% endif %}
-                    {% endfor %}
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <hr>
-
-        </div>
         {% endif %}
         <!--fourth page contents end-->
         <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
@@ -1629,7 +1602,7 @@
                     </div>
                 </div>
                 {% endif %}
-                </div>
+                
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
@@ -1637,6 +1610,7 @@
                     {% get_answer_question quest reportupdates.1 as text %}
                     <h5>{{text}}
                     </h5>
+                </div>
                 </div>
                 {% endif %}
                 </div>
