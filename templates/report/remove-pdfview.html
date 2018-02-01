@@ -316,7 +316,7 @@
                     {% if value == k %}
                     {% for ky,val in v.iteritems %}
                     {% get_quarter_names ky number_dict as quarter_name %}
-                    <h3><span>{{quarter_name}} {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {% endif %} - ({{val}})</span><span></span></h3>
+                    <h3><span>{{quarter_name}} {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {{text}} {% endif %} - ({{val}})</span><span></span></h3>
                     {% endfor %}
                     {% endif %}
                     {% endfor %}
