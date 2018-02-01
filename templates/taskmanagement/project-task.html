@@ -19,7 +19,7 @@ font-size: 14px;
 
 <!--Content part starts-->
 <!--<div class="select-area search_area">-->
-<!--<!--      	<label>Search</label>-->
+<!--      	<label style = "margin-top: 28px;">Search</label>-->
 <!--   -->
 <!--		<input id="activate_tagator2" type="text" class="form-control" placeholder="Search" data-tagator-show-all-options-on-focus="true" data-tagator-autocomplete="['Budget', 'Report', 'Document', 'Files', 'Budget', 'Report', 'Document', 'Task', 'Worksheet']">-->
 <!--        <img onclick="javascript:exportToForm()" src="/static/img/search-icon.png">-->
@@ -564,7 +564,7 @@ font-size: 14px;
 
             var progress = $('#xp_'+key).val();
             if (progress != 'None'){
-                alert("Task completion status is updated to "+progress+" % successfully");
+                alert("Task completion status is updated to "+progress+"% successfully");
             }
             $('.range-control-handle').css('left',progress+'%');
 
@@ -654,6 +654,19 @@ function exportToForm(){
 
 }
 </script>
+<script>
+jQuery("#activate_tagator2").keyup(function () {
+    var filter = jQuery(this).val();
+    jQuery("li.data_row").each(function () {
+        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+            jQuery(this).hide();
+        } else {
+            jQuery(this).show()
+        }
+    });
+});
+</script>
+
 
 <!--ZZ-->
 {% endblock %}
