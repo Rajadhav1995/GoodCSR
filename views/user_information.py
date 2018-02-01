@@ -5,6 +5,13 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from projectmanagement.models import (UserProfile,)
+from userprofile.models import (RoleTypes,UserRoles)
+
+def get_user_role(userprofileobj):
+    org_code = {'1':1,'2':2,'4':4,'0':3}
+    code = org_code.get(str(userprofileobj.organization_type))
+    roleobj = RoleTypes.objects.get(code = code)
+    return roleobj
 
 class UserInformationStorage(APIView):
 
@@ -29,6 +36,11 @@ class UserInformationStorage(APIView):
         else:
             userprofileobj.__dict__.update(user_data)
             userprofileobj.save()
+        roleobj = get_user_role(userprofileobj)
+        userroleobj,created = UserRoles.objects.get_or_create(user = userprofileobj)
+        userroleobj.role_type.add(roleobj)
+        userroleobj.email = userprofileobj.email
+        userroleobj.save()
         response = {'msg':"created successfully",'status':2}
         return Response(response)
 
