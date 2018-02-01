@@ -25,6 +25,8 @@ from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
                                             projectbudgetdetail,budgetutilization,
                                             budgetview,year_quarter_list,
                                             budgetlineitemedit,month_quarter_list)
+from userprofile.views import *
+
 
 admin.autodiscover()
 
@@ -42,6 +44,22 @@ roles_patterns = ([
     url(r'^quarter/list/$',year_quarter_list),
     url(r'^month/list/$',month_quarter_list),
     url(r'^project/budget/lineitem/edit/$',budgetlineitemedit),
+
+])
+
+userroles_patterns = ([
+
+    url(r'^list/(?P<model>(:?user|role|menu))/$', UserListView.as_view()),
+    url(r'^list/(?P<model>(:?roleconfig))/(?P<pid>\d+)/$', UserListView.as_view()),
+    url(r'^add/(?P<model>(:?role|user|menu))/$', UserAddView.as_view()),
+    url(r'^add/(?P<model>(:?roleconfig))/(?P<pid>\d+)/$', UserAddView.as_view()),
+    url(r'^edit/(?P<model>(:?role|user|menu|roleconfig))/(?P<pk>\d+)/$', UserEditView.as_view()),
+    url(r'^edit/(?P<model>(:?roleconfig))/(?P<pk>\d+)/(?P<pid>\d+)/$', UserEditView.as_view()),
+    url(r'^active/(?P<model>(:?role|user|menu|roleconfig))/(?P<pk>\d+)/$', UserActive.as_view()),
+    url(r'^active/(?P<model>(:?roleconfig))/(?P<pk>\d+)/(?P<pid>\d+)/$', UserActive.as_view()),
+    url(r'^manage/role/(?P<pk>\d+)/$', manage_role),
+    url(r'^manage/menu/(?P<pk>\d+)/$', manage_menu),
+    url(r'^manage/active/(?P<pk>\d+)/$', Active),
 
 ])
 
@@ -63,6 +81,7 @@ urlpatterns = [
     url(r'^logout/$',signout),
     url(r'^save/image/$',saveimage),
     url(r'^manage/', include(roles_patterns)),
+    url(r'^usermanagement/',include(userroles_patterns)),
 
 ]
 

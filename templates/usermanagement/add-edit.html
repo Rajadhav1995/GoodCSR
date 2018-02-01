@@ -1,0 +1,104 @@
+{% extends "manage/mini-base.html" %}
+
+{% block title %} {{model|title}} {% endblock %}
+
+{% block rightcontent %}
+  <div class="row">
+    <div class="box col-md-5">
+      <div class="box-inner">
+        <div class="box-header well" data-original-title="">
+                    {% if edit %}
+                    {% if model == 'user'%}
+                    <h2>User Management - Edit {{model|capfirst}}</h2>
+                    {% endif %}
+                    {% if model == 'role' %}
+                        <h2>User Management - Edit {{model|capfirst}}</h2>
+                        {% endif %}
+                    {% endif %}
+                    {% if model == 'user'%}
+                        <h2>User Management</a> - Add {{model|capfirst}}</h2>
+                        {% endif %}
+                        {% if model == 'role' %}
+                        <h2>User Management</a> - Add {{model|capfirst}}</h2>
+                        {% endif %}
+                        </div>
+        <div class="box-content">
+                        <form id="ic_form" action="#" method = "post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                        {% if message %}<span class="required" style="color:red">{{message}}</span>{% endif %}
+                    {% if error %}<p style="color:red"><b>{{error}}</b></p>{% endif %}
+
+                    {% for field in form %}
+                       <div class="input-group col-md-4">
+                            
+                                {{ field.label_tag }}
+                            {% if field.field.required %} <span class="required" style="color:red">*</span>{% elif field.name == 'role_type' %}<span class="required" style="color:red"> *</span>
+        {% endif %}
+                                {{ field }}
+                                <p style="color:red"> {% if field.errors %}{{ field.errors|striptags }}{% endif %} </p>
+                        </div>
+                    {% endfor %}
+                        
+                        <br>
+                                    {% if edit %}
+                                        <button type="submit" class="btn btn-default">Update</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-default">Save</button>
+                                    {% endif %}
+                                        <input class="btn close-fancybox btn-default" type="button" value="Cancel" onClick="parent.location='/usermanagement/list/{{model}}/'">
+                                    
+                        </form>
+                   </div>
+      </div>
+    </div>
+    <!--/span-->
+  </div><!--/row-->
+  
+{% if model == 'user' %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('input[type=text]').addClass('form-control')
+        $('input[type=email]').addClass('form-control')
+    });
+</script>
+{% endif %}
+    <script type="text/javascript" src="/static/js/jquery.validate.js"></script>
+    <script>$(function(){$('#id_role_type').multiSelect();})</script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#ic_form").validate({
+            rules :
+            {
+                first_name:{required:true,minlength:3,maxlength: 15},
+                last_name:{required:false,minlength:1,maxlength: 15},
+                name:{required:true,minlength:3,maxlength: 15},
+                email:{required:true,},
+                role_type:{required:true,},
+            },
+            messages:
+            {
+                first_name:{required : "Please enter the firstname"},
+                last_name : {required : "Please enter the lastname"},
+                name : {required : "Please enter the name"},
+                email : {required: "Please enter the email"},
+                role_type:{required:"Please choose the role"},
+            }
+        });
+    $('#id_name,#id_first_name').bind('keypress', function (event) {
+        var regex = new RegExp("^[a-zA-Z\b]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+        event.preventDefault();
+        return false;
+        }
+        });
+    });
+    
+    
+<style>
+.error{color:red; min-width: 200px;}
+</style>
+
+{% endblock %}
+
+
+

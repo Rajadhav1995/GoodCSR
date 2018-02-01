@@ -16,7 +16,7 @@ from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation
                                         ProjectParameterValue)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                                 ReportParameter, Question,Answer,QuarterReportSection)
-from media.models import (Comment,)
+from media.models import (Comment,Attachment)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
 from media.models import (Attachment,ScreenshotMedia)
@@ -478,3 +478,31 @@ def remove_spcl_char(string):
     # this filter is to remove all special chars from string
     #  we are using this to give class name or id
     return ''.join(e for e in string if e.isalnum())
+
+@register.assignment_tag
+def pmo_role(request):
+    user_id = request.session.get('user_id')
+    user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
+    project = Project.objects.get_or_none(slug=request.GET.get('slug'))
+    pmo_user = ProjectUserRoleRelationship.objects.get_or_none(active=2,project=project,role=3,user=user_obj)
+    pmo_user_list = ProjectUserRoleRelationship.objects.filter(active=2,role=3,user=user_obj)
+    # import ipdb; ipdb.set_trace()
+    if pmo_user:
+        option = 1
+    else:
+        if pmo_user_list:
+            option = 2
+        else:
+            option = 0
+    return option
+
+@register.assignment_tag
+def get_line_attach(line_itemobj):
+    # to get the attachemnt of the budget line item
+    attach_dict = {'image_url':'','name':''}
+    try:
+        attach = Attachment.objects.get_or_none(content_type=ContentType.objects.get_for_model(line_itemobj),object_id=int(line_itemobj.id))
+        attach_dict = {'image_url':attach.attachment_file.url,'name':attach.attachment_file.name.split('/')[-1]}
+    except:
+        attach = None
+    return attach_dict

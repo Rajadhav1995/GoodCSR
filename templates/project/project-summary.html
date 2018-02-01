@@ -549,9 +549,20 @@ under 0 Milestones</h5>
     </div>
 
     <div class=" white-box ">
-<!--    	<img src="/static/img/wip-img.jpg" alt="">-->
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed  </li>
+              <li><span class="taskO"></span> In progress </li>
+              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
-    </div>
+        </div>
+  </div>
     <div class="white-box-left user-list-box">
     <div class="table-responsive">
     <table class="table-resp" cellpadding="0" cellspacing="0" border="0">
@@ -577,8 +588,9 @@ under 0 Milestones</h5>
             <td style="width:26%;">{% if project_funders.implementation_partner.designation %}{{project_funders.implementation_partner.designation}} {% else %} - {% endif %}</td>
             <td style="width:19%;">Implementation Partner
                 {% get_user_permission request as user_obj %}
+                {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a class="btn btn-primary">Edit</a></td>{% endif %}
+            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=0" class="btn btn-primary">Edit</a></td>{% endif %}
       </tr>
       {% endif %}
       {% if project_funders.funder %}
@@ -590,7 +602,7 @@ under 0 Milestones</h5>
             <td style="width:19%;">Funder
                 {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a class="btn btn-primary" >Edit</a></td>{% endif %}
+            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=1" class="btn btn-primary" >Edit</a></td>{% endif %}
       </tr>
       {% endif %}
 

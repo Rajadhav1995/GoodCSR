@@ -5,7 +5,7 @@ from budgetmanagement.report_download_pdf import (download_report_generation,
 									pdfconverter,pdf_header,pdf_footer)
 
 
-
+# this are URLs are related with the Report generation
 urlpatterns = [
     url(r'generation-form/$',report_form),
     url(r'remove/detail/$',remove_functionality_pdf_view),

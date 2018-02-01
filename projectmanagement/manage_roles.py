@@ -3,6 +3,7 @@ from  django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import (Project,)
 from userprofile.models import (ProjectUserRoleRelationship,)
 from .forms import(ProjectUserRoleRelationshipForm,)
+from projectmanagement.models import ProjectFunderRelation,UserProfile
 # this section is to manage role wise access to different functionalities
 
 def projectuserslist(request):
@@ -52,6 +53,7 @@ def projectuseredit(request):
     if request.POST:
         redirect_key = request.POST.get('key')
         project_slug = request.POST.get('slug')
+        # import ipdb; ipdb.set_trace()
         form = ProjectUserRoleRelationshipForm(request.POST, instance = pmobj)
         if form.is_valid():
             form.save()
@@ -60,4 +62,26 @@ def projectuseredit(request):
             return HttpResponseRedirect('/manage/project/role/list/?slug='+str(project_slug))
         else:
             msg = "Email Already exists"
+    return render(request,'project/manage_project_user.html',locals())
+
+def manage_funder_relation(request):
+    key = 'project_edit_user'
+    project_slug = request.GET.get('slug')
+    try:
+        project_funder = request.GET.get('key')
+    except:
+        pass
+    proj_obj = Project.objects.get(slug=project_slug)
+    proj_funder_obj = ProjectFunderRelation.objects.get(project=proj_obj)
+    funder_user = UserProfile.objects.filter(active=2,organization_type=1)
+    partner = UserProfile.objects.filter(active=2,organization_type=2)
+    if request.POST:
+        slug = request.POST.get('slug')
+        implementation_partner = int(request.POST.get('implementation_partner'))
+        funder = int(request.POST.get('funder'))
+        # import ipdb; ipdb.set_trace()
+        proj_funder_obj.implementation_partner = UserProfile.objects.get(id=implementation_partner)
+        proj_funder_obj.funder = UserProfile.objects.get(id=funder)
+        proj_funder_obj.save()
+        return HttpResponseRedirect('/project/summary/?slug='+str(project_slug))
     return render(request,'project/manage_project_user.html',locals())

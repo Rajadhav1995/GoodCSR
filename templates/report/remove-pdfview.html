@@ -209,7 +209,7 @@
                     {% for i in ques.0 %}
                     {% if i.q_name == 'cover_image' %}
                     <div>
-                        <img src="{{i.answer}}" style="width:100%">
+                        <img src="{{image_url}}{{i.answer}}" style="width:100%">
                     </div>
                     {% endif %}
                     <div>
@@ -316,7 +316,7 @@
                     {% if value == k %}
                     {% for ky,val in v.iteritems %}
                     {% get_quarter_names ky number_dict as quarter_name %}
-                    <h3><span> {{quarter_name}} Quarter - ({{val}})</span><span></span></h3>
+                    <h3><span>{{quarter_name}} {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {{text}} {% endif %} - ({{val}})</span><span></span></h3>
                     {% endfor %}
                     {% endif %}
                     {% endfor %}
@@ -495,32 +495,19 @@
                     {% if sub.q_name == "logos" %}
                     <img src="{{sub.answer}}" height = 70 width = 100></li>
                     {% endif %}
+                    {% if sub.q_name == 'project_objective' %}
+            <div class="location margin-top40 page_height">
+                <p>Objective of the project</p>
+                <h5>{{sub.answer | striptags}}</h5>
+            </div>
+            {% endif %}
                     {% endfor %}
                     {% endif %}
                     {% endfor %}
                 </div>
             </div>
             <hr>
-           {% get_questions locals_list.block2 projectreportobj 2 "false" as ques %}
-            {% for i in ques.0 %}
-            {% if i.q_type == 'OT' %}
-           {% get_auto_populated_questions i.q_id  projectobj projectreportobj 2 "false" as sub_questions %}
-            {% for sub in sub_questions.0 %}
-            {% if sub.q_name == 'project_objective' %}
-            <div class="location margin-top40 page_height">
-                <p>Objective of the project</p>
-                <h5>{{sub.answer | striptags}}</h5>
-            </div>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-            {% endfor %}
-            <footer>
-                <hr>
-                <img src="/static/img/report/logo.png" style="float:left">
-                {% get_page_number page_number as page_number %}
-                <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
-            </footer>
+
         </div>
         {% endif %}
         <!--fourth page contents end-->
@@ -570,12 +557,12 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> Quarter {{text}} </p>
+            <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} </p>
             {% endif %}
             {% endif %}
             {% if quest.slug == "key-achievements-in-this-quarter" %}
             <div class="margin_30 prev_banner ">
-                <h5 class="color_green">Key Achievements in this quarter</h5>
+                <h5 class="color_green">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</h5>
                 <!-- timeline slider -->
                 {% if timeline_json != '[]' %}
                 <div id="scrollbar1">
@@ -696,7 +683,7 @@
                     <h4 style="margin:0px">{{text|title}}</h4>
                     {% endif %}
                     {% if quest.slug == "duration" %}
-                    <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+                    <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</span> </p>
                     {% endif %}
                     {% endif %}
                     {% if quest.slug == "budget-utlization-tranches" %}
@@ -721,27 +708,37 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    {% if projectreportobj.report_type == 1 %}
+                                        {% get_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% else %}
+                                        {% get_month_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% endif %}
+
                                         {% for row in budget_period %}
                                         <tr class = "data_row">
-                                            {% get_budget_lineitem row projectobj as lineitemobj %}
-                                            <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                                            <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                                            <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
-                                            {% get_line_total row projectobj as line_total %}
-                                            <td align="right" class="sticky-cell">{{line_total}}</td>
-                                            {% get_utlizedline_total row projectobj as utilized_amount %}
-                                            <td align="right" class="sticky-cell">{{utilized_amount}}</td>
-                                            <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                            {% if projectreportobj.report_type == 1 %}
-                                            {% get_quarter_details row i projectobj as line_itemobj %}
-                                            {% else %}
-                                            {% get_month_quarter_details row v i projectobj as line_itemobj %}
-                                            {% endif %}
+                                            {% get_row_details row i projectobj as lineitemobj %}
+                                    <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                    <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                    <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                    {% get_line_total row projectobj as line_total %}
+                                    <td align="right" class="sticky-cell">{{line_total}}</td>
+                                    {% get_utlizedline_total row projectobj as utilized_amount %}
+                                    <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                    <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                    {% if projectreportobj.report_type == 1 %}
+                                            <td align="right" class=""> {{lineitemobj.unit}} </td>
+                                            <td align="right" class=""> {{lineitemobj.rate}}  </td>
+                                            <td align="right" class=""> {{lineitemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if lineitemobj.utilized_unit_cost %} {{lineitemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if lineitemobj.variance %} {{lineitemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    {% else %}
+                                        {% get_month_quarter_details row v i projectobj as line_itemobj %}
                                             <td align="right" class=""> {{line_itemobj.unit}} </td>
                                             <td align="right" class=""> {{line_itemobj.rate}}  </td>
                                             <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
                                             <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
                                             <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                            {% endif %}
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -863,7 +860,7 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> First Quarter {{text}} </p>
+            <p> {% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {{text}} {% endif %} </p>
             {% endif %}
             {% endif %}
             <!--for gantt chart div -->
@@ -874,10 +871,20 @@
                     <p class="color_green" style="border-bottom:0px">Milestones & Activities1</p>
                     <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                     <div class=" white-box ">
-
-                        <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'">
-                        </div>
-                    </div>
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed  </li>
+              <li><span class="taskO"></span> InProgress </li>
+              <li><span class="taskB"></span> Not-Started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
+        <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+        </div>
+  </div>
                 </div>
             </div>
             <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
@@ -1298,7 +1305,7 @@
             <!--                            this is for about the quarter-->
             {% if quest.slug == "about-the-quarter" %}
             <div class="location margin_top30" style="margin-bottom:0px">
-                <p>{{quest.text|title}}</p>
+                <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                 {% get_answer_question quest reportupdates.1 as text %}
                 <h5 >{{text}}</h5>
             </div>
@@ -1393,7 +1400,7 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+            <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</span> </p>
             {% endif %}
             {% endif %}
             <!--                     this is for parameter selection -->
@@ -1541,9 +1548,14 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            {% if projectreportobj.report_type == 1 %}
+                                        {% get_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% else %}
+                                        {% get_month_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% endif %}
                                 {% for row in budget_period %}
                                 <tr class = "data_row">
-                                    {% get_budget_lineitem row projectobj as lineitemobj %}
+                                    {% get_row_details row i projectobj as lineitemobj %}
                                     <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
                                     <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
@@ -1553,15 +1565,19 @@
                                     <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
                                     {% if projectreportobj.report_type == 1 %}
-                                            {% get_quarter_details row i projectobj as line_itemobj %}
-                                            {% else %}
-                                            {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{lineitemobj.unit}} </td>
+                                            <td align="right" class=""> {{lineitemobj.rate}}  </td>
+                                            <td align="right" class=""> {{lineitemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if lineitemobj.utilized_unit_cost %} {{lineitemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if lineitemobj.variance %} {{lineitemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    {% else %}
+                                        {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                            <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                            <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             {% endif %}
-                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
-                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
-                                    <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
-                                    <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
-                                    <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -1673,7 +1689,7 @@
                 <h4 style="margin:0px">{{text|title}}</h4>
                 {% endif %}
                 {% if quest.slug == "duration" %}
-                <p> Quarter {{text}} <span style="float:right">Key Achievements in this quarter</span> </p>
+                <p> {% if projectreportobj.report_type == 1 %} Quarter {{text}}{% else %} Month {{text}} {% endif %} <span style="float:right">{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} Key Achievements In This Month {% endif %}</span> </p>
                 {% endif %}
                 {% endif %}
                 <!--                     this is for parameter selection -->
@@ -1749,14 +1765,14 @@
             <h4 style="margin:0px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p> First Quarter {{text}} </p>
+            <p> {% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {{text}} {% endif %} </p>
             {% endif %}
             {% endif %}
 
 <!--                            this is for about the quarter-->
                         {% if quest.slug == "about-the-quarter" %}
                               <div class="location margin_top30" style="margin-bottom:0px">
-                                 <p>About The Quarter</p>
+                                 <p>{% if projectreportobj.report_type == 1 %} {{quest.text|title}}{% else %} About The Month {% endif %}</p>
                                 {% get_answer_question quest reportupdates.1 as text %}
                                  <h5>{{text}} </h5>
                               </div>
@@ -1784,9 +1800,14 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% if projectreportobj.report_type == 1 %}
+                                        {% get_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% else %}
+                                        {% get_month_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% endif %}
                                 {% for row in budget_period %}
                                 <tr class = "data_row">
-                                    {% get_budget_lineitem row projectobj as lineitemobj %}
+                                    {% get_row_details row i projectobj as lineitemobj %}
                                     <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
                                     <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
@@ -1796,15 +1817,20 @@
                                     <td align="right" class="sticky-cell">{{utilized_amount}}</td>
                                     <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
                                     {% if projectreportobj.report_type == 1 %}
-                                            {% get_quarter_details row i projectobj as line_itemobj %}
-                                            {% else %}
-                                            {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{lineitemobj.unit}} </td>
+                                            <td align="right" class=""> {{lineitemobj.rate}}  </td>
+                                            <td align="right" class=""> {{lineitemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if lineitemobj.utilized_unit_cost %} {{lineitemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if lineitemobj.variance %} {{lineitemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    {% else %}
+                                        {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                            <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                            <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                            <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                            <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                            <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
                                             {% endif %}
-                                    <td align="right" class=""> {{line_itemobj.unit}} </td>
-                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
-                                    <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
-                                    <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
-                                    <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                    
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -1812,6 +1838,54 @@
                     </div>
                 </div>
                 <br><br>
+                        {% get_tranches v tranche_list as filtered_tranches %}
+                        {% if filtered_tranches.1.planned_amount %}
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                
+                                <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th align="center">Tranche No.</th>
+                                            <th>Due Date</th>
+                                            <th>Planned Amount</th>
+                                            <th>Actual Disbursement</th>
+                                            <th>Recommended Disbursement</th>
+<!--                                            <th> Utilized</th>-->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% get_tranches v tranche_list as filtered_tranches %}
+                                        
+                                        {% for i in filtered_tranches.0 %}
+                                        {% with forloop.counter as rnum %}
+                                        <tr>
+                                            <td>{{rnum}}</td>
+                                            <td>{{i.due_date|date:"j M Y"}}</td>
+                                            <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                            <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                            <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+<!--                                            <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>-->
+                                        </tr>
+                                        {% endwith %}
+                                        {% endfor %}
+                                        
+                                        
+                                        <tr bgcolor="#f1f3e9" class="table-tr">
+                                            <td>Total</td>
+                                            <td>&nbsp;</td>
+                                            <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                            <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                            <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+<!--                                            <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>-->
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
                 <!-- ------------------------------------------------------- -->
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}

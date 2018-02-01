@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load roles_tags %}
+
+{% block title %}Role{% endblock %}
+
+{% block content %}
+
+<!-- page content -->
+<section class="content-part forms_section">
+  
+  <div class="row">
+    <div class="box col-md-12">
+      <div class="box-inner">
+	                <div class="box-header well" data-original-title="">
+	
+                        <h3><a href="/usermanagement/list/role/">User Management</a> - Role ({{role}})</h3>
+                    <div style="float: right;">
+                         <input type="submit" form="id_form" class=" btn-success btn-xs save-text" value="Save"/>
+                         <a href="/usermanagement/list/role/" type="button" class=" btn-danger btn-xs" >Cancel</a>
+                    </div>
+                    </div>
+                        <div class="clearfix"></div>
+
+                    <div class="box-content">
+                        <table class="table table-striped table-bordered  responsive responsive-utilities jambo_table bulk_action">
+                            <thead>
+                                <tr class="headings">
+                                    <th class="column-title">Menu</th>
+                                    <th class="column-title">View</th>
+                                    <th class="column-title">Add</th>
+                                    <th class="column-title">Edit</th>
+<!--                                    <th class="column-title">Delete</th>-->
+                                </tr>
+                            </thead>
+
+                <tbody>
+        <form method="post" id="id_form" action=".">{% csrf_token %}
+            {% for i in confs %}
+                    <tr class="even pointer">
+                        <td class=" ">
+                            {% if i.menu.parent %}
+                                 {{i.menu.name|title}} - {{ i.menu.parent|title }}
+                            {% else %}
+                                {{ i.menu.name|title }}(Parent)  
+                            {% endif %}
+                        </td>
+                        <td class=" ">
+                            {% if not i.menu.get_sub_menus %}
+                                <input type="checkbox" name="{{i.id}}" value="view" {% if i.view %}checked{% endif %}>
+                            {% endif %}
+                        </td>
+                        <td class=" ">
+                            {% if not i.menu.get_sub_menus %}
+                                <input type="checkbox" name="{{i.id}}" value="add" {% if i.add %}checked{% endif %}>
+                            {% endif %}
+                        </td>
+                        <td class=" ">
+                            {% if not i.menu.get_sub_menus %}
+                                <input type="checkbox" name="{{i.id}}" value="edit" {% if i.edit %}checked{% endif %}>
+                            {% endif %}
+                        </td>
+<!--                        <td class=" ">-->
+<!--                            {% if i.menu.parent %}-->
+<!--                                <input type="checkbox" name="{{i.id}}" value="delete" {% if i.delete %}checked{% endif %}>-->
+<!--                            {% endif %}-->
+<!--                        </td>-->
+                    </tr>
+            {% endfor %}
+        </form>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<!-- /page content -->
+
+
+
+
+<script>
+function myFunction() {
+    var x = confirm("Do You want to update role permission?");
+    if (x == true ){
+        window.location.href='/'
+    } else {
+        return false;
+    }
+}
+
+$(function(){
+    $('#id_form').submit(function(){
+        return myFunction()
+    })
+})
+</script>
+
+{% endblock %}
+
+
+

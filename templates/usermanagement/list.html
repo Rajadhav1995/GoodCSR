@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load urs_tags %}
+
+
+{% block section %}
+{% endblock %}
+{% block content %}
+
+<script type="text/javascript" src="/static/js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+
+<section class="content-part forms_section">
+  
+  <div class="row">
+      <div class="white-box white-pad">
+    <div class="box-body table-responsive">
+          <h3>User Management - {{model|capfirst}}</h3>
+                        <div class="clearfix"></div>
+
+                        <table id="example1" class="table table-striped table-bordered textalign_boottom" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr class="headings">
+                                            {% if model == 'menu' %}
+                                                <th class="column-title">Name </th>
+                                                <th class="column-title">Parent Link </th>
+                                                <th class="column-title">Link </th>
+                                                <th class="column-title no-link last"><span class="nobr">Action</span></th>
+                                            {% endif %}
+                                            {% if model == 'role' %}
+                                                <th class="column-title">Name </th>
+                                                <th class="column-title no-link last"><span class="nobr">Action</span></th>
+                                            {% endif %}
+                                            {% if model == 'user' %}
+                                                <th class="column-title">First name </th>
+                                                <th class="column-title">Last name </th>
+                                                <th class="column-title">Email </th>
+                                                <th class="column-title">Role type </th>
+<!--                                                <th class="column-title no-link last"><span class="nobr">Action</span></th>-->
+                                            {% endif %}
+                                            </tr>
+                                        </thead>
+
+                            <tbody>
+                        {% for obj in object_list %}
+                                <tr class="even pointer">
+                                {% if model == 'menu' %}
+                                    <td class=" ">{{obj.name}}</td>
+                                    <td class=" ">{{obj.parent.name}}</td>
+                                    <td class=" ">{{obj.link}}</td>
+                                    <td class=" last">
+                                        <a href="/usermanagement/edit/menu/{{obj.id}}" title="Edit" class="btn fancybox btn-xs btn-info">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i>
+                                             Edit
+                                        </a>
+                                    </td>
+                                {% endif %}
+                                {% if model == 'role' %}
+                                    <td class=" ">{{obj.name}}</td>
+                                    <td class=" last">
+<!--                                        <a href="/usermanagement/edit/role/{{obj.id}}" title="Edit" class="btn fancybox btn-xs btn-info">-->
+<!--                                            <i class="glyphicon glyphicon-edit icon-white"></i> Edit-->
+<!--                                        </a> |-->
+                                        <a href="/usermanagement/manage/role/{{obj.id}}" title="Manage" class="btn btn-danger deactivate">
+                                            <i class="glyphicon glyphicon-edit icon-white"></i> Manage Permissions
+                                        </a>
+<!--                                        <a href="/usermanagement/manage/menu/{{obj.id}}" title="Manage" class="btn btn-danger deactivate">-->
+<!--                                            <i class="glyphicon glyphicon-edit icon-white"></i>Manage Menu-->
+<!--                                        </a>-->
+                                    </td>
+                                {% endif %}
+                                {% if model == 'user' %}
+                                    <td class=" ">{{obj.first_name}}</td>
+                                    <td class=" ">{{obj.last_name}}</td>
+                                    <td class=" ">{{obj.email}}</td>
+                                    <td class=" ">{% for ii in obj.role_type.all%} {{ii}}{% if not forloop.last %},{% else %}.{% endif %} {% endfor%}</td>
+<!--                                    <td class=" last">-->
+<!--                                        <a href="/usermanagement/edit/user/{{obj.id}}" title="Edit" class="btn fancybox btn-xs btn-info">-->
+<!--                                            <i class="glyphicon glyphicon-edit icon-white"></i>-->
+<!--                                            Edit-->
+<!--                                        </a>-->
+<!--                                    </td>-->
+                                {% endif %}
+                                </tr>
+                        {% endfor %}
+                                            </tbody>
+                                    </table>
+            </div>
+        </div>
+    </div>
+</section>
+            <!-- /page content -->
+
+
+
+{% endblock %}

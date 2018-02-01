@@ -110,8 +110,8 @@ class ProjectReport(BaseContent):
     description = models.TextField()
     objective = models.TextField()
 
-    def __str__(self):
-        return str(self.id)
+    def __unicode__(self):
+        return str(self.id) or ''
         
     def delete_report_answers(self):
         report_obj = ProjectReport.objects.get_or_none(id=int(self.id))
