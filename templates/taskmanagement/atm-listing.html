@@ -703,8 +703,13 @@ $(document).ready(function(){
 <script>
     if (gSuperName.length > 0) {
       var SuperRemain = new Array();
-      for (i = 0; i < gSuperComp.length; i++) {
-        SuperRemain.push(100 - gSuperComp[i]);
+      alert(gSuperComp)
+      for (i = 0; i < gSuperComp.length-1; i++) {
+        if (i != gSuperComp.length-2){
+        
+        SuperRemain.push(100 - gSuperComp[i]);}
+        else{
+        alert("gdfg");}
         //SuperRemain = SuperRemain.reverse();
       }
       SuperComp = Highcharts.chart('Super_Completion', {
