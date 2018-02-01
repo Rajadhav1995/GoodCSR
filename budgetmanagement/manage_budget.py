@@ -276,12 +276,12 @@ def upload_budget_utlized(line_itemlist,i,request,budget_periodobj):
                 commentobj,created = Comment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
                 commentobj.text = text
                 commentobj.save()
-#            else:
-#                if request.FILES.get(j):
-#                    upload = request.FILES.getlist(j)[0]
-#                    attachobj,created = Attachment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
-#                    attachobj.attachment_file = upload
-#                    attachobj.save()
+            else:
+                if request.FILES.get(j):
+                    upload = request.FILES.getlist(j)[0]
+                    attachobj,created = Attachment.objects.get_or_create(content_type=ContentType.objects.get_for_model(budget_periodobj),object_id=i)
+                    attachobj.attachment_file = upload
+                    attachobj.save()
     return line_item_updated_values
 
 
