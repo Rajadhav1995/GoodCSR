@@ -1732,7 +1732,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <h4 style="margin:0px" style="margin-left:-20px">{{text|title}}</h4>
             {% endif %}
             {% if quest.slug == "duration" %}
-            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
+            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {{text}}{% endif %} </p>
             {% endif %}
             {% endif %}
 
