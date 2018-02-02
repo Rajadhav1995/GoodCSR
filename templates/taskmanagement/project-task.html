@@ -71,7 +71,7 @@ font-size: 14px;
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
+               <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% endif %}
             </ul>
@@ -82,7 +82,7 @@ font-size: 14px;
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li></div>
+               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.end_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
@@ -95,7 +95,7 @@ font-size: 14px;
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li></div>
+               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.end_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
@@ -108,7 +108,7 @@ font-size: 14px;
             <ul>
                {% if remain_tasks %}
                {% for t in remain_tasks %}
-               <div class="activity act_{{t.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
+               <div class="activity act_{{t.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.end_date|date:'jS F Y'}} - {{t.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>

@@ -1158,8 +1158,7 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
-                            {% get_gantt_details v projectobj as taskdict %}
-                            {% if taskdict.activities or taskdict.tasks %}
+                            
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
