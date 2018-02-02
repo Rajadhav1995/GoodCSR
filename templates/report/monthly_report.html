@@ -870,17 +870,16 @@
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
                         {% get_gantt_details v projectobj as taskdict %}
-                        
-                    {% taskdict_json taskdict as taskdict_json %}
-
-                    {% if taskdict_json.activities or taskdict_json.tasks %}
+                         {% taskdict_json taskdict as taskdict_json %}
+                         
+                         {% if taskdict_json.activities or taskdict_json.tasks %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
                                 <div class=" white-box ">
         <div class="col-md-12 legendContainer">
           <ul class="legend">
-              <li><span class="taskC"></span> Completed </li>
+              <li><span class="taskC"></span> Completed aadi </li>
               <li><span class="taskO"></span> In progress </li>
               <li><span class="taskB"></span> Not started </li>
               <li><span class="taskN"></span> Non-Core </li>
@@ -889,21 +888,658 @@
           </ul>
         </div>
         <div class="col-md-12">
-        <div id="gwContainer1" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
         </div>
   </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
-                            {% endif %}
                         {% endif %}
-
+                        {% endif %}
 <script src="/static/js/jsgantt.js" type="text/javascript"></script>
                             <script>
-                                {% for i,v in currentquarter_list.items %}
+                                
+      {% get_gantt_details v projectobj as taskdict %}
+      var jsonData = {{taskdict|safe}}
+      // alert("hi");
+  var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+  // console.log(jsonData.tasks);
+  // Get today and tomorrows date
+  var cur = new Date();
+    var tom = new Date();
+    var project = "";
+    project = jsonData.project[0].slug;
+    tom.setDate(tom.getDate() + 1);
+    var curDate = cur.getFullYear() + '-' +
+      (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
+      (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
+
+    var tomDate = tom.getFullYear() + '-' +
+      (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
+      (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
+    // Get today and tomorrows date
+    $.each(jsonData.supercategories, function (i) {
+      superId = 1, activity_type = 'Core', taskCompletion = 0, superName = 'Super Category';
+      if (this.id != null) {
+        superId = this.id;
+      }
+      superName = this.name;
+      var superDesc = this.description;
+      if (superName.toLowerCase() != "location") {
+        g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+          '', superDesc, g));
+      }
+      // console.log("Super");
+      // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+      //   '', superDesc);
+    });
+    $.each(jsonData.activities, function (i) {
+      var activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0,
+        activityName = 'Activity';
+      if (this.id != null) {
+        activityId = this.id.toString();
+      }
+      if (this.super_category != null) {
+        superId = this.super_category;
+        if (this.id != null) {
+          activityId = this.super_category.toString() + activityId;
+        }
+      }
+      // console.log("ActID", activityId);
+      activityName = this.name;
+      var activityDesc = this.description;
+      g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
+        1, '', '',
+        activityDesc, g));
+      // console.log("Act");
+      // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
+    });
+    $.each(jsonData.tasks, function (i) {
+      var taskId = 111,
+        tempId = 1,
+        activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0,
+        taskName = 'Task',
+        taskStatus = 'gtaskred',
+        pStartDate = curDate,
+        pEndDate = tomDate,
+        eStartDate = curDate,
+        eEndDate = tomDate,
+        slug = "",
+        link = "";
+      if (this.id != null) {
+        taskId = this.id;
+        tempId = this.id;
+      }
+      // added the script 16th-Nov
+      if(this.task_progress != null || this.task_progress != undefined){
+            taskCompletion = this.task_progress;
+      }
+      // ended th script
+      if (this.activity != null) {
+        activityId = this.activity;
+      }
+      if (this.slug != null) {
+        slug = this.slug;
+      }
+      // activity = jsonData.activities.filter(function( i ) {
+      //   if(i.id == activityId){return i.super_category;}
+      // });
+      $.each(jsonData.activities, function () {
+        if (this.id == activityId) {
+          activity_type = this.activity_type;
+          if (this.super_category != null) {
+            superId = this.super_category;
+          }
+        }
+      });
+      if (superId != null && activityId != null && taskId != null) {
+        taskId = superId.toString() + activityId.toString() + taskId.toString();
+      }
+      if (superId != null && activityId != null) {
+        activityId = superId.toString() + activityId.toString();
+      }
+      activityId = parseInt(activityId);
+      // console.log("Slug and project", slug,project);
+      if ( slug != null && project != ""){
+        // var domain = "";
+        // if(window.location.hostname == ""){
+        //   domain = "http://goodcsrpmu.mahiti.org";
+        // }
+        link = "/managing/my-tasks/details/?slug="+project+"&key=projecttasks&status=1#"+slug;
+      }
+      taskName = this.name;
+      pStartDate = this.start_date;
+      pEndDate = this.end_date;
+      eStartDate = this.expected_start_date;
+      eEndDate = this.expected_end_date;
+      if (activity_type == "Core") {
+        switch (this.status) {
+          case "Ongoing":
+            taskStatus = 'gtaskblue';
+            break;
+          case "Open":
+            taskStatus = 'gtaskyellow';
+            break;
+          case "Close":
+            taskStatus = 'gtaskgreen';
+            break;
+          default:
+            taskStatus = 'gtaskblue';
+            break;
+        };
+      }
+      // For Milestones
+      var completionDate = this.actual_end_date;
+      console.log('Complete date', completionDate);
+      $.each(jsonData.milestones, function (i) {
+        var mileId = 111,
+        mileStatus = 'gmilestone redmile '
+        depTask = [];
+        depTask = this.task;
+        mileName = this.name;
+        if (this.id != null) {
+          mileId = this.id;
+        }
+        // added the script 16th-Nov
+        maxDate = new Date('1970-01-01');
+        var tempArray = [];
+        var n = 0;
+        $.each(depTask, function (index, value) {
+          console.log('value', n);
+          tempArray.push({
+            'id': value
+          });
+          for (var i = 0; i < jsonData.tasks.length; i++) {
+            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {
+              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();
+            }
+            if (i == (depTask.length - 1)) {
+
+              console.log('Array', depTask)
+              console.log('Max Date',Math.max(tempArray.date));
+            }
+          }
+          n++;
+        });
+        console.log("tempArray", tempArray);
+        //end of  the added script
+        // if (depTask.length == 1) {
+        var ln = depTask.length;
+        ln--;
+        console.log('depTask', depTask[0]);
+        if (depTask[ln] == tempId) {
+          var d1 = new Date(eEndDate);
+          var d2 = new Date(eEndDate);
+          d1.setDate(d1.getDate() + 1);
+          d2.setDate(d2.getDate() + 11);
+          var mileStart = d1.getFullYear() + '-' +
+            (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
+            (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
+
+          var mileEnd = d2.getFullYear() + '-' +
+            (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
+            (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
+          //Check for milestone complete or calculate delay
+          if (completionDate == null) {
+            mileStatus = 'gmilestone redmile '
+          } else {
+            var d3 = new Date(this.overdue);
+            var d4 = new Date(completionDate);
+            var timeDiff = (d3.getTime() + 86400) - d4.getTime();
+            var diffDays = Math.ceil(timeDiff / 86400000);
+            console.log('DiffDays', diffDays);
+            if (diffDays < 0) {
+              var dur = rem = Math.abs(diffDays);
+              if (dur < 8) {
+                mileName += " - Delayed by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) {
+                dur = Math.floor(dur / 7);
+                //add 16th- Nov
+                rem = Math.floor(rem % 7);
+                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";
+                };
+                //end
+              if (dur >= 30 && dur < 365) {
+                dur = Math.floor(dur / 30);
+                //add 16th-Nov
+                rem = Math.floor(rem % 30);
+                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";
+              };
+                //end
+              if (dur >= 365) {
+                dur = Math.floor(dur / 365);
+                //added script
+                rem = Math.floor(rem % 365);
+                mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
+              };
+              //ended script
+              console.log('Diff days', mileName);
+            } else {
+              mileStatus = 'gmilestone greenmile '
+              var dur = rem = Math.abs(diffDays);
+              if (dur == 0) {
+                 mileName += " - On track"
+              };
+              if (dur < 8) {
+                mileName += " - Ahead by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) {
+                dur = Math.floor(dur / 7);
+                rem = Math.floor(rem % 7);//new line
+                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)"; //modified
+              };
+              if (dur >= 30 && dur < 365) {
+                dur = Math.floor(dur / 30);
+                rem = Math.floor(rem % 30);//new line
+                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";//modified
+              };
+              if (dur >= 365) {
+                 dur = Math.floor(dur / 365);
+                rem = Math.floor(rem % 365);//new line
+                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";//modified
+                 };
+              console.log('Diff days', mileName);
+            }
+          }
+          g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
+            mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));//changed null to 100
+        }
+      });
+      //Draw task after drawing milestone
+      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, link, 0,
+        '', taskCompletion , 0, activityId, 1, '', '', '', g ,pStartDate, pEndDate));
+    });
+
+    g.setShowStartDate(0);
+    g.setShowEndDate(0);
+    g.setShowRes(0);
+    g.setShowDeps(0);
+    g.setShowDur(0);
+    g.setUseToolTip(1);
+    g.setWeekColWidth(50);
+    g.setWeekMajorDateDisplayFormat('mon yyyy');
+    g.setWeekMinorDateDisplayFormat('W w');
+    g.setScrollTo('today');
+    g.setTimer(5);
+    g.setShowTaskInfoLink(1);
+    g.Draw();
+    var collideDiv
+    function collision($div1, $div2) {
+      var x1 = $div1.offset().left;
+      var y1 = $div1.offset().top;
+      var h1 = $div1.outerHeight(true);
+      var w1 = $div1.outerWidth(true);
+      var b1 = y1 + h1;
+      var r1 = x1 + w1;
+      var x2 = $div2.offset().left;
+      var y2 = $div2.offset().top;
+      var h2 = $div2.outerHeight(true);
+      var w2 = $div2.outerWidth(true);
+      var b2 = y2 + h2;
+      var r2 = x2 + w2;
+
+      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2){ return false;}
+      else{
+            collideDiv = $div2;
+             return true;
+    }
+    }
+    var count = 0,
+      padding = 25,
+      arrayTask = [],
+      collide = false;
+    $('.gselector').hide();
+      var previous = null;
+      var prePrevious, pre2, pre3= null;
+      var mile = false;
+      $(".gtaskbarcontainer").each(function (index) {
+        currParent = $(this).parent().parent().parent();
+        listParent = currParent.attr('id').replace('row', '');
+        if ($(this).hasClass('gmilecontainer')) {
+          mile = true;
+        }
+        if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
+          .attr('id')) {
+          // console.log("This ID", $(this).attr('id'), mile);
+          if (mile) {
+
+          }
+          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
+            $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
+              if ($(this).css('top') == '-5px') {
+                $(this).css('top', '0px');
+              }
+            });
+            collide = true;
+            $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
+            if (count == 0) {
+              $(previous).css('top', '0px');
+              count++;
+            }
+            listParentDiv = $('#' + listParent);
+            if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+              listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
+              currParent.css({
+                'height': parseInt(currParent.css('height')) + 25 + 'px',
+                'vertical-align': 'top'
+              });
+            }
+          }
+        } else {
+          count = 0;
+          arrayTask = [];
+          collide = false;
+          $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
+            top: '-5px'
+          });
+          mile = false;
+        }
+        prePrevious = previous;
+        previous = this;
+      });
+                                // end of the script added 16th-Nov
+                                
+                            </script>
+
+
+<!--                            this is for about the quarter-->
+                        {% if quest.slug == "about-the-quarter" %}
+                            <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
+
+                                <p>About The Month</p>
+                                <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                            </div>
+                        {% endif %}
+
+
+                        <!--                            this is for milestone section-->
+
+                        {% if quest.slug == "activity-section" %}
+                             <input type="hidden" name="activity_count_{{i}}_1" value="1">
+                            <input type="hidden" name="activity-pic-count_1" value="1">
+                            <input type="hidden" name="current_parameter_count_1" value="1">
+                            <input type="hidden" name="add_section" value="0">
+                            <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
+                            {% get_previous_subquestions quest as act_quest_list %}
+                            {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
+                                <div class="col-md-6 report_text parameter_section ">
+
+                                {% for act_quest in activity_questions %}
+
+                                    {% if act_quest.slug == "activity-name" %}
+                                        <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
+                                        <p>{{act_quest.text|title}}</p>
+                                        {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
+                                        {%  if milestone_activitieslist %}
+                                        <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
+                                            <option value="0">Select</option>
+                                            {% for i in milestone_activitieslist %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% else %}
+                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
+                                        {% endif %}
+                                       <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if act_quest.slug == "about-the-actvity" %}
+                                    <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
+                                        <p>{{act_quest.text|title}}</p>
+                                        <div class="">
+                                            <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
+                                        </div>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                                {% for act_quest in activity_questions %}
+                                <div class="col-md-6 report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
+                                {% if act_quest.slug == "upload-picture" %}
+                                    <div class=" report_text">
+                                        <p>{{act_quest.text|title}}</p>
+                                        <div class="form-group upload_text">
+                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0">
+                                        </div>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                                    </div>
+                                {% endif %}
+                                {% if act_quest.slug == "picture-description" %}
+                                    <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
+                                        <p>{{act_quest.text|title}}</p>
+                                        <div class="form-group">
+                                            <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
+                                        </div>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+<!--                                        <div class="form-group addpicture">-->
+<!--                                            <input type="file" id="file02">-->
+<!--                                        </div>-->
+                                    </div>
+                                {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group addmilestone click_buttons">
+                                 <div class="link-left">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="aadd_clone_{{i}}_{{j}}">Add more</a>
+                                        </div>
+                                        <div class="link-center">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="aadd_remove_{{i}}_{{j}}">Remove</a>
+                                        </div>
+                            </div>
+                            {% endif %}
+
+<!--                     this is for parameter selection -->
+                        {% if quest.slug == "parameter-section" %}
+                                <hr class="border_line">
+                                <div class="milestone para_data_row_{{i}}_1" id="data_row_{{i}}_1">
+                                {% get_previous_subquestions quest as para_quest_list %}
+                                  {% get_previous_removed para_quest_list "false" final_questionlist.1 as parameter_questions %}
+                                    {% for param_quest in parameter_questions %}
+                                    {% if param_quest.slug == "parameter-selection" %}
+                                    <div class="col-md-6 report_text parameter_section">
+                                        <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
+                                        <p>{{param_quest.text|title}}</p>
+                                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
+                                            <option value="0">Select</option>
+                                            {% for i in project_paramterlist %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+
+                                    {% if param_quest.slug == "about-parameter" %}
+                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
+                                        <p>{{param_quest.text|title}}</p>
+                                        <div class="">
+                                            <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
+                                        </div>
+                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                                    </div>
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group addmilestone click_buttons">
+                                        <div class="link-left">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="para_add_clone_{{i}}_{{j}}">Add more</a>
+                                        </div>
+                                        <div class="link-center">
+                                            <input type="hidden"/>
+                                            <a href ="javascript:void(0);" class ="para_add_remove_{{i}}_{{j}}">Remove</a>
+                                        </div>
+                                </div>
+                        {% endif %}
+
+<!--                            this is for budget table display-->
+
+                            {% if quest.slug == "budget-utlization-tranches" %}
+                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
+                                    <p>{{quest.text|title}}</p>
+                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
+                                        <table class="table table-boardered table-striped table-striped budget_table">
+                                            <thead>
+                                            <tr class="sticky-row">
+                                              <th  class="sticky-cell">Super Category</th>
+                                              <th  class="sticky-cell">Heading</th>
+                                              <th  class="sticky-cell">Subheading</th>
+                                              <th  class="sticky-cell">Total Planned</th>
+                                              <th  class="sticky-cell">Total Utilized</th>
+                                              <th  class="sticky-cell">Units Type</th>
+                                              <th>Units</th>
+                                              <th>Rate</th>
+                                              <th> Planned</th>
+                                              <th> Utilized</th>
+                                              <th>Variance</th>
+                                            </tr>
+                                            </thead>
+                                        <tbody class="budget_section">
+                                            {% for row in budget_period %}
+                                            <tr class = "data_row">
+                                                {% get_budget_lineitem row projectobj as lineitemobj %}
+                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
+                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
+                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
+                                                {% get_line_total row projectobj as line_total %}
+                                                <td align="right" class="sticky-cell">{{line_total}}</td>
+                                                {% get_utlizedline_total row projectobj as utilized_amount %}
+                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
+                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
+                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
+                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
+                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
+                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
+                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                    <br>
+                                {% get_tranches v tranche_list as filtered_tranches %}
+                                {% if filtered_tranches.1.planned_amount %}
+                                <div class="table-responsive">
+                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
+                                      <thead>
+                                      <tr>
+                                        <th align="center">Tranche No.</th>
+                                        <th>Due Date</th>
+                                        <th>Planned Amount</th>
+                                        <th>Actual Disbursement</th>
+                                        <th>Recommended Disbursement</th>
+                                        <th> Utilized</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in filtered_tranches.0 %}
+                                      {% with forloop.counter as rnum %}
+                                      <tr>
+                                        <td>{{rnum}}</td>
+                                        <td>{{i.due_date}}</td>
+                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
+                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
+                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
+                                      </tr>
+                                      {% endwith %}
+                                      {% endfor %}
+                                      <tr bgcolor="#f1f3e9" class="table-tr">
+                                        <td>Total</td>
+                                        <td>&nbsp;</td>
+                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
+                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                </div>
+                                {% endif %}
+                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                                </div>
+                            {% endif %}
+
+                            {% if quest.slug == "about-the-budget" %}
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
+                                <p>{{quest.text|title}}</p>
+                                <div class="">
+                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                                </div>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                            </div>
+                            {% endif %}
+                            {% if quest.slug == "risks-mitigation" %}
+                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
+                                <p>{{quest.text|title}}</p>
+                                <div class="">
+                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                                </div>
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                            </div>
+                            {% endif %}
+
+                            {% endfor %} <!-- this for ends for previous question list -->
+                    {% else %}
+                        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
+                            {% for quest in final_questionlist.0 %} <!-- this is for loop for  if object is present -->
+<!--                             this is for auto populate text -->
+                            {% if quest.qtype == "APT" %}
+                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{j|add:previous_len}}">
+                                <p>{{quest.text|title}}</p>
+                                {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
+                                <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" >
+                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                            </div>
+                            {% endif %}
+
+<!--                            this is for milestone and activity graph-->
+                        {% if quest.slug == "milestones-activities-snapshot" %}
+                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
+                                <p>{{quest.text|title}}</p>
+<!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
+                                <div class=" white-box ">
+        <div class="col-md-12 legendContainer">
+          <ul class="legend">
+              <li><span class="taskC"></span> Completed aadi2 </li>
+              <li><span class="taskO"></span> In progress </li>
+              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskN"></span> Non-Core </li>
+              <li><span class="mileC"></span> On-Time Milestone </li>
+              <li><span class="mileD"></span> Delayed Milestone </li>
+          </ul>
+        </div>
+        <div class="col-md-12">
+        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
+        </div>
+  </div>
+                         <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
+                            </div>
+
+<!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
+
+                              <script src="/static/js/jsgantt.js" type="text/javascript"></script>
+                            <script>
+                                
                                     {% get_gantt_details v projectobj as taskdict %}
                                     var jsonData = {{taskdict|safe}}
-                                    console.log(jsonData.tasks);
-                                var g = new JSGantt.GanttChart(document.getElementById('gwContainer1'), 'week');
+                                var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
                                 // console.log(jsonData.tasks);
                                 // Get today and tomorrows date
                                 var cur = new Date();
@@ -1246,636 +1882,7 @@
         previous = this;
       });
                                 // end of the script added 16th-Nov
-                                 {% endfor %}
-                            </script>
-<!--                            this is for about the quarter-->
-                        {% if quest.slug == "about-the-quarter" %}
-                            <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
-
-                                <p>About The Month</p>
-                                <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                            </div>
-                        {% endif %}
-
-
-                        <!--                            this is for milestone section-->
-
-                        {% if quest.slug == "activity-section" %}
-                             <input type="hidden" name="activity_count_{{i}}_1" value="1">
-                            <input type="hidden" name="activity-pic-count_1" value="1">
-                            <input type="hidden" name="current_parameter_count_1" value="1">
-                            <input type="hidden" name="add_section" value="0">
-                            <div class="milestone data_row_{{i}}_1" id="data_row_{{i}}_1">
-                            {% get_previous_subquestions quest as act_quest_list %}
-                            {% get_previous_removed act_quest_list "false" final_questionlist.1 as activity_questions %}
-                                <div class="col-md-6 report_text parameter_section ">
-
-                                {% for act_quest in activity_questions %}
-
-                                    {% if act_quest.slug == "activity-name" %}
-                                        <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
-                                        <p>{{act_quest.text|title}}</p>
-                                        {% get_milestones_activities v 2 projectobj as milestone_activitieslist %}
-                                        {%  if milestone_activitieslist %}
-                                        <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
-                                            <option value="0">Select</option>
-                                            {% for i in milestone_activitieslist %}
-                                            <option value="{{i.id}}">{{i.name}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        {% else %}
-                                        <input type="text " id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" class="input_section">
-                                        {% endif %}
-                                       <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                        </div>
-                                    {% endif %}
-
-                                    {% if act_quest.slug == "about-the-actvity" %}
-                                    <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
-                                        <p>{{act_quest.text|title}}</p>
-                                        <div class="">
-                                            <textarea class="textarea_file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0"> </textarea>
-                                        </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-                                </div>
-                                {% for act_quest in activity_questions %}
-                                <div class="col-md-6 report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
-                                {% if act_quest.slug == "upload-picture" %}
-                                    <div class=" report_text">
-                                        <p>{{act_quest.text|title}}</p>
-                                        <div class="form-group upload_text">
-                                            <input type="file" id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0">
-                                        </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                    </div>
-                                {% endif %}
-                                {% if act_quest.slug == "picture-description" %}
-                                    <div class=" report_text" id="ques_{{act_quest.id}}_{{j|add:previous_len}}">
-                                        <p>{{act_quest.text|title}}</p>
-                                        <div class="form-group">
-                                            <input type="text " id = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" name = "{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0_0" class="form_section input_section">
-                                        </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{act_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-<!--                                        <div class="form-group addpicture">-->
-<!--                                            <input type="file" id="file02">-->
-<!--                                        </div>-->
-                                    </div>
-                                {% endif %}
-                                </div>
-                                {% endfor %}
-                            </div>
-                            <div class="form-group addmilestone click_buttons">
-                                 <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aadd_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="aadd_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                            </div>
-                            {% endif %}
-
-<!--                     this is for parameter selection -->
-                        {% if quest.slug == "parameter-section" %}
-                                <hr class="border_line">
-                                <div class="milestone para_data_row_{{i}}_1" id="data_row_{{i}}_1">
-                                {% get_previous_subquestions quest as para_quest_list %}
-                                  {% get_previous_removed para_quest_list "false" final_questionlist.1 as parameter_questions %}
-                                    {% for param_quest in parameter_questions %}
-                                    {% if param_quest.slug == "parameter-selection" %}
-                                    <div class="col-md-6 report_text parameter_section">
-                                        <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
-                                        <p>{{param_quest.text|title}}</p>
-                                        <select name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" id="parameter-selection_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" >
-                                            <option value="0">Select</option>
-                                            {% for i in project_paramterlist %}
-                                            <option value="{{i.id}}">{{i.name}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-
-
-                                    {% if param_quest.slug == "about-parameter" %}
-                                    <div class="col-md-12 report_text " id="ques_{{param_quest.id}}_{{j|add:previous_len}}">
-                                        <p>{{param_quest.text|title}}</p>
-                                        <div class="">
-                                            <textarea class = "textarea_file" id="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0" name="{{param_quest.text}}_2_{{i}}_{{param_quest.id}}_{{j}}_1_parameter_0"></textarea>
-                                        </div>
-                                        <h5><a href="javascript:void(0);" onclick="return remove_fields({{param_quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                    </div>
-                                    {% endif %}
-
-                                    {% endfor %}
-                                </div>
-                                <div class="form-group addmilestone click_buttons">
-                                        <div class="link-left">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_add_clone_{{i}}_{{j}}">Add more</a>
-                                        </div>
-                                        <div class="link-center">
-                                            <input type="hidden"/>
-                                            <a href ="javascript:void(0);" class ="para_add_remove_{{i}}_{{j}}">Remove</a>
-                                        </div>
-                                </div>
-                        {% endif %}
-
-<!--                            this is for budget table display-->
-
-                            {% if quest.slug == "budget-utlization-tranches" %}
-                                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
-                                    <p>{{quest.text|title}}</p>
-                                    <div class="table-responsive sticky-table sticky-headers sticky-ltr-cells table-wrap" style="margin-bottom: 20px;">
-                                        <table class="table table-boardered table-striped table-striped budget_table">
-                                            <thead>
-                                            <tr class="sticky-row">
-                                              <th  class="sticky-cell">Super Category</th>
-                                              <th  class="sticky-cell">Heading</th>
-                                              <th  class="sticky-cell">Subheading</th>
-                                              <th  class="sticky-cell">Total Planned</th>
-                                              <th  class="sticky-cell">Total Utilized</th>
-                                              <th  class="sticky-cell">Units Type</th>
-                                              <th>Units</th>
-                                              <th>Rate</th>
-                                              <th> Planned</th>
-                                              <th> Utilized</th>
-                                              <th>Variance</th>
-                                            </tr>
-                                            </thead>
-                                        <tbody class="budget_section">
-                                            {% for row in budget_period %}
-                                            <tr class = "data_row">
-                                                {% get_budget_lineitem row projectobj as lineitemobj %}
-                                                <td class="sticky-cell"> {{lineitemobj.category.name}}</td>
-                                                <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
-                                                <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
-                                                {% get_line_total row projectobj as line_total %}
-                                                <td align="right" class="sticky-cell">{{line_total}}</td>
-                                                {% get_utlizedline_total row projectobj as utilized_amount %}
-                                                <td align="right" class="sticky-cell">{{utilized_amount}}</td>
-                                                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
-                                                {% get_month_quarter_details row v i projectobj as line_itemobj %}
-                                                   <td align="right" class=""> {{line_itemobj.unit}} </td>
-                                                    <td align="right" class=""> {{line_itemobj.rate}}  </td>
-                                                     <td align="right" class=""> {{line_itemobj.planned_unit_cost}}  </td>
-                                                     <td align="right" class=""> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost}} {% else %} 0 {% endif %}</td>
-                                                     <td align="right" class=""> {% if line_itemobj.variance %} {{line_itemobj.variance}} {% else %} 0 {% endif %}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                        </table>
-                                    </div>
-                                    <br>
-                                {% get_tranches v tranche_list as filtered_tranches %}
-                                {% if filtered_tranches.1.planned_amount %}
-                                <div class="table-responsive">
-                                    <table class="table table-boardered budget_table tab-resp1" cellpadding="0" cellspacing="0" border="0">
-                                      <thead>
-                                      <tr>
-                                        <th align="center">Tranche No.</th>
-                                        <th>Due Date</th>
-                                        <th>Planned Amount</th>
-                                        <th>Actual Disbursement</th>
-                                        <th>Recommended Disbursement</th>
-                                        <th> Utilized</th>
-                                      </tr>
-                                      </thead>
-                                      <tbody>
-                                      {% for i in filtered_tranches.0 %}
-                                      {% with forloop.counter as rnum %}
-                                      <tr>
-                                        <td>{{rnum}}</td>
-                                        <td>{{i.due_date}}</td>
-                                        <td> Rs. {% if  i.planned_amount %} {{i.planned_amount}} {% else %} 0 {% endif %}</td>
-                                        <td> Rs. {% if  i.actual_disbursed_amount %} {{i.actual_disbursed_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.recommended_amount %} {{i.recommended_amount}}  {% else %} 0 {% endif %} </td>
-                                        <td> Rs. {% if  i.utilized_amount %} {{i.utilized_amount}}  {% else %} 0 {% endif %} </td>
-                                      </tr>
-                                      {% endwith %}
-                                      {% endfor %}
-                                      <tr bgcolor="#f1f3e9" class="table-tr">
-                                        <td>Total</td>
-                                        <td>&nbsp;</td>
-                                        <td>Rs. {% if planned_amount %} {{filtered_tranches.1.planned_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if actual_disbursed_amount %}{{filtered_tranches.1.actual_disbursed_amount}} {% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if recommended_amount %} {{filtered_tranches.1.recommended_amount}}{% else %} 0 {% endif %} </td>
-                                        <td>Rs. {% if utilized_amount %}{{filtered_tranches.1.utilized_amount}} {% else %} 0 {% endif %}</td>
-                                      </tr>
-                                      </tbody>
-                                    </table>
-                                </div>
-                                {% endif %}
-                                    <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                                </div>
-                            {% endif %}
-
-                            {% if quest.slug == "about-the-budget" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
-                                <p>{{quest.text|title}}</p>
-                                <div class="">
-                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
-                                </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                            </div>
-                            {% endif %}
-                            {% if quest.slug == "risks-mitigation" %}
-                            <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
-                                <p>{{quest.text|title}}</p>
-                                <div class="">
-                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
-                                </div>
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                            </div>
-                            {% endif %}
-
-                            {% endfor %} <!-- this for ends for previous question list -->
-                    {% else %}
-                        {% get_final_questions current_questionlist 4 reportupdates.1 v report_id "false" as final_questionlist %}
-                            {% for quest in final_questionlist.0 %} <!-- this is for loop for  if object is present -->
-<!--                             this is for auto populate text -->
-                            {% if quest.qtype == "APT" %}
-                            <div class="col-md-6 report_text" id="ques_{{quest.id}}_{{j|add:previous_len}}">
-                                <p>{{quest.text|title}}</p>
-                                {% get_previous_question_value quest v i projectreportobj reportupdates as text %}
-                                <input type="text" class="input_section" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}" >
-                                <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,{{reportupdates.1}},'{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                            </div>
-                            {% endif %}
-
-<!--                            this is for milestone and activity graph-->
-                        {% if quest.slug == "milestones-activities-snapshot" %}
-                            {% get_gantt_details v projectobj as taskdict %}
-                            {% if taskdict.activities or taskdict.tasks %}
-                            <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
-                                <p>{{quest.text|title}}</p>
-<!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
-                                <div class=" white-box ">
-                            <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
-
-                         </div>
-                         <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
-                            </div>
-                            {% endif %}
-
-<!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
-
-                              <script src="/static/js/jsgantt.js" type="text/javascript"></script>
-                            <script>
-                                {% for i,v in currentquarter_list.items %}
-                                    {% get_gantt_details v projectobj as taskdict %}
-                                    var jsonData = {{taskdict|safe}}
-                                    console.log(jsonData.tasks);
-                                var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
-                                // console.log(jsonData.tasks);
-                                // Get today and tomorrows date
-                                var cur = new Date();
-    var tom = new Date();
-    var project = "";
-    project = jsonData.project[0].slug;
-    tom.setDate(tom.getDate() + 1);
-    var curDate = cur.getFullYear() + '-' +
-      (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
-      (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
-
-    var tomDate = tom.getFullYear() + '-' +
-      (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
-      (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
-    // Get today and tomorrows date
-    $.each(jsonData.supercategories, function (i) {
-      superId = 1, activity_type = 'Core', taskCompletion = 0, superName = 'Super Category';
-      if (this.id != null) {
-        superId = this.id;
-      }
-      superName = this.name;
-      var superDesc = this.description;
-      if (superName.toLowerCase() != "location") {
-        g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-          '', superDesc, g));
-      }
-      // console.log("Super");
-      // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-      //   '', superDesc);
-    });
-    $.each(jsonData.activities, function (i) {
-      var activityId = 11,
-        superId = 1,
-        activity_type = 'Core',
-        taskCompletion = 0,
-        activityName = 'Activity';
-      if (this.id != null) {
-        activityId = this.id.toString();
-      }
-      if (this.super_category != null) {
-        superId = this.super_category;
-        if (this.id != null) {
-          activityId = this.super_category.toString() + activityId;
-        }
-      }
-      // console.log("ActID", activityId);
-      activityName = this.name;
-      var activityDesc = this.description;
-      g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
-        1, '', '',
-        activityDesc, g));
-      // console.log("Act");
-      // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
-    });
-    $.each(jsonData.tasks, function (i) {
-      var taskId = 111,
-        tempId = 1,
-        activityId = 11,
-        superId = 1,
-        activity_type = 'Core',
-        taskCompletion = 0,
-        taskName = 'Task',
-        taskStatus = 'gtaskred',
-        pStartDate = curDate,
-        pEndDate = tomDate,
-        eStartDate = curDate,
-        eEndDate = tomDate,
-        slug = "",
-        link = "";
-      if (this.id != null) {
-        taskId = this.id;
-        tempId = this.id;
-      }
-      // added the script 16th-Nov
-      if(this.task_progress != null || this.task_progress != undefined){
-            taskCompletion = this.task_progress;
-      }
-      // ended th script
-      if (this.activity != null) {
-        activityId = this.activity;
-      }
-      if (this.slug != null) {
-        slug = this.slug;
-      }
-      // activity = jsonData.activities.filter(function( i ) {
-      //   if(i.id == activityId){return i.super_category;}
-      // });
-      $.each(jsonData.activities, function () {
-        if (this.id == activityId) {
-          activity_type = this.activity_type;
-          if (this.super_category != null) {
-            superId = this.super_category;
-          }
-        }
-      });
-      if (superId != null && activityId != null && taskId != null) {
-        taskId = superId.toString() + activityId.toString() + taskId.toString();
-      }
-      if (superId != null && activityId != null) {
-        activityId = superId.toString() + activityId.toString();
-      }
-      activityId = parseInt(activityId);
-      // console.log("Slug and project", slug,project);
-      if ( slug != null && project != ""){
-        // var domain = "";
-        // if(window.location.hostname == ""){
-        //   domain = "http://goodcsrpmu.mahiti.org";
-        // }
-        link = "/managing/my-tasks/details/?slug="+project+"&key=projecttasks&status=1#"+slug;
-      }
-      taskName = this.name;
-      pStartDate = this.start_date;
-      pEndDate = this.end_date;
-      eStartDate = this.expected_start_date;
-      eEndDate = this.expected_end_date;
-      if (activity_type == "Core") {
-        switch (this.status) {
-          case "Ongoing":
-            taskStatus = 'gtaskblue';
-            break;
-          case "Open":
-            taskStatus = 'gtaskyellow';
-            break;
-          case "Close":
-            taskStatus = 'gtaskgreen';
-            break;
-          default:
-            taskStatus = 'gtaskblue';
-            break;
-        };
-      }
-      // For Milestones
-      var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
-      $.each(jsonData.milestones, function (i) {
-        var mileId = 111,
-        mileStatus = 'gmilestone redmile '
-        depTask = [];
-        depTask = this.task;
-        mileName = this.name;
-        if (this.id != null) {
-          mileId = this.id;
-        }
-        // added the script 16th-Nov
-        maxDate = new Date('1970-01-01');
-        var tempArray = [];
-        var n = 0;
-        $.each(depTask, function (index, value) {
-          console.log('value', n);
-          tempArray.push({
-            'id': value
-          });
-          for (var i = 0; i < jsonData.tasks.length; i++) {
-            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {
-              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();
-            }
-            if (i == (depTask.length - 1)) {
-
-              console.log('Array', depTask)
-              console.log('Max Date',Math.max(tempArray.date));
-            }
-          }
-          n++;
-        });
-        console.log("tempArray", tempArray);
-        //end of  the added script
-        // if (depTask.length == 1) {
-        var ln = depTask.length;
-        ln--;
-        console.log('depTask', depTask[0]);
-        if (depTask[ln] == tempId) {
-          var d1 = new Date(eEndDate);
-          var d2 = new Date(eEndDate);
-          d1.setDate(d1.getDate() + 1);
-          d2.setDate(d2.getDate() + 11);
-          var mileStart = d1.getFullYear() + '-' +
-            (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
-            (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
-
-          var mileEnd = d2.getFullYear() + '-' +
-            (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
-            (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
-          //Check for milestone complete or calculate delay
-          if (completionDate == null) {
-            mileStatus = 'gmilestone redmile '
-          } else {
-            var d3 = new Date(this.overdue);
-            var d4 = new Date(completionDate);
-            var timeDiff = (d3.getTime() + 86400) - d4.getTime();
-            var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
-            if (diffDays < 0) {
-              var dur = rem = Math.abs(diffDays);
-              if (dur < 8) {
-                mileName += " - Delayed by " + dur + " day(s)"
-              };
-              if (dur >= 8 && dur < 30) {
-                dur = Math.floor(dur / 7);
-                //add 16th- Nov
-                rem = Math.floor(rem % 7);
-                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";
-                };
-                //end
-              if (dur >= 30 && dur < 365) {
-                dur = Math.floor(dur / 30);
-                //add 16th-Nov
-                rem = Math.floor(rem % 30);
-                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";
-              };
-                //end
-              if (dur >= 365) {
-                dur = Math.floor(dur / 365);
-                //added script
-                rem = Math.floor(rem % 365);
-                mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
-              };
-              //ended script
-              console.log('Diff days', mileName);
-            } else {
-              mileStatus = 'gmilestone greenmile '
-              var dur = rem = Math.abs(diffDays);
-              if (dur == 0) {
-                 mileName += " - On track"
-              };
-              if (dur < 8) {
-                mileName += " - Ahead by " + dur + " day(s)"
-              };
-              if (dur >= 8 && dur < 30) {
-                dur = Math.floor(dur / 7);
-                rem = Math.floor(rem % 7);//new line
-                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";	//modified
-              };
-              if (dur >= 30 && dur < 365) {
-                dur = Math.floor(dur / 30);
-                rem = Math.floor(rem % 30);//new line
-                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";//modified
-              };
-              if (dur >= 365) {
-                 dur = Math.floor(dur / 365);
-                rem = Math.floor(rem % 365);//new line
-                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";//modified
-                 };
-              console.log('Diff days', mileName);
-            }
-          }
-          g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
-            mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));//changed null to 100
-        }
-      });
-      //Draw task after drawing milestone
-      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, link, 0,
-        '', taskCompletion , 0, activityId, 1, '', '', '', g ,pStartDate, pEndDate));
-    });
-
-    g.setShowStartDate(0);
-    g.setShowEndDate(0);
-    g.setShowRes(0);
-    g.setShowDeps(0);
-    g.setShowDur(0);
-    g.setUseToolTip(1);
-    g.setWeekColWidth(50);
-    g.setWeekMajorDateDisplayFormat('mon yyyy');
-    g.setWeekMinorDateDisplayFormat('W w');
-    g.setScrollTo('today');
-    g.setTimer(5);
-    g.setShowTaskInfoLink(1);
-    g.Draw();
-    var collideDiv
-    function collision($div1, $div2) {
-      var x1 = $div1.offset().left;
-      var y1 = $div1.offset().top;
-      var h1 = $div1.outerHeight(true);
-      var w1 = $div1.outerWidth(true);
-      var b1 = y1 + h1;
-      var r1 = x1 + w1;
-      var x2 = $div2.offset().left;
-      var y2 = $div2.offset().top;
-      var h2 = $div2.outerHeight(true);
-      var w2 = $div2.outerWidth(true);
-      var b2 = y2 + h2;
-      var r2 = x2 + w2;
-
-      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2){ return false;}
-      else{
-            collideDiv = $div2;
-             return true;
-    }
-    }
-    var count = 0,
-      padding = 25,
-      arrayTask = [],
-      collide = false;
-    $('.gselector').hide();
-      var previous = null;
-      var prePrevious, pre2, pre3= null;
-      var mile = false;
-      $(".gtaskbarcontainer").each(function (index) {
-        currParent = $(this).parent().parent().parent();
-        listParent = currParent.attr('id').replace('row', '');
-        if ($(this).hasClass('gmilecontainer')) {
-          mile = true;
-        }
-        if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
-          .attr('id')) {
-          // console.log("This ID", $(this).attr('id'), mile);
-          if (mile) {
-
-          }
-          if (collision($(this), $(previous)) || collision($(this), $(prePrevious))) {
-            $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
-              if ($(this).css('top') == '-5px') {
-                $(this).css('top', '0px');
-              }
-            });
-            collide = true;
-            $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-            if (count == 0) {
-              $(previous).css('top', '0px');
-              count++;
-            }
-            listParentDiv = $('#' + listParent);
-            if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
-              listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
-              currParent.css({
-                'height': parseInt(currParent.css('height')) + 25 + 'px',
-                'vertical-align': 'top'
-              });
-            }
-          }
-        } else {
-          count = 0;
-          arrayTask = [];
-          collide = false;
-          $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
-            top: '-5px'
-          });
-          mile = false;
-        }
-        prePrevious = previous;
-        previous = this;
-      });
-                                // end of the script added 16th-Nov
-                                 {% endfor %}
+                                
                             </script>
 <!--            SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES                -->
 
@@ -2211,8 +2218,6 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
-                            {% get_gantt_details v projectobj as taskdict %}
-                            {% if taskdict.activities or taskdict.tasks %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
@@ -2221,7 +2226,6 @@
                          </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
-                            {% endif %}
                         {% endif %}
 
 <!--                            this is for about the quarter-->
@@ -2354,11 +2358,6 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
-
-                            {% get_gantt_details v projectobj as taskdict %}
-                            {% taskdict_json taskdict as taskdict_json %}
-                        
-                            {% if taskdict_json.activities or taskdict_json.tasks %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
@@ -2367,7 +2366,6 @@
                          </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
-                        {% endif %}
                         {% endif %}
 
 <!--                            this is for about the quarter-->
@@ -3014,24 +3012,24 @@ $(document).ready(function() {
 <script>
     //Toggle
 
-    		 $('.user-menu').on('click',function(){
+         $('.user-menu').on('click',function(){
               $('.dropdown-menu').slideToggle();
 
             });
-    		 $(document).ready(function(e) {
-    	/*Content Show/Hide */
-    	$('.hide-cont').hide();
-    	$('.close-cont').hide();
-    	$('.view-cont').click(function(){
-    		$('.hide-cont').slideDown(350);
-    		$('.close-cont').show();
-    		$('.view-cont').hide();
-    	});
-    	$('.close-cont').click(function(){
-    		$('.hide-cont').slideUp(350);
-    		$('.close-cont').hide();
-    		$('.view-cont').show();
-    	});
+         $(document).ready(function(e) {
+      /*Content Show/Hide */
+      $('.hide-cont').hide();
+      $('.close-cont').hide();
+      $('.view-cont').click(function(){
+        $('.hide-cont').slideDown(350);
+        $('.close-cont').show();
+        $('.view-cont').hide();
+      });
+      $('.close-cont').click(function(){
+        $('.hide-cont').slideUp(350);
+        $('.close-cont').hide();
+        $('.view-cont').show();
+      });
      });
 
 </script>
@@ -3058,15 +3056,15 @@ $(document).ready(function() {
 
     $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
 
-	var li_Count = $('.time-line li').length;
-	$(".time-line").css('width', 200*li_Count);
+  var li_Count = $('.time-line li').length;
+  $(".time-line").css('width', 200*li_Count);
   });
 
-	$(document).ready(function()
-	{
-		  $("#scrollbar1").tinyscrollbar({ axis: "x"});
+  $(document).ready(function()
+  {
+      $("#scrollbar1").tinyscrollbar({ axis: "x"});
 
-	});
+  });
 </script>
 <script>
     // Change the selector if needed
@@ -3094,7 +3092,7 @@ $(document).ready(function() {
     {% for i,v in futurequarter_list.items %}
         {% get_gantt_details v projectobj as taskdict %}
         var jsonData = {{taskdict|safe}}
-        var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
+        var g = new JSGantt.GanttChart(document.getElementById('gwContainer_next'), 'week');
         // console.log(jsonData.tasks);
         // Get today and tomorrows date
         var cur = new Date();
@@ -3564,4 +3562,3 @@ $(document).ready(function() {
 </script>
 
 {% endblock %}
-
