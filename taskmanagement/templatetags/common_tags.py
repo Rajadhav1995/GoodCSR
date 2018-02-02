@@ -344,3 +344,12 @@ def get_monthly_date(period):
     period = start_date+' to '+ end_date
     return period
 
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+import json
+@register.assignment_tag
+def taskdict_json(taskdict):
+    taskdict = json.loads(taskdict)
+    return taskdict
