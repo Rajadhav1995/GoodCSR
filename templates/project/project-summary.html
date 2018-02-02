@@ -571,6 +571,9 @@ under 0 Milestones</h5>
         </div>
     </div>
 
+
+{% taskdict_json taskdict as taskdict_json %}
+{% if taskdict_json.activities or taskdict_json.tasks %}
     <div class=" white-box ">
         <div class="col-md-12 legendContainer">
           <ul class="legend">
@@ -586,6 +589,8 @@ under 0 Milestones</h5>
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
         </div>
   </div>
+{% endif %}
+
     <div class="white-box-left user-list-box">
     <div class="table-responsive">
     <table class="table-resp" cellpadding="0" cellspacing="0" border="0">

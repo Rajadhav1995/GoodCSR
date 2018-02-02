@@ -869,6 +869,9 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
+                        {% get_gantt_details v projectobj as taskdict %}
+                            {{taskdict.activities}}
+                            {% if taskdict.activities and taskdict.tasks %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
@@ -889,6 +892,7 @@
   </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
+                            {% endif %}
                         {% endif %}
 
 <!--                            this is for about the quarter-->
@@ -1154,6 +1158,8 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
+                            {% get_gantt_details v projectobj as taskdict %}
+                            {% if taskdict.activities or taskdict.tasks %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
@@ -1163,6 +1169,7 @@
                          </div>
                          <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
+                            {% endif %}
 
 <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
 
@@ -1171,6 +1178,7 @@
                                 {% for i,v in currentquarter_list.items %}
                                     {% get_gantt_details v projectobj as taskdict %}
                                     var jsonData = {{taskdict|safe}}
+                                    console.log(jsonData.tasks);
                                 var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
                                 // console.log(jsonData.tasks);
                                 // Get today and tomorrows date
@@ -1850,6 +1858,8 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
+                            {% get_gantt_details v projectobj as taskdict %}
+                            {% if taskdict.activities or taskdict.tasks %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
@@ -1858,6 +1868,7 @@
                          </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
+                            {% endif %}
                         {% endif %}
 
 <!--                            this is for about the quarter-->
@@ -1990,6 +2001,11 @@
 
 <!--                            this is for milestone and activity graph-->
                         {% if quest.slug == "milestones-activities-snapshot" %}
+
+                            {% get_gantt_details v projectobj as taskdict %}
+                            {% taskdict_json taskdict as taskdict_json %}
+                        
+                            {% if taskdict_json.activities or taskdict_json.tasks %}
                             <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
 <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
@@ -1998,6 +2014,7 @@
                          </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,{{reportupdates.1}},'{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
+                        {% endif %}
                         {% endif %}
 
 <!--                            this is for about the quarter-->

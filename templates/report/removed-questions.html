@@ -797,6 +797,9 @@
                    <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                    <p>{{quest.text|title}}</p>
                    <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
+                   {% get_gantt_details v projectobj as taskdict %}
+                    {% taskdict_json taskdict as taskdict_json %}
+                    {% if taskdict_json.activities or taskdict_json.tasks %}
                    <div class=" white-box ">
         <div class="col-md-12 legendContainer">
           <ul class="legend">
@@ -812,6 +815,7 @@
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
         </div>
   </div>
+  {% endif %}
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
                </div>
                {% endif %}
@@ -1069,6 +1073,9 @@
                <div class="col-md-12 report_text " style="padding:0px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                    <p>{{quest.text|title}}</p>
                    <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
+                   {% get_gantt_details v projectobj as taskdict %}
+                    {% taskdict_json taskdict as taskdict_json %}
+                    {% if taskdict_json.activities or taskdict_json.tasks %}
                    <div class=" white-box ">
         <div class="col-md-12 legendContainer">
           <ul class="legend">
@@ -1084,6 +1091,7 @@
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
         </div>
   </div>
+  {% endif %}
                    <h5><a href="javascript:void(0);" onclick="return add_fields({{quest.id}},'{{final_questionlist.1}}','{{j|add:previous_len}}')">Add</a></h5>
                </div>
                <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->

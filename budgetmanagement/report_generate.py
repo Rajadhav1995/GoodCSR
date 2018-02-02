@@ -809,13 +809,27 @@ def get_index_contents(slug,report_id):
             # so that we can render the quarters based on the name of the content and iterate it
             # same way for current and next quarters is done
         if previousquarter_list:
-            contents['2'] = 'Previous Quarter Updates'
-            quarters['Previous Quarter Updates'] = previousquarter_list
+            if report_obj.report_type==1:
+                contents['2'] = 'Previous Quarter Updates'
+                quarters['Previous Quarter Updates'] = previousquarter_list
+            else:
+                contents['2'] = 'Previous Month Updates'
+                quarters['Previous Month Updates'] = previousquarter_list
         if currentquarter_list:
-            contents['3'] = 'Current Quarter Updates'
-            quarters['Current Quarter Updates'] = currentquarter_list
+            if report_obj.report_type==1:
+                contents['3'] = 'Current Quarter Updates'
+                quarters['Current Quarter Updates'] = currentquarter_list
+            else:
+                contents['3'] = 'Current Month Updates'
+                quarters['Current Month Updates'] = currentquarter_list
+
         if futurequarter_list:
-            contents['4'] = 'Next Quarter Updates'
+            if report_obj.report_type==1:
+                contents['4'] = 'Next Quarter Updates'
+                quarters['Next Month Updates'] = futurequarter_list
+            else:
+                contents['4'] = 'Next Month Updates'
+                quarters['Next Month Updates'] = futurequarter_list
             import operator
             # here we getting all next quarter so we taking first quarter 
             sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])

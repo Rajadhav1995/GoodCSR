@@ -316,7 +316,7 @@
                     {% if value == k %}
                     {% for ky,val in v.iteritems %}
                     {% get_quarter_names ky number_dict as quarter_name %}
-                    <h3><span> {{quarter_name}} Quarter - ({{val}})</span><span></span></h3>
+                    <h3><span>{{quarter_name}} {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {{text}} {% endif %} - ({{val}})</span><span></span></h3>
                     {% endfor %}
                     {% endif %}
                     {% endfor %}
@@ -458,11 +458,18 @@
                     </div>
                 </div>
                 {% endif %}
+                {% if sub.q_name == 'project_objective' %}
+            <div class="location margin-top40">
+                <p>Objective of the project</p>
+                <h5>{{sub.answer | striptags}}</h5>
+            </div>
+            {% endif %}
                 {% endfor %}
                 {% endif %}
                 {% endfor %}
             </div>
             
+
             <footer>
                 <hr>
                 <img src="/static/img/report/logo.png" style="float:left">
@@ -470,45 +477,11 @@
                 <h3 style="float:right;margin-top:0px;">{{page_number}}</h3>
             </footer>
         </div>
-        <header style="margin-top:50px">
-            <div>
-                <img src="/static/img/report/bottomslider.jpg" style="width:100%">
-            </div>
-        </header>
         <!--third page -->
         </div>
         <!--                    third page contents ends -->
         <!--        fourth page contents starts-->
         
-        <div class="container">
-            <div class="margin_25">
-                <h1 style="font-size:20px">{{answer_list.report_name}}</h1>
-                <div class="float_right">
-                    {% get_questions locals_list.block1 projectreportobj 1 "false" as ques %}
-                    {% for i in ques.0 %}
-                    {% if i.q_type == 'OT' %}
-                    {% get_auto_populated_questions i.q_id  projectobj projectreportobj 1 "false" as sub_questions %}
-                    {% for sub in sub_questions.0 %}
-                    {% if sub.q_name == 'client_logo' %}
-                    <img src="{{sub.answer}}" height = 70 width = 100></li>
-                    {% endif %}
-                    {% if sub.q_name == "logos" %}
-                    <img src="{{sub.answer}}" height = 70 width = 100></li>
-                    {% endif %}
-                    {% if sub.q_name == 'project_objective' %}
-            <div class="location margin-top40 page_height">
-                <p>Objective of the project</p>
-                <h5>{{sub.answer | striptags}}</h5>
-            </div>
-            {% endif %}
-                    {% endfor %}
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <hr>
-
-        </div>
         {% endif %}
         <!--fourth page contents end-->
         <!--fifth page contents starts that is previous quarter updates that is milestone and timeline progress -->
@@ -712,7 +685,7 @@
                                         {% get_budget_period projectobj budgetobj v as budget_period  %}
                                     {% else %}
                                         {% get_month_budget_period projectobj budgetobj v as budget_period  %}
-                                        {% endif %}
+                                    {% endif %}
                                         {% for row in budget_period %}
                                         <tr class = "data_row">
                                             {% get_row_details row i projectobj as lineitemobj %}
@@ -869,12 +842,15 @@
                 <div class="col-md-12 report_text " style="padding:0px">
                     <p class="color_green" style="border-bottom:0px">Milestones & Activities1</p>
                     <!--                                <img src="/static/img/imgpage0802.jpg" style="width:100%">-->
+                    {% get_gantt_details v projectobj as taskdict %}
+                    {% taskdict_json taskdict as taskdict_json %}
+                    {% if taskdict_json.activities or taskdict_json.tasks %}
                     <div class=" white-box ">
         <div class="col-md-12 legendContainer">
           <ul class="legend">
               <li><span class="taskC"></span> Completed  </li>
-              <li><span class="taskO"></span> In progress </li>
-              <li><span class="taskB"></span> Not started </li>
+              <li><span class="taskO"></span> InProgress </li>
+              <li><span class="taskB"></span> Not-Started </li>
               <li><span class="taskN"></span> Non-Core </li>
               <li><span class="mileC"></span> On-Time Milestone </li>
               <li><span class="mileD"></span> Delayed Milestone </li>
@@ -884,6 +860,7 @@
         <div id="gwContainer_current" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
         </div>
   </div>
+  {% endif %}
                 </div>
             </div>
             <!--     SCRIPT FOR GANTT CHART CURRENT QUARTER UPDATES STARTS HERE                       -->
@@ -1547,7 +1524,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            {% get_budget_period projectobj budgetobj v as budget_period  %}
+                            {% if projectreportobj.report_type == 1 %}
+                                        {% get_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% else %}
+                                        {% get_month_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% endif %}
                                 {% for row in budget_period %}
                                 <tr class = "data_row">
                                     {% get_row_details row i projectobj as lineitemobj %}
@@ -1624,7 +1605,7 @@
                     </div>
                 </div>
                 {% endif %}
-                </div>
+                
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
@@ -1632,6 +1613,7 @@
                     {% get_answer_question quest reportupdates.1 as text %}
                     <h5>{{text}}
                     </h5>
+                </div>
                 </div>
                 {% endif %}
                 </div>
@@ -1795,7 +1777,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% get_budget_period projectobj budgetobj v as budget_period  %}
+                                {% if projectreportobj.report_type == 1 %}
+                                        {% get_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% else %}
+                                        {% get_month_budget_period projectobj budgetobj v as budget_period  %}
+                                    {% endif %}
                                 {% for row in budget_period %}
                                 <tr class = "data_row">
                                     {% get_row_details row i projectobj as lineitemobj %}

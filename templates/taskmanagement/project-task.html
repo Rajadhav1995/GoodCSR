@@ -18,7 +18,14 @@ font-size: 14px;
 <div class="clear"></div>
 
 <!--Content part starts-->
+<!--<div class="select-area search_area">-->
+<!--      	<label style = "margin-top: 28px;">Search</label>-->
+<!--   -->
+<!--		<input id="activate_tagator2" type="text" class="form-control" placeholder="Search" data-tagator-show-all-options-on-focus="true" data-tagator-autocomplete="['Budget', 'Report', 'Document', 'Files', 'Budget', 'Report', 'Document', 'Task', 'Worksheet']">-->
+<!--        <img onclick="javascript:exportToForm()" src="/static/img/search-icon.png">-->
+<!--         </div>-->
 <section class="content-part">
+    
    <div class="row">
       <div class="left-task">
 
@@ -56,15 +63,15 @@ font-size: 14px;
 <!--            </div>-->
          </div>
 
-         <div id="boxscroll-pad">
-            <div class="task-head">
+         <div id="boxscroll-pad" id="dest">
+            <div class="task-head" >
                <h4>Overdue</h4>
                <span>{% if over_due %}{{over_due | length }} {% else %} 0{% endif %}</span>
             </div>
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.start_date |date:'jS F Y'}} - {{task.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
+               <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% endif %}
             </ul>
@@ -75,10 +82,10 @@ font-size: 14px;
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.start_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li></div>
+               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.end_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
-               <li><a href="javascript:void(0);">No tasks</a></li>
+               <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
             <div class="task-head">
@@ -88,10 +95,10 @@ font-size: 14px;
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.start_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li></div>
+               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.end_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
-               <li><a href="javascript:void(0);">No tasks</a></li>
+               <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
             <div class="task-head">
@@ -101,10 +108,10 @@ font-size: 14px;
             <ul>
                {% if remain_tasks %}
                {% for t in remain_tasks %}
-               <div class="activity act_{{t.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.start_date|date:'jS F Y'}} - {{t.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
+               <div class="activity act_{{t.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.end_date|date:'jS F Y'}} - {{t.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
-               <li><a href="javascript:void(0);">No tasks</a></li>
+               <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
          </div>
@@ -557,7 +564,7 @@ font-size: 14px;
 
             var progress = $('#xp_'+key).val();
             if (progress != 'None'){
-                alert("Task completion status is updated to "+progress+" % successfully");
+                alert("Task completion status is updated to "+progress+"% successfully");
             }
             $('.range-control-handle').css('left',progress+'%');
 
@@ -632,6 +639,32 @@ $(document).ready(function() {
             $('html, body').animate({scrollTop:0},'1000');
         }
     });
+</script>
+<script>
+function exportToForm(){
+  var selectedText = document.getElementById("activate_tagator2").value;
+  debugger;
+  $("#dest li.data_row").each(function(){
+    if ($(this).text().search(new RegExp(selectedText, "i")) < 0) {
+        $(this).fadeOut();
+     } else {
+         $(this).show();
+    }
+});
+
+}
+</script>
+<script>
+jQuery("#activate_tagator2").keyup(function () {
+    var filter = jQuery(this).val();
+    jQuery("li.data_row").each(function () {
+        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+            jQuery(this).hide();
+        } else {
+            jQuery(this).show()
+        }
+    });
+});
 </script>
 
 
