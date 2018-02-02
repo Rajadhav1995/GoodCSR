@@ -104,5 +104,11 @@ def check_menu_permission(user,menuname):
     
 @register.assignment_tag
 def get_menu_list():
-    menu = Menus.objects.filter(parent=None)
+    menu = Menus.objects.filter(parent=None,main_menu=True,active=2)
     return menu
+
+@register.assignment_tag
+def get_special_menu_list():
+    menu = Menus.objects.filter(parent=None,main_menu=False,active=2)
+    return menu
+
