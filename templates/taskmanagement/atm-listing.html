@@ -1,6 +1,6 @@
 {% extends 'project/project-summary.html' %}
 {% load urs_tags %}
-
+{% load common_tags %}
 <!--Content part starts-->
 
 {% block content %}
@@ -14,6 +14,8 @@
   <div class=" white-box ">
   <div id="Super_Completion" style="width: 100%;float: left;">Super Category Completion</div>
   </div>
+{% taskdict_json taskdict as taskdict_json %}
+{% if taskdict_json.activities or taskdict_json.tasks %}
   <div class=" white-box ">
         <div class="col-md-12 legendContainer">
           <ul class="legend">
@@ -29,6 +31,8 @@
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px';position: 'relative'; height: 'auto'; width:'100%';"></div>
         </div>
   </div>
+{% endif %}
+
 <div class="green-box">
    <div class="green-box-lft">
       <h2>Activities</h2>

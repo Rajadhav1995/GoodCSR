@@ -108,7 +108,7 @@
                                   <td> <input type="text" name = "comment_{{i}}_{{j}}_{{line_itemobj.id}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
                                  <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
                                  {% get_line_attach line_itemobj as attach %}
-                                 <td><input type="file" class = 'file_input_id' style="border: 0px;" name = "attach_{{i}}_{{j}}_{{line_itemobj.id}}" id="attach_{{i}}_{{j}}" onchange = "return attach_error()" value="{% if attach %}{{attach.attachment_file}} {% else %} {% endif %}">{% if attach %}<a href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a> {% endif %}</td>
+                                 <td><input type="file" class = 'file_input_id' style="border: 0px;" name = "attach_{{i}}_{{j}}_{{line_itemobj.id}}" id="attach_{{i}}_{{j}}" onchange = "return attach_error()" value="{% if attach %}{{attach.attachment_file}} {% else %} {% endif %}">{% if attach %}<a style="float:left" href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a> {% endif %}</td>
                                      
                                  <script type="text/javascript">
                                     function attach_error(){
