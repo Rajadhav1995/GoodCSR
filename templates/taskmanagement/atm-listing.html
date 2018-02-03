@@ -706,8 +706,16 @@ $(document).ready(function(){
 <script src="http://code.highcharts.com/highcharts-more.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script>
+    console.log('gSuper',gSuperName,gSuperComp)
     if (gSuperName.length > 0) {
       var SuperRemain = new Array();
+      $.each(gSuperName,function(i){
+        console.log("gSuper",gSuperComp[i],gSuperName[i])        
+        if(gSuperName[i]==""){
+          gSuperComp.splice(i,1);
+          gSuperName.splice(i,1);
+        }
+      })
       for (i = 0; i < gSuperComp.length; i++) {
         SuperRemain.push(100 - gSuperComp[i]);
         //SuperRemain = SuperRemain.reverse();
@@ -799,6 +807,16 @@ $(document).ready(function(){
 <script>
   var pvaData=[];
   var pvaSorted=[];
+    function getNextWeek(y,w) {
+      var simple = new Date(y, 0, 9 + (w) * 7);
+      var dow = simple.getDay();
+      var ISOweekStart = simple;
+      if (dow <= 4)
+          ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+      else
+          ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+      return ISOweekStart;
+    }
     temp = {{ser_hist|safe}}
     $.each(temp,function(i){
       pvaData[i] = temp[i].fields;
@@ -814,22 +832,42 @@ $(document).ready(function(){
       this.modified.setHours(0, 0, 0, 0);
       this.modified = new Date(this.modified);  
     })
+    $.each(jsonData.tasks,function(){
+      var temp = {};
+      temp.active = 2;
+      temp.activity = this.activity;
+      temp.name = this.name;
+      temp.actual_start_date = this.actual_start_date;
+      temp.actual_end_date = this.actual_end_date;
+      temp.assigned_to = this.assigned_to;
+      temp.created = this.start_date;
+      temp.end_date = this.end_date;
+      temp.id = this.id;
+      temp.modified = this.actual_end_date;
+      temp.slug = this.slug;
+      temp.start_date = this.start_date;
+      temp.task_progress = this.task_progress
+      pvaSorted.push(temp);
+    })
     //Get rows with unique date and task
     var flags = {},i;
     for( i=0; i<pvaData.length; i++) {
         if( flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()]) continue;
         flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
-        console.log("Dates",(new Date(pvaData[i].modified)))
+        if(pvaData[i].end_date==null){
+        pvaData[i].end_date = pvaData[i].modified;
+        }
         pvaSorted.push(pvaData[i]);
     }
-
+    console.log("pvaData",pvaSorted)
     var week = d3.timeFormat("%Y-%U");
 
-    var nest = d3.nest().key(function (d) {
-        return week(new Date(d.modified));
+    var actnest = d3.nest().key(function (d) {
+        return week(new Date(d.actual_end_date));
     }).entries(pvaSorted);
+    console.log("Check actual",actnest);
     
-    var nest2 = d3.nest().key(function (d) {
+    var plannest = d3.nest().key(function (d) {
         return week(new Date(d.end_date));
     }).entries(jsonData.tasks);
     //Count for each day and store in the array
@@ -844,23 +882,101 @@ $(document).ready(function(){
     //   }
     //   return map 
     // }, {}) 
-    $.each(nest, function(){
-      console.log(this.key,"Key")
-    })
-    console.log("Map2",nest,nest2) 
-    var cArray = Object.keys(map).map(function(elem) {
-    return { date: elem, count: map[elem]/100 }
-    })
-    console.log("Map",cArray)
+    var maxComp = 0;
     var chartData = [];
-    var Cprev = [{date:"",count:0}];
-    $.each(cArray,function(n,i){
-      chartData.push([(new Date(this.date)).getTime(),(this.count+Cprev.count)]);
-      console.log("Value",Cprev,"this",(this.count+Cprev.count))
-      if(n>-1){Cprev = cArray[(n)];}
+    console.log("Plannest",plannest)
+    // $.each(plannest, function(){
+    //   $.each(this.values,function(){
+    //     var weight = diffDates(this.start_date,this.end_date);
+    //     if(weight==0){weight=1;} 
+    //     maxComp += (weight * 100);
+    //   })
+    // })
+    // --- For Planned Tasks ---
+    plannest.sort(function(a,b){
+      return new Date(b.modified) - new Date(a.modified);
+    });
+    $.each(plannest , function(){
+      var plankey = this.key.toString().split('-');
+      var week = getNextWeek(plankey[0],plankey[1]);
+      var comp = 0;
+      $.each(this.values,function(){
+        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime() + 1);
+        comp += (weight * 100);
+        console.log("keys", comp, this.id , weight);
+      })
+      chartData.push([(week.getTime()+19800000),comp]);
+      console.log("Key",week.getTime(),comp)
     })
-    chartData.reverse();
-    console.log("PVA",pvaData,pvaSorted,chartData);
+    console.log("CD",chartData,maxComp,plannest)
+    chartData.sort(function(a,b){
+      return new Date(a[0]) - new Date(b[0]);
+    });
+    console.log("CDA",chartData)
+    temp = 0;
+    $.each(chartData,function(){
+      maxComp += this[1];
+      this[1] = this[1] + temp;
+      temp = this[1];
+    })
+    $.each(chartData,function(){
+      this[1] = Math.round((this[1]/maxComp)*100);
+    });
+    console.log("Map2",plannest,actnest) 
+    // var cArray = Object.keys(map).map(function(elem) {
+    // return { date: elem, count: map[elem]/100 }
+    // })
+    // console.log("Map",cArray)
+    // var chartData = [];
+    // var Cprev = [{date:"",count:0}];
+    // $.each(cArray,function(n,i){
+    //   chartData.push([(new Date(this.date)).getTime(),(this.count+Cprev.count)]);
+    //   console.log("Value",Cprev,"this",(this.count+Cprev.count))
+    //   if(n>-1){Cprev = cArray[(n)];}
+    // })
+    // chartData.reverse();
+    // --- For Actual Tasks --- 
+    var AmaxComp = 0;
+    var AchartData = [];
+    actnest.sort(function(a,b){
+      return new Date(b.end_date) - new Date(a.end_date);
+    });
+    console.log("Asort",actnest)
+    $.each(actnest , function(){
+      var plankey = this.key.toString().split('-');
+      var week = getNextWeek(plankey[0],plankey[1]);
+      var compA = 0;
+      console.log(new Date(week),"Key",this.values)
+      //Remove tasks with same id in the same week 
+      var weekUID = [];
+      for( i=0; i<this.values.length; i++) {
+          if( flags[(this.values[i].id)]) continue;
+          flags[(this.values[i].id)] = true;
+          weekUID.push(this.values[i]);
+      }
+      console.log(weekUID,'weelUID');
+      $.each(weekUID,function(){
+        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime() + 1);
+        compA += (weight * this.task_progress);
+        console.log("taskval",this.id,compA);
+      })
+      AchartData.push([(week.getTime()+19800000),compA]);
+    })
+    console.log("aCD",AchartData,AmaxComp)
+    AchartData.sort(function(a,b){
+      return new Date(a[0]) - new Date(b[0]);
+    });
+    console.log("aCDA",AchartData)
+    temp = 0;
+    $.each(AchartData,function(){
+      AmaxComp += this[1];
+      this[1] = this[1] + temp;
+      temp = this[1];
+    })
+    $.each(AchartData,function(){
+      this[1] = Math.round((this[1]/maxComp)*100);
+    });
+    console.log("PVA",AchartData,pvaData);
     PVAChart = Highcharts.chart('pvaContainer', {
 
       title: {
@@ -868,19 +984,24 @@ $(document).ready(function(){
       },
       xAxis: {
           type: 'datetime',
-          dateTimeLabelFormats: { // don't display the dummy year
-              month: '%b %Y',
+          dateTimeLabelFormats: {
+              month: '%b',
               year: '%Y'
+          },
+          labels: {
+            format: '{value:%e %b \'%y}'
           },
           title: {
               text: 'Date'
           }
       },
-
       yAxis: {
           title: {
               text: 'Task Completion %'
-          }
+          },
+      },
+      tooltip: {
+          valueSuffix: '%'
       },
       legend: {
           align: 'right',
@@ -893,15 +1014,17 @@ $(document).ready(function(){
           series: {
               label: {
                   connectorAllowed: false
-              },
-              pointStart: 2010
+              } 
           },
           exporting: false
       },
 
       series: [{
-        name: 'Actual',
+        name: 'Planned',
         data: chartData
+    },{
+        name: 'Actual',
+        data: AchartData
     }],
 
       responsive: {
