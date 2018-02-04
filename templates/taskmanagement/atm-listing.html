@@ -8,15 +8,18 @@
 <!--Content part starts-->
 <section class="content-part">
   <div class="row">
-  <div class="white-box">
+  <div class="white-box white-pad">
+  <h2>Planned vs Actual Task Completion</h2>
     <div id="pvaContainer" style="width: 100%;float: left;">Planned vs Actual Task Completion Graph</div>
   </div>
-  <div class=" white-box ">
+  <div class=" white-box white-pad">
+  <h2>Super Category Completion</h2>
   <div id="Super_Completion" style="width: 100%;float: left;">Super Category Completion</div>
   </div>
 {% taskdict_json taskdict as taskdict_json %}
 {% if taskdict_json.activities or taskdict_json.tasks %}
-  <div class=" white-box ">
+  <div class=" white-box">
+  <h2>Project Gantt Chart</h2>
         <div class="col-md-12 legendContainer">
           <ul class="legend">
               <li><span class="taskC"></span> Completed  </li>
@@ -365,7 +368,7 @@ $(document).ready(function(){
         activity_type = 'Core',
         taskCompletion = 0,
         taskName = 'Task',
-        taskStatus = 'gtaskred',
+        taskStatus = '',
         pStartDate = curDate,
         pEndDate = tomDate,
         eStartDate = curDate,
@@ -417,21 +420,26 @@ $(document).ready(function(){
       pEndDate = this.end_date;
       eStartDate = this.expected_start_date;
       eEndDate = this.expected_end_date;
+      if(taskCompletion==100 && (new Date(eEndDate).getTime() > new Date(pEndDate).getTime()) ){
+        taskStatus = 'gtaskdel ';
+      }
       if (activity_type == "Core") {
         switch (this.status) {
           case "Ongoing":
-            taskStatus = 'gtaskblue';
+            taskStatus += 'gtaskblue';
             break;
           case "Open":
-            taskStatus = 'gtaskyellow';
+            taskStatus += 'gtaskyellow';
             break;
           case "Close":
-            taskStatus = 'gtaskgreen';
+            taskStatus += 'gtaskgreen';
             break;
           default:
-            taskStatus = 'gtaskblue';
+            taskStatus += 'gtaskblue';
             break;
         };
+      }else{
+        taskStatus += 'gtaskred';
       }
       // For Milestones
       var completionDate = this.actual_end_date;
@@ -858,16 +866,17 @@ $(document).ready(function(){
     for( i=0; i<pvaData.length; i++) {
         if( flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()]) continue;
         flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
-        if(pvaData[i].end_date==null){
-        pvaData[i].end_date = pvaData[i].modified;
-        }
         pvaSorted.push(pvaData[i]);
     }
     console.log("pvaData",pvaSorted)
     var week = d3.timeFormat("%Y-%U");
 
     var actnest = d3.nest().key(function (d) {
+      if(d.actual_end_date!=null){
         return week(new Date(d.actual_end_date));
+      }else{
+        return null;
+      }
     }).entries(pvaSorted);
     console.log("Check actual",actnest);
     
@@ -905,7 +914,7 @@ $(document).ready(function(){
       var week = getNextWeek(plankey[0],plankey[1]);
       var comp = 0;
       $.each(this.values,function(){
-        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime() + 1);
+        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
         comp += (weight * 100);
         console.log("keys", comp, this.id , weight);
       })
@@ -947,24 +956,26 @@ $(document).ready(function(){
     });
     console.log("Asort",actnest)
     $.each(actnest , function(){
-      var plankey = this.key.toString().split('-');
-      var week = getNextWeek(plankey[0],plankey[1]);
-      var compA = 0;
-      console.log(new Date(week),"Key",this.values)
-      //Remove tasks with same id in the same week 
-      var weekUID = [];
-      for( i=0; i<this.values.length; i++) {
-          if( flags[(this.values[i].id)]) continue;
-          flags[(this.values[i].id)] = true;
-          weekUID.push(this.values[i]);
+      if(this.key!="null"){
+        var plankey = this.key.toString().split('-');
+        var week = getNextWeek(plankey[0],plankey[1]);
+        var compA = 0;
+        console.log(new Date(week),"Key",this.values)
+        //Remove tasks with same id in the same week 
+        var weekUID = [];
+        for( i=0; i<this.values.length; i++) {
+            if( flags[(this.values[i].id)]) continue;
+            flags[(this.values[i].id)] = true;
+            weekUID.push(this.values[i]);
+        }
+        console.log(weekUID,'weelUID');
+        $.each(weekUID,function(){
+          var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
+          compA += (weight * this.task_progress);
+          console.log("taskval",this.id,compA);
+        })
+        AchartData.push([(week.getTime()+19800000),compA]);
       }
-      console.log(weekUID,'weelUID');
-      $.each(weekUID,function(){
-        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime() + 1);
-        compA += (weight * this.task_progress);
-        console.log("taskval",this.id,compA);
-      })
-      AchartData.push([(week.getTime()+19800000),compA]);
     })
     console.log("aCD",AchartData,AmaxComp)
     AchartData.sort(function(a,b){
@@ -984,7 +995,7 @@ $(document).ready(function(){
     PVAChart = Highcharts.chart('pvaContainer', {
 
       title: {
-          text: 'Planned vs Actual Task Completion'
+          text: ''
       },
       xAxis: {
           type: 'datetime',
@@ -1003,9 +1014,11 @@ $(document).ready(function(){
           title: {
               text: 'Task Completion %'
           },
+          max: 100
       },
       tooltip: {
-          valueSuffix: '%'
+          valueSuffix: '%',
+          shared: true
       },
       legend: {
           align: 'right',
@@ -1016,19 +1029,25 @@ $(document).ready(function(){
       },
       plotOptions: {
           series: {
+              pointInterval: 24 * 3600 * 1000 * 7,
               label: {
                   connectorAllowed: false
-              } 
+              },
+              marker: {
+                    enabled: true
+                }
           },
           exporting: false
       },
 
       series: [{
         name: 'Planned',
-        data: chartData
+        data: chartData,
+        color: '#006C90'
     },{
         name: 'Actual',
-        data: AchartData
+        data: AchartData,
+        color: '#a73f5c'
     }],
 
       responsive: {
