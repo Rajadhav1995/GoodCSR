@@ -22,6 +22,7 @@ from rest_framework.response import Response as RestResponse
 from serializers import *
 from rest_framework.response import Response
 from pmu.settings import PMU_URL
+from django.core import serializers
 
 # Create your views here.
 
@@ -45,6 +46,8 @@ def listing(request):
     #    added by meghana
     projectobj = project
     key = request.GET.get('key')
+    task_hist = Task.history.filter(activity__project=project).order_by('-id')
+    ser_hist = serializers.serialize('json',task_hist)
     return render(request,'taskmanagement/atm-listing.html',locals())
 
 def update_task_completion(request,add,status):

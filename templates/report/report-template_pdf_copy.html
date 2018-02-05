@@ -914,7 +914,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endif %}
             {% if quest.slug == "duration" %}
 
-            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {% endif %} </p>
+            <p>{% if projectreportobj.report_type == 1 %} First Quarter {{text}}{% else %} Month {{text}}{% endif %} </p>
             {% endif %}
             {% endif %}
             <!--for gantt chart div -->

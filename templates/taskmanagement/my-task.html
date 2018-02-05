@@ -30,12 +30,12 @@ margin-top: -6px;
 {% block content %}
 <div class="clear"></div>
 <!--Content part starts-->
-<!--<div class="select-area search_area">-->
-<!--      	<label style = "margin-top: 28px;">Search</label>-->
-<!--   -->
-<!--		<input id="activate_tagator2" type="text" class="form-control" placeholder="Search" data-tagator-show-all-options-on-focus="true" data-tagator-autocomplete="['Budget', 'Report', 'Document', 'Files', 'Budget', 'Report', 'Document', 'Task', 'Worksheet']">-->
-<!--        <img onclick="javascript:exportToForm()" src="/static/img/search-icon.png">-->
-<!--         </div>-->
+<div class="select-area search_area">
+      	<label style = "margin-top: 28px;">Search</label>
+   
+		<input id="activate_tagator2" type="text" class="form-control" placeholder="Search" data-tagator-show-all-options-on-focus="true" data-tagator-autocomplete="['Budget', 'Report', 'Document', 'Files', 'Budget', 'Report', 'Document', 'Task', 'Worksheet']">
+        <img onclick="javascript:exportToForm()" src="/static/img/search-icon.png">
+         </div>
 <section class="content-part">
    <div class="row">
       <div class="left-task">
@@ -62,7 +62,7 @@ margin-top: -6px;
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <div class="project proj_{{task.activity.project.name|remove_spcl_char}}"><li><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}}</span><span>{% if status == '0' %}{{task.activity.project.name|title}}{% endif %}</span></a></li></div>
+               <div class="project proj_{{task.activity.project.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}}</span><span>{% if status == '0' %}{{task.activity.project.name|title}}{% endif %}</span></a></li></div>
                {% endfor %}
                {% endif %}
             </ul>
@@ -73,10 +73,10 @@ margin-top: -6px;
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <li><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.end_date|date:'jS F Y'}} - {{i.activity.name}}</span><span>{% if status == '0' %}{{i.activity.project.name|title}}{% endif %}</span></a></li>
+               <li class = 'data_row'><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.end_date|date:'jS F Y'}} - {{i.activity.name}}</span><span>{% if status == '0' %}{{i.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% else %}
-               <li><a href="javascript:void(0);">No tasks</a></li>
+               <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
             <div class="task-head">
@@ -86,10 +86,10 @@ margin-top: -6px;
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <li><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.end_date|date:'jS F Y'}} - {{j.activity.name}}</span><span>{% if status == '0' %}{{j.activity.project.name|title}}{% endif %}</span></a></li>
+               <li class = 'data_row'><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.end_date|date:'jS F Y'}} - {{j.activity.name}}</span><span>{% if status == '0' %}{{j.activity.project.name|title}}{% endif %}</span></a></li>
                {% endfor %}
                {% else %}
-               <li><a href="javascript:void(0);">No tasks</a></li>
+               <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
             <div class="task-head">
@@ -100,10 +100,10 @@ margin-top: -6px;
                {% if remain_tasks %}
                {% for t in remain_tasks %}
 
-               <div class="project proj_{{t.activity.project.name | remove_spcl_char}}"><li><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.end_date|date:'jS F Y'}} - {{t.activity.name}}</span></a></li></div>
+               <div class="project proj_{{t.activity.project.name | remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.end_date|date:'jS F Y'}} - {{t.activity.name}}</span><span>{% if status == '0' %}{{t.activity.project.name|title}}{% endif %}</span></a></li></div>
                {% endfor %}
                {% else %}
-               <li><a href="javascript:void(0);">No tasks</a></li>
+               <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
          </div>
