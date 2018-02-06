@@ -437,12 +437,15 @@ function numberWithCommas(x) {
 <!--        <form action="/save/image/?slug={{slug}}" method="POST" enctype="multipart/form-data">{% csrf_token %}-->
 <!--       <button>Save Image</button>-->
 <!--        </form>-->
-        {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
+
+    <!--commented for menu permisions.-->
+<!--        {% get_user_permission request as user_obj %}-->
         
-        
+        {% with "upload-parameters"|make_string:"view" as keystring %}
+                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
         <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
+        {% endwith %}
         </div>
 
         <ul class="key_parameter parameter">
@@ -492,10 +495,11 @@ function numberWithCommas(x) {
     </div>
     <div class="white-box timeline-white">
     	<h2>Timeline Progress</h2>
-    	    {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
-    	{% endif %}
+        {% with "upload-images"|make_string:"view" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+        <a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
+        {% endif %}
+        {% endwith %}
         <div class="clear"></div>
 <!-- timeline slider -->
         {% if timeline_json != '[]' %}
@@ -654,10 +658,11 @@ under 0 Milestones</h5>
   </table>
 	</table>
     </div>
-        {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
+    {% with "add-user"|make_string:"view" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
     <a href="/manage/project/role/add/?slug={{obj.slug}}&key=summary" class="link-pad">Add User</a>
-    {% endif %}
+        {% endif %}
+    {% endwith %}
     </div>
     <div class="white-box-right">
     	<h2>Recent Updates</h2>

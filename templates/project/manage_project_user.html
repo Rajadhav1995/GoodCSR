@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load roles_tags %}
 {% block section %}
 <div> </div>
 {% endblock %}
@@ -13,7 +13,9 @@ width:450px;
     <!-- Main content -->
 {% block content %}
 <div class="clear"></div>
-<section class="content-part">
+<section class="content-part forms_section">
+    {% with "add-user"|make_string:"add" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
     <div class='container' >
     <div class="white-box">
         <div class="col-md-12">
@@ -121,7 +123,8 @@ width:450px;
     </div>
 </div>
 </div>
-
+{% endif %}
+{% endwith %}
 </section>
 {% endblock %}
 {% block script %}

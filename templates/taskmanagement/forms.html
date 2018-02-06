@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load roles_tags %}
 {% block section %}
 <div></div>
 {% endblock %}
@@ -13,6 +14,8 @@
 
     <!-- Main content -->
 
+        {% with "upload-images"|make_string:"add" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
 <section class="content-part">
 	<div class="row">
 	{% if timeline == 1 %}
@@ -53,6 +56,12 @@
     
     </div>
 </section>
+{% else %}
+You do not have access pls contact administrator
+{% endif %}
+{% endwith %}
+
+  
 <script>
 //Toggle
         
