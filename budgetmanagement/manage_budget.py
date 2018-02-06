@@ -569,9 +569,18 @@ def category_add(request):
         project_obj = Project.objects.get_or_none(slug=project_slug)
         budget_obj = Budget.objects.get_or_none(id=int(budget_id))
         super_parent = SuperCategory.objects.filter(budget=budget_obj,project=project_obj)[1].parent
-        super_obj = SuperCategory.objects.create(budget=budget_obj,project=project_obj,name=request.POST.get('super-category'))
-        super_obj.slug=slugify(super_obj.name)
-        super_obj.parent = super_parent
-        super_obj.save()
+        category_names  = [str(k) for k,v in request.POST.items() if k.startswith('category')]
+        for i in category_names:
+            if request.POST.get(i):
+                super_obj = SuperCategory.objects.create(name = request.POST.get(i),project = project_obj,parent=super_parent,budget = budget_obj)
+                super_obj.slug = slugify(super_obj.name)
+                super_obj.save()
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+'&key=budget')
     return render(request,"budget/category_edit.html",locals())
+
+def delete_category(request):
+    budget_id=request.GET.get('budget_id')
+    project_slug = request.GET.get('slug')
+    catgry_id = request.GET.get('cat_id')
+    catgery_del = SuperCategory.objects.get(id=catgry_id).delete()
+    return HttpResponseRedirect('/manage/project/budget/category/listing/?budget_id='+str(budget_id)+'&slug='+project_slug)

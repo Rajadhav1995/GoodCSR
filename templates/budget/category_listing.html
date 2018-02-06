@@ -16,14 +16,12 @@
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
+    
         <h3>Super Category List </h3>
        
         <!-- <a href='/report/pdf/view/'>view</a> -->
-    {% if msg %}
-        <h3> {{msg}} <a style="text-decoration:underline;color:#169776" href= '/manage/project/budget/create/?slug={{project.slug}}'>Click here to create Budget</a> </h3>
-    {% else %}
+    
          <div style="float: right;"><a class="budget_button iframe" href="/manage/project/budget/add/category/?budget_id={{budget_id}}&slug={{project_slug}}">Add Super Category</a></div>
-    {% endif %}
     {% if listing %}
     <table id="example1" class="table table-striped table-bordered textalign_boottom" cellspacing="0" width="100%">
         <thead>
@@ -39,7 +37,7 @@
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{i.name}}</td>
-            <td><a class="btn btn-danger delete_function" href="" onclick="return confirm('Are you sure you want to delete the super category ?')">X</button></a></td>
+            <td><a class="btn btn-danger delete_function" href="/manage/project/budget/category/delete/?budget_id={{budget_id}}&slug={{project_slug}}&cat_id={{i.id}}" onclick="return confirm('Are you sure you want to delete the super category ?')">X</button></a></td>
 
         </tr>
 
@@ -49,6 +47,9 @@
 </table>
     {% endif %}
         </div>
+        <div style="float: right;">
+    <a class="budget_button iframe" href="/manage/project/budget/view/?slug={{project_slug}}&key=budget">Back</a>
+    </div>
           <div class="pagination_no">
         <div id="pagination-long"></div>
     </div>
