@@ -44,7 +44,7 @@ class SuperCategory(BaseContent):
     project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
     history = HistoricalRecords()
 
-    def __str__(self):
+    def __unicode__(self):
         return str(self.id) if self.id else str(0)
 
 class ProjectBudgetPeriodConf(BaseContent):

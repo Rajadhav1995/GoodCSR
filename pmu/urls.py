@@ -24,7 +24,8 @@ from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
                                             projectbudgetcategoryadd,projectlineitemadd,
                                             projectbudgetdetail,budgetutilization,
                                             budgetview,year_quarter_list,
-                                            budgetlineitemedit,month_quarter_list)
+                                            budgetlineitemedit,month_quarter_list,
+                                            category_listing,category_add,)
 from userprofile.views import *
 
 
@@ -44,6 +45,8 @@ roles_patterns = ([
     url(r'^quarter/list/$',year_quarter_list),
     url(r'^month/list/$',month_quarter_list),
     url(r'^project/budget/lineitem/edit/$',budgetlineitemedit),
+    url(r'^project/budget/category/listing/$',category_listing),
+    url(r'^project/budget/add/category/$',category_add),
 
 ])
 

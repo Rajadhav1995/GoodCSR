@@ -551,3 +551,27 @@ def budgetlineitemedit(request):
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&edit=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/edit_budgetlineitem.html",locals())
+    
+def category_listing(request):
+    # this is to list the categories which are added 
+    budget_id = request.GET.get('budget_id')
+    project_slug = request.GET.get('slug')
+    listing = SuperCategory.objects.filter(budget__id=budget_id,project__slug = project_slug).exclude(parent=None)
+    return render(request,"budget/category_listing.html",locals())
+
+def category_add(request):
+    # this is to add super categories for the project
+    budget_id = request.GET.get('budget_id')
+    project_slug = request.GET.get('slug')
+    if request.method == 'POST':
+        budget_id = request.POST.get('budget_id')
+        project_slug = request.POST.get('slug')
+        project_obj = Project.objects.get_or_none(slug=project_slug)
+        budget_obj = Budget.objects.get_or_none(id=int(budget_id))
+        super_parent = SuperCategory.objects.filter(budget=budget_obj,project=project_obj)[1].parent
+        super_obj = SuperCategory.objects.create(budget=budget_obj,project=project_obj,name=request.POST.get('super-category'))
+        super_obj.slug=slugify(super_obj.name)
+        super_obj.parent = super_parent
+        super_obj.save()
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+'&key=budget')
+    return render(request,"budget/category_edit.html",locals())
