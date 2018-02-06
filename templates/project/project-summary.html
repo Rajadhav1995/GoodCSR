@@ -415,7 +415,8 @@ function numberWithCommas(x) {
 <!--       <button>Save Image</button>-->
 <!--        </form>-->
         {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
+        {% pmo_role request as pmo_access %}
+        {% if user_obj.is_admin_user == True or pmo_access == 1 or user_obj.organization_type == 2  and user_obj.owner == True %}
         
         
         <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
@@ -632,7 +633,8 @@ under 0 Milestones</h5>
 	</table>
     </div>
         {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True %}
+        {% pmo_role request as pmo_access %}
+        {% if user_obj.is_admin_user == True or pmo_access == 1 or user_obj.organization_type == 2  and user_obj.owner == True %}
     <a href="/manage/project/role/add/?slug={{obj.slug}}&key=summary" class="link-pad">Add User</a>
     {% endif %}
     </div>
