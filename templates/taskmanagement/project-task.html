@@ -1,6 +1,6 @@
 {% extends 'project/project-summary.html' %}
 {% load common_tags %}
-{% load urs_tags %}
+{% load urs_tags roles_tags %}
 
 {% block content %}
 
@@ -185,13 +185,16 @@ font-size: 14px;
                <input type='file' name ='upload_attach' id='upload-photo'/> 
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
-                
+        {% with "project-tasks"|make_string:"add" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
                 <div class = 'task_bar' style="width: 375px;float: left;">
                          <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{{i.task_progress}}"   />
                 </div>
                   <input class="task-link" type="submit" value="Add update"/>
+              {% endif %}
+              {% endwith %}
                   </form>
                </div>
             </div>

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load roles_tags %}
 {% block section %}
 <div> </div>
 {% endblock %}
@@ -20,6 +20,8 @@
                 <div class="col-md-12">
                 
               <h3 class="border_line">Add Tranche for {{project.name}}</h3>
+              {% endif %}
+              {% endwith %}
           </div>
             
             

@@ -106,8 +106,11 @@ $(document).ready(function(){
     </ul>
     </div>
     
-    
+    {% with "generate-report"|make_string:"view" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
     <a id="myBtn1" class="green-link green-link1" href="/report/listing/?slug={{request.GET.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    {% endif %}
+    {% endwith %}
 <!--    <a id="myBtn1" class="green-link green-link1" href="/report/survey/quarter/?slug={{request.GET.slug}}" style="margin-top:30px;"> &nbsp;Temp Generate Report</a>-->
 <!--    <a id="myBtn1" class="green-link green-link1" href="/report/final/design/?slug={{request.GET.slug}}" style="margin-top:30px;"> &nbsp;Generate Report with design</a>-->
 

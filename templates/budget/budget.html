@@ -1,6 +1,6 @@
 
 {% extends 'project/project-summary.html' %}
-{% load urs_tags %}
+{% load urs_tags roles_tags %}
 
 
 {% block content %}
@@ -157,14 +157,21 @@
           </table>
         </div>
     </div>
-    {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
+
+        
     <div class="link-right">
+            {% with "report-utilization"|make_string:"add" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
     	<a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Report Utilization</a>
+    	{% endif %}
+    	{% endwith %}
+    	{% with "edit-budget"|make_string:"edit" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
 <!--    	    <a href="javascript:void(0);" class="link-pad1"> Edit/Update Budget</a>-->
         <a href="/manage/project/budget/lineitem/edit/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>
+        {% endif %}
+        {% endwith %}
     </div>   
-    {% endif %}
     <div class="white-box">
     <div class="table-responsive">
     <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">
@@ -203,10 +210,11 @@
 	</table>  
     </div>
     {% else %}
-    {% get_user_permission request as user_obj %}
-    {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
+    {% with "edit-budget"|make_string:"add" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
     <h3 style="text-align:center">Click here to add <a style="text-decoration:underline;color:#169776" href="/manage/project/budget/create/?slug={{project_slug}}">BUDGET </a></h3>
     {% endif %}
+    {% endwith %}
     {% endif %}
     </div>
     </div>
