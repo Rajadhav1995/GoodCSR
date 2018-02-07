@@ -186,7 +186,30 @@ function showCheckboxes() {
         $("#id_description").addClass('form-control text_area');
     });
 </script>
-
+<script>
+$(document).ready(function() {
+var slug = '{{request.GET.slug}}'
+$.ajax({
+            url:'/managing/activites/',
+            type:'GET',
+            data:{'id':'[]','slug':slug},
+            dataType:"json",
+            success:function(data){
+            var act = $('#id_activity').val();
+                $('#id_activity option').remove();
+                $('#id_activity').append('<option value="" >-----</option>')
+                if (data.activity){
+                    activity = data.activity
+                   for (var i=0;i<activity.length;i++){
+                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] +' ('+activity[i]['super_name']+')'+ '</option>').appendTo('#id_activity');
+                    }
+                    $('#id_activity').val(act);
+                }
+            
+            },
+        });
+      });
+</script>
 
 
 <script>
@@ -325,7 +348,7 @@ $(document).ready(function() {
                 if (data.activity){
                     activity = data.activity
                    for (var i=0;i<activity.length;i++){
-                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] +' ('+activity[i]['super_name']+')'+ '</option>').appendTo('#id_activity');
                     }
                     $('#id_activity').val(act);
                 }
