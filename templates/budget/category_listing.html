@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% block section %}
+{% endblock %}
+{% block content %}
+{% load urs_tags %}
+{% load common_tags %}
+<!--Green pad Ends-->
+<!--Content part starts-->
+<style>
+.budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+</style>
+<section class="content-part forms_section">
+    <div class="row">
+    <div class="content-top">
+       
+    </div>
+    <div class="white-box white-pad">
+    <div class="box-body table-responsive">
+    
+        <h3>Super Category List </h3>
+       
+        <!-- <a href='/report/pdf/view/'>view</a> -->
+    
+         <div style="float: right;"><a class="budget_button iframe" href="/manage/project/budget/add/category/?budget_id={{budget_id}}&slug={{project_slug}}">Add Super Category</a></div>
+    {% if listing %}
+    <table id="example1" class="table table-striped table-bordered textalign_boottom" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>S.no</th>
+                <th>Super Category</th>
+                <th>Action</th>
+                
+            </tr>
+        </thead>
+        
+        {% for i in listing %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.name}}</td>
+            <td><a class="btn btn-danger delete_function" href="/manage/project/budget/category/delete/?budget_id={{budget_id}}&slug={{project_slug}}&cat_id={{i.id}}" onclick="return confirm('Are you sure you want to delete the super category ?')">X</button></a></td>
+
+        </tr>
+
+        {% endfor %}
+
+  </tbody>
+</table>
+    {% endif %}
+        </div>
+        <div style="float: right;">
+    <a class="budget_button iframe" href="/manage/project/budget/view/?slug={{project_slug}}&key=budget">Back</a>
+    </div>
+          <div class="pagination_no">
+        <div id="pagination-long"></div>
+    </div>
+    </div>
+    
+    
+    
+    </div>
+</section>
+<link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".iframe").fancybox({
+        type: 'iframe'
+    });
+});
+</script>
+
+<script>
+//Toggle
+        
+         $('.user-menu').on('click',function(){
+          $('.dropdown-menu').slideToggle();
+          
+        });
+         $(document).ready(function(e) {    
+    /*Content Show/Hide */
+    $('.hide-cont').hide();
+    $('.close-cont').hide();
+    $('.view-cont').click(function(){
+        $('.hide-cont').slideDown(350);
+        $('.close-cont').show();
+        $('.view-cont').hide();
+    });
+    $('.close-cont').click(function(){
+        $('.hide-cont').slideUp(350);
+        $('.close-cont').hide();
+        $('.view-cont').show();
+    }); 
+ });
+    
+</script>
+<!--Content part Ends-->
+{% endblock %}
+
+<!-- jQuery (necessary for JavaScript plugins) -->
+<script type="text/javascript" src="js/jquery.selectbox-0.2.js"></script>
+
+
+    
+<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
+<script type="text/javascript" src="/static/js/common.js" /></script>
+
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+
+
+
+    <script type="text/javascript">
+   
+    
+    var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    </script>
+    <script>
+  $(document).ready(function() {
+  
+    var nice = $("html").niceScroll();  // The document page (body)
+    
+    $("#div1").html($("#div1").html()+' '+nice.version);
+    
+    $("#boxscroll, .table-resp tbody").niceScroll({cursorborder:"",cursorcolor:"#949494",boxzoom:true}); // First scrollable DIV
+
+    
+  });
+</script>
+<!--  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>-->
+<script src="/static/js/materialize-pagination.js"></script>
+    <script>
+    $(function() {
+        $(function() {
+            $('#pagination-long').materializePagination({
+                align: 'center',
+                lastPage: 10,
+                firstPage: 1,
+                useUrlParameter: false,
+                onClickCallback: function(requestedPage) {
+                    console.log('Requested page from #pagination-long: ' + requestedPage);
+                }
+            });
+        });
+    });
+    </script>
+<script src="js/sorttable.js"></script>
+
+<script>
+$(function(){
+    $("#dest").addSortWidget();
+});
+</script>
+
+    
+    <script src="/static/js/fm.tagator.jquery.js"></script>
+    <script>
+        $(function () {
+            var $input_tagator1 = $('#input_tagator1');
+            var $activate_tagator1 = $('#activate_tagator1');
+            $activate_tagator1.click(function () {
+                if ($input_tagator1.data('tagator') === undefined) {
+                    $input_tagator1.tagator({
+                        autocomplete: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'],
+                        useDimmer: true
+                    });
+                    $activate_tagator1.val('destroy tagator');
+                } else {
+                    $input_tagator1.tagator('destroy');
+                    $activate_tagator1.val('activate tagator');
+                }
+            });
+            $activate_tagator1.trigger('click');
+        });
+    </script>
+</body>
+</html>
+
