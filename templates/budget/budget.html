@@ -155,7 +155,7 @@
                      <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                     <!--  Added to display attachment using a template tag                    -->
                      {% get_line_attach line_itemobj as attach %}
-                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;" href={{image_url}}{{attach.image_url}} target="_blank"><b>{{attach.name}}</b></a>{% else %}<b>-</b> {% endif %}  </td>
+                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;text-decoration: none; border-bottom: 1px solid black;" href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a>{% else %} - {% endif %}  </td>
                      {% endwith %}
                      {% endfor %}
             </tr>
