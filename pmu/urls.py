@@ -28,7 +28,11 @@ from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
                                             category_listing,category_add,
                                             delete_category,)
 from userprofile.views import *
+import userprofile
+from django.conf.urls import handler404, handler500
 
+handler404 = userprofile.views.handler404
+handler500 = userprofile.views.handler500
 
 admin.autodiscover()
 
