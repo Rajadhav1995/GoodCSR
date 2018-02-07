@@ -19,11 +19,12 @@ font-size: 14px;
 
 <!--Content part starts-->
 <div class="select-area search_area">
-      	<label style = "margin-top: 28px;">Search</label>
+      	<label class = "search_lbl" >Search</label>
    
 		<input id="activate_tagator2" type="text" class="form-control" placeholder="Search" data-tagator-show-all-options-on-focus="true" data-tagator-autocomplete="['Budget', 'Report', 'Document', 'Files', 'Budget', 'Report', 'Document', 'Task', 'Worksheet']">
         <img onclick="javascript:exportToForm()" src="/static/img/search-icon.png">
          </div>
+      
 <section class="content-part">
     
    <div class="row">
@@ -268,24 +269,32 @@ font-size: 14px;
                   </li>
                   {% endif %}
                   {% endfor %}
-                  {% task_comments dates i.id as comments %}
+
+                  {% task_comments_progress dates i.id as comments %}
                   {%if comments %}
                   <li>
                     {% for c in comments %}
+                    {% get_task_comments c.time i.id as comment_progress %}
                      <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                             <div class="middle">
-                                <div class="text">{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}</div>
+                                <div class="text">{{comment_progress.first_name}} {{comment_progress.last_name}}</div>
                             </div>
                         </div>
                      </div>
                      
                      <div class="right-li third-li">
-                        <ul>
-                           <li>{% if c.text %}{{c.text}}{% endif %}</li>
+                      <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
+                        <ul style="">
+                           <li style="width:100%;margin-bottom:5px">{% if comment_progress.comment_text %}{{comment_progress.comment_text}}{% endif %}</li>
                         </ul>
-                        {% get_converted_time c.created as time %}
+                        {% get_converted_time c.time as time %}
                         <span>{{time}}</span>
+                      </div>
+                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        
+                        
+                        
                             
                      </div>
                      {% endfor %}

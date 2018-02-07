@@ -441,9 +441,6 @@ function numberWithCommas(x) {
 <!--       <button>Save Image</button>-->
 <!--        </form>-->
 
-    <!--commented for menu permisions.-->
-<!--        {% get_user_permission request as user_obj %}-->
-        
         {% with "upload-parameters"|make_string:"view" as keystring %}
                     {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
         <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
