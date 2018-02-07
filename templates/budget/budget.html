@@ -109,7 +109,7 @@
               <td class = "sticky-cell table_first" colspan="6">&nbsp;</td>	
             {% for i,j in quarter_list.items %}
             {% with forloop.counter as rnum %}
-              <td class = "filter_{{rnum}} table-head" colspan="5">{{j}}</td>
+              <td class = "filter_{{rnum}} table-head" colspan="6">{{j}}</td>
               {% endwith %}
               {% endfor %}
             </tr>  
@@ -127,6 +127,7 @@
               <th class="filter_{{rnum}}"> Planned</th>
               <th class="filter_{{rnum}}"> Utilized</th>
               <th class="filter_{{rnum}}">Variance</th>
+              <th class="filter_{{rnum}}">Attachment</th>
               {% endwith %}
               {% endfor %}
             </tr>
@@ -152,6 +153,9 @@
                      <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
                      <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
                      <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                    <!--  Added to display attachment using a template tag                    -->
+                     {% get_line_attach line_itemobj as attach %}
+                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;text-decoration: none; border-bottom: 1px solid black;" href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a>{% else %} - {% endif %}  </td>
                      {% endwith %}
                      {% endfor %}
             </tr>
@@ -848,6 +852,12 @@ $(document).ready(function() {
     }
      .highcharts-background {
     fill: none
+}
+</style>
+
+<style>
+a: link{
+    color: red;
 }
 </style>
 {% endblock %}
