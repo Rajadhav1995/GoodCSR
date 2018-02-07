@@ -579,6 +579,7 @@ def category_add(request):
     return render(request,"budget/category_edit.html",locals())
 
 def delete_category(request):
+    # this is to delete a category
     budget_id=request.GET.get('budget_id')
     project_slug = request.GET.get('slug')
     catgry_id = request.GET.get('cat_id')
