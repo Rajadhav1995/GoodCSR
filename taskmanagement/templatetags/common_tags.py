@@ -45,7 +45,6 @@ def task_comments(date,task_id):
 @register.assignment_tag   
 def task_comments_progress(date,task_id):
     task_data = []
-    print "aditya",task_id
     # comment_list = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id).order_by('-id')
     # for i in comment_list.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
     #     data = {'name':i.created_by.attrs,'comment_text':i.text,'time':i.created}
@@ -66,9 +65,9 @@ from datetime import date
 @register.assignment_tag
 def get_task_comments(comment_date,task_id):
     comment_data = {}
-    new_date = comment_date.replace(microsecond=0)
+#    import ipdb;ipdb.set_trace();
     comment_list = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
-            created__year=new_date.year,created__month=new_date.month,created__day=new_date.day,created__hour=new_date.hour,created__minute=new_date.minute,created__second=new_date.second)
+created__date = comment_date)
     if comment_list:
         comment_data = {'name':comment_list.created_by.attrs,'comment_text':comment_list.text,'time':comment_list.created}
     return comment_data
