@@ -55,10 +55,11 @@ def task_comments_progress(date,task_id):
     for i in task_progress_history:
         if i.task_progress:
             previous_task_progress = i.get_previous_by_created().task_progress
-            cell_one = {'name':'','comment_text':'','time':i.modified,
+            if i.task_progress != i.get_previous_by_created().task_progress:
+                cell_one = {'name':'','comment_text':'','time':i.modified,
                         'task_progress':i.task_progress,
-                        'previous_task_progress':i.get_previous_by_created().task_progress,}
-            task_data.append(cell_one)
+                        'previous_task_progress':i.get_previous_by_created().task_progress if i.get_previous_by_created().task_progress!=None else 0,}
+                task_data.append(cell_one)
     task_data.sort(key=lambda item:item['time'], reverse=True)
     return task_data
 
