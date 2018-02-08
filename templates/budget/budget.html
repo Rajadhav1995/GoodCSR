@@ -7,9 +7,7 @@
 <!--Content part starts-->
 <section class="content-part">
 	<div class="row">
-<!--Added for super categoty listing by priya	-->
-	<a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Add/Delete Super Category</a>
-<!--Added for super categoty listing by priya	(end)-->
+
     <div class="white-box">
         
     	{% if budgetobj %}
@@ -42,7 +40,11 @@
             </ul> -->
         </div>
     </div>
+    <!--Added for super categoty listing by priya	-->
+	
 	<div class="content-top margin-top">
+	
+<!--Added for super categoty listing by priya	(end)-->
       <div class="select-area">
          <form id=" " action=".?slug={{project_slug}}" method = "post" >{% csrf_token %}
                  <input type="hidden" name="slug" value="{{project_slug}}">
@@ -155,7 +157,7 @@
                      <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                     <!--  Added to display attachment using a template tag                    -->
                      {% get_line_attach line_itemobj as attach %}
-                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;text-decoration: none; border-bottom: 1px solid black;" href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a>{% else %} - {% endif %}  </td>
+                     <td align="center" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;" href={{image_url}}{{attach.image_url}} target="_blank"><img src='/static/img/attachment-icon.png' /></a>{% else %} - {% endif %}  </td>
                      {% endwith %}
                      {% endfor %}
             </tr>
@@ -165,6 +167,8 @@
           </table>
         </div>
     </div>
+    
+	<a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Manage Super Category</a>
     {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     <div class="link-right">

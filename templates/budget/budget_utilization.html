@@ -49,7 +49,7 @@
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" enctype="multipart/form-data" >{% csrf_token %}
 <input type="hidden" name="count" value="{{span_length}}">
 
-        <div id="boxscroll1" class="table-scroll">
+        <div id="boxscroll1" class="table-scroll"></div>
                 <input type="hidden" name="count" value="6">
                 <input type="hidden" name="slug" value="{{project_slug}}">
                 <input type="hidden" name="budget_id" value="{{budget_id}}">
