@@ -206,6 +206,7 @@ font-size: 14px;
                <ul>
                   <li>
                      {% for a in attach %}
+                     {% get_attachment_progress a i.id as attachement_json %}
                      {% if a.attachment_type == 1 %}
                      <div class="left-li">
                         <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
@@ -218,17 +219,24 @@ font-size: 14px;
                      <div class="right-li first-li">
                             {% if a.attachment_file %}
                         <p>{% if a.description %}{{a.description|safe}} {% endif %}</p>
-                        <ul>
-                           <li>
+                        
+                        <div style="float:left; width:50%;margin-right:20px; margin-bottom:10px">
+                          <ul>
+                           <li style="width:100%">
                               <a href="{{image_url}}{{a.attachment_file.url}}">
-                                 <img src="{{image_url}}{{a.attachment_file.url}}" width="162" height="112" alt="">
+                                 <img src="{{image_url}}{{a.attachment_file.url}}" width="60%" alt="">
 <!--                                 <div class="/static/image-hover">4 More files</div>-->
                               </a>
                            </li>
+                           {% get_converted_time a.created as time %}
+                        <span>{{time}}</span>
                             
                         </ul>
-                        {% get_converted_time a.created as time %}
-                        <span>{{time}}</span>
+                      </div>
+                        
+                        {% if attachement_json.previous_task_progress == attachement_json.task_progress %}
+                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{attachement_json.previous_task_progress}}%</b> to <b>{{attachement_json.task_progress}}% </b></p>
+                        {% endif %}
                         {% endif %}
                      </div>
                      
@@ -261,41 +269,68 @@ font-size: 14px;
                         </ul>
                         {% get_converted_time a.created as time %}
                         <span>{{time}}</span>
+                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{attachement_json.previous_task_progress}}%</b> to <b>{{attachement_json.task_progress}}% </b></p>
                         {% endif %}
+
                      </div>
                   </li>
+
                   {% endif %}
                   {% endfor %}
-                  {% task_comments dates i.id as comments %}
+
+                  {% task_comments_progress dates i.id as comments %}
                   {%if comments %}
                   <li>
                     {% for c in comments %}
+                    {% get_task_comments c.time i.id as comment_progress %}
+
                      <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                             <div class="middle">
-                                <div class="text">{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}</div>
+                                <div class="text">{{comment_progress.first_name}} {{comment_progress.last_name}}</div>
                             </div>
                         </div>
                      </div>
                      
                      <div class="right-li third-li">
-                        <ul>
-                           <li>{% if c.text %}{{c.text}}{% endif %}</li>
+                      {% if comment_progress %}
+                      <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
+                        <ul style="">
+                          
+                          <li style="width:100%;margin-bottom:5px">{% if comment_progress.comment_text %}{{comment_progress.comment_text}}{% endif %}</li>
+                          
                         </ul>
-                        {% get_converted_time c.created as time %}
+                        {% get_converted_time c.time as time %}
+                        
                         <span>{{time}}</span>
+                        
+                      </div>
+                      {% else %}
+                        {% get_converted_time c.time as time %}
+                        
+                        <br><span>{{time}}</span>   
+                           {% endif %}
+                      
+                        
+                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        
+                        
+                        
+                        
+                        
+                        
                             
                      </div>
                      {% endfor %}
                      
                   </li>
                   {% endif %}
+
                </ul>
                {% endfor %}
                {% endfor %}
             </div>
             {% else %}
-
                     <li>No updates</li>
                   {% endif %}
          </div>
