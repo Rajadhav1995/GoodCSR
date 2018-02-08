@@ -741,8 +741,12 @@ def get_activites_list(request):
     url=request.META.get('HTTP_REFERER')
     obj = None
     activity=[]
-    obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
-    activity = [{'id':i.id,'name':i.name} for i in obj_list]
+    if ids != '[]':
+        obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
+    else:
+        slug = request.GET.get('slug')
+        obj_list = Activity.objects.filter(active=2,project__slug=slug)
+    activity = [{'id':i.id,'name':i.name,'super_name':i.super_category.name} for i in obj_list]
     return JsonResponse({"activity":activity})
     
 from django.http import JsonResponse
