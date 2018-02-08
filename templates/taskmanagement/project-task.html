@@ -306,13 +306,14 @@ font-size: 14px;
                         
                       </div>
                       {% else %}
-                        {% get_converted_time c.time as time %}
-                        
+                       
+                        <p style=" float: left; width: 100%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                         {% get_converted_time c.time as time %}
                         <br><span>{{time}}</span>   
                            {% endif %}
                       
                         
-                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        
                         
                         
                         

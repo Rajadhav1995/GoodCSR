@@ -67,10 +67,11 @@ from datetime import date
 @register.assignment_tag
 def get_task_comments(comment_date,task_id):
     comment_data = {}
+    print "---------------------",task_id
     start_time = comment_date.replace(microsecond=1)
     end_time = comment_date.replace(microsecond=999999)
     # new_date = comment_date.replace(microsecond=0)
-    comment_list = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
+    comment_list = Comment.objects.latest_one(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
                         created__range=(start_time,end_time))
     if comment_list:
         comment_data = {'name':comment_list.created_by.attrs,'comment_text':comment_list.text,'time':comment_list.created}
@@ -79,10 +80,14 @@ def get_task_comments(comment_date,task_id):
 @register.assignment_tag
 def get_attachment_progress(attach,task_id):
     time = attach.created
+    data ={}
     start_time = time.replace(microsecond=1)
     end_time = time.replace(microsecond=999999)
     task_object = Task.objects.get(id=task_id)
-    task_history = task_object.history.get(modified__range = (start_time,end_time))
+    try:
+        task_history = task_object.history.get_or_none(modified__range = (start_time,end_time))
+    except:
+        task_history = task_object.history.filter(modified__range = (start_time,end_time))[0]
     # data = {'name':attach.created_by.attrs,
     #         'description':attach.description,
     #         'date':attach.created,
@@ -91,7 +96,8 @@ def get_attachment_progress(attach,task_id):
     #         'image_url':PMU_URL + attach.attachment_file.url,
     #         'task_progress':task_history.task_progress,
     #         'previous_task_progress':task_history.get_previous_by_created().task_progress}
-    data = {'task_progress':task_history.task_progress,
+    if task_history:
+        data = {'task_progress':task_history.task_progress,
            'previous_task_progress':task_history.get_previous_by_created().task_progress}
     return data
 
