@@ -315,8 +315,15 @@
                     {% for k,v in quarters.iteritems %}
                     {% if value == k %}
                     {% for ky,val in v.iteritems %}
-                    {% get_quarter_names ky number_dict as quarter_name %}
-                    <h3><span>{{quarter_name}} {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {{text}} {% endif %} - ({{val}})</span><span></span></h3>
+
+                    {% if projectreportobj.report_type == 1 %}
+                      {% get_quarter_names ky number_dict as quarter_name %}
+                      <h3><span> {{quarter_name}} Quarter - ({{val}})</span><span></span></h3>
+                      {% else %}
+                      {% get_month_name val as month_name %}
+                      <h3><span> {{month_name}} Month - ({{val}})</span><span></span></h3>
+                      {% endif %}
+
                     {% endfor %}
                     {% endif %}
                     {% endfor %}

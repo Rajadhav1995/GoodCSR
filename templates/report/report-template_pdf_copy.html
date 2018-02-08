@@ -375,7 +375,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
                <div class="container" style="margin-left:-3px;">
                 <div>
-                   <h1 style="font-size:24px;">Index</h1>
+                   <h1 style="font-size:24px;">Index </h1>
                 </div>
                   <div class="page_height">
                     <!--Dynamic getting of the contents of index page (STARTS)                  -->
@@ -392,8 +392,14 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                               {% for k,v in quarters.iteritems %}
                               {% if value == k %}
                               {% for ky,val in v.iteritems %}
+
+                              {% if projectreportobj.report_type == 1 %}
                               {% get_quarter_names ky number_dict as quarter_name %}
-                              <h3><span> {{quarter_name}} {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {% endif %} - ({{val}})</span><span></span></h3>
+                              <h3><span> {{quarter_name}} Quarter - ({{val}})</span><span></span></h3>
+                              {% else %}
+                              {% get_month_name val as month_name %}
+                              <h3><span> {{month_name}} Month - ({{val}})</span><span></span></h3>
+                              {% endif %}
                               {% endfor %}
                               {% endif %}
                               {% endfor %}
