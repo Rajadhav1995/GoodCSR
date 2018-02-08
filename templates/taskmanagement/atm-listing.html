@@ -58,8 +58,6 @@ function filter(target,parent,type) {
   <div id="pvaContainer" style="width: 50%;float: left;">Planned vs Actual Task Completion Graph</div>
   <div id="Super_Completion" style="width: 50%;float: left;">Super Category Completion</div>
   </div>
-{% taskdict_json taskdict as taskdict_json %}
-{% if taskdict_json.activities or taskdict_json.tasks %}
   <div class=" white-box">
   <h2>Project Gantt Chart</h2>
         <div class="col-md-12 legendContainer">
@@ -76,7 +74,6 @@ function filter(target,parent,type) {
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px';position: 'relative'; height: 'auto'; width:'100%';"></div>
         </div>
   </div>
-{% endif %}
 
 <div class="green-box">
    <div class="green-box-lft">
