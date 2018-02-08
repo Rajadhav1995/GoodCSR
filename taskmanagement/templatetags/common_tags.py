@@ -67,7 +67,6 @@ from datetime import date
 @register.assignment_tag
 def get_task_comments(comment_date,task_id):
     comment_data = {}
-    print "---------------------",task_id
     start_time = comment_date.replace(microsecond=1)
     end_time = comment_date.replace(microsecond=999999)
     # new_date = comment_date.replace(microsecond=0)
