@@ -37,7 +37,7 @@
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{i.name}}</td>
-            <td><a class="budget_button" href="/manage/project/budget/add/category/?budget_id={{budget_id}}&slug={{project_slug}}&cat_id={{i.id}}&key=edit">Edit</a> &nbsp <a class="btn btn-danger delete_function" href="/manage/project/budget/category/delete/?budget_id={{budget_id}}&slug={{project_slug}}&cat_id={{i.id}}" onclick="return confirm('Are you sure you want to delete the super category ?')">X</button></a>&nbsp</td>
+            <td><a class="budget_button iframe" href="/manage/project/budget/add/category/?budget_id={{budget_id}}&slug={{project_slug}}&cat_id={{i.id}}&key=edit">Edit</a> &nbsp <a class="btn btn-danger delete_function" href="/manage/project/budget/category/delete/?budget_id={{budget_id}}&slug={{project_slug}}&cat_id={{i.id}}" onclick="return confirm('Are you sure you want to delete the super category ?')">X</button></a>&nbsp</td>
 
         </tr>
 
@@ -48,7 +48,7 @@
     {% endif %}
         </div>
         <div style="float: right;">
-    <a class="budget_button iframe" href="/manage/project/budget/view/?slug={{project_slug}}&key=budget">Back</a>
+    <a class="budget_button" href="/manage/project/budget/view/?slug={{project_slug}}&key=budget">Back</a>
     </div>
           <div class="pagination_no">
         <div id="pagination-long"></div>

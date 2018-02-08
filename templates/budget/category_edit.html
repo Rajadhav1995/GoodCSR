@@ -130,10 +130,12 @@
                               </div>
                            </div>
                          {% else %}
+                         <input type="hidden" name="key" value="{{key}}" class="form-control">
+                            <input type="hidden" name="cat_id" value="{{cat_id}}" class="form-control">
                             <div class="col-md-6 padding_right">
                               <div class="form-group">
                                  <label>Category</label>
-                                 <input class="form-control" type="text" name="category_6" val= {{}}>
+                                 <input class="form-control" type="text" name="category_6" value= {{cat_obj.name}}></input>
                                  <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
                               </div>
                            </div>

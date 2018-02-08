@@ -7,9 +7,7 @@
 <!--Content part starts-->
 <section class="content-part">
 	<div class="row">
-<!--Added for super categoty listing by priya	-->
-<!--	<a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Add/Delete Super Category</a>-->
-<!--Added for super categoty listing by priya	(end)-->
+
     <div class="white-box">
         
     	{% if budgetobj %}
@@ -42,7 +40,11 @@
             </ul> -->
         </div>
     </div>
+    <!--Added for super categoty listing by priya	-->
+	
 	<div class="content-top margin-top">
+	
+<!--Added for super categoty listing by priya	(end)-->
       <div class="select-area">
          <form id=" " action=".?slug={{project_slug}}" method = "post" >{% csrf_token %}
                  <input type="hidden" name="slug" value="{{project_slug}}">
@@ -165,6 +167,8 @@
           </table>
         </div>
     </div>
+    
+	<a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Manage Super Category</a>
     {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     <div class="link-right">

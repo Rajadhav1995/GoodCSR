@@ -563,6 +563,10 @@ def category_add(request):
     # this is to add super categories for the project
     budget_id = request.GET.get('budget_id')
     project_slug = request.GET.get('slug')
+    key=request.GET.get('key')
+    if key == "edit":
+        cat_id = request.GET.get('cat_id')
+        cat_obj = SuperCategory.objects.get_or_none(id=cat_id)
     if request.method == 'POST':
         budget_id = request.POST.get('budget_id')
         project_slug = request.POST.get('slug')
@@ -572,7 +576,11 @@ def category_add(request):
         category_names  = [str(k) for k,v in request.POST.items() if k.startswith('category')]
         for i in category_names:
             if request.POST.get(i):
-                super_obj = SuperCategory.objects.create(name = request.POST.get(i),project = project_obj,parent=super_parent,budget = budget_obj)
+                try:
+                    super_obj = SuperCategory.objects.get(id=int(request.POST.get('cat_id')))
+                    super_obj.name = request.POST.get(i)
+                except:
+                    super_obj= SuperCategory.objects.create(name = request.POST.get(i),project = project_obj,parent=super_parent,budget = budget_obj)
                 super_obj.slug = slugify(super_obj.name)
                 super_obj.save()
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+'&key=budget')
