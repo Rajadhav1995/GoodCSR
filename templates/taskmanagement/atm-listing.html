@@ -55,6 +55,9 @@ function filter(target,parent,type) {
 <section class="content-part">
   <div class="row">
   <div class=" white-box white-pad">
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  </div>
+  <div class=" white-box white-pad">
   <div id="pvaContainer" style="width: 50%;float: left;">Planned vs Actual Task Completion Graph</div>
   <div id="Super_Completion" style="width: 50%;float: left;">Super Category Completion</div>
   </div>
@@ -1095,6 +1098,152 @@ $(document).ready(function() {
         type: 'iframe'
     });
 });
+</script>
+
+<!--<script src="http://github.highcharts.com/master/highcharts.js"></script>-->
+<!--<script src="http://github.highcharts.com/master/modules/drilldown.js"></script>-->
+<script src="/static/js/highcharts.js" type="text/javascript"></script>
+<script src="/static/js/drilldown.js" type="text/javascript"></script>
+<script>
+$(function() {
+
+  // Create the chart
+  if (gSuperName.length > 0) {
+      var SuperRemain = new Array();
+      $.each(gSuperName,function(i){
+        console.log("gSuper",gSuperComp[i],gSuperName[i])        
+        if(gSuperName[i]==""){
+          gSuperComp.splice(i,1);
+          gSuperName.splice(i,1);
+        }
+      })
+      for (i = 0; i < gSuperComp.length; i++) {
+        SuperRemain.push(100 - gSuperComp[i]);
+        //SuperRemain = SuperRemain.reverse();
+      }
+   }
+      //alert(gSuperName);
+  $('#container').highcharts({
+      chart: {
+        type: 'bar'
+      },
+      title: {
+        text: 'Delay Drill Down'
+      },
+      xAxis: {
+        type: 'category',
+      },
+      yAxis: {
+        title: {
+          text: 'Duration (days)'
+        }
+      },
+      tooltip: {
+        valueSuffix: ' days'
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          borderWidth: 1,
+          dataLabels: {
+            enabled: false,
+          }
+        }
+      },
+      series: [{
+        id: 'toplevel',
+        name: 'Super Category',
+        color: '#00998b',
+        data: [{
+          name: 'Mumbai',
+          y: 4,
+          drilldown: 'activity'
+        }, {
+          name: 'Bangalore',
+          y: -2,
+          drilldown: 'activity1'
+        }, {
+          name: 'Delhi',
+          y: 1,
+          drilldown: 'activity'
+        }, {
+          name: 'Bihar',
+          y: 2,
+          drilldown: 'activity'
+        }, {
+          name: 'Gujarat',
+          y: -3.5,
+          drilldown: 'activity'
+        },]
+      }],
+      drilldown: {
+        series: [{
+          id: 'activity',
+          name: 'Activity',
+          color: '#006C90',
+          data: [{
+            name: 'Refurbishment',
+            y: 1,
+            drilldown: 'task'
+          }, {
+            name: 'Operation',
+            y: -2,
+            drilldown: 'task'
+          }, {
+            name: 'Maintenance',
+            y: -3,
+            drilldown: 'task'
+          }, {
+            name: 'Behavioural Change Communication',
+            y: 4,
+            drilldown: 'task'
+          }]
+        },
+        {
+            id:'activity1',
+            name:'Activity',
+            color:'#006C90',
+            data: [{
+            name: 'Maintenance',
+            y: -3,
+            drilldown: 'task'
+          }, {
+            name: 'Behavioural Change Communication',
+            y: 4,
+            drilldown: 'task'
+          }]
+        }, 
+        {
+          id: 'task',
+          name: 'Task',
+          data: [{
+            name: 'Hiring of Project Staff',
+            y: -1,
+            task_progress: 20
+          }, {
+            name: 'Operations',
+            y: 4,
+            task_progress: 90
+          }, {
+            name: 'Maintainence Support',
+            y: -3,
+            task_progress: 40
+          }, {
+            name: 'Documentation of Case Studies',
+            y: -4,
+            task_progress: 70
+          }]
+        }]
+      }, function(chart){	
+        	
+			console.log(chart,'this')
+        }
+      
+    })
+});
+
 </script>
 {% endblock %}
 
