@@ -216,47 +216,44 @@ font-size: 14px;
                   {%if comments %}
 
                   {% for c in comments %}
-                  {% if c.attachment == 0 %}
-                  <li>
-                    
+                      {% if c.attachment == 0 %}
+                      <li>
+                        
 
-                    {% get_task_comments c.date i.id as comment_progress %}
+                        {% get_task_comments c.date i.id as comment_progress %}
 
-                     <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
-                            <div class="middle">
-                                <div class="text">{{comment_progress.first_name}} {{comment_progress.last_name}}</div>
+                         <div class="left-li">
+                            <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                                <div class="middle">
+                                    <div class="text">{{comment_progress.first_name}} {{comment_progress.last_name}}</div>
+                                </div>
                             </div>
-                        </div>
-                     </div>
-                     
-                     <div class="right-li third-li">
-                      {% if comment_progress %}
-                      <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
-                        <ul style="">
-                          
-                          <li style="width:100%;margin-bottom:5px">{% if comment_progress.comment_text %}{{comment_progress.comment_text}}{% endif %}</li>
-                          
-                        </ul>
-                        {% get_converted_time c.date as time %}
-                        
-                        <span>{{time}}</span>
-                        
-                      </div>
-                      {% if c.previous_task_progress != c.task_progress %}
-                      <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
-                        {% endif %}
-                      {% else %}
-                       
-                        <p style=" float: left; width: 100%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
-                         {% get_converted_time c.date as time %}
-                        <br><span>{{time}}</span>   
-                           {% endif %}
-                      
-                        
+                         </div>
+                         
+                         <div class="right-li third-li">
+                          {% if comment_progress %}
+                              <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
+                                <ul style="">
+                                  
+                                  <li style="width:100%;margin-bottom:5px">{% if comment_progress.comment_text %}{{comment_progress.comment_text}}{% endif %}</li>
+                                  
+                                </ul>
+                                {% get_converted_time c.date as time %}
+                                
+                                <span>{{time}}</span>
+                                
+                              </div>
+                              {% if c.previous_task_progress != c.task_progress %}
+                              <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                          {% endif %}
+                          {% else %}
+                           
+                            <p style=" float: left; width: 100%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                             {% get_converted_time c.date as time %}
+                            <br><span>{{time}}</span>   
+                          {% endif %}
                             
                      </div>
-                     
                      
                   </li>
                   {% endif %}
@@ -298,6 +295,8 @@ font-size: 14px;
                      </div>
                     
                   </li>
+                  {% endif %}
+                  
                   {% if c.attachment_type == 2 %}
                   <li>
                      <div class="left-li">
@@ -310,20 +309,18 @@ font-size: 14px;
                      <div class="right-li second-li">
                      
                         <ul>
-                           {% if c.image_url %}
                            
                            <li>
                                 
-                              <a href="{{image_url}}{{c.image_url}}">
+                              <a href="{{c.image_url}}">
                               {% if c.document_type == 3 %}
-                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{c.name}}</span></a>
+                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{c.file_name}}</span></a>
                               {% elif c.document_type == 1 %}
-                              <img src="/static/img/excel-icon.png" alt=""> <span>{{c.name}}</span></a>
+                              <img src="/static/img/excel-icon.png" alt=""> <span>{{c.file_name}}</span></a>
                               {% else %}
-                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{c.name}}</span></a>
+                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{c.file_name}}</span></a>
                               
                            </li>
-                           {% endif %}
                         </ul>
                         {% get_converted_time c.date as time %}
                         <span>{{time}}</span>
@@ -334,7 +331,7 @@ font-size: 14px;
                   </li>
                   {% endif %}
 <!-- -------------------------------------------------------------------- -->
-                  {% endif %}
+
                   {% endif %}
                   {% endfor %}
                   {% endif %}

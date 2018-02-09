@@ -89,11 +89,12 @@ def task_comments_progress(date,task_id, attach):
             attachment_data = {'name':i.created_by.attrs,
             'description':i.description,
             'date':i.created,'attachment':1,
-            'attachment_type':i.attachment_type,
+            'attachment_type':int(i.attachment_type),
             'document_type':i.document_type,
             'image_url':PMU_URL + i.attachment_file.url,
             'task_progress':task_history.task_progress,
-            'previous_task_progress':task_history.get_previous_by_created().task_progress}
+            'previous_task_progress':task_history.get_previous_by_created().task_progress,
+            'file_name':i.attachment_file.name.split('/')[-1]}
             task_data.append(attachment_data)
     task_data.sort(key=lambda item:item['date'], reverse=True)
     return task_data
@@ -102,7 +103,6 @@ from datetime import date
 @register.assignment_tag
 def get_task_comments(comment_date,task_id):
     comment_data = {}
-    print comment_date
     try:
         prev_tick = comment_date.second -1
     except:
@@ -116,7 +116,6 @@ def get_task_comments(comment_date,task_id):
     # new_date = comment_date.replace(microsecond=0)
     comment_list = Comment.objects.latest_one(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
                         created__range=(start_time,end_time))
-    print task_id
     if comment_list:
         comment_data = {'name':comment_list.created_by.attrs,'comment_text':comment_list.text,'time':comment_list.created}
     return comment_data
