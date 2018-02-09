@@ -302,12 +302,13 @@ font-size: 14px;
                           <li style="width:100%;margin-bottom:5px">{% if comment_progress.comment_text %}{{comment_progress.comment_text}}{% endif %}</li>
                           
                         </ul>
-                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% get_converted_time c.time as time %}
                         
                         <span>{{time}}</span>
                         
                       </div>
+                      <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        
                       {% else %}
                        
                         <p style=" float: left; width: 100%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
