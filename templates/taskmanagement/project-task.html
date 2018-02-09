@@ -322,12 +322,17 @@ font-size: 14px;
                               
                            </li>
                         </ul>
+                        aadis
                         {% get_converted_time c.date as time %}
                         <span>{{time}}</span>
-                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{attachement_json.previous_task_progress}}%</b> to <b>{{attachement_json.task_progress}}% </b></p>
+                        aad
+                        
                         {% endif %}
 
                      </div>
+                     {% if c.previous_task_progress != c.task_progress %}
+                        <p style=" float: right; width: 50%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        {% endif %}
                   </li>
                   {% endif %}
 <!-- -------------------------------------------------------------------- -->
