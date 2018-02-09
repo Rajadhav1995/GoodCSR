@@ -168,15 +168,19 @@
         </div>
     </div>
     
-	<a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Manage Super Category</a>
-    {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
+	
+    
     <div class="link-right">
+    
+        <a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Manage Super Category</a>
+        {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     	<a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Report Utilization</a>
 <!--    	    <a href="javascript:void(0);" class="link-pad1"> Edit/Update Budget</a>-->
         <a href="/manage/project/budget/lineitem/edit/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>
+        {% endif %}
     </div>   
-    {% endif %}
+    
     <div class="white-box">
     <div class="table-responsive">
     <table class="tab-resp1" cellpadding="0" cellspacing="0" border="0">

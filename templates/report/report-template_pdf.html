@@ -869,6 +869,8 @@ No Key Acheivements in this Quarter
     {% for i,v in currentquarter_list.items %}
         {% get_gantt_details v project as taskdict %}
         var jsonData = {{taskdict|safe}}
+        var gantt_range='{{v}}'
+                var gantt_date = gantt_range.split(' to ')[0]
         var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
          var cur = new Date();
     var tom = new Date();
