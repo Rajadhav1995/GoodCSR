@@ -317,7 +317,8 @@ $(document).ready(function() {
     {
       var obj = ff[i]
       var title = obj.title;
-      var title_id = title.replace(/ /g,'').replace(/[^a-zA-Z ]/g, "")
+      var title_id = title.replace(/ /g,'').replace(/[^a-zA-Z 0-9 ]/g, "")
+      alert(title_id);
       var wrapper         = $(".numeric_parameter_"+ title_id); //Fields wrapper
       console.log(obj);
       if (obj.type == 'CUR') {
