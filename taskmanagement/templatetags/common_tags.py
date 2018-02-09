@@ -58,8 +58,12 @@ def task_comments_progress(date,task_id, attach):
             # if i.task_progress != i.get_previous_by_created().task_progress:
             task_time = i.modified
             next_tick = task_time.second +1
+            
             task_prev_tick = task_time.second -1
-            start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
+            try:
+                start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
+            except:
+                start_time = task_time.replace(microsecond=499999,second=59)
             end_time = task_time.replace(microsecond=999999)
             attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time))
             if not attach_obj:
@@ -102,7 +106,6 @@ def get_task_comments(comment_date,task_id):
     try:
         prev_tick = comment_date.second -1
     except:
-        import ipdb;ipdb.set_trace()
         pass
     try:
         start_time = comment_date.replace(microsecond=499999,second=prev_tick)
@@ -128,7 +131,6 @@ def get_attachment_progress(attach,task_id):
     end_time = time.replace(microsecond=999999)
     task_object = Task.objects.get(id=task_id)
     try:
-        # import ipdb; ipdb.set_trace()
         task_history = task_object.history.get(modified__range = (start_time,end_time))
     except:
         task_history = task_object.history.filter(modified__range = (start_time,end_time))
