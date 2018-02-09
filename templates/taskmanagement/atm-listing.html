@@ -4,59 +4,44 @@
 <!--Content part starts-->
 
 {% block content %}
-<script>
-function activity(name,slug,act_id,super_cat_id) {
-    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
-}
-function task(name,slug,task_id,act_id,super_id) {
-    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
-}
-
-function milestone(name,slug,mile_id,task_ids) {
-    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
-}
-</script>
-<!--script for filters by- malcolm-->
-<script>
-function filter(target,parent,type) {
-    if ($(target).hasClass('fa-filter')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").each(function () {
-        var child = $(this).children()[0];
-        $(this).show();
-        if(type=="activity"){
-        var actFilter = $(parent).attr('act_id');
-        if ($(child).attr('activity_id') != actFilter) {
-          $(this).hide();
-        }
-        }else if(type=="milestone"){
-        var actFilter = $(parent).attr('task_ids');
-        if (actFilter.includes($(child).attr('task_id'))==false) {
-          $(this).hide();
-        }
-        }
-      });
-      $('.fa-ban').not(target).each(function(){
-        $(this).toggleClass('fa fa-ban');
-        $(this).toggleClass('fa fa-filter');
-      });
-      // Code to filter tasks when the button is clicked
-    } else if ($(target).hasClass('fa-ban')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").show();
-  // Code to show all tasks when the button is clicked
-  }
-}
-</script>
 <div class="clear"></div>
 <!--Content part starts-->
 <section class="content-part">
   <div class="row">
   <div class=" white-box white-pad">
-  <div id="pvaContainer" style="width: 50%;float: left;">Planned vs Actual Task Completion Graph</div>
-  <div id="Super_Completion" style="width: 50%;float: left;">Super Category Completion</div>
+  <div style="width: 50%;float: left;">
+  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Planned vs Actual Task Completion</div>
+  <div id="pvaSuper">
+    <div class="scrollmenu">
+    </div>
+    <style>
+    div.scrollmenu {
+    overflow: auto;
+    white-space: nowrap;
+    height: 30px;
+    padding-left: 10px;
+    }
+    div.scrollmenu a {
+        display: inline-block;
+        text-align: center;
+        font-size: 14px;
+        line-height: 20px;
+        padding: 2px 5px;
+        text-decoration: none;
+        float: none;
+        margin: 0 0 0 10px;
+    }
+    div.scrollmenu a:hover {
+        background-color: #a73f5c;
+    }
+    </style>
+  </div>
+  <div id="pvaContainer" style="width: 100%;float: left;"></div >
+  </div>
+  <div style="width: 50%;float: left;">
+  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Super Category Completion</div>
+  <div id="Super_Completion" style="width: 100%;float: left;"></div>
+  </div>
   </div>
 {% taskdict_json taskdict as taskdict_json %}
 {% if taskdict_json.activities or taskdict_json.tasks %}
@@ -198,7 +183,40 @@ function milestone(name,slug,mile_id,task_ids) {
 }
 </script>
 
-
+<!--script for filters by- malcolm-->
+<script>
+function filter(target,parent,type) {
+    if ($(target).hasClass('fa-filter')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
+      $("#boxscroll-atm1>ul>li").each(function () {
+        var child = $(this).children()[0];
+        $(this).show();
+        if(type=="activity"){
+        var actFilter = $(parent).attr('act_id');
+        if ($(child).attr('activity_id') != actFilter) {
+          $(this).hide();
+        }
+        }else if(type=="milestone"){
+        var actFilter = $(parent).attr('task_ids');
+        if (actFilter.includes($(child).attr('task_id'))==false) {
+          $(this).hide();
+        }
+        }
+      });
+      $('.fa-ban').not(target).each(function(){
+        $(this).toggleClass('fa fa-ban');
+        $(this).toggleClass('fa fa-filter');
+      });
+      // Code to filter tasks when the button is clicked
+    } else if ($(target).hasClass('fa-ban')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
+      $("#boxscroll-atm1>ul>li").show();
+  // Code to show all tasks when the button is clicked
+  }
+}
+</script>
 
 
 <script>
@@ -312,7 +330,7 @@ $(document).ready(function(){
 <!-- script for gantt chart starts here-->
 
 <script>
-    var jsonData = {{taskdict|safe}}
+    var jsonData = {{taskdict|safe}};
     console.log(jsonData);
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
@@ -375,7 +393,7 @@ $(document).ready(function(){
         activityId = 11,
         superId = 1,
         activity_type = 'Core',
-        taskCompletion = 0,
+        taskCompletion = 0, 
         taskName = 'Task',
         taskStatus = '',
         pStartDate = curDate,
@@ -744,14 +762,14 @@ $(document).ready(function(){
       SuperComp = Highcharts.chart('Super_Completion', {
         chart: {
           type: 'bar',
-          height: '400',
+          height: '410',
           borderWidth: 1,
           borderColor: 'rgba(0,0,0,0)',
           backgroundColor: '#fbfbfb',
           marginTop: 75
         },
         title: {
-            text: '<h2>Super Category Completion</h2>'
+            text: ''
         },
         exporting: {
           enabled: false
@@ -831,6 +849,9 @@ $(document).ready(function(){
 <script>
   var pvaData=[];
   var pvaSorted=[];
+  var sc=[];
+  var ids=[];
+  pTasks = jsonData.tasks;
     function getNextWeek(y,w) {
       var simple = new Date(y, 0, 9 + (w) * 7);
       var dow = simple.getDay();
@@ -841,7 +862,14 @@ $(document).ready(function(){
           ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
       return ISOweekStart;
     }
-    temp = {{ser_hist|safe}}
+    $.each(jsonData.supercategories,function(){
+      console.log('supr',this.name)
+      if(this.name != ""){
+        $(".scrollmenu").append("<a class='link-pad text-md-center' onClick='superData("+this.id+")'>"+this.name+"</a>");
+        }
+    });
+    temp = {{ser_hist|safe}};
+    function chartInit(){
     $.each(temp,function(i){
       pvaData[i] = temp[i].fields;
     });
@@ -856,23 +884,38 @@ $(document).ready(function(){
       this.modified.setHours(0, 0, 0, 0);
       this.modified = new Date(this.modified);  
     })
+      $.each(jsonData.tasks,function(i,n){
+        $.each(jsonData.activities,function(j,m){
+          if(jsonData.activities[j].id == jsonData.tasks[i].activity){
+            sc.push({'super':jsonData.activities[j].super_category,'task':jsonData.tasks[i].id})
+          }
+        })
+      });
     $.each(jsonData.tasks,function(){
       var temp = {};
       temp.active = 2;
       temp.activity = this.activity;
       temp.name = this.name;
       temp.actual_start_date = this.actual_start_date;
-      temp.actual_end_date = this.actual_end_date;
       temp.assigned_to = this.assigned_to;
       temp.created = this.start_date;
       temp.end_date = this.end_date;
       temp.id = this.id;
       temp.modified = this.actual_end_date;
+      temp.actual_end_date = this.actual_end_date;
+      if(this.actual_end_date==null && this.task_progress==100){
+      temp.modified = this.expected_end_date;
+      temp.actual_end_date = this.expected_end_date;
+      }
       temp.slug = this.slug;
       temp.start_date = this.start_date;
-      temp.task_progress = this.task_progress
-      pvaSorted.push(temp);
+      temp.task_progress = this.task_progress;
+      if(temp.modified==null) temp.modified = this.expected_end_date;
+      pvaData.push(temp);
     })
+    console.log("pva1",pvaSorted);
+    }
+    function filteract(){
     //Get rows with unique date and task
     var flags = {},i;
     for( i=0; i<pvaData.length; i++) {
@@ -890,11 +933,18 @@ $(document).ready(function(){
         return null;
       }
     }).entries(pvaSorted);
-    console.log("Check actual",actnest);
+    console.log("Check actual",ids.length);
     
     var plannest = d3.nest().key(function (d) {
+        if(ids.length==0){
         return week(new Date(d.end_date));
-    }).entries(jsonData.tasks);
+        }
+        else if(ids.indexOf(d.id)!=-1){
+        return week(new Date(d.end_date));
+        }else{
+        return null;
+        }
+    }).entries(pTasks);
     //Count for each day and store in the array
     // var map = pvaSorted.reduce(function(map, elem) { 
     //   var date = elem.modified;
@@ -922,6 +972,7 @@ $(document).ready(function(){
       return new Date(b.modified) - new Date(a.modified);
     });
     $.each(plannest , function(){
+      if(this.key!="null"){
       var plankey = this.key.toString().split('-');
       var week = getNextWeek(plankey[0],plankey[1]);
       var comp = 0;
@@ -931,8 +982,8 @@ $(document).ready(function(){
         console.log("keys", comp, this.id , weight);
       })
       chartData.push([(week.getTime()+19800000),comp]);
-      console.log("Key",week.getTime(),comp)
-    })
+      }
+    });
     console.log("CD",chartData,maxComp,plannest)
     chartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
@@ -972,15 +1023,16 @@ $(document).ready(function(){
         var plankey = this.key.toString().split('-');
         var week = getNextWeek(plankey[0],plankey[1]);
         var compA = 0;
-        console.log(new Date(week),"Key",this.values)
-        //Remove tasks with same id in the same week 
         var weekUID = [];
-        for( i=0; i<this.values.length; i++) {
-            if( flags[(this.values[i].id)]) continue;
-            flags[(this.values[i].id)] = true;
-            weekUID.push(this.values[i]);
+        console.log(new Date(week),"Key",this.values.length)
+        //Remove tasks with same id in the same week 
+        for(var k=0; k<this.values.length; k++) {
+            console.log(flags[this.values[k].id],'weelUID2');
+            if( flags[(this.values[k].id)]) continue;
+            flags[(this.values[k].id)] = true;
+            weekUID.push(this.values[k]);
         }
-        console.log(weekUID,'weelUID');
+            console.log(weekUID,'weelUID');
         $.each(weekUID,function(){
           var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
           compA += (weight * this.task_progress);
@@ -988,7 +1040,7 @@ $(document).ready(function(){
         })
         AchartData.push([(week.getTime()+19800000),compA]);
       }
-    })
+    });
     console.log("aCD",AchartData,AmaxComp)
     AchartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
@@ -1006,13 +1058,14 @@ $(document).ready(function(){
     console.log("PVA",AchartData,pvaData);
     PVAChart = Highcharts.chart('pvaContainer', {
       chart: {
-        height: '400',
+        type: 'spline',
+        height: '380',
         borderWidth: 1,
         borderColor: 'rgba(0,0,0,0)',
         backgroundColor: '#fbfbfb'
       },
       title: {
-          text: '<h2>Planned vs Actual Completion</h2>'
+          text: ''
       },
       xAxis: {
           type: 'datetime',
@@ -1025,12 +1078,20 @@ $(document).ready(function(){
           },
           title: {
               text: 'Date'
-          }
+          },
+          plotLines: [
+            {
+              color: '#cab361',
+              width: 3,
+              value: new Date().getTime()
+            }
+          ]
       },
       yAxis: {
           title: {
               text: 'Task Completion %'
           },
+          min: 0,
           max: 100
       },
       tooltip: {
@@ -1086,6 +1147,36 @@ $(document).ready(function(){
       }
 
     });
+    }
+    chartInit();
+    filteract();
+// Redraw chart after selecting super category
+    
+    function redraw(){
+      $('#pvaContainer').highcharts().destroy();
+      filteract();
+    }
+    function superData(id){
+      ids=[];
+      chartInit();
+      $.each(sc,function(){
+        if(this.super == id){
+          ids.push(this.task);
+        }
+      });
+      console.log("asort2b",pvaData,ids);
+      $.each(pvaData,function(i){
+        if(ids.indexOf(pvaData[i].id)==-1){
+          console.log('asort2v',ids.indexOf(pvaData[i].id)==-1);
+          pvaData[i].id = 0;
+          pvaData[i].modified = 0;
+          pvaData[i].start_date = 0;
+          pvaData[i].end_date = 0;
+        }
+      });
+      console.log("asort2",pvaData,ids);
+      setTimeout(redraw(),3000);
+    }
 </script>
 <!-- script for planned vs actual ends -->
 

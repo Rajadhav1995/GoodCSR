@@ -425,8 +425,10 @@ def my_tasks_details(request):
     key = request.GET.get('key')
     if status == '1':
         return render(request,'taskmanagement/project-task.html',locals())
-    else:
+    elif status == '0':
         return render(request,'taskmanagement/my-task.html',locals())
+    elif status == '2':
+        return render(request,'taskmanagement/my-calendar.html',locals())
     
 def create_task_progress(request,task):
     # this function is to create task progress
