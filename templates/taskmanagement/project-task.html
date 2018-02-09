@@ -204,87 +204,22 @@ font-size: 14px;
                {% for dates,attach in task_attach.items %}
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
-                  <li>
-                     {% for a in attach %}
-                     {% get_attachment_progress a i.id as attachement_json %}
-                     
-                     {% if a.attachment_type == 1 %}
-                     <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
-                            <div class="middle">
-                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
-                            </div>
-                        </div>
-                     </div>
-                     
-                     <div class="right-li first-li">
-                            {% if a.attachment_file %}
-                        <p>{% if a.description %}{{a.description|safe}} {% endif %}</p>
-                        
-                        <div style="float:left; width:50%;margin-right:20px; margin-bottom:10px">
-                          <ul>
-                           <li style="width:100%">
-                              <a href="{{image_url}}{{a.attachment_file.url}}">
-                                 <img src="{{image_url}}{{a.attachment_file.url}}" width="60%" alt="">
-<!--                                 <div class="/static/image-hover">4 More files</div>-->
-                              </a>
-                           </li>
-                           {% get_converted_time a.created as time %}
-                        <span>{{time}}</span>
-                            
-                        </ul>
-                      </div>
-                        
-                        {% if attachement_json.previous_task_progress == attachement_json.task_progress %}
-                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{attachement_json.previous_task_progress}}%</b> to <b>{{attachement_json.task_progress}}% </b></p>
-                        {% endif %}
-                        {% endif %}
-                     </div>
-                     
-                  </li>
-                  {% elif a.attachment_type == 2 %}
-                  <li>
-                     <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
-                            <div class="middle">
-                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
-                            </div>
-                        </div>
-                     </div>
-                     <div class="right-li second-li">
-                     
-                        <ul>
-                           {% if a.attachment_file %}
-                           
-                           <li>
-                                
-                              <a href="{{image_url}}{{a.attachment_file.url}}">
-                              {% if a.document_type == 3 %}
-                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{a.name}}</span></a>
-                              {% elif a.document_type == 1 %}
-                              <img src="/static/img/excel-icon.png" alt=""> <span>{{a.name}}</span></a>
-                              {% else %}
-                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{a.name}}</span></a>
-                              {% endif %}
-                           </li>
-                        </ul>
-                        {% get_converted_time a.created as time %}
-                        <span>{{time}}</span>
-                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{attachement_json.previous_task_progress}}%</b> to <b>{{attachement_json.task_progress}}% </b></p>
-                        {% endif %}
 
-                     </div>
-                  </li>
 
-                  {% endif %}
-                  {% endfor %}
 
-                  {% task_comments_progress dates i.id as comments %}
+                  
+                 
+                  
+                  {% task_comments_progress dates i.id attach as comments %}
+                  
                   {%if comments %}
-                  <li>
-                    {% for c in comments %}
 
-                    {% get_task_comments c.time i.id as comment_progress %}
+                  {% for c in comments %}
+                  {% if c.attachment == 0 %}
+                  <li>
+                    
+
+                    {% get_task_comments c.date i.id as comment_progress %}
 
                      <div class="left-li">
                         <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
@@ -302,34 +237,107 @@ font-size: 14px;
                           <li style="width:100%;margin-bottom:5px">{% if comment_progress.comment_text %}{{comment_progress.comment_text}}{% endif %}</li>
                           
                         </ul>
-                        {% get_converted_time c.time as time %}
+                        {% get_converted_time c.date as time %}
                         
                         <span>{{time}}</span>
                         
                       </div>
+                      {% if c.previous_task_progress != c.task_progress %}
                       <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
-                        
+                        {% endif %}
                       {% else %}
                        
                         <p style=" float: left; width: 100%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
-                         {% get_converted_time c.time as time %}
+                         {% get_converted_time c.date as time %}
                         <br><span>{{time}}</span>   
                            {% endif %}
                       
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                        
                             
                      </div>
-                     {% endfor %}
+                     
                      
                   </li>
                   {% endif %}
+                  {% if c.attachment == 1 %}
+<!-- ---------------------------------------------------------------------------------------- -->
+                  <li>
+                    
+                     
+                     {% if c.attachment_type == 1 %}
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
+                     
+                     <div class="right-li first-li">
+                            
+                        <p>{{c.description}}</p>
+                        
+                        <div style="float:left; width:50%;margin-right:20px; margin-bottom:10px">
+                          <ul>
+                           <li style="width:100%">
+                              <a href="{{c.image_url}}">
+                                 <img src="{{c.image_url}}" width="60%" alt="">
+<!--                                 <div class="/static/image-hover">4 More files</div>-->
+                              </a>
+                           </li>
+                           {% get_converted_time c.date as time %}
+                        <span>{{time}}</span>
+                            
+                        </ul>
+                      </div>
+                        
+                        {% if c.previous_task_progress != c.task_progress %}
+                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        {% endif %}
+                     </div>
+                    
+                  </li>
+                  {% if c.attachment_type == 2 %}
+                  <li>
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
+                     <div class="right-li second-li">
+                     
+                        <ul>
+                           {% if c.image_url %}
+                           
+                           <li>
+                                
+                              <a href="{{image_url}}{{c.image_url}}">
+                              {% if c.document_type == 3 %}
+                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{c.name}}</span></a>
+                              {% elif c.document_type == 1 %}
+                              <img src="/static/img/excel-icon.png" alt=""> <span>{{c.name}}</span></a>
+                              {% else %}
+                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{c.name}}</span></a>
+                              
+                           </li>
+                           {% endif %}
+                        </ul>
+                        {% get_converted_time c.date as time %}
+                        <span>{{time}}</span>
+                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{attachement_json.previous_task_progress}}%</b> to <b>{{attachement_json.task_progress}}% </b></p>
+                        {% endif %}
+
+                     </div>
+                  </li>
+                  {% endif %}
+<!-- -------------------------------------------------------------------- -->
+                  {% endif %}
+                  {% endif %}
+                  {% endfor %}
+                  {% endif %}
+
 
                </ul>
                {% endfor %}
