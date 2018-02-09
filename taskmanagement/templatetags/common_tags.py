@@ -86,10 +86,7 @@ def get_attachment_progress(attach,task_id):
     try:
         task_history = task_object.history.get_or_none(modified__range = (start_time,end_time))
     except:
-        import ipdb; ipdb.set_trace()
-        task_history = task_object.history.filter(modified__range = (start_time,end_time))
-        if task_history:
-            task_history = task_history[0]
+        return data
 
     # data = {'name':attach.created_by.attrs,
     #         'description':attach.description,
