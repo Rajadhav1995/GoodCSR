@@ -8,7 +8,7 @@ import requests,ast
 from taskmanagement.models import Task
 from budgetmanagement.models import *
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
-from pmu.settings import PMU_URL
+from pmu.settings import PMU_URL,SAMITHA_URL
 from ast import literal_eval
 from itertools import chain
 
@@ -45,12 +45,12 @@ def task_comments(date,task_id):
 @register.assignment_tag   
 def task_comments_progress(date,task_id):
     task_data = []
-    print "aditya",task_id
     # comment_list = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id).order_by('-id')
     # for i in comment_list.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
     #     data = {'name':i.created_by.attrs,'comment_text':i.text,'time':i.created}
         # task_data.append(data)
     task_progress = Task.objects.get(id=task_id)
+
     task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
     for i in task_progress_history:
         if i.task_progress:
@@ -67,12 +67,40 @@ from datetime import date
 @register.assignment_tag
 def get_task_comments(comment_date,task_id):
     comment_data = {}
-    new_date = comment_date.replace(microsecond=0)
-    comment_list = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
-            created__year=new_date.year,created__month=new_date.month,created__day=new_date.day,created__hour=new_date.hour,created__minute=new_date.minute,created__second=new_date.second)
+    start_time = comment_date.replace(microsecond=1)
+    end_time = comment_date.replace(microsecond=999999)
+    # new_date = comment_date.replace(microsecond=0)
+    comment_list = Comment.objects.latest_one(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
+                        created__range=(start_time,end_time))
     if comment_list:
         comment_data = {'name':comment_list.created_by.attrs,'comment_text':comment_list.text,'time':comment_list.created}
     return comment_data
+
+@register.assignment_tag
+def get_attachment_progress(attach,task_id):
+    time = attach.created
+    data ={}
+    start_time = time.replace(microsecond=1)
+    end_time = time.replace(microsecond=999999)
+    task_object = Task.objects.get(id=task_id)
+    try:
+        task_history = task_object.history.get_or_none(modified__range = (start_time,end_time))
+    except:
+        return data
+
+    # data = {'name':attach.created_by.attrs,
+    #         'description':attach.description,
+    #         'date':attach.created,
+    #         'attachment_type':attach.attachment_type,
+    #         'document_type':attach.document_type,
+    #         'image_url':PMU_URL + attach.attachment_file.url,
+    #         'task_progress':task_history.task_progress,
+    #         'previous_task_progress':task_history.get_previous_by_created().task_progress}
+    if task_history:
+        data = {'task_progress':task_history.task_progress,
+           'previous_task_progress':task_history.get_previous_by_created().task_progress}
+    return data
+
 
 def get_removed_questions(questions,block,project_report,block_type,quest_removed):
     # to get the removed questions list for that particular block 
