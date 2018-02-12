@@ -410,7 +410,6 @@ def my_tasks_details(request):
         task_activities = Task.objects.filter(id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
         category_list = set([i.activity.super_category for i in task_activities])
-        # import ipdb; ipdb.set_trace()
     else:
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
