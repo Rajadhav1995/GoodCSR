@@ -97,7 +97,6 @@ class Manage(object):
     # on success returning to particular model list
     #--------------------------------#
         return "/close/?msg=%s added successfully." %(self.kwargs['model'])
-#        return '/usermanagement/list/%s/' %(self.kwargs['model'])
 
 
 
@@ -172,14 +171,10 @@ def manage_role(request, pk):
         #     (<Role_Config: salutation>, [])
         # ]
         for conf,perms in perm_data:
-            if 'edit' in perms and 'view' != perms :
+            if 'edit' in perms or 'add' in perms and 'view' != perms :
                 perms.append('view')
                 conf.update(perms)
 
-            elif 'add' in perms and 'view' != perms :
-                perms.append('view')
-                conf.update(perms)
-                
             elif 'delete' in perms and 'view'!= perms and 'edit'!= perms:
                 perms.append('view')
                 perms.append('edit')
@@ -193,8 +188,6 @@ def manage_role(request, pk):
                 roleconf = RoleConfig.objects.filter(menu=parent,role=role)[0]
                 if roleconf:
                     roleconf.update('view')
-#        for conf, perms in perm_data:
-#            conf.update(perms)
     return render(request, 'usermanagement/manage-role.html', locals())
 
 
@@ -207,7 +200,7 @@ def manage_menu(request, pk):
 
     return render(request, 'usermanagement/manage-menu.html', locals())
 
-def Active(request,pk):
+def active(request,pk):
 
     # Activate or deactivate a model object
     # Then redirect to listing page
@@ -217,3 +210,9 @@ def Active(request,pk):
         obj.switch()
         obj.save()
         return JsonResponse({'status': obj.active})
+
+def handler404(request):
+    return render(request, '404.html', status=404)
+
+def handler500(request):
+    return render(request, '500.html', status=500)

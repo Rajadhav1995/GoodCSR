@@ -551,3 +551,45 @@ def budgetlineitemedit(request):
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&edit=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/edit_budgetlineitem.html",locals())
+    
+def category_listing(request):
+    # this is to list the categories which are added 
+    budget_id = request.GET.get('budget_id')
+    project_slug = request.GET.get('slug')
+    listing = SuperCategory.objects.filter(budget__id=budget_id,project__slug = project_slug).exclude(parent=None)
+    return render(request,"budget/category_listing.html",locals())
+
+def category_add(request):
+    # this is to add super categories for the project
+    budget_id = request.GET.get('budget_id')
+    project_slug = request.GET.get('slug')
+    key=request.GET.get('key')
+    if key == "edit":
+        cat_id = request.GET.get('cat_id')
+        cat_obj = SuperCategory.objects.get_or_none(id=cat_id)
+    if request.method == 'POST':
+        budget_id = request.POST.get('budget_id')
+        project_slug = request.POST.get('slug')
+        project_obj = Project.objects.get_or_none(slug=project_slug)
+        budget_obj = Budget.objects.get_or_none(id=int(budget_id))
+        super_parent = SuperCategory.objects.filter(budget=budget_obj,project=project_obj)[1].parent
+        category_names  = [str(k) for k,v in request.POST.items() if k.startswith('category')]
+        for i in category_names:
+            if request.POST.get(i):
+                try:
+                    super_obj = SuperCategory.objects.get(id=int(request.POST.get('cat_id')))
+                    super_obj.name = request.POST.get(i)
+                except:
+                    super_obj= SuperCategory.objects.create(name = request.POST.get(i),project = project_obj,parent=super_parent,budget = budget_obj)
+                super_obj.slug = slugify(super_obj.name)
+                super_obj.save()
+        return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+'&key=budget')
+    return render(request,"budget/category_edit.html",locals())
+
+def delete_category(request):
+    # this is to delete a category
+    budget_id=request.GET.get('budget_id')
+    project_slug = request.GET.get('slug')
+    catgry_id = request.GET.get('cat_id')
+    catgery_del = SuperCategory.objects.get(id=catgry_id).delete()
+    return HttpResponseRedirect('/manage/project/budget/category/listing/?budget_id='+str(budget_id)+'&slug='+project_slug)

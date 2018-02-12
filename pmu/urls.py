@@ -24,9 +24,15 @@ from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
                                             projectbudgetcategoryadd,projectlineitemadd,
                                             projectbudgetdetail,budgetutilization,
                                             budgetview,year_quarter_list,
-                                            budgetlineitemedit,month_quarter_list)
+                                            budgetlineitemedit,month_quarter_list,
+                                            category_listing,category_add,
+                                            delete_category,)
 from userprofile.views import *
+import userprofile
+from django.conf.urls import handler404, handler500
 
+handler404 = userprofile.views.handler404
+handler500 = userprofile.views.handler500
 
 admin.autodiscover()
 
@@ -44,6 +50,9 @@ roles_patterns = ([
     url(r'^quarter/list/$',year_quarter_list),
     url(r'^month/list/$',month_quarter_list),
     url(r'^project/budget/lineitem/edit/$',budgetlineitemedit),
+    url(r'^project/budget/category/listing/$',category_listing),
+    url(r'^project/budget/add/category/$',category_add),
+    url(r'^project/budget/category/delete/$',delete_category),
 
 ])
 
@@ -59,7 +68,7 @@ userroles_patterns = ([
     url(r'^active/(?P<model>(:?roleconfig))/(?P<pk>\d+)/(?P<pid>\d+)/$', UserActive.as_view()),
     url(r'^manage/role/(?P<pk>\d+)/$', manage_role),
     url(r'^manage/menu/(?P<pk>\d+)/$', manage_menu),
-    url(r'^manage/active/(?P<pk>\d+)/$', Active),
+    url(r'^manage/active/(?P<pk>\d+)/$', active),
 
 ])
 

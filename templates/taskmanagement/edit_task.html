@@ -210,7 +210,7 @@ function showCheckboxes() {
                 if (data.activity){
                     activity = data.activity
                    for (var i=0;i<activity.length;i++){
-                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] + '</option>').appendTo('#id_activity');
+                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] +' ('+activity[i]['super_name']+')'+ '</option>').appendTo('#id_activity');
                     }
                     $('#id_activity').val(act);
                 }

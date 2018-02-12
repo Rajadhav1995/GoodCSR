@@ -775,6 +775,14 @@ def finalreportdesign(request):
     else:
         return render(request,'report/final_report.html',locals())
 
+def get_heading_listing(report_obj,key):
+    content_data = ''
+    if report_obj.report_type==1:
+        content_data = key+' Quarter Updates'
+    else:
+        content_data = key+' Month Updates'
+    return content_data
+
 from collections import OrderedDict
 from budgetmanagement.templatetags import question_tags
 from taskmanagement.templatetags import common_tags
@@ -809,31 +817,22 @@ def get_index_contents(slug,report_id):
             # so that we can render the quarters based on the name of the content and iterate it
             # same way for current and next quarters is done
         if previousquarter_list:
-            if report_obj.report_type==1:
-                contents['2'] = 'Previous Quarter Updates'
-                quarters['Previous Quarter Updates'] = previousquarter_list
-            else:
-                contents['2'] = 'Previous Month Updates'
-                quarters['Previous Month Updates'] = previousquarter_list
+            content_data = get_heading_listing(report_obj,key="Previous")
+            contents['2'] = content_data
+            quarters[content_data] = previousquarter_list
         if currentquarter_list:
-            if report_obj.report_type==1:
-                contents['3'] = 'Current Quarter Updates'
-                quarters['Current Quarter Updates'] = currentquarter_list
-            else:
-                contents['3'] = 'Current Month Updates'
-                quarters['Current Month Updates'] = currentquarter_list
+            content_data = get_heading_listing(report_obj,key="Current")
+            contents['3'] = content_data
+            quarters[content_data] = currentquarter_list
 
         if futurequarter_list:
-            if report_obj.report_type==1:
-                contents['4'] = 'Next Quarter Updates'
-                quarters['Next Month Updates'] = futurequarter_list
-            else:
-                contents['4'] = 'Next Month Updates'
-                quarters['Next Month Updates'] = futurequarter_list
+            content_data = get_heading_listing(report_obj,key="Next")
+            contents['4'] = content_data
+            quarters[content_data] = futurequarter_list
             import operator
             # here we getting all next quarter so we taking first quarter 
-            sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])
-            quarters['Next Quarter Updates']=sorted_futurequarter_list
+#            sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])
+#            quarters['Next Quarter Updates']=sorted_futurequarter_list
         contents['5'] = "Annexure"
         quarters['Annexure']=''
     number_dict = {0:"First",1:"Second",2:"Third",3:"Fourth",4:"Fifth",5:"Sixth",6:"Seventh",7:"Eigth",8:"Ninth",9:"Tenth"}

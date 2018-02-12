@@ -315,8 +315,15 @@
                     {% for k,v in quarters.iteritems %}
                     {% if value == k %}
                     {% for ky,val in v.iteritems %}
-                    {% get_quarter_names ky number_dict as quarter_name %}
-                    <h3><span>{{quarter_name}} {% if projectreportobj.report_type == 1 %} Quarter {% else %} Month {{text}} {% endif %} - ({{val}})</span><span></span></h3>
+
+                    {% if projectreportobj.report_type == 1 %}
+                      {% get_quarter_names ky number_dict as quarter_name %}
+                      <h3><span> {{quarter_name}} Quarter - ({{val}})</span><span></span></h3>
+                      {% else %}
+                      {% get_month_name val as month_name %}
+                      <h3><span> {{month_name}} Month - ({{val}})</span><span></span></h3>
+                      {% endif %}
+
                     {% endfor %}
                     {% endif %}
                     {% endfor %}
@@ -873,6 +880,8 @@
             <script>
                 {% get_gantt_details v projectobj as taskdict %}
                 var jsonData = {{taskdict|safe}}
+                var gantt_range='{{v}}'
+                var gantt_date = gantt_range.split(' to ')[0]
                 console.log(jsonData);
                 var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
                 // console.log(jsonData.tasks);
@@ -1149,7 +1158,7 @@
     g.setWeekColWidth(50);
     g.setWeekMajorDateDisplayFormat('mon yyyy');
     g.setWeekMinorDateDisplayFormat('W w');
-    g.setScrollTo('today');
+    g.setScrollTo(gantt_date);
     g.setTimer(5);
     g.setShowTaskInfoLink(1);
     g.Draw();

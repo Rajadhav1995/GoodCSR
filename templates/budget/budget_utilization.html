@@ -49,7 +49,7 @@
 <form id="ic_form" action=".?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" enctype="multipart/form-data" >{% csrf_token %}
 <input type="hidden" name="count" value="{{span_length}}">
 
-        <div id="boxscroll1" class="table-scroll">
+        <div id="boxscroll1" class="table-scroll"></div>
                 <input type="hidden" name="count" value="6">
                 <input type="hidden" name="slug" value="{{project_slug}}">
                 <input type="hidden" name="budget_id" value="{{budget_id}}">
@@ -108,7 +108,11 @@
                                   <td> <input type="text" name = "comment_{{i}}_{{j}}_{{line_itemobj.id}}" id="comment_{{i}}_{{j}}" value="{% if comment %}{{comment.text}} {% else %} {% endif %}"> </td>
                                  <input type="hidden" name="line_obj" value="{{line_itemobj.id}}">
                                  {% get_line_attach line_itemobj as attach %}
-                                 <td><input type="file" class = 'file_input_id' style="border: 0px;" name = "attach_{{i}}_{{j}}_{{line_itemobj.id}}" id="attach_{{i}}_{{j}}" onchange = "return attach_error()" value="{% if attach %}{{attach.attachment_file}} {% else %} {% endif %}">{% if attach %}<a style="float:left" href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a> {% endif %}</td>
+                                 <td>
+                                 <div class="file">
+	<input type="file" class="fullwidth input rqd file_input_id" style="border: 0px;" name = "attach_{{i}}_{{j}}_{{line_itemobj.id}}" id="attach_{{i}}_{{j}}" onchange = "return attach_error()" value="{% if attach %}{{attach.attachment_file}} {% else %} {% endif %}">{% if attach %}<a style="float:left; width:100%" href={{image_url}}{{attach.image_url}} target="_blank">{{attach.name}}</a> {% endif %}
+	</div>
+                                 </td>
                                      
                                  <script type="text/javascript">
                                     function attach_error(){
@@ -341,5 +345,24 @@ $(document).ready(function(){
 <style>
 .error_cls{color:red;}
 </style>
+
+<style>
+.file input[type="file"]{
+    color: transparent;
+}
+.file{width:300px}
+.file input, .file select{width:300px}
+        </style>
+<script>
+ $(function () {
+     $('input[type="file"]').change(function () {
+          if ($(this).val() != "") {
+                 $(this).css('color', '#333');
+          }else{
+                 $(this).css('color', 'transparent');
+          }
+     });
+})
+        </script>
 
 {% endblock %}

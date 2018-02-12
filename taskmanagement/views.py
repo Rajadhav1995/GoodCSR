@@ -410,6 +410,7 @@ def my_tasks_details(request):
         task_activities = Task.objects.filter(id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
         category_list = set([i.activity.super_category for i in task_activities])
+        # import ipdb; ipdb.set_trace()
     else:
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
@@ -742,8 +743,12 @@ def get_activites_list(request):
     url=request.META.get('HTTP_REFERER')
     obj = None
     activity=[]
-    obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
-    activity = [{'id':i.id,'name':i.name} for i in obj_list]
+    if ids != '[]':
+        obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
+    else:
+        slug = request.GET.get('slug')
+        obj_list = Activity.objects.filter(active=2,project__slug=slug)
+    activity = [{'id':i.id,'name':i.name,'super_name':i.super_category.name} for i in obj_list]
     return JsonResponse({"activity":activity})
     
 from django.http import JsonResponse
