@@ -22,3 +22,17 @@ def updateuserform():
         userroleobj.role_type.add(*roletypeid)
         userroleobj.save()
         print "roles are tagged successuly for - %s"%i
+
+
+from collections import Counter, defaultdict
+
+def duplicates(lst):
+    cnt= Counter(lst)
+    return [key for key in cnt.keys() if cnt[key]> 1]
+
+def duplicates_indices(lst):
+    dup, ind= duplicates(lst), defaultdict(list)
+    for i, v in enumerate(lst):
+        if v in dup: ind[v].append(i)
+    return ind
+
