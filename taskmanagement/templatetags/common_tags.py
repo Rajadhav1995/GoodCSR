@@ -45,17 +45,12 @@ def task_comments(date,task_id):
 @register.assignment_tag   
 def task_comments_progress(date,task_id, attach):
     task_data = []
-    # comment_list = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id).order_by('-id')
-    # for i in comment_list.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
-    #     data = {'name':i.created_by.attrs,'comment_text':i.text,'time':i.created}
-        # task_data.append(data)
     
     task_progress = Task.objects.get(id=task_id)
     task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
     for i in task_progress_history:
         if i.task_progress:
             previous_task_progress = i.get_previous_by_created().task_progress
-            # if i.task_progress != i.get_previous_by_created().task_progress:
             task_time = i.modified
             next_tick = task_time.second +1
             
@@ -113,7 +108,6 @@ def get_task_comments(comment_date,task_id):
         start_time = comment_date.replace(microsecond=499999,second=59)
 
     end_time = comment_date.replace(microsecond=999999)
-    # new_date = comment_date.replace(microsecond=0)
     comment_list = Comment.objects.latest_one(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
                         created__range=(start_time,end_time))
     if comment_list:
@@ -136,14 +130,6 @@ def get_attachment_progress(attach,task_id):
         if task_history:
             task_history = task_history[0]
 
-    # data = {'name':attach.created_by.attrs,
-    #         'description':attach.description,
-    #         'date':attach.created,
-    #         'attachment_type':attach.attachment_type,
-    #         'document_type':attach.document_type,
-    #         'image_url':PMU_URL + attach.attachment_file.url,
-    #         'task_progress':task_history.task_progress,
-    #         'previous_task_progress':task_history.get_previous_by_created().task_progress}
     if task_history:
         data = {'task_progress':task_history.task_progress,
            'previous_task_progress':task_history.get_previous_by_created().task_progress}
