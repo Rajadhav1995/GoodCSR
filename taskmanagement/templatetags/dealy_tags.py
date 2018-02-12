@@ -16,4 +16,6 @@ from pmu.settings import PMU_URL,SAMITHA_URL
 def super_category_delay(project_slug):
     project_obj = Project.objects.get_or_none(slug=project_slug)
     super_list = SuperCategory.objects.filter(project=project_obj)
+    delay_list =[]
+        
     return super_list

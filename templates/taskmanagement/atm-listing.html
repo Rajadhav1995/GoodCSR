@@ -1108,7 +1108,8 @@ $(document).ready(function() {
 $(function() {
 
   // Create the chart
-
+var project_slug = '{{request.GET.slug}}'
+//{% super_category_delay project_slug as super_list %}
     
   $('#container').highcharts({
       chart: {
