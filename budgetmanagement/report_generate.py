@@ -829,7 +829,6 @@ def get_index_contents(slug,report_id):
             content_data = get_heading_listing(report_obj,key="Next")
             contents['4'] = content_data
             quarters[content_data] = futurequarter_list
-            
             import operator
             # here we getting all next quarter so we taking first quarter 
 #            sorted_futurequarter_list = dict([sorted(futurequarter_list.items(), key=operator.itemgetter(1))[0]])
