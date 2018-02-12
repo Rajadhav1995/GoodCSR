@@ -14,27 +14,6 @@
   <div id="pvaSuper">
     <div class="scrollmenu">
     </div>
-    <style>
-    div.scrollmenu {
-    overflow: auto;
-    white-space: nowrap;
-    height: 30px;
-    padding-left: 10px;
-    }
-    div.scrollmenu a {
-        display: inline-block;
-        text-align: center;
-        font-size: 14px;
-        line-height: 20px;
-        padding: 2px 5px;
-        text-decoration: none;
-        float: none;
-        margin: 0 0 0 10px;
-    }
-    div.scrollmenu a:hover {
-        background-color: #a73f5c;
-    }
-    </style>
   </div>
   <div id="pvaContainer" style="width: 100%;float: left;"></div >
   </div>
@@ -910,8 +889,7 @@ $(document).ready(function(){
       temp.slug = this.slug;
       temp.start_date = this.start_date;
       temp.task_progress = this.task_progress;
-      if(temp.modified==null) temp.modified = this.expected_end_date;
-      pvaData.push(temp);
+      if(temp.modified!=null && temp.actual_end_date!=null) pvaData.push(temp);
     })
     console.log("pva1",pvaSorted);
     }
@@ -923,17 +901,17 @@ $(document).ready(function(){
         flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
         pvaSorted.push(pvaData[i]);
     }
-    console.log("pvaData",pvaSorted)
     var week = d3.timeFormat("%Y-%U");
 
     var actnest = d3.nest().key(function (d) {
-      if(d.actual_end_date!=null){
+      if(d.actual_end_date!=null && new Date(d.actual_end_date).getTime() <= new Date().getTime()){
+        console.log("Check ac",new Date(d.actual_end_date).getTime())
         return week(new Date(d.actual_end_date));
       }else{
         return null;
       }
     }).entries(pvaSorted);
-    console.log("Check actual",ids.length);
+    console.log("Check actual",actnest);
     
     var plannest = d3.nest().key(function (d) {
         if(ids.length==0){
