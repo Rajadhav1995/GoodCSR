@@ -8,7 +8,7 @@ import requests,ast
 from taskmanagement.models import Task
 from budgetmanagement.models import *
 from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,ProjectParameter
-from pmu.settings import PMU_URL
+from pmu.settings import PMU_URL,SAMITHA_URL
 from ast import literal_eval
 from itertools import chain
 
@@ -43,34 +43,112 @@ def task_comments(date,task_id):
     return task_comment
 
 @register.assignment_tag   
-def task_comments_progress(date,task_id):
+def task_comments_progress(date,task_id, attach):
     task_data = []
     # comment_list = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id).order_by('-id')
     # for i in comment_list.filter(created__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))):
     #     data = {'name':i.created_by.attrs,'comment_text':i.text,'time':i.created}
         # task_data.append(data)
+    
     task_progress = Task.objects.get(id=task_id)
     task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
     for i in task_progress_history:
         if i.task_progress:
             previous_task_progress = i.get_previous_by_created().task_progress
-            cell_one = {'name':'','comment_text':'','time':i.modified,
-                        'task_progress':i.task_progress,
-                        'previous_task_progress':i.get_previous_by_created().task_progress,}
-            task_data.append(cell_one)
-    task_data.sort(key=lambda item:item['time'], reverse=True)
+            # if i.task_progress != i.get_previous_by_created().task_progress:
+            task_time = i.modified
+            next_tick = task_time.second +1
+            
+            task_prev_tick = task_time.second -1
+            try:
+                start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
+            except:
+                start_time = task_time.replace(microsecond=499999,second=59)
+            end_time = task_time.replace(microsecond=999999)
+            attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time))
+            if not attach_obj:
+                cell_one = {'name':'','comment_text':'','date':i.modified,
+                        'task_progress':i.task_progress,'attachment':0,
+                        'previous_task_progress':i.get_previous_by_created().task_progress if i.get_previous_by_created().task_progress!=None else 0,}
+                task_data.append(cell_one)
+    for i in attach:
+        time = i.created
+        data ={}
+        next_tick = time.second +1
+        prev_tick = time.second -1
+        start_time = time.replace(microsecond=499999,second=prev_tick)
+        end_time = time.replace(microsecond=999999)
+        task_object = Task.objects.get(id=task_id)
+        try:
+            task_history = task_object.history.get(modified__range = (start_time,end_time))
+        except:
+            task_history = task_object.history.filter(modified__range = (start_time,end_time))
+            if task_history:
+                task_history = task_history[0]
+        if task_history:
+            attachment_data = {'name':i.created_by.attrs,
+            'description':i.description,
+            'date':i.created,'attachment':1,
+            'attachment_type':int(i.attachment_type),
+            'document_type':i.document_type,
+            'image_url':PMU_URL + i.attachment_file.url,
+            'task_progress':task_history.task_progress,
+            'previous_task_progress':task_history.get_previous_by_created().task_progress,
+            'file_name':i.attachment_file.name.split('/')[-1]}
+            task_data.append(attachment_data)
+    task_data.sort(key=lambda item:item['date'], reverse=True)
     return task_data
 
 from datetime import date
 @register.assignment_tag
 def get_task_comments(comment_date,task_id):
     comment_data = {}
-#    import ipdb;ipdb.set_trace();
-    comment_list = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
-created__date = comment_date)
+    try:
+        prev_tick = comment_date.second -1
+    except:
+        pass
+    try:
+        start_time = comment_date.replace(microsecond=499999,second=prev_tick)
+    except:
+        start_time = comment_date.replace(microsecond=499999,second=59)
+
+    end_time = comment_date.replace(microsecond=999999)
+    # new_date = comment_date.replace(microsecond=0)
+    comment_list = Comment.objects.latest_one(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
+                        created__range=(start_time,end_time))
     if comment_list:
         comment_data = {'name':comment_list.created_by.attrs,'comment_text':comment_list.text,'time':comment_list.created}
     return comment_data
+
+@register.assignment_tag
+def get_attachment_progress(attach,task_id):
+    time = attach.created
+    data ={}
+    next_tick = time.second +1
+    prev_tick = time.second -1
+    start_time = time.replace(microsecond=499999,second=prev_tick)
+    end_time = time.replace(microsecond=999999)
+    task_object = Task.objects.get(id=task_id)
+    try:
+        task_history = task_object.history.get(modified__range = (start_time,end_time))
+    except:
+        task_history = task_object.history.filter(modified__range = (start_time,end_time))
+        if task_history:
+            task_history = task_history[0]
+
+    # data = {'name':attach.created_by.attrs,
+    #         'description':attach.description,
+    #         'date':attach.created,
+    #         'attachment_type':attach.attachment_type,
+    #         'document_type':attach.document_type,
+    #         'image_url':PMU_URL + attach.attachment_file.url,
+    #         'task_progress':task_history.task_progress,
+    #         'previous_task_progress':task_history.get_previous_by_created().task_progress}
+    if task_history:
+        data = {'task_progress':task_history.task_progress,
+           'previous_task_progress':task_history.get_previous_by_created().task_progress}
+    return data
+
 
 def get_removed_questions(questions,block,project_report,block_type,quest_removed):
     # to get the removed questions list for that particular block 
@@ -306,6 +384,14 @@ def get_quarter_names(key,number_dict):
     name=''
     name = number_dict.get(key)
     return name
+
+@register.assignment_tag
+def get_month_name(date):
+    from datetime import datetime
+    month_name = date.split(' to ')[0]
+    month_name = datetime.strptime(month_name, '%Y-%m-%d')
+    month_name = month_name.strftime("%B")
+    return month_name
 
 @register.assignment_tag
 def get_images(obj):

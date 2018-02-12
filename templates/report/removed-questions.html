@@ -847,7 +847,7 @@
                <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_0" >
                <option value="0">Select</option>
                {% for i in milestone_activitieslist %}
-               <option value="{{i.id}}">{{i.name}}</option>
+               <option value="{{i.id}}">{{i.name}} ({{i.super_category.name}})</option>
                {% endfor %}
                </select>
                {% else %}
@@ -1482,7 +1482,7 @@
                <select id="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" name="{{act_quest.text}}_2_{{i}}_{{act_quest.id}}_{{j}}_1_{{mileobj.id}}" >
                <option value="0">Select</option>
                {% for i in milestone_activitieslist %}
-               <option value="{{i.id}}" {% if i.id == mileobj.object_id %} selected=selected {% endif %}>{{i.name}}</option>
+               <option value="{{i.id}}" {% if i.id == mileobj.object_id %} selected=selected {% endif %}>{{i.name}} ({{i.super_category.name}})</option>
                {% endfor %}
                </select>
                {% else %}
