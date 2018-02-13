@@ -275,7 +275,7 @@ font-size: 14px;
                             
                         <p>{{c.description}}</p>
                         
-                        <div style="float:left; width:50%;margin-right:20px; margin-bottom:10px">
+                        <div style="float:left; width:56%;margin-right:20px; margin-bottom:10px">
                           <ul>
                            <li style="width:100%">
                               <a href="{{c.image_url}}">
@@ -290,7 +290,7 @@ font-size: 14px;
                       </div>
                         
                         {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: left; width: 39%; font-size:14px;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                      </div>
                     
@@ -307,7 +307,7 @@ font-size: 14px;
                         </div>
                      </div>
                      <div class="right-li second-li">
-                     
+                     <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
                         <ul>
                            
                            <li>
@@ -329,10 +329,11 @@ font-size: 14px;
 
                      </div>
                      {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: right; width: 50%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: right; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                   </li>
                   {% endif %}
+                 
 <!-- -------------------------------------------------------------------- -->
 
                   {% endif %}
@@ -350,6 +351,7 @@ font-size: 14px;
          </div>
       </div>
       {% endfor %}
+   </div>
    </div>
 </section>
 <!--Content part Ends-->
