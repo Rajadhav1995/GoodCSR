@@ -318,4 +318,5 @@ def show_budget_table(date,block_id,report_type):
             budget_table = True
     else:
         budget_table = True
+        
     return budget_table
