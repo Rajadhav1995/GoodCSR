@@ -667,7 +667,7 @@
                     {% endif %}
                     {% endif %}
                     {% if quest.slug == "budget-utlization-tranches" %}
-                    {% show_budget_table v 3 projectreportobj.report_type as budget_table %}
+                    {% show_budget_table v 3 projectreportobj as budget_table %}
                     <div class="margin_top30 page_height">
                         {% if budget_table == True %}
                         <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
@@ -1520,7 +1520,7 @@
 
             
             {% if quest.slug == "budget-utlization-tranches" %}
-            {% show_budget_table v 4 projectreportobj.report_type as budget_table %}
+            {% show_budget_table v 4 projectreportobj as budget_table %}
             <div class="margin_top30 page_height">
                 {% if budget_table == True %}
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
@@ -1778,7 +1778,7 @@
 
 
             {% if quest.slug == "budget-utlization-tranches" %}
-            {% show_budget_table v 5 projectreportobj.report_type as budget_table %}
+            {% show_budget_table v 5 projectreportobj as budget_table %}
             <div class="margin_top30 page_height">
                 {% if budget_table == True %}
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
