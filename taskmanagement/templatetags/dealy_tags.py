@@ -15,11 +15,18 @@ from pmu.settings import PMU_URL,SAMITHA_URL
 def get_cat_delay_point(obj):
     import datetime
     diff=0
+    max_list = []
     today = datetime.datetime.now()
-    task_list = Task.objects.filter(activity__super_category=obj).values_list('end_date',flat = True)
-    if task_list:
-        max_end = max(task_list)
-        diff = (today.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')) - max_end.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))).days
+    
+    task_list = Task.objects.filter(activity__super_category=obj)
+#    ExpectedDatesCalculator(task_list=tasks)
+    for i in task_list:
+        if i.actual_end_date :
+            max_list.append(i.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')))
+        else:
+            max_list.append(i.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')))
+    max_end = max(max_list)
+    diff = (max_end.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')) - today.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))).days
     slug = str(obj.slug)
     return diff,slug
 
