@@ -313,8 +313,10 @@ def show_budget_table(date,block_id,report_type):
         elif block_id == 5:
             if date in first_month:
                 budget_table = True
-        elif block_id == 4:
+        if block_id == 4:
+
             budget_table = True
     else:
         budget_table = True
+        
     return budget_table
