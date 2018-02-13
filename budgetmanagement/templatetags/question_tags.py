@@ -3,7 +3,7 @@ import datetime
 import json
 from django import template
 from django.db.models import Sum
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import relativedelta
 from itertools import chain
 from django.contrib.contenttypes.models import ContentType
@@ -20,7 +20,8 @@ from taskmanagement.models import Activity,Milestone
 from media.models import Attachment
 from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from ast import literal_eval
-
+from budgetmanagement.manage_budget import get_budget_quarters
+from collections import OrderedDict
 
 register = template.Library()
 
@@ -299,24 +300,32 @@ def get_row_details(row,quarter,projectobj):
     return line_itemobj
 
 @register.assignment_tag
-def show_budget_table(date,block_id,report_type):
-    if report_type == 2:
+def show_budget_table(date,block_id,report_obj):
+    if report_obj.report_type == 2:
         budget_table = False
-        date = int(date.split(' to ')[0].split('-')[1])
-        month = [1,2,3,4,5,6,7,8,9,10,11,12]
-        first_month = month[0::3]
-        second_month = month[1::3]
-        third_month = month[2::3]
+        date_list = []
+        month = int(date.split(' to ')[0].split('-')[1])
+        budgetobj = Budget.objects.get(project = report_obj.project,active=2)
+        quarter_list = get_budget_quarters(budgetobj)
+        start_q = quarter_list.get(0)
+        end_q = quarter_list.get(quarter_list.keys()[-1])
+        date_list.append(start_q.split(' to ')[0])
+        date_list.append(end_q.split(' to ')[1])
+        start, end = [datetime.strptime(_, "%Y-%m-%d") for _ in date_list]
+        month_list = OrderedDict(((start + timedelta(_)).strftime(r"%-m"), None) for _ in xrange((end - start).days)).keys()
+        month_list = map(int,month_list)
+        first_month = month_list[0::3]
+        second_month = month_list[1::3]
+        third_month = month_list[2::3]
         if block_id == 3:
-            if date in third_month:
+            if month in third_month:
                 budget_table = True
         elif block_id == 5:
-            if date in first_month:
+            if month in first_month:
                 budget_table = True
         if block_id == 4:
 
             budget_table = True
     else:
         budget_table = True
-        
     return budget_table
