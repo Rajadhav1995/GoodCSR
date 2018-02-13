@@ -317,14 +317,11 @@ def show_budget_table(date,block_id,report_obj):
         first_month = month_list[0::3]
         second_month = month_list[1::3]
         third_month = month_list[2::3]
-        if block_id == 3:
-            if month in third_month:
-                budget_table = True
-        elif block_id == 5:
-            if month in first_month:
-                budget_table = True
+        if block_id == 3 and month in third_month:
+            budget_table = True
+        elif block_id == 5 and month in first_month:
+            budget_table = True
         if block_id == 4:
-
             budget_table = True
     else:
         budget_table = True
