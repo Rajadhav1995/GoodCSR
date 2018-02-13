@@ -1,6 +1,7 @@
 {% extends 'project/project-summary.html' %}
 {% load urs_tags %}
 {% load common_tags %}
+{% load dealy_tags %}
 <!--Content part starts-->
 
 {% block content %}
@@ -54,9 +55,9 @@ function filter(target,parent,type) {
 <!--Content part starts-->
 <section class="content-part">
   <div class="row">
-  <div class=" white-box white-pad">
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-  </div>
+<!--  <div class=" white-box white-pad">-->
+<!--    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
+<!--  </div>-->
   <div class=" white-box white-pad">
   <div id="pvaContainer" style="width: 50%;float: left;">Planned vs Actual Task Completion Graph</div>
   <div id="Super_Completion" style="width: 50%;float: left;">Super Category Completion</div>
@@ -1105,11 +1106,15 @@ $(document).ready(function() {
 <script src="/static/js/highcharts.js" type="text/javascript"></script>
 <script src="/static/js/drilldown.js" type="text/javascript"></script>
 <script>
+var project_slug = '{{request.GET.slug}}'
+{% super_category_delay request.GET.slug as super_list %}
+var categories = {{super_list|safe}}
+console.log('super_cat');
+console.log(categories);
 $(function() {
 
   // Create the chart
-var project_slug = '{{request.GET.slug}}'
-//{% super_category_delay project_slug as super_list %}
+
     
   $('#container').highcharts({
       chart: {
@@ -1144,27 +1149,7 @@ var project_slug = '{{request.GET.slug}}'
         id: 'toplevel',
         name: 'Super Category',
         color: '#00998b',
-        data: [{
-          name: 'Mumbai',
-          y: 4,
-          drilldown: 'activity'
-        }, {
-          name: 'Bangalore',
-          y: -2,
-          drilldown: 'activity1'
-        }, {
-          name: 'Delhi',
-          y: 1,
-          drilldown: 'activity'
-        }, {
-          name: 'Bihar',
-          y: 2,
-          drilldown: 'activity'
-        }, {
-          name: 'Gujarat',
-          y: -3.5,
-          drilldown: 'activity'
-        },]
+        data: categories,
       }],
       drilldown: {
         series: [{

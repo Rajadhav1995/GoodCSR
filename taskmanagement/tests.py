@@ -3,6 +3,10 @@
 # Create your tests here.
 from django.contrib.auth.models import User
 from django.test import TestCase
+from projectmanagement.models import *
+from taskmanagement.models import *
+
+
 
 class LogInTest(TestCase):
     def setUp(self):
@@ -18,11 +22,16 @@ class LogInTest(TestCase):
         
     def test_admin(self):
         user = User.objects.get(username='mahiti')
-        self.assertEqual(user.passsword,'goodcsr@#123')
         self.assertNotEqual(user.username,'mahiti')
         
         
-
+    def test_user_profile(self):
+        user = UserProfile.objects.get(name='mahiti')
+        self.assertEqual(user.is_admin_user,False)
+        
+    def test_get_tasks(self):
+        task_list = Task.objects.filter(active=2)
+        self.assertEqual(len(task_list),4)
 
 
 
