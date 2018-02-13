@@ -299,19 +299,22 @@ def get_row_details(row,quarter,projectobj):
     return line_itemobj
 
 @register.assignment_tag
-def show_budget_table(date,block_id):
-    budget_table = False
-    date = int(date.split(' to ')[0].split('-')[1])
-    month = [1,2,3,4,5,6,7,8,9,10,11,12]
-    first_month = month[0::3]
-    second_month = month[1::3]
-    third_month = month[2::3]
-    if block_id == 3:
-        if date in third_month:
+def show_budget_table(date,block_id,report_type):
+    if report_type == 2:
+        budget_table = False
+        date = int(date.split(' to ')[0].split('-')[1])
+        month = [1,2,3,4,5,6,7,8,9,10,11,12]
+        first_month = month[0::3]
+        second_month = month[1::3]
+        third_month = month[2::3]
+        if block_id == 3:
+            if date in third_month:
+                budget_table = True
+        elif block_id == 5:
+            if date in first_month:
+                budget_table = True
+        elif block_id == 4:
             budget_table = True
-    elif block_id == 5:
-        if date in first_month:
-            budget_table = True
-    elif block_id == 4:
+    else:
         budget_table = True
     return budget_table
