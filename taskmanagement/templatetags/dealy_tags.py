@@ -19,7 +19,7 @@ def get_cat_delay_point(obj):
     task_list = Task.objects.filter(activity__super_category=obj).values_list('end_date',flat = True)
     if task_list:
         max_end = max(task_list)
-        diff = (today - max_end).days
+        diff = (today.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')) - max_end.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))).days
     slug = str(obj.slug)
     return diff,slug
 

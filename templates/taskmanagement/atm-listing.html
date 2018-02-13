@@ -9,6 +9,9 @@
 <!--Content part starts-->
 <section class="content-part">
   <div class="row">
+<!--      <div class=" white-box white-pad">-->
+<!--    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
+<!--  </div>-->
   <div class=" white-box white-pad">
   <div style="width: 50%;float: left;">
   <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Planned vs Actual Task Completion</div>
@@ -1173,10 +1176,10 @@ $(document).ready(function() {
 <script src="/static/js/drilldown.js" type="text/javascript"></script>
 <script>
 var project_slug = '{{request.GET.slug}}'
-{% super_category_delay request.GET.slug as super_list %}
-var categories = {{super_list|safe}}
-console.log('super_cat');
-console.log(categories);
+//{% super_category_delay request.GET.slug as super_list %}
+//var categories = {{super_list|safe}}
+//console.log('super_cat');
+//console.log(categories);
 $(function() {
 
   // Create the chart
