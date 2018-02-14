@@ -15,11 +15,7 @@ class ReCaptcha(forms.widgets.Widget):
 
     def __init__(self, public_key=None, use_ssl=None, attrs={}, *args,
                  **kwargs):
-        self.public_key = public_key if public_key else \
-            settings.RECAPTCHA_PUBLIC_KEY
-        self.use_ssl = use_ssl if use_ssl is not None else getattr(
-            settings, 'RECAPTCHA_USE_SSL', False)
-        self.js_attrs = attrs
+        self.public_key = public_key
         super(ReCaptcha, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None):
