@@ -9,6 +9,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from ckeditor.fields import RichTextField
 from projectmanagement.models import (BaseContent,UserProfile)
 from budgetmanagement.models import (ReportParameter,)
+from simple_history.models import HistoricalRecords
+from simple_history.admin import SimpleHistoryAdmin
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))

@@ -44,7 +44,7 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
 
-@register.assignment_tag   
+@register.assignment_tag
 def task_comments_progress(date,task_id, attach):
     task_data = []
     
@@ -68,7 +68,7 @@ def task_comments_progress(date,task_id, attach):
                         'task_progress':i.task_progress,'attachment':0,
                         'previous_task_progress':i.get_previous_by_created().task_progress if i.get_previous_by_created().task_progress!=None else 0,}
                 task_data.append(cell_one)
-            task_data.append(attachment_json_for_comments(task_id,attach))
+    task_data.append(attachment_json_for_comments(task_id,attach))
     
     task_data = filter(partial(is_not, None), task_data)
     task_data.sort(key=lambda item:item['date'], reverse=True)
