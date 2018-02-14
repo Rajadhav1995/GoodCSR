@@ -102,6 +102,16 @@ def attachment_json_for_comments(task_id,attach):
             'file_name':i.attachment_file.name.split('/')[-1]}
             return attachment_data
 
+@register.assignment_tag
+def get_task_status(date,task_id):
+    task_progress = Task.objects.get(id=task_id)
+    task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
+    if task_progress_history:
+        status = True
+    else:
+        status = False
+    return status
+
 from datetime import date
 @register.assignment_tag
 def get_task_comments(comment_date,task_id):
