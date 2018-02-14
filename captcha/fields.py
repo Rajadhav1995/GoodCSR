@@ -31,8 +31,7 @@ class ReCaptchaField(forms.CharField):
         JavaScript variables as specified in
         https://code.google.com/apis/recaptcha/docs/customization.html
         """
-        public_key = public_key if public_key else \
-            settings.RECAPTCHA_PUBLIC_KEY
+        public_key = public_key
         self.private_key = private_key if private_key else \
             settings.RECAPTCHA_PRIVATE_KEY
         self.use_ssl = use_ssl if use_ssl is not None else getattr(
