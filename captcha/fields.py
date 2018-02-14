@@ -22,8 +22,7 @@ class ReCaptchaField(forms.CharField):
         'captcha_error': _('Error verifying input, please try again.'),
     }
 
-    def __init__(self, public_key=None, private_key=None, use_ssl=None,
-                 attrs={}, *args, **kwargs):
+    def __init__(self, public_key, *args, **kwargs):
         """
         ReCaptchaField can accepts attributes which is a dictionary of
         attributes to be passed to the ReCaptcha widget class. The widget will
@@ -31,9 +30,8 @@ class ReCaptchaField(forms.CharField):
         JavaScript variables as specified in
         https://code.google.com/apis/recaptcha/docs/customization.html
         """
-        public_key = public_key
-        self.private_key = private_key if private_key else \
-            settings.RECAPTCHA_PRIVATE_KEY
+        public_key = '6Lf16zEUAAAAAI0UjXIk8DbmfpsopHqaYh-QOGQG'
+        self.private_key = '6Lf16zEUAAAAACg4nUHUoSjePKydoVaq2giCvHN6'
         self.use_ssl = use_ssl if use_ssl is not None else getattr(
             settings, 'RECAPTCHA_USE_SSL', True)
 
