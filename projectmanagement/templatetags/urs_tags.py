@@ -21,39 +21,18 @@ from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
 from media.models import (Attachment,ScreenshotMedia)
 
-#    The dict type has been reimplemented to use a more compact representation based on a proposal by Raymond Hettinger and similar to the PyPy dict implementation. This resulted in dictionaries using 20% to 25% less memory when compared to Python 3.5.
-#    Customization of class creation has been simplified with the new protocol.
-#    The class attribute definition order is now preserved.
-#    The order of elements in **kwargs now corresponds to the order in which keyword arguments were passed to the function.
-#    DTrace and SystemTap probing support has been added.
-#    The new PYTHONMALLOC environment variable can now be used to debug the interpreter memory allocation and access errors.
-
-#Significant improvements in the standard library:
-
-#    The asyncio module has received new features, significant usability and performance improvements, and a fair amount of bug fixes. Starting with Python 3.6 the asyncio module is no longer provisional and its API is considered stable.
-#    A new file system path protocol has been implemented to support path-like objects. All standard library functions operating on paths have been updated to work with the new protocol.
-#    The datetime module has gained support for Local Time Disambiguation.
-#    The typing module received a number of improvements.
-#    The tracemalloc module has been significantly reworked and is now used to provide better output for ResourceWarning as well as provide better diagnostics for memory allocation errors. See the PYTHONMALLOC section for more information.
-
-#Security improvements:
-
-#    The new secrets module has been added to simplify the generation of cryptographically strong pseudo-random numbers suitable for managing secrets such as account authentication, tokens, and similar.
-#    On Linux, os.urandom() now blocks until the system urandom entropy pool is initialized to increase the security. See the PEP 524 for the rationale.
-#    The hashlib and ssl modules now support OpenSSL 1.1.0.
-#    The default settings and feature set of the ssl module have been improved.
-#    The hashlib module received support for the BLAKE2, SHA-3 and SHAKE hash algorithms and the scrypt() key derivation function.
-
-#Windows improvements:
-
-#    PEP 528 and PEP 529, Windows filesystem and console encoding changed to UTF-8.
-#    The py.exe launcher, when used interactively, no longer prefers Python 2 over Python 3 when the user doesn’t specify a version (via command line arguments or a config file). Handling of shebang lines remains unchanged - “python” refers to Python 2 in that case.
-#    python.exe and pythonw.exe have been marked as long-path aware, which means that the 260 character path limit may no longer apply. See removing the MAX_PATH limitation for details.
-#    A ._pth file can be added to force isolated mode and fully specify all search paths to avoid registry and environment lookup. See the documentation for more information.
-#    A python36.zip file now works as a landmark to infer PYTHONHOME. See the documentation for more information.
-
-
-
+#According to Wikipedia the exact definition of a goal is:
+# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
+#In other words, any planning you do for the future regardless of what it is, is a goal. 
+#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
+# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
+#you can't achieve anything unless a goal is focusing your effort. 
+#Because at the end of the day goals are what give you direction in life. 
+#By setting goals for yourself you give yourself a target to shoot for. 
+#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
 register = template.Library()
 
 @register.assignment_tag

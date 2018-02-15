@@ -15,36 +15,18 @@ from .forms import(ProjectBudgetForm,)
 from datetime import datetime
 from menu_decorators import check_loggedin_access
 
-#Feature documentation
-#PEP 519: Adding a file system path protocol
-
-#File system paths have historically been represented as str or bytes objects. This has led to people who write code which operate on file system paths to assume that such objects are only one of those two types (an int representing a file descriptor does not count as that is not a file path). Unfortunately that assumption prevents alternative object representations of file system paths like pathlib from working with pre-existing code, including Python’s standard library.
-
-#To fix this situation, a new interface represented by os.PathLike has been defined. By implementing the __fspath__() method, an object signals that it represents a path. An object can then provide a low-level representation of a file system path as a str or bytes object. This means an object is considered path-like if it implements os.PathLike or is a str or bytes object which represents a file system path. Code can use os.fspath(), os.fsdecode(), or os.fsencode() to explicitly get a str and/or bytes representation of a path-like object.
-
-#The built-in open() function has been updated to accept os.PathLike objects, as have all relevant functions in the os and os.path modules, and most other functions and classes in the standard library. The os.DirEntry class and relevant classes in pathlib have also been updated to implement os.PathLike.
-
-#The hope is that updating the fundamental functions for operating on file system paths will lead to third-party code to implicitly support all path-like objects without any code changes, or at least very minimal ones (e.g. calling os.fspath() at the beginning of code before operating on a path-like object).
-
-#Here are some examples of how the new interface allows for pathlib.Path to be used more easily and transparently with pre-existing code:
-#>>>
-
-
-
-#(Implemented by Brett Cannon, Ethan Furman, Dusty Phillips, and Jelle Zijlstra.)
-
-#See also
-
-#PEP 519 – Adding a file system path protocol
-#    PEP written by Brett Cannon and Koos Zevenhoven.
-
-#PEP 495: Local Time Disambiguation
-
-#In most world locations, there have been and will be times when local clocks are moved back. In those times, intervals are introduced in which local clocks show the same time twice in the same day. In these situations, the information displayed on a local clock (or stored in a Python datetime instance) is insufficient to identify a particular moment in time.
-
-#PEP 495 adds the new fold attribute to instances of datetime.datetime and datetime.time classes to differentiate between two moments in time for which local times are the same:
-#>>>
-
+#According to Wikipedia the exact definition of a goal is:
+# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
+#In other words, any planning you do for the future regardless of what it is, is a goal. 
+#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
+# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
+#you can't achieve anything unless a goal is focusing your effort. 
+#Because at the end of the day goals are what give you direction in life. 
+#By setting goals for yourself you give yourself a target to shoot for. 
+#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
 
 def diff(list1, list2):
     ''' to get the difference of two list '''
