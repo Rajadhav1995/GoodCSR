@@ -25,7 +25,6 @@ def get_delay_difference(tasks):
         else:
             ExpectedDatesCalculator(task=task_obj)
             max_end = task_obj.expected_end_date
-            print "task_name= ",task_obj.name,"task_date= ",task_obj.expected_end_date
         diff = (max_end - today).days
     return diff
 
