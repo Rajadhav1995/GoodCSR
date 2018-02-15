@@ -25,7 +25,11 @@ def get_delay_difference(tasks):
         else:
             ExpectedDatesCalculator(task=task_obj)
             max_end = task_obj.expected_end_date
-        diff = (max_end - today).days
+            print "task_name= ",task_obj.name,"task_date= ",task_obj.expected_end_date
+        if task_obj.status == 2:
+            diff = 0
+        else:
+            diff = (max_end - today).days
     return diff
 
 def get_cat_delay_point(obj,key):
@@ -48,7 +52,10 @@ def get_task_delay_ponts(obj):
         else:
             ExpectedDatesCalculator(task=i)
             max_end = i.expected_end_date
-        diff = (max_end - today).days
+        if i.status == 2:
+            diff = 0
+        else:
+            diff = (max_end - today).days
         task_data['name']=str(i.name)
         task_data['y']= diff
         task_data['task_progress']= str(i.task_progress)
@@ -93,6 +100,5 @@ def super_category_delay(project_slug):
         series.append(act_dict)
         for i in task_details:
             series.append(i)
-    print series
     import json
     return json.dumps(delay_list),json.dumps(series)
