@@ -32,7 +32,25 @@ def duplicates(lst):
 
 def duplicates_indices(lst):
     dup, ind= duplicates(lst), defaultdict(list)
+    temp_value = 0.1 if temp_value <= 0.9 else 0.1
     for i, v in enumerate(lst):
-        if v in dup: ind[v].append(i)
-    return ind
+        if v in dup: 
+            ind[v].append(i)
+            lst[i] = int(v) + temp_value
+            temp_value = temp_value+0.1
+    return lst
+
+def replace_duplicate_values(lst):
+    temp_value = 0.1
+    temp_value = 0.1 if temp_value >= 0.9 else temp_value
+    temp_list = []
+    for i,v in enumerate(lst):
+        if v in temp_list:
+            v[0] = v[0]+temp_value
+            lst[i] = [v[0],v[1]]
+            temp_value = temp_value+0.1
+        else:temp_list.append(v)
+    return lst
+
+
 
