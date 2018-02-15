@@ -15,6 +15,37 @@ from .forms import(ProjectBudgetForm,)
 from datetime import datetime
 from menu_decorators import check_loggedin_access
 
+#Feature documentation
+#PEP 519: Adding a file system path protocol
+
+#File system paths have historically been represented as str or bytes objects. This has led to people who write code which operate on file system paths to assume that such objects are only one of those two types (an int representing a file descriptor does not count as that is not a file path). Unfortunately that assumption prevents alternative object representations of file system paths like pathlib from working with pre-existing code, including Python’s standard library.
+
+#To fix this situation, a new interface represented by os.PathLike has been defined. By implementing the __fspath__() method, an object signals that it represents a path. An object can then provide a low-level representation of a file system path as a str or bytes object. This means an object is considered path-like if it implements os.PathLike or is a str or bytes object which represents a file system path. Code can use os.fspath(), os.fsdecode(), or os.fsencode() to explicitly get a str and/or bytes representation of a path-like object.
+
+#The built-in open() function has been updated to accept os.PathLike objects, as have all relevant functions in the os and os.path modules, and most other functions and classes in the standard library. The os.DirEntry class and relevant classes in pathlib have also been updated to implement os.PathLike.
+
+#The hope is that updating the fundamental functions for operating on file system paths will lead to third-party code to implicitly support all path-like objects without any code changes, or at least very minimal ones (e.g. calling os.fspath() at the beginning of code before operating on a path-like object).
+
+#Here are some examples of how the new interface allows for pathlib.Path to be used more easily and transparently with pre-existing code:
+#>>>
+
+
+
+#(Implemented by Brett Cannon, Ethan Furman, Dusty Phillips, and Jelle Zijlstra.)
+
+#See also
+
+#PEP 519 – Adding a file system path protocol
+#    PEP written by Brett Cannon and Koos Zevenhoven.
+
+#PEP 495: Local Time Disambiguation
+
+#In most world locations, there have been and will be times when local clocks are moved back. In those times, intervals are introduced in which local clocks show the same time twice in the same day. In these situations, the information displayed on a local clock (or stored in a Python datetime instance) is insufficient to identify a particular moment in time.
+
+#PEP 495 adds the new fold attribute to instances of datetime.datetime and datetime.time classes to differentiate between two moments in time for which local times are the same:
+#>>>
+
+
 def diff(list1, list2):
     ''' to get the difference of two list '''
     c = set(list1).union(set(list2))

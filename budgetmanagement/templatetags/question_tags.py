@@ -24,6 +24,36 @@ from budgetmanagement.manage_budget import get_budget_quarters
 from collections import OrderedDict
 
 register = template.Library()
+#    The dict type has been reimplemented to use a more compact representation based on a proposal by Raymond Hettinger and similar to the PyPy dict implementation. This resulted in dictionaries using 20% to 25% less memory when compared to Python 3.5.
+#    Customization of class creation has been simplified with the new protocol.
+#    The class attribute definition order is now preserved.
+#    The order of elements in **kwargs now corresponds to the order in which keyword arguments were passed to the function.
+#    DTrace and SystemTap probing support has been added.
+#    The new PYTHONMALLOC environment variable can now be used to debug the interpreter memory allocation and access errors.
+
+#Significant improvements in the standard library:
+
+#    The asyncio module has received new features, significant usability and performance improvements, and a fair amount of bug fixes. Starting with Python 3.6 the asyncio module is no longer provisional and its API is considered stable.
+#    A new file system path protocol has been implemented to support path-like objects. All standard library functions operating on paths have been updated to work with the new protocol.
+#    The datetime module has gained support for Local Time Disambiguation.
+#    The typing module received a number of improvements.
+#    The tracemalloc module has been significantly reworked and is now used to provide better output for ResourceWarning as well as provide better diagnostics for memory allocation errors. See the PYTHONMALLOC section for more information.
+
+#Security improvements:
+
+#    The new secrets module has been added to simplify the generation of cryptographically strong pseudo-random numbers suitable for managing secrets such as account authentication, tokens, and similar.
+#    On Linux, os.urandom() now blocks until the system urandom entropy pool is initialized to increase the security. See the PEP 524 for the rationale.
+#    The hashlib and ssl modules now support OpenSSL 1.1.0.
+#    The default settings and feature set of the ssl module have been improved.
+#    The hashlib module received support for the BLAKE2, SHA-3 and SHAKE hash algorithms and the scrypt() key derivation function.
+
+#Windows improvements:
+
+#    PEP 528 and PEP 529, Windows filesystem and console encoding changed to UTF-8.
+#    The py.exe launcher, when used interactively, no longer prefers Python 2 over Python 3 when the user doesn’t specify a version (via command line arguments or a config file). Handling of shebang lines remains unchanged - “python” refers to Python 2 in that case.
+#    python.exe and pythonw.exe have been marked as long-path aware, which means that the 260 character path limit may no longer apply. See removing the MAX_PATH limitation for details.
+#    A ._pth file can be added to force isolated mode and fully specify all search paths to avoid registry and environment lookup. See the documentation for more information.
+#    A python36.zip file now works as a landmark to infer PYTHONHOME. See the documentation for more information.
 
 @register.assignment_tag
 def to_and(value):
