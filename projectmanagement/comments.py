@@ -130,11 +130,7 @@
 
 #PEP 492 introduced support for native coroutines and async / await syntax to Python 3.5. A notable limitation of the Python 3.5 implementation is that it was not possible to use await and yield in the same function body. In Python 3.6 this restriction has been lifted, making it possible to define asynchronous generators:
 
-#async def ticker(delay, to):
-#    """Yield numbers from 0 to *to* every *delay* seconds."""
-#    for i in range(to):
-#        yield i
-#        await asyncio.sleep(delay)
+
 
 #The new syntax allows for faster and more concise code.
 
@@ -147,11 +143,11 @@
 
 #PEP 530 adds support for using async for in list, set, dict comprehensions and generator expressions:
 
-#result = [i async for i in aiter() if i % 2]
+
 
 #Additionally, await expressions are supported in all kinds of comprehensions:
 
-#result = [await fun() for fun in funcs if await condition()]
+
 
 #See also
 
@@ -162,18 +158,6 @@
 
 #It is now possible to customize subclass creation without using a metaclass. The new __init_subclass__ classmethod will be called on the base class whenever a new subclass is created:
 
-#class PluginBase:
-#    subclasses = []
-
-#    def __init_subclass__(cls, **kwargs):
-#        super().__init_subclass__(**kwargs)
-#        cls.subclasses.append(cls)
-
-#class Plugin1(PluginBase):
-#    pass
-
-#class Plugin2(PluginBase):
-#    pass
 
 #In order to allow zero-argument super() calls to work correctly from __init_subclass__() implementations, custom metaclasses must ensure that the new __classcell__ namespace entry is propagated to type.__new__ (as described in Creating the class object).
 
@@ -187,21 +171,7 @@
 
 #PEP 487 extends the descriptor protocol to include the new optional __set_name__() method. Whenever a new class is defined, the new method will be called on all descriptors included in the definition, providing them with a reference to the class being defined and the name given to the descriptor within the class namespace. In other words, instances of descriptors can now know the attribute name of the descriptor in the owner class:
 
-#class IntField:
-#    def __get__(self, instance, owner):
-#        return instance.__dict__[self.name]
 
-#    def __set__(self, instance, value):
-#        if not isinstance(value, int):
-#            raise ValueError(f'expecting integer in {self.name}')
-#        instance.__dict__[self.name] = value
-
-#    # this is the new initializer:
-#    def __set_name__(self, owner, name):
-#        self.name = name
-
-#class Model:
-#    int_field = IntField()
 
 #See also
 
@@ -222,18 +192,7 @@
 #Here are some examples of how the new interface allows for pathlib.Path to be used more easily and transparently with pre-existing code:
 #>>>
 
-#>>> import pathlib
-#>>> with open(pathlib.Path("README")) as f:
-#...     contents = f.read()
-#...
-#>>> import os.path
-#>>> os.path.splitext(pathlib.Path("some_file.txt"))
-#('some_file', '.txt')
-#>>> os.path.join("/a/b", pathlib.Path("c"))
-#'/a/b/c'
-#>>> import os
-#>>> os.fspath(pathlib.Path("some_file.txt"))
-#'some_file.txt'
+
 
 #(Implemented by Brett Cannon, Ethan Furman, Dusty Phillips, and Jelle Zijlstra.)
 
@@ -249,12 +208,7 @@
 #PEP 495 adds the new fold attribute to instances of datetime.datetime and datetime.time classes to differentiate between two moments in time for which local times are the same:
 #>>>
 
-#>>> u0 = datetime(2016, 11, 6, 4, tzinfo=timezone.utc)
-#>>> for i in range(4):
-#...     u = u0 + i*HOUR
-#...     t = u.astimezone(Eastern)
-#...     print(u.time(), 'UTC =', t.time(), t.tzname(), t.fold)
-#...
+
 #04:00:00 UTC = 00:00:00 EDT 0
 #05:00:00 UTC = 01:00:00 EDT 0
 #06:00:00 UTC = 01:00:00 EST 1
@@ -499,8 +453,6 @@
 #New Decimal.as_integer_ratio() method that returns a pair (n, d) of integers that represent the given Decimal instance as a fraction, in lowest terms and with a positive denominator:
 #>>>
 
-#>>> Decimal('-3.14').as_integer_ratio()
-#(-157, 50)
 
 #(Contributed by Stefan Krah amd Mark Dickinson in bpo-25928.)
 #distutils
@@ -529,14 +481,6 @@
 #The new enum.auto value can be used to assign values to enum members automatically:
 #>>>
 
-#>>> from enum import Enum, auto
-#>>> class Color(Enum):
-#...     red = auto()
-#...     blue = auto()
-#...     green = auto()
-#...
-#>>> list(Color)
-#[<Color.red: 1>, <Color.blue: 2>, <Color.green: 3>]
 
 #faulthandler
 
@@ -743,10 +687,7 @@
 
 #A new NewType() helper function has been added to create lightweight distinct types for annotations:
 
-#from typing import NewType
 
-#UserId = NewType('UserId', int)
-#some_id = UserId(524313)
 
 #The static type checker will treat the new type as if it were a subclass of the original type. (Contributed by Ivan Levkivskyi in Github #189.)
 #unicodedata
@@ -776,23 +717,12 @@
 
 #Example with the script example.py:
 
-#import warnings
 
-#def func():
-#    return open(__file__)
 
-#f = func()
-#f = None
 
 #Output of the command python3.6 -Wd -X tracemalloc=5 example.py:
 
-#example.py:7: ResourceWarning: unclosed file <_io.TextIOWrapper name='example.py' mode='r' encoding='UTF-8'>
-#  f = None
-#Object allocated at (most recent call first):
-#  File "example.py", lineno 4
-#    return open(__file__)
-#  File "example.py", lineno 6
-#    f = func()
+
 
 #The “Object allocated at” traceback is new and is only displayed if tracemalloc is tracing Python memory allocations and if the warnings module was already imported.
 #winreg
@@ -987,5 +917,11 @@
 
 #    The crypt.METHOD_CRYPT will no longer be added to crypt.methods if unsupported by the platform. (Contributed by Victor Stinner in bpo-25287.)
 
+#    As part of PEP 487, the handling of keyword arguments passed to type (other than the metaclass hint, metaclass) is now consistently delegated to object.__init_subclass__(). This means that type.__new__() and type.__init__() both now accept arbitrary keyword arguments, but object.__init_subclass__() (which is called from type.__new__()) will reject them by default. Custom metaclasses accepting additional keyword arguments will need to adjust their calls to type.__new__() (whether direct or via super) accordingly.
+
+#    In distutils.command.sdist.sdist, the default_format attribute has been removed and is no longer honored. Instead, the gzipped tarfile format is the default on all platforms and no platform-specific selection is made. In environments where distributions are built on Windows and zip distributions are required, configure the project with a setup.cfg file containing the following:
+#    As part of PEP 487, the handling of keyword arguments passed to type (other than the metaclass hint, metaclass) is now consistently delegated to object.__init_subclass__(). This means that type.__new__() and type.__init__() both now accept arbitrary keyword arguments, but object.__init_subclass__() (which is called from type.__new__()) will reject them by default. Custom metaclasses accepting additional keyword arguments will need to adjust their calls to type.__new__() (whether direct or via super) accordingly.
+
+#    In distutils.command.sdist.sdist, the default_format attribute has been removed and is no longer honored. Instead, the gzipped tarfile format is the default on all platforms and no platform-specific selection is made. In environments where distributions are built on Windows and zip distributions are required, configure the project with a setup.cfg file containing the following:
 
 
