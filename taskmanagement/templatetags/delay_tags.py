@@ -82,8 +82,6 @@ def get_task_delay_ponts(obj):
 #        print "diff=",diff
 #        if diff > maxi:
 #            maxi = diff
-#        else:
-#            maxi= maxi
 #        print "maxi= ",maxi
         if i.actual_end_date:
             max_end = i.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
@@ -155,7 +153,5 @@ def get_delay_difference1(tasks):
             print "diff=",diff
             if diff > maxi:
                 maxi = diff
-            else:
-                maxi= maxi
             print "maxi= ",maxi
     return maxi
