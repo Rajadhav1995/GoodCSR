@@ -626,8 +626,8 @@ class ExpectedDatesCalculator():
         expected_start_date = main_task.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         expected_end_date = main_task.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         for dep in dep_dates:
-            expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
-                dep.expected_end_date) > expected_start_date) else expected_start_date
+            expected_start_date = self.next_weekday(dep.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))) if (self.next_weekday(
+                dep.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))) > expected_start_date) else expected_start_date
         expected_end_date = expected_start_date + \
             (main_task.end_date - main_task.start_date)
         expected_end_date = self.next_weekday(
@@ -808,3 +808,5 @@ def tasks_max_end_date(request):
     tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})
+
+

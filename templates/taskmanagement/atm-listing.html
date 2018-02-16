@@ -149,21 +149,11 @@
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <script src="/static/js/jquery.nicescroll.min.js"></script>
  <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js" type="text/javascript" />
-<script src="/static/js/highcharts.js" type="text/javascript"></script>
-<script src="/static/js/drilldown.js" type="text/javascript"></script>
-<script>
-function activity(name,slug,act_id,super_cat_id) {
-    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
-}
-function task(name,slug,task_id,act_id,super_id) {
-    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
-}
+ 
 
-function milestone(name,slug,mile_id,task_ids) {
-    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js" type="text/javascript" />
+
+
 
 <!--script for filters by- malcolm-->
 <script>
@@ -309,6 +299,7 @@ $(document).ready(function(){
 </script>
 <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
   <script src="/static/js/jsgantt.js" type="text/javascript"></script>
+  
 <!-- script for gantt chart starts here-->
 
 <script>
@@ -1172,19 +1163,23 @@ $(document).ready(function() {
 });
 </script>
 <!--SCRIPT FOR DEALY DRILL DOWN STARTS    -->
-<!--<script src="http://github.highcharts.com/master/highcharts.js"></script>-->
-<!--<script src="http://github.highcharts.com/master/modules/drilldown.js"></script>-->
+<script src="/static/js/highcharts.js"></script>
+<script src="/static/js/drilldown.js"></script>
 
 <script>
 var project_slug = '{{request.GET.slug}}'
 {% super_category_delay request.GET.slug as super_list %}
-var categories = {{super_list|safe}}
+var categories = {{super_list.0|safe}}
+var act_task = {{super_list.1|safe}}
 console.log('super_cat');
 console.log(categories);
-$(function() {
+console.log(act_task);
 
   // Create the chart
     
+  $(function() {
+
+  // Create the chart
   $('#container').highcharts({
       chart: {
         type: 'bar'
@@ -1210,7 +1205,14 @@ $(function() {
         series: {
           borderWidth: 1,
           dataLabels: {
-            enabled: false,
+            enabled: true,
+            formatter: function ()  {
+            if(this.y == 0) return "On time";
+            else if(this.y>0) return "Ahead by "+this.y+" day(s)";
+            else if(this.y<0) return "Delayed by "+Math.abs(parseInt(this.y))+" day(s)";
+                    },
+            inside: false
+                  
           }
         }
       },
@@ -1221,63 +1223,7 @@ $(function() {
         data: categories,
       }],
       drilldown: {
-        series: [{
-          id: 'activity',
-          name: 'Activity',
-          color: '#006C90',
-          data: [{
-            name: 'Refurbishment',
-            y: 1,
-            drilldown: 'task'
-          }, {
-            name: 'Operation',
-            y: -2,
-            drilldown: 'task'
-          }, {
-            name: 'Maintenance',
-            y: -3,
-            drilldown: 'task'
-          }, {
-            name: 'Behavioural Change Communication',
-            y: 4,
-            drilldown: 'task'
-          }]
-        },
-        {
-            id:'activity1',
-            name:'Activity',
-            color:'#006C90',
-            data: [{
-            name: 'Maintenance',
-            y: -3,
-            drilldown: 'task'
-          }, {
-            name: 'Behavioural Change Communication',
-            y: 4,
-            drilldown: 'task'
-          }]
-        }, 
-        {
-          id: 'task',
-          name: 'Task',
-          data: [{
-            name: 'Hiring of Project Staff',
-            y: -1,
-            task_progress: 20
-          }, {
-            name: 'Operations',
-            y: 4,
-            task_progress: 90
-          }, {
-            name: 'Maintainence Support',
-            y: -3,
-            task_progress: 40
-          }, {
-            name: 'Documentation of Case Studies',
-            y: -4,
-            task_progress: 70
-          }]
-        }]
+        series: act_task,
       }, function(chart){	
         	
 			console.log(chart,'this')
@@ -1288,5 +1234,17 @@ $(function() {
 
 </script>
 <!--SCRIPT FOR DELAY DRILL DOWN (ENDS)    -->
+<script>
+function activity(name,slug,act_id,super_cat_id) {
+    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
+}
+function task(name,slug,task_id,act_id,super_id) {
+    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
+}
+
+function milestone(name,slug,mile_id,task_ids) {
+    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
+}
+</script>
 {% endblock %}
 
