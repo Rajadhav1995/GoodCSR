@@ -32,6 +32,7 @@ class Attachment(BaseContent):
     URL = models.URLField("Link url", max_length=200, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True)
     timeline_progress = models.BooleanField(default=True)
+    history = HistoricalRecords()
 
     def __unicode__(self):
         return str(self.id) or self.object_id

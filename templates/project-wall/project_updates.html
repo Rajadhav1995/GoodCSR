@@ -69,155 +69,78 @@
 </div>
 
 <ul class="blog_timeline">
+
+{% for f in file_data %}
+{% if forloop.counter|divisibleby:2 %}
 <li class="timeline-right">
- <p class="date">09 Feb</p>
+{% else %}
+<li class="timeline-left">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>AT</p></div>
     <div class="timeline-panel">
-        <div class="timeline-heading">
-            <img class="img-responsive" src="assets/img/main/img6.jpg" alt="">
-        </div>
+        
             <div class="timeline-body text-justify">
                <div class="col-md-6">
                 <div class="image_uploaded">
-                <p style="color:#fff">Uploaded <span>image</span></p>
+                <p style="color:#fff">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}} Uploaded <span>{% if f.file_type == 'Image' and f.image_type == True %}image{% else %}Document{%endif%}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <div class="progress_time"><a href="#"><p># TImeline Progress</p></a></div>
+                 
+                 {% if f.file_type == 'Image' and f.image_type == True %}
+                    <div class="progress_time"><a href="#"><p># Timeline Progress</p></a></div>
+                  {% else %}
+                    <div class="progress_time"><a href="#"><p># Document</p></a></div>
+                  {% endif %}
                 </div>
+
+                {% if f.history %}
+                {% for y in f.history %}
+
                 <div style=" float: left;text-align: center; width: 100%;">
                   <img src="/static/img/line-bar-small.png">
                 </div>
                 <div class="file_name">
-                  <p><b>File:</b>image2.png</p>
-                  <p><b>Description:</b>Field Location2</p>
+                  <p><b>File: </b><a href="{{f.image_url}}">{{y.file_name}}</a></p>
+                  <p><b>Description: </b>{{y.description}}</p>
                </div>
+               {% endfor %}
+               {% endif %}
+             </div>
+        </div>
+    </div>
+</li>       
+{% endfor %}
+
+{% for i in budget_datar %}
+<li class="timeline-left">
+ <p class="date">{{i.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>AD</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-6">
+                <div class="image_uploaded">
+                <p style="color:#fff"><b>{{i.created_by.name}}</b> Uploaded <span>image</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#Budget</p></a></div>
+                </div>
+                
+                
              </div>
         </div>
     </div>
 </li>
-<li class="timeline-left">
-<p class="date">09 Feb</p>
-    <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>AT</p></div>
-        <div class="timeline-panel">
-        <div class="timeline-heading">
-         <img class="img-responsive" src="assets/img/main/img12.jpg" alt="">
-        </div>
-            <div class="timeline-body text-justify">
-                <div class="text">
-                    <p>&quot; @Jagpreet There has been a #delay due to rains. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.&quot;</p>
-                    <p>@Jagpreet There has been a #delay due to rains. Lorem Ipsum is simply dummy text of the printing and type setting industry. </p>
-                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
-                    <div class="progress_time"><a href="#"><p># Image</p></a></div>
-                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
-                </div>
-                <div style=" float: left;text-align: center; width: 100%;">
-                  <img src="/static/img/line-bar-small.png">
-                </div>
-                <div class="file_name">
-                    <p><b>Task:</b>Woodwork and creation of doors and windows</p>
-                    <p><b>Activity:</b>Construction</p>
-                    <p><b>Supercategory:</b>Aurangabad</p>
-                </div>
-                <div style=" float: left;text-align: center; width: 100%;">
-                   <img src="/static/img/line-bar-small.png">
-                </div>
-                    <div class="file_name">
-                        <p><b>File:</b>image2.png</p>
-                        <p><b>Description:</b>Field Location1</p>
-                    </div>
-                    <div style=" float: left;text-align: center; width: 100%;">
-                       <img src="/static/img/line-bar-small.png">
-                    </div>
-            <div class="file_name">
-                    <p><b>File:</b>image2.png</p>
-                    <p><b>Description:</b>Field Location2</p>
-            </div>
-            </div>
-        </div>
-</li>
-				
-<li class="timeline-right">
-  <p class="date">09 Feb</p>
-   <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>AT</p></div>
-        <div class="timeline-panel">
-            <div class="timeline-heading">
-              <img class="img-responsive" src="assets/img/main/img12.jpg" alt="">
-            </div>
-                <div class="timeline-body text-justify">
-                    <div class="text">
-                        <p>&quot; @Jagpreet There has been a #delay due to rains. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.&quot;</p>
-                        <p>@Jagpreet There has been a #delay due to rains. Lorem Ipsum is simply dummy text of the printing and type setting industry. </p>
-                        <p class="read_more">Read more >></p>
-                        <p class="text_content">&quot; @Jagpreet There has been a #delay due to rains. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.&quot;</p>
-                        <p class="less_more">Less >></p>
-                        <div class="col-md-12">
-                        <div class="row">
-                        <div class="progress_time"><a href="#"><p># Task</p></a></div>
-                        <div class="progress_time"><a href="#"><p># Image</p></a></div>
-                        <div class="progress_time"><a href="#"><p># Delay</p></a></div>
-                        </div>
-                        </div>
-                    </div>
-                    <div style=" float: left;text-align: center; width: 100%;">
-                     <img src="/static/img/line-bar-small.png">
-                    </div>
-                    <div class="file_name">
-                        <p><b>File:</b>image2.png</p>
-                        <p><b>Description:</b>Field Location2</p>
-                </div>
-            </div>
-      </div>
-</li>
-				
-<li class="timeline-left">
-<p class="date">09 Feb</p>
-    <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>AT</p></div>
-        <div class="timeline-panel">
-        <!-- <div class="timeline-heading">
-         <img class="img-responsive" src="assets/img/main/img12.jpg" alt="">
-        </div> -->
-            <div class="timeline-body text-justify">
-                <div class="text">
-                    <p>&quot; @Jagpreet There has been a #delay due to rains. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.&quot;</p>
-                    <p>@Jagpreet There has been a #delay due to rains. Lorem Ipsum is simply dummy text of the printing and type setting industry. </p>
-                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
-                    <div class="progress_time"><a href="#"><p># Image</p></a></div>
-                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
-                </div>
-                <div style=" float: left;text-align: center; width: 100%;">
-                  <img src="/static/img/line-bar-small.png">
-                </div>
-                <div class="file_name">
-                    <p><b>Task:</b>Woodwork and creation of doors and windows</p>
-                    <p><b>Activity:</b>Construction</p>
-                    <p><b>Supercategory:</b>Aurangabad</p>
-                </div>
-                <div style=" float: left;text-align: center; width: 100%;">
-                   <img src="/static/img/line-bar-small.png">
-                </div>
-                    <div class="file_name">
-                        <p><b>File:</b>image2.png</p>
-                        <p><b>Description:</b>Field Location1</p>
-                    </div>
-                    <div style=" float: left;text-align: center; width: 100%;">
-                       <img src="/static/img/line-bar-small.png">
-                    </div>
-            <div class="file_name">
-                    <p><b>File:</b>image2.png</p>
-                    <p><b>Description:</b>Field Location2</p>
-            </div>
-            </div>
-        </div>
-</li>			
-				
+
+{% endfor %}
+
 				
 				
 			</ul>
 		</div>
     </div>
+    
  <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
