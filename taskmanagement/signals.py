@@ -4,7 +4,12 @@ from django.db.models.signals import post_save, pre_save
 from taskmanagement.models import *
 from django.forms.models import model_to_dict
 from django.core.cache import cache
+from projectmanagement.models import Project
+from budgetmanagement.models import Budget
+from media.models import Attachment
+from django.core.signals import got_request_exception
 
+user_login = Signal(providing_args=["request", "user"])
 
 
 @receiver(post_save, sender=Task)
@@ -28,3 +33,12 @@ def milestone_completion_status(sender,**kwargs):
             mile_obj.status=2
             mile_obj.save()
         
+@receiver(post_save, sender=Budget)
+@receiver(post_save, sender=Project)
+@receiver(post_save, sender=Task)
+@receiver(post_save, sender=Attachment)
+@receiver(got_request_exception)
+
+def save_modified_by_users(sender, **kwargs):
+    obj = kwargs['instance']
+#    inst = receiver_function(sender, request)
