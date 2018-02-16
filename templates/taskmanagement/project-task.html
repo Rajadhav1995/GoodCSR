@@ -201,11 +201,14 @@ font-size: 14px;
          <div class="user-timeline">
 
          
-         {% get_task_status dates i.id as status %}
-         {% if status == True %}
+         
+         
+
             <div id="boxscroll-timeline">
                {% for task_attach in i.task_attachments %}
                {% for dates,attach in task_attach.items %}
+               {% get_task_status dates i.id as status %}
+               {% if status == True %}
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
 
@@ -341,12 +344,14 @@ font-size: 14px;
 
 
                </ul>
-               {% endfor %}
-               {% endfor %}
-            </div>
-            {% else %}
+               {% else %}
                     <li>No updates</li>
-                  {% endif %}
+               {% endif %}
+
+               
+            </div>
+            {% endfor %}
+               {% endfor %}
          </div>
       </div>
       {% endfor %}
