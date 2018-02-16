@@ -135,7 +135,7 @@ ga('send', 'pageview');
                 <!--</div>-->
               </li>
               <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
-              <!-- <li><a {% if key == "mycalendar" %} class="active" {% endif %} href = "/managing/my-calendar/details/?slug={{request.GET.slug}}&key=mycalendar&status=2">My Calendar </a></li> -->
+              <li><a {% if key == "mycalendar" %} class="active" {% endif %} href = "/managing/my-calendar/details/?slug=&key=mycalendar&status=2">My Calendar </a></li>
         {% get_user_permission request as user_obj %}
         {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or pmo_access == 2 %}
