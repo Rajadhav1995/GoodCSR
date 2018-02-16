@@ -67,11 +67,24 @@ def get_cat_delay_point(obj,key):
     return diff,slug
 
 def get_task_delay_ponts(obj):
+    
     task_data_list = []
     today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     tasks_obj = Task.objects.filter(activity=obj).order_by('end_date')
+    
     for i in tasks_obj:
         task_data={}
+#        ExpectedDatesCalculator(task=i)
+#         maxi=0
+#        planned_date = i.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+#        expected_end = i.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+#        diff = (expected_end - planned_date).days
+#        print "diff=",diff
+#        if diff > maxi:
+#            maxi = diff
+#        else:
+#            maxi= maxi
+#        print "maxi= ",maxi
         if i.actual_end_date:
             max_end = i.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         else:
@@ -127,3 +140,22 @@ def super_category_delay(project_slug):
             series.append(i)
     import json
     return json.dumps(delay_list),json.dumps(series)
+    
+#logic for calculating the delay days b/w planned end date and expected end date of a task
+def get_delay_difference1(tasks):
+    diff = ''
+    maxi =0
+    today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    if tasks:
+        ExpectedDatesCalculator(task_list=tasks)
+        for task_obj in tasks:
+            planned_date = task_obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+            expected_end = task_obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+            diff = (expected_end - planned_date).days
+            print "diff=",diff
+            if diff > maxi:
+                maxi = diff
+            else:
+                maxi= maxi
+            print "maxi= ",maxi
+    return maxi

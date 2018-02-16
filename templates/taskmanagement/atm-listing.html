@@ -1,7 +1,7 @@
 {% extends 'project/project-summary.html' %}
 {% load urs_tags %}
 {% load common_tags %}
-{% load dealy_tags %}
+{% load delay_tags %}
 <!--Content part starts-->
 
 {% block content %}
@@ -155,40 +155,6 @@
 
 
 
-<!--script for filters by- malcolm-->
-<script>
-function filter(target,parent,type) {
-    if ($(target).hasClass('fa-filter')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").each(function () {
-        var child = $(this).children()[0];
-        $(this).show();
-        if(type=="activity"){
-        var actFilter = $(parent).attr('act_id');
-        if ($(child).attr('activity_id') != actFilter) {
-          $(this).hide();
-        }
-        }else if(type=="milestone"){
-        var actFilter = $(parent).attr('task_ids');
-        if (actFilter.includes($(child).attr('task_id'))==false) {
-          $(this).hide();
-        }
-        }
-      });
-      $('.fa-ban').not(target).each(function(){
-        $(this).toggleClass('fa fa-ban');
-        $(this).toggleClass('fa fa-filter');
-      });
-      // Code to filter tasks when the button is clicked
-    } else if ($(target).hasClass('fa-ban')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").show();
-  // Code to show all tasks when the button is clicked
-  }
-}
-</script>
 
 
 <script>
@@ -1246,5 +1212,41 @@ function milestone(name,slug,mile_id,task_ids) {
     window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
 }
 </script>
+
+<!--script for filters by- malcolm-->
+<script>
+function filter(target,parent,type) {
+    if ($(target).hasClass('fa-filter')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
+      $("#boxscroll-atm1>ul>li").each(function () {
+        var child = $(this).children()[0];
+        $(this).show();
+        if(type=="activity"){
+        var actFilter = $(parent).attr('act_id');
+        if ($(child).attr('activity_id') != actFilter) {
+          $(this).hide();
+        }
+        }else if(type=="milestone"){
+        var actFilter = $(parent).attr('task_ids');
+        if (actFilter.includes($(child).attr('task_id'))==false) {
+          $(this).hide();
+        }
+        }
+      });
+      $('.fa-ban').not(target).each(function(){
+        $(this).toggleClass('fa fa-ban');
+        $(this).toggleClass('fa fa-filter');
+      });
+      // Code to filter tasks when the button is clicked
+    } else if ($(target).hasClass('fa-ban')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
+      $("#boxscroll-atm1>ul>li").show();
+  // Code to show all tasks when the button is clicked
+  }
+}
+</script>
+
 {% endblock %}
 
