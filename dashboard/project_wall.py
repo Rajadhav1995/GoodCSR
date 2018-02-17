@@ -39,12 +39,21 @@ def get_project_updates(request):
 		plain_task.append(data)
 		history_obj = t.history.filter(created__range=[start_date,end_date])[:10]
 		for k in history_obj:
+			time = k.modified
+			start_time = time.replace(microsecond=0)
+			end_time = time.replace(microsecond=999999)
+			comment_obj = Comment.objects.get_or_none(created__range=[start_time,end_time])
+			attach_obj = Attachment.objects.get_or_none(created=time)
 			previous_task_progress = k.get_previous_by_created().task_progress
 			history_data = {'task_name':k.name,'activity_name':k.activity.name,
 			'supercategory':k.activity.super_category,'date':k.created,
 			'task_progress':k.task_progress,'previous_task_progress':previous_task_progress,
 			'activity_name':k.activity.name,'supercategory':k.activity.super_category,
 			'update_type':'tasks_history'}
+			if attach_obj:
+				history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':attach_obj.attachment_file})
+			if comment_obj:
+				history_data.update({'comment_text':comment_obj.text})
 			history_task_data.append(history_data)
 
 	main_data = history_task_data + plain_task
@@ -76,9 +85,7 @@ def get_project_updates(request):
 			'supercategory':t.activity.super_category,'date':t.created,
 			'task_progress':t.task_progress,'previous_task_progress':previous_task_progress,
 			'activity_name':t.activity.name,'supercategory':i.activity.super_category,}
-			print i.activity.super_category
-			if attach_obj:
-				task_history_data.update({'file_name':attach_obj.attachment_file.split('/')[-1] if attach_obj.attachment_file else '',})
+			print i.activity.super_category				
 			if comment_:
 				task_history_data.update({'comment_text':comment_.text})
 
