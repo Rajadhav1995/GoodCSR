@@ -58,6 +58,9 @@ def get_project_updates(request):
 
 	main_data = history_task_data + plain_task
 
+	budget_data = []
+	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj).values_list('id',flat=True))
+	budget_period = list(BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list).values_list('planned_unit_cost',flat=True))
 
 
 
@@ -94,6 +97,9 @@ def get_project_updates(request):
 		# 		'history':task_history_data}
 			task_data.append(task_history_data)
 	# task_history = task_updates.history.all()
+
+
+
 
 	budget_update = Budget.objects.filter(active=2,project=projectobj,created__range=[start_date,end_date])
 	budget_data = []
