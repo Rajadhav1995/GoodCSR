@@ -25,8 +25,10 @@ margin-top: -6px;
 {% block content %}
 <div class="row">
     <div class=" white-box">
-      <a href="?slug=&key=mycalendar&status=2&month=2">Next Month</a>
-    <h2>Project Gantt Chart</h2>
+        <a class="updateChart" id="nextMonth" style="width:4%;float:right; background: none; border: none; font-size: 25px; height: 40px;font-weight: bold; background: url('/static/img/right_arrow.png') no-repeat center center; color: #0b6861; background-size: contain;"></a>
+        <span id="pageNo" style="width: auto; padding: 10px 0px; height: 40px; float:right;  background: none; font-size: 14px;  border: none; font-weight: bold; color: #0b6861;"></span>
+        <a class="updateChart" id="prevMonth" style="width: 4%;float:right;  background: none; font-size: 25px; height: 40px; border: none; font-weight: bold;  background: url('/static/img/left_arrow.png') no-repeat center center;color: #0b6861; background-size: contain;"></a>
+    <h2>Calendar</h2>
           <div class="col-md-12 legendContainer">
             <ul class="legend">
                 <li><span class="taskC"></span> Completed  </li>
@@ -55,6 +57,48 @@ margin-top: -6px;
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>--<!-- script for gantt chart starts here-->
 
 <script>
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return parseInt('');
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    currMonth = new Date();
+    filMonth = getParameterByName('month');
+    filYear = getParameterByName('year');
+    if(filMonth == null || filYear == null){
+      filMonth = new Date().getMonth();
+      filYear = new Date().getFullYear();
+      currMonth = new Date(filYear,filMonth,1);
+    }else{
+      filMonth = parseInt(filMonth);
+      filYear = parseInt(filYear);
+      currMonth = new Date(filYear,filMonth-1,1);
+    }
+    var n,p = 0;
+    if(filMonth==12){
+        n = filYear+1;
+        p = filYear;
+        filNext = "&month=1&year="+n;
+        filPrev = "&month=11&year="+p;
+    }else if(filMonth==1){
+        n = filYear;
+        p = filYear-1;
+        filNext = "&month=2&year="+n;
+        filPrev = "&month=12&year="+p;
+    }else{
+        n = filMonth+1;
+        p = filMonth-1;
+        filNext = "&month="+n+"&year="+filYear;
+        filPrev = "&month="+p+"&year="+filYear;
+    }
+    $("#nextMonth").attr("href","?slug=&key=mycalendar&status=2"+filNext);
+    $("#prevMonth").attr("href","?slug=&key=mycalendar&status=2"+filPrev);
+    $("#pageNo").html(currMonth.toLocaleString("en-us", { month: "long" })+" "+filYear);
+    console.log('checkmon',currMonth.toISOString().split('T')[0],currMonth.toLocaleString("en-us", { month: "long" })+" "+filYear)
     var jsonData = {{taskdict|safe}};
     console.log('json',jsonData);
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'day');
@@ -91,16 +135,29 @@ margin-top: -6px;
     });
 
     $.each(jsonData.supercategories, function (i) {
-      superId = 1, activity_type = 'Core', taskCompletion = 0, superName = '';
+      superId = 1, projectId = 1,activity_type = 'Core', taskCompletion = 0, superName = '',projectName='';
       if (this.id != null) {
         superId = this.id;
       }
-      if(filterSuper.indexOf(superId)!=-1){
-        superName = this.name;
-        var superDesc = this.description;
+      if(this.project != null){
+        projectId = this.project;
+      }
+      if(filterSuper.indexOf(this.id)!=-1){
+        $.each(jsonData.project,function(){
+          if(this.id == projectId){
+            projectName = this.name;
+          }
+        });
+        var initials = projectName.match(/\b\w/g) || [];
+        initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+        console.log('FilterSuper',filterSuper,this.id, projectId, initials)
+        superName = initials + ' - ' + this.name;
+        var superDesc = projectName + ' - ' + this.name;
         if (superName.toLowerCase() != "location") {
           g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
             '', superDesc, g));
+        console.log('AddSuper',superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+            '', superDesc);
         }
       }
     });
@@ -331,10 +388,13 @@ margin-top: -6px;
     g.setWeekColWidth(50);
     g.setWeekMajorDateDisplayFormat('mon yyyy');
     g.setWeekMinorDateDisplayFormat('W w');
-    g.setScrollTo('today');
+    g.setDayMajorDateDisplayFormat('dd mon yy ');
+    // g.setDayMinorDateDisplayFormat('W w');
+    g.setScrollTo(currMonth.toISOString());
     g.setTimer(5);
     g.setShowTaskInfoLink(1);
     g.Draw();
+    console.log(currMonth.toISOString().split('T')[0],'curmon')
     var collideDiv;
     function collision($div1, $div2) {
       var x1 = $div1.offset().left;
@@ -456,7 +516,7 @@ margin-top: -6px;
           previous = this;
         });
       }
-      $(document).ready(function(){ganttRedo();})
+      ganttRedo();
   </script>
 <!--script for super categories ends -->
 
