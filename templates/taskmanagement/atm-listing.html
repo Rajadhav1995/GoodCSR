@@ -9,9 +9,10 @@
 <!--Content part starts-->
 <section class="content-part">
   <div class="row">
-      <div class=" white-box white-pad">
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-  </div>
+<!--      <div class=" white-box white-pad">-->
+    
+<!--  </div>-->
+  
   <div class=" white-box white-pad">
   <div style="width: 50%;float: left;">
   <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Planned vs Actual Task Completion</div>
@@ -22,7 +23,14 @@
   <div id="pvaContainer" style="width: 100%;float: left;"></div >
   </div>
   <div style="width: 50%;float: left;">
-  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Super Category Completion</div>
+  
+    
+  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;" id="super_name">Super Category Completion</div>
+  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;" id="delay_name">Dealy Drill Down</div>
+  <div class="" style="float: right;">
+  <a class="link-pad text-md-center" id="button_delay" >Dealy Drill</a>
+    <a class="link-pad text-md-center" id="button_category" >Super Category Completion</a></div>
+  <div id="container" style="width: 100%;float: left; height: 400px; margin: 0 auto"></div>
   <div id="Super_Completion" style="width: 100%;float: left;"></div>
   </div>
   </div>
@@ -1151,7 +1159,7 @@ console.log(act_task);
         type: 'bar'
       },
       title: {
-        text: 'Delay Drill Down'
+        text: ''
       },
       xAxis: {
         type: 'category',
@@ -1247,6 +1255,48 @@ function filter(target,parent,type) {
   }
 }
 </script>
+<script>
+$("#super_name").show();
+$("#delay_name").hide();
+$("#container").hide();
+$("#button_category").hide();
+$("#button_delay").click(function(){
+$("#super_name").hide();
+$("#delay_name").show();
+$("#container").show();
+$("#Super_Completion").hide();
 
+
+$("#button_category").show();
+$("#button_delay").hide();
+});
+
+$("#button_category").click(function(){
+$("#super_name").show();
+$("#delay_name").hide();
+$("#Super_Completion").show();
+
+$("#container").hide();
+$("#button_delay").show();
+$("#button_category").hide();
+});
+
+
+</script>
+<style>
+path.highcharts-button-symbol {
+    display: none;
+}
+highcharts-button-hover .highcharts-button-symbol {
+    display: none;
+}
+g.highcharts-button.highcharts-contextbutton.highcharts-button-normal {
+    display: none;
+}
+.link-pad:hover {
+    background: #169776;
+    color: #fff !important;
+}
+</style>
 {% endblock %}
 
