@@ -33,13 +33,10 @@ def milestone_completion_status(sender,**kwargs):
         if tasks.filter(status =2).count()==tasks.count():
             mile_obj.status=2
             mile_obj.save()
-        
-@receiver(post_save, sender=Budget)
-@receiver(post_save, sender=Project)
-@receiver(post_save, sender=Task)
-@receiver(post_save, sender=Attachment)
-def save_modified_by_users(sender, **kwargs):
-    obj = kwargs['instance']
-    user = cache.get('temp_user')
-    obj.modified_by = user
-    obj.save()
+
+#@receiver(post_save, sender=Task)
+#def save_modified_by_users(sender, **kwargs):
+#    obj = kwargs['instance']
+#    user = cache.get('temp_user')
+#    obj.modified_by = user
+#    obj.save()
