@@ -14,7 +14,7 @@ from simple_history.admin import SimpleHistoryAdmin
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
-
+from context_processors import *
 class Attachment(BaseContent):
     # model to attach files.
     #content_type is a foriegn key, verbose_name- is a function differing with _"
@@ -49,7 +49,10 @@ class Attachment(BaseContent):
         keywords = FileKeywords.objects.filter(active=2,object_id=self.id,content_type=ContentType.objects.get(model='Attachment')).values_list('key',flat=True)
         key_list = Keywords.objects.filter(id__in=keywords).values_list('name',flat=True)
         return list(key_list)
-
+    
+#    def __init__(self,*args, **kwargs):
+#        pass
+#        #global_variables(request)
 class Keywords(BaseContent):
     name = models.CharField(max_length=100, **OPTIONAL)
 

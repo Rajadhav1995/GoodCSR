@@ -73,8 +73,3 @@ def get_image():
      
     plt.axis('equal')
     plt.savefig(results_dir + sample_file_name)
-    
-#from django.core.cache import cache
-
-#def global_variables(request):
-#    cache.set('user', request.user)

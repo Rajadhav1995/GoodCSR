@@ -8,7 +8,7 @@ from projectmanagement.models import Project
 from budgetmanagement.models import Budget
 from media.models import Attachment
 from django.core.signals import got_request_exception
-
+from context_processors import *
 user_login = Signal(providing_args=["request", "user"])
 
 
@@ -33,12 +33,12 @@ def milestone_completion_status(sender,**kwargs):
             mile_obj.status=2
             mile_obj.save()
         
-@receiver(post_save, sender=Budget)
-@receiver(post_save, sender=Project)
-@receiver(post_save, sender=Task)
-@receiver(post_save, sender=Attachment)
-@receiver(got_request_exception)
-
-def save_modified_by_users(sender, **kwargs):
-    obj = kwargs['instance']
-#    inst = receiver_function(sender, request)
+#@receiver(post_save, sender=Budget)
+#@receiver(post_save, sender=Project)
+#@receiver(post_save, sender=Task)
+#@receiver(post_save, sender=Attachment)
+#def save_modified_by_users(sender, **kwargs):
+#    obj = kwargs['instance']
+#    import ipdb;ipdb.set_trace()
+#    
+#    user = cache.get('user')

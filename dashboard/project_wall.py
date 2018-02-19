@@ -15,6 +15,7 @@ def get_project_updates(request):
 	projectobj = Project.objects.get_or_none(slug='test-project-feb5')
 	task_updates = Task.objects.filter(active=2)
 	# task_history = task_updates.history.all()
+	project_task = 
 	
 	budget_update = Budget.objects.filter(active=2,project=projectobj,created__range=[start_date,end_date])
 	budget_data = []
