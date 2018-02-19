@@ -119,7 +119,7 @@ def get_form_saved(form,edit,task_progress,user,project,form_dict):
             f.created_by = user
             f.save()
         form.save_m2m()
-        return 'true'
+        return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
 
 def edit_taskmanagement(request,model_name,m_form,slug):
     # this function is to edit task 
@@ -143,8 +143,8 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         except:
             pass
         form_dict = {'m_form':m_form,'m':m,'model_name':model_name}
-        form_saved=get_form_saved(form,edit,task_progress,user,project,form_dict)
-        return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        get_form_saved(form,edit,task_progress,user,project,form_dict)
+        
     else:
          form=form(user_id,project.id,instance=m)
     if model_name == 'Task':
