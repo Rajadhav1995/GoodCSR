@@ -411,12 +411,8 @@ def my_tasks_details(request):
         task_activities = Task.objects.filter(id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
         category_list = set([i.activity.super_category for i in task_activities])
-<<<<<<< HEAD
         # import ipdb; ipdb.set_trace()
     elif status == '0':
-=======
-    else:
->>>>>>> fe1adebb074e065ba7cdd559d6ebb43a42b31a1d
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
         tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
