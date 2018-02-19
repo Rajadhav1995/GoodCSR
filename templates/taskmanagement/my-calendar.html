@@ -25,9 +25,9 @@ margin-top: -6px;
 {% block content %}
 <div class="row">
     <div class=" white-box">
-        <a class="updateChart" id="nextMonth" style="width:4%;float:right; background: none; border: none; font-size: 25px; height: 40px;font-weight: bold; background: url('/static/img/right_arrow.png') no-repeat center center; color: #0b6861; background-size: contain;"></a>
-        <span id="pageNo" style="width: auto; padding: 10px 0px; height: 40px; float:right;  background: none; font-size: 14px;  border: none; font-weight: bold; color: #0b6861;"></span>
-        <a class="updateChart" id="prevMonth" style="width: 4%;float:right;  background: none; font-size: 25px; height: 40px; border: none; font-weight: bold;  background: url('/static/img/left_arrow.png') no-repeat center center;color: #0b6861; background-size: contain;"></a>
+        <a class="updateChart" id="nextMonth" style="width:4%;float:right; background: none; border: none; font-size: 25px; height: 25px;font-weight: bold; background: url('/static/img/right_arrow.png') no-repeat center center; color: #0b6861; background-size: contain;"></a>
+        <span id="pageNo" style="width: auto; padding: 1px 0px; height: 25px; float:right;  background: none; font-size: 12px;  border: none; font-weight: bold; color: #0b6861;"></span>
+        <a class="updateChart" id="prevMonth" style="width: 4%;float:right;  background: none; font-size: 25px; height: 25px; border: none; font-weight: bold;  background: url('/static/img/left_arrow.png') no-repeat center center;color: #0b6861; background-size: contain;"></a>
     <h2>Calendar</h2>
           <div class="col-md-12 legendContainer">
             <ul class="legend">
@@ -40,7 +40,7 @@ margin-top: -6px;
             </ul>
           </div>
           <div class="col-md-12">
-          <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px';position: 'relative'; height: 'auto'; width:'100%';"></div>
+          <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px';position: 'relative'; height: 'auto'; width:'100%';">No Tasks.</div>
           </div>
     </div>
 </div>
@@ -73,10 +73,12 @@ margin-top: -6px;
       filMonth = new Date().getMonth();
       filYear = new Date().getFullYear();
       currMonth = new Date(filYear,filMonth,1);
+      monScrl = new Date(filYear,filMonth-1,10);
     }else{
       filMonth = parseInt(filMonth);
       filYear = parseInt(filYear);
       currMonth = new Date(filYear,filMonth-1,1);
+      monScrl = new Date(filYear,filMonth-2,10);
     }
     var n,p = 0;
     if(filMonth==12){
@@ -106,10 +108,8 @@ margin-top: -6px;
     // Get today and tomorrows date
     var cur = new Date();
     var tom = new Date();
-    var project = "";
     var filterAct = [];
     var filterSuper = [];
-    project = jsonData.project[0].slug;
     tom.setDate(tom.getDate() + 1);
     var curDate = cur.getFullYear() + '-' +
       (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
@@ -186,6 +186,8 @@ margin-top: -6px;
     });
     $.each(jsonData.tasks, function (i) {
       var taskId = 111,
+        projectId =1,
+        projectSlug = '',
         tempId = 1,
         activityId = 11,
         superId = 1,
@@ -214,11 +216,15 @@ margin-top: -6px;
       }
       $.each(jsonData.activities, function () {
         if (this.id == activityId) {
+          projectId = this.project;
           activity_type = this.activity_type;
           if (this.super_category != null) {
             superId = this.super_category;
           }
         }
+      });
+      $.each(jsonData.project, function(){
+        if(this.id == projectId) projectSlug = this.slug;
       });
       if (superId != null && activityId != null && taskId != null) {
         taskId = superId.toString() + activityId.toString() + taskId.toString();
@@ -228,12 +234,12 @@ margin-top: -6px;
       }
       activityId = parseInt(activityId);
       
-      if ( slug != null && project != ""){
+      if ( slug != null && projectSlug != ""){
         // var domain = "";
         // if(window.location.hostname == ""){
         //   domain = "http://goodcsrpmu.mahiti.org";
         // }
-        link = "/managing/my-tasks/details/?slug="+project+"&key=projecttasks&status=1#"+slug;
+        link = "/managing/my-tasks/details/?slug="+projectSlug+"&key=projecttasks&status=1#"+slug;
       }
       
       taskName = this.name;
@@ -386,15 +392,16 @@ margin-top: -6px;
     g.setShowDur(0);
     g.setUseToolTip(1);
     g.setWeekColWidth(50);
+    g.setDayColWidth(28);
     g.setWeekMajorDateDisplayFormat('mon yyyy');
     g.setWeekMinorDateDisplayFormat('W w');
     g.setDayMajorDateDisplayFormat('dd mon yy ');
     // g.setDayMinorDateDisplayFormat('W w');
-    g.setScrollTo(currMonth.toISOString());
+    g.setScrollTo(monScrl.toISOString());
     g.setTimer(5);
     g.setShowTaskInfoLink(1);
     g.Draw();
-    console.log(currMonth.toISOString().split('T')[0],'curmon')
+    console.log(monScrl.toISOString().split('T')[0],'curmon')
     var collideDiv;
     function collision($div1, $div2) {
       var x1 = $div1.offset().left;
