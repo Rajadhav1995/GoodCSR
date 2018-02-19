@@ -119,7 +119,27 @@ def get_form_saved(form,edit,task_progress,user,project,form_dict):
             f.created_by = user
             f.save()
         form.save_m2m()
-        return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        return True
+    else:
+        return False
+
+def get_form_dates_display(form):
+    # this function is to get the values of actual,planned end and start dates so that to dispaly in form,
+    # if any errors is thrown the values are not displayed so to explicitly we are giving the values by using this.
+    end_date = actual_start_date = actual_end_date = ''
+    try:
+        end_date = form.data['end_date']
+    except:
+        pass
+    try:
+        actual_start_date = form.data['actual_start_date']
+    except:
+        pass
+    try:
+        actual_end_date = form.data['actual_end_date']
+    except:
+        pass
+    return end_date,actual_start_date,actual_end_date
 
 def edit_taskmanagement(request,model_name,m_form,slug):
     # this function is to edit task 
@@ -138,12 +158,12 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             task_progress = m.task_progress 
             task_progress = update_task_completion(request,add,m.status)
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
-        try:
-            end_date = form.data['end_date']
-        except:
-            pass
+        end_date,actual_start_date,actual_end_date = get_form_dates_display(form)
+        
         form_dict = {'m_form':m_form,'m':m,'model_name':model_name}
-        get_form_saved(form,edit,task_progress,user,project,form_dict)
+        form_saved = get_form_saved(form,edit,task_progress,user,project,form_dict)
+        if form_saved:
+            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
         
     else:
          form=form(user_id,project.id,instance=m)
