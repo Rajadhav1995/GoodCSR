@@ -78,6 +78,7 @@ urlpatterns = [
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^dashboard/$',dashboard.admin_dashboard),
     url(r'^project/',include('projectmanagement.urls')),
+    url(r'^dashboard/',include('dashboard.urls')),
     url(r'^upload/',include('media.urls')),
     url(r'^report/',include('budgetmanagement.report_urls')),
     url(r'^login/$',signin),

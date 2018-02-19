@@ -154,6 +154,25 @@ class UserActive(Manage, DeleteView):
         return HttpResponseRedirect(self.request.META['HTTP_REFERER'])
         
 
+def get_roleconfig_details(conf,perms,role):
+    roleconf = None
+    if 'edit' in perms or 'add' in perms and 'view' != perms :
+        perms.append('view')
+        conf.update(perms)
+
+    elif 'delete' in perms and 'view'!= perms and 'edit'!= perms:
+        perms.append('view')
+        perms.append('edit')
+        conf.update(perms)
+
+    else:
+        conf.update(perms)
+    parent = conf.menu.parent
+    if parent and perms:
+        roleconf = RoleConfig.objects.filter(menu=parent,role=role)[0]
+        if roleconf:
+            roleconf.update('view')
+    return roleconf
 
 def manage_role(request, pk):
     #-------------------------#
@@ -171,23 +190,10 @@ def manage_role(request, pk):
         #     (<Role_Config: salutation>, [])
         # ]
         for conf,perms in perm_data:
-            if 'edit' in perms or 'add' in perms and 'view' != perms :
-                perms.append('view')
-                conf.update(perms)
+            
+            roleconf = get_roleconfig_details(conf,perms,role)
 
-            elif 'delete' in perms and 'view'!= perms and 'edit'!= perms:
-                perms.append('view')
-                perms.append('edit')
-                conf.update(perms)
-
-            else:
-                conf.update(perms)
-
-            parent = conf.menu.parent
-            if parent and perms:
-                roleconf = RoleConfig.objects.filter(menu=parent,role=role)[0]
-                if roleconf:
-                    roleconf.update('view')
+            
     return render(request, 'usermanagement/manage-role.html', locals())
 
 

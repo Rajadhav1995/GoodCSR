@@ -70,6 +70,7 @@ class BaseContent(six.with_metaclass(BaseContentBase, models.Model)):
                                          default=2)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    modified_by = models.CharField(max_length=50,blank=True, null=True)
     Admin = SimpleHistoryAdmin
     objects = ActiveQuerySet.as_manager()
     history = HistoricalRecords()
@@ -255,8 +256,10 @@ class Project(BaseContent):
         return tasks
 
     def get_remaining_tasks(self,remain_days,user,status):
+
         from taskmanagement.models import Task
         if status == '1':
+            import ipdb; ipdb.set_trace()
             tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days).order_by('-id')
         else:
             tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')

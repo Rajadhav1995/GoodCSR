@@ -11,6 +11,21 @@ from projectmanagement.models import Project,UserProfile,ProjectFunderRelation,P
 from pmu.settings import PMU_URL,SAMITHA_URL
 from ast import literal_eval
 from itertools import chain
+from operator import is_not
+from functools import partial
+
+#According to Wikipedia the exact definition of a goal is:
+# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
+#In other words, any planning you do for the future regardless of what it is, is a goal. 
+#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
+# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
+#you can't achieve anything unless a goal is focusing your effort. 
+#Because at the end of the day goals are what give you direction in life. 
+#By setting goals for yourself you give yourself a target to shoot for. 
+#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
 
 @register.assignment_tag
 def get_details(obj):
@@ -42,7 +57,7 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
 
-@register.assignment_tag   
+@register.assignment_tag
 def task_comments_progress(date,task_id, attach):
     task_data = []
     
@@ -66,6 +81,14 @@ def task_comments_progress(date,task_id, attach):
                         'task_progress':i.task_progress,'attachment':0,
                         'previous_task_progress':i.get_previous_by_created().task_progress if i.get_previous_by_created().task_progress!=None else 0,}
                 task_data.append(cell_one)
+    task_data.append(attachment_json_for_comments(task_id,attach))
+    
+    task_data = filter(partial(is_not, None), task_data)
+    task_data.sort(key=lambda item:item['date'], reverse=True)
+    return task_data
+
+def attachment_json_for_comments(task_id,attach):
+    attachment_data = {}
     for i in attach:
         time = i.created
         data ={}
@@ -90,9 +113,17 @@ def task_comments_progress(date,task_id, attach):
             'task_progress':task_history.task_progress,
             'previous_task_progress':task_history.get_previous_by_created().task_progress,
             'file_name':i.attachment_file.name.split('/')[-1]}
-            task_data.append(attachment_data)
-    task_data.sort(key=lambda item:item['date'], reverse=True)
-    return task_data
+            return attachment_data
+
+@register.assignment_tag
+def get_task_status(date,task_id):
+    task_progress = Task.objects.get(id=task_id)
+    task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
+    if task_progress_history:
+        status = True
+    else:
+        status = False
+    return status
 
 from datetime import date
 @register.assignment_tag
@@ -113,28 +144,6 @@ def get_task_comments(comment_date,task_id):
     if comment_list:
         comment_data = {'name':comment_list.created_by.attrs,'comment_text':comment_list.text,'time':comment_list.created}
     return comment_data
-
-@register.assignment_tag
-def get_attachment_progress(attach,task_id):
-    time = attach.created
-    data ={}
-    next_tick = time.second +1
-    prev_tick = time.second -1
-    start_time = time.replace(microsecond=499999,second=prev_tick)
-    end_time = time.replace(microsecond=999999)
-    task_object = Task.objects.get(id=task_id)
-    try:
-        task_history = task_object.history.get(modified__range = (start_time,end_time))
-    except:
-        task_history = task_object.history.filter(modified__range = (start_time,end_time))
-        if task_history:
-            task_history = task_history[0]
-
-    if task_history:
-        data = {'task_progress':task_history.task_progress,
-           'previous_task_progress':task_history.get_previous_by_created().task_progress}
-    return data
-
 
 def get_removed_questions(questions,block,project_report,block_type,quest_removed):
     # to get the removed questions list for that particular block 

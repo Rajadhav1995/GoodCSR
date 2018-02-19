@@ -411,8 +411,12 @@ def my_tasks_details(request):
         task_activities = Task.objects.filter(id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
         category_list = set([i.activity.super_category for i in task_activities])
+<<<<<<< HEAD
         # import ipdb; ipdb.set_trace()
     elif status == '0':
+=======
+    else:
+>>>>>>> fe1adebb074e065ba7cdd559d6ebb43a42b31a1d
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
         tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
@@ -645,8 +649,8 @@ class ExpectedDatesCalculator():
         expected_start_date = main_task.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         expected_end_date = main_task.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         for dep in dep_dates:
-            expected_start_date = self.next_weekday(dep.expected_end_date) if (self.next_weekday(
-                dep.expected_end_date) > expected_start_date) else expected_start_date
+            expected_start_date = self.next_weekday(dep.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))) if (self.next_weekday(
+                dep.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))) > expected_start_date) else expected_start_date
         expected_end_date = expected_start_date + \
             (main_task.end_date - main_task.start_date)
         expected_end_date = self.next_weekday(
@@ -844,3 +848,5 @@ def tasks_max_end_date(request):
     tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})
+
+
