@@ -127,6 +127,7 @@ margin-top: -6px;
       $.each(jsonData.activities, function () {
         if (this.id == tempAct) {
           if (this.super_category != null) {
+            tempSuper = this.super_category;
             if(filterSuper.indexOf(this.super_category)==-1) filterSuper.push(this.super_category);
           }
         }
@@ -170,7 +171,7 @@ margin-top: -6px;
       if (this.id != null) {
         activityId = this.id.toString();
       }
-      if(filterAct.indexOf(activityId)!=-1){
+      if(filterAct.indexOf(this.id)!=-1){
         if (this.super_category != null) {
           superId = this.super_category;
           if (this.id != null) {
@@ -182,6 +183,7 @@ margin-top: -6px;
         g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
           1, '', '',
           activityDesc, g));
+        console.log("AddAct",activityId, activityName)
       }
     });
     $.each(jsonData.tasks, function (i) {
