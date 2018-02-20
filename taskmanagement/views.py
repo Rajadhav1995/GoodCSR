@@ -26,6 +26,7 @@ from django.core import serializers
 from projectmanagement.templatetags.urs_tags import userprojectlist
 from django.core.serializers.json import DjangoJSONEncoder
 # Create your views here.
+from projectmanagement.common_method import add_modified_by_user
 
 def listing(request):
     # this function is for listing 
@@ -99,6 +100,7 @@ def add_taskmanagement(request,model_name,m_form):
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
+                add_modified_by_user(f,request)
                 f.save()
             form.save_m2m()
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
@@ -109,6 +111,7 @@ def add_taskmanagement(request,model_name,m_form):
 def get_form_saved(form,edit,task_progress,user,project,form_dict):
     # this function is for saving form
     # 
+    request = form_dict.get('request')
     if form.is_valid():
         f=form.save(commit=False)
         if form_dict.get('m_form') == 'TaskForm':
@@ -118,6 +121,7 @@ def get_form_saved(form,edit,task_progress,user,project,form_dict):
         f.save()
         if form_dict.get('model_name') == 'Activity' or form_dict.get('model_name') == 'Task':
             f.created_by = user
+            add_modified_by_user(f,request) # added to save the modified_by user to get the updates
             f.save()
         form.save_m2m()
         return True
@@ -161,7 +165,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
         end_date,actual_start_date,actual_end_date = get_form_dates_display(form)
         
-        form_dict = {'m_form':m_form,'m':m,'model_name':model_name}
+        form_dict = {'m_form':m_form,'m':m,'model_name':model_name,'request':request}
         form_saved = get_form_saved(form,edit,task_progress,user,project,form_dict)
         if form_saved:
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
@@ -523,16 +527,22 @@ def task_comments(request):
                     object_id = request.POST.get('task_id'),
                     name=file_name
                     )
-                attach.save()
                 
+                # added to get the task updates done by particular user saved in modified_by 
+                add_modified_by_user(attach,request)
+                attach.save()
             else:
                 msg = "yess"
         elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
+            # added to get the task updates done by particular user saved in modified_by 
+            add_modified_by_user(comment,request)
             comment.save()
         progress_status = create_task_progress(request,task)
+        # added to get the task updates done by particular user saved in modified_by 
+        add_modified_by_user(task,request)
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
         
     return HttpResponseRedirect(url)
