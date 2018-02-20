@@ -116,7 +116,7 @@ $(document).ready(function(){
      <div class="menu-bottom">
         <ul>
           <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
-          <li><a  {% if key == "summary" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
+          <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
           <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>
           <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
           <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>

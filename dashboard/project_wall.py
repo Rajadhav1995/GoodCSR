@@ -129,4 +129,5 @@ def get_project_updates(request):
 	main_data.sort(key=lambda item:item['date'], reverse=True)
 
 	# import ipdb; ipdb.set_trace()
+	key = 'updates'
 	return render(request,'project-wall/project_updates_old.html',locals())
