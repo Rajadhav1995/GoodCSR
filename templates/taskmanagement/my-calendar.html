@@ -17,19 +17,33 @@ margin-top: -6px;
 </style>
     <section class="green-pad green-height">
     <div class="row">
-        <div class="image-pad orglogo ">
-            {% get_org_logo projectobj as org_logo %}
-        	<a href="javascript:void(0);"> {% if org_logo %}<img src="{{org_logo}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);"></a>
-<!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
-        </div>
     </div>
     </section>
 {% endblock %}
 
 
 {% block content %}
-<div><h2>My Calendar will appear here</h2></div>
-
+<div class="row">
+    <div class=" white-box">
+        <a class="updateChart" id="nextMonth" style="width:4%;float:right; background: none; border: none; font-size: 25px; height: 25px;font-weight: bold; background: url('/static/img/right_arrow.png') no-repeat center center; color: #0b6861; background-size: contain;"></a>
+        <span id="pageNo" style="width: auto; padding: 1px 0px; height: 25px; float:right;  background: none; font-size: 12px;  border: none; font-weight: bold; color: #0b6861;"></span>
+        <a class="updateChart" id="prevMonth" style="width: 4%;float:right;  background: none; font-size: 25px; height: 25px; border: none; font-weight: bold;  background: url('/static/img/left_arrow.png') no-repeat center center;color: #0b6861; background-size: contain;"></a>
+    <h2>Calendar</h2>
+          <div class="col-md-12 legendContainer">
+            <ul class="legend">
+                <li><span class="taskC"></span> Completed  </li>
+                <li><span class="taskO"></span> In progress </li>
+                <li><span class="taskB"></span> Not started </li>
+                <li><span class="taskN"></span> Non-Core </li>
+                <li><span class="mileC"></span> On-Time Milestone </li>
+                <li><span class="mileD"></span> Delayed Milestone </li>
+            </ul>
+          </div>
+          <div class="col-md-12">
+          <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px';position: 'relative'; height: 'auto'; width:'100%';">No Tasks.</div>
+          </div>
+    </div>
+</div>
 {% endblock %}
 {% block script %}
 <!-- jQuery (necessary for JavaScript plugins) -->
@@ -37,9 +51,483 @@ margin-top: -6px;
 <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
 <script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
 <script type="text/javascript" src="/static/js/common.js" /></script>
+<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/jsgantt.js" type="text/javascript"></script>
 
-<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
+<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>--<!-- script for gantt chart starts here-->
 
+<script>
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return parseInt('');
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    currMonth = new Date();
+    filMonth = getParameterByName('month');
+    filYear = getParameterByName('year');
+    if(filMonth == null || filYear == null){
+      filMonth = new Date().getMonth();
+      filYear = new Date().getFullYear();
+      currMonth = new Date(filYear,filMonth,1);
+      monScrl = new Date(filYear,filMonth-1,10);
+    }else{
+      filMonth = parseInt(filMonth);
+      filYear = parseInt(filYear);
+      currMonth = new Date(filYear,filMonth-1,1);
+      monScrl = new Date(filYear,filMonth-2,10);
+    }
+    var n,p = 0;
+    if(filMonth==12){
+        n = filYear+1;
+        p = filYear;
+        filNext = "&month=1&year="+n;
+        filPrev = "&month=11&year="+p;
+    }else if(filMonth==1){
+        n = filYear;
+        p = filYear-1;
+        filNext = "&month=2&year="+n;
+        filPrev = "&month=12&year="+p;
+    }else{
+        n = filMonth+1;
+        p = filMonth-1;
+        filNext = "&month="+n+"&year="+filYear;
+        filPrev = "&month="+p+"&year="+filYear;
+    }
+    $("#nextMonth").attr("href","?slug=&key=mycalendar&status=2"+filNext);
+    $("#prevMonth").attr("href","?slug=&key=mycalendar&status=2"+filPrev);
+    $("#pageNo").html(currMonth.toLocaleString("en-us", { month: "long" })+" "+filYear);
+    console.log('checkmon',currMonth.toISOString().split('T')[0],currMonth.toLocaleString("en-us", { month: "long" })+" "+filYear)
+    var jsonData = {{taskdict|safe}};
+    console.log('json',jsonData);
+    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'day');
+    // console.log(jsonData.tasks);
+    // Get today and tomorrows date
+    var cur = new Date();
+    var tom = new Date();
+    var filterAct = [];
+    var filterSuper = [];
+    tom.setDate(tom.getDate() + 1);
+    var curDate = cur.getFullYear() + '-' +
+      (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
+      (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
+
+    var tomDate = tom.getFullYear() + '-' +
+      (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
+      (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
+    // Get today and tomorrows date
+    $.each(jsonData.tasks,function(){
+      if (this.activity != null) {
+        tempAct = this.activity;
+        if(filterAct.indexOf(this.activity)==-1) filterAct.push(this.activity);
+      }
+      $.each(jsonData.activities, function () {
+        if (this.id == tempAct) {
+          if (this.super_category != null) {
+            tempSuper = this.super_category;
+            if(filterSuper.indexOf(this.super_category)==-1) filterSuper.push(this.super_category);
+          }
+        }
+      });
+
+    });
+
+    $.each(jsonData.supercategories, function (i) {
+      superId = 1, projectId = 1,activity_type = 'Core', taskCompletion = 0, superName = '',projectName='';
+      if (this.id != null) {
+        superId = this.id;
+      }
+      if(this.project != null){
+        projectId = this.project;
+      }
+      if(filterSuper.indexOf(this.id)!=-1){
+        $.each(jsonData.project,function(){
+          if(this.id == projectId){
+            projectName = this.name;
+          }
+        });
+        var initials = projectName.match(/\b\w/g) || [];
+        initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+        console.log('FilterSuper',filterSuper,this.id, projectId, initials)
+        superName = initials + ' - ' + this.name;
+        var superDesc = projectName + ' - ' + this.name;
+        if (superName.toLowerCase() != "location") {
+          g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+            '', superDesc, g));
+        console.log('AddSuper',superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
+            '', superDesc);
+        }
+      }
+    });
+    $.each(jsonData.activities, function (i) {
+      var activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0,
+        activityName = 'Activity';
+      if (this.id != null) {
+        activityId = this.id.toString();
+      }
+      if(filterAct.indexOf(this.id)!=-1){
+        if (this.super_category != null) {
+          superId = this.super_category;
+          if (this.id != null) {
+            activityId = this.super_category.toString() + activityId;
+          }
+        }
+        activityName = this.name;
+        var activityDesc = this.description;
+        g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
+          1, '', '',
+          activityDesc, g));
+        console.log("AddAct",activityId, activityName)
+      }
+    });
+    $.each(jsonData.tasks, function (i) {
+      var taskId = 111,
+        projectId =1,
+        projectSlug = '',
+        tempId = 1,
+        activityId = 11,
+        superId = 1,
+        activity_type = 'Core',
+        taskCompletion = 0, 
+        taskName = 'Task',
+        taskStatus = '',
+        pStartDate = curDate,
+        pEndDate = tomDate,
+        eStartDate = curDate,
+        eEndDate = tomDate,
+        slug = "",
+        link = "";
+      if (this.id != null) {
+        taskId = this.id;
+        tempId = this.id;
+      }
+      if (this.task_progress != null || this.task_progress != undefined) {
+        taskCompletion = this.task_progress;
+      }
+      if (this.activity != null) {
+        activityId = this.activity;
+      }
+      if (this.slug != null) {
+        slug = this.slug;
+      }
+      $.each(jsonData.activities, function () {
+        if (this.id == activityId) {
+          projectId = this.project;
+          activity_type = this.activity_type;
+          if (this.super_category != null) {
+            superId = this.super_category;
+          }
+        }
+      });
+      $.each(jsonData.project, function(){
+        if(this.id == projectId) projectSlug = this.slug;
+      });
+      if (superId != null && activityId != null && taskId != null) {
+        taskId = superId.toString() + activityId.toString() + taskId.toString();
+      }
+      if (superId != null && activityId != null) {
+        activityId = superId.toString() + activityId.toString();
+      }
+      activityId = parseInt(activityId);
+      
+      if ( slug != null && projectSlug != ""){
+        // var domain = "";
+        // if(window.location.hostname == ""){
+        //   domain = "http://goodcsrpmu.mahiti.org";
+        // }
+        link = "/managing/my-tasks/details/?slug="+projectSlug+"&key=projecttasks&status=1#"+slug;
+      }
+      
+      taskName = this.name;
+      pStartDate = this.start_date;
+      pEndDate = this.end_date;
+      eStartDate = this.expected_start_date;
+      eEndDate = this.expected_end_date;
+      if(taskCompletion==100 && (new Date(eEndDate).getTime() > new Date(pEndDate).getTime()) ){
+        taskStatus = 'gtaskdel ';
+      }
+      if (activity_type == "Core") {
+        switch (this.status) {
+          case "Ongoing":
+            taskStatus += 'gtaskblue';
+            break;
+          case "Open":
+            taskStatus += 'gtaskyellow';
+            break;
+          case "Close":
+            taskStatus += 'gtaskgreen';
+            break;
+          default:
+            taskStatus += 'gtaskblue';
+            break;
+        };
+      }else{
+        taskStatus += 'gtaskred';
+      }
+      // For Milestones
+      var completionDate = this.actual_end_date;
+      console.log('Complete date', completionDate);
+      $.each(jsonData.milestones, function (i) {
+        var mileId = 111,
+          mileStatus = 'gmilestone redmile '
+        depTask = [];
+        depTask = this.task;
+        mileName = this.name;
+        if (this.id != null) {
+          mileId = activityId.toString() + this.id.toString();
+        }
+        maxDate = new Date('1970-01-01');
+        var tempArray = [];
+        var n = 0;
+        $.each(depTask, function (index, value) {
+          console.log('value', n);
+          tempArray.push({
+            'id': value
+          });
+          for (var i = 0; i < jsonData.tasks.length; i++) {
+            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {
+              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();
+            }
+            if (i == (depTask.length - 1)) {
+
+              console.log('Array', depTask)
+              console.log('Max Date', Math.max(tempArray.date));
+            }
+          }
+          n++;
+        });
+        console.log("tempArray", tempArray);
+        var ln = depTask.length;
+        ln--;
+        console.log('depTask', depTask[0]);
+        if (depTask[ln] == tempId) {
+          var d1 = new Date(eEndDate);
+          var d2 = new Date(eEndDate);
+          d1.setDate(d1.getDate() + 1);
+          d2.setDate(d2.getDate() + 11);
+          var mileStart = d1.getFullYear() + '-' +
+            (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
+            (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
+
+          var mileEnd = d2.getFullYear() + '-' +
+            (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
+            (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
+          //Check for milestone complete or calculate delay
+          if (completionDate == null) {
+            mileStatus = 'gmilestone redmile '
+          } else {
+            var d3 = new Date(this.overdue);
+            var d4 = new Date(completionDate);
+            var timeDiff = (d3.getTime() + 86400) - d4.getTime();
+            var diffDays = Math.ceil(timeDiff / 86400000);
+            console.log('DiffDays', diffDays);
+            if (diffDays < 0) {
+              var dur = rem = Math.abs(diffDays);
+              if (dur < 8) {
+                mileName += " - Delayed by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) {
+                dur = Math.floor(dur / 7);
+                rem = Math.floor(rem % 7);
+                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";
+              };
+              if (dur >= 30 && dur < 365) {
+                dur = Math.floor(dur / 30);
+                rem = Math.floor(rem % 30);
+                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";
+              };
+              if (dur >= 365) {
+                dur = Math.floor(dur / 365);
+                rem = Math.floor(rem % 365);
+                mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
+              };
+              console.log('Diff days', mileName);
+            } else {
+              mileStatus = 'gmilestone greenmile '
+              var dur = rem = Math.abs(diffDays);
+              if (dur == 0) {
+                mileName += " - On track"
+              };
+              if (dur < 8) {
+                mileName += " - Ahead by " + dur + " day(s)"
+              };
+              if (dur >= 8 && dur < 30) {
+                dur = Math.floor(dur / 7);
+                rem = Math.floor(rem % 7);
+                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";
+              };
+              if (dur >= 30 && dur < 365) {
+                dur = Math.floor(dur / 30);
+                rem = Math.floor(rem % 30);
+                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";
+              };
+              if (dur >= 365) {
+                dur = Math.floor(dur / 365);
+                rem = Math.floor(rem % 365);
+                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
+              };
+              console.log('Diff days', mileName);
+            }
+          }
+          g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
+            mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));
+        }
+      });
+
+
+      //Draw task after drawing milestone
+      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, link, 0,
+        '', taskCompletion, 0, activityId, 1, '', '', '', g, pStartDate, pEndDate));
+    });
+    console.log('Filtered act and super',filterAct,filterSuper)
+
+    g.setShowStartDate(0);
+    g.setShowEndDate(0);
+    g.setShowRes(0);
+    g.setShowDeps(0);
+    g.setShowDur(0);
+    g.setUseToolTip(1);
+    g.setWeekColWidth(50);
+    g.setDayColWidth(28);
+    g.setWeekMajorDateDisplayFormat('mon yyyy');
+    g.setWeekMinorDateDisplayFormat('W w');
+    g.setDayMajorDateDisplayFormat('dd mon yy ');
+    // g.setDayMinorDateDisplayFormat('W w');
+    g.setScrollTo(monScrl.toISOString());
+    g.setTimer(5);
+    g.setShowTaskInfoLink(1);
+    g.Draw();
+    console.log(monScrl.toISOString().split('T')[0],'curmon')
+    var collideDiv;
+    function collision($div1, $div2) {
+      var x1 = $div1.offset().left;
+      var y1 = $div1.offset().top;
+      var h1 = $div1.outerHeight(true);
+      var w1 = $div1.outerWidth(true);
+      var b1 = y1 + h1;
+      var r1 = x1 + w1;
+      var x2 = $div2.offset().left;
+      var y2 = $div2.offset().top;
+      var h2 = $div2.outerHeight(true);
+      var w2 = $div2.outerWidth(true);
+      var b2 = y2 + h2;
+      var r2 = x2 + w2;
+
+      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) { return false; }
+      else {
+        collideDiv = $div2;
+        return true;
+      }
+    }
+    var count = 0,
+      padding = 25,
+      arrayTask = [],
+      collide = false;
+      $('.gselector').hide();
+      function ganttRedo() {
+        var previous = null;
+        var p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 = null;
+        var mile = false;
+        $(".gtaskbarcontainer").each(function (index) {
+          currParent = $(this).parent().parent().parent();
+          listParent = currParent.attr('id').replace('row', '');
+          if ($(this).hasClass('gmilecontainer')) {
+            mile = true;
+          }
+          if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
+            .attr('id')) {
+            collide = false;
+            if (collision($(this), $(previous))) {
+              collide = true;
+            } else if (collision($(this), $(p1))) {
+              collide = true;
+            } else if (p2 != undefined && collision($(this), $(p2))) {
+              collide = true;
+            } else if (p3 != undefined && collision($(this), $(p3))) {
+              collide = true;
+            } else if (p4 != undefined && collision($(this), $(p4))) {
+              collide = true;
+            } else if (p5 != undefined && collision($(this), $(p5))) {
+              collide = true;
+            } else if (p6 != undefined && collision($(this), $(p6))) {
+              collide = true;
+            } else if (p7 != undefined && collision($(this), $(p7))) {
+              collide = true;
+            } else if (p8 != undefined && collision($(this), $(p8))) {
+              collide = true;
+            } else if (p9 != undefined && collision($(this), $(p9))) {
+              collide = true;
+            } else if (p10 != undefined && collision($(this), $(p10))) {
+              collide = true;
+            } else if (p11 != undefined && collision($(this), $(p11))) {
+              collide = true;
+            } else if (p12 != undefined && collision($(this), $(p12))) {
+              collide = true;
+            } else if (p13 != undefined && collision($(this), $(p13))) {
+              collide = true;
+            } else if (p14 != undefined && collision($(this), $(p14))) {
+              collide = true;
+            } else if (p15 != undefined && collision($(this), $(p15))) {
+              collide = true;
+            }
+
+            if (collide) {
+              $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
+                if ($(this).css('top') == '-5px') {
+                  $(this).css('top', '0px');
+                }
+              });
+              $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
+              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
+              if (count == 0) {
+                $(previous).css('top', '0px');
+                count++;
+              }
+              listParentDiv = $('#' + listParent);
+              if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
+                listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
+                currParent.css({
+                  'height': parseInt(currParent.css('height')) + 25 + 'px',
+                  'vertical-align': 'top'
+                });
+              }
+            }
+          } else {
+            count = 0;
+            arrayTask = [];
+            collide = false;
+            $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
+              top: '-5px'
+            });
+            mile = false;
+          }
+          p15 = p14;
+          p14 = p13;
+          p13 = p12;
+          p12 = p11;
+          p11 = p10;
+          p10 = p9;
+          p9 = p8;
+          p8 = p7;
+          p7 = p6;
+          p6 = p5;
+          p5 = p4;
+          p4 = p3;
+          p3 = p2;
+          p2 = p1;
+          p1 = previous;
+          previous = this;
+        });
+      }
+      ganttRedo();
+  </script>
+<!--script for super categories ends -->
 
 
 <link href="/static/css/sample.css" rel="stylesheet" />
@@ -47,18 +535,6 @@ margin-top: -6px;
 
     <script src="/static/js/plugin.js" type="text/javascript"></script>
 <script src="/static/js/script.js" type="text/javascript"></script>
-<!--<script>-->
-<!--$(document).ready(function() {-->
-<!--    $(".my-progress-bar").circularProgress({-->
-<!--        line_width: 6,-->
-<!--        color: "#333",-->
-<!--        starting_position: 0, // 12.00 o' clock position, 25 stands for 3.00 o'clock (clock-wise)-->
-<!--        percent: 0, // percent starts from-->
-<!--        percentage: true,-->
-<!--        text: ""-->
-<!--    }).circularProgress('animate', 50, 5000);-->
-<!--});       -->
-<!--</script>-->
 <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="/static/css/jquery.range-control.css" />
     <script src="/static/js/jquery.range-control.js"></script>

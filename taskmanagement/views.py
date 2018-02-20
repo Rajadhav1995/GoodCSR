@@ -1,4 +1,4 @@
-import requests,ast
+import requests,ast,json
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -23,7 +23,8 @@ from serializers import *
 from rest_framework.response import Response
 from pmu.settings import PMU_URL
 from django.core import serializers
-
+from projectmanagement.templatetags.urs_tags import userprojectlist
+from django.core.serializers.json import DjangoJSONEncoder
 # Create your views here.
 
 def listing(request):
@@ -430,7 +431,8 @@ def my_tasks_details(request):
         task_activities = Task.objects.filter(id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
         category_list = set([i.activity.super_category for i in task_activities])
-    else:
+        # import ipdb; ipdb.set_trace()
+    elif status == '0':
         over_due = my_tasks_listing(project,user,status)
         tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
         tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
@@ -440,6 +442,23 @@ def my_tasks_details(request):
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
         project_list = Project.objects.filter(active=2)
+#   code for My Calendar
+    elif status == '2':
+    #   calling api to return the gantt chart format data
+        this_month = datetime.now().month
+        this_year = datetime.now().year
+        print 'MONTH1',request.GET.get('month')==None,request.GET.get('year')=='None' 
+        try:
+            if(request.GET.get('month') != None or request.GET.get('year') != None):
+                this_month = request.GET.get('month')
+                this_year = request.GET.get('year')
+                print 'MONTH',this_month, this_year
+        except:
+            print 'NO MONTH DATA'
+        data = {'status':2,'user':int(user_id), 'month':int(this_month),'year':int(this_year)}
+        rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
+        taskdict = ast.literal_eval(json.dumps(rdd.content))
+    #   code for My Calendar
     projectobj = project
     user_obj = user
     key = request.GET.get('key')
@@ -705,6 +724,7 @@ class GanttChartData(APIView):
         i_project_id = request.data.get('project_id')
         start_date = request.data.get('start_date')
         end_date = request.data.get('end_date')
+        status = request.data.get('status')
         if start_date and end_date:
             # this is to get gant chart in  the report form according to the quarters
             tasks = Task.objects.filter(activity__project=i_project_id,actual_start_date__gte=start_date,actual_end_date__lte=end_date)
@@ -713,21 +733,37 @@ class GanttChartData(APIView):
             activities = Activity.objects.filter(id__in=[i.activity.id for i in tasks])
             milestones = Milestone.objects.filter(task__id__in=[i.id for i in tasks])
             projects = Project.objects.filter(id=i_project_id)
+            supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
+        elif status == '2':
+            user_id = request.data.get('user')
+            this_month = request.data.get('month')
+            this_year = request.data.get('year')
+            minDate = datetime(year=int(this_year),month=int(this_month),day=1)
+            if(int(this_month)==12):
+                maxDate = datetime(year=int(this_year)+1,month=1,day=1)
+            else:
+                maxDate = datetime(year=int(this_year),month=int(this_month)+1,day=1)
+            user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+            project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
+            # Run this command on server for it to work -  sudo mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root mysql 
+            tasks = Task.objects.filter(active=2,assigned_to=user,start_date__date__lt=maxDate,end_date__date__gte=minDate).order_by('-id')
+            activities = Activity.objects.filter(active=2).order_by('-id')
+            milestones = Milestone.objects.filter(active=2,subscribers=user).order_by('-id')
+            projects = Project.objects.order_by('-id')
+            supercategories = SuperCategory.objects.exclude(parent=None)
         else:
             # this to get the gantt chart in the summary and tasks and milestone page
             tasks = Task.objects.filter(activity__project=i_project_id)
             activities = Activity.objects.filter(project=i_project_id)
             milestones = Milestone.objects.filter(project=i_project_id)
             projects = Project.objects.filter(id=i_project_id)
-        supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
-        ExpectedDatesCalculator(task_list=tasks)
+            supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
+        ExpectedDatesCalculator(task_list=tasks) 
         taskdict = {}
         taskdict['tasks'] = TaskSerializer(tasks, many=True).data
         taskdict['activities'] = ActivitySerializer(activities, many=True).data
         taskdict['milestones'] = MilestoneSerializer(
             milestones, many=True).data
-#        taskdict['supercategories'] = SuperCategorySerializer(
-#            supercategories, many=True).data
         taskdict['project'] = ProjectSerializer(projects,many=True).data
         super_categories = SuperCategorySerializer(supercategories, many=True).data
         super_categories.append({"id":'',"active":'',"created":"","modified":"","name":"","slug":"","description":'',"budget":'',"parent":'',"project":''})
