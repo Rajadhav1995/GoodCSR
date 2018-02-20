@@ -54,6 +54,8 @@ def timeline_upload(request):
             f.content_type = ContentType.objects.get(model=('project'))
             f.object_id = project.id
             f.timeline_progress = True
+            # to save modified_by user to get the updates in updates sectionss
+            f.modified_by = user_id
             f.save()
             return HttpResponseRedirect('/project/summary/?slug='+project.slug)
         else :
@@ -88,6 +90,7 @@ def upload_attachment(request):
             obj.description = request.POST.get('description')
             obj.content_type=ContentType.objects.get(model=model)
             obj.object_id=project_obj.id
+            obj.modified_by = user_id # to get the user who is modified in order to show updates
             obj.created_by = UserProfile.objects.get_or_none(user_reference_id=user_id)
             if key==1:
                 obj.attachment_type=2
@@ -134,7 +137,11 @@ def edit_attachment(request):
         if form.is_valid():
 
             obj = form.save(commit=False)
+            from projectmanagement.common_method import add_modified_by_user
+            add_modified_by_user(obj,request)
             obj.save()
+            # to get the user who is modified in order to show updates
+            
         try:
             keys = request.POST.get('keywords').split(',')
             attach_model = 'Attachment'
