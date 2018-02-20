@@ -5,8 +5,8 @@ from taskmanagement.models import *
 from django.forms.models import model_to_dict
 from django.core.cache import cache
 from projectmanagement.models import Project
-from budgetmanagement.models import Budget
-from media.models import Attachment
+from budgetmanagement.models import *
+from media.models import Attachment,Comment
 from django.core.signals import got_request_exception
 from context_processors import *
 user_login = Signal(providing_args=["request", "user"])
@@ -34,10 +34,19 @@ def milestone_completion_status(sender,**kwargs):
             mile_obj.status=2
             mile_obj.save()
 
-#@receiver(post_save, sender=Task)
+#from django.core.signals import request_finished
+
+#request_finished.connect(save_modified_by_users, dispatch_uid="my_unique_identifier")
+
+#@receiver(pre_save, sender=Project, dispatch_uid="my_unique_identifier")
 #def save_modified_by_users(sender, **kwargs):
-#    
-#    obj = kwargs['instance']
-#    user = cache.get('temp_user')
-#    obj.modified_by = user
-#    obj.save()
+#    try:
+#        import ipdb;ipdb.set_trace()
+#        obj = kwargs['instance']
+#        user = cache.get('temp_user')
+#        obj.modified_by= user
+#        created = True
+#        obj.save()
+#    except Exception as e:
+#        print e.message
+#        
