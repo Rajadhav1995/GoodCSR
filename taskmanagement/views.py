@@ -738,15 +738,15 @@ class GanttChartData(APIView):
             user_id = request.data.get('user')
             this_month = request.data.get('month')
             this_year = request.data.get('year')
-            minDate = datetime(year=int(this_year),month=int(this_month),day=1)
+            min_date = datetime(year=int(this_year),month=int(this_month),day=1)
             if(int(this_month)==12):
-                maxDate = datetime(year=int(this_year)+1,month=1,day=1)
+                max_date = datetime(year=int(this_year)+1,month=1,day=1)
             else:
-                maxDate = datetime(year=int(this_year),month=int(this_month)+1,day=1)
+                max_date = datetime(year=int(this_year),month=int(this_month)+1,day=1)
             user = UserProfile.objects.get_or_none(user_reference_id = user_id)
             project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
             # Run this command on server for it to work -  sudo mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root mysql 
-            tasks = Task.objects.filter(active=2,assigned_to=user,start_date__date__lt=maxDate,end_date__date__gte=minDate).order_by('-id')
+            tasks = Task.objects.filter(active=2,assigned_to=user,start_date__date__lt=max_date,end_date__date__gte=min_date).order_by('-id')
             activities = Activity.objects.filter(active=2).order_by('-id')
             milestones = Milestone.objects.filter(active=2,subscribers=user).order_by('-id')
             projects = Project.objects.order_by('-id')
