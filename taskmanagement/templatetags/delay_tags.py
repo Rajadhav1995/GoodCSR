@@ -74,15 +74,7 @@ def get_task_delay_ponts(obj):
     
     for i in tasks_obj:
         task_data={}
-#        ExpectedDatesCalculator(task=i)
-#         maxi=0
-#        planned_date = i.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-#        expected_end = i.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-#        diff = (expected_end - planned_date).days
-#        print "diff=",diff
-#        if diff > maxi:
-#            maxi = diff
-#        print "maxi= ",maxi
+
         if i.actual_end_date:
             max_end = i.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         else:
@@ -150,8 +142,16 @@ def get_delay_difference1(tasks):
             planned_date = task_obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
             expected_end = task_obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
             diff = (expected_end - planned_date).days
-            print "diff=",diff
             if diff > maxi:
                 maxi = diff
-            print "maxi= ",maxi
+     
     return maxi
+    # this is for tasks dont delete this code priya
+    ExpectedDatesCalculator(task=i)
+    maxi=0
+    planned_date = i.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    expected_end = i.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    diff = (expected_end - planned_date).days
+    if diff > maxi:
+        maxi = diff
+    # for tasks purpose its written 

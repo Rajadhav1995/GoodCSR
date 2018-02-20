@@ -34,19 +34,4 @@ def milestone_completion_status(sender,**kwargs):
             mile_obj.status=2
             mile_obj.save()
 
-#from django.core.signals import request_finished
 
-#request_finished.connect(save_modified_by_users, dispatch_uid="my_unique_identifier")
-
-#@receiver(pre_save, sender=Project, dispatch_uid="my_unique_identifier")
-#def save_modified_by_users(sender, **kwargs):
-#    try:
-#        import ipdb;ipdb.set_trace()
-#        obj = kwargs['instance']
-#        user = cache.get('temp_user')
-#        obj.modified_by= user
-#        created = True
-#        obj.save()
-#    except Exception as e:
-#        print e.message
-#        
