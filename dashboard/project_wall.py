@@ -67,7 +67,6 @@ def get_project_updates(request):
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
 	line_total = sum(map(float,line_item_amount_list))
 
-
 	
 
 
