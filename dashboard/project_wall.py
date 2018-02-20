@@ -35,7 +35,8 @@ def get_project_updates(request):
 	for t in task_listing:
 		data = {'task_name':t.name,'activity_name':t.activity.name,
 				'supercategory':t.activity.super_category,'date':t.created,
-				'created_by':t.created_by,'update_type':'tasks'}
+				'created_by':t.created_by,'update_type':'tasks',
+				'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
 		plain_task.append(data)
 		history_obj = t.history.filter(created__range=[start_date,end_date])[:10]
 		for k in history_obj:
@@ -49,7 +50,8 @@ def get_project_updates(request):
 			'supercategory':k.activity.super_category,'date':k.created,
 			'task_progress':k.task_progress,'previous_task_progress':previous_task_progress,
 			'activity_name':k.activity.name,'supercategory':k.activity.super_category,
-			'update_type':'tasks_history'}
+			'update_type':'tasks_history',
+			'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
 			if attach_obj:
 				history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':attach_obj.attachment_file})
 			if comment_obj:
@@ -59,9 +61,13 @@ def get_project_updates(request):
 	main_data = history_task_data + plain_task
 
 	budget_data = []
+	
 	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj).values_list('id',flat=True))
-	budget_period = list(BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list).values_list('planned_unit_cost',flat=True))
+	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list)
+	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
+	line_total = sum(map(float,line_item_amount_list))
 
+	
 
 
 
@@ -87,7 +93,8 @@ def get_project_updates(request):
 			task_history_data = {'task_name':t.name,'activity_name':t.activity.name,
 			'supercategory':t.activity.super_category,'date':t.created,
 			'task_progress':t.task_progress,'previous_task_progress':previous_task_progress,
-			'activity_name':t.activity.name,'supercategory':i.activity.super_category,}
+			'activity_name':t.activity.name,'supercategory':i.activity.super_category,
+			'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
 			print i.activity.super_category				
 			if comment_:
 				task_history_data.update({'comment_text':comment_.text})
@@ -117,7 +124,7 @@ def get_project_updates(request):
 		history_data = []
 		for k in history:
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file'})
-		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file)})
+		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL +'/' + str(f.attachment_file)})
 
 
 	# file_history_object = Attachment.objects.filter(active=2,object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
@@ -127,7 +134,8 @@ def get_project_updates(request):
 	# 		file_data.append({'name':j.name,'created_by':j.history_user,'file_type':j.get_attachment_type_display(),'date':j.created,'update_type':'file'})
 	file_data.sort(key=lambda item:item['date'], reverse=True)
 	main_data.sort(key=lambda item:item['date'], reverse=True)
-
+	final_data = file_data + main_data
+	final_data.sort(key=lambda item:item['date'], reverse=True)
 	# import ipdb; ipdb.set_trace()
 	key = 'updates'
-	return render(request,'project-wall/project_updates_old.html',locals())
+	return render(request,'project-wall/project_updates.html',locals())
