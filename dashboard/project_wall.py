@@ -124,7 +124,6 @@ def get_project_updates(request):
 	return render(request,'project-wall/project_updates.html',locals())
 
 
-# @csrf_exempt
+# @csrf_exempt	
 def create_note(request):
-	import ipdb;ipdb.set_trace()
 	return
