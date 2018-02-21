@@ -212,16 +212,14 @@ font-size: 14px;
                  
                   
                   {% task_comments_progress dates i.id attach as comments %}
-                  {{comments}}
+                  
                   {%if comments %}
-                  {{i.id}}aadis
+                  
                   {% for c in comments %}
                       {% if c.attachment == 0 %}
+                      {% get_task_comments c.date i.id as comment_progress %}
                       <li>
                         
-
-                        {% get_task_comments c.date i.id as comment_progress %}
-
                          <div class="left-li">
                             <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                                 <div class="middle">
@@ -256,6 +254,7 @@ font-size: 14px;
                      </div>
                      
                   </li>
+                  
                   {% endif %}
                   {% if c.attachment == 1 %}
 <!-- ---------------------------------------------------------------------------------------- -->
