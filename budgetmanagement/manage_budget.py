@@ -14,6 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
 from menu_decorators import check_loggedin_access
+from projectmanagement.common_method import add_modified_by_user
 
 #According to Wikipedia the exact definition of a goal is:
 # A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
@@ -179,6 +180,8 @@ def projectlineitemadd(request):
                     start_date = budget_period.split('to')[0].rstrip()
                     end_date = budget_period.split('to')[1].lstrip()
                     budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(i))
+                    # this is to save modified_by user to get the updates
+                    add_modified_by_user(budget_periodobj,request)
                     budget_dict = {'created_by':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))),
                                'budget_period':budget_periodobj,
                                'category':SuperCategory.objects.get_or_none(id = result['location']),
@@ -194,6 +197,8 @@ def projectlineitemadd(request):
                                'quarter_order':int(quarter),
                                }
                     budet_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
+                    # this is to save modified_by user to get the updates
+                    add_modified_by_user(budet_lineitem_obj,request)
         final_budget_amount = project_amount_difference(projectobj)
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/budget_lineitem.html",locals())
@@ -343,9 +348,11 @@ def budgetutilization(request):
             line_item_updated_values = upload_budget_utlized(line_itemlist,i,request,budget_periodobj)
             budget_periodobj.__dict__.update(line_item_updated_values)
             budget_periodobj.save()
+            add_modified_by_user(budget_periodobj,request)# this is to save modified by user to get the updates
         from projectmanagement.views import get_project_budget_utilized_amount,auto_update_tranche_amount
         final_budget_utilizedamount = get_project_budget_utilized_amount(projectobj,budgetobj)
         auto_update_tranche_amount(final_budget_utilizedamount,projectobj)
+        
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/budget_utilization.html",locals())
 
@@ -469,7 +476,7 @@ def get_budget_edit_result(line_itemlist,quarter,request):
             result.update({name:request.POST.get(line)})
     return result,budgetperiodid
 
-def budget_lineitem_update(budget_parameters):
+def budget_lineitem_update(budget_parameters,request):
     ''' function to update the line items '''
     data_item  = budget_parameters
     budgetperiodid = data_item['budgetperiodid']
@@ -481,7 +488,7 @@ def budget_lineitem_update(budget_parameters):
         budget_lineitem_obj.save()
         utilized_amount = budget_lineitem_obj.utilized_unit_cost if budget_lineitem_obj.utilized_unit_cost else 0
         planned_cost = float(result['planned-cost']) if result['planned-cost'] else 0 
-        budget_lineitem_obj.variance = planned_cost - int(utilized_amount)
+        budget_lineitem_obj.variance = planned_cost - float(utilized_amount)
         budget_lineitem_obj.save()
     else:
         start_date = data_item['start_date']
@@ -492,6 +499,7 @@ def budget_lineitem_update(budget_parameters):
         request = data_item['request']
         quarter = data_item['quarter']
         budget_periodobj = ProjectBudgetPeriodConf.objects.create(project = projectobj,budget = budgetobj,start_date=start_date,end_date=end_date,name = projectobj.name,row_order=int(j))
+        add_modified_by_user(budget_periodobj,request)#this is save modified_by user to get the updates 
         budget_lineitem_obj = BudgetPeriodUnit.objects.create(**budget_dict)
         budget_extra_values = {
                    'created_by_id':UserProfile.objects.get_or_none(user_reference_id = int(request.session.get('user_id'))).id,
@@ -502,6 +510,7 @@ def budget_lineitem_update(budget_parameters):
                    }
         budget_lineitem_obj.__dict__.update(budget_extra_values)
         budget_lineitem_obj.save()
+    add_modified_by_user(budget_lineitem_obj,request)
     return budget_lineitem_obj
 
 def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj):
@@ -529,7 +538,7 @@ def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,pr
                                 'end_date':end_date,'j':j,'budgetobj':budgetobj,
                                 'projectobj':projectobj,'request':request,
                                 'quarter':quarter}
-            budget_saving = budget_lineitem_update(budget_parameters)
+            budget_saving = budget_lineitem_update(budget_parameters,request)
     return line_itemlist
 
 
