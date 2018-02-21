@@ -69,7 +69,6 @@ def project_location(request,obj,location):
 def create_project(request):
     #Create and edit project (with dynamic activities)
     # 
-    import ipdb;ipdb.set_trace()
     user_id = request.session.get('user_id')
     try:
         slug =  request.GET.get('slug')

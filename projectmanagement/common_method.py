@@ -53,5 +53,5 @@ def add_modified_by_user(obj,request):
     project or tasks '''
     temp_user = request.session.get('user_id')
     obj.modified_by = temp_user
-    obj.save
+    obj.save()
     return obj
