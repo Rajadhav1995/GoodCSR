@@ -66,8 +66,11 @@ def get_project_updates(request):
 	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list)
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
 	line_total = sum(map(float,line_item_amount_list))
-	budgetdata = [{'budget_total':line_total,'created_by':budget_period[0].created_by,'date':budget_period[0].created,
+	try:
+		budgetdata = [{'budget_total':line_total,'created_by':budget_period[0].created_by,'date':budget_period[0].created,
 					'update_type':'budget'}]
+	except:
+		pass
 	budget_history = []
 	for idx,q in enumerate(budget_period,start=1):
 		his = list(q.history.all().values_list('planned_unit_cost',flat=True))
@@ -103,16 +106,6 @@ def get_project_updates(request):
 		budgetlist.append(data)
 		
 
-	budget_update = Budget.objects.filter(active=2,project=projectobj,created__range=[start_date,end_date])
-	budget_data = []
-	for b in budget_update:
-		budget_data.append({'created_by':'','name':b.name,'date':b.created,'is_history':0,'update_type':'budget'})
-	budget_history_object = Budget.objects.filter(active=2,project=projectobj)
-	for i in budget_history_object:
-		budget_history = i.history.all()
-		budget_history_new = budget_history.filter(created__range=[start_date,end_date])
-		for h in budget_history:
-			budget_data.append({'name':h.name,'date':h.created,'is_history':1,'update_type':'budget'})
 	
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
@@ -129,3 +122,9 @@ def get_project_updates(request):
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
+
+
+# @csrf_exempt
+def create_note(request):
+	import ipdb;ipdb.set_trace()
+	return
