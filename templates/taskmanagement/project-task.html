@@ -212,9 +212,9 @@ font-size: 14px;
                  
                   
                   {% task_comments_progress dates i.id attach as comments %}
-                  
+                  {{comments}}
                   {%if comments %}
-
+                  {{i.id}}aadis
                   {% for c in comments %}
                       {% if c.attachment == 0 %}
                       <li>
@@ -244,11 +244,11 @@ font-size: 14px;
                                 
                               </div>
                               {% if c.previous_task_progress != c.task_progress %}
-                              <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                              <p style=" float: left; width: 39%;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                           {% endif %}
                           {% else %}
                            
-                            <p style=" float: left; width: 100%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                            <p style=" float: left; width: 100%;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                              {% get_converted_time c.date as time %}
                             <br><span>{{time}}</span>   
                           {% endif %}
@@ -290,7 +290,7 @@ font-size: 14px;
                       </div>
                         
                         {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: left; width: 39%; font-size:14px;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: left; width: 39%; font-size:14px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                      </div>
                     
