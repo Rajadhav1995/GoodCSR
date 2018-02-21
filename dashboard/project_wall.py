@@ -53,7 +53,7 @@ def get_project_updates(request):
 			'update_type':'tasks_history',
 			'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
 			if attach_obj:
-				history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':attach_obj.attachment_file})
+				history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
 			if comment_obj:
 				history_data.update({'comment_text':comment_obj.text})
 			history_task_data.append(history_data)
@@ -66,8 +66,24 @@ def get_project_updates(request):
 	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list)
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
 	line_total = sum(map(float,line_item_amount_list))
+	data = {}
+	budget_history = []
+	for idx,q in enumerate(budget_period,start=1):
+		his = list(q.history.all().values_list('planned_unit_cost',flat=True))
+		his = map(float,his)
+		budget_history.append(his)
+	qq = []
+	counter = 1
 
-	
+	if budget_period:
+		budget_history_object = budget_period[0].history.filter(modified__range=[start_date,end_date])[0::2]
+		for h in budget_history_object:
+			time = h.modified
+
+			previous_obj = h.get_previous_by_created()
+			history_data = {'present_amount':30000,'previous_amount':40000}
+			budget_history.append(history_data)
+			
 
 
 
@@ -75,34 +91,34 @@ def get_project_updates(request):
 
 	# import ipdb; ipdb.set_trace()
 	# task = Task.objects.filter(status=2,activity__project__id=projectobj.id).order_by('-id')
-	task_data = []
-	for i in task_listing:
-		task_history = i.history.all()[:5]
-		for t in task_history:
-			task_time = t.modified
-			task_prev_tick = task_time.second -1
-			try:
-				start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
-			except:
-				start_time = task_time.replace(microsecond=499999,second=59)
-			end_time = task_time.replace(microsecond=999999)
-			attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time))
-			previous_task_progress = t.get_previous_by_created().task_progress
-			# import ipdb; ipdb.set_trace()
-			comment_ = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=i.id,created__range=(start_time,end_time))
-			task_history_data = {'task_name':t.name,'activity_name':t.activity.name,
-			'supercategory':t.activity.super_category,'date':t.created,
-			'task_progress':t.task_progress,'previous_task_progress':previous_task_progress,
-			'activity_name':t.activity.name,'supercategory':i.activity.super_category,
-			'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
-			print i.activity.super_category				
-			if comment_:
-				task_history_data.update({'comment_text':comment_.text})
+	# task_data = []
+	# for i in task_listing:
+	# 	task_history = i.history.all()[:5]
+	# 	for t in task_history:
+	# 		task_time = t.modified
+	# 		task_prev_tick = task_time.second -1
+	# 		try:
+	# 			start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
+	# 		except:
+	# 			start_time = task_time.replace(microsecond=499999,second=59)
+	# 		end_time = task_time.replace(microsecond=999999)
+	# 		attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time))
+	# 		previous_task_progress = t.get_previous_by_created().task_progress
+	# 		# import ipdb; ipdb.set_trace()
+	# 		comment_ = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=i.id,created__range=(start_time,end_time))
+	# 		task_history_data = {'task_name':t.name,'activity_name':t.activity.name,
+	# 		'supercategory':t.activity.super_category,'date':t.created,
+	# 		'task_progress':t.task_progress,'previous_task_progress':previous_task_progress,
+	# 		'activity_name':t.activity.name,'supercategory':i.activity.super_category,
+	# 		'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
+	# 		print i.activity.super_category				
+	# 		if comment_:
+	# 			task_history_data.update({'comment_text':comment_.text})
 
-		# tas = {'task_name':i.name,'activity_name':i.activity.name,
-		# 		'supercategory':i.activity.super_category,'date':i.created,
-		# 		'history':task_history_data}
-			task_data.append(task_history_data)
+	# 	# tas = {'task_name':i.name,'activity_name':i.activity.name,
+	# 	# 		'supercategory':i.activity.super_category,'date':i.created,
+	# 	# 		'history':task_history_data}
+	# 		task_data.append(task_history_data)
 	# task_history = task_updates.history.all()
 
 	budget_update = Budget.objects.filter(active=2,project=projectobj,created__range=[start_date,end_date])

@@ -139,7 +139,7 @@
                   <img src="/static/img/line-bar-small.png">
                 </div>
                 <div class="file_name">
-                  <p><b>File: </b><a href="{{f.image_url}}">{{y.file_name}}</a></p>
+                  <p><b>File: </b><a href="{{f.image_url}}" target="_blank">{{y.file_name}}</a></p>
                   <p><b>Description: </b>{{y.description}}</p>
                </div>
                {% endfor %}
@@ -189,7 +189,7 @@
                    <img src="/static/img/line-bar-small.png">
                 </div>
                     <div class="file_name">
-                        <p><b>File:</b>image2.png</p>
+                        <p><b>File:</b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
                         <p><b>Description:</b>Field Location1</p>
                     </div>
                     {% endif %}
@@ -224,7 +224,7 @@
                   <img src="/static/img/line-bar-small.png">
                 </div>
                 <div class="file_name">
-                    <p><b>Task:</b><a href='{{f.task_link}}'>{{f.task_name}}</a></p>
+                    <p><b>Task:</b><a href='{{f.task_link}}' target="_blank">{{f.task_name}}</a></p>
                     <p><b>Activity:</b>{{f.activity_name}}</p>
                     <p><b>Supercategory:</b>{{f.supercategory}}</p>
                 </div>
@@ -233,7 +233,7 @@
                    <img src="/static/img/line-bar-small.png">
                 </div>
                     <div class="file_name">
-                        <p><b>File:</b>image2.png</p>
+                        <p><b>File:</b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
                         <p><b>Description:</b>Field Location1</p>
                     </div>
                     {% endif %}
