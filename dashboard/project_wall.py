@@ -87,13 +87,21 @@ def get_project_updates(request):
 	for q in budget_period:
 		budgethistory = q.history.all()
 		for k in budgethistory:
-			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost}
+			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H"),'amount':k.planned_unit_cost}
 			budget_data_list.append(data)
 	result = defaultdict(float)
 	for d in budget_data_list:
 		result[d['date']] += float(d['amount'])
 	budget_final_dict = [{'date': name, 'amount': value} for name, value in result.items()]
-
+	budgetlist = []
+	from dateutil import parser
+	import pytz
+	utc=pytz.UTC
+	for c in budget_final_dict[:10]:
+		history_date = datetime.strptime(c.get('date'), '%Y-%M-%d-%H')
+		data = {'date':utc.localize(history_date),'amount':c.get('amount'),'update_type':'budget_history'}
+		budgetlist.append(data)
+		
 
 	budget_update = Budget.objects.filter(active=2,project=projectobj,created__range=[start_date,end_date])
 	budget_data = []
@@ -109,7 +117,6 @@ def get_project_updates(request):
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
-		
 		history = f.history.all().order_by('created')
 		history_data = []
 		for k in history:
@@ -118,7 +125,7 @@ def get_project_updates(request):
 
 	file_data.sort(key=lambda item:item['date'], reverse=True)
 	main_data.sort(key=lambda item:item['date'], reverse=True)
-	final_data = file_data + main_data + budgetdata
+	final_data = file_data + main_data + budgetdata + budgetlist
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
