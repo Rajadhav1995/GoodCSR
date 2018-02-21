@@ -64,7 +64,7 @@ def task_comments_progress(date,task_id, attach):
     task_progress = Task.objects.get(id=task_id)
     task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
     for i in task_progress_history:
-        if i.task_progress:
+        if i.task_progress and (i.get_previous_by_created().task_progress != i.task_progress):
             previous_task_progress = i.get_previous_by_created().task_progress
             task_time = i.modified
             next_tick = task_time.second +1
