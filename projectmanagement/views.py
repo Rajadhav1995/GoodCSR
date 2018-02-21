@@ -141,7 +141,7 @@ def get_project_budget_utilized_amount(projectobj,budgetobj):
     budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('id', flat=True)
     budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist).values_list('utilized_unit_cost', flat=True)
     budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
-    final_budget_period_utilizedamount = sum(map(int,budget_period_utilizedamount))
+    final_budget_period_utilizedamount = sum(map(float,budget_period_utilizedamount))
     return final_budget_period_utilizedamount
 
 def auto_update_tranche_amount(final_budget_utilizedamount,project):

@@ -66,6 +66,7 @@ def get_project_updates(request):
 	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list)
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
 	line_total = sum(map(float,line_item_amount_list))
+	data = {}
 	budget_history = []
 	for idx,q in enumerate(budget_period,start=1):
 		his = list(q.history.all().values_list('planned_unit_cost',flat=True))
@@ -73,9 +74,6 @@ def get_project_updates(request):
 		budget_history.append(his)
 	qq = []
 	counter = 1
-
-
-	import ipdb;ipdb.set_trace()
 
 	if budget_period:
 		budget_history_object = budget_period[0].history.filter(modified__range=[start_date,end_date])[0::2]
