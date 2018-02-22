@@ -762,7 +762,7 @@ class GanttChartData(APIView):
             user = UserProfile.objects.get_or_none(user_reference_id = user_id)
             project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
             # Run this command on server for it to work -  sudo mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root mysql 
-            tasks = Task.objects.filter(Q(start_date__lt=maxDate),Q(end_date__gte=minDate),active=2,assigned_to=user).order_by('-id')
+            tasks = Task.objects.filter(Q(start_date__lt=max_date),Q(end_date__gte=min_date),active=2,assigned_to=user).order_by('-id')
             activities = Activity.objects.filter(active=2).order_by('-id')
             milestones = Milestone.objects.filter(active=2,subscribers=user).order_by('-id')
             projects = Project.objects.order_by('-id')
