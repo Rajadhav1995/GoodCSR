@@ -436,7 +436,6 @@ def my_tasks_details(request):
         activity_list=set([i.activity for i in task_activities])
         category_list = [{'id':i.activity.super_category.id,
                               'name':i.activity.super_category.name} for i in task_activities]
-        import ast
         category_list = [ast.literal_eval(sub) for sub in set([str(cate) for cate in category_list])]
         # import ipdb; ipdb.set_trace()
     elif status == '0':
