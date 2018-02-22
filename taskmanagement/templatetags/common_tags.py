@@ -107,38 +107,38 @@ def task_comments_progress(date,task_id, attach):
                             'previous_task_progress':0 if i.get_previous_by_created().task_progress == None or temp_var == 0 else i.get_previous_by_created().task_progress,}
                         task_data.append(cell_one)
                     
-                else:
-                    if attach_obj.id==463:
-                        print attach_obj
-                        attachment_data = {'name':attach_obj.created_by.attrs,
-                            'description':attach_obj.description,
-                            'date':attach_obj.created,'attachment':1,
-                            'attachment_type':int(attach_obj.attachment_type),
-                            'document_type':attach_obj.document_type,
-                            'image_url':PMU_URL + attach_obj.attachment_file.url,
-                            'task_progress':i.task_progress,
-                            'previous_task_progress':i.get_previous_by_created().task_progress,
-                            'file_name':attach_obj.attachment_file.name.split('/')[-1]}
-                        print task_id
+                elif attach_obj:
+
+                    attachment_data = {'name':attach_obj.created_by.attrs,
+                        'description':attach_obj.description,
+                        'date':attach_obj.created,'attachment':1,
+                        'attachment_type':int(attach_obj.attachment_type),
+                        'document_type':attach_obj.document_type,
+                        'image_url':PMU_URL + attach_obj.attachment_file.url,
+                        'task_progress':i.task_progress,
+                        'previous_task_progress':i.get_previous_by_created().task_progress,
+                        'file_name':attach_obj.attachment_file.name.split('/')[-1]}
+                    task_data.append(attachment_data)
             temp_var = new_var
-    task_data.append(attachment_json_for_comments(task_id,attach))
+    # task_data.append(attachment_json_for_comments(task_id,attach))
     # import ipdb;ipdb.set_trace()
     task_data = filter(partial(is_not, None), task_data)
+    
     task_data.sort(key=lambda item:item['date'], reverse=True)
     return task_data
 
 def attachment_json_for_comments(task_id,attach):
-    attachment_data = {}
+    attachment_data = []
     for i in attach:
         time = i.created
-        data ={}
+        
         next_tick = time.second +1
         prev_tick = time.second -1
         try:
             start_time = time.replace(microsecond=499999,second=prev_tick)
         except:
             start_time = time.replace(microsecond=499999,second=59)
-            
+
         end_time = time.replace(microsecond=999999)
         task_object = Task.objects.get(id=task_id)
         try:
@@ -159,7 +159,7 @@ def attachment_json_for_comments(task_id,attach):
             'task_progress':task_history.task_progress,
             'previous_task_progress':task_history.get_previous_by_created().task_progress,
             'file_name':i.attachment_file.name.split('/')[-1]}
-            return attachment_data
+    return attachment_data
 
 @register.assignment_tag
 def get_task_status(task_id):
