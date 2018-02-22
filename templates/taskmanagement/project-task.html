@@ -33,15 +33,6 @@ font-size: 14px;
 
         
         <div class="col-md-12">
-        <div class='col-md-2 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 0px;">Activity</label></div>
-        <div class="col-md-3 nopadding">
-                <select style="margin-left: -15px;" name="year" id="year_id" class = "form-control small_height" >
-                    <option value = "Select Year">Select</option>
-                    {% for i in activity_list %}
-                    <option value="{{i.id}}">{{i.name}}</option>
-                    {% endfor %}
-                </select>
-        </div>
         <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 15px;">Super Category</label></div>
         <div class="col-md-4 padding_left">
                 <select name="year" id="category_dropdown" class = "form-control small_height" >
@@ -51,6 +42,16 @@ font-size: 14px;
                     {% endfor %}
                 </select>
         </div>
+        <div class='col-md-2 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 0px;">Activity</label></div>
+        <div class="col-md-3 nopadding">
+                <select style="margin-left: -15px;" name="activity" id="activity_id" class = "form-control small_height" >
+                    <option value = "Select Year">Select</option>
+                    {% for i in activity_list %}
+                    <option value="{{i.id}}">{{i.name}}</option>
+                    {% endfor %}
+                </select>
+        </div>
+        
       </div>
          <div class="content-top content-top-task">
 <!--            <div class="select-area">-->
@@ -392,7 +393,7 @@ font-size: 14px;
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
- $('#year_id').on("change",function () {
+ $('#activity_id').on("change",function () {
     var as = $(this).find("option:selected").text();
     var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
     $('.activity').hide();
@@ -719,6 +720,35 @@ jQuery("#activate_tagator2").keyup(function () {
 });
 </script>
 
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        $('#category_dropdown').on('change',function(e){-->
+<!--        var category_id = $('#category_dropdown').val();-->
+<!--        $.ajax({-->
+<!--            url:'/managing/activites/',-->
+<!--            type:'GET',-->
+<!--            data:{'id':JSON.stringify(category_id)},-->
+<!--            dataType:"json",-->
+<!--            success:function(data){-->
+<!--            var act = $('#activity_id').val();-->
+<!--                $('#activity_id option').remove();-->
+<!--                $('#activity_id').append('<option value="" >-----</option>')-->
+<!--                if (data.activity){-->
+<!--                    activity = data.activity-->
+<!--                   for (var i=0;i<activity.length;i++){-->
+<!--                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] +' ('+activity[i]['super_name']+')'+ '</option>').appendTo('#activity_id');-->
+<!--                    }-->
+<!--                    $('#activity_id').val(act);-->
+<!--                }-->
+<!--            -->
+<!--            },-->
+<!--            error : function(){}-->
+<!--        });-->
+<!--        e.stopImmediatePropagation();-->
+<!--        return false;-->
+<!--      });-->
+<!--           });-->
+<!--</script>-->
 
-<!--ZZ-->
+
 {% endblock %}

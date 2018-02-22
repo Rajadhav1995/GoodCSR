@@ -451,14 +451,12 @@ def my_tasks_details(request):
     #   calling api to return the gantt chart format data
         this_month = datetime.now().month
         this_year = datetime.now().year
-        print 'MONTH1',request.GET.get('month')==None,request.GET.get('year')=='None' 
         try:
             if(request.GET.get('month') != None or request.GET.get('year') != None):
                 this_month = request.GET.get('month')
                 this_year = request.GET.get('year')
-                print 'MONTH',this_month, this_year
         except:
-            print 'NO MONTH DATA'
+            pass
         data = {'status':2,'user':int(user_id), 'month':int(this_month),'year':int(this_year)}
         rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
         taskdict = ast.literal_eval(json.dumps(rdd.content))
