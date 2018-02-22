@@ -149,8 +149,10 @@ margin-top: -6px;
             projectName = this.name;
           }
         });
-        var initials = projectName.match(/\b\w/g) || [];
-        initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+        // var initials = projectName.match(/\b(\w)/g) || [];
+        // initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+        var initials = projectName.match(/\b(\w)/g);
+        initials = initials.join('').toUpperCase();
         console.log('FilterSuper',filterSuper,this.id, projectId, initials)
         superName = initials + ' - ' + this.name;
         var superDesc = projectName + ' - ' + this.name;
