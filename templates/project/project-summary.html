@@ -123,6 +123,8 @@ $(document).ready(function(){
                     {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                         {% if i.slug == "project-summary" %}
                         <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
+                        {% if i.slug == "updates" %}
+                        <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
                         {% elif i.slug == "tasks-milestones" %}
                         <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>
                         {% elif i.slug == "budget" %}
@@ -389,7 +391,7 @@ function numberWithCommas(x) {
 </style>
 
 
-<section class="content-part">
+<section class="content-part forms_section">
 	<div class="row">
 
 
@@ -1268,7 +1270,7 @@ $(document).ready(function(){
 </script>
 
 <!---datepicker script-->
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
 	$(function() {
 	$( ".datepicker" ).datepicker({

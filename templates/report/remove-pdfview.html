@@ -667,7 +667,9 @@
                     {% endif %}
                     {% endif %}
                     {% if quest.slug == "budget-utlization-tranches" %}
+                    {% show_budget_table v 3 projectreportobj as budget_table %}
                     <div class="margin_top30 page_height">
+                        {% if budget_table == True %}
                         <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                         <div class="white-box">
                             <div class="table-responsive">
@@ -725,7 +727,9 @@
                             </div>
                         </div>
                         <br><br>
+                        {% endif %}
 
+                        {% if budget_table == True %}
                         {% get_tranches v tranche_list as filtered_tranches %}
                         {% if filtered_tranches.1.planned_amount %}
                         <div class="white-box">
@@ -772,6 +776,7 @@
                                 </table>
                             </div>
                         </div>
+                        {% endif %}
                         {% endif %}
                     </div>
                     {% endif %}
@@ -1324,7 +1329,7 @@
                     {% endif %}
                     {% endif %}
                     {% if mile_quest.slug == "picture-description" %}
-                    <p style="font-size:13px; margin-top:10px">{{imageobj.description|safe}} aadis</p>
+                    <p style="font-size:13px; margin-top:10px">{{imageobj.description|safe}}</p>
                     {% endif %}
                     {% endfor %} <!-- for loop ends for imagelist-->
                 </div>
@@ -1511,8 +1516,12 @@
             </div>
             <br>
             {% endif %} <!-- ends for parameter section  -->
+
+            
             {% if quest.slug == "budget-utlization-tranches" %}
+            {% show_budget_table v 4 projectreportobj as budget_table %}
             <div class="margin_top30 page_height">
+                {% if budget_table == True %}
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                 <div class="white-box">
                     <div class="table-responsive">
@@ -1570,6 +1579,8 @@
                     </div>
                 </div>
                 <br><br>
+                {% endif %}
+                {% if budget_table == True %}
                 <!-- ------------------------------------------------------- -->
                 {% get_tranches v tranche_list as filtered_tranches %}
                     {% if filtered_tranches.1.planned_amount %}
@@ -1614,7 +1625,7 @@
                     </div>
                 </div>
                 {% endif %}
-                
+                {% endif %}
                 {% endif %}
                 {% if quest.slug == "about-the-budget" %}
                 <div class="location margin_top30">
@@ -1764,8 +1775,11 @@
                               </div>
                     {% endif %}
 
+
             {% if quest.slug == "budget-utlization-tranches" %}
+            {% show_budget_table v 5 projectreportobj as budget_table %}
             <div class="margin_top30 page_height">
+                {% if budget_table == True %}
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                 <div class="white-box">
                     <div class="table-responsive">
@@ -1824,6 +1838,8 @@
                     </div>
                 </div>
                 <br><br>
+                {% endif %}
+                {% if budget_table == True %}
                         {% get_tranches v tranche_list as filtered_tranches %}
                         {% if filtered_tranches.1.planned_amount %}
                         <div class="white-box">
@@ -1870,6 +1886,7 @@
                                 </table>
                             </div>
                         </div>
+                        {% endif %}
                         {% endif %}
                     </div>
                 <!-- ------------------------------------------------------- -->
@@ -1986,7 +2003,7 @@
             } );
         </script>
         <!--this script is to get the timeline progress -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 //var loop_count = $('#loop_count').val()

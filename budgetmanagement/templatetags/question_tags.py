@@ -3,7 +3,7 @@ import datetime
 import json
 from django import template
 from django.db.models import Sum
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import relativedelta
 from itertools import chain
 from django.contrib.contenttypes.models import ContentType
@@ -20,10 +20,22 @@ from taskmanagement.models import Activity,Milestone
 from media.models import Attachment
 from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from ast import literal_eval
-
+from budgetmanagement.manage_budget import get_budget_quarters
+from collections import OrderedDict
 
 register = template.Library()
-
+#According to Wikipedia the exact definition of a goal is:
+# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
+#In other words, any planning you do for the future regardless of what it is, is a goal. 
+#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
+# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
+#you can't achieve anything unless a goal is focusing your effort. 
+#Because at the end of the day goals are what give you direction in life. 
+#By setting goals for yourself you give yourself a target to shoot for. 
+#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
 @register.assignment_tag
 def to_and(value):
     return value.replace(" ","_")
@@ -303,3 +315,27 @@ def get_row_details(row,quarter,projectobj):
     except:
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj
+
+@register.assignment_tag
+def show_budget_table(date,block_id,report_obj):
+    if report_obj.report_type == 2:
+        budget_table = False
+        date_list = []
+        month = int(date.split(' to ')[0].split('-')[1])
+        budgetobj = Budget.objects.get(project = report_obj.project,active=2)
+        quarter_list = get_budget_quarters(budgetobj)
+        start_q = quarter_list.get(0)
+        end_q = quarter_list.get(quarter_list.keys()[-1])
+        date_list.append(start_q.split(' to ')[0])
+        date_list.append(end_q.split(' to ')[1])
+        start, end = [datetime.strptime(_, "%Y-%m-%d") for _ in date_list]
+        month_list = OrderedDict(((start + timedelta(_)).strftime(r"%-m"), None) for _ in xrange((end - start).days)).keys()
+        month_list = map(int,month_list)
+        first_month = month_list[0::3]
+        second_month = month_list[1::3]
+        third_month = month_list[2::3]
+        if (block_id == 3 and month in third_month) or (block_id == 4) or (block_id == 5 and month in first_month):
+            budget_table = True
+    else:
+        budget_table = True
+    return budget_table

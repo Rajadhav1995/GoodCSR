@@ -4,6 +4,12 @@ from django.db.models.signals import post_save, pre_save
 from taskmanagement.models import *
 from django.forms.models import model_to_dict
 from django.core.cache import cache
+from projectmanagement.models import Project
+from budgetmanagement.models import *
+from media.models import Attachment,Comment
+from django.core.signals import got_request_exception
+from context_processors import *
+user_login = Signal(providing_args=["request", "user"])
 
 
 
@@ -14,7 +20,7 @@ def task_auto_updation_date(sender, **kwargs):
     if tasks:
         tasks.start_date = task_obj.end_date
         tasks.save()
-        
+    
 @receiver(post_save, sender=Task)
 def milestone_completion_status(sender,**kwargs):
 #this is to close the milestone based on the closed task of that milestone 
@@ -27,4 +33,5 @@ def milestone_completion_status(sender,**kwargs):
         if tasks.filter(status =2).count()==tasks.count():
             mile_obj.status=2
             mile_obj.save()
-        
+
+

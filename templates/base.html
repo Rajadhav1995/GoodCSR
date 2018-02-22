@@ -9,7 +9,7 @@
 <title>Samhita GoodCSR</title>
 
 <!--CSS Srat-->
-<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/static/css/AdminLTE.min.css" />
 <link rel="stylesheet" href="/static/css/bootstrap.css" />
 <link rel="stylesheet" href="/static/css/style.css" />
@@ -50,7 +50,7 @@
 <!--  <link rel="stylesheet" href="/resources/demos/style.css">-->
 
 <!--Progress bar script -->
-<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="/static/css/jQuery-plugin-progressbar.css">
 
 
@@ -174,6 +174,8 @@ ga('send', 'pageview');
                                       </li>
                                     {% elif i.slug == "my-tasks" %}
                                     <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
+                                    {% elif i.slug = "my-calendar" %}
+                                    <li><a {% if key == "mycalendar" %} class="active" {% endif %} href = "/managing/my-calendar/details/?slug=&key=mycalendar&status=2">My Calendar </a></li>
                                     {% else %}
                                         <li><a href="{{i.backend_link}}" class="active">{{i.name|title}} </li>
                                 {% endif %}
@@ -181,9 +183,6 @@ ga('send', 'pageview');
                                 {% endwith %}
                                 {% endfor %}
                     </ul>
-
-           
-           
 <!--            <ul>-->
 <!--              <li><a href="/dashboard/" class="active">Dashboard</a></li>-->
 <!--              <li class="user-wrap"><a href="javascript:void(0);">-->
@@ -217,11 +216,8 @@ ga('send', 'pageview');
 <!--              </li>-->
 <!--            {% endif %}-->
 <!--            </ul>-->
-
-
           </nav>
             <div class="menu-rgt">
-    
       <ul>
         <li id="search_ico">
            <!-- <form id="demo-2">
