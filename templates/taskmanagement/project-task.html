@@ -36,9 +36,9 @@ font-size: 14px;
         <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 15px;">Super Category</label></div>
         <div class="col-md-4 padding_left">
                 <select name="year" id="category_dropdown" class = "form-control small_height" >
-                    <option value = "Select Year"><small>Select</small></option>
+                    <option value = "Select Category"><small>Select</small></option>
                     {% for i in category_list %}
-                    <option value="{{i}}">{{i}}</option>
+                    <option value="{{i.id}}">{{i.name}}</option>
                     {% endfor %}
                 </select>
         </div>
@@ -405,19 +405,19 @@ font-size: 14px;
   })
 </script>
 
-<script>
- $('#category_dropdown').on("change",function () {
-    var as = $(this).find("option:selected").text();
-    var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
-    $('.category').hide();
-    if (ddd == 'Select') {
-      $('.activity').show();
-    }else{
-      $('.cat_'+ddd).show();
-    };
-    
-  })
-</script>
+<!--<script>-->
+<!-- $('#category_dropdown').on("change",function () {-->
+<!--    var as = $(this).find("option:selected").text();-->
+<!--    var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");-->
+<!--    $('.category').hide();-->
+<!--    if (ddd == 'Select') {-->
+<!--      $('.activity').show();-->
+<!--    }else{-->
+<!--      $('.cat_'+ddd).show();-->
+<!--    };-->
+<!--    -->
+<!--  })-->
+<!--</script>-->
 
 <script>
    //Toggle
@@ -720,35 +720,37 @@ jQuery("#activate_tagator2").keyup(function () {
 });
 </script>
 
-<!--<script>-->
-<!--    $(document).ready(function() {-->
-<!--        $('#category_dropdown').on('change',function(e){-->
-<!--        var category_id = $('#category_dropdown').val();-->
-<!--        $.ajax({-->
-<!--            url:'/managing/activites/',-->
-<!--            type:'GET',-->
-<!--            data:{'id':JSON.stringify(category_id)},-->
-<!--            dataType:"json",-->
-<!--            success:function(data){-->
-<!--            var act = $('#activity_id').val();-->
-<!--                $('#activity_id option').remove();-->
-<!--                $('#activity_id').append('<option value="" >-----</option>')-->
-<!--                if (data.activity){-->
-<!--                    activity = data.activity-->
-<!--                   for (var i=0;i<activity.length;i++){-->
-<!--                    $('<option value="'+ activity[i]['id']+'">' + activity[i]['name'] +' ('+activity[i]['super_name']+')'+ '</option>').appendTo('#activity_id');-->
-<!--                    }-->
-<!--                    $('#activity_id').val(act);-->
-<!--                }-->
-<!--            -->
-<!--            },-->
-<!--            error : function(){}-->
-<!--        });-->
-<!--        e.stopImmediatePropagation();-->
-<!--        return false;-->
-<!--      });-->
-<!--           });-->
-<!--</script>-->
+<script>
+    $(document).ready(function() {
+        $('#category_dropdown').on('change',function(e){
+        var category_id = $('#category_dropdown').val();
+        var cat_list = Array()
+        cat_list.push(category_id)
+        $.ajax({
+            url:'/managing/activites/',
+            type:'GET',
+            data:{'id':JSON.stringify(cat_list)},
+            dataType:"json",
+            success:function(data){
+            var act = $('#activity_id').val();
+                $('#activity_id option').remove();
+                $('#activity_id').append('<option value="" >-----</option>')
+                if (data.activity){
+                    activity = data.activity
+                   for (var i=0;i<activity.length;i++){
+                    $('<option value="'+ activity[i]['name']+'">' + activity[i]['name'] + '</option>').appendTo('#activity_id');
+                    }
+                    $('#activity_id').val(act);
+                }
+            
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+           });
+</script>
 
 
 {% endblock %}

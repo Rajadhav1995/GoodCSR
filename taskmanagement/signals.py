@@ -12,7 +12,7 @@ from context_processors import *
 user_login = Signal(providing_args=["request", "user"])
 
 
-
+'''This is to update the tasks object startdate and end date'''
 @receiver(post_save, sender=Task)
 def task_auto_updation_date(sender, **kwargs):
     task_obj = kwargs['instance']
@@ -20,7 +20,10 @@ def task_auto_updation_date(sender, **kwargs):
     if tasks:
         tasks.start_date = task_obj.end_date
         tasks.save()
-    
+
+'''This is to close the milestone , if aany of the task is closed which
+is related to a milestone checking whether that milestone othertasks
+are also closed if so then close the milestone otherwise the status of milestone is open'''
 @receiver(post_save, sender=Task)
 def milestone_completion_status(sender,**kwargs):
 #this is to close the milestone based on the closed task of that milestone 
