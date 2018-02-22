@@ -77,9 +77,13 @@ class Task(BaseContent):
         from media.models import Attachment,Comment
         comment = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=self.id).order_by('-id')
         comment_dates = list(set([i.date() for i in comment.values_list('created',flat=True)]))
+        task_progress_history = self.history.filter(task_progress__isnull=False).order_by('-id')
         attachments = Attachment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=self.id).order_by('-id')
-        attach_dates = list(set([i.date() for i in attachments.values_list('created',flat=True)]))
-        distinct_dates = attach_dates + comment_dates
+        attach_dates = list(set([i.date() for i in attachments.values_list('modified',flat=True)]))
+        task_progress_dates = list(set([i.date() for i in task_progress_history.values_list('modified',flat=True)]))
+        
+        distinct_dates = attach_dates + comment_dates + task_progress_dates
+        
         attach = []
         if distinct_dates:
             for date in list(set(distinct_dates)):

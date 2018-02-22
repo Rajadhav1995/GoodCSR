@@ -118,7 +118,7 @@ def get_project_updates(request):
 
 	file_data.sort(key=lambda item:item['date'], reverse=True)
 	main_data.sort(key=lambda item:item['date'], reverse=True)
-	final_data = file_data + main_data + budgetdata + budgetlist
+	final_data = main_data + file_data + budgetdata + budgetlist
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
