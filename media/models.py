@@ -130,3 +130,13 @@ class ScreenshotMedia(BaseContent):
     def __unicode__(self):
         return str(self.id) or ''
 
+class Note(BaseContent):
+    project = models.ForeignKey("projectmanagement.Project", **OPTIONAL)
+    created_by = models.ForeignKey(UserProfile, related_name='note_created_user', **OPTIONAL)
+    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)    
+    description = models.CharField("Description", max_length=600, **OPTIONAL)
+    comment = RichTextField(**OPTIONAL)
+    history = HistoricalRecords()
+
+    def __unicode__(self):
+        return str(self.id)

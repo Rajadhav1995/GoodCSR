@@ -1,1250 +1,439 @@
-{% extends 'project/project-summary.html' %}
+ {% extends 'project/project-summary.html' %}
 {% load urs_tags %}
-{% load common_tags %}
-{% load dealy_tags %}
-<!--Content part starts-->
 
 {% block content %}
-<div class="clear"></div>
-<!--Content part starts-->
-<section class="content-part">
-  <div class="row">
-      <div class=" white-box white-pad">
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-  </div>
-  <div class=" white-box white-pad">
-  <div style="width: 50%;float: left;">
-  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Planned vs Actual Task Completion</div>
-  <div id="pvaSuper">
-    <div class="scrollmenu">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<link rel="stylesheet" href="/static/css/main-68c112ec48.css">
+
+<style>
+
+
+.blog_timeline li { margin-bottom: 80px;position: relative;width: 50%;float: left;clear: left;}
+.blog_timeline {padding: 20px 0;list-style: none;position: relative; float: left;}
+.blog_timeline li.timeline-right {float: right;clear: right;margin-bottom: 40px;}
+.blog_timeline .timeline-left {margin-top: 80px;}
+.blog_timeline:before {top: 0;bottom: 0;position: absolute;content: " ";width: 3px;background-color: #eee;
+    left: 50%;margin-left: -1.5px;border: 2px dashed #232323;}
+.blog_timeline li > .timeline-badge {color: #232323;width: 24px;height: 24px;line-height: 50px;font-size: 1.4em;cursor: pointer;text-align: center;
+    position: absolute;top: 0px;right: -12px;z-index: 9;}
+.blog_timeline li > .timeline-badge{ }
+.timeline-right .timeline-badge{ text-align: left !important;left: -9px !important;right: -13px !important;}
+.timeline-left .timeline-badge{ text-align: right !important;right: -15px !important;}
+.blog_timeline .timeline-left .timeline-panel{width: 85%;float: left}
+.timeline-right .timeline-panel{width: 85%;float: right !important}
+.timeline-right .date{ position: absolute;float: left; left: -70px; font-size: 14px; color: #3b9e84; text-align: center;top:7px;font-weight: bold}
+.timeline-left .date{ position: absolute;float: right !important; right: -65px; font-size: 14px; font-weight: bold; color: #3b9e84; text-align: center;top:7px;}
+.timeline-right .two_letters p{width: 35px;height: 35px;border-radius: 50px;border: 2px solid #3b9e84; text-align: center;
+    position: absolute;left: 15px; line-height: 35px;}
+.timeline-left .two_letters p{width: 35px;height: 35px;border-radius: 50px;border: 2px solid #3b9e84; text-align: center;
+    position: absolute;right: 15px; line-height: 35px;}
+.timeline-badge p{background: #aa3d5c;border-radius: 50px;width: 20px;height: 20px;border:1px solid #232323}
+/*input[type=file]{width:100px;color:transparent;float: left}*/
+.image_uploaded{width: 100%;float: left; background: #3b9e84;padding: 40px 10px 10px;border-radius: 8px;margin-bottom: 0px;}
+.file_name{border: 1px solid #d0c173; padding: 4px 10px; margin-top: 10px; float: left; width: 100%; background: #f1f3e9; border-radius: 5px;}
+.timeline-left  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
+.timeline-right  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
+.text p{margin-bottom: 15px;color: #fff}
+.progress_time{ background: #f1f3e9;float: left; padding: 5px 15px; border-radius: 5px; margin-top: 10px;margin-right: 10px;}
+.progress_time p{margin-bottom: 0px;color: #232323; }
+.timeline-left .file_name{margin-top: 0px}
+.timeline-right .file_name{margin-top: 0px}
+.cont-wrap{text-align: left}
+.cont-wrap li a { border: 1px solid #a8a8a8;padding: 0.2em 0.5em;}
+.cont-wrap ul li:nth-child(2){margin-top: 5px;}
+.cont-wrap ul li { display: inline-block;  width:auto; margin: 5px 1px;margin: 5px 1px 0px; clear: none;}
+.calender_ico {position: relative; left: -30px;}
+.cont-wrap ul li:hover{background:  #3b9e84; border: 1px solid #3b9e84;color: #fff;}
+.cont-wrap ul li:hover a{border: 0px;color: #fff !important}
+.read_more{float: left; border-bottom: 1px solid #fff; padding-bottom: 0px;}
+.less_more{float: left; border-bottom: 1px solid #fff; padding-bottom: 0px;}
+#tagcloud{max-width: 350px; height: 200px;overflow: auto;background: #3b9e84; padding: 10px 20px; border-radius: 5px;box-shadow: 0px 0px 5px rgba(0,0,0,0.6);  border: 1px solid #fff;}
+#tagcloud a{text-decoration: underline; padding: 0px 5px}
+#tagcloud a:hover{color:#d0c173 !important}
+.header_fixed .menu-toggle-holder { background: #fff; height: 30px; width: 30px; float: right; position: relative; z-index: 2;/* border-left: 1px solid #c7c7c7; */}
+.header_fixed #nav{top:40px;}
+.c-hamburger{width:32px !important;}
+.c-hamburger span:after, .c-hamburger span:before{width: 85%}
+</style>
+<body>
+
+<div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:25px;top:250px;">
+  <div class="menu-toggle-holder">
+     <p style="float:left;position: relative; top: 4px; left: -40px; font-size: 16px;">Tags</p>
+     <div class="center"> <span class="label">Menu</span>
+      <button id="menu-toggle" class="c-hamburger c-hamburger--htx" ><span> </span></button>
+     </div>
+ </div> 
+ <nav id="nav" style="background: none;right: 0px;" class="nav-primary">
+           <div class="cont-wrap" >
+           <div id="tagcloud" >
+        <a href="#" rel="1">Task</a>
+        <a href="#" rel="2">Image</a>
+        <a href="#" rel="3">Budget</a>
+        <a href="#" rel="1">Meeting</a>
+        <a href="#" rel="2">Tranches</a>
+        <a href="#" rel="3">TimelineProgress</a>
+        <a href="#" rel="1">Report</a>
+        
+        </div>
+    </nav>
+    </div>
+<div class="container">
+  <div class=" content">
+  
+<div style="margin:20px 0px;float: left; width: 100%;">
+    <div style="float:left">
+      <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button>
+    </div>
+    <div style="float:right;position: relative;left: -30px;">
+      <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
+        <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
+            <label for="from" style="font-weight:normal">From</label>
+            <input type="text" id="from" name="from" style="border:1px solid #dedede">
+            <img src="/static/img/calender.png" class="calender_ico">
+        </div>
+        <div style="float:left;position: relative;z-index:1000 ">
+            <label for="to" style="font-weight:normal">to</label>
+            <input type="text" id="to" name="to" style="border:1px solid #dedede">
+            <img src="/static/img/calender.png" class="calender_ico">
+        </div>
+    </div>
+</div>
+
+<ul class="blog_timeline">
+{% for f in final_data %}
+
+{% if f.update_type == 'file' %}
+
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>AT</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-6">
+                <div class="image_uploaded">
+                <p style="color:#fff">{{f.created_by.attrs.first_name}} Uploaded <span>{% if f.file_type == 'Image' %}image{% else %}Document{%endif%}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                 
+                 {% if f.file_type == 'Image' %}
+                    <div class="progress_time"><a href="#"><p># Timeline Progress</p></a></div>
+                  {% else %}
+                    <div class="progress_time"><a href="#"><p># Document</p></a></div>
+                  {% endif %}
+                </div>
+
+                {% if f.history %}
+                {% for y in f.history %}
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                <div class="file_name">
+                  <p><b>File: </b><a href="{{f.image_url}}" target="_blank">{{y.file_name}}</a></p>
+                  <p><b>Description: </b>{{y.description}}</p>
+               </div>
+               {% endfor %}
+               {% endif %}
+             </div>
+        </div>
+    </div>
+</li>  
+{% endif %}     
+
+
+
+
+{% if f.update_type == 'tasks_history' %}
+{% if f.comment_text or f.task_progress != None %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-right">
+{% else %}
+<li class="timeline-left">
+{%endif%}
+<p class="date">{{f.date | date:"d M"}}</p>
+    <div class="timeline-badge primary"><p></p></div>
+    <div class="two_letters"><p>AT</p></div>
+        <div class="timeline-panel">
+        
+
+            <div class="timeline-body text-justify">
+              
+                <div class="text">
+                    <p>{{f.comment_text}}</p>
+                    <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}% </p>
+                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
+                </div>
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                <div class="file_name">
+                    <p><b>Task:</b><a href='{{f.task_link}}'>{{f.task_name}}</a></p>
+                    <p><b>Activity:</b>{{f.activity_name}}</p>
+                    <p><b>Supercategory:</b>{{f.supercategory}}</p>
+                </div>
+                {% if f.file_name %}
+                <div style=" float: left;text-align: center; width: 100%;">
+                   <img src="/static/img/line-bar-small.png">
+                </div>
+                    <div class="file_name">
+                        <p><b>File:</b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
+                        <p><b>Description:</b>Field Location1</p>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+</li>
+{% endif %}
+
+{% elif f.update_type == 'tasks' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+<p class="date">{{f.date | date:"d M"}}</p>
+    <div class="timeline-badge primary"><p></p></div>
+    <div class="two_letters"><p>AT</p></div>
+        <div class="timeline-panel">
+        
+
+            <div class="timeline-body text-justify">
+              
+                <div class="text">
+                    <p>{{f.comment_text}}</p>
+                    <p>Task created by {{f.created_by}} </p>
+                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
+                </div>
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                <div class="file_name">
+                    <p><b>Task:</b><a href='{{f.task_link}}' target="_blank">{{f.task_name}}</a></p>
+                    <p><b>Activity:</b>{{f.activity_name}}</p>
+                    <p><b>Supercategory:</b>{{f.supercategory}}</p>
+                </div>
+                {% if f.file_name %}
+                <div style=" float: left;text-align: center; width: 100%;">
+                   <img src="/static/img/line-bar-small.png">
+                </div>
+                    <div class="file_name">
+                        <p><b>File:</b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
+                        <p><b>Description:</b>Field Location1</p>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+</li>
+
+
+{% endif %}
+
+
+
+{% if f.update_type == 'budget' %}
+<li class="timeline-left">
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>AD</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-6">
+                <div class="image_uploaded">
+                <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.budget_total}}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#Budget</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+{% if f.update_type == 'budget_history' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>AD</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-6">
+                <div class="image_uploaded">
+                <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.amount}}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#BudgetUpdate</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+{% endfor %}
+
+
+				
+			</ul>
+		</div>
+    </div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Create a Note</h4>
+        </div>
+        <div class="modal-body">
+         <form autocomplete="off" id="note_create" class ="form-horizantal budget_form" action="/dashboard/add/note/?slug={{request.GET.slug}}" method="POST" enctype="multipart/form-data">
+             <div >
+                 <div class="form-group">
+                     <span>Comment</span>
+                 <textarea class="form-control" rows="1" name="comment" placeholder="Comment"></textarea>
+                 </div>
+                 <div class="form-group">
+                 <span>Attachment</span>
+                <input type="file" name="attachment">
+                 </div>
+                 <div class="form-group">
+                 <span>Description</span>
+                 <textarea class="form-control" rows="4" name="description" placeholder="Description"></textarea>
+                 </div>
+                 <div class="form-group">
+                  
+                 </div>
+                 <div class="modal-footer">
+         <button type="button" class="btn btn-success" type="submit" value="Save" data-dismiss="modal" style="background:#3b9e84;border:1px solid #3b9e84 color:#fff;float:right">Create</button>
+        </div>
+             </div>
+         </form>
+        </div>
+        
+      </div>
+      
     </div>
   </div>
-  <div id="pvaContainer" style="width: 100%;float: left;"></div >
-  </div>
-  <div style="width: 50%;float: left;">
-  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Super Category Completion</div>
-  <div id="Super_Completion" style="width: 100%;float: left;"></div>
-  </div>
-  </div>
-  <div class=" white-box">
-  <h2>Project Gantt Chart</h2>
-        <div class="col-md-12 legendContainer">
-          <ul class="legend">
-              <li><span class="taskC"></span> Completed  </li>
-              <li><span class="taskO"></span> In progress </li>
-              <li><span class="taskB"></span> Not started </li>
-              <li><span class="taskN"></span> Non-Core </li>
-              <li><span class="mileC"></span> On-Time Milestone </li>
-              <li><span class="mileD"></span> Delayed Milestone </li>
-          </ul>
-        </div>
-        <div class="col-md-12">
-        <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px';position: 'relative'; height: 'auto'; width:'100%';"></div>
-        </div>
-  </div>
-
-<div class="green-box">
-   <div class="green-box-lft">
-      <h2>Activities</h2>
-      <div class="green-content">
-         <div id="boxscroll-atm">
-            <ul>
-               {% if activity_list %}
-               {% for i in activity_list %}
-               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')"></i> <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>
-
-<!--               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>-->
-               {% get_user_permission request as user_obj %}
-<!--                    {% if user_obj.is_admin_user == True %}-->
-                  
-                      <!-- <a href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"></a> -->
-                  
-<!--                    {% endif %}-->
-                    </a>
-               </li>
-               {% endfor %}
-               {% else %}
-               <li><a href="javascript:void(0);"> No activites are created</a></li>
-               {% endif %}
-            </ul>
-         </div>
-         <div class="clear"></div>
-                  {% get_user_permission_pmo request as user_obj %}
-                    {% if user_obj == 1 %}
-                    <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
-                    {% endif %}
-      </div>
-   </div>
-      <div class="green-box-lft">
-         <h2>Tasks</h2>
-         <div class="green-content">
-            <div id="boxscroll-atm1">
-               <ul>
-                  {% if task_list %}
-                  {% for task in task_list %}
-                  <li><a href="javascript:void(0);" task_id={{task.id}} activity_id={{task.activity.id}} category_id={{task.activity.super_category.id}}>{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')"></i></span>
-<!--                    {% get_user_permission request as user_obj %}-->
-<!--                    {% if user_obj.is_admin_user == True %}-->
-<!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
-<!--                     {% endif %}-->
-                    </a>
-                  </li>
-                  {% endfor %}
-                  {% else %}
-                  <li><a href="javascript:void(0);"> No tasks are created </a></li>
-                  {% endif %}
-               </ul>
-            </div>
-            <div class="clear"></div>
-            {% get_user_permission_pmo request as user_obj %}
-                    {% if user_obj == 1 %}
-            <a class="add-task" href="/managing/Task/TaskForm/add/?slug={{project.slug}}">Add Task</a>
-                {% endif %}
-         </div>
-      </div>
-      <div class="green-box-lft">
-         <h2>Milestones</h2>
-         <div class="green-content">
-            <div id="boxscroll-atm2">
-               <ul>
-                  {% if milestone %}
-                  {% for mile in milestone %}
-                  
-                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')"></i><i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>
-<!--                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>-->
-
-
-<!--                  {% get_user_permission request as user_obj %}-->
-<!--                    {% if user_obj.is_admin_user == True %}-->
-<!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
-<!--                  {% endif %}-->
-                    </a>
-                  </li>
-                  {% endfor %}
-                  {% else %}
-                  <li><a href="javascript:void(0);"> No milestones</a></li>
-                  {% endif %}
-               </ul>
-            </div>
-            <div class="clear"></div>
-                {% get_user_permission_pmo request as user_obj %}
-                    {% if user_obj == 1 %}
-                <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
-                {% endif %}
-         </div>
-      </div>
-   </div>
-</div>
-</section>
-<!--Content part Ends-->
-
-{% endblock %}
-
-{% block script %}
-<!-- jQuery (necessary for JavaScript plugins) -->
-<script type="text/javascript" src="/static/js/jquery.selectbox-0.2.js"></script>
-<script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
-<script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
-<script type="text/javascript" src="/static/js/common.js" /></script>
-<!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
-<script src="/static/js/jquery.nicescroll.min.js"></script>
- <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
- 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js" type="text/javascript" />
-
-
-
-<!--script for filters by- malcolm-->
-<script>
-function filter(target,parent,type) {
-    if ($(target).hasClass('fa-filter')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").each(function () {
-        var child = $(this).children()[0];
-        $(this).show();
-        if(type=="activity"){
-        var actFilter = $(parent).attr('act_id');
-        if ($(child).attr('activity_id') != actFilter) {
-          $(this).hide();
-        }
-        }else if(type=="milestone"){
-        var actFilter = $(parent).attr('task_ids');
-        if (actFilter.includes($(child).attr('task_id'))==false) {
-          $(this).hide();
-        }
-        }
-      });
-      $('.fa-ban').not(target).each(function(){
-        $(this).toggleClass('fa fa-ban');
-        $(this).toggleClass('fa fa-filter');
-      });
-      // Code to filter tasks when the button is clicked
-    } else if ($(target).hasClass('fa-ban')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").show();
-  // Code to show all tasks when the button is clicked
-  }
-}
-</script>
-
-
-<script>
-//Toggle
-    
-  $('.user-menu').on('click',function(){
-    $('.dropdown-menu').slideDown(350);
-  
-  });
-  $('.select-down').on('click',function(){
-        $('.dropdown-menu1').slideDown(350);
-          
-    });
-  
-  $(document).ready(function(e) { 
-    /*Content Show/Hide */
-    $('.hide-cont').hide();
-    $('.close-cont').hide();
-    $('.view-cont').click(function(){
-      $('.hide-cont').slideDown(350);
-      $('.close-cont').show();
-      $('.view-cont').hide();
-    });
-    $('.close-cont').click(function(){
-      $('.hide-cont').slideUp(350);
-      $('.close-cont').hide();
-      $('.view-cont').show();
-    }); 
-    $(document).trigger( "click" );
-  });
-  
-  $(document).click(function(){
-  
-    $('.user-menu, .select-down').click(function(event){
-      event.stopPropagation();
-    });
-  
-    $('.dropdown-menu, .dropdown-menu1').slideUp(350);   
-  
-  });    
-</script>
-
-    <script type="text/javascript">
-   
-  
-  var expanded = false;
-
-function showCheckboxes() {
-  var checkboxes = document.getElementById("checkboxes");
-  if (!expanded) {
-    checkboxes.style.display = "block";
-    expanded = true;
-  } else {
-    checkboxes.style.display = "none";
-    expanded = false;
-  }
-}
-    </script>
+<script src="/static/js/jquery.min.js"></script> 
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!--<script>
+    window.pressed = function(){
+    var a = document.getElementById('aa');
+    if(a.value == "")
+    {
+        fileLabel.innerHTML = "Choose file";
+    }
+    else
+    {
+        var theSplit = a.value.split('\\');
+        fileLabel.innerHTML = theSplit[theSplit.length-1];
+    }
+};
+    </script>-->
     <script>
-  $(document).ready(function() {
-  
-    $("#boxscroll-atm").niceScroll("#boxscroll-atm ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
-  // First scrollable DIV
-  $("#boxscroll-atm1").niceScroll("#boxscroll-atm1 ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
-  $("#boxscroll-atm2").niceScroll("#boxscroll-atm2 ul",{cursorborder:"",cursorcolor:"#949494",boxzoom:true});
-
-    
-  });
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#horizontalTab').easyResponsiveTabs({
-            type: 'default', //Types: default, vertical, accordion           
-            width: 'auto', //auto or any width like 600px
-            fit: true,   // 100% fit in a container
-            closed: 'accordion', // Start closed if in accordion view
-            activate: function(event) { // Callback function if tab is switched
-                var $tab = $(this);
-                var $info = $('#tabInfo');
-                var $name = $('span', $info);
-
-                $name.text($tab.text());
-
-                $info.show();
-            }
-        });
-    });
-</script>
-<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#myBtn1').click(function(){
-  $('#pop3').simplePopup();
-    });
-});
-</script>
-
-<!---datepicker script-->
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-<script>
-  $(function() {
-  $( ".datepicker" ).datepicker({
-  showOn: "button",
-  buttonImage: "img/calender-icon.png", 
-  buttonImageOnly: true
-  });
-  });
-</script>
-<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
-  <script src="/static/js/jsgantt.js" type="text/javascript"></script>
-  
-<!-- script for gantt chart starts here-->
-
-<script>
-    var jsonData = {{taskdict|safe}};
-    console.log(jsonData);
-    var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
-    // console.log(jsonData.tasks);
-    // Get today and tomorrows date
-    var cur = new Date();
-    var tom = new Date();
-    var project = "";
-    project = jsonData.project[0].slug;
-    tom.setDate(tom.getDate() + 1);
-    var curDate = cur.getFullYear() + '-' +
-      (('' + (cur.getMonth() + 1)).length < 2 ? '0' : '') + (cur.getMonth() + 1) + '-' +
-      (('' + cur.getDate()).length < 2 ? '0' : '') + cur.getDate();
-
-    var tomDate = tom.getFullYear() + '-' +
-      (('' + (tom.getMonth() + 1)).length < 2 ? '0' : '') + (tom.getMonth() + 1) + '-' +
-      (('' + tom.getDate()).length < 2 ? '0' : '') + tom.getDate();
-    // Get today and tomorrows date
-    $.each(jsonData.supercategories, function (i) {
-      superId = 1, activity_type = 'Core', taskCompletion = 0, superName = '';
-      if (this.id != null) {
-        superId = this.id;
-      }
-      superName = this.name;
-      var superDesc = this.description;
-      if (superName.toLowerCase() != "location") {
-        g.AddTaskItem(new JSGantt.TaskItem(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-          '', superDesc, g));
-      }
-      // console.log("Super");
-      // console.log(superId, superName, '', '', 'ggroupblack', '', 0, null, 0, 1, 0, 1, '',
-      //   '', superDesc);
-    });
-    $.each(jsonData.activities, function (i) {
-      var activityId = 11,
-        superId = 1,
-        activity_type = 'Core',
-        taskCompletion = 0,
-        activityName = 'Activity';
-      if (this.id != null) {
-        activityId = this.id.toString();
-      }
-      if (this.super_category != null) {
-        superId = this.super_category;
-        if (this.id != null) {
-          activityId = this.super_category.toString() + activityId;
-        }
-      }
-      // console.log("ActID", activityId);
-      activityName = this.name;
-      var activityDesc = this.description;
-      g.AddTaskItem(new JSGantt.TaskItem(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,
-        1, '', '',
-        activityDesc, g));
-      // console.log("Act");
-      // console.log(activityId, activityName, '', '', 'ggroupblack', '', 0, '', 0, 2, superId,1, '', '',activityDesc);
-    });
-    $.each(jsonData.tasks, function (i) {
-      var taskId = 111,
-        tempId = 1,
-        activityId = 11,
-        superId = 1,
-        activity_type = 'Core',
-        taskCompletion = 0, 
-        taskName = 'Task',
-        taskStatus = '',
-        pStartDate = curDate,
-        pEndDate = tomDate,
-        eStartDate = curDate,
-        eEndDate = tomDate,
-        slug = "",
-        link = "";
-      if (this.id != null) {
-        taskId = this.id;
-        tempId = this.id;
-      }
-      if (this.task_progress != null || this.task_progress != undefined) {
-        taskCompletion = this.task_progress;
-      }
-      if (this.activity != null) {
-        activityId = this.activity;
-      }
-      if (this.slug != null) {
-        slug = this.slug;
-      }
-      // activity = jsonData.activities.filter(function( i ) {
-      //   if(i.id == activityId){return i.super_category;}
-      // });
-      $.each(jsonData.activities, function () {
-        if (this.id == activityId) {
-          activity_type = this.activity_type;
-          if (this.super_category != null) {
-            superId = this.super_category;
-          }
-        }
+  $( function() {
+    var dateFormat = "mm/dd/yy",
+      from = $( "#from" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 1
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#to" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths:1
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
       });
-      if (superId != null && activityId != null && taskId != null) {
-        taskId = superId.toString() + activityId.toString() + taskId.toString();
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
       }
-      if (superId != null && activityId != null) {
-        activityId = superId.toString() + activityId.toString();
-      }
-      activityId = parseInt(activityId);
-      
-      if ( slug != null && project != ""){
-        // var domain = "";
-        // if(window.location.hostname == ""){
-        //   domain = "http://goodcsrpmu.mahiti.org";
-        // }
-        link = "/managing/my-tasks/details/?slug="+project+"&key=projecttasks&status=1#"+slug;
-      }
-      
-      taskName = this.name;
-      pStartDate = this.start_date;
-      pEndDate = this.end_date;
-      eStartDate = this.expected_start_date;
-      eEndDate = this.expected_end_date;
-      if(taskCompletion==100 && (new Date(eEndDate).getTime() > new Date(pEndDate).getTime()) ){
-        taskStatus = 'gtaskdel ';
-      }
-      if (activity_type == "Core") {
-        switch (this.status) {
-          case "Ongoing":
-            taskStatus += 'gtaskblue';
-            break;
-          case "Open":
-            taskStatus += 'gtaskyellow';
-            break;
-          case "Close":
-            taskStatus += 'gtaskgreen';
-            break;
-          default:
-            taskStatus += 'gtaskblue';
-            break;
-        };
-      }else{
-        taskStatus += 'gtaskred';
-      }
-      // For Milestones
-      var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
-      $.each(jsonData.milestones, function (i) {
-        var mileId = 111,
-          mileStatus = 'gmilestone redmile '
-        depTask = [];
-        depTask = this.task;
-        mileName = this.name;
-        if (this.id != null) {
-          mileId = activityId.toString() + this.id.toString();
-        }
-        maxDate = new Date('1970-01-01');
-        var tempArray = [];
-        var n = 0;
-        $.each(depTask, function (index, value) {
-          console.log('value', n);
-          tempArray.push({
-            'id': value
-          });
-          for (var i = 0; i < jsonData.tasks.length; i++) {
-            if (jsonData.tasks[i].id == value && jsonData.tasks[i].actual_end_date != null) {
-              tempArray[n].date = new Date(jsonData.tasks[i].actual_end_date).getTime();
-            }
-            if (i == (depTask.length - 1)) {
-
-              console.log('Array', depTask)
-              console.log('Max Date', Math.max(tempArray.date));
-            }
-          }
-          n++;
-        });
-        console.log("tempArray", tempArray);
-        // if (depTask.length == 1) {
-        var ln = depTask.length;
-        ln--;
-        console.log('depTask', depTask[0]);
-        if (depTask[ln] == tempId) {
-          var d1 = new Date(eEndDate);
-          var d2 = new Date(eEndDate);
-          d1.setDate(d1.getDate() + 1);
-          d2.setDate(d2.getDate() + 11);
-          var mileStart = d1.getFullYear() + '-' +
-            (('' + (d1.getMonth() + 1)).length < 2 ? '0' : '') + (d1.getMonth() + 1) + '-' +
-            (('' + d1.getDate()).length < 2 ? '0' : '') + d1.getDate();
-
-          var mileEnd = d2.getFullYear() + '-' +
-            (('' + (d2.getMonth() + 1)).length < 2 ? '0' : '') + (d2.getMonth() + 1) + '-' +
-            (('' + d2.getDate()).length < 2 ? '0' : '') + d2.getDate();
-          //Check for milestone complete or calculate delay
-          if (completionDate == null) {
-            mileStatus = 'gmilestone redmile '
-          } else {
-            var d3 = new Date(this.overdue);
-            var d4 = new Date(completionDate);
-            var timeDiff = (d3.getTime() + 86400) - d4.getTime();
-            var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
-            if (diffDays < 0) {
-              var dur = rem = Math.abs(diffDays);
-              if (dur < 8) {
-                mileName += " - Delayed by " + dur + " day(s)"
-              };
-              if (dur >= 8 && dur < 30) {
-                dur = Math.floor(dur / 7);
-                rem = Math.floor(rem % 7);
-                mileName += " - Delayed by " + dur + " week(s) and " + rem + " day(s)";
-              };
-              if (dur >= 30 && dur < 365) {
-                dur = Math.floor(dur / 30);
-                rem = Math.floor(rem % 30);
-                mileName += " - Delayed by " + dur + " month(s) and " + rem + " day(s)";
-              };
-              if (dur >= 365) {
-                dur = Math.floor(dur / 365);
-                rem = Math.floor(rem % 365);
-                mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
-              };
-              console.log('Diff days', mileName);
-            } else {
-              mileStatus = 'gmilestone greenmile '
-              var dur = rem = Math.abs(diffDays);
-              if (dur == 0) {
-                mileName += " - On track"
-              };
-              if (dur < 8) {
-                mileName += " - Ahead by " + dur + " day(s)"
-              };
-              if (dur >= 8 && dur < 30) {
-                dur = Math.floor(dur / 7);
-                rem = Math.floor(rem % 7);
-                mileName += " - Ahead by " + dur + " week(s) and " + rem + " day(s)";
-              };
-              if (dur >= 30 && dur < 365) {
-                dur = Math.floor(dur / 30);
-                rem = Math.floor(rem % 30);
-                mileName += " - Ahead by " + dur + " month(s) and " + rem + " day(s)";
-              };
-              if (dur >= 365) {
-                dur = Math.floor(dur / 365);
-                rem = Math.floor(rem % 365);
-                mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
-              };
-              console.log('Diff days', mileName);
-            }
-          }
-          g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
-            mileStatus, '', 1, '', 100, 0, activityId, 1, '', '', '', g));
-        }
-        // } else {
-        //   var prevDate, maxDate;
-        //   $.each(depTask, function () {
-        //     var depValue = this.valueOf();
-        //     $.each(jsonData.tasks,function(){
-        //       if(this.id == depValue){
-
-        //       }
-        //     });
-        //     console.log('Dep', this.valueOf(), depTask);
-        //   });
-        // }
-        // g.AddTaskItem(new JSGantt.TaskItem(66141, 'Milestone', '2017-05-30T18:30:00Z', '2017-06-07T00:00:00Z',
-        //   'gmilestone', '', 1, '', 10, 0, 6614, 1, '661496FS', '', '', g));
-      });
-
-
-      //Draw task after drawing milestone
-      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, link, 0,
-        '', taskCompletion, 0, activityId, 1, '', '', '', g, pStartDate, pEndDate));
-      // console.log("Task");
-      // console.log(taskId, this.id, superId, taskName, eStartDate, eEndDate, taskStatus, '', 0,
-      //   '', 0, 0, activityId, 1, '', '', '');
-
-    });
-
-    g.setShowStartDate(0);
-    g.setShowEndDate(0);
-    g.setShowRes(0);
-    g.setShowDeps(0);
-    g.setShowDur(0);
-    g.setUseToolTip(1);
-    g.setWeekColWidth(50);
-    g.setWeekMajorDateDisplayFormat('mon yyyy');
-    g.setWeekMinorDateDisplayFormat('W w');
-    g.setScrollTo('today');
-    g.setTimer(5);
-    g.setShowTaskInfoLink(1);
-    g.Draw();
-    var collideDiv;
-    function collision($div1, $div2) {
-      var x1 = $div1.offset().left;
-      var y1 = $div1.offset().top;
-      var h1 = $div1.outerHeight(true);
-      var w1 = $div1.outerWidth(true);
-      var b1 = y1 + h1;
-      var r1 = x1 + w1;
-      var x2 = $div2.offset().left;
-      var y2 = $div2.offset().top;
-      var h2 = $div2.outerHeight(true);
-      var w2 = $div2.outerWidth(true);
-      var b2 = y2 + h2;
-      var r2 = x2 + w2;
-
-      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) { return false; }
-      else {
-        collideDiv = $div2;
-        return true;
-      }
+ 
+      return date;
     }
-    var count = 0,
-      padding = 25,
-      arrayTask = [],
-      collide = false;
-      //$('.gselector').hide();
-      function ganttRedo() {
-        var previous = null;
-        var p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 = null;
-        var mile = false;
-        $(".gtaskbarcontainer").each(function (index) {
-          currParent = $(this).parent().parent().parent();
-          listParent = currParent.attr('id').replace('row', '');
-          if ($(this).hasClass('gmilecontainer')) {
-            mile = true;
-          }
-          if (previous && $(this).parent().parent().parent().attr('id') == $(previous).parent().parent().parent()
-            .attr('id')) {
-            collide = false;
-            if (collision($(this), $(previous))) {
-              collide = true;
-            } else if (collision($(this), $(p1))) {
-              collide = true;
-            } else if (p2 != undefined && collision($(this), $(p2))) {
-              collide = true;
-            } else if (p3 != undefined && collision($(this), $(p3))) {
-              collide = true;
-            } else if (p4 != undefined && collision($(this), $(p4))) {
-              collide = true;
-            } else if (p5 != undefined && collision($(this), $(p5))) {
-              collide = true;
-            } else if (p6 != undefined && collision($(this), $(p6))) {
-              collide = true;
-            } else if (p7 != undefined && collision($(this), $(p7))) {
-              collide = true;
-            } else if (p8 != undefined && collision($(this), $(p8))) {
-              collide = true;
-            } else if (p9 != undefined && collision($(this), $(p9))) {
-              collide = true;
-            } else if (p10 != undefined && collision($(this), $(p10))) {
-              collide = true;
-            } else if (p11 != undefined && collision($(this), $(p11))) {
-              collide = true;
-            } else if (p12 != undefined && collision($(this), $(p12))) {
-              collide = true;
-            } else if (p13 != undefined && collision($(this), $(p13))) {
-              collide = true;
-            } else if (p14 != undefined && collision($(this), $(p14))) {
-              collide = true;
-            } else if (p15 != undefined && collision($(this), $(p15))) {
-              collide = true;
-            }
-
-            if (collide) {
-              $('#' + currParent.attr('id') + " .gtaskbarcontainer").each(function () {
-                if ($(this).css('top') == '-5px') {
-                  $(this).css('top', '0px');
-                }
-              });
-              $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
-              if (count == 0) {
-                $(previous).css('top', '0px');
-                count++;
-              }
-              listParentDiv = $('#' + listParent);
-              if (parseInt(currParent.css('height')) <= parseInt($(this).css('top'))) {
-                listParentDiv.css('height', parseInt(listParentDiv.css('height')) + 25 + 'px');
-                currParent.css({
-                  'height': parseInt(currParent.css('height')) + 25 + 'px',
-                  'vertical-align': 'top'
-                });
-              }
-            }
-          } else {
-            count = 0;
-            arrayTask = [];
-            collide = false;
-            $('#' + currParent.attr('id') + ' .gtaskbarcontainer').css({
-              top: '-5px'
-            });
-            mile = false;
-          }
-          p15 = p14;
-          p14 = p13;
-          p13 = p12;
-          p12 = p11;
-          p11 = p10;
-          p10 = p9;
-          p9 = p8;
-          p8 = p7;
-          p7 = p6;
-          p6 = p5;
-          p5 = p4;
-          p4 = p3;
-          p3 = p2;
-          p2 = p1;
-          p1 = previous;
-          previous = this;
-        });
-      }
-      $(document).ready(function(){ganttRedo();})
+  } );
   </script>
-<!--script for super categories starts -->
+  
+  <script type="text/javascript" src="/static/js/jqcloud.min.js"></script>
+<!--<link rel="stylesheet" href="/static/css/jqcloud.css">
 
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/highcharts-more.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script type="text/javascript">	
+	/*FancyBox*/
+	$(document).ready(function(){
+	    var words = [{'text': 'task', 'link': '/task/', 'weight': 3}, {'text': 'Image', 'link': '/image/', 'weight': 3}, {'text': 'Budget', 'link': '/budget/', 'weight': 4}, {'text': 'Meeting', 'link': '/meeting/', 'weight': 5}, {'text': 'Tranches', 'link': '/tranches/', 'weight': 3}, {'text': 'TimelineProgress', 'link': '/timelineProgress/', 'weight': 4}, {'text': 'Report', 'link': '/Report/', 'weight': 5}];
+	    $('#new-cloud').jQCloud(words,{
+	    width:350,
+	    height:250,
+	    shape: 'rectangular'
+	    });
+	});
+	</script>-->
+	<script src="/static/js/jquery.tagcloud.js"></script>
 <script>
-    console.log('gSuper',gSuperName,gSuperComp)
-    if (gSuperName.length > 0) {
-      var SuperRemain = new Array();
-      $.each(gSuperName,function(i){
-        console.log("gSuper",gSuperComp[i],gSuperName[i])        
-        if(gSuperName[i]==""){
-          gSuperComp.splice(i,1);
-          gSuperName.splice(i,1);
-        }
-      })
-      for (i = 0; i < gSuperComp.length; i++) {
-        SuperRemain.push(100 - gSuperComp[i]);
-        //SuperRemain = SuperRemain.reverse();
-      }
-      SuperComp = Highcharts.chart('Super_Completion', {
-        chart: {
-          type: 'bar',
-          height: '410',
-          borderWidth: 1,
-          borderColor: 'rgba(0,0,0,0)',
-          backgroundColor: '#fbfbfb',
-          marginTop: 75
-        },
-        title: {
-            text: ''
-        },
-        exporting: {
-          enabled: false
-        },
-        legend: {
-            align: 'right',
-            verticalAlign: 'top'
-        },
-        credits: {
-          enabled: false
-        },
-        xAxis: {
-          categories: gSuperName,
-          labels: {
-            style: {
-              fontWeight: '600',
-              fontSize: '1em',
-              whiteSpace: 'normal',
-              textOverflow: 'ellipsis',
-            }
-          },
-        },
-        yAxis: {
-          visible: true,
-          min: 0,
-          max: 100,
-          title: {
-            text: '% completion',
-          },
-        },
-        plotOptions: {
-          series: {
-            stacking: 'normal',
-            pointWidth: 15
-          },
-          bar: {
-            grouping: false,
-            dataLabels: {
-              enabled: false
-            }
-          }
-        },
-        legend: {
-          enabled: false
-
-        },
-        series: [{
-          name: 'Remaining',
-          data: SuperRemain,
-          borderWidth: 0,
-          color: "#D0D0D0",
-        }, {
-          name: 'Completed',
-          data: gSuperComp,
-          color: "#00998b",
-          dataLabels: {
-            enabled: true,
-            inside: true,
-            format: '{y}%',
-            style: {
-              fontSize: '0.75em',
-              fontWeight: 'normal',
-              color: 'black',
-              backgroundColor: 'transparent',
-            }
-          },
-        }]
-
-      });
-    }
-</script>
-
-<!--script for super categories end -->
-
-<!-- script for planned vs actual start -->
-
-<script>
-  var pvaData=[];
-  var pvaSorted=[];
-  var sc=[];
-  var ids=[];
-  pTasks = jsonData.tasks;
-    function getNextWeek(y,w) {
-      var simple = new Date(y, 0, 9 + (w) * 7);
-      var dow = simple.getDay();
-      var ISOweekStart = simple;
-      if (dow <= 4)
-          ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-      else
-          ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
-      return ISOweekStart;
-    }
-    $.each(jsonData.supercategories,function(){
-      console.log('supr',this.name)
-      if(this.name != ""){
-        $(".scrollmenu").append("<a class='link-pad text-md-center' onClick='superData("+this.id+")'>"+this.name+"</a>");
-        }
-    });
-    temp = {{ser_hist|safe}};
-    function chartInit(){
-    $.each(temp,function(i){
-      pvaData[i] = temp[i].fields;
-    });
-    //Sort object array by date
-    pvaData.sort(function(a,b){
-      return new Date(b.modified) - new Date(a.modified);
-    });
-    //Remove the time for each day
-    $.each(pvaData,function(){
-      var d = this.modified;
-      this.modified = new Date(d);
-      this.modified.setHours(0, 0, 0, 0);
-      this.modified = new Date(this.modified);  
-    })
-      $.each(jsonData.tasks,function(i,n){
-        $.each(jsonData.activities,function(j,m){
-          if(jsonData.activities[j].id == jsonData.tasks[i].activity){
-            sc.push({'super':jsonData.activities[j].super_category,'task':jsonData.tasks[i].id})
-          }
-        })
-      });
-    $.each(jsonData.tasks,function(){
-      var temp = {};
-      temp.active = 2;
-      temp.activity = this.activity;
-      temp.name = this.name;
-      temp.actual_start_date = this.actual_start_date;
-      temp.assigned_to = this.assigned_to;
-      temp.created = this.start_date;
-      temp.end_date = this.end_date;
-      temp.id = this.id;
-      temp.modified = this.actual_end_date;
-      temp.actual_end_date = this.actual_end_date;
-      if(this.actual_end_date==null && this.task_progress==100){
-      temp.modified = this.expected_end_date;
-      temp.actual_end_date = this.expected_end_date;
-      }
-      temp.slug = this.slug;
-      temp.start_date = this.start_date;
-      temp.task_progress = this.task_progress;
-      if(temp.modified!=null && temp.actual_end_date!=null) pvaData.push(temp);
-    })
-    console.log("pva1",pvaSorted);
-    }
-    function filteract(){
-    //Get rows with unique date and task
-    var flags = {},i;
-    for( i=0; i<pvaData.length; i++) {
-        if( flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()]) continue;
-        flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
-        pvaSorted.push(pvaData[i]);
-    }
-    var week = d3.timeFormat("%Y-%U");
-
-    var actnest = d3.nest().key(function (d) {
-      if(d.actual_end_date!=null && new Date(d.actual_end_date).getTime() <= new Date().getTime()){
-        console.log("Check ac",new Date(d.actual_end_date).getTime())
-        return week(new Date(d.actual_end_date));
-      }else{
-        return null;
-      }
-    }).entries(pvaSorted);
-    console.log("Check actual",actnest);
-    
-    var plannest = d3.nest().key(function (d) {
-        if(ids.length==0){
-        return week(new Date(d.end_date));
-        }
-        else if(ids.indexOf(d.id)!=-1){
-        return week(new Date(d.end_date));
-        }else{
-        return null;
-        }
-    }).entries(pTasks);
-    //Count for each day and store in the array
-    // var map = pvaSorted.reduce(function(map, elem) { 
-    //   var date = elem.modified;
-    //   var count = +elem.task_progress;
-    //   console.log("Poya",map[date])
-    //   if(map[date]%100==0||map[date]%1000==0){
-    //   map[date] = (map[date] || 0) + count;
-    //   }else{
-    //   map[date] = 0 + count;
-    //   }
-    //   return map 
-    // }, {}) 
-    var maxComp = 0;
-    var chartData = [];
-    console.log("Plannest",plannest)
-    // $.each(plannest, function(){
-    //   $.each(this.values,function(){
-    //     var weight = diffDates(this.start_date,this.end_date);
-    //     if(weight==0){weight=1;} 
-    //     maxComp += (weight * 100);
-    //   })
-    // })
-    // --- For Planned Tasks ---
-    plannest.sort(function(a,b){
-      return new Date(b.modified) - new Date(a.modified);
-    });
-    $.each(plannest , function(){
-      if(this.key!="null"){
-      var plankey = this.key.toString().split('-');
-      var week = getNextWeek(plankey[0],plankey[1]);
-      var comp = 0;
-      $.each(this.values,function(){
-        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
-        comp += (weight * 100);
-        console.log("keys", comp, this.id , weight);
-      })
-      chartData.push([(week.getTime()+19800000),comp]);
-      }
-    });
-    console.log("CD",chartData,maxComp,plannest)
-    chartData.sort(function(a,b){
-      return new Date(a[0]) - new Date(b[0]);
-    });
-    console.log("CDA",chartData)
-    temp = 0;
-    $.each(chartData,function(){
-      maxComp += this[1];
-      this[1] = this[1] + temp;
-      temp = this[1];
-    })
-    $.each(chartData,function(){
-      this[1] = Math.round((this[1]/maxComp)*100);
-    });
-    console.log("Map2",plannest,actnest) 
-    // var cArray = Object.keys(map).map(function(elem) {
-    // return { date: elem, count: map[elem]/100 }
-    // })
-    // console.log("Map",cArray)
-    // var chartData = [];
-    // var Cprev = [{date:"",count:0}];
-    // $.each(cArray,function(n,i){
-    //   chartData.push([(new Date(this.date)).getTime(),(this.count+Cprev.count)]);
-    //   console.log("Value",Cprev,"this",(this.count+Cprev.count))
-    //   if(n>-1){Cprev = cArray[(n)];}
-    // })
-    // chartData.reverse();
-    // --- For Actual Tasks --- 
-    var AmaxComp = 0;
-    var AchartData = [];
-    actnest.sort(function(a,b){
-      return new Date(b.end_date) - new Date(a.end_date);
-    });
-    console.log("Asort",actnest)
-    $.each(actnest , function(){
-      if(this.key!="null"){
-        var plankey = this.key.toString().split('-');
-        var week = getNextWeek(plankey[0],plankey[1]);
-        var compA = 0;
-        var weekUID = [];
-        console.log(new Date(week),"Key",this.values.length)
-        //Remove tasks with same id in the same week 
-        for(var k=0; k<this.values.length; k++) {
-            console.log(flags[this.values[k].id],'weelUID2');
-            if( flags[(this.values[k].id)]) continue;
-            flags[(this.values[k].id)] = true;
-            weekUID.push(this.values[k]);
-        }
-            console.log(weekUID,'weelUID');
-        $.each(weekUID,function(){
-          var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
-          compA += (weight * this.task_progress);
-          console.log("taskval",this.id,compA);
-        })
-        AchartData.push([(week.getTime()+19800000),compA]);
-      }
-    });
-    console.log("aCD",AchartData,AmaxComp)
-    AchartData.sort(function(a,b){
-      return new Date(a[0]) - new Date(b[0]);
-    });
-    console.log("aCDA",AchartData)
-    temp = 0;
-    $.each(AchartData,function(){
-      AmaxComp += this[1];
-      this[1] = this[1] + temp;
-      temp = this[1];
-    })
-    $.each(AchartData,function(){
-      this[1] = Math.round((this[1]/maxComp)*100);
-    });
-    console.log("PVA",AchartData,pvaData);
-    PVAChart = Highcharts.chart('pvaContainer', {
-      chart: {
-        type: 'spline',
-        height: '380',
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0)',
-        backgroundColor: '#fbfbfb'
-      },
-      title: {
-          text: ''
-      },
-      xAxis: {
-          type: 'datetime',
-          dateTimeLabelFormats: {
-              month: '%b',
-              year: '%Y'
-          },
-          labels: {
-            format: '{value:%e %b \'%y}'
-          },
-          title: {
-              text: 'Date'
-          },
-          plotLines: [
-            {
-              color: '#cab361',
-              width: 3,
-              value: new Date().getTime()
-            }
-          ]
-      },
-      yAxis: {
-          title: {
-              text: 'Task Completion %'
-          },
-          min: 0,
-          max: 100
-      },
-      tooltip: {
-          valueSuffix: '%',
-          shared: true
-      },
-      legend: {
-          align: 'right',
-          verticalAlign: 'top'
-      },
-      exporting: {
-        enabled: false
-      },
-      credits: {
-        enabled: false
-      },
-      plotOptions: {
-          series: {
-              pointInterval: 24 * 3600 * 1000 * 7,
-              label: {
-                  connectorAllowed: false
-              },
-              marker: {
-                    enabled: true
-                }
-          },
-          exporting: false
-      },
-
-      series: [{
-        name: 'Planned',
-        data: chartData,
-        color: '#169876'
-    },{
-        name: 'Actual',
-        data: AchartData,
-        color: '#006C90'
-    }],
-
-      responsive: {
-          rules: [{
-              condition: {
-                  maxWidth: 500
-              },
-              chartOptions: {
-                  legend: {
-                      layout: 'horizontal',
-                      align: 'center',
-                      verticalAlign: 'bottom'
-                  }
-              }
-          }]
-      }
-
-    });
-    }
-    chartInit();
-    filteract();
-// Redraw chart after selecting super category
-    
-    function redraw(){
-      $('#pvaContainer').highcharts().destroy();
-      filteract();
-    }
-    function superData(id){
-      ids=[];
-      chartInit();
-      $.each(sc,function(){
-        if(this.super == id){
-          ids.push(this.task);
-        }
-      });
-      console.log("asort2b",pvaData,ids);
-      $.each(pvaData,function(i){
-        if(ids.indexOf(pvaData[i].id)==-1){
-          console.log('asort2v',ids.indexOf(pvaData[i].id)==-1);
-          pvaData[i].id = 0;
-          pvaData[i].modified = 0;
-          pvaData[i].start_date = 0;
-          pvaData[i].end_date = 0;
-        }
-      });
-      console.log("asort2",pvaData,ids);
-      setTimeout(redraw(),3000);
-    }
-</script>
-<!-- script for planned vs actual ends -->
-
-<link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-    $(".iframe").fancybox({
-        type: 'iframe'
-    });
+$("#tagcloud a").tagcloud({
+	size: {start: 12, middle:18, end: 20, unit: "px"},
+	color: {start: '#fff', end: '#fff'}
 });
 </script>
-<!--SCRIPT FOR DEALY DRILL DOWN STARTS    -->
-<script src="/static/js/highcharts.js"></script>
-<script src="/static/js/drilldown.js"></script>
-
+	
 <script>
-var project_slug = '{{request.GET.slug}}'
-{% super_category_delay request.GET.slug as super_list %}
-var categories = {{super_list.0|safe}}
-var act_task = {{super_list.1|safe}}
-console.log('super_cat');
-console.log(categories);
-console.log(act_task);
-
-  // Create the chart
+     $('.less_more').hide();
+    $('.text_content').hide();
+    $('.read_more').click(function(){
+    $('.less_more').show();
+         $('.text_content').show();
+          $('.read_more').hide();
+        
+    });
+     
+    $('.less_more').click(function(){
+    $('.read_more').show();
+         $('.text_content').hide();
+        $('.less_more').hide();
+        
+    });
     
-  $(function() {
-
-  // Create the chart
-  $('#container').highcharts({
-      chart: {
-        type: 'bar'
-      },
-      title: {
-        text: 'Delay Drill Down'
-      },
-      xAxis: {
-        type: 'category',
-      },
-      yAxis: {
-        title: {
-          text: 'Duration (days)'
-        }
-      },
-      tooltip: {
-        valueSuffix: ' days'
-      },
-      credits: {
-        enabled: false
-      },
-      plotOptions: {
-        series: {
-          borderWidth: 1,
-          dataLabels: {
-            enabled: true,
-            formatter: function ()  {
-            if(this.y == 0) return "On time";
-            else if(this.y>0) return "Ahead by "+this.y+" day(s)";
-            else if(this.y<0) return "Delayed by "+Math.abs(parseInt(this.y))+" day(s)";
-                    },
-            inside: false
-                  
-          }
-        }
-      },
-      series: [{
-        id: 'toplevel',
-        name: 'Super Category',
-        color: '#00998b',
-        data: categories,
-      }],
-      drilldown: {
-        series: act_task,
-      }, function(chart){	
-        	
-			console.log(chart,'this')
-        }
-      
-    })
-});
-
-</script>
-<!--SCRIPT FOR DELAY DRILL DOWN (ENDS)    -->
-<script>
-function activity(name,slug,act_id,super_cat_id) {
-    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
-}
-function task(name,slug,task_id,act_id,super_id) {
-    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
-}
-
-function milestone(name,slug,mile_id,task_ids) {
-    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
-}
-</script>
+     </script>
+     <script src="/static/js/main-adc980b5d8.js"></script>
+</body>
 {% endblock %}
-
+</html>

@@ -259,7 +259,6 @@ class Project(BaseContent):
 
         from taskmanagement.models import Task
         if status == '1':
-            # import ipdb; ipdb.set_trace()
             tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days).order_by('-id')
         else:
             tasks = Task.objects.filter(activity__project__id = self.id,active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')

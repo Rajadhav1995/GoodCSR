@@ -377,7 +377,18 @@ $(document).ready(function() {
 
 
 </script>
-
+<script>
+$(document).ready(function() {
+    if ('{{form.errors}}'){
+        var end_date = '{{end_date}}'
+        var actual_end_date = '{{actual_end_date}}'
+        var actual_start_date = '{{actual_start_date}}'
+        document.getElementById("id_actual_end_date").value = actual_end_date
+        document.getElementById("id_actual_start_date").value = actual_start_date
+        document.getElementById("id_end_date").value = end_date
+    }
+});
+</script>
 
 {% endblock %}
 

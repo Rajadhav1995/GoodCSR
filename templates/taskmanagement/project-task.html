@@ -33,24 +33,25 @@ font-size: 14px;
 
         
         <div class="col-md-12">
+        <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 15px;">Super Category</label></div>
+        <div class="col-md-4 padding_left">
+                <select name="year" id="category_dropdown" class = "form-control small_height" >
+                    <option value = "Select Category"><small>Select</small></option>
+                    {% for i in category_list %}
+                    <option value="{{i.id}}">{{i.name}}</option>
+                    {% endfor %}
+                </select>
+        </div>
         <div class='col-md-2 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 0px;">Activity</label></div>
         <div class="col-md-3 nopadding">
-                <select style="margin-left: -15px;" name="year" id="year_id" class = "form-control small_height" >
+                <select style="margin-left: -15px;" name="activity" id="activity_id" class = "form-control small_height" >
                     <option value = "Select Year">Select</option>
                     {% for i in activity_list %}
                     <option value="{{i.id}}">{{i.name}}</option>
                     {% endfor %}
                 </select>
         </div>
-        <div class='col-md-3 nopadding'><label style="color: #00998b;float: left;font-weight: bold;margin-top: 20px;margin-left: 15px;">Super Category</label></div>
-        <div class="col-md-4 padding_left">
-                <select name="year" id="category_dropdown" class = "form-control small_height" >
-                    <option value = "Select Year"><small>Select</small></option>
-                    {% for i in category_list %}
-                    <option value="{{i}}">{{i}}</option>
-                    {% endfor %}
-                </select>
-        </div>
+        
       </div>
          <div class="content-top content-top-task">
 <!--            <div class="select-area">-->
@@ -73,7 +74,7 @@ font-size: 14px;
             <ul>
                {% if over_due %}
                {% for task in over_due %}
-               <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
+               <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}} - {{task.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% endif %}
             </ul>
@@ -84,7 +85,7 @@ font-size: 14px;
             <ul>
                {% if tasks_today %}
                {% for i in tasks_today %}
-               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.end_date|date:'jS F Y'}} - {{i.activity.name}}</span></a></li></div>
+               <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.end_date|date:'jS F Y'}} - {{i.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
@@ -97,7 +98,7 @@ font-size: 14px;
             <ul>
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
-               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.end_date|date:'jS F Y'}} - {{j.activity.name}}</span></a></li></div>
+               <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.end_date|date:'jS F Y'}} - {{j.activity.name}} - {{j.activity.super_category.name}}</span></a></li></div>
                {% endfor %}
                {% else %}
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
@@ -201,26 +202,25 @@ font-size: 14px;
                   <div class="user-timeline">
          {% if i.task_attachments %}
             <div id="boxscroll-timeline">
-
                {% for task_attach in i.task_attachments %}
                {% for dates,attach in task_attach.items %}
-               {% get_task_status dates i.id as status %}
-               
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
 
-                
-                  {% task_comments_progress dates i.id attach as comments %}
-                    
-                  {%if comments %}
 
+
+                  
+                 
+                  
+                  {% task_comments_progress dates i.id attach as comments %}
+                  
+                  {%if comments %}
+                  
                   {% for c in comments %}
                       {% if c.attachment == 0 %}
+                      {% get_task_comments c.date i.id as comment_progress %}
                       <li>
                         
-
-                        {% get_task_comments c.date i.id as comment_progress %}
-
                          <div class="left-li">
                             <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                                 <div class="middle">
@@ -243,11 +243,11 @@ font-size: 14px;
                                 
                               </div>
                               {% if c.previous_task_progress != c.task_progress %}
-                              <p style=" float: left; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                              <p style=" float: left; width: 39%;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                           {% endif %}
                           {% else %}
                            
-                            <p style=" float: left; width: 100%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                            <p style=" float: left; width: 100%;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                              {% get_converted_time c.date as time %}
                             <br><span>{{time}}</span>   
                           {% endif %}
@@ -255,6 +255,7 @@ font-size: 14px;
                      </div>
                      
                   </li>
+                  
                   {% endif %}
                   {% if c.attachment == 1 %}
 <!-- ---------------------------------------------------------------------------------------- -->
@@ -289,7 +290,7 @@ font-size: 14px;
                       </div>
                         
                         {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: left; width: 39%; font-size:14px;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: left; width: 39%; font-size:14px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                      </div>
                     
@@ -332,7 +333,7 @@ font-size: 14px;
                         {% endif %}
                   </li>
                   {% endif %}
-                 </div>
+                 
 <!-- -------------------------------------------------------------------- -->
 
                   {% endif %}
@@ -341,21 +342,17 @@ font-size: 14px;
 
 
                </ul>
-                {% endfor %}
                {% endfor %}
-          </div>
+               {% endfor %}
+            </div>
             {% else %}
                     <li>No updates</li>
                   {% endif %}
          </div>
-
-            
-         </div>
-        
       </div>
       {% endfor %}
    </div>
-   </div>
+   </div></div></div>
 </section>
 <!--Content part Ends-->
 
@@ -396,7 +393,7 @@ font-size: 14px;
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
- $('#year_id').on("change",function () {
+ $('#activity_id').on("change",function () {
     var as = $(this).find("option:selected").text();
     var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
     $('.activity').hide();
@@ -408,19 +405,19 @@ font-size: 14px;
   })
 </script>
 
-<script>
- $('#category_dropdown').on("change",function () {
-    var as = $(this).find("option:selected").text();
-    var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
-    $('.category').hide();
-    if (ddd == 'Select') {
-      $('.activity').show();
-    }else{
-      $('.cat_'+ddd).show();
-    };
-    
-  })
-</script>
+<!--<script>-->
+<!-- $('#category_dropdown').on("change",function () {-->
+<!--    var as = $(this).find("option:selected").text();-->
+<!--    var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");-->
+<!--    $('.category').hide();-->
+<!--    if (ddd == 'Select') {-->
+<!--      $('.activity').show();-->
+<!--    }else{-->
+<!--      $('.cat_'+ddd).show();-->
+<!--    };-->
+<!--    -->
+<!--  })-->
+<!--</script>-->
 
 <script>
    //Toggle
@@ -723,6 +720,37 @@ jQuery("#activate_tagator2").keyup(function () {
 });
 </script>
 
+<script>
+    $(document).ready(function() {
+        $('#category_dropdown').on('change',function(e){
+        var category_id = $('#category_dropdown').val();
+        var cat_list = Array()
+        cat_list.push(category_id)
+        $.ajax({
+            url:'/managing/activites/',
+            type:'GET',
+            data:{'id':JSON.stringify(cat_list)},
+            dataType:"json",
+            success:function(data){
+            var act = $('#activity_id').val();
+                $('#activity_id option').remove();
+                $('#activity_id').append('<option value="" >-----</option>')
+                if (data.activity){
+                    activity = data.activity
+                   for (var i=0;i<activity.length;i++){
+                    $('<option value="'+ activity[i]['name']+'">' + activity[i]['name'] + '</option>').appendTo('#activity_id');
+                    }
+                    $('#activity_id').val(act);
+                }
+            
+            },
+            error : function(){}
+        });
+        e.stopImmediatePropagation();
+        return false;
+      });
+           });
+</script>
 
-<!--ZZ-->
+
 {% endblock %}

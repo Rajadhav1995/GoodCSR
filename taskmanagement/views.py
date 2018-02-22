@@ -27,6 +27,7 @@ from projectmanagement.templatetags.urs_tags import userprojectlist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 # Create your views here.
+from projectmanagement.common_method import add_modified_by_user
 
 def listing(request):
     # this function is for listing 
@@ -100,6 +101,7 @@ def add_taskmanagement(request,model_name,m_form):
             f.save()
             if model_name == 'Activity' or model_name == 'Task':
                 f.created_by = user
+                add_modified_by_user(f,request)
                 f.save()
             form.save_m2m()
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
@@ -110,6 +112,7 @@ def add_taskmanagement(request,model_name,m_form):
 def get_form_saved(form,edit,task_progress,user,project,form_dict):
     # this function is for saving form
     # 
+    request = form_dict.get('request')
     if form.is_valid():
         f=form.save(commit=False)
         if form_dict.get('m_form') == 'TaskForm':
@@ -119,9 +122,30 @@ def get_form_saved(form,edit,task_progress,user,project,form_dict):
         f.save()
         if form_dict.get('model_name') == 'Activity' or form_dict.get('model_name') == 'Task':
             f.created_by = user
+            add_modified_by_user(f,request) # added to save the modified_by user to get the updates
             f.save()
         form.save_m2m()
-        return 'true'
+        return True
+    else:
+        return False
+
+def get_form_dates_display(form):
+    # this function is to get the values of actual,planned end and start dates so that to dispaly in form,
+    # if any errors is thrown the values are not displayed so to explicitly we are giving the values by using this.
+    end_date = actual_start_date = actual_end_date = ''
+    try:
+        end_date = form.data['end_date']
+    except:
+        pass
+    try:
+        actual_start_date = form.data['actual_start_date']
+    except:
+        pass
+    try:
+        actual_end_date = form.data['actual_end_date']
+    except:
+        pass
+    return end_date,actual_start_date,actual_end_date
 
 def edit_taskmanagement(request,model_name,m_form,slug):
     # this function is to edit task 
@@ -140,13 +164,13 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             task_progress = m.task_progress 
             task_progress = update_task_completion(request,add,m.status)
         form=form(user_id,project.id,request.POST,request.FILES,instance=m)
-        try:
-            end_date = form.data['end_date']
-        except:
-            pass
-        form_dict = {'m_form':m_form,'m':m,'model_name':model_name}
-        form_saved=get_form_saved(form,edit,task_progress,user,project,form_dict)
-        return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        end_date,actual_start_date,actual_end_date = get_form_dates_display(form)
+        
+        form_dict = {'m_form':m_form,'m':m,'model_name':model_name,'request':request}
+        form_saved = get_form_saved(form,edit,task_progress,user,project,form_dict)
+        if form_saved:
+            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+        
     else:
          form=form(user_id,project.id,instance=m)
     if model_name == 'Task':
@@ -411,7 +435,9 @@ def my_tasks_details(request):
         task_ids = [int(i.id) for i in task_listing]
         task_activities = Task.objects.filter(id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
-        category_list = set([i.activity.super_category for i in task_activities])
+        category_list = [{'id':i.activity.super_category.id,
+                              'name':i.activity.super_category.name} for i in task_activities]
+        category_list = [ast.literal_eval(sub) for sub in set([str(cate) for cate in category_list])]
         # import ipdb; ipdb.set_trace()
     elif status == '0':
         over_due = my_tasks_listing(project,user,status)
@@ -428,14 +454,12 @@ def my_tasks_details(request):
     #   calling api to return the gantt chart format data
         this_month = datetime.now().month
         this_year = datetime.now().year
-        print 'MONTH1',request.GET.get('month')==None,request.GET.get('year')=='None' 
         try:
             if(request.GET.get('month') != None or request.GET.get('year') != None):
                 this_month = request.GET.get('month')
                 this_year = request.GET.get('year')
-                print 'MONTH',this_month, this_year
         except:
-            print 'NO MONTH DATA'
+            pass
         data = {'status':2,'user':int(user_id), 'month':int(this_month),'year':int(this_year)}
         rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
         taskdict = ast.literal_eval(json.dumps(rdd.content))
@@ -504,16 +528,22 @@ def task_comments(request):
                     object_id = request.POST.get('task_id'),
                     name=file_name
                     )
-                attach.save()
                 
+                # added to get the task updates done by particular user saved in modified_by 
+                add_modified_by_user(attach,request)
+                attach.save()
             else:
                 msg = "yess"
         elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
+            # added to get the task updates done by particular user saved in modified_by 
+            add_modified_by_user(comment,request)
             comment.save()
         progress_status = create_task_progress(request,task)
+        # added to get the task updates done by particular user saved in modified_by 
+        add_modified_by_user(task,request)
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
         
     return HttpResponseRedirect(url)
@@ -716,14 +746,19 @@ class GanttChartData(APIView):
             projects = Project.objects.filter(id=i_project_id)
             supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
         elif status == '2':
+            ''' This is to dispaly my calender in the top menu where it shows the 
+            tasks based on months . on load it shows current month and year and we can navigate to next and 
+            previous month to check the  details of tasks that are assigned to a particular user.
+            The logged in user can check his tasks progress in my calender .
+            If he is assigned any task ,if not then no tasks are shown'''
             user_id = request.data.get('user')
             this_month = request.data.get('month')
             this_year = request.data.get('year')
-            minDate = datetime(year=int(this_year),month=int(this_month),day=1)
+            min_date = datetime(year=int(this_year),month=int(this_month),day=1)
             if(int(this_month)==12):
-                maxDate = datetime(year=int(this_year)+1,month=1,day=1)
+                max_date = datetime(year=int(this_year)+1,month=1,day=1)
             else:
-                maxDate = datetime(year=int(this_year),month=int(this_month)+1,day=1)
+                max_date = datetime(year=int(this_year),month=int(this_month)+1,day=1)
             user = UserProfile.objects.get_or_none(user_reference_id = user_id)
             project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
             # Run this command on server for it to work -  sudo mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root mysql 

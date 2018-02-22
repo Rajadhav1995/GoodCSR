@@ -64,7 +64,7 @@ def task_comments_progress(date,task_id, attach):
     task_progress = Task.objects.get(id=task_id)
     task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
     for i in task_progress_history:
-        if i.task_progress:
+        if i.task_progress and (i.get_previous_by_created().task_progress != i.task_progress):
             previous_task_progress = i.get_previous_by_created().task_progress
             task_time = i.modified
             next_tick = task_time.second +1
@@ -77,12 +77,15 @@ def task_comments_progress(date,task_id, attach):
             end_time = task_time.replace(microsecond=999999)
             attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time))
             if not attach_obj:
+                # if i.get_previous_by_created().task_progress != i.task_progress:
                 cell_one = {'name':'','comment_text':'','date':i.modified,
                         'task_progress':i.task_progress,'attachment':0,
                         'previous_task_progress':i.get_previous_by_created().task_progress if i.get_previous_by_created().task_progress!=None else 0,}
                 task_data.append(cell_one)
+
+
     task_data.append(attachment_json_for_comments(task_id,attach))
-    
+    # import ipdb;ipdb.set_trace()
     task_data = filter(partial(is_not, None), task_data)
     task_data.sort(key=lambda item:item['date'], reverse=True)
     return task_data
