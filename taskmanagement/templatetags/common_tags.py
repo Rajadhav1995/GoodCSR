@@ -65,14 +65,16 @@ def task_comments_progress(date,task_id, attach):
     task_progress_history = task_progress.history.filter(task_progress__isnull=False,modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))).order_by('-id')
    
     temp_var = 0
+    temp_var2 = 0
     for i in task_progress_history:
-        new_var = i.modified.strftime("%Y%m%d%H%M")
-        if temp_var == new_var:
+        new_var = int(i.modified.strftime("%Y%m%d%H%M%S"))
+        
+        if (int(new_var)-int(temp_var)) < 10:
             pass
         else:
             
             if i.task_progress:# and (i.get_previous_by_created().task_progress != i.task_progress):
-
+                
                 previous_task_progress = i.get_previous_by_created().task_progress
                 task_time = i.modified
                 next_tick = task_time.second +1
@@ -121,7 +123,6 @@ def task_comments_progress(date,task_id, attach):
                     task_data.append(attachment_data)
             temp_var = new_var
     # task_data.append(attachment_json_for_comments(task_id,attach))
-    # import ipdb;ipdb.set_trace()
     task_data = filter(partial(is_not, None), task_data)
     
     task_data.sort(key=lambda item:item['date'], reverse=True)

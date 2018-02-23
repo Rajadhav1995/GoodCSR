@@ -268,6 +268,7 @@ font-size: 14px;
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
                   {% task_comments_progress dates i.id attach as comments %}
+                
                   {%if comments %}
                   {% for c in comments %}
                       {% if c.attachment == 0 %}
