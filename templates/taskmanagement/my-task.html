@@ -182,7 +182,7 @@ margin-top: -6px;
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
                 <div class = 'task_bar' style="width: 375px;float: left;">
-                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{{i.task_progress}}"   />
+                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{% if i.task_progress %}{{i.task_progress}}{% else %}0{% endif %}"   />
                 </div>
 <!--         SCRIPT FOR tASK PROGRESS BAR STARTS       -->
                  <script src="/static/js/price-range.js"></script>
