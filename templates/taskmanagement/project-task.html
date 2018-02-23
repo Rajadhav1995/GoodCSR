@@ -299,12 +299,12 @@ font-size: 14px;
                                 
                               </div>
                               {% if c.previous_task_progress != c.task_progress %}
-                              <p style=" float: left; width: 39%;"> Task completion changed from <b>{% if c.previous_task_progress != 'None' %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
+                              <p style=" float: left; width: 39%;"> Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                               {% endif %}
                           
                           {% else %}
                            
-                            <p style=" float: left; width: 100%; margin-top:15px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                            <p style=" float: left; width: 100%; margin-top:15px;"> Task completion changed from <b>   {% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                              {% get_converted_time c.date as time %}
                             <br><span>{{time}}</span>   
                           {% endif %}
@@ -348,7 +348,7 @@ font-size: 14px;
                       </div>
                         
                         {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: left; width: 39%; font-size:14px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: left; width: 39%; font-size:14px;"> Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                      </div>
                     
@@ -389,7 +389,7 @@ font-size: 14px;
 
                      </div>
                      {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: right; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: right; width: 39%;">Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                   </li>
                   {% endif %}
