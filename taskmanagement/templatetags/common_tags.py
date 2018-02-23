@@ -99,7 +99,7 @@ def task_comments_progress(date,task_id, attach):
                         task_data.append(cell_one)
                     elif (i.get_previous_by_created().task_progress != i.task_progress):
                         
-                        cell_one = {'name':'','comment_text':'','date':i.modified,
+                        cell_one = {'name':comment_obj.created_by.attrs,'comment_text':'','date':i.modified,
                             'task_progress':i.task_progress,'attachment':0,
                             'previous_task_progress':0 if i.get_previous_by_created().task_progress == None or temp_var == 0 else i.get_previous_by_created().task_progress,}
                         task_data.append(cell_one)

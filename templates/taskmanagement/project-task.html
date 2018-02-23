@@ -276,7 +276,8 @@ font-size: 14px;
                       <li>
                         
                          <div class="left-li">
-                            <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                          
+                            <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                                 <div class="middle">
                                     <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
                                 </div>
@@ -319,7 +320,8 @@ font-size: 14px;
                      
                      {% if c.attachment_type == 1 %}
                      <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                             <div class="middle">
                                 <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
                             </div>
