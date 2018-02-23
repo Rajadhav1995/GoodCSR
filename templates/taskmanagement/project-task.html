@@ -67,11 +67,11 @@ font-size: 14px;
          </div>
 
          <div id="boxscroll-pad" id="dest">
-            <div class="task-head" >
+            <div class="task-head over_count" >
                <h4>Overdue</h4>
-               <span>{% if over_due %}{{over_due | length }} {% else %} 0{% endif %}</span>
+               <span class ="overdue_id">{% if over_due %}{{over_due | length }} {% else %} 0{% endif %}</span>
             </div>
-            <ul>
+            <ul class= "due_count">
                {% if over_due %}
                {% for task in over_due %}
                <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}} - {{task.activity.super_category.name}}</span></a></li></div>
@@ -80,7 +80,7 @@ font-size: 14px;
             </ul>
             <div class="task-head current-date">
                <h4>Today</h4>
-               <span>{% if tasks_today %}{{tasks_today | length }} {% else %} 0{% endif %}</span>
+               <span class = "current_id">{% if tasks_today %}{{tasks_today | length }} {% else %} 0{% endif %}</span>
             </div>
             <ul>
                {% if tasks_today %}
@@ -91,9 +91,9 @@ font-size: 14px;
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
-            <div class="task-head">
+            <div class="task-head tmrw-date ">
                <h4>Tommorow</h4>
-               <span>{% if tasks_tomorrow %}{{tasks_tomorrow | length }} {% else %} 0{% endif %}</span>
+               <span class ="tmrw_id">{% if tasks_tomorrow %}{{tasks_tomorrow | length }} {% else %} 0{% endif %}</span>
             </div>
             <ul>
                {% if tasks_tomorrow %}
@@ -104,9 +104,9 @@ font-size: 14px;
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
-            <div class="task-head">
+            <div class="task-head other-tasks">
                <h4>Tasks</h4>
-               <span>{% if remain_tasks %}{{remain_tasks | length }} {% else %} 0{% endif %}</span>
+               <span class ="others_id">{% if remain_tasks %}{{remain_tasks | length }} {% else %} 0{% endif %}</span>
             </div>
             <ul>
                {% if remain_tasks %}
@@ -394,6 +394,7 @@ font-size: 14px;
 
 <script>
  $('#activity_id').on("change",function () {
+    debugger;
     var as = $(this).find("option:selected").text();
     var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
     $('.activity').hide();
@@ -402,7 +403,15 @@ font-size: 14px;
     }else{
       $('.act_'+ddd).show();
     };
-  })
+    var over_head = $('.due_count li').length;
+    var current = $('.current-date').length;
+    var tmrw = $('.tmrw-date').length;
+    var other = $('.other-tasks').length;
+    $("span.overdue_id", ".over_count").text(over_head);
+    $("span.current_id",".current-date").text(current);
+    $("span.tmrw_id",".tmrw-date").text(tmrw);
+    $("span.others_id",".other-tasks").text(other);
+  });
 </script>
 
 <!--<script>-->
