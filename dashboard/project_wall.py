@@ -90,14 +90,6 @@ def get_project_updates(request):
 		budget_history.append(history)
 	qq = []
 	counter = 1
-	if budget_period:
-		budget_history_object = budget_period[0].history.filter(modified__range=[start_date,end_date])[0::2]
-		for h in budget_history_object:
-			time = h.modified
-
-			previous_obj = h.get_previous_by_created()
-			history_data = {'present_amount':30000,'previous_amount':40000}
-			budget_history.append(history_data)
 	budget_data_list = []
 	for q in budget_period:
 		budgethistory = q.history.all()
@@ -114,9 +106,7 @@ def get_project_updates(request):
 		history_date = datetime.strptime(c.get('date'), '%Y-%M-%d-%H')
 		data = {'date':utc.localize(history_date),'amount':c.get('amount'),'update_type':'budget_history'}
 		budgetlist.append(data)
-		
 
-	
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
