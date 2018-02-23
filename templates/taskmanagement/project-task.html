@@ -67,11 +67,11 @@ font-size: 14px;
          </div>
 
          <div id="boxscroll-pad" id="dest">
-            <div class="task-head" >
+            <div class="task-head over_count" >
                <h4>Overdue</h4>
-               <span>{% if over_due %}{{over_due | length }} {% else %} 0{% endif %}</span>
+               <span class ="overdue_id">{% if over_due %}{{over_due | length }} {% else %} 0{% endif %}</span>
             </div>
-            <ul>
+            <ul class= "due_count">
                {% if over_due %}
                {% for task in over_due %}
                <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}} - {{task.activity.super_category.name}}</span></a></li></div>
@@ -80,9 +80,9 @@ font-size: 14px;
             </ul>
             <div class="task-head current-date">
                <h4>Today</h4>
-               <span>{% if tasks_today %}{{tasks_today | length }} {% else %} 0{% endif %}</span>
+               <span class = "current_id">{% if tasks_today %}{{tasks_today | length }} {% else %} 0{% endif %}</span>
             </div>
-            <ul>
+            <ul class = "current_count">
                {% if tasks_today %}
                {% for i in tasks_today %}
                <div class="activity act_{{i.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{i.slug}}>{{i.name}} <span>{{i.end_date|date:'jS F Y'}} - {{i.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
@@ -91,11 +91,11 @@ font-size: 14px;
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
-            <div class="task-head">
+            <div class="task-head tmrw-date ">
                <h4>Tommorow</h4>
-               <span>{% if tasks_tomorrow %}{{tasks_tomorrow | length }} {% else %} 0{% endif %}</span>
+               <span class ="tmrw_id">{% if tasks_tomorrow %}{{tasks_tomorrow | length }} {% else %} 0{% endif %}</span>
             </div>
-            <ul>
+            <ul class = "tmrw_count">
                {% if tasks_tomorrow %}
                {% for j in tasks_tomorrow %}
                <div class="activity act_{{j.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{j.slug}}>{{j.name}} <span>{{j.end_date|date:'jS F Y'}} - {{j.activity.name}} - {{j.activity.super_category.name}}</span></a></li></div>
@@ -104,11 +104,11 @@ font-size: 14px;
                <li class = 'data_row'><a href="javascript:void(0);">No tasks</a></li>
                {% endif %}
             </ul>
-            <div class="task-head">
+            <div class="task-head other-tasks">
                <h4>Tasks</h4>
-               <span>{% if remain_tasks %}{{remain_tasks | length }} {% else %} 0{% endif %}</span>
+               <span class ="others_id">{% if remain_tasks %}{{remain_tasks | length }} {% else %} 0{% endif %}</span>
             </div>
-            <ul>
+            <ul class = "other_count">
                {% if remain_tasks %}
                {% for t in remain_tasks %}
                <div class="activity act_{{t.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show" id={{t.slug}}>{{t.name}} <span>{{t.end_date|date:'jS F Y'}} - {{t.activity.name}} - {{i.activity.super_category.name}}</span></a></li></div>
@@ -192,49 +192,106 @@ font-size: 14px;
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
                 <div class = 'task_bar' style="width: 375px;float: left;">
-                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{{i.task_progress}}"   />
+                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{% if i.task_progress %}{{i.task_progress}}{% else %}0{% endif %}"   />
                 </div>
+<!--     SCRIPT FOR TASK PROGRESS BAR STARTS HERE           -->
+                <script src="/static/js/price-range.js"></script>
+                        <script>
+                           $(function(){
+                           
+                               $('.hide-show').on('click',function(){
+                                   var sl_id = '{{i.slug}}'
+                                   $('.right-task').hide();
+                                   $('.div-'+sl_id).show();
+                                   var progress = $('#xp_'+sl_id).val();
+                                    $('.range-control-handle').css('left',progress+'%');
+
+                                   $('.range-'+sl_id).rangeControl({
+
+                                  max: 100,
+                                  min:0,
+                                 
+                                  delim: '', 
+                                 
+                                  scale: {
+                                    position: 'bottom',
+                                    labels: true,
+                                   // interval:1
+                                  },
+                                  className: ''
+                                });
+
+                                    $('.range-'+sl_id).on('rangeControlSlide.rangeControlEvent', function () {
+                                      // on slide event
+
+                                        
+                                     
+
+                                     // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+                                      $('#slectedNumber').html($('.range-control-current-value').text());
+                                     
+                                    });
+
+                                    $('.range-'+sl_id).on('rangeControlChange.rangeControlEvent', function () {
+                                         $('#slectedNumber').html($('.range-control-current-value').text());
+                                    });
+
+                                    $('.range-'+sl_id).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+                                    });
+
+
+                                    var progress = $('#xp_'+sl_id).val();
+                                    $('.range-control-handle').css('left',progress+'%');
+
+                               });
+                               $('.hide-show').first().trigger('click');
+                               $(".hide-show").addClass('active');
+                           }
+                           );
+                        </script>
+<!--                  SCRIPT FOR TASK PROGRESS BAR      -->
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
             </div>
          </div>
+        
+
                   <div class="user-timeline">
+                    
          {% if i.task_attachments %}
             <div id="boxscroll-timeline">
                {% for task_attach in i.task_attachments %}
                {% for dates,attach in task_attach.items %}
+               {% task_comments_progress dates i.id attach as comments %}
+                  
+              {%if comments %}
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
 
-
-
-                  
-                 
-                  
-                  {% task_comments_progress dates i.id attach as comments %}
-                  
-                  {%if comments %}
-                  
                   {% for c in comments %}
                       {% if c.attachment == 0 %}
-                      {% get_task_comments c.date i.id as comment_progress %}
+                      
+                      
                       <li>
                         
                          <div class="left-li">
-                            <div  class="middle_text"><canvas class="user-icon" data-name="{{comment_progress.first_name}} {{comment_progress.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                          
+                            <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                                 <div class="middle">
-                                    <div class="text">{{comment_progress.first_name}} {{comment_progress.last_name}}</div>
+                                    <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
                                 </div>
                             </div>
                          </div>
                          
                          <div class="right-li third-li">
-                          {% if comment_progress %}
+                          {% if c.comment_text %}
                               <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
                                 <ul style="">
                                   
-                                  <li style="width:100%;margin-bottom:5px">{% if comment_progress.comment_text %}{{comment_progress.comment_text}}{% endif %}</li>
+                                  <li style="width:100%;margin-bottom:5px">{% if c.comment_text %}{{c.comment_text}}{% endif %}</li>
                                   
                                 </ul>
                                 {% get_converted_time c.date as time %}
@@ -243,11 +300,12 @@ font-size: 14px;
                                 
                               </div>
                               {% if c.previous_task_progress != c.task_progress %}
-                              <p style=" float: left; width: 39%;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
-                          {% endif %}
+                              <p style=" float: left; width: 39%;"> Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
+                              {% endif %}
+                          
                           {% else %}
                            
-                            <p style=" float: left; width: 100%;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                            <p style=" float: left; width: 100%; margin-top:15px;"> Task completion changed from <b>   {% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                              {% get_converted_time c.date as time %}
                             <br><span>{{time}}</span>   
                           {% endif %}
@@ -264,7 +322,8 @@ font-size: 14px;
                      
                      {% if c.attachment_type == 1 %}
                      <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                             <div class="middle">
                                 <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
                             </div>
@@ -290,7 +349,7 @@ font-size: 14px;
                       </div>
                         
                         {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: left; width: 39%; font-size:14px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: left; width: 39%; font-size:14px;"> Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                      </div>
                     
@@ -307,6 +366,7 @@ font-size: 14px;
                         </div>
                      </div>
                      <div class="right-li second-li">
+                     <p>{{c.description}}</p>
                      <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
                         <ul>
                            
@@ -319,7 +379,8 @@ font-size: 14px;
                               <img src="/static/img/excel-icon.png" alt=""> <span>{{c.file_name}}</span></a>
                               {% else %}
                               <img src="/static/img/textbox-bg.png" alt=""> <span>{{c.file_name}}</span></a>
-                              
+                              {% get_converted_time c.date as time %}
+                        <span>{{time}}</span>
                            </li>
                         </ul>
                         {% get_converted_time c.date as time %}
@@ -329,18 +390,18 @@ font-size: 14px;
 
                      </div>
                      {% if c.previous_task_progress != c.task_progress %}
-                        <p style=" float: right; width: 39%;">Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                        <p style=" float: right; width: 39%;">Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
-                  </li>
+                  
                   {% endif %}
                  
 <!-- -------------------------------------------------------------------- -->
 
                   {% endif %}
                   {% endfor %}
+                  
+                  </li>
                   {% endif %}
-
-
                </ul>
                {% endfor %}
                {% endfor %}
@@ -402,7 +463,22 @@ font-size: 14px;
     }else{
       $('.act_'+ddd).show();
     };
-  })
+    var over_head = $('.over_count').siblings('.due_count').length;
+
+    var current = $('.current-date').siblings('.current_count').length;
+    var tmrw = $('.tmrw-date').siblings('.tmrw_count').length;
+    var other = $('.other-tasks').siblings('.other_count').length;
+    $("span.overdue_id", ".over_count").text(over_head);
+    $("span.current_id",".current-date").text(current);
+    $("span.tmrw_id",".tmrw-date").text(tmrw);
+   $("span.others_id",".other-tasks").text(other);
+   over_head = 0;
+   current = 0;
+   tmrw = 0;
+   other=0;
+   
+   
+  });
 </script>
 
 <!--<script>-->
@@ -616,9 +692,9 @@ font-size: 14px;
 
 
             var progress = $('#xp_'+key).val();
-            if (progress != 'None'){
-                alert("Task completion status is updated to "+progress+"% successfully");
-            }
+            //if (progress != 'None'){
+              //  alert("Task completion status is updated to "+progress+"% successfully");
+            //}
             $('.range-control-handle').css('left',progress+'%');
 
             $(".div-"+key).show();

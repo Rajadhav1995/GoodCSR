@@ -182,8 +182,65 @@ margin-top: -6px;
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
                 <div class = 'task_bar' style="width: 375px;float: left;">
-                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{{i.task_progress}}"   />
+                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{% if i.task_progress %}{{i.task_progress}}{% else %}0{% endif %}"   />
                 </div>
+<!--         SCRIPT FOR tASK PROGRESS BAR STARTS       -->
+                 <script src="/static/js/price-range.js"></script>
+                    <script>
+                       $(function(){
+                       
+                           $('.hide-show').on('click',function(){
+                               var sl_id = '{{i.slug}}'
+                               $('.right-task').hide();
+                               $('.div-'+sl_id).show();
+                               var progress = $('#xp_'+sl_id).val();
+                                $('.range-control-handle').css('left',progress+'%');
+
+                               $('.range-'+sl_id).rangeControl({
+
+                              max: 100,
+                             
+                              delim: '', 
+                             
+                              scale: {
+                                position: 'bottom',
+                                labels: true,
+                               // interval:1
+                              },
+                              className: ''
+                            });
+
+                                $('.range-'+sl_id).on('rangeControlSlide.rangeControlEvent', function () {
+                                  // on slide event
+
+                                    
+                                 
+
+                                 // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+                                  $('#slectedNumber').html($('.range-control-current-value').text());
+                                 
+                                });
+
+                                $('.range-'+sl_id).on('rangeControlChange.rangeControlEvent', function () {
+                                     $('#slectedNumber').html($('.range-control-current-value').text());
+                                });
+
+                                $('.range-'+sl_id).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+                                });
+
+
+                                var progress = $('#xp_'+sl_id).val();
+                                $('.range-control-handle').css('left',progress+'%');
+
+                           });
+                           $('.hide-show').first().trigger('click');
+                           $(".hide-show").addClass('active');
+                       }
+                       );
+                    </script>
+<!--       SCRIPT FOR TASK PROGRESS BAR ENDS              -->
                   <input class="task-link" type="submit" value="Add update"/>
                   </form>
                </div>
