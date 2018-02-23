@@ -304,7 +304,7 @@ font-size: 14px;
                           
                           {% else %}
                            
-                            <p style=" float: left; width: 100%; margin-top:30px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                            <p style=" float: left; width: 100%; margin-top:10px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                              {% get_converted_time c.date as time %}
                             <br><span>{{time}}</span>   
                           {% endif %}
@@ -313,9 +313,7 @@ font-size: 14px;
                      
                   </li>
                   
-
                   {% endif %}
-
                   {% if c.attachment == 1 %}
 <!-- ---------------------------------------------------------------------------------------- -->
                   <li>
@@ -404,11 +402,10 @@ font-size: 14px;
                </ul>
                {% endfor %}
                {% endfor %}
-               {% else %}
+            </div>
+            {% else %}
                     <li>No updates</li>
                   {% endif %}
-            </div>
-            
          </div>
       </div>
       {% endfor %}

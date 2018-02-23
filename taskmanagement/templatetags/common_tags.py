@@ -114,7 +114,7 @@ def task_comments_progress(date,task_id, attach):
                     attachment_data = {'name':attach_obj.created_by.attrs,
                         'description':attach_obj.description,
                         'date':attach_obj.created,'attachment':1,
-                        'attachment_type':int(attach_obj.attachment_type),
+                        'attachment_type':attach_obj.attachment_type,
                         'document_type':attach_obj.document_type,
                         'image_url':PMU_URL + attach_obj.attachment_file.url,
                         'task_progress':i.task_progress,
