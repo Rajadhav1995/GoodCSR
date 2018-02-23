@@ -464,11 +464,17 @@ font-size: 14px;
 
     var current = $('.current-date').siblings('.current_count').length;
     var tmrw = $('.tmrw-date').siblings('.tmrw_count').length;
-    var other = $('.other-tasks')siblings('.other_count').length;
+    var other = $('.other-tasks').siblings('.other_count').length;
     $("span.overdue_id", ".over_count").text(over_head);
     $("span.current_id",".current-date").text(current);
     $("span.tmrw_id",".tmrw-date").text(tmrw);
    $("span.others_id",".other-tasks").text(other);
+   over_head = 0;
+   current = 0;
+   tmrw = 0;
+   other=0;
+   
+   
   });
 </script>
 
