@@ -304,7 +304,7 @@ font-size: 14px;
                           
                           {% else %}
                            
-                            <p style=" float: left; width: 100%; margin-top:10px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
+                            <p style=" float: left; width: 100%; margin-top:15px;"> Task completion changed from <b>{{c.previous_task_progress}}%</b> to <b>{{c.task_progress}}% </b></p>
                              {% get_converted_time c.date as time %}
                             <br><span>{{time}}</span>   
                           {% endif %}
@@ -377,7 +377,8 @@ font-size: 14px;
                               <img src="/static/img/excel-icon.png" alt=""> <span>{{c.file_name}}</span></a>
                               {% else %}
                               <img src="/static/img/textbox-bg.png" alt=""> <span>{{c.file_name}}</span></a>
-                              
+                              {% get_converted_time c.date as time %}
+                        <span>{{time}}</span>
                            </li>
                         </ul>
                         {% get_converted_time c.date as time %}
