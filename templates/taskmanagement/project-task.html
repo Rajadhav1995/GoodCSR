@@ -192,7 +192,7 @@ font-size: 14px;
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
                 <div class = 'task_bar' style="width: 375px;float: left;">
-                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{{i.task_progress}}"   />
+                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{% if i.task_progress %}{{i.task_progress}}{% else %}0{% endif %}"   />
                 </div>
 <!--     SCRIPT FOR TASK PROGRESS BAR STARTS HERE           -->
                 <script src="/static/js/price-range.js"></script>
@@ -209,6 +209,7 @@ font-size: 14px;
                                    $('.range-'+sl_id).rangeControl({
 
                                   max: 100,
+                                  min:0,
                                  
                                   delim: '', 
                                  
@@ -448,7 +449,6 @@ font-size: 14px;
 
 <script>
  $('#activity_id').on("change",function () {
-    debugger;
     var as = $(this).find("option:selected").text();
     var ddd = as.replace(/ /g,'').replace(/[^a-zA-Z0-9 ]/g, "");
     $('.activity').hide();
@@ -457,14 +457,14 @@ font-size: 14px;
     }else{
       $('.act_'+ddd).show();
     };
-    var over_head = $('.due_count li').length;
+    var over_head = $('.due_count, li').length;
     var current = $('.current-date').length;
     var tmrw = $('.tmrw-date').length;
     var other = $('.other-tasks').length;
-    $("span.overdue_id", ".over_count").text(over_head);
-    $("span.current_id",".current-date").text(current);
-    $("span.tmrw_id",".tmrw-date").text(tmrw);
-    $("span.others_id",".other-tasks").text(other);
+    //$("span.overdue_id", ".over_count").text(over_head);
+   // $("span.current_id",".current-date").text(current);
+   // $("span.tmrw_id",".tmrw-date").text(tmrw);
+   // $("span.others_id",".other-tasks").text(other);
   });
 </script>
 
@@ -679,9 +679,9 @@ font-size: 14px;
 
 
             var progress = $('#xp_'+key).val();
-            if (progress != 'None'){
-                alert("Task completion status is updated to "+progress+"% successfully");
-            }
+            //if (progress != 'None'){
+              //  alert("Task completion status is updated to "+progress+"% successfully");
+            //}
             $('.range-control-handle').css('left',progress+'%');
 
             $(".div-"+key).show();
