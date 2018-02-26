@@ -39,7 +39,7 @@ import datetime
 #    The hashlib module received support for the BLAKE2, SHA-3 and SHAKE hash algorithms and the scrypt() key derivation function.
 
 def get_delay_difference(tasks):
-    diff = ''
+    diff = None
     today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     if tasks:
         task_obj = tasks.reverse()[0]
