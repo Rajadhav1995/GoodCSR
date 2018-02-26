@@ -265,11 +265,12 @@ font-size: 14px;
             <div id="boxscroll-timeline">
                {% for task_attach in i.task_attachments %}
                {% for dates,attach in task_attach.items %}
+               {% task_comments_progress dates i.id attach as comments %}
+                  
+              {%if comments %}
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
-                  {% task_comments_progress dates i.id attach as comments %}
-                
-                  {%if comments %}
+
                   {% for c in comments %}
                       {% if c.attachment == 0 %}
                       
@@ -391,16 +392,16 @@ font-size: 14px;
                      {% if c.previous_task_progress != c.task_progress %}
                         <p style=" float: right; width: 39%;">Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
-                  </li>
+                  
                   {% endif %}
                  
 <!-- -------------------------------------------------------------------- -->
 
                   {% endif %}
                   {% endfor %}
+                  
+                  </li>
                   {% endif %}
-
-
                </ul>
                {% endfor %}
                {% endfor %}
