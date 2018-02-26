@@ -60,11 +60,14 @@ def get_cat_delay_point(obj,key):
     diff = None
     if key == 'cat':
         activities= Activity.objects.filter(super_category = obj)
-        for i in activities:
-            tasks = Task.objects.filter(activity=i).order_by('end_date')
-            max_diff = get_delay_difference(tasks)
-            if diff < max_diff:
-                diff = max_diff
+        tasks = Task.objects.filter(activity__super_category = obj).order_by('end_date')
+        high_task = tasks.reverse()[0]
+        diff = get_max_diff_tasks(high_task)
+#        for i in activities:
+#            tasks = Task.objects.filter(activity=i).order_by('end_date')
+#            max_diff = get_delay_difference(tasks)
+#            if diff < max_diff:
+#                diff = max_diff
     else:
         act_obj = Activity.objects.get_or_none(id=obj.id)
         tasks = Task.objects.filter(activity = act_obj).order_by('end_date')
