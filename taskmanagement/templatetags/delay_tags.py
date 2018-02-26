@@ -45,12 +45,13 @@ def get_delay_difference(tasks):
         task_obj = tasks.reverse()[0]
         ExpectedDatesCalculator(task=task_obj)
         planned_end = task_obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        planned_start = task_obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         expected_end = task_obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         if task_obj.status == 2:
             diff = 0
         else:
             diff = (expected_end - planned_end).days
-        if planned_end < today:
+        if planned_start < today:
             diff = int(-(diff))
     return diff
 
