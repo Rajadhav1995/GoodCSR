@@ -80,10 +80,11 @@ def get_task_delay_ponts(obj):
         planned_date = i.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         expected_end = i.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         diff = (expected_end - planned_date).days
+        bytodaydiff = (planned_date-today).days
         if i.status == 2:
             diff=0
         if diff > maxi:
-            maxi = diff
+            maxi = diff + bytodaydiff
 #        if i.actual_end_date:
 #            max_end = i.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
 #        else:
@@ -152,10 +153,11 @@ def get_delay_difference(tasks):
             planned_date = task_obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
             expected_end = task_obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
             diff = (expected_end - planned_date).days
+            bytodaydiff = (planned_date-today).days
             if task_obj.status == 2:
                 diff = 0
             if diff > maxi:
-                maxi = diff
+                maxi = diff + bytodaydiff
      
     return maxi
     # this is for tasks dont delete this code priya
