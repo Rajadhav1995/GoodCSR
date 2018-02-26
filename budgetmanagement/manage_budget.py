@@ -16,18 +16,56 @@ from datetime import datetime
 from menu_decorators import check_loggedin_access
 from projectmanagement.common_method import add_modified_by_user
 
+'''
+This file is about saving of budget line items,
+budget line items edit ,budget utilisation amount 
+and view budget line items.
+1)projectbudgetadd: this is function where first step 
+of budget creation executes. If first step is already 
+executed then it ll redirect to the second step.
+2) projectbudgetcategoryadd : Function to create the 
+budget categories in step 2. It redirects to the third step
+when second step is already filled.
+3) projectlineitemadd : This function is made up of 
+many sub functions. It creates the budget line items 
+based on quarter by considering the line item row number.
+'''
 #According to Wikipedia the exact definition of a goal is:
-# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
-#In other words, any planning you do for the future regardless of what it is, is a goal. 
-#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
-# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
+# A desired result a person or a system envisions, plans and commits to 
+#achieve a personal or organizational desired end-point in some sort of 
+#assumed development. Many people endeavor to reach goals within a finite time
+# by setting deadlines. 
+#In other words, any planning you do for the future regardless of what it is, 
+#is a goal. 
+#So the next time you are planning on doing the weekly chores or decide on 
+#watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
+# Just like how sunlight can't burn through anything without a magnifying glass 
+#focusing it, 
 #you can't achieve anything unless a goal is focusing your effort. 
 #Because at the end of the day goals are what give you direction in life. 
 #By setting goals for yourself you give yourself a target to shoot for. 
-#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
+#This sense of direction is what allows your mind to focus on a target and 
+#rather than waste energy shooting aimlessly,
 # allows you to hit your target and reach your goal. 
-#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
-#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
+#By setting goals for yourself you are able to measure your progress because 
+#you always have a fixed endpoint or benchmark to compare with. Take this
+# scenario for example: David makes a goal to write a book with a minimum of 
+# 300 pages. He starts writing every day and works really hard but along the 
+# way, he loses track of how many more pages he has written and how much more 
+# he needs to write. 
+#So rather than panicking David simply counts the number of pages he has 
+#already written and he instantly determines his progress and knows how much 
+#further he needs to go.
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because
+# you always have a fixed endpoint or benchmark to compare with. Take this 
+# scenario for example: David makes a goal to write a book with a minimum of 
+# 300 pages. He starts writing every day and works really hard but along the way,
+#  he loses track of how many more pages he has written and how much more he 
+#  needs to write. 
+#So rather than panicking David simply counts the number of pages he has 
+#already written and he instantly determines his progress and knows how much 
+#further he needs to go.
 
 def diff(list1, list2):
     ''' to get the difference of two list '''

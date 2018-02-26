@@ -25,6 +25,7 @@ from pmu.settings import PMU_URL
 from django.core import serializers
 from projectmanagement.templatetags.urs_tags import userprojectlist
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q
 # Create your views here.
 from projectmanagement.common_method import add_modified_by_user
 
@@ -434,7 +435,9 @@ def my_tasks_details(request):
         task_ids = [int(i.id) for i in task_listing]
         task_activities = Task.objects.filter(id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
-        category_list = set([i.activity.super_category for i in task_activities])
+        category_list = [{'id':i.activity.super_category.id,
+                              'name':i.activity.super_category.name} for i in task_activities]
+        category_list = [ast.literal_eval(sub) for sub in set([str(cate) for cate in category_list])]
         # import ipdb; ipdb.set_trace()
     elif status == '0':
         over_due = my_tasks_listing(project,user,status)
@@ -451,14 +454,12 @@ def my_tasks_details(request):
     #   calling api to return the gantt chart format data
         this_month = datetime.now().month
         this_year = datetime.now().year
-        print 'MONTH1',request.GET.get('month')==None,request.GET.get('year')=='None' 
         try:
             if(request.GET.get('month') != None or request.GET.get('year') != None):
                 this_month = request.GET.get('month')
                 this_year = request.GET.get('year')
-                print 'MONTH',this_month, this_year
         except:
-            print 'NO MONTH DATA'
+            pass
         data = {'status':2,'user':int(user_id), 'month':int(this_month),'year':int(this_year)}
         rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
         taskdict = ast.literal_eval(json.dumps(rdd.content))
@@ -745,6 +746,11 @@ class GanttChartData(APIView):
             projects = Project.objects.filter(id=i_project_id)
             supercategories = SuperCategory.objects.filter(project=i_project_id).exclude(parent=None)
         elif status == '2':
+            ''' This is to dispaly my calender in the top menu where it shows the 
+            tasks based on months . on load it shows current month and year and we can navigate to next and 
+            previous month to check the  details of tasks that are assigned to a particular user.
+            The logged in user can check his tasks progress in my calender .
+            If he is assigned any task ,if not then no tasks are shown'''
             user_id = request.data.get('user')
             this_month = request.data.get('month')
             this_year = request.data.get('year')
@@ -756,7 +762,7 @@ class GanttChartData(APIView):
             user = UserProfile.objects.get_or_none(user_reference_id = user_id)
             project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
             # Run this command on server for it to work -  sudo mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root mysql 
-            tasks = Task.objects.filter(active=2,assigned_to=user,start_date__date__lt=max_date,end_date__date__gte=min_date).order_by('-id')
+            tasks = Task.objects.filter(Q(start_date__lt=max_date),Q(end_date__gte=min_date),active=2,assigned_to=user).order_by('-id')
             activities = Activity.objects.filter(active=2).order_by('-id')
             milestones = Milestone.objects.filter(active=2,subscribers=user).order_by('-id')
             projects = Project.objects.order_by('-id')
