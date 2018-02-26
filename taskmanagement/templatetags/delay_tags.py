@@ -78,6 +78,7 @@ def get_max_diff_tasks(obj):
     ExpectedDatesCalculator(task=obj)
     planned_date = obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     expected_end = obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    planned_start = obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     diff = (expected_end - planned_date).days
     if today > planned_date:
         maxi = int(-(diff))
