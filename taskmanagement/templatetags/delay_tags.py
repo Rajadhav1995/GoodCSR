@@ -40,6 +40,7 @@ import datetime
 
 def get_delay_difference(tasks):
     diff = None
+    maxi = None
     today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     if tasks:
         task_obj = tasks.reverse()[0]
@@ -47,7 +48,7 @@ def get_delay_difference(tasks):
         planned_end = task_obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         planned_start = task_obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
         expected_end = task_obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-        diff = (expected_end - planned_date).days
+        diff = (expected_end - planned_end).days
         if today > planned_start:
             maxi = int(-(diff))
         elif diff ==0 and obj.status ==2:
