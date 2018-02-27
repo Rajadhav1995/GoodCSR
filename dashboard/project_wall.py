@@ -13,6 +13,12 @@ from dateutil import parser
 import pytz
 from taskmanagement.templatetags import common_tags
 
+
+def get_modified_by_user(user_id):
+	user_object = UserProfile.objects.get_or_none(user_reference_id=oo)
+	if user_object:
+		return user_object.attrs
+
 def get_project_updates(request):
 #	start_date = '2017-01-01'
 #	end_date = '2018-02-28'
@@ -36,7 +42,6 @@ def get_project_updates(request):
 		history_data = common_tags.task_updates_list(key,t,start_date,today)
 		for i in history_data:
 		    history_task_data.append(i)
-
 	main_data = history_task_data + plain_task
 
 	budget_data = []
@@ -47,29 +52,26 @@ def get_project_updates(request):
 
 
 	line_total = sum(map(float,line_item_amount_list))
-	try:
-		budgetdata = [{'budget_total':line_total,'created_by':budget_period[0].created_by,'date':utc.localize(budget_period[0].created),
-					'update_type':'budget'}]
-	except:
-		pass
-	counter = 1
+
 	budget_data_list = []
 	for q in budget_period:
 		budgethistory = q.history.all()
 		for k in budgethistory:
-			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H"),'amount':k.planned_unit_cost}
+			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost}
 			budget_data_list.append(data)
 	result = defaultdict(float)
 	for d in budget_data_list:
 		result[d['date']] += float(d['amount'])
 	budget_final_dict = [{'date': name, 'amount': value} for name, value in result.items()]
 	budgetlist = []
-	
-	for c in budget_final_dict[:10]:
-		history_date = datetime.strptime(c.get('date'), '%Y-%M-%d-%H')
-		data = {'date':utc.localize(history_date),'amount':c.get('amount'),'update_type':'budget_history'}
-		budgetlist.append(data)
 
+	utc=pytz.UTC
+	from pytz import timezone
+	for c in budget_final_dict[:10]:
+		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
+		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
+		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history'}
+		budgetlist.append(data)
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,today],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
@@ -79,7 +81,8 @@ def get_project_updates(request):
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':utc.localize(k.created),'update_type':'file'})
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':utc.localize(f.created),'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL +'/' + str(f.attachment_file)})
 
-	final_data = main_data + file_data + budgetdata + budgetlist
+	budgetlist.sort(key=lambda item:item['date'], reverse=True)
+	final_data = main_data + file_data + budgetlist
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
