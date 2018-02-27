@@ -14,7 +14,10 @@ import pytz
 
 
 def get_modified_by_user(user_id):
-	user_object = UserProfile.objects.get_or_none(user_reference_id=oo)
+	if user_id:
+		user_object = UserProfile.objects.get_or_none(user_reference_id=int(user_id))
+	else:
+		user_object = ''
 	if user_object:
 		return user_object.attrs
 
@@ -49,14 +52,15 @@ def get_project_updates(request):
 				previous_task_progress = k.get_previous_by_created().task_progress
 
 				# created_by = UserProfile.objects.get(user__id=k.modified_by)
+
 				if previous_task_progress != k.task_progress:
 					history_data = {'task_name':k.name,'activity_name':k.activity.name,
 					'supercategory':k.activity.super_category,'date':k.modified,
 					'task_progress':k.task_progress,'previous_task_progress':previous_task_progress,
 					'activity_name':k.activity.name,'supercategory':k.activity.super_category,
-					'update_type':'tasks_history','created_by':'',
+					'update_type':'tasks_history','created_by':k.created_by,'modified_by':get_modified_by_user(k.modified_by),
 					'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
-					print k.modified, "task_date"
+					print get_modified_by_user(k.modified_by)
 					if attach_obj:
 						history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
 					if comment_obj:
@@ -98,7 +102,7 @@ def get_project_updates(request):
 		history = f.history.all().order_by('modified')
 		history_data = []
 		for k in history:
-			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file'})
+			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file','modified_by':get_modified_by_user(k.modified_by)})
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL +'/' + str(f.attachment_file)})
 
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
