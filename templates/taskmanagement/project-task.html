@@ -71,7 +71,7 @@ font-size: 14px;
                <h4>Overdue</h4>
                <span class ="overdue_id">{% if over_due %}{{over_due | length }} {% else %} 0{% endif %}</span>
             </div>
-            <ul class= "due_count">
+            <ul class="due_count">
                {% if over_due %}
                {% for task in over_due %}
                <div class="activity act_{{task.activity.name|remove_spcl_char}} category cat_{{i.activity.super_category.name|remove_spcl_char}}"><li class = 'data_row'><a href = # class="hide-show"  id={{task.slug}} >{{task.name}} <span>{{task.end_date |date:'jS F Y'}} - {{task.activity.name}} - {{task.activity.super_category.name}}</span></a></li></div>
@@ -463,6 +463,7 @@ font-size: 14px;
     }else{
       $('.act_'+ddd).show();
     };
+    
     var over_head = $('.over_count').siblings('.due_count').length;
 
     var current = $('.current-date').siblings('.current_count').length;
