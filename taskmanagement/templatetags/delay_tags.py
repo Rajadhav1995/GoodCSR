@@ -61,10 +61,12 @@ def get_cat_delay_point(obj,key):
     if key == 'cat':
         activities= Activity.objects.filter(super_category = obj)
         tasks = Task.objects.filter(activity__super_category = obj).order_by('end_date')
-        for i in tasks:
-            max_diff = get_max_diff_tasks(i)
-            if diff < max_diff:
-                diff = max_diff
+        high_task = tasks.reverse()[0]
+        ExpectedDatesCalculator(task=obj)
+        planned_date = obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        expected_end = obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        planned_start = obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        diff = (expected_end - planned_date).days
 #        for i in activities:
 #            tasks = Task.objects.filter(activity=i).order_by('end_date')
 #            max_diff = get_delay_difference(tasks)
