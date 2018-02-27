@@ -386,8 +386,8 @@ margin-top: -6px;
 
 
       //Draw task after drawing milestone
-      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, eStartDate, eEndDate, taskStatus, link, 0,
-        '', taskCompletion, 0, activityId, 1, '', '', '', g, pStartDate, pEndDate));
+      g.AddTaskItem(new JSGantt.TaskItem(taskId, taskName, pStartDate, pEndDate, taskStatus, link, 0,
+        '', taskCompletion, 0, activityId, 1, '', '', '', g, eStartDate, eEndDate));
     });
     console.log('Filtered act and super',filterAct,filterSuper)
 
@@ -406,6 +406,8 @@ margin-top: -6px;
     g.setScrollTo(monScrl.toISOString());
     g.setTimer(5);
     g.setShowTaskInfoLink(1);
+    // If you want to show planned dates then setType(1) and swap expected and planned in AddTaskItem
+    g.setType(1);
     g.Draw();
     console.log(monScrl.toISOString().split('T')[0],'curmon')
     var collideDiv;
