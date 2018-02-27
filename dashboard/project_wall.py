@@ -12,6 +12,12 @@ from collections import defaultdict
 from dateutil import parser
 import pytz
 
+
+def get_modified_by_user(user_id):
+	user_object = UserProfile.objects.get_or_none(user_reference_id=oo)
+	if user_object:
+		return user_object.attrs
+
 def get_project_updates(request):
 	start_date = '2017-01-01'
 	end_date = '2018-02-28'
