@@ -17,26 +17,12 @@ def get_project_updates(request):
 	end_date = '2018-02-28'
 	main_data = []
 	today = datetime.today().date()
-	tomorrow = today + timedelta(days=1)
-	remain_days = today + timedelta(days=2)
 	slug = request.GET.get('slug')
-	status = 1
-
 	projectobj = Project.objects.get_or_none(slug=slug)
-	user = projectobj.created_by
-	activity_list = list(Activity.objects.filter(project=projectobj).values_list('id', flat=True))
-	proj_task=Task.objects.filter(activity__id__in=list(activity_list))
-	tasks_today = projectobj.get_todays_tasks(today,user,status)
-	tasks_tomorrow = projectobj.get_todays_tasks(tomorrow,user,status)
-	tasks_remain = projectobj.get_remaining_tasks(remain_days,user,status)
-	closed_tasks = Task.objects.filter(status=2,activity__project__id=projectobj.id).order_by('-id')
-	remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
-	task_list = Task.objects.filter(activity__project=projectobj).order_by('-id')
-
+	task_list = Task.objects.filter(activity__project=projectobj,active=2).order_by('-id')
 	plain_task = []
 	history_task_data = []
 	for t in task_list:
-
 		data = {'task_name':t.name,'activity_name':t.activity.name,
 				'supercategory':t.activity.super_category,'date':t.created,
 				'created_by':t.created_by,'update_type':'tasks',
@@ -74,21 +60,17 @@ def get_project_updates(request):
 
 	budget_data = []
 	
-	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj).values_list('id',flat=True))
-	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list)
+	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
+	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2).exclude(planned_unit_cost="")
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
+
+
 	line_total = sum(map(float,line_item_amount_list))
 	try:
 		budgetdata = [{'budget_total':line_total,'created_by':budget_period[0].created_by,'date':budget_period[0].created,
 					'update_type':'budget'}]
 	except:
 		pass
-	budget_history = []
-	for idx,q in enumerate(budget_period,start=1):
-		history = list(q.history.all().values_list('planned_unit_cost',flat=True))
-		history = map(float,history)
-		budget_history.append(history)
-	qq = []
 	counter = 1
 	budget_data_list = []
 	for q in budget_period:
