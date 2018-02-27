@@ -172,7 +172,9 @@
               
                 <div class="text">
                     <p>{{f.comment_text}}</p>
+                    {% if f.previous_task_progress != f.task_progress %}
                     <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}% </p>
+                    {% endif %}
                     <div class="progress_time"><a href="#"><p># Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
                     <div class="progress_time"><a href="#"><p># Delay</p></a></div>
