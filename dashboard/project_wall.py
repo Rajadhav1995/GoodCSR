@@ -50,6 +50,7 @@ def get_project_updates(request):
 					'activity_name':k.activity.name,'supercategory':k.activity.super_category,
 					'update_type':'tasks_history','created_by':'',
 					'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
+					print k.modified, "task_date"
 					if attach_obj:
 						history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
 					if comment_obj:
@@ -66,17 +67,12 @@ def get_project_updates(request):
 
 
 	line_total = sum(map(float,line_item_amount_list))
-	try:
-		budgetdata = [{'budget_total':line_total,'created_by':budget_period[0].created_by,'date':budget_period[0].created,
-					'update_type':'budget'}]
-	except:
-		pass
-	counter = 1
+
 	budget_data_list = []
 	for q in budget_period:
 		budgethistory = q.history.all()
 		for k in budgethistory:
-			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H"),'amount':k.planned_unit_cost}
+			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost}
 			budget_data_list.append(data)
 	result = defaultdict(float)
 	for d in budget_data_list:
@@ -84,11 +80,12 @@ def get_project_updates(request):
 	budget_final_dict = [{'date': name, 'amount': value} for name, value in result.items()]
 	budgetlist = []
 	utc=pytz.UTC
+	from pytz import timezone
 	for c in budget_final_dict[:10]:
-		history_date = datetime.strptime(c.get('date'), '%Y-%M-%d-%H')
-		data = {'date':utc.localize(history_date),'amount':c.get('amount'),'update_type':'budget_history'}
+		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
+		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
+		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history'}
 		budgetlist.append(data)
-
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
@@ -98,7 +95,8 @@ def get_project_updates(request):
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file'})
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL +'/' + str(f.attachment_file)})
 
-	final_data = main_data + file_data + budgetdata + budgetlist
+	budgetlist.sort(key=lambda item:item['date'], reverse=True)
+	final_data = main_data + file_data + budgetlist
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
