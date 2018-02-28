@@ -11,23 +11,21 @@ from itertools import chain
 from collections import defaultdict
 from dateutil import parser
 import pytz
+from taskmanagement.templatetags import common_tags
+from taskmanagement.templatetags.common_tags import get_modified_by_user
 
 
-def get_modified_by_user(user_id):
-	if user_id:
-		user_object = UserProfile.objects.get_or_none(user_reference_id=int(user_id))
-	else:
-		user_object = ''
-	if user_object:
-		return user_object.attrs
 
 def get_project_updates(request):
-	start_date = '2017-01-01'
-	end_date = '2018-02-28'
+#	start_date = '2017-01-01'
+#	end_date = '2018-02-28'
+	key = 'updates_wall'
 	main_data = []
+	utc=pytz.UTC
 	today = datetime.today().date()
 	slug = request.GET.get('slug')
 	projectobj = Project.objects.get_or_none(slug=slug)
+	start_date = projectobj.start_date
 	task_list = Task.objects.filter(activity__project=projectobj,active=2).order_by('-id')
 	plain_task = []
 	history_task_data = []
@@ -37,36 +35,10 @@ def get_project_updates(request):
 				'created_by':t.created_by,'update_type':'tasks',
 				'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
 		plain_task.append(data)
-		history_obj = t.history.filter(created__range=[start_date,end_date]).order_by('-id')
-		temp_var = 0
-		for k in history_obj:
-			time_check = int(k.modified.strftime("%Y%m%d%H%M%S"))
-			if (int(time_check)-int(temp_var)) < 10:
-				pass
-			else:
-				time = k.modified
-				start_time = time.replace(microsecond=0)
-				end_time = time.replace(microsecond=999999)
-				comment_obj = Comment.objects.get_or_none(created__range=[start_time,end_time])
-				attach_obj = Attachment.objects.get_or_none(created=time)
-				previous_task_progress = k.get_previous_by_created().task_progress
-
-				# created_by = UserProfile.objects.get(user__id=k.modified_by)
-
-				if previous_task_progress != k.task_progress:
-					history_data = {'task_name':k.name,'activity_name':k.activity.name,
-					'supercategory':k.activity.super_category,'date':k.modified,
-					'task_progress':k.task_progress,'previous_task_progress':previous_task_progress,
-					'activity_name':k.activity.name,'supercategory':k.activity.super_category,
-					'update_type':'tasks_history','created_by':k.created_by,'modified_by':get_modified_by_user(k.modified_by),
-					'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
-					print get_modified_by_user(k.modified_by)
-					if attach_obj:
-						history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
-					if comment_obj:
-						history_data.update({'comment_text':comment_obj.text})
-					history_task_data.append(history_data)
-				temp_var = time_check
+		# added by priya where written a common function to get the task updates history
+		history_data = common_tags.task_updates_list(key,t,start_date,today)
+		for i in history_data:
+		    history_task_data.append(i)
 	main_data = history_task_data + plain_task
 
 	budget_data = []
@@ -82,13 +54,15 @@ def get_project_updates(request):
 	for q in budget_period:
 		budgethistory = q.history.all()
 		for k in budgethistory:
-			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost}
+			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by)}
 			budget_data_list.append(data)
 	result = defaultdict(float)
+	
 	for d in budget_data_list:
 		result[d['date']] += float(d['amount'])
 	budget_final_dict = [{'date': name, 'amount': value} for name, value in result.items()]
 	budgetlist = []
+
 	utc=pytz.UTC
 	from pytz import timezone
 	for c in budget_final_dict[:10]:
@@ -97,7 +71,7 @@ def get_project_updates(request):
 		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history'}
 		budgetlist.append(data)
 	file_data = []
-	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
+	file_update = Attachment.objects.filter(active=2,created__range=[start_date,today],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
 		history = f.history.all().order_by('modified')
 		history_data = []

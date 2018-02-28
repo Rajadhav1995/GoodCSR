@@ -107,11 +107,6 @@
 </div>
 
 <ul class="blog_timeline">
-{% for f in final_data %}
-{% if f.update_type == 'tasks_history' %}
-{{f.first_name}}{{f.last_name}}aads{{f}}
-{% endif %}
-{% endfor %}
 
 {% for f in final_data %}
 
@@ -124,17 +119,17 @@
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>AT</p></div>
+   <div class="two_letters"><p>{{f.created_by.attrs.first_name | slice:":1"}}{{f.created_by.attrs.last_name | slice:":1"}}</p></div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
                <div class="col-md-6">
                 <div class="image_uploaded">
-                <p style="color:#fff">{{f.modified_by.attrs.first_name}} Uploaded <span>{% if f.file_type == 'Image' %}image{% else %}Document{%endif%}</span></p>
+                <p style="color:#fff">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}} Uploaded <span>{% if f.file_type == 'Image' %}image{% else %}Document{%endif%}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                  
                  {% if f.file_type == 'Image' %}
-                    <div class="progress_time"><a href="#"><p># Timeline Progress</p></a></div>
+                    <div class="progress_time"><a href="#"><p>{% if f.image_type == True %} # Timeline Progress{% else %}# Image {% endif %}</p></a></div>
                   {% else %}
                     <div class="progress_time"><a href="#"><p># Document</p></a></div>
                   {% endif %}
@@ -171,18 +166,23 @@
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>AT</p></div>
+
+    <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}} {{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p></div>
         <div class="timeline-panel">
         
 
             <div class="timeline-body text-justify">
               
                 <div class="text">
+                    {% if f.file_name %}
+                    <p>{{f.file_description}}</p>
+                    {% else %}
                     <p>{{f.comment_text}}</p>
-                    <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}%  by {{f.modified_by.first_name}} {{f.modified_by.last_name}}</p>
+                    {% endif %}
+                    <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}%  by {% if f.modified %}{{f.modified_by.first_name}} {{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}{% endif %}</p>
                     <div class="progress_time"><a href="#"><p># Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
-                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"></a></div> -->
                 </div>
 
                 <div style=" float: left;text-align: center; width: 100%;">
@@ -199,7 +199,7 @@
                 </div>
                     <div class="file_name">
                         <p><b>File:</b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
-                        <p><b>Description:</b>Field Location1</p>
+                        <!-- <p><b>Description:</b>{{f.file_description}}</p> -->
                     </div>
                     {% endif %}
             </div>
@@ -215,7 +215,7 @@
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>AT</p></div>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p></div>
         <div class="timeline-panel">
         
 
@@ -223,10 +223,10 @@
               
                 <div class="text">
                     <p>{{f.comment_text}}</p>
-                    <p>Task created by {{f.modified_by.first_name}} {{f.modified_by.last_name}} {{created_by.attrs.first_name}}aadis</p>
+                    <p>Task created by {{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</p>
                     <div class="progress_time"><a href="#"><p># Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
-                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"></a></div> -->
                 </div>
 
                 <div style=" float: left;text-align: center; width: 100%;">
