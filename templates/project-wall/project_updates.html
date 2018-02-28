@@ -291,13 +291,13 @@
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>AD</p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}} {{f.modified_by.last_name |slice:":1"}}</p></div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
                <div class="col-md-6">
                 <div class="image_uploaded">
-                <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.amount}}</span></p>
+                <p style="color:#fff"><b>{{f.modified_by.first_name}} {{f.modified_by.last_name}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                     <div class="progress_time"><a href="#"><p>#BudgetUpdate</p></a></div>
                 </div>

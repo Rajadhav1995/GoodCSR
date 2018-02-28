@@ -53,23 +53,29 @@ def get_project_updates(request):
 	budget_data_list = []
 	for q in budget_period:
 		budgethistory = q.history.all()
+		temp_var = 0
 		for k in budgethistory:
-			data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by)}
-			budget_data_list.append(data)
+			new_var = int(k.modified.strftime("%Y%m%d%H%M"))
+			if int(new_var) != int(temp_var):
+				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by)}
+				budget_data_list.append(data)
+			temp_var = new_var
 	result = defaultdict(float)
 	
 	for d in budget_data_list:
 		result[d['date']] += float(d['amount'])
-	budget_final_dict = [{'date': name, 'amount': value/3} for name, value in result.items()]
-	budgetlist = []
 
+	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
+	budgetlist = []
 	utc=pytz.UTC
 	from pytz import timezone
-	for c in budget_final_dict[:10]:
+	for c,d in zip(budget_final_dict,budget_data_list):
+		
 		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
 		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
-		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history'}
+		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by')}
 		budgetlist.append(data)
+	# import ipdb; ipdb.set_trace()
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,today],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
