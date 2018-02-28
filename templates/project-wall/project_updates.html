@@ -126,28 +126,26 @@
             <div class="timeline-body text-justify">
                <div class="col-md-10">
                 <div class="image_uploaded">
-                <p style="color:#fff">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}} Uploaded <span>{% if f.file_type == 'Image' %}image{% else %}Document{%endif%}</span></p>
+                <p style="color:#fff">Uploaded <span>{% if f.file_type == 'Image' %}Image{% else %}Document{%endif%}</span> to project</p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                  
                  {% if f.file_type == 'Image' %}
-                    <div class="progress_time"><a href="#"><p>{% if f.image_type == True %} # Timeline Progress{% else %}# Image {% endif %}</p></a></div>
+                    <div class="progress_time"><a href="#"><p>{% if f.image_type == True %} #Timeline Progress{% else %}#Image {% endif %}</p></a></div>
                   {% else %}
-                    <div class="progress_time"><a href="#"><p># Document</p></a></div>
+                    <div class="progress_time"><a href="#"><p>#Document</p></a></div>
                   {% endif %}
                 </div>
 
-                <!-- {% if f.history %}
-                {% for y in f.history %}
+                
 
                 <div style=" float: left;text-align: center; width: 100%;">
                   <img src="/static/img/line-bar-small.png">
                 </div>
                 <div class="file_name">
-                  <p><b>File: </b><a href="{{f.image_url}}" target="_blank">{{y.file_name}}</a></p>
-                  <p><b>Description: </b>{{y.description}}</p>
+                  <p><b>File: </b><a href="{{f.image_url}}" target="_blank">{{f.file_name}}</a></p>
+                  <p><b>Description: </b>{{f.description}}</p>
                </div>
-               {% endfor %}
-               {% endif %} -->
+             
              </div>
         </div>
     </div>
@@ -183,7 +181,7 @@
                     {% if f.previous_task_progress != f.task_progress %}
                     <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}% by {% if f.modified %}{{f.modified_by.first_name}} {{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}{% endif %} </p>
                     {% endif %}
-                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
+                    <div class="progress_time"><a href="#"><p>#Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
                     <!-- <div class="progress_time"><a href="#"></a></div> -->
                 </div>
@@ -192,16 +190,16 @@
                   <img src="/static/img/line-bar-small.png">
                 </div>
                 <div class="file_name">
-                    <p><b>Task:</b><a href='{{f.task_link}}'>{{f.task_name}}</a></p>
-                    <p><b>Activity:</b>{{f.activity_name}}</p>
-                    <p><b>Supercategory:</b>{{f.supercategory}}</p>
+                    <p><b>Task: </b><a href='{{f.task_link}}'><u> {{f.task_name}}</u></a></p>
+                    <p><b>Activity: </b> {{f.activity_name}}</p>
+                    <p><b>Super Category: </b> {{f.supercategory}}</p>
                 </div>
                 {% if f.file_name %}
                 <div style=" float: left;text-align: center; width: 100%;">
                    <img src="/static/img/line-bar-small.png">
                 </div>
                     <div class="file_name">
-                        <p><b>File:</b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
+                        <p><b>File: </b><a href='{{f.file_url}}' target="_blank"><u>{{f.file_name}}</u></a></p>
                         <!-- <p><b>Description:</b>{{f.file_description}}</p> -->
                     </div>
                     {% endif %}
@@ -227,7 +225,7 @@
                 <div class="text">
                     <p>{{f.comment_text}}</p>
                     <p>Task created by {{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</p>
-                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
+                    <div class="progress_time"><a href="#"><p>#Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
                     <!-- <div class="progress_time"><a href="#"></a></div> -->
                 </div>
@@ -236,17 +234,17 @@
                   <img src="/static/img/line-bar-small.png">
                 </div>
                 <div class="file_name">
-                    <p><b>Task:</b><a href='{{f.task_link}}' target="_blank">{{f.task_name}}</a></p>
-                    <p><b>Activity:</b>{{f.activity_name}}</p>
-                    <p><b>Supercategory:</b>{{f.supercategory}}</p>
+                    <p><b>Task: </b><a href='{{f.task_link}}' target="_blank">{{f.task_name}}</a></p>
+                    <p><b>Activity: </b> {{f.activity_name}}</p>
+                    <p><b>Supercategory: </b> {{f.supercategory}}</p>
                 </div>
                 {% if f.file_name %}
                 <div style=" float: left;text-align: center; width: 100%;">
                    <img src="/static/img/line-bar-small.png">
                 </div>
                     <div class="file_name">
-                        <p><b>File:</b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
-                        <p><b>Description:</b>Field Location1</p>
+                        <p><b>File: </b><a href='{{f.file_url}}' target="_blank">{{f.file_name}}</a></p>
+                        <p><b>Description: </b> {{f.description}}</p>
                     </div>
                     {% endif %}
             </div>
@@ -298,7 +296,7 @@
             <div class="timeline-body text-justify">
                <div class="col-md-10">
                 <div class="image_uploaded">
-                <p style="color:#fff"><b>{{f.modified_by.first_name}} {{f.modified_by.last_name}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.amount}}</span></p>
+                <p style="color:#fff">Updated  <span>the budget. Total budget amount is now ₹ {{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                     <div class="progress_time"><a href="#"><p>#BudgetUpdate</p></a></div>
                 </div>
