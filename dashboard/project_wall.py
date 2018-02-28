@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from media.models import Attachment,Comment
 from pmu.settings import PMU_URL
 from datetime import datetime,timedelta
-import datetime
+
 from itertools import chain
 from collections import defaultdict
 from dateutil import parser
@@ -23,7 +23,9 @@ def get_project_updates(request):
 	key = 'updates_wall'
 	main_data = []
 	utc=pytz.UTC
-	today = datetime.date.today() + datetime.timedelta(days=1)
+	# import datetime
+	# import ipdb; ipdb.set_trace()
+	today = datetime.now() + timedelta(days=1)
 	slug = request.GET.get('slug')
 	projectobj = Project.objects.get_or_none(slug=slug)
 	start_date = projectobj.start_date
