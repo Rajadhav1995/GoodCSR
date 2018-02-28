@@ -76,7 +76,8 @@ def get_project_updates(request):
 		
 		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
 		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
-		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by')}
+
+		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
 		budgetlist.append(data)
 	
 	file_data = []
