@@ -80,7 +80,6 @@ def task_progress_history_details(task_data,attach_obj,i,comment_obj):
             task_data.append(cell_one)
         
     elif attach_obj:
-
         attachment_data = {'name':attach_obj.created_by.attrs,
             'description':attach_obj.description,
             'date':attach_obj.created,'attachment':1,
@@ -146,7 +145,7 @@ def task_updates_list(key,task_progress,start_date,end_date):
                 'update_type':'tasks_history','created_by':i.created_by,'modified_by':get_modified_by_user(i.modified_by),
                 'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
                 if attach_obj:
-                    history_data.update({'file_name':attach_obj.name,'file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
+                    history_data.update({'file_name':attach_obj.attachment_file.url.split('/')[-1] if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
                 if comment_obj:
                     history_data.update({'comment_text':comment_obj.text})
                 task_data.append(history_data)
