@@ -75,7 +75,7 @@ def get_project_updates(request):
 		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
 		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by')}
 		budgetlist.append(data)
-	# import ipdb; ipdb.set_trace()
+	
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,today],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
