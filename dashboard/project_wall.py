@@ -60,7 +60,7 @@ def get_project_updates(request):
 	
 	for d in budget_data_list:
 		result[d['date']] += float(d['amount'])
-	budget_final_dict = [{'date': name, 'amount': value} for name, value in result.items()]
+	budget_final_dict = [{'date': name, 'amount': value/3} for name, value in result.items()]
 	budgetlist = []
 
 	utc=pytz.UTC
