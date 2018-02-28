@@ -15,7 +15,7 @@
 
 
 .blog_timeline li { margin-bottom: 80px;position: relative;width: 50%;float: left;clear: left;}
-.blog_timeline {padding: 20px 0;list-style: none;position: relative; float: left;}
+.blog_timeline {padding: 20px 0;list-style: none;position: relative; float: left;width: 100%}
 .blog_timeline li.timeline-right {float: right;clear: right;margin-bottom: 110px;}
 .blog_timeline .timeline-left {margin-top: 62px;}
 .blog_timeline:before {top: 0;bottom: 0;position: absolute;content: " ";width: 3px;background-color: #eee;
@@ -84,6 +84,7 @@
         </div>
     </nav>
     </div>
+    <section class="content-part forms_section">
 <div class="container">
   <div class=" content">
   
@@ -106,8 +107,8 @@
     </div>
 </div>
 
+{% if final_data %}
 <ul class="blog_timeline">
-
 {% for f in final_data %}
 
 {% if f.update_type == 'file' %}
@@ -123,7 +124,7 @@
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-6">
+               <div class="col-md-10">
                 <div class="image_uploaded">
                 <p style="color:#fff">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}} Uploaded <span>{% if f.file_type == 'Image' %}image{% else %}Document{%endif%}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -269,7 +270,7 @@
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-6">
+               <div class="col-md-10">
                 <div class="image_uploaded">
                 <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.budget_total}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -295,7 +296,7 @@
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-6">
+               <div class="col-md-10">
                 <div class="image_uploaded">
                 <p style="color:#fff"><b>{{f.modified_by.first_name}} {{f.modified_by.last_name}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -312,7 +313,12 @@
 
 
 				
-			</ul>
+</ul>
+{% else %}
+<div style="align:center;">
+No Updates
+</div>
+{% endif %}
 		</div>
     </div>
 

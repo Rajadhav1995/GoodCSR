@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from media.models import Attachment,Comment
 from pmu.settings import PMU_URL
 from datetime import datetime,timedelta
+import datetime
 from itertools import chain
 from collections import defaultdict
 from dateutil import parser
@@ -22,7 +23,7 @@ def get_project_updates(request):
 	key = 'updates_wall'
 	main_data = []
 	utc=pytz.UTC
-	today = datetime.today().date()
+	today = datetime.date.today() + datetime.timedelta(days=1)
 	slug = request.GET.get('slug')
 	projectobj = Project.objects.get_or_none(slug=slug)
 	start_date = projectobj.start_date
@@ -79,8 +80,10 @@ def get_project_updates(request):
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,today],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
+
 		history = f.history.all().order_by('modified')
 		history_data = []
+
 		for k in history:
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file','modified_by':get_modified_by_user(k.modified_by)})
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL +'/' + str(f.attachment_file)})
