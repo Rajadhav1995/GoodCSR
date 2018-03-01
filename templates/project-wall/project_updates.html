@@ -60,10 +60,19 @@
 .header_fixed #nav{top:40px;}
 .c-hamburger{width:32px !important;}
 .c-hamburger span:after, .c-hamburger span:before{width: 85%}
+
+.white_bg {
+background: #fff;
+float: left;
+width: 100%;
+border-radius: 3px;
+box-shadow: 0px 0px 1px;
+margin: 10px 0px;
+}
 </style>
 <body>
 
-<div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:25px;top:280px;">
+<div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:90px;top:290px;">
   <div class="menu-toggle-holder">
      <p style="float:left;position: relative; top: 4px; left: -40px; font-size: 16px;">Tags</p>
      <div class="center"> <span class="label">Menu</span>
@@ -86,13 +95,14 @@
     </div>
     <section class="content-part forms_section">
 <div class="container">
+<div class="white_bg">
   <div class=" content">
   
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button>
     </div>
-    <div style="float:right;position: relative;left: -30px;">
+    <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
@@ -331,6 +341,7 @@ No Updates
         </div>
         <div class="modal-body">
          <form autocomplete="off" id="note_create" class ="form-horizantal budget_form" action="/dashboard/add/note/?slug={{request.GET.slug}}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
              <div >
                  <div class="form-group">
                      <span>Comment</span>
@@ -348,20 +359,42 @@ No Updates
                   
                  </div>
                  <div class="modal-footer">
-         <button type="button" class="btn btn-success" type="submit" value="Save" data-dismiss="modal" style="background:#3b9e84;border:1px solid #3b9e84 color:#fff;float:right">Create</button>
+         <button type="submit" class="btn btn-success" type="submit" value="Save" data-dismiss="modal" style="background:#3b9e84;border:1px solid #3b9e84 color:#fff;float:right">Create</button>
         </div>
              </div>
          </form>
         </div>
         
       </div>
-      
+
     </div>
   </div>
 <script src="/static/js/jquery.min.js"></script> 
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+
+<script type="text/javascript">
+    var frm = $('#note_create');
+    frm.submit(function () {
+        
+        $.ajax({
+            
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                $("#SOME-DIV").html(data);
+            },
+            error: function(data) {
+                $("#MESSAGE-DIV").html("Something went wrong!");
+            }
+        });
+        return false;
+    });
+</script>
+
 <!--<script>
     window.pressed = function(){
     var a = document.getElementById('aa');
