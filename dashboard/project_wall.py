@@ -101,4 +101,5 @@ def get_project_updates(request):
 
 # @csrf_exempt	
 def create_note(request):
+	import ipdb; ipdb.set_trace()
 	return
