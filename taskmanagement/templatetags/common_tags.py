@@ -139,19 +139,22 @@ def task_updates_list(key,task_progress,start_date,end_date):
             else:
                 # this is for updates wall
 #                if previous_task_progress != i.task_progress:
-                history_data = {'task_name':i.name,'activity_name':i.activity.name,
-                'supercategory':i.activity.super_category,'date':i.modified,
-                'task_progress':i.task_progress,'previous_task_progress':previous_task_progress,
-                'update_type':'tasks_history','created_by':i.created_by,'modified_by':get_modified_by_user(i.modified_by),
-                'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
-                if attach_obj:
-                    history_data.update({'file_name':attach_obj.attachment_file.url.split('/')[-1] if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
-                if comment_obj:
-                    history_data.update({'comment_text':comment_obj.text})
+                history_data = get_task_attachment(i,attach_obj,previous_task_progress,slug,comment_obj)
                 task_data.append(history_data)
         temp_var = new_var
     return task_data
 
+def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
+    history_data = {'task_name':obj.name,'activity_name':obj.activity.name,
+                'supercategory':obj.activity.super_category,'date':obj.modified,
+                'task_progress':obj.task_progress,'previous_task_progress':previous_task_progress,
+                'update_type':'tasks_history','created_by':obj.created_by,'modified_by':get_modified_by_user(obj.modified_by),
+                'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
+    if attach_obj:
+        history_data.update({'file_name':attach_obj.attachment_file.url.split('/')[-1] if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
+    if comment_obj:
+        history_data.update({'comment_text':comment_obj.text})
+    return history_data
 
 @register.assignment_tag
 def task_comments_progress(date,task_id, attach):
