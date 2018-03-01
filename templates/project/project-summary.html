@@ -123,7 +123,7 @@ $(document).ready(function(){
                     {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                         {% if i.slug == "project-summary" %}
                         <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
-                        {% if i.slug == "updates" %}
+                        {% elif i.slug == "updates" %}
                         <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
                         {% elif i.slug == "tasks-milestones" %}
                         <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>

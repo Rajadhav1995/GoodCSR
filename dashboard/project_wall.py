@@ -35,6 +35,7 @@ def get_project_updates(request):
 
 	plain_task = []
 	history_task_data = []
+	utc=pytz.UTC
 	for t in task_list:
 
 		data = {'task_name':t.name,'activity_name':t.activity.name,
@@ -74,8 +75,8 @@ def get_project_updates(request):
 
 	budget_data = []
 	
-	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj).values_list('id',flat=True))
-	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list)
+	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
+	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2).exclude(planned_unit_cost="")
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
 	line_total = sum(map(float,line_item_amount_list))
 	try:
@@ -85,7 +86,7 @@ def get_project_updates(request):
 		pass
 	budget_history = []
 	for idx,q in enumerate(budget_period,start=1):
-		history = list(q.history.all().values_list('planned_unit_cost',flat=True))
+		history = list(q.history.filter().exclude(planned_unit_cost="").values_list('planned_unit_cost',flat=True))
 		history = map(float,history)
 		budget_history.append(history)
 	qq = []
@@ -98,10 +99,9 @@ def get_project_updates(request):
 			budget_data_list.append(data)
 	result = defaultdict(float)
 	for d in budget_data_list:
-		result[d['date']] += float(d['amount'])
+		result[d['date']] += float(d['amount']) if d['amount'] != "" else 0
 	budget_final_dict = [{'date': name, 'amount': value} for name, value in result.items()]
 	budgetlist = []
-	utc=pytz.UTC
 	for c in budget_final_dict[:10]:
 		history_date = datetime.strptime(c.get('date'), '%Y-%M-%d-%H')
 		data = {'date':utc.localize(history_date),'amount':c.get('amount'),'update_type':'budget_history'}
@@ -117,7 +117,9 @@ def get_project_updates(request):
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL +'/' + str(f.attachment_file)})
 
 	final_data = main_data + file_data + budgetdata + budgetlist
+	print final_data,"before sorting"
 	final_data.sort(key=lambda item:item['date'], reverse=True)
+	print final_data,"after sorting"
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
 
