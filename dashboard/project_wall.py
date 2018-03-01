@@ -14,6 +14,7 @@ from dateutil import parser
 import pytz
 from taskmanagement.templatetags import common_tags
 from taskmanagement.templatetags.common_tags import get_modified_by_user
+from media.forms import NoteForm
 
 
 
@@ -101,5 +102,5 @@ def get_project_updates(request):
 
 # @csrf_exempt	
 def create_note(request):
-	import ipdb; ipdb.set_trace()
-	return
+	# import ipdb; ipdb.set_trace()
+	return render(request,'project-wall/create-note.html',locals())
