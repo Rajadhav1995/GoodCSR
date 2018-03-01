@@ -2,18 +2,18 @@ import requests,ast
 from django.shortcuts import render
 from taskmanagement.models import Task,Activity
 from budgetmanagement.models import Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit
+from django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import Project,UserProfile
 from django.contrib.contenttypes.models import ContentType
-from media.models import Attachment,Comment
+from media.models import Attachment,Comment, Note
 from pmu.settings import PMU_URL
 from datetime import datetime,timedelta
-
 from itertools import chain
 from collections import defaultdict
 from dateutil import parser
 import pytz
 from taskmanagement.templatetags import common_tags
-from taskmanagement.templatetags.common_tags import get_modified_by_user
+from taskmanagement.templatetags.common_tags import get_modified_by_user,string_trim
 from media.forms import NoteForm
 
 
@@ -67,7 +67,10 @@ def get_project_updates(request):
 	result = defaultdict(float)
 	
 	for d in budget_data_list:
-		result[d['date']] += float(d['amount'])
+		try:
+			result[d['date']] += float(d['amount'])
+		except:
+			result[d['date']] += float(0)
 
 	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
 	budgetlist = []
@@ -90,8 +93,7 @@ def get_project_updates(request):
 
 		for k in history[:2]:
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file','modified_by':get_modified_by_user(k.modified_by)})
-		# import ipdb; ipdb.set_trace()
-		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':f.attachment_file.url.split('/')[-1] if f.attachment_file else '','description':f.description})
+		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
 
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
 	final_data = main_data + file_data + budgetlist
@@ -99,8 +101,16 @@ def get_project_updates(request):
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
 
-
 # @csrf_exempt	
 def create_note(request):
-	# import ipdb; ipdb.set_trace()
+	
+	slug=request.GET.get('slug')
+	if request.method=='POST':
+		project_slug = request.POST.get('slug')
+		projectobj = Project.objects.get(slug=project_slug)
+		note_create = Note.objects.create(project=projectobj,\
+						comment=request.POST.get('comment'),
+						description=request.POST.get('description'),
+						attachment_file=request.FILES['attachment'])
+		return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
 	return render(request,'project-wall/create-note.html',locals())

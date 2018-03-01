@@ -182,7 +182,7 @@ font-size: 14px;
             <div class="task-completion-right">
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">{% csrf_token %}
                 <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
-               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
+               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..." required></textarea>
                <div>
                <i class="fa fa-file"></i>
                <input type='file' name ='upload_attach' id='upload-photo'/> 
