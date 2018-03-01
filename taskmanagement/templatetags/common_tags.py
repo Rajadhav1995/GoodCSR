@@ -76,7 +76,7 @@ def task_progress_history_details(task_data,attach_obj,i,comment_obj):
         elif comment_obj and (i.get_previous_by_created().task_progress == i.task_progress):
             cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
                 'task_progress':i.task_progress,'attachment':0,
-                'previous_task_progress':i.get_previous_by_created().task_progress ,}
+                'previous_task_progress':i.get_previous_by_created().task_progress}
             task_data.append(cell_one)
         
     elif attach_obj:
