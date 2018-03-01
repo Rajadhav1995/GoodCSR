@@ -38,62 +38,70 @@ import datetime
 #    The default settings and feature set of the ssl module have been improved.
 #    The hashlib module received support for the BLAKE2, SHA-3 and SHAKE hash algorithms and the scrypt() key derivation function.
 
-
-
-
-def get_delay_difference1(tasks):
-    diff = ''
+def get_delay_difference(tasks):
+    diff = None
+    maxi = None
     today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     if tasks:
         task_obj = tasks.reverse()[0]
-        if task_obj.actual_end_date:
-            max_end = task_obj.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        ExpectedDatesCalculator(task=task_obj)
+        planned_end = task_obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        planned_start = task_obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        expected_end = task_obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+        diff = (expected_end - planned_end).days
+        if today > planned_start:
+            maxi = int(-(diff))
+        elif diff ==0 and task_obj.status ==2:
+            maxi = 0
         else:
-            ExpectedDatesCalculator(task=task_obj)
-            max_end = task_obj.expected_end_date
-        if task_obj.status == 2:
-            diff = 0
-        else:
-            diff = (max_end - today).days
-    return diff
+            maxi = diff
+    return maxi
+
 
 def get_cat_delay_point(obj,key):
+    diff = None
     if key == 'cat':
-        tasks = Task.objects.filter(activity__super_category=obj).order_by('end_date')
+        activities= Activity.objects.filter(super_category = obj)
+        tasks = Task.objects.filter(activity__super_category = obj).order_by('end_date')
+        if tasks:
+            high_task = tasks.reverse()[0]
+            diff = get_max_diff_tasks(high_task)
+#        for i in activities:
+#            tasks = Task.objects.filter(activity=i).order_by('end_date')
+#            max_diff = get_delay_difference(tasks)
+#            if diff < max_diff:
+#                diff = max_diff
     else:
-        tasks = Task.objects.filter(activity=obj).order_by('end_date')
-    diff = get_delay_difference(tasks)
+        act_obj = Activity.objects.get_or_none(id=obj.id)
+        tasks = Task.objects.filter(activity = act_obj).order_by('end_date')
+        diff = get_delay_difference(tasks)
+        
     slug = str(obj.slug)
     return diff,slug
+
+def get_max_diff_tasks(obj):
+    today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    ExpectedDatesCalculator(task=obj)
+    planned_date = obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    expected_end = obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    planned_start = obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+    diff = (expected_end - planned_date).days
+    if today > planned_start:
+        maxi = int(-(diff))
+    elif diff ==0 and obj.status ==2:
+        maxi = 0
+    else:
+        maxi = diff
+    return maxi
 
 def get_task_delay_ponts(obj):
     maxi=''
     task_data_list = []
-    today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     tasks_obj = Task.objects.filter(activity=obj).order_by('end_date')
-    
     for i in tasks_obj:
         maxi=0
         task_data={}
-        ExpectedDatesCalculator(task=i)
-        
-        planned_date = i.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-        expected_end = i.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-        diff = (expected_end - planned_date).days
-        bytodaydiff = (planned_date-today).days
-        if i.status == 2:
-            diff=0
-        if diff > maxi:
-            maxi = diff + bytodaydiff
-#        if i.actual_end_date:
-#            max_end = i.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-#        else:
-#            ExpectedDatesCalculator(task=i)
-#            max_end = i.expected_end_date
-#        if i.status == 2:
-#            diff = 0
-#        else:
-#            diff = (max_end - today).days
+        maxi = get_max_diff_tasks(i)
         task_data['name']=str(i.name)
         task_data['y']= maxi
         task_data['task_progress']= str(i.task_progress)
@@ -141,6 +149,7 @@ def super_category_delay(project_slug):
     import json
     return json.dumps(delay_list),json.dumps(series)
     
+<<<<<<< HEAD
 #logic for calculating the delay days b/w planned end date and expected end date of a task
 def get_delay_difference(tasks):
     diff = ''
@@ -163,3 +172,6 @@ def get_delay_difference(tasks):
     # this is for tasks dont delete this code priya
     
     # for tasks purpose its written 
+=======
+
+>>>>>>> 2a9226b02b9eb1966b087b26d91c51d742e670a9
