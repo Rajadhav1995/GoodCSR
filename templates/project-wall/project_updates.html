@@ -35,7 +35,7 @@
     position: absolute;right: 15px; line-height: 35px;}
 .timeline-badge p{background: #aa3d5c;border-radius: 50px;width: 20px;height: 20px;border:1px solid #232323}
 /*input[type=file]{width:100px;color:transparent;float: left}*/
-.image_uploaded{width: 100%;float: left; background: #3b9e84;padding: 40px 10px 10px;border-radius: 8px;margin-bottom: 0px;}
+.image_uploaded{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;margin-bottom: 0px;}
 .file_name{border: 1px solid #d0c173; padding: 4px 10px; margin-top: 10px; float: left; width: 100%; background: #f1f3e9; border-radius: 5px;}
 .timeline-left  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
 .timeline-right  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
@@ -194,7 +194,7 @@ display: none;
                     <p>{{f.comment_text}}</p>
                     {% endif %}
                     {% if f.previous_task_progress != f.task_progress %}
-                    <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}% by {% if f.modified %}{{f.modified_by.first_name}} {{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}{% endif %} </p>
+                    <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}% </p>
                     {% endif %}
                     <div class="progress_time"><a href="#"><p>#Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
@@ -285,7 +285,7 @@ display: none;
             <div class="timeline-body text-justify">
                <div class="col-md-10">
                 <div class="image_uploaded">
-                <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.budget_total}}</span></p>
+                <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now <br> ₹{{f.budget_total}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                     <div class="progress_time"><a href="#"><p>#Budget</p></a></div>
                 </div>
@@ -311,7 +311,7 @@ display: none;
             <div class="timeline-body text-justify">
                <div class="col-md-10">
                 <div class="image_uploaded">
-                <p style="color:#fff">Updated  <span>the budget. Total budget amount is now ₹ {{f.amount}}</span></p>
+                <p style="color:#fff">Updated  <span>the budget. Total budget amount is now <br> ₹ {{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                     <div class="progress_time"><a href="#"><p>#BudgetUpdate</p></a></div>
                 </div>
