@@ -1,20 +1,23 @@
 import requests,ast
+from django.shortcuts import render_to_response
 from django.shortcuts import render
 from taskmanagement.models import Task,Activity
 from budgetmanagement.models import Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit
+from django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import Project,UserProfile
 from django.contrib.contenttypes.models import ContentType
-from media.models import Attachment,Comment
+from media.models import Attachment,Comment, Note
 from pmu.settings import PMU_URL
 from datetime import datetime,timedelta
-
 from itertools import chain
 from collections import defaultdict
 from dateutil import parser
+from django.core.cache import cache
 import pytz
 from taskmanagement.templatetags import common_tags
 from taskmanagement.templatetags.common_tags import get_modified_by_user
 from menu_decorators import check_loggedin_access
+from media.forms import NoteForm
 
 @check_loggedin_access
 def get_project_updates(request):
@@ -66,7 +69,10 @@ def get_project_updates(request):
 	result = defaultdict(float)
 	
 	for d in budget_data_list:
-		result[d['date']] += float(d['amount'])
+		try:
+			result[d['date']] += float(d['amount'])
+		except:
+			result[d['date']] += float(0)
 
 	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
 	budgetlist = []
@@ -89,17 +95,40 @@ def get_project_updates(request):
 
 		for k in history[:2]:
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file','modified_by':get_modified_by_user(k.modified_by)})
-		# import ipdb; ipdb.set_trace()
-		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':f.attachment_file.url.split('/')[-1] if f.attachment_file else '','description':f.description})
+		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
 
+	note_list = get_project_note(projectobj,request)
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
-	final_data = main_data + file_data + budgetlist
+	final_data = main_data + file_data + budgetlist + note_list
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
 
+def get_project_note(projectobj,request):
+	note_obj = Note.objects.filter(project=projectobj)
+	note_list = []
+	for n in note_obj:
+		short_comment_text,more_comment_text = read_more_text(n.comment)
+		short_description_text,more_description_text = read_more_text(n.description)
+		data = {'short_comment':short_comment_text,'short_description':short_description_text,'date':n.created,
+				'attachment_name':string_trim(n.attachment_file.url.split('/')[-1]) if n.attachment_file else '',
+				'attachment_link':PMU_URL + str(n.attachment_file.url) if n.attachment_file else '',
+				'update_type':'note','created_by':n.created_by,
+				'more_description':more_description_text,'more_comment':more_comment_text}
+		note_list.append(data)
+	return note_list
 
-# @csrf_exempt	
+# @csrf_exempt
 def create_note(request):
-	import ipdb; ipdb.set_trace()
-	return
+	created_by = UserProfile.objects.get_or_none(id=request.session.get('user_id'))
+	slug=request.GET.get('slug')
+	if request.method=='POST':
+		project_slug = request.POST.get('slug')
+		projectobj = Project.objects.get(slug=project_slug)
+		note_create = Note.objects.create(project=projectobj,\
+						comment=request.POST.get('comment'),
+						description=request.POST.get('description'),
+						attachment_file=request.FILES['attachment'],
+						created_by=created_by)
+		return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
+	return render(request,'project-wall/create-note.html',locals())

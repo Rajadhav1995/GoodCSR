@@ -1,7 +1,7 @@
 from projectmanagement.models import Project,MasterCategory,UserProfile,Program,ProjectFunderRelation
 from collections import OrderedDict
 from django import forms
-from media.models import Attachment
+from media.models import Attachment,Note
 from django.contrib.admin import widgets
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
@@ -72,3 +72,17 @@ class ContactPersonForm(forms.ModelForm):
     class Meta:
         model = ContactPersonInformation
         fields  = ('name','email','organization_name','mobile_number','message')
+
+class NoteForm(forms.ModelForm):
+    '''
+    This is model form to create nte in project update wall
+    '''
+    comment = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
+    attachment_file = forms.ImageField(label=_('Attach File'),required=False, error_messages = {'invalid':_("Image files only")}, widget=forms.FileInput)
+    class Meta:
+        model = Note
+        fields  = ('description','attachment_file','comment')
+        widgets = {
+            "file": MyClearableFileInput(),
+        }

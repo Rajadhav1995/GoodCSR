@@ -35,7 +35,7 @@
     position: absolute;right: 15px; line-height: 35px;}
 .timeline-badge p{background: #aa3d5c;border-radius: 50px;width: 20px;height: 20px;border:1px solid #232323}
 /*input[type=file]{width:100px;color:transparent;float: left}*/
-.image_uploaded{width: 100%;float: left; background: #3b9e84;padding: 40px 10px 10px;border-radius: 8px;margin-bottom: 0px;}
+.image_uploaded{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;margin-bottom: 0px;}
 .file_name{border: 1px solid #d0c173; padding: 4px 10px; margin-top: 10px; float: left; width: 100%; background: #f1f3e9; border-radius: 5px;}
 .timeline-left  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
 .timeline-right  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
@@ -65,14 +65,19 @@
 background: #fff;
 float: left;
 width: 100%;
-border-radius: 3px;
-box-shadow: 0px 0px 1px;
+border-radius: 5px;
+-webkit-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);
+    -moz-box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);
+    box-shadow: 0px 0px 5px -1px rgba(51,51,51,0.4);
 margin: 10px 0px;
+}
+#no-overflow .clearfix.header_fixed.right_menu.position_fixed .cont-wrap {
+display: none;
 }
 </style>
 <body>
 
-<div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:90px;top:290px;">
+<!-- <div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:60px;top:290px;">
   <div class="menu-toggle-holder">
      <p style="float:left;position: relative; top: 4px; left: -40px; font-size: 16px;">Tags</p>
      <div class="center"> <span class="label">Menu</span>
@@ -92,17 +97,18 @@ margin: 10px 0px;
         
         </div>
     </nav>
-    </div>
+    </div> -->
     <section class="content-part forms_section">
-<div class="container">
+<div class="row">
 <div class="white_bg">
   <div class=" content">
   
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
-      <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button>
+      <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
+      <!-- <a href="/dashboard/add/note/?slug={{slug}}" class="iframe"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a> -->
     </div>
-    <div style="float:right;position: relative;left: -60px;">
+    <!-- <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
@@ -114,7 +120,7 @@ margin: 10px 0px;
             <input type="text" id="to" name="to" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
-    </div>
+    </div> -->
 </div>
 
 {% if final_data %}
@@ -184,13 +190,16 @@ margin: 10px 0px;
               
                 <div class="text">
                     {% if f.file_name %}
-                    <p>{{f.file_description}}</p>
+                    <p>{% if f.attachment_file_type == 'image' %} An image has been uploaded. {% else %} A document has been uploaded.{% endif %}</p>
+                    <p>"{{f.file_description}}"</p>
                     {% else %}
                     <p>{{f.comment_text}}</p>
                     {% endif %}
+                    {% if f.file_name %}
+                    <p>File: <a href='{{f.file_url}}' target="_blank"><u>{{f.file_name}}</u></a>{% endif %}</p>
                     {% if f.previous_task_progress != f.task_progress %}
-                    <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}% by {% if f.modified %}{{f.modified_by.first_name}} {{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}{% endif %} </p>
-                    {% endif %}
+                    <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}%
+                    {% endif %}</p>
                     <div class="progress_time"><a href="#"><p>#Task</p></a></div>
                     <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
                     <!-- <div class="progress_time"><a href="#"></a></div> -->
@@ -210,7 +219,7 @@ margin: 10px 0px;
                 </div>
                     <div class="file_name">
                         <p><b>File: </b><a href='{{f.file_url}}' target="_blank"><u>{{f.file_name}}</u></a></p>
-                        <!-- <p><b>Description:</b>{{f.file_description}}</p> -->
+                        
                     </div>
                     {% endif %}
             </div>
@@ -280,7 +289,7 @@ margin: 10px 0px;
             <div class="timeline-body text-justify">
                <div class="col-md-10">
                 <div class="image_uploaded">
-                <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now ₹{{f.budget_total}}</span></p>
+                <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now <br> ₹{{f.budget_total}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                     <div class="progress_time"><a href="#"><p>#Budget</p></a></div>
                 </div>
@@ -306,9 +315,9 @@ margin: 10px 0px;
             <div class="timeline-body text-justify">
                <div class="col-md-10">
                 <div class="image_uploaded">
-                <p style="color:#fff">Updated  <span>the budget. Total budget amount is now ₹ {{f.amount}}</span></p>
+                <p style="color:#fff">Updated  <span>the budget. Total budget amount is now <br> ₹ {{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <div class="progress_time"><a href="#"><p>#BudgetUpdate</p></a></div>
+                    <div class="progress_time"><a href="#"><p>#Budget</p></a></div>
                 </div>
                 
                 
@@ -317,6 +326,77 @@ margin: 10px 0px;
     </div>
 </li>
 {% endif %}
+
+
+
+{% if f.update_type == 'note' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+<p class="date">{{f.date | date:"d M"}}</p>
+    <div class="timeline-badge primary"><p></p></div>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p></div>
+        <div class="timeline-panel">
+        
+
+            <div class="timeline-body text-justify">
+              
+                <div class="text">
+                    <p class="short_comment{{forloop.counter}}">{{f.short_comment}}{% if f.more_comment %}...{% endif %}</p>
+                    {% if f.more_comment %}
+                    <p class="read_more{{forloop.counter}}"><u>Read more >></u></p>
+                        <p class="text_content{{forloop.counter}}">{{f.short_comment}}{{f.more_comment}}</p>
+                        <p class="less_more{{forloop.counter}}"><u>Less >></u></p>
+                    {% endif %}
+                    <p>Note added</p>
+                    
+                    <div class="progress_time"><a href="#"><p>#Note</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
+                    <!-- <div class="progress_time"><a href="#"></a></div> -->
+                </div>
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                
+                
+                <div style=" float: left;text-align: center; width: 100%;">
+                   <img src="/static/img/line-bar-small.png">
+                </div>
+                    <div class="file_name">
+                        <p><b>File: </b><a href='{{f.attachment_link}}' target="_blank"><u>{{f.attachment_name}}</u></a></p>
+                        <p><b>Description: </b> {{f.description}}</p>
+                    </div>
+                
+            </div>
+        </div>
+</li>
+
+<script>
+     $('.less_more{{forloop.counter}}').hide();
+    $('.text_content{{forloop.counter}}').hide();
+    $('.read_more{{forloop.counter}}').click(function(){
+      $('.short_comment{{forloop.counter}}').hide();
+    $('.less_more{{forloop.counter}}').show();
+         $('.text_content{{forloop.counter}}').show();
+          $('.read_more{{forloop.counter}}').hide();
+        
+    });
+     
+    $('.less_more{{forloop.counter}}').click(function(){
+    $('.read_more{{forloop.counter}}').show();
+    $('.short_comment{{forloop.counter}}').show();
+         $('.text_content{{forloop.counter}}').hide();
+        $('.less_more{{forloop.counter}}').hide();
+        
+    });    
+</script>
+{% endif %}
+
+
+
 {% endfor %}
 
 
@@ -369,11 +449,29 @@ No Updates
 
     </div>
   </div>
+  </div>
 <script src="/static/js/jquery.min.js"></script> 
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+<link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".iframe").fancybox({
+        type: 'iframe',
+        onCanceal: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
+        alert('aaaa');
+        parent.location.reload(true);
+    }
+        
+    });
+});
+</script>
 
 <script type="text/javascript">
     var frm = $('#note_create');

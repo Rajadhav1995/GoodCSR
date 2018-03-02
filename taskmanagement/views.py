@@ -28,7 +28,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 # Create your views here.
 from projectmanagement.common_method import add_modified_by_user
-from menu_decorators import @check_loggedin_access
+from menu_decorators import check_loggedin_access
 
 @check_loggedin_access
 def listing(request):
