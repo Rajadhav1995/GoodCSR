@@ -28,6 +28,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 # Create your views here.
 from projectmanagement.common_method import add_modified_by_user
+from menu_decorators import check_loggedin_access
 
 def listing(request):
     # this function is for listing 
@@ -411,7 +412,7 @@ def corp_total_budget_disbursed(obj_list):
     total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
-
+@check_loggedin_access
 def my_tasks_details(request):
     #  to get my task details
     # 
