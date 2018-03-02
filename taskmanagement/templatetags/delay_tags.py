@@ -149,29 +149,4 @@ def super_category_delay(project_slug):
     import json
     return json.dumps(delay_list),json.dumps(series)
     
-<<<<<<< HEAD
-#logic for calculating the delay days b/w planned end date and expected end date of a task
-def get_delay_difference(tasks):
-    diff = ''
-    maxi =''
-    today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-    if tasks:
-        maxi=0
-        ExpectedDatesCalculator(task_list=tasks)
-        for task_obj in tasks:
-            planned_date = task_obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-            expected_end = task_obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-            diff = (expected_end - planned_date).days
-            bytodaydiff = (planned_date-today).days
-            if task_obj.status == 2:
-                diff = 0
-            if diff > maxi:
-                maxi = diff + bytodaydiff
-     
-    return maxi
-    # this is for tasks dont delete this code priya
-    
-    # for tasks purpose its written 
-=======
 
->>>>>>> 2a9226b02b9eb1966b087b26d91c51d742e670a9

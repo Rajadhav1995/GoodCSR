@@ -14,9 +14,9 @@ from dateutil import parser
 import pytz
 from taskmanagement.templatetags import common_tags
 from taskmanagement.templatetags.common_tags import get_modified_by_user
+from menu_decorators import check_loggedin_access
 
-
-
+@check_loggedin_access
 def get_project_updates(request):
 #	start_date = '2017-01-01'
 #	end_date = '2018-02-28'
