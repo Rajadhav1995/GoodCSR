@@ -13,6 +13,7 @@ from ast import literal_eval
 from itertools import chain
 from operator import is_not
 from functools import partial
+# from dashboard.project_wall import string_trim
 
 
 #According to Wikipedia the exact definition of a goal is:
@@ -103,7 +104,6 @@ def get_modified_by_user(user_id):
 def task_updates_list(key,task_progress,start_date,end_date):
 # this is to get the task updates 
 # where the combination of updates would be filtered and displayed
-
     task_data = []
     utc=pytz.UTC
     slug = task_progress.activity.project.slug
@@ -151,7 +151,7 @@ def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
                 'update_type':'tasks_history','created_by':obj.created_by,'modified_by':get_modified_by_user(obj.modified_by),
                 'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
     if attach_obj:
-        history_data.update({'file_name':attach_obj.attachment_file.url.split('/')[-1] if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
+        history_data.update({'file_name':string_trim(attach_obj.attachment_file.url.split('/')[-1]) if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
     if comment_obj:
         history_data.update({'comment_text':comment_obj.text})
     return history_data
@@ -555,3 +555,12 @@ import json
 def taskdict_json(taskdict):
     taskdict = json.loads(taskdict)
     return taskdict
+
+def string_trim(string):
+    # import ipdb; ipdb.set_trace()
+    file_extension = string.split('.')
+    if len(string) > 19:
+        new_string = string[:25] + '...' + file_extension[0][-6:] + '.'+file_extension[-1]
+    else:
+        new_string = string
+    return new_string
