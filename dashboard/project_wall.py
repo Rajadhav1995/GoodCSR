@@ -130,5 +130,5 @@ def create_note(request):
 						created_by=created_by)
 		messages.success(request, 'Note added successfully!')
 		# return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
-		return HttpResponseRedirect('/dashboard/add/note/')
+		return HttpResponseRedirect('/dashboard/add/note/?slug='+str(project_slug))
 	return render(request,'project-wall/create-note.html',locals())
