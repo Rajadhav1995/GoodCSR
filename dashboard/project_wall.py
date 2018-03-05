@@ -16,7 +16,7 @@ from django.core.cache import cache
 import pytz
 from django.contrib import messages
 from taskmanagement.templatetags import common_tags
-from taskmanagement.templatetags.common_tags import get_modified_by_user
+from taskmanagement.templatetags.common_tags import get_modified_by_user,string_trim,read_more_text
 from menu_decorators import check_loggedin_access
 from media.forms import NoteForm
 
