@@ -190,10 +190,11 @@ display: none;
               
                 <div class="text">
                     {% if f.file_name %}
+                    <p>{% if f.file_description %}"{{f.file_description}}" {% endif %}</p>
                     <p>{% if f.attachment_file_type == 'image' %} An image has been uploaded. {% else %} A document has been uploaded.{% endif %}</p>
-                    <p>"{{f.file_description}}"</p>
                     {% else %}
-                    <p>{{f.comment_text}}</p>
+                    <p>{% if f.comment_text %} "{{f.comment_text}}"{% endif %}</p>
+                    <p>{% if f.attachment_file_type == 'image' %} An image has been uploaded. {% else %} A document has been uploaded.{% endif %}</p>
                     {% endif %}
                     
                     {% if f.previous_task_progress != f.task_progress %}
