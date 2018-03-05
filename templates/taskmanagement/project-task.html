@@ -184,7 +184,7 @@ font-size: 14px;
                 <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
                <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..." required></textarea>
                <div>
-               <i class="fa fa-file"></i>
+               <!-- <i class="fa fa-file"></i> -->
                <input type='file' name ='upload_attach' id='upload-photo'/> 
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
@@ -332,9 +332,10 @@ font-size: 14px;
                      
                      <div class="right-li first-li">
                             
-                        <p>{{c.description}}</p>
+                        
                         
                         <div style="float:left; width:56%;margin-right:20px; margin-bottom:10px">
+                          <p>{{c.description}}</p>
                           <ul>
                            <li style="width:100%">
                               <a href="{{c.image_url}}">
@@ -366,8 +367,9 @@ font-size: 14px;
                         </div>
                      </div>
                      <div class="right-li second-li">
-                     <p>{{c.description}}</p>
+                     
                      <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
+                      <p>{{c.description}}</p>
                         <ul>
                            
                            <li>

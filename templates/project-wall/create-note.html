@@ -84,7 +84,7 @@ ul li {
             {% csrf_token %}
                                 <div class="form-group">
                      <span>Comment</span>
-                 <textarea class="form-control" rows="1" name="comment" placeholder="Comment"></textarea>
+                 <textarea style="height: 80px;" class="form-control" rows="1" name="comment" placeholder="Comment"></textarea>
                         </div>
                             <div class="row">
                                         <div class="form-group">
@@ -95,7 +95,7 @@ ul li {
                                 
                                      <div class="form-group">
                  <span>Description</span>
-                 <textarea class="form-control" rows="4" name="description" placeholder="Description"></textarea>
+                 <textarea style="height: 80px;" class="form-control" rows="4" name="description" placeholder="Description"></textarea>
                  </div>
                               
                  <input type="hidden" name="slug" value="{{slug}}">
@@ -118,7 +118,7 @@ ul li {
                             </div>
                         </div> -->
 
-                        <input class="budget_button" type="submit" value="Submit"/>  
+                        <a href="javascript:parent.jQuery.fancybox.close();"><input  class="budget_button" type="submit" value="Submit"/>  </a>
                         
                         <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
@@ -140,6 +140,14 @@ ul li {
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
+// <script type="text/javascript">
+// $(".iframe").fancybox({
+//     type: 'iframe',
+//     afterClose: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
+//         parent.location.reload(true);
+//     }
+// });
+// </script>
 
 <script type="text/javascript">
     $(document).ready(function(){

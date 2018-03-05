@@ -151,7 +151,8 @@ def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
                 'update_type':'tasks_history','created_by':obj.created_by,'modified_by':get_modified_by_user(obj.modified_by),
                 'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
     if attach_obj:
-        history_data.update({'file_name':string_trim(attach_obj.attachment_file.url.split('/')[-1]) if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
+        attachment_file_type = get_attachment_type(attach_obj.attachment_file.url.split('/')[-1])
+        history_data.update({'file_name':string_trim(attach_obj.attachment_file.url.split('/')[-1]) if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file),'attachment_file_type':attachment_file_type})
     if comment_obj:
         history_data.update({'comment_text':comment_obj.text})
     return history_data
@@ -564,3 +565,22 @@ def string_trim(string):
     else:
         new_string = string
     return new_string
+
+def read_more_text(text):
+    if len(text) > 50:
+        short_text = text[:50]
+        more_text = text[50:]
+    else:
+        short_text = text
+        more_text = ''
+    return short_text,more_text
+
+def get_attachment_type(file_name):
+    image_format = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c ', 'fpx', 'pcd', 'png']
+    docs_format = ['rtf', 'odt', 'docx', 'pot', 'pxt', 'txt', 'odf', 'doc']
+    file_extension = file_name.split('.')[-1]
+    if file_extension in image_format:
+        attachment_file_type = 'image'
+    else:
+        attachment_file_type = 'doc'
+    return attachment_file_type

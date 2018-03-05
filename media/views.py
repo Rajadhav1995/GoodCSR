@@ -10,9 +10,10 @@ from pmu.settings import PMU_URL
 from projectmanagement.models import Project,Boundary
 from media.forms import AttachmentForm,ImageUpload,ImageUploadTimeline
 from projectmanagement.common_method import unique_slug_generator,add_keywords
+from menu_decorators import check_loggedin_access
 
 # this views is to manage media
-
+@check_loggedin_access
 def list_document(request):
     # this function will list documents of project
     # 
