@@ -68,8 +68,8 @@ ul li {
     {% endfor %}
 </ul><br>
 <!-- <div align='center'><a href="javascript:parent.jQuery.fancybox.close();">Close Window</a></div> -->
-{{slug}}
-<div align='center'><a href="/dashboard/updates/?slug={{slug}}">Close Window</a></div>
+
+<div align='center'><a href="javascript:window.parent.location.reload();" id="close_pop">Close Window</a></div>
 {% else %}
         <div class="col-xs-12">
           <div class="box demo_popup">
@@ -132,6 +132,7 @@ ul li {
 <script type="text/javascript" src="/static/js/respond.js"></script>
 <script type="text/javascript" src="/static/js/html5.js"></script>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
 <script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
@@ -150,6 +151,12 @@ ul li {
 //     }
 // });
 // </script>
+
+<script type="text/javascript">
+        $('#close_pop').click(function(){
+  window.parent.jQuery.fn.fancybox.close();
+});
+    </script>
 
 <script type="text/javascript">
     $(document).ready(function(){

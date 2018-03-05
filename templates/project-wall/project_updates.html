@@ -106,7 +106,7 @@ display: none;
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
-      <!-- <a href="/dashboard/add/note/?slug={{slug}}" class="iframe"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a> -->
+      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a>
     </div>
     <!-- <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
@@ -464,8 +464,7 @@ No Updates
 $(document).ready(function() {
     $(".iframe").fancybox({
         type: 'iframe',
-        onCanceal: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
-        alert('aaaa');
+        afterCloses: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
         parent.location.reload(true);
     }
         
