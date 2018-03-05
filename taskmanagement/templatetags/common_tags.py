@@ -145,6 +145,7 @@ def task_updates_list(key,task_progress,start_date,end_date):
     return task_data
 
 def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
+    print obj.created_by.attrs
     history_data = {'task_name':obj.name,'activity_name':obj.activity.name,
                 'supercategory':obj.activity.super_category,'date':obj.modified,
                 'task_progress':obj.task_progress,'previous_task_progress':previous_task_progress,

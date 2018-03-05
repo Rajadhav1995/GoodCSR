@@ -106,7 +106,7 @@ display: none;
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
-      <!-- <a href="/dashboard/add/note/?slug={{slug}}" class="iframe"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a> -->
+      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a>
     </div>
     <!-- <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
@@ -195,8 +195,7 @@ display: none;
                     {% else %}
                     <p>{{f.comment_text}}</p>
                     {% endif %}
-                    {% if f.file_name %}
-                    <p>File: <a href='{{f.file_url}}' target="_blank"><u>{{f.file_name}}</u></a>{% endif %}</p>
+                    
                     {% if f.previous_task_progress != f.task_progress %}
                     <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}%
                     {% endif %}</p>

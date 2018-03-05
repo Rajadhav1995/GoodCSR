@@ -14,6 +14,7 @@ from collections import defaultdict
 from dateutil import parser
 from django.core.cache import cache
 import pytz
+from django.contrib import messages
 from taskmanagement.templatetags import common_tags
 from taskmanagement.templatetags.common_tags import get_modified_by_user,string_trim,read_more_text
 from media.forms import NoteForm
@@ -26,8 +27,6 @@ def get_project_updates(request):
 	key = 'updates_wall'
 	main_data = []
 	utc=pytz.UTC
-	# import datetime
-	# import ipdb; ipdb.set_trace()
 	today = datetime.now() + timedelta(days=1)
 	slug = request.GET.get('slug')
 	projectobj = Project.objects.get_or_none(slug=slug)
@@ -62,6 +61,7 @@ def get_project_updates(request):
 		temp_var = 0
 		for k in budgethistory:
 			new_var = int(k.modified.strftime("%Y%m%d%H%M"))
+
 			if int(new_var) != int(temp_var):
 				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by)}
 				budget_data_list.append(data)
@@ -69,10 +69,8 @@ def get_project_updates(request):
 	result = defaultdict(float)
 	
 	for d in budget_data_list:
-		try:
-			result[d['date']] += float(d['amount'])
-		except:
-			result[d['date']] += float(0)
+		
+		result[d['date']] += float(d['amount']) if d['amount'] else float(0)
 
 	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
 	budgetlist = []
@@ -130,5 +128,7 @@ def create_note(request):
 						description=request.POST.get('description'),
 						attachment_file=request.FILES['attachment'],
 						created_by=created_by)
-		return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
+		messages.success(request, 'Note added successfully!')
+		# return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
+		return HttpResponseRedirect('/dashboard/add/note/')
 	return render(request,'project-wall/create-note.html',locals())
