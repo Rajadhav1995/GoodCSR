@@ -13,6 +13,7 @@ from ast import literal_eval
 from itertools import chain
 from operator import is_not
 from functools import partial
+# from dashboard.project_wall import string_trim
 
 
 #According to Wikipedia the exact definition of a goal is:
@@ -76,7 +77,7 @@ def task_progress_history_details(task_data,attach_obj,i,comment_obj):
         elif comment_obj and (i.get_previous_by_created().task_progress == i.task_progress):
             cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
                 'task_progress':i.task_progress,'attachment':0,
-                'previous_task_progress':i.get_previous_by_created().task_progress ,}
+                'previous_task_progress':i.get_previous_by_created().task_progress}
             task_data.append(cell_one)
         
     elif attach_obj:
@@ -103,7 +104,6 @@ def get_modified_by_user(user_id):
 def task_updates_list(key,task_progress,start_date,end_date):
 # this is to get the task updates 
 # where the combination of updates would be filtered and displayed
-
     task_data = []
     utc=pytz.UTC
     slug = task_progress.activity.project.slug
@@ -139,19 +139,23 @@ def task_updates_list(key,task_progress,start_date,end_date):
             else:
                 # this is for updates wall
 #                if previous_task_progress != i.task_progress:
-                history_data = {'task_name':i.name,'activity_name':i.activity.name,
-                'supercategory':i.activity.super_category,'date':i.modified,
-                'task_progress':i.task_progress,'previous_task_progress':previous_task_progress,
-                'update_type':'tasks_history','created_by':i.created_by,'modified_by':get_modified_by_user(i.modified_by),
-                'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
-                if attach_obj:
-                    history_data.update({'file_name':attach_obj.attachment_file.url.split('/')[-1] if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file)})
-                if comment_obj:
-                    history_data.update({'comment_text':comment_obj.text})
+                history_data = get_task_attachment(i,attach_obj,previous_task_progress,slug,comment_obj)
                 task_data.append(history_data)
         temp_var = new_var
     return task_data
 
+def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
+    history_data = {'task_name':obj.name,'activity_name':obj.activity.name,
+                'supercategory':obj.activity.super_category,'date':obj.modified,
+                'task_progress':obj.task_progress,'previous_task_progress':previous_task_progress,
+                'update_type':'tasks_history','created_by':obj.created_by,'modified_by':get_modified_by_user(obj.modified_by),
+                'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
+    if attach_obj:
+        attachment_file_type = get_attachment_type(attach_obj.attachment_file.url.split('/')[-1])
+        history_data.update({'file_name':string_trim(attach_obj.attachment_file.url.split('/')[-1]) if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file),'attachment_file_type':attachment_file_type})
+    if comment_obj:
+        history_data.update({'comment_text':comment_obj.text})
+    return history_data
 
 @register.assignment_tag
 def task_comments_progress(date,task_id, attach):
@@ -552,3 +556,31 @@ import json
 def taskdict_json(taskdict):
     taskdict = json.loads(taskdict)
     return taskdict
+
+def string_trim(string):
+    # import ipdb; ipdb.set_trace()
+    file_extension = string.split('.')
+    if len(string) > 19:
+        new_string = string[:25] + '...' + file_extension[0][-6:] + '.'+file_extension[-1]
+    else:
+        new_string = string
+    return new_string
+
+def read_more_text(text):
+    if len(text) > 50:
+        short_text = text[:50]
+        more_text = text[50:]
+    else:
+        short_text = text
+        more_text = ''
+    return short_text,more_text
+
+def get_attachment_type(file_name):
+    image_format = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c ', 'fpx', 'pcd', 'png']
+    docs_format = ['rtf', 'odt', 'docx', 'pot', 'pxt', 'txt', 'odf', 'doc']
+    file_extension = file_name.split('.')[-1]
+    if file_extension in image_format:
+        attachment_file_type = 'image'
+    else:
+        attachment_file_type = 'doc'
+    return attachment_file_type
