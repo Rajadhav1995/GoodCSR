@@ -442,9 +442,10 @@ def my_tasks_details(request):
         # import ipdb; ipdb.set_trace()
     elif status == '0':
         over_due = my_tasks_listing(project,user,status)
-        tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
-        tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
-        tasks_remain = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
+        task_list = Task.objects.filter(active=2,assigned_to=user)
+        tasks_today = task_list.filter(start_date = today).order_by('-id')
+        tasks_tomorrow = task_list.filter(start_date = tomorrow).order_by('-id')
+        tasks_remain = task_list.filter(start_date__gte = remain_days).order_by('-id')
         closed_tasks = Task.objects.filter(status=2).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
