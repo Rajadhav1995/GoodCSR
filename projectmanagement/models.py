@@ -319,6 +319,7 @@ class ProjectParameter(BaseContent):
     aggregation_function = models.TextField(choices=AGGREGATION_FUNCTION_CHOICES, default='ADD')
     parent = models.ForeignKey('self', **OPTIONAL)
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
+    history = HistoricalRecords()
     
     def __str__(self):
         return str(self.id)

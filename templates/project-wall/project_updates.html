@@ -17,7 +17,7 @@
 .blog_timeline li { margin-bottom: 80px;position: relative;width: 50%;float: left;clear: left;}
 .blog_timeline {padding: 20px 0;list-style: none;position: relative; float: left;width: 100%}
 .blog_timeline li.timeline-right {float: right;clear: right;margin-bottom: 116px;}
-.blog_timeline .timeline-left {margin-top: 140px;}
+.blog_timeline .timeline-left {margin-top: 130px;}
 .blog_timeline:before {top: 0;bottom: 0;position: absolute;content: " ";width: 3px;background-color: #eee;
     left: 50%;margin-left: -1.5px;border: 2px dashed #232323;}
 .blog_timeline li > .timeline-badge {color: #232323;width: 24px;height: 24px;line-height: 50px;font-size: 1.4em;cursor: pointer;text-align: center;
@@ -74,6 +74,18 @@ margin: 10px 0px;
 #no-overflow .clearfix.header_fixed.right_menu.position_fixed .cont-wrap {
 display: none;
 }
+
+.fancybox-skin{position:relative;top:60px;}
+.fancybox-skin .fancybox-inner{height:520px !important}
+.fancybox-close {
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 1004;
+}
 </style>
 <body>
 
@@ -106,7 +118,7 @@ display: none;
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
-      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a>
+      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a>
     </div>
     <!-- <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
@@ -122,7 +134,6 @@ display: none;
         </div>
     </div> -->
 </div>
-
 {% if final_data %}
 <ul class="blog_timeline">
 {% for f in final_data %}
@@ -309,7 +320,7 @@ display: none;
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}} {{f.modified_by.last_name |slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
@@ -346,9 +357,9 @@ display: none;
                 <div class="text">
                     <p class="short_comment{{forloop.counter}}">{{f.short_comment}}{% if f.more_comment %}...{% endif %}</p>
                     {% if f.more_comment %}
-                    <p class="read_more{{forloop.counter}}"><u>Read more >></u></p>
+                    <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
                         <p class="text_content{{forloop.counter}}">{{f.short_comment}}{{f.more_comment}}</p>
-                        <p class="less_more{{forloop.counter}}"><u>Less >></u></p>
+                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p>
                     {% endif %}
                     <p>Note added</p>
                     
@@ -396,6 +407,85 @@ display: none;
 {% endif %}
 
 
+{% if f.update_type == 'parameter' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-10">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>Uploaded values for #parameter <b>{{f.keyparameter_name}}</b> for {{f.upload_date | date:"M Y"}}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+
+{% if f.update_type == 'parameter_history' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-10">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>Edited #parameter <b>{{f.parameter_name}}</b></span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+
+{% if f.update_type == 'parameter_created' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-10">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>Created a new parameter <b>{{f.parameter_name}}</b></span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
 
 {% endfor %}
 
@@ -462,8 +552,9 @@ No Updates
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $(".iframe").fancybox({
+    $(".iframe1").fancybox({
         type: 'iframe',
+        'showCloseButton' : true,
         afterCloses: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
         parent.location.reload(true);
     }

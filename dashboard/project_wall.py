@@ -4,7 +4,7 @@ from django.shortcuts import render
 from taskmanagement.models import Task,Activity
 from budgetmanagement.models import Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit
 from django.http import HttpResponse,HttpResponseRedirect
-from projectmanagement.models import Project,UserProfile
+from projectmanagement.models import Project,UserProfile,ProjectParameter,ProjectParameterValue
 from django.contrib.contenttypes.models import ContentType
 from media.models import Attachment,Comment, Note
 from pmu.settings import PMU_URL
@@ -94,10 +94,33 @@ def get_project_updates(request):
 		for k in history[:2]:
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file','modified_by':get_modified_by_user(k.modified_by)})
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
-
+	parameter_data = []
+	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None)
+	parameter_created = ProjectParameter.objects.filter(project=projectobj,parent__isnull=True)
+	parameter_created_data = []
+	for k in parameter_created:
+		created_data = {'modified_by':k.modified_by,'parameter_name':k.name,
+						'date':k.created,'update_type':'parameter_created'}
+		parameter_created_data.append(created_data)
+	# import ipdb; ipdb.set_trace()
+	for p in parameter_value:
+		data = {'date':p.created,'upload_date':p.start_date,
+				'modified_by':get_modified_by_user(p.modified_by),
+				'update_type':'parameter','keyparameter_name':p.keyparameter.name}
+		parameter_data.append(data)
+	parameter_history_data = []
+	project_parameter = ProjectParameter.objects.filter(project=projectobj,parent__isnull=True)
+	
+	for parameter in project_parameter:
+		parameter_history = parameter.history.all()[0::2]
+		for history in parameter_history:
+			data = {'date':history.modified,'id':parameter.id,
+					'modified_by':get_modified_by_user(history.modified_by),
+					'parameter_name':history.name,'update_type':'parameter_history'}
+			parameter_history_data.append(data)
 	note_list = get_project_note(projectobj,request)
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
-	final_data = main_data + file_data + budgetlist + note_list
+	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
@@ -112,7 +135,7 @@ def get_project_note(projectobj,request):
 				'attachment_name':string_trim(n.attachment_file.url.split('/')[-1]) if n.attachment_file else '',
 				'attachment_link':PMU_URL + str(n.attachment_file.url) if n.attachment_file else '',
 				'update_type':'note','created_by':n.created_by,
-				'more_description':more_description_text,'more_comment':more_comment_text}
+				'description':n.description,'more_comment':more_comment_text}
 		note_list.append(data)
 	return note_list
 
