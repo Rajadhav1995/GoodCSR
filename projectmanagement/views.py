@@ -200,6 +200,7 @@ def budget_tranche(request):
             return HttpResponseRedirect('/project/tranche/list/?slug=%s' %slug)
     return render(request,'budget/tranche.html',locals())
 
+@check_loggedin_access
 def tranche_list(request):
     '''
     This function is for listing of project tranches                                

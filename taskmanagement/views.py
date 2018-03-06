@@ -28,7 +28,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 # Create your views here.
 from projectmanagement.common_method import add_modified_by_user
+from menu_decorators import check_loggedin_access
 
+@check_loggedin_access
 def listing(request):
     # this function is for listing 
     # all tasks, milestones and activities
@@ -278,7 +280,8 @@ def my_tasks_listing(project,user,status):
     task_lists=[]
     activities = Activity.objects.filter(project = project)
     if status == '0':
-        tasks_list = Task.objects.filter(assigned_to=user,start_date__lt = today).exclude(status=2).order_by('-start_date')
+        task_list = Task.objects.filter(assigned_to=user)
+        tasks_list =task_list.filter(start_date__lt = today).exclude(status=2).order_by('-start_date')
     else:
         tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).exclude(status=2).order_by('-start_date')
     return tasks_list
@@ -411,7 +414,7 @@ def corp_total_budget_disbursed(obj_list):
     total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
-
+@check_loggedin_access
 def my_tasks_details(request):
     #  to get my task details
     # 
@@ -441,10 +444,11 @@ def my_tasks_details(request):
         # import ipdb; ipdb.set_trace()
     elif status == '0':
         over_due = my_tasks_listing(project,user,status)
-        tasks_today = Task.objects.filter(active=2,start_date = today,assigned_to=user).order_by('-id')
-        tasks_tomorrow = Task.objects.filter(active=2,start_date = tomorrow,assigned_to=user).order_by('-id')
-        tasks_remain = Task.objects.filter(active=2,start_date__gte = remain_days,assigned_to=user).order_by('-id')
-        closed_tasks = Task.objects.filter(status=2).order_by('-id')
+        task_list = Task.objects.filter(active=2,assigned_to=user)
+        tasks_today = task_list.filter(start_date = today).order_by('-id')
+        tasks_tomorrow = task_list.filter(start_date = tomorrow).order_by('-id')
+        tasks_remain = task_list.filter(start_date__gte = remain_days).order_by('-id')
+        closed_tasks = task_list.filter(status=2).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]

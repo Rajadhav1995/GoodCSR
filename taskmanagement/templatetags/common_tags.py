@@ -13,6 +13,8 @@ from ast import literal_eval
 from itertools import chain
 from operator import is_not
 from functools import partial
+# from dashboard.project_wall import string_trim
+
 
 #According to Wikipedia the exact definition of a goal is:
 # A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
@@ -57,74 +59,117 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
 
-@register.assignment_tag
-def task_comments_progress(date,task_id, attach):
+def task_progress_history_details(task_data,attach_obj,i,comment_obj):
+    utc=pytz.UTC
+    if not attach_obj:
+        if comment_obj and (i.get_previous_by_created().task_progress != i.task_progress):
+        # if i.get_previous_by_created().task_progress != i.task_progress:
+            cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
+                'task_progress':i.task_progress,'attachment':0,
+                'previous_task_progress':i.get_previous_by_created().task_progress,}
+            task_data.append(cell_one)
+        elif (i.get_previous_by_created().task_progress != i.task_progress):
+            
+            cell_one = {'name':'','comment_text':'','date':i.modified,
+                'task_progress':i.task_progress,'attachment':0,
+                'previous_task_progress':i.get_previous_by_created().task_progress,}
+            task_data.append(cell_one)
+        elif comment_obj and (i.get_previous_by_created().task_progress == i.task_progress):
+            cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
+                'task_progress':i.task_progress,'attachment':0,
+                'previous_task_progress':i.get_previous_by_created().task_progress}
+            task_data.append(cell_one)
+        
+    elif attach_obj:
+        attachment_data = {'name':attach_obj.created_by.attrs,
+            'description':attach_obj.description,
+            'date':attach_obj.created,'attachment':1,
+            'attachment_type':attach_obj.attachment_type,
+            'document_type':attach_obj.document_type,
+            'image_url':PMU_URL + attach_obj.attachment_file.url,
+            'task_progress':i.task_progress,
+            'previous_task_progress':i.get_previous_by_created().task_progress,
+            'file_name':attach_obj.name}
+        task_data.append(attachment_data)
+    return task_data
+
+def get_modified_by_user(user_id):
+    if user_id:
+        user_object = UserProfile.objects.get_or_none(user_reference_id=int(user_id))
+    else:
+        user_object = ''
+    if user_object:
+        return user_object.attrs
+
+def task_updates_list(key,task_progress,start_date,end_date):
+# this is to get the task updates 
+# where the combination of updates would be filtered and displayed
     task_data = []
-    
-    task_progress = Task.objects.get(id=task_id)
-    task_progress_history = task_progress.history.filter(task_progress__isnull=False,modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time()))).order_by('-id')
-   
+    utc=pytz.UTC
+    slug = task_progress.activity.project.slug
+    if key == 'project_tasks':
+        task_progress_history = task_progress.history.filter(task_progress__isnull=False,modified__range = [start_date,end_date]).order_by('-id')
+    else:
+        task_progress_history = task_progress.history.filter(created__range=[start_date,end_date]).order_by('-id')
     temp_var = 0
-    temp_var2 = 0
     for i in task_progress_history:
         new_var = int(i.modified.strftime("%Y%m%d%H%M%S"))
         
-        if (int(new_var)-int(temp_var)) < 10:
-            pass
-        else:
+        if (int(new_var)-int(temp_var)) > 10 and i.task_progress:
             
-            if i.task_progress:# and (i.get_previous_by_created().task_progress != i.task_progress):
-                
-                previous_task_progress = i.get_previous_by_created().task_progress
-                task_time = i.modified
-                next_tick = task_time.second +1
-                
-                task_prev_tick = task_time.second -1
+            previous_task_progress = i.get_previous_by_created().task_progress
+            task_time = i.modified
+            next_tick = task_time.second +1
+            
+            task_prev_tick = task_time.second -1
 
-                try:
-                    start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
-                except:
-                    start_time = task_time.replace(microsecond=499999,second=59)
-                end_time = task_time.replace(microsecond=999999)
+            try:
+                start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
+            except:
+                start_time = task_time.replace(microsecond=499999,second=59)
+            end_time = task_time.replace(microsecond=999999)
+            
+            attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time),content_type=ContentType.objects.get(model=('task')),object_id=task_progress.id)
+            comment_obj = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_progress.id,\
+                        created__range=(start_time,end_time))     
+            if key == 'project_tasks': 
+                # this for project tasks updates section 
+                task_data = task_progress_history_details(task_data,attach_obj,i,comment_obj)
                 
-                attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time),content_type=ContentType.objects.get(model=('task')),object_id=task_id)
-                comment_obj = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id,\
-                            created__range=(start_time,end_time))            
-                if not attach_obj:
-                    if comment_obj and (i.get_previous_by_created().task_progress != i.task_progress):
-                    # if i.get_previous_by_created().task_progress != i.task_progress:
-                        cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
-                            'task_progress':i.task_progress,'attachment':0,
-                            'previous_task_progress':i.get_previous_by_created().task_progress,}
-                        task_data.append(cell_one)
-                    elif (i.get_previous_by_created().task_progress != i.task_progress):
-                        
-                        cell_one = {'name':'','comment_text':'','date':i.modified,
-                            'task_progress':i.task_progress,'attachment':0,
-                            'previous_task_progress':i.get_previous_by_created().task_progress,}
-                        task_data.append(cell_one)
-                    elif comment_obj and (i.get_previous_by_created().task_progress == i.task_progress):
-                        cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
-                            'task_progress':i.task_progress,'attachment':0,
-                            'previous_task_progress':i.get_previous_by_created().task_progress ,}
-                        task_data.append(cell_one)
-                    
-                elif attach_obj:
+            else:
+                # this is for updates wall
+#                if previous_task_progress != i.task_progress:
+                history_data = get_task_attachment(i,attach_obj,previous_task_progress,slug,comment_obj)
+                task_data.append(history_data)
+        temp_var = new_var
+    return task_data
 
-                    attachment_data = {'name':attach_obj.created_by.attrs,
-                        'description':attach_obj.description,
-                        'date':attach_obj.created,'attachment':1,
-                        'attachment_type':attach_obj.attachment_type,
-                        'document_type':attach_obj.document_type,
-                        'image_url':PMU_URL + attach_obj.attachment_file.url,
-                        'task_progress':i.task_progress,
-                        'previous_task_progress':i.get_previous_by_created().task_progress,
-                        'file_name':attach_obj.attachment_file.name.split('/')[-1]}
-                    task_data.append(attachment_data)
-            temp_var = new_var
+def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
+    history_data = {'task_name':obj.name,'activity_name':obj.activity.name,
+                'supercategory':obj.activity.super_category,'date':obj.modified,
+                'task_progress':obj.task_progress,'previous_task_progress':previous_task_progress,
+                'update_type':'tasks_history','created_by':obj.created_by,'modified_by':get_modified_by_user(obj.modified_by),
+                'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
+    if attach_obj:
+        attachment_file_type = get_attachment_type(attach_obj.attachment_file.url.split('/')[-1])
+        history_data.update({'file_name':string_trim(attach_obj.attachment_file.url.split('/')[-1]) if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file),'attachment_file_type':attachment_file_type})
+    if comment_obj:
+        history_data.update({'comment_text':comment_obj.text})
+    return history_data
+
+@register.assignment_tag
+def task_comments_progress(date,task_id, attach):
+    task_data = []
+    key = 'project_tasks'
+    start_date = datetime.combine(date, datetime.min.time())
+    end_date = datetime.combine(date, datetime.max.time())
+    task_progress = Task.objects.get(id=task_id)
+    # to make common function for project tasks updates and updates wall (tasks history objects)
+    # based on the key ,task , start date and end date we are getting the details ,
+    # particular task
+    task_data = task_updates_list(key,task_progress,start_date,end_date)
     # task_data.append(attachment_json_for_comments(task_id,attach))
     task_data = filter(partial(is_not, None), task_data)
-    
     task_data.sort(key=lambda item:item['date'], reverse=True)
     return task_data
 
@@ -511,3 +556,31 @@ import json
 def taskdict_json(taskdict):
     taskdict = json.loads(taskdict)
     return taskdict
+
+def string_trim(string):
+    # import ipdb; ipdb.set_trace()
+    file_extension = string.split('.')
+    if len(string) > 19:
+        new_string = string[:25] + '...' + file_extension[0][-6:] + '.'+file_extension[-1]
+    else:
+        new_string = string
+    return new_string
+
+def read_more_text(text):
+    if len(text) > 50:
+        short_text = text[:50]
+        more_text = text[50:]
+    else:
+        short_text = text
+        more_text = ''
+    return short_text,more_text
+
+def get_attachment_type(file_name):
+    image_format = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c ', 'fpx', 'pcd', 'png']
+    docs_format = ['rtf', 'odt', 'docx', 'pot', 'pxt', 'txt', 'odf', 'doc']
+    file_extension = file_name.split('.')[-1]
+    if file_extension in image_format:
+        attachment_file_type = 'image'
+    else:
+        attachment_file_type = 'doc'
+    return attachment_file_type

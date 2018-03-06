@@ -1,0 +1,260 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="icon" type="image/png" href="/static/img/favicon.ico">
+<title>Samhita GoodCSR</title>
+
+<!--CSS Srat-->
+
+<link rel="stylesheet" href="/static/css/AdminLTE.min.css" />
+<link rel="stylesheet" href="/static/css/bootstrap.css" />
+<link rel="stylesheet" href="/static/css/style.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/easy-responsive-tabs.css" />
+<link rel="stylesheet" href="/static/css/popup.css">
+<link href="/static/css/materialize.min.css" rel="stylesheet" >
+<link rel="stylesheet" href="/static/css/style-new.css" />
+
+<style>
+ul li {
+    list-style-type: none;
+    line-height: 26px;
+    color: white;
+  }
+
+.alert-success {
+    /*background-color: #dff0d8;*/
+    border-color: #d0e9c6;
+    color: #a73f5c;
+    height: 110;
+}
+.msg {
+    display: none;
+}
+.error {
+    color: red;
+}
+.success {
+    color: white;
+    font-family: 'work_sansregular';
+}
+
+.h1, h1 {
+    font-size: 2.7rem;
+}
+.bg-green, .callout.callout-success, .alert-success, .label-success, .modal-success .modal-body {
+    /*background-color: #54a73f !important;*/
+}
+</style>
+
+
+<!--Common Script-->
+<!-- IE less than 9 -->
+<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
+
+<!--  Responsive CSS  -->
+<link rel="stylesheet" href="/static/css/media.css" /><!-- /*<style>
+.demo_div label.demo_label { width: 50%; float: left;}
+.demo_div input { width: 50%; height: 34px; padding-left:10px;}
+.demo_popup .border_line{font-weight: normal;}
+</style>*/ -->
+<div class="clear"></div>
+<section class="content-part">
+    <div class='container' >
+    <div class="white-box">
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div class="alert alert-success">
+    <h3><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></h3><br></div>
+    {% endfor %}
+</ul><br>
+<!-- <div align='center'><a href="javascript:parent.jQuery.fancybox.close();">Close Window</a></div> -->
+
+<div align='center'><a href="javascript:window.parent.location.reload();" id="close_pop">Close Window</a></div>
+{% else %}
+        <div class="col-xs-12">
+          <div class="box demo_popup">
+            <div class="box-header">
+              <h3 class="border_line">Create Note</h3>
+
+              <div align="right">
+             <!-- <a class="btn btn-success" href="/project/list/" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>&#160;<input class="btn btn-primary" type="submit" form="prog_edit" value="Save" /> -->
+         </div><br>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <form autocomplete="off" id="feedback1" name="feedback" action="/dashboard/add/note/" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+                                <div class="form-group">
+                     <span>Comment</span>
+                 <textarea style="height: 80px;" class="form-control" rows="1" id="comment" name="comment" placeholder="Comment"></textarea>
+                        </div>
+                            <div class="row">
+                                        <div class="form-group">
+                 <span>Attachment</span>
+                <input type="file" id="attachment" name="attachment">
+                 </div>
+                                    </div>
+                                
+                                     <div class="form-group">
+                 <span>Description</span>
+                 <textarea style="height: 80px;" class="form-control" rows="4" id="description" name="description" placeholder="Description"></textarea>
+                 </div>
+                              
+                 <input type="hidden" name="slug" value="{{slug}}">
+                                
+                        
+                               
+
+
+
+                                <!-- <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div> -->
+                        
+                        <!-- <div class="row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" >
+                                Keywords:
+                            </label>
+                            <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                                <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
+                                <p style="color:grey ;">
+                                    (Please press Enter or TAB or ',' after typing each keyword)
+                            </div>
+                        </div> -->
+
+                        <a href="javascript:parent.jQuery.fancybox.close();"><input  class="budget_button" type="submit" value="Submit"/>  </a>
+                        
+                        <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
+
+                    </form>
+  </div>
+  </div>
+  </div>
+  </div>
+<script type="text/javascript" src="/static/js/respond.js"></script>
+<script type="text/javascript" src="/static/js/html5.js"></script>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
+<script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+// <script type="text/javascript">
+// $(".iframe").fancybox({
+//     type: 'iframe',
+//     afterClose: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
+//         parent.location.reload(true);
+//     }
+// });
+// </script>
+
+<script type="text/javascript">
+        $('#close_pop').click(function(){
+  window.parent.jQuery.fn.fancybox.close();
+});
+    </script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#feedback1").validate({
+            framework: 'bootstrap',
+            icon: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+            rules :
+            {
+                comment : {required:true, maxlength: 300},
+                attachment : {required:true},
+                description : {required:true},
+                mobile_number : {required:true, minlength:9,maxlength:12,},
+                message : {required:true},
+                recaptcha_response_field : {required:true},
+                
+            },
+            messages:
+            {
+                comment:{required:"<font color=#fc282f>Please enter comment"},
+                attachment : {required:"<font color=#fc282f>Please add an attachment </font>"},
+                description:{required:"<font color=#fc282f>Please enter description</font>"},
+                mobile_number : {required : "<font color=#fc282f>Please enter Mobile Number</font>"},
+                message : {required : "<font color=#fc282f>Please enter message</font>"},
+                recaptcha_response_field : {required : "<font color=#fc282f>Please enter captcha</font>"},
+
+
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('error')
+            },
+
+
+
+        });
+});
+</script>
+<script type="text/javascript">
+ $(document).ready(function () {
+ $("#id_email").blur(function () {
+ var email = $(this).val();
+ var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+if (re.test(email)) {
+    document.getElementById('email_error1').innerHTML=""
+} else {
+    document.getElementById('email_error1').innerHTML="Please enter valid email id"
+}
+ if (email == '') {
+ $("#availability").html("");
+ }else{
+ $.ajax({
+ url: "/email-valid/?uname="+email
+ }).done(function( data ) {
+    // if (data.is_taken== true) {
+    //     document.getElementById('email_error').innerHTML="Email id already present"
+    // } else{
+    //     document.getElementById('email_error').innerHTML=''
+    // };
+    
+ //$("#availability").html(data);
+ }); 
+ } 
+ });
+});
+</script>
+<script type="text/javascript">
+
+function email_valid() {
+    var email_valid = document.getElementById('email_error').innerHTML;
+    var email_valid1 = document.getElementById('email_error1').innerHTML;
+    var response = document.getElementById('recaptcha_response_field').value
+
+    if (email_valid == '' && email_valid1 == '') {
+        return true;
+    } else {
+        alert("Please enter valid email id");
+        return false;
+    };
+    if (response == '') {
+        alert('Please Enter captcha');
+    };
+}
+</script>
+<script type="text/javascript">
+function capcha_filled () {
+    allowSubmit = true;
+}
+function capcha_expired () {
+    allowSubmit = false;
+}
+
+</script>
+
+{% endif %}
+  
