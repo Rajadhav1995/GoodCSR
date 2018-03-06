@@ -464,8 +464,7 @@ No Updates
 $(document).ready(function() {
     $(".iframe").fancybox({
         type: 'iframe',
-        onCanceal: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
-        alert('aaaa');
+        afterCloses: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
         parent.location.reload(true);
     }
         
