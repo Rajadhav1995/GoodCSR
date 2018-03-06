@@ -271,14 +271,16 @@ $(document).ready(function(){
   });
   });
 </script>
-<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
-  <script src="/static/js/jsgantt.js" type="text/javascript"></script>
   
 <!-- script for gantt chart starts here-->
 
 <script>
-    var jsonData = {{taskdict|safe}};
+    jsonData = {{taskdict|safe}};
     console.log(jsonData);
+</script>
+<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/jsgantt.js" type="text/javascript"></script>
+<script>
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -873,9 +875,10 @@ $(document).ready(function(){
     var week = d3.timeFormat("%Y-%U");
 
     var actnest = d3.nest().key(function (d) {
-      if(d.actual_end_date!=null && new Date(d.actual_end_date).getTime() <= new Date().getTime()){
+      if(d.actual_end_date!=null){
         console.log("Check ac",new Date(d.actual_end_date).getTime())
-        return week(new Date(d.actual_end_date));
+        if(new Date(d.actual_end_date).getTime() >= new Date().getTime()) {return week(new Date()-604800000);}
+        else if(new Date(d.actual_end_date).getTime() < new Date().getTime()) {return week(new Date(d.actual_end_date));}
       }else{
         return null;
       }
@@ -961,21 +964,21 @@ $(document).ready(function(){
       console.log("SORT",a,b)
       return new Date(a.values[0].actual_end_date) - new Date(b.values[0].actual_end_date);
     });
-    console.log("Check actual",actnest,pvaSorted,actnest2);
     $.each(actnest,function(i,v){
       actnest2[i].key = this.key;
+    console.log("Check actual",actnest2[i].value);
       $.each(this.values,function(){
         $.each(actnest2[i].value, function(m,n){
           if(actnest2[i+1]!=undefined) {
           var c = actnest2[i+1].value[m];
           console.log("keey",m,i+1,c);
-          c.task_progress = this.task_progress;
+          if(this.task_progress >= c.task_progress) c.task_progress = this.task_progress;
           }
         })
       var b = actnest2[i].value.filter( n => n.id == this.id );
       console.log("keey2",b,this,actnest2);
-      if(this.task_progress != null && b.length>0) b[0].task_progress = this.task_progress;
-      console.log("keey23",this);
+      if(this.task_progress != null && b.length>0 && b[0].task_progress<=this.task_progress) b[0].task_progress = this.task_progress;
+      console.log("keey3",this);
       });
     });
 
