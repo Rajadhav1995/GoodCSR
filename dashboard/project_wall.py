@@ -99,10 +99,11 @@ def get_project_updates(request):
 	parameter_created = ProjectParameter.objects.filter(project=projectobj,parent__isnull=True)
 	parameter_created_data = []
 	for k in parameter_created:
-		created_data = {'modified_by':k.modified_by,'parameter_name':k.name,
+		# import ipdb; ipdb.set_trace()
+		created_data = {'modified_by':get_modified_by_user(k.modified_by),'parameter_name':k.name,
 						'date':k.created,'update_type':'parameter_created'}
 		parameter_created_data.append(created_data)
-	# import ipdb; ipdb.set_trace()
+	
 	for p in parameter_value:
 		data = {'date':p.created,'upload_date':p.start_date,
 				'modified_by':get_modified_by_user(p.modified_by),
