@@ -92,6 +92,7 @@ display: none;
 .timeline-right .two_letters:hover .hover_name {display: block; position: absolute;left: 14px;top: 35px;font-size: 14px; z-index: 1000;}
 .timeline-left .hover_name{display: none}
 .timeline-left .two_letters:hover .hover_name {display: block; position: absolute;right: 14px;top: 35px;font-size: 14px; z-index: 1000;}
+#tagcloud .active{color:#232323 !important; background:#fff !important; }
 
 </style>
 <body>
@@ -106,13 +107,13 @@ display: none;
  <nav id="nav" style="background: none;right: 0px;" class="nav-primary">
            <div class="cont-wrap" >
            <div id="tagcloud" >
-        <a href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=task" rel="3">Task</a>
-        <a href="#" rel="2">Image</a>
-        <a href="#" rel="3">Budget</a>
-        <a href="#" rel="1">Notes</a>
-        <a href="#" rel="2">Tranches</a>
-        <a href="#" rel="1">TimelineProgress</a>
-        <a href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
+        <a {% if filter_key == 'task' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=task" rel="3">Task</a>
+        <a {% if filter_key == 'file' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=file" rel="2">Image</a>
+        <a {% if filter_key == 'budget' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=budget" rel="3">Budget</a>
+        <a {% if filter_key == 'note' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=note" rel="1">Notes</a>
+        <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="2">Tranches</a>
+        <a href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=file" rel="1">TimelineProgress</a>
+        <a {% if filter_key == None %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
         <!-- <a href="#" rel="1">Report</a> -->
         
         </div>

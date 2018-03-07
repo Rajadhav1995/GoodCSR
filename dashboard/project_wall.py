@@ -34,56 +34,50 @@ def get_project_updates(request):
 	task_list = Task.objects.filter(activity__project=projectobj,active=2).order_by('-id')
 	plain_task = []
 	history_task_data = []
-	for t in task_list:
-		data = {'task_name':t.name,'activity_name':t.activity.name,
-				'supercategory':t.activity.super_category,'date':t.created,
-				'created_by':t.created_by,'update_type':'tasks',
-				'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
-		plain_task.append(data)
-		# added by priya where written a common function to get the task updates history
-		history_data = common_tags.task_updates_list(key,t,start_date,today)
-		for i in history_data:
-		    history_task_data.append(i)
+	if request.GET.get('filter') == 'task' or request.GET.get('filter') == None:
+		for t in task_list:
+			data = {'task_name':t.name,'activity_name':t.activity.name,
+					'supercategory':t.activity.super_category,'date':t.created,
+					'created_by':t.created_by,'update_type':'tasks',
+					'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
+			plain_task.append(data)
+			# added by priya where written a common function to get the task updates history
+			history_data = common_tags.task_updates_list(key,t,start_date,today)
+			for i in history_data:
+			    history_task_data.append(i)
 	main_data = history_task_data + plain_task
 
-	budget_data = []
+	budget_final_list = []
+	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
+		budget_final_list = get_budget_updates(projectobj)
+	file_data_final = []
+	if request.GET.get('filter') == 'file' or request.GET.get('filter') == None:
+		file_data_final = get_file_updates(projectobj,start_date,today)
 	
-	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
-	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2).exclude(planned_unit_cost="")
-	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
+	final_parameter_data = []
+	# import ipdb; ipdb.set_trace()
+	if request.GET.get('filter') == 'parameter' or request.GET.get('filter') == None:
+		final_parameter_data = get_parameter_updates(projectobj)
+	note_list = []
+	if request.GET.get('filter') == 'note' or request.GET.get('filter') == None:
+		note_list = get_project_note(projectobj,request)
+	tranche_list = []
+	if request.GET.get('filter') == 'tranche' or request.GET.get('filter') == None:
+		tranche_list = get_trance_updates(projectobj,slug)
 
+	budget_final_list.sort(key=lambda item:item['date'], reverse=True)
+	filter_key = request.GET.get('filter')
+	filter_dict = {'task':main_data,'note':note_list}
 
-	line_total = sum(map(float,line_item_amount_list))
+	final_data = main_data + file_data_final + budget_final_list + note_list + final_parameter_data + tranche_list
+	if filter_key == 'task':
+		final_data = main_data
+	final_data.sort(key=lambda item:item['date'], reverse=True)
+	key = 'updates'
+	url = PMU_URL
+	return render(request,'project-wall/project_updates.html',locals())
 
-	budget_data_list = []
-	for q in budget_period:
-		budgethistory = q.history.all()
-		temp_var = 0
-		for k in budgethistory:
-			new_var = int(k.modified.strftime("%Y%m%d%H%M"))
-
-			if int(new_var) != int(temp_var):
-				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by)}
-				budget_data_list.append(data)
-			temp_var = new_var
-	result = defaultdict(float)
-	
-	for d in budget_data_list:
-		
-		result[d['date']] += float(d['amount']) if d['amount'] else float(0)
-
-	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
-	budgetlist = []
-	utc=pytz.UTC
-	from pytz import timezone
-	for c,d in zip(budget_final_dict,budget_data_list):
-		
-		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
-		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
-
-		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
-		budgetlist.append(data)
-	
+def get_file_updates(projectobj,start_date,today):
 	file_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,today],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
@@ -94,6 +88,9 @@ def get_project_updates(request):
 		for k in history[:2]:
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file','modified_by':get_modified_by_user(k.modified_by)})
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
+	return file_data
+
+def get_parameter_updates(projectobj):
 	parameter_data = []
 	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None)
 	parameter_created_data = []
@@ -120,19 +117,8 @@ def get_project_updates(request):
 					'modified_by':get_modified_by_user(history.modified_by),
 					'parameter_name':history.name,'update_type':'parameter_history'}
 				parameter_history_data.append(data)
-	note_list = get_project_note(projectobj,request)
-	tranche_list = get_trance_updates(projectobj,slug)
-	budgetlist.sort(key=lambda item:item['date'], reverse=True)
-	filter_key = request.GET.get('filter')
-	filter_dict = {'task':main_data,'note':note_list}
-
-	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data + tranche_list
-	if filter_key == 'task':
-		final_data = main_data
-	final_data.sort(key=lambda item:item['date'], reverse=True)
-	key = 'updates'
-	url = PMU_URL
-	return render(request,'project-wall/project_updates.html',locals())
+	final_parameter_data = parameter_history_data + parameter_data + parameter_created_data
+	return final_parameter_data
 
 def get_project_note(projectobj,request):
 	note_obj = Note.objects.filter(project=projectobj)
@@ -166,6 +152,45 @@ def get_trance_updates(projectobj,slug):
 	tranche_list_final = tranche_history_data + tranche_list
 	tranche_list_final.sort(key=lambda item:item['date'], reverse=True)
 	return tranche_list_final
+
+def get_budget_updates(projectobj):
+	budgetlist = []
+	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
+	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2).exclude(planned_unit_cost="")
+	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
+
+
+	line_total = sum(map(float,line_item_amount_list))
+
+	budget_data_list = []
+	for q in budget_period:
+		budgethistory = q.history.all()
+		temp_var = 0
+		for k in budgethistory:
+			new_var = int(k.modified.strftime("%Y%m%d%H%M"))
+
+			if int(new_var) != int(temp_var):
+				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by)}
+				budget_data_list.append(data)
+			temp_var = new_var
+	result = defaultdict(float)
+	
+	for d in budget_data_list:
+		
+		result[d['date']] += float(d['amount']) if d['amount'] else float(0)
+
+	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
+	
+	utc=pytz.UTC
+	from pytz import timezone
+	for c,d in zip(budget_final_dict,budget_data_list):
+		
+		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
+		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
+
+		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
+		budgetlist.append(data)
+	return budgetlist
 
 def create_note(request):
 	created_by = UserProfile.objects.get_or_none(id=request.session.get('user_id'))
