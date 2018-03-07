@@ -96,14 +96,7 @@ def get_project_updates(request):
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
 	parameter_data = []
 	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None)
-	parameter_created = ProjectParameter.objects.filter(project=projectobj,parent__isnull=True)
 	parameter_created_data = []
-	for k in parameter_created:
-		# import ipdb; ipdb.set_trace()
-		created_data = {'modified_by':get_modified_by_user(k.modified_by),'parameter_name':k.name,
-						'date':k.created,'update_type':'parameter_created'}
-		parameter_created_data.append(created_data)
-	
 	for p in parameter_value:
 		data = {'date':p.created,'upload_date':p.start_date,
 				'modified_by':get_modified_by_user(p.modified_by),
@@ -113,12 +106,20 @@ def get_project_updates(request):
 	project_parameter = ProjectParameter.objects.filter(project=projectobj,parent__isnull=True)
 	
 	for parameter in project_parameter:
+		
+		created_data = {'modified_by':get_modified_by_user(parameter.modified_by),'parameter_name':parameter.name,
+						'date':parameter.created,'update_type':'parameter_created'}
+		parameter_created_data.append(created_data)
+		parameter_time = int(parameter.created.strftime("%Y%m%d%H%M%S"))
 		parameter_history = parameter.history.all()[0::2]
+
 		for history in parameter_history:
-			data = {'date':history.modified,'id':parameter.id,
+			history_time = int(history.modified.strftime("%Y%m%d%H%M%S"))
+			if int(history_time) != int(parameter_time):
+				data = {'date':history.modified,'id':parameter.id,
 					'modified_by':get_modified_by_user(history.modified_by),
 					'parameter_name':history.name,'update_type':'parameter_history'}
-			parameter_history_data.append(data)
+				parameter_history_data.append(data)
 	note_list = get_project_note(projectobj,request)
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
 	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data
