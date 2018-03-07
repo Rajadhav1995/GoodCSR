@@ -121,9 +121,9 @@ def get_project_updates(request):
 					'parameter_name':history.name,'update_type':'parameter_history'}
 				parameter_history_data.append(data)
 	note_list = get_project_note(projectobj,request)
-	tranche_list,tranche_history_data = get_trance_updates(projectobj,slug)
+	tranche_list = get_trance_updates(projectobj,slug)
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
-	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data + tranche_list + tranche_history_data
+	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data + tranche_list
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
@@ -157,7 +157,9 @@ def get_trance_updates(projectobj,slug):
 				'modified_by':get_modified_by_user(th.modified_by),'tranche_name':th.name,
 				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 			tranche_history_data.append(history_data)
-	return tranche_list,tranche_history_data
+	tranche_list_final = tranche_history_data + tranche_list
+	tranche_list_final.sort(key=lambda item:item['date'], reverse=True)
+	return tranche_list_final
 
 def create_note(request):
 	created_by = UserProfile.objects.get_or_none(id=request.session.get('user_id'))
