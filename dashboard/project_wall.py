@@ -123,9 +123,15 @@ def get_project_updates(request):
 	note_list = get_project_note(projectobj,request)
 	tranche_list = get_trance_updates(projectobj,slug)
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
+	filter_key = request.GET.get('filter')
+	filter_dict = {'task':main_data,'note':note_list}
+
 	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data + tranche_list
+	if filter_key == 'task':
+		final_data = main_data
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
+	url = PMU_URL
 	return render(request,'project-wall/project_updates.html',locals())
 
 def get_project_note(projectobj,request):
