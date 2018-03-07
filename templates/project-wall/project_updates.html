@@ -25,8 +25,9 @@
 .blog_timeline li > .timeline-badge{ }
 .timeline-right .timeline-badge{ text-align: left !important;left: -9px !important;right: -13px !important;}
 .timeline-left .timeline-badge{ text-align: right !important;right: -15px !important;}
-.blog_timeline .timeline-left .timeline-panel{width: 85%;float: left}
-.timeline-right .timeline-panel{width: 85%;float: right !important}
+.blog_timeline .timeline-left .timeline-panel{    width: 79%; float: left;box-shadow: 0px 0px 3px; padding: 20px; border-radius: 8px; margin-left: 20px;}
+.timeline-right .timeline-panel{ width: 79%; float: right; box-shadow: 0px 0px 3px; padding: 20px; border-radius: 8px; margin-right: 20px;}
+
 .timeline-right .date{ position: absolute;float: left; left: -70px; font-size: 14px; color: #3b9e84; text-align: center;top:7px;font-weight: bold}
 .timeline-left .date{ position: absolute;float: right !important; right: -65px; font-size: 14px; font-weight: bold; color: #3b9e84; text-align: center;top:7px;}
 .timeline-right .two_letters p{width: 35px;height: 35px;border-radius: 50px;border: 2px solid #3b9e84; text-align: center;
@@ -86,6 +87,11 @@ display: none;
     cursor: pointer;
     z-index: 1004;
 }
+
+.timeline-right .hover_name{display: none}
+.timeline-right .two_letters:hover .hover_name {display: block; position: absolute;left: 14px;top: 35px;font-size: 14px; z-index: 1000;}
+.timeline-left .hover_name{display: none}
+.timeline-left .two_letters:hover .hover_name {display: block; position: absolute;right: 14px;top: 35px;font-size: 14px; z-index: 1000;}
 </style>
 <body>
 
@@ -134,6 +140,7 @@ display: none;
         </div>
     </div> -->
 </div>
+{{tranche_history_data}}
 {% if final_data %}
 <ul class="blog_timeline">
 {% for f in final_data %}
@@ -147,11 +154,13 @@ display: none;
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.created_by.attrs.first_name | slice:":1"}}{{f.created_by.attrs.last_name | slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.created_by.attrs.first_name | slice:":1"}}{{f.created_by.attrs.last_name | slice:":1"}}</p>
+    <h3 class="hover_name">{{f.created_by.attrs.first_name}}{{f.created_by.attrs.last_name}}</h3>
+   </div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff">Uploaded <span>{% if f.file_type == 'Image' %}Image{% else %}Document{%endif%}</span> to project</p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -193,7 +202,9 @@ display: none;
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
 
-    <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}} {{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p></div>
+    <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}} {{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p>
+      <h3 class="hover_name">{% if f.modified %}{{f.modified_by.first_name}}{{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}}{{f.created_by.attrs.last_name}}{% endif %}</h3>
+    </div>
         <div class="timeline-panel">
         
 
@@ -246,7 +257,9 @@ display: none;
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p></div>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p>
+      <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
+    </div>
         <div class="timeline-panel">
         
 
@@ -298,7 +311,7 @@ display: none;
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now <br> ₹{{f.budget_total}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -320,11 +333,13 @@ display: none;
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+   </div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff">Updated  <span>the budget. Total budget amount is now <br> ₹ {{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -348,7 +363,9 @@ display: none;
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p></div>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p>
+      <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
+    </div>
         <div class="timeline-panel">
         
 
@@ -419,7 +436,7 @@ display: none;
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff">  <span>Uploaded values for #parameter <b>{{f.keyparameter_name}}</b> for {{f.upload_date | date:"M Y"}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -442,11 +459,13 @@ display: none;
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+   </div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff">  <span>Edited #parameter <b>{{f.parameter_name}}</b></span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -469,13 +488,43 @@ display: none;
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+   </div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff">  <span>Created a new parameter <b>{{f.parameter_name}}</b></span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+{% if f.update_type == 'tranche' or f.update_type == 'tranche_history' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>{% if f.update_type == 'tranche_history' %}Edited {% else %}Added a {% endif %} #tranche <b><u><a target="_blank" href={{f.tranche_url}}>{{f.tranche_name}}</a></u></b> with planned amount <br> ₹ {{f.planned_amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                     <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
                 </div>

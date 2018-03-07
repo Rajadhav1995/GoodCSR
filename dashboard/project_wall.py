@@ -2,7 +2,7 @@ import requests,ast
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from taskmanagement.models import Task,Activity
-from budgetmanagement.models import Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit
+from budgetmanagement.models import Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,Tranche
 from django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import Project,UserProfile,ProjectParameter,ProjectParameterValue
 from django.contrib.contenttypes.models import ContentType
@@ -121,8 +121,9 @@ def get_project_updates(request):
 					'parameter_name':history.name,'update_type':'parameter_history'}
 				parameter_history_data.append(data)
 	note_list = get_project_note(projectobj,request)
+	tranche_list,tranche_history_data = get_trance_updates(projectobj,slug)
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
-	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data
+	final_data = main_data + file_data + budgetlist + note_list + parameter_data + parameter_history_data + parameter_created_data + tranche_list + tranche_history_data
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	return render(request,'project-wall/project_updates.html',locals())
@@ -141,7 +142,23 @@ def get_project_note(projectobj,request):
 		note_list.append(data)
 	return note_list
 
-# @csrf_exempt
+def get_trance_updates(projectobj,slug):
+	tranches = Tranche.objects.filter(project=projectobj)
+	tranche_list = []
+	for t in tranches:
+		data = {'date':t.created,'update_type':'tranche','planned_amount':t.planned_amount,
+				'modified_by':get_modified_by_user(t.modified_by),'tranche_name':t.name,
+				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
+		tranche_list.append(data)
+		
+		tranche_history_data = []
+		for th in t.history.all()[0::2]:
+			history_data = {'date':th.created,'update_type':'tranche_history','planned_amount':th.planned_amount,
+				'modified_by':get_modified_by_user(th.modified_by),'tranche_name':th.name,
+				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
+			tranche_history_data.append(history_data)
+	return tranche_list,tranche_history_data
+
 def create_note(request):
 	created_by = UserProfile.objects.get_or_none(id=request.session.get('user_id'))
 	slug=request.GET.get('slug')
