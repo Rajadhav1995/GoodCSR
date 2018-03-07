@@ -13,7 +13,6 @@ from ast import literal_eval
 from itertools import chain
 from operator import is_not
 from functools import partial
-# from dashboard.project_wall import string_trim
 
 
 #According to Wikipedia the exact definition of a goal is:

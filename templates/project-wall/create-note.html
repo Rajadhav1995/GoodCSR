@@ -66,15 +66,20 @@ ul li {
     <div class='container'  id="popup_height">
     <div class="white-box">
 {% if messages %}
-<ul class="messages">
+<script>
+parent.jQuery.fancybox.close();
+alert("Note added successfully!");
+window.parent.location.reload();
+</script>
+<!-- <ul class="messages">
     {% for message in messages %}
     <div class="alert alert-success">
     <h3><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></h3><br></div>
     {% endfor %}
-</ul><br>
+</ul> --><br>
 <!-- <div align='center'><a href="javascript:parent.jQuery.fancybox.close();">Close Window</a></div> -->
 
-<div align='center'><a href="javascript:window.parent.location.reload();" id="close_pop">Close Window</a></div>
+<!-- <div align='center'><a href="javascript:window.parent.location.reload();" id="close_pop">Close Window</a></div> -->
 {% else %}
         <div class="col-xs-12">
           <div class="box demo_popup">
@@ -125,7 +130,7 @@ ul li {
                             </div>
                         </div> -->
 
-                        <a href="javascript:parent.jQuery.fancybox.close();"><input  class="budget_button" type="submit" value="Submit"/>  </a>
+                        <a href="javascript:parent.jQuery.fancybox.close();"><input  class="budget_button" type="submit" value="Submit" id="close_pop"/>  </a>
                         
                         <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
@@ -152,6 +157,7 @@ ul li {
         $('#close_pop').click(function(){
   window.parent.jQuery.fn.fancybox.close();
 });
+
     </script>
 
 <script type="text/javascript">

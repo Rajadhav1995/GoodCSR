@@ -55,7 +55,6 @@ def get_project_updates(request):
 		file_data_final = get_file_updates(projectobj,start_date,today)
 	
 	final_parameter_data = []
-	# import ipdb; ipdb.set_trace()
 	if request.GET.get('filter') == 'parameter' or request.GET.get('filter') == None:
 		final_parameter_data = get_parameter_updates(projectobj)
 	note_list = []
