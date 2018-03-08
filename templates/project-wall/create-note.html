@@ -130,7 +130,7 @@ window.parent.location.reload();
                             </div>
                         </div> -->
 
-                        <a href="javascript:parent.jQuery.fancybox.close();"><input  class="budget_button" type="submit" value="Submit" id="close_pop"/>  </a>
+                        <a href="javascript:parent.jQuery.fancybox.close();"><input  class="budget_button" onclick="myFunction()" type="submit" value="Submit" id="close_pop"/>  </a>
                         
                         <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
 
@@ -152,6 +152,16 @@ window.parent.location.reload();
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+<script>
+function myFunction() {
+    // parent.jQuery.fancybox.close();
+    // alert("Note added successfully!");
+    // window.parent.location.reload();
+    
+}
+</script>
 
 <script type="text/javascript">
         $('#close_pop').click(function(){

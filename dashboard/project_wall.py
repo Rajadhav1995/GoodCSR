@@ -20,17 +20,33 @@ from taskmanagement.templatetags.common_tags import get_modified_by_user,string_
 from menu_decorators import check_loggedin_access
 from media.forms import NoteForm
 
+def get_date_range(request,projectobj):
+
+	if request.GET.get('strt_dt'):
+		start_date = datetime.strptime(request.GET.get('strt_dt'),"%m/%d/%Y")
+	else:
+		start_date = projectobj.start_date
+	if request.GET.get('end_dt'):
+		end_date = datetime.strptime(request.GET.get('end_dt'),"%m/%d/%Y")
+	else:
+		end_date = datetime.now() + timedelta(days=1)
+	return start_date,end_date
+
+
 @check_loggedin_access
 def get_project_updates(request):
 #	start_date = '2017-01-01'
 #	end_date = '2018-02-28'
+	# import ipdb; ipdb.set_trace()
+	
 	key = 'updates_wall'
 	main_data = []
 	utc=pytz.UTC
-	today = datetime.now() + timedelta(days=1)
+	
+	filter_key = request.GET.get('filter')
 	slug = request.GET.get('slug')
 	projectobj = Project.objects.get_or_none(slug=slug)
-	start_date = projectobj.start_date
+	start_date,end_date = get_date_range(request,projectobj)
 	task_list = Task.objects.filter(activity__project=projectobj,active=2).order_by('-id')
 	plain_task = []
 	history_task_data = []
@@ -42,7 +58,7 @@ def get_project_updates(request):
 					'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
 			plain_task.append(data)
 			# added by priya where written a common function to get the task updates history
-			history_data = common_tags.task_updates_list(key,t,start_date,today)
+			history_data = common_tags.task_updates_list(key,t,start_date,end_date)
 			for i in history_data:
 			    history_task_data.append(i)
 	main_data = history_task_data + plain_task
@@ -51,8 +67,9 @@ def get_project_updates(request):
 	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
 		budget_final_list = get_budget_updates(projectobj)
 	file_data_final = []
-	if request.GET.get('filter') == 'file' or request.GET.get('filter') == None:
-		file_data_final = get_file_updates(projectobj,start_date,today)
+	timeline_data_final = []
+	if request.GET.get('filter') == 'file' or request.GET.get('filter') == 'timeline' or request.GET.get('filter') == None:
+		file_data_final = get_file_updates(projectobj,start_date,end_date,filter_key)
 	
 	final_parameter_data = []
 	if request.GET.get('filter') == 'parameter' or request.GET.get('filter') == None:
@@ -65,7 +82,7 @@ def get_project_updates(request):
 		tranche_list = get_trance_updates(projectobj,slug)
 
 	budget_final_list.sort(key=lambda item:item['date'], reverse=True)
-	filter_key = request.GET.get('filter')
+	
 	filter_dict = {'task':main_data,'note':note_list}
 
 	final_data = main_data + file_data_final + budget_final_list + note_list + final_parameter_data + tranche_list
@@ -76,9 +93,10 @@ def get_project_updates(request):
 	url = PMU_URL
 	return render(request,'project-wall/project_updates.html',locals())
 
-def get_file_updates(projectobj,start_date,today):
+def get_file_updates(projectobj,start_date,end_date,filter_key):
 	file_data = []
-	file_update = Attachment.objects.filter(active=2,created__range=[start_date,today],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
+	timeline_data = []
+	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
 
 		history = f.history.all().order_by('modified')
@@ -86,8 +104,17 @@ def get_file_updates(projectobj,start_date,today):
 
 		for k in history[:2]:
 			history_data.append({'name':k.name,'description':k.description,'file_name':k.attachment_file.split('/')[-1],'date':k.created,'update_type':'file','modified_by':get_modified_by_user(k.modified_by)})
-		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
-	return file_data
+		if f.timeline_progress == False:
+			file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
+		else:
+			timeline_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':string_trim(f.attachment_file.url.split('/')[-1]) if f.attachment_file else '','description':f.description})
+	if filter_key == 'timeline':
+		final_file_data = timeline_data
+	elif filter_key == 'file':
+		final_file_data = file_data
+	else:
+		final_file_data = timeline_data + file_data
+	return final_file_data
 
 def get_parameter_updates(projectobj):
 	parameter_data = []

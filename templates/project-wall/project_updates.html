@@ -111,8 +111,8 @@ display: none;
         <a {% if filter_key == 'file' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=file" rel="2">Image</a>
         <a {% if filter_key == 'budget' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=budget" rel="3">Budget</a>
         <a {% if filter_key == 'note' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=note" rel="1">Notes</a>
-        <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="2">Tranches</a>
-        <a href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=file" rel="1">TimelineProgress</a>
+        <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="3">Tranches</a>
+        <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=timeline" rel="2">TimelineProgress</a>
         <a {% if filter_key == None %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
         <!-- <a href="#" rel="1">Report</a> -->
         
@@ -127,28 +127,28 @@ display: none;
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
-      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff" id="hide_button" class="singup btn btn-sucess" disabled="disabled">Creat a Note</button></a>
+      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
     </div>
     <!-- <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
-            <input type="text" id="from" name="from" style="border:1px solid #dedede">
+            <input type="text" id="from" name="from" value="{{request.GET.strt_dt}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
         <div style="float:left;position: relative;z-index:1000 ">
             <label for="to" style="font-weight:normal">to</label>
-            <input type="text" id="to" name="to" style="border:1px solid #dedede">
+            <input type="text" id="to" name="to" value="{{request.GET.end_dt}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
     </div> -->
 </div>
+{{request.GET.date}}
 {% if final_data %}
 <ul class="blog_timeline">
 {% for f in final_data %}
 
 {% if f.update_type == 'file' %}
-
 {% if forloop.counter|divisibleby:2 %}
 <li class="timeline-left">
 {% else %}
@@ -392,9 +392,9 @@ display: none;
                 </div>
                 
                 
-                <div style=" float: left;text-align: center; width: 100%;">
+                <!-- <div style=" float: left;text-align: center; width: 100%;">
                    <img src="/static/img/line-bar-small.png">
-                </div>
+                </div> -->
                     <div class="file_name">
                         <p><b>File: </b><a href='{{f.attachment_link}}' target="_blank"><u>{{f.attachment_name}}</u></a></p>
                         <p><b>Description: </b> {{f.description}}</p>
@@ -661,7 +661,12 @@ $(document).ready(function() {
         .datepicker({
           defaultDate: "+1w",
           changeMonth: true,
-          numberOfMonths: 1
+          numberOfMonths: 1,
+          onSelect: function(date, instance) {
+            // alert(date);
+            
+            window.location = "/dashboard/updates/?slug=test-proj-pmu&key=updates&strt_dt="+date;
+          }
         })
         .on( "change", function() {
           to.datepicker( "option", "minDate", getDate( this ) );
@@ -669,7 +674,11 @@ $(document).ready(function() {
       to = $( "#to" ).datepicker({
         defaultDate: "+1w",
         changeMonth: true,
-        numberOfMonths:1
+        numberOfMonths:1,
+        onSelect: function(date, instance) {
+            // alert(date);
+            window.location = "/dashboard/updates/?slug=test-proj-pmu&key=updates&end_dt="+date;
+          }
       })
       .on( "change", function() {
         from.datepicker( "option", "maxDate", getDate( this ) );
