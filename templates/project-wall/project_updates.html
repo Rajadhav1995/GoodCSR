@@ -134,7 +134,7 @@ display: none;
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
       <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
     </div>
-    <div style="float:right;position: relative;left: -60px;">
+    <!-- <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
@@ -146,7 +146,7 @@ display: none;
             <input type="text" id="to" name="to" value="{{request.GET.end_dt}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
-    </div>
+    </div> -->
 </div>
 {{request.GET.date}}
 {% if final_data %}
