@@ -94,6 +94,11 @@ display: none;
 .timeline-left .two_letters:hover .hover_name {display: block; position: absolute;right: 14px;top: 35px;font-size: 14px; z-index: 1000;}
 #tagcloud .active{color:#232323 !important; background:#fff !important; }
 
+.hide_box {
+  padding: 0px;
+  box-shadow: none;
+  width: 81%;
+}
 </style>
 <body>
 
@@ -129,7 +134,7 @@ display: none;
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
       <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
     </div>
-    <!-- <div style="float:right;position: relative;left: -60px;">
+    <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
@@ -141,7 +146,7 @@ display: none;
             <input type="text" id="to" name="to" value="{{request.GET.end_dt}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
-    </div> -->
+    </div>
 </div>
 {{request.GET.date}}
 {% if final_data %}
@@ -435,7 +440,7 @@ display: none;
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
-    <div class="timeline-panel">
+    <div class="timeline-panel hide_box">
         
             <div class="timeline-body text-justify">
                <div class="">
@@ -464,7 +469,7 @@ display: none;
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
     <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
    </div>
-    <div class="timeline-panel">
+    <div class="timeline-panel hide_box">
         
             <div class="timeline-body text-justify">
                <div class="">

@@ -189,33 +189,37 @@ def get_budget_updates(projectobj):
 	line_total = sum(map(float,line_item_amount_list))
 
 	budget_data_list = []
+	budget_count = budget_period.count()
 	for q in budget_period:
 		budgethistory = q.history.all()
 		temp_var = 0
 		for k in budgethistory:
 			new_var = int(k.modified.strftime("%Y%m%d%H%M"))
-
+			
 			if int(new_var) != int(temp_var):
-				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by)}
+				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by),'utilized_amount':k.utilized_unit_cost}
+
 				budget_data_list.append(data)
 			temp_var = new_var
 	result = defaultdict(float)
-	
-	for d in budget_data_list:
-		
+	items = defaultdict(list)
+	for idx,d in enumerate(budget_data_list):
+		print idx
 		result[d['date']] += float(d['amount']) if d['amount'] else float(0)
-
+		items[d['date']].append(d['amount'])
 	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
+	count_budget_list = [{'date': name, 'count': len(value)} for name, value in items.items()]
 	
 	utc=pytz.UTC
 	from pytz import timezone
-	for c,d in zip(budget_final_dict,budget_data_list):
+	for c,d,e in zip(budget_final_dict,budget_data_list,count_budget_list):
 		
 		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
 		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
-
-		data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
-		budgetlist.append(data)
+		# import ipdb; ipdb.set_trace()
+		if e.get('count') == budget_count or e.get('count') == budget_count-1:
+			data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
+			budgetlist.append(data)
 	return budgetlist
 
 def create_note(request):
