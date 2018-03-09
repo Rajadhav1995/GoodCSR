@@ -163,19 +163,25 @@ def get_project_note(projectobj,request):
 def get_trance_updates(projectobj,slug):
 	tranches = Tranche.objects.filter(project=projectobj)
 	tranche_list = []
+	tranche_history_data = []
 	for t in tranches:
-		data = {'date':t.created,'update_type':'tranche','planned_amount':t.planned_amount,
-				'modified_by':get_modified_by_user(t.modified_by),'tranche_name':t.name,
-				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
-		tranche_list.append(data)
-		
-		tranche_history_data = []
-		for th in t.history.all()[0::2]:
-			history_data = {'date':th.created,'update_type':'tranche_history','planned_amount':th.planned_amount,
-				'modified_by':get_modified_by_user(th.modified_by),'tranche_name':th.name,
-				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
-			tranche_history_data.append(history_data)
-	tranche_list_final = tranche_history_data + tranche_list
+		temp_var = 0
+		for th in t.history.all():
+			new_var = int(th.modified.strftime("%Y%m%d%H%M"))
+			if (int(new_var) != int(temp_var)):
+				if th.created != th.modified:
+					history_data = {'date':th.modified,'update_type':'tranche_history','planned_amount':th.planned_amount,
+					'modified_by':get_modified_by_user(th.modified_by),'tranche_name':th.name,
+					'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
+				else:
+					history_data = {'date':th.created,'update_type':'tranche','planned_amount':th.planned_amount,
+					'modified_by':get_modified_by_user(th.modified_by),'tranche_name':th.name,
+					'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
+
+				tranche_history_data.append(history_data)
+			temp_var = new_var
+	
+	tranche_list_final = tranche_history_data
 	tranche_list_final.sort(key=lambda item:item['date'], reverse=True)
 	return tranche_list_final
 
