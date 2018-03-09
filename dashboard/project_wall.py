@@ -85,6 +85,7 @@ def get_project_updates(request):
 		# import ipdb; ipdb.set_trace()
 		file_data.append({'name':f.name,'created_by':f.created_by,'file_type':f.get_attachment_type_display(),'date':f.created,'update_type':'file','history':history_data,'image_type':f.timeline_progress,'image_url':PMU_URL + str(f.attachment_file.url) if f.attachment_file else '','file_name':f.attachment_file.url.split('/')[-1] if f.attachment_file else '','description':f.description})
 	budgetlist.sort(key=lambda item:item['date'], reverse=True)
+	note_list = get_project_note(projectobj,request)
 	final_data = main_data + file_data + budgetlist + note_list
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
