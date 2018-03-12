@@ -546,7 +546,6 @@ Highcharts.chart('planned_utilized', {
         }
     }, {
         title: {
-            text: '2016-2017',
             align: "middle",
             rotation: 360
         },
@@ -614,12 +613,27 @@ Highcharts.chart('Budget_location', {
                 enabled: true,
                 layout: 'horizontal',
                 align: 'center',
-                width: 200,
+                width: 250,
+                height: 'auto',
                 verticalAlign: 'bottom',
                 useHTML: true,
                 labelFormatter: function() {
-
-                    return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                    var str = '<span>' + this.name +' - Rs.  '+ this.y.toFixed(0).replace(/(\d)(?=(\d\d)+\d$)/g, "$1,");
+                                        
+                    var newStr = str.replace(/(.{37})/g, "$1<br/>")+'</span>';
+                    
+                    return newStr;
+                },
+                navigation: {
+                    activeColor: '#3E576F',
+                    animation: true,
+                    arrowSize: 12,
+                    inactiveColor: '#CCC',
+                    style: {
+                        fontWeight: 'bold',
+                        color: '#333',
+                        fontSize: '12px'
+                    }
                 }
             },
             series: [{

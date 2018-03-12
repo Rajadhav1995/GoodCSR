@@ -271,14 +271,16 @@ $(document).ready(function(){
   });
   });
 </script>
-<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
-  <script src="/static/js/jsgantt.js" type="text/javascript"></script>
   
 <!-- script for gantt chart starts here-->
 
 <script>
-    var jsonData = {{taskdict|safe}};
+    jsonData = {{taskdict|safe}};
     console.log(jsonData);
+</script>
+<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/jsgantt.js" type="text/javascript"></script>
+<script>
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -829,7 +831,8 @@ $(document).ready(function(){
       var d = this.modified;
       this.modified = new Date(d);
       this.modified.setHours(0, 0, 0, 0);
-      this.modified = new Date(this.modified);  
+      this.modified = new Date(this.modified);
+      if(this.actual_end_date==null) this.actual_end_date = this.modified; 
     })
       $.each(jsonData.tasks,function(i,n){
         $.each(jsonData.activities,function(j,m){
@@ -850,7 +853,7 @@ $(document).ready(function(){
       temp.id = this.id;
       temp.modified = this.actual_end_date;
       temp.actual_end_date = this.actual_end_date;
-      if(this.actual_end_date==null && this.task_progress==100){
+      if(this.actual_end_date==null){
       temp.modified = this.expected_end_date;
       temp.actual_end_date = this.expected_end_date;
       }
@@ -859,7 +862,6 @@ $(document).ready(function(){
       temp.task_progress = this.task_progress;
       if(temp.modified!=null && temp.actual_end_date!=null) pvaData.push(temp);
     })
-    console.log("pva1",pvaSorted);
     }
     function filteract(){
     //Get rows with unique date and task
@@ -869,18 +871,35 @@ $(document).ready(function(){
         flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
         pvaSorted.push(pvaData[i]);
     }
+    console.log("pvaSort",pvaSorted);
     var week = d3.timeFormat("%Y-%U");
 
     var actnest = d3.nest().key(function (d) {
+      if(d.actual_end_date!=null){
+        console.log("Check ac",new Date(d.actual_end_date).getTime())
+        if(new Date(d.actual_end_date).getTime() >= new Date().getTime()) {return week(new Date()-604800000);}
+        else if(new Date(d.actual_end_date).getTime() < new Date().getTime()) {return week(new Date(d.actual_end_date));}
+      }else{
+        return null;
+      }
+    }).entries(pvaSorted);
+
+    var actnest2 = d3.nest().key(function (d) {
       if(d.actual_end_date!=null && new Date(d.actual_end_date).getTime() <= new Date().getTime()){
         console.log("Check ac",new Date(d.actual_end_date).getTime())
         return week(new Date(d.actual_end_date));
       }else{
         return null;
       }
+    }).rollup(function (v){
+      var tmp = [];
+      for(var l=0;l<pTasks.length;l++){
+        var w = (new Date(pTasks[l].end_date).getTime() - new Date(pTasks[l].start_date).getTime()+1);
+        tmp.push({"id":pTasks[l].id,"task_progress": 0,"name":pTasks[l].name,"weight":w,"actual_start_date":pTasks[l].actual_start_date,"actual_end_date":pTasks[l].actual_end_date});
+        }
+      return tmp;
     }).entries(pvaSorted);
-    console.log("Check actual",actnest);
-    
+    console.log("Data ",pvaSorted,actnest2)
     var plannest = d3.nest().key(function (d) {
         if(ids.length==0){
         return week(new Date(d.end_date));
@@ -906,13 +925,6 @@ $(document).ready(function(){
     var maxComp = 0;
     var chartData = [];
     console.log("Plannest",plannest)
-    // $.each(plannest, function(){
-    //   $.each(this.values,function(){
-    //     var weight = diffDates(this.start_date,this.end_date);
-    //     if(weight==0){weight=1;} 
-    //     maxComp += (weight * 100);
-    //   })
-    // })
     // --- For Planned Tasks ---
     plannest.sort(function(a,b){
       return new Date(b.modified) - new Date(a.modified);
@@ -923,14 +935,14 @@ $(document).ready(function(){
       var week = getNextWeek(plankey[0],plankey[1]);
       var comp = 0;
       $.each(this.values,function(){
-        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
+        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
         comp += (weight * 100);
-        console.log("keys", comp, this.id , weight);
+        // console.log("keys", comp, this.id , weight);
       })
       chartData.push([(week.getTime()+19800000),comp]);
       }
     });
-    console.log("CD",chartData,maxComp,plannest)
+    console.log("CD",chartData,maxComp)
     chartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
@@ -945,63 +957,97 @@ $(document).ready(function(){
       this[1] = Math.round((this[1]/maxComp)*100);
     });
     console.log("Map2",plannest,actnest) 
-    // var cArray = Object.keys(map).map(function(elem) {
-    // return { date: elem, count: map[elem]/100 }
-    // })
-    // console.log("Map",cArray)
-    // var chartData = [];
-    // var Cprev = [{date:"",count:0}];
-    // $.each(cArray,function(n,i){
-    //   chartData.push([(new Date(this.date)).getTime(),(this.count+Cprev.count)]);
-    //   console.log("Value",Cprev,"this",(this.count+Cprev.count))
-    //   if(n>-1){Cprev = cArray[(n)];}
-    // })
-    // chartData.reverse();
     // --- For Actual Tasks --- 
     var AmaxComp = 0;
     var AchartData = [];
     actnest.sort(function(a,b){
-      return new Date(b.end_date) - new Date(a.end_date);
+      console.log("SORT",a,b)
+      return new Date(a.values[0].actual_end_date) - new Date(b.values[0].actual_end_date);
     });
-    console.log("Asort",actnest)
-    $.each(actnest , function(){
+    $.each(actnest,function(i,v){
+      actnest2[i].key = this.key;
+    console.log("Check actual",actnest2[i].value);
+      $.each(this.values,function(){
+        $.each(actnest2[i].value, function(m,n){
+          if(actnest2[i+1]!=undefined) {
+          var c = actnest2[i+1].value[m];
+          console.log("keey",m,i+1,c);
+          if(this.task_progress >= c.task_progress) c.task_progress = this.task_progress;
+          }
+        })
+      var b = actnest2[i].value.filter( n => n.id == this.id );
+      console.log("keey2",b,this,actnest2);
+      if(this.task_progress != null && b.length>0 && b[0].task_progress<=this.task_progress) b[0].task_progress = this.task_progress;
+      console.log("keey3",this);
+      });
+    });
+
+    console.log("Asort",actnest2)
+    // $.each(actnest , function(){
+    //   if(this.key!="null"){
+    //     var plankey = this.key.toString().split('-');
+    //     var week = getNextWeek(plankey[0],plankey[1]);
+    //     var compA = 0;
+    //     var weekUID = [];
+    //     console.log(new Date(week),"Key",this.values.length)
+    //     //Remove tasks with same id in the same week 
+    //     for(var k=0; k<this.values.length; k++) {
+    //         console.log(flags[this.values[k].id],'weelUID2');
+    //         if( flags[(this.values[k].id)]) continue;
+    //         flags[(this.values[k].id)] = true;
+    //         weekUID.push(this.values[k]);
+    //     }
+    //         console.log(weekUID,'weelUID');
+    //     $.each(weekUID,function(){
+    //       var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
+    //       compA += (weight * this.task_progress);
+    //       console.log("taskval",this.id,compA);
+    //     })
+    //     AchartData.push([(week.getTime()+19800000),compA]);
+    //   }
+    // });
+    $.each(actnest2, function(){
       if(this.key!="null"){
         var plankey = this.key.toString().split('-');
         var week = getNextWeek(plankey[0],plankey[1]);
         var compA = 0;
         var weekUID = [];
-        console.log(new Date(week),"Key",this.values.length)
+        // console.log(new Date(week),"Key4",this)
         //Remove tasks with same id in the same week 
-        for(var k=0; k<this.values.length; k++) {
-            console.log(flags[this.values[k].id],'weelUID2');
-            if( flags[(this.values[k].id)]) continue;
-            flags[(this.values[k].id)] = true;
-            weekUID.push(this.values[k]);
-        }
-            console.log(weekUID,'weelUID');
-        $.each(weekUID,function(){
-          var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
-          compA += (weight * this.task_progress);
-          console.log("taskval",this.id,compA);
+        // for(var k=0; k<this.value.length; k++) {
+        //     // console.log(flags[this.value[k].id],'weelUID2');
+        //     if( flags[(this.value[k].id)]) continue;
+        //     flags[(this.value[k].id)] = true;
+        //     weekUID.push(this.value[k]);
+        // }
+        //     console.log(weekUID,'weelUID');
+        $.each(this.value,function(){
+          var tp = 0;
+          if(this.task_progress != "None") tp = this.task_progress;
+          // var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
+          compA += (Math.abs(this.weight) * parseInt(tp));
+          console.log("CDA2",week,compA)
         })
-        AchartData.push([(week.getTime()+19800000),compA]);
+        AchartData.push([(week.getTime()+19800000),Math.round((compA/maxComp)*100)]);
+          console.log("CDA22",week,compA/maxComp)
+
       }
     });
-    console.log("aCD",AchartData,AmaxComp)
+    console.log("CDA21",AchartData,maxComp)
     AchartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
     console.log("aCDA",AchartData)
     temp = 0;
-    $.each(AchartData,function(){
-      AmaxComp += this[1];
-      this[1] = this[1] + temp;
-      temp = this[1];
-    })
-    $.each(AchartData,function(){
-      this[1] = Math.round((this[1]/maxComp)*100);
-    });
-    console.log("PVA",AchartData,pvaData);
+    // $.each(AchartData,function(){
+    //   AmaxComp += this[1];
+    //   this[1] = this[1] + temp;
+    //   temp = this[1];
+    // })
+    // $.each(AchartData,function(){
+    //   this[1] = Math.round((this[1]/maxComp)*100);
+    // });
+    console.log("PVA",AchartData);
     PVAChart = Highcharts.chart('pvaContainer', {
       chart: {
         type: 'spline',
@@ -1103,7 +1149,7 @@ $(document).ready(function(){
       filteract();
     }
     function superData(id){
-      ids=[];
+      ids=[-1];
       chartInit();
       $.each(sc,function(){
         if(this.super == id){
