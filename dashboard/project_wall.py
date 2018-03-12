@@ -187,7 +187,7 @@ def get_trance_updates(projectobj,slug):
 	return tranche_history_data
 
 def get_tranche_update(projectobj,slug):
-	# import ipdb;ipdb.set_trace()
+	
 	tranches = Tranche.objects.filter(project=projectobj)
 	tranche_list = []
 	tranche_history_data = []
@@ -201,12 +201,14 @@ def get_tranche_update(projectobj,slug):
 			new_var = int(th.modified.strftime("%Y%m%d%H%M"))
 			modified_time = int(th.modified.strftime("%Y%m%d%H%M%S"))
 			created_time = int(th.created.strftime("%Y%m%d%H%M%S"))
-			if (new_var != temp_var) and created_time != modified_time:
+			if (new_var != temp_var) and (created_time != modified_time):
+				print new_var,temp_var,created_time,modified_time
 				history_data = {'date':th.modified,'update_type':'tranche_history','planned_amount':th.planned_amount,
 					'modified_by':get_modified_by_user(t.modified_by) if t.modified_by else projectobj.created_by.attrs,
 					'tranche_name':th.name,
 					'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 				tranche_history_data.append(history_data)
+			temp_var = new_var
 	final_tranche = tranche_list + tranche_history_data
 	final_tranche.sort(key=lambda item:item['date'], reverse=True)
 	return final_tranche
@@ -248,7 +250,6 @@ def get_budget_updates(projectobj):
 		
 		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
 		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
-		# import ipdb; ipdb.set_trace()
 		if e.get('count') == budget_count or e.get('count') == budget_count-1:
 			data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
 			budgetlist.append(data)
