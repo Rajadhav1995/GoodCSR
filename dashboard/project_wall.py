@@ -121,8 +121,9 @@ def get_parameter_updates(projectobj):
 	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None)
 	parameter_created_data = []
 	for p in parameter_value:
+		import ipdb; ipdb.set_trace()
 		data = {'date':p.created,'upload_date':p.start_date,
-				'modified_by':get_modified_by_user(p.modified_by),
+				'modified_by':get_modified_by_user(p.modified_by) if p.modified_by else projectobj.created_by.attrs,
 				'update_type':'parameter','keyparameter_name':p.keyparameter.name}
 		parameter_data.append(data)
 	parameter_history_data = []
@@ -130,7 +131,7 @@ def get_parameter_updates(projectobj):
 	
 	for parameter in project_parameter:
 		
-		created_data = {'modified_by':get_modified_by_user(parameter.modified_by),'parameter_name':parameter.name,
+		created_data = {'modified_by':get_modified_by_user(parameter.modified_by) if parameter.modified_by else projectobj.created_by.attrs ,'parameter_name':parameter.name,
 						'date':parameter.created,'update_type':'parameter_created'}
 		parameter_created_data.append(created_data)
 		parameter_time = int(parameter.created.strftime("%Y%m%d%H%M%S"))
@@ -140,7 +141,7 @@ def get_parameter_updates(projectobj):
 			history_time = int(history.modified.strftime("%Y%m%d%H%M%S"))
 			if int(history_time) != int(parameter_time):
 				data = {'date':history.modified,'id':parameter.id,
-					'modified_by':get_modified_by_user(history.modified_by),
+					'modified_by':get_modified_by_user(history.modified_by) if history.modified_by else projectobj.created_by.attrs,
 					'parameter_name':history.name,'update_type':'parameter_history'}
 				parameter_history_data.append(data)
 	final_parameter_data = parameter_history_data + parameter_data + parameter_created_data
@@ -186,12 +187,13 @@ def get_trance_updates(projectobj,slug):
 	return tranche_history_data
 
 def get_tranche_update(projectobj,slug):
+	# import ipdb;ipdb.set_trace()
 	tranches = Tranche.objects.filter(project=projectobj)
 	tranche_list = []
 	tranche_history_data = []
 	for t in tranches:
 		data = {'date':t.created,'update_type':'tranche','planned_amount':t.planned_amount,
-				'modified_by':get_modified_by_user(t.modified_by),'tranche_name':t.name,
+				'modified_by':get_modified_by_user(t.modified_by) if t.modified_by else projectobj.created_by.attrs,'tranche_name':t.name,
 				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 		tranche_list.append(data)
 		temp_var = 0
@@ -201,7 +203,8 @@ def get_tranche_update(projectobj,slug):
 			created_time = int(th.created.strftime("%Y%m%d%H%M%S"))
 			if (new_var != temp_var) and created_time != modified_time:
 				history_data = {'date':th.modified,'update_type':'tranche_history','planned_amount':th.planned_amount,
-					'modified_by':get_modified_by_user(th.modified_by),'tranche_name':th.name,
+					'modified_by':get_modified_by_user(t.modified_by) if t.modified_by else projectobj.created_by.attrs,
+					'tranche_name':th.name,
 					'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 				tranche_history_data.append(history_data)
 	final_tranche = tranche_list + tranche_history_data
