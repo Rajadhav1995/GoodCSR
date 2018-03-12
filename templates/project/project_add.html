@@ -664,6 +664,11 @@ function funder_val() {
         document.all ? k = e.keyCode : k = e.which;
         return ((k >= 65 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||(k >= 38 && k <= 41) || (k>=44 && k<=46));
         }
-     );
+     ).on('paste', function (e) {
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k >= 65 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||(k >= 38 && k <= 41) || (k>=44 && k<=46));
+        }
+        );
     </script>
 {% endblock %}
