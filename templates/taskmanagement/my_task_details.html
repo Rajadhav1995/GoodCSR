@@ -1,0 +1,358 @@
+<html>
+{% load common_tags %}
+{% load urs_tags %}
+      {% for i in tasks %}
+      <div class="right-task div-{{i.slug}}">
+       <div class="border-bottom task_width">
+         <div class="task-head-lft ">
+            <h4>{{i.name}}<img src="/static/img/vender-icon.png" alt=""></h4>
+            <h5>of <span class="under-line">{{i.activity.project.name}}</span> in <span>{{i.activity.super_category.name}}</span> for <span>{{i.activity.name}}</span> <img src="/static/img/material-icon.png" alt=""></h5>
+<!--            <p>Details: This project works for child development, health and-->
+<!--               welfare of Ramnagar village in Andhra Pradesh. -->
+<!--            </p>-->
+         </div>
+         <div class="task-head-rgt">
+<!--            <div class="my-progress-bar"></div>-->
+        <div class="progress-bar position" data-percent=" {% if i.task_progress %}{{i.task_progress}} {% else %} 0 {% endif %}" data-duration="1000" data-color="#ccc,#3ca187"></div>
+<!--            <img src="/static/img/progress-icon.png" alt="">-->
+            <p>{%if i.status == 2 %}completed {% else %} in progress{% endif %}</p>
+         </div>
+         </div>
+         <div class="planned-date">
+            <ul>
+               <li>Planned Start Date : <span>{{i.start_date|date:'jS F Y'}}</span></li>
+               <li>Planned End Date&nbsp;&nbsp;&nbsp;: <span>{{i.end_date|date:'jS F Y'}}</span></li>
+            </ul>
+            <ul>
+               <li>Actual Start Date : <span>{{i.actual_start_date|date:'jS F Y'}}</span></li>
+               <li>Actual End Date&nbsp;&nbsp;&nbsp;: <span>{{i.actual_end_date|date:'jS F Y'}}</span></li>
+            </ul>
+         </div>
+         <div class="planned-pad">
+            <ul>
+               <li><span>Assigned to</span> 
+                   <div class="middle_text"><canvas class="user-icon" data-name="{{i.assigned_to}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                        <div class="middle">
+                            <div class="text">{% if i.assigned_to.attrs.first_name %}{{i.assigned_to.attrs.first_name}}  {{i.assigned_to.attrs.last_name}}{% else %}{{i.assigned_to.name}}{% endif %}</div>
+                        </div>
+                   </div>
+               </li>
+               <li><span>Created by </span>
+                   <div  class="middle_text"><canvas class="user-icon" data-name="{{i.created_by}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{i.created_by.attrs.first_name}} {{i.created_by.attrs.last_name}}</div>
+                            </div>
+                       </div>
+               </li>
+               <li><span>Approval</span> <canvas class="user-icon" data-name="A" width="30" height="30" style="border-radius:30px" ></canvas></li>
+               <li><span>Subscribed to</span>
+                    {% for sub in i.subscribers.all|slice:"0:2" %} 
+                     <div  class="middle_text"><canvas class="user-icon" data-name="{{sub}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                        <div class="middle">
+                            <div class="text">{% if sub.attrs.first_name %}{{sub.attrs.first_name}} {{sub.attrs.last_name}}{% else %}{{sub.name}}{% endif %}</div>
+                        </div>
+                     </div>
+                    {%endfor%}
+               </li>{%if i.subscribers.all|length >= 3 %}. . . .{% endif %}
+            </ul>
+            
+         </div>
+         <div class="task-completion">
+            <div class="task-completion-left">
+               <div  class="middle_text"><canvas class="user-icon" data-name="{{user.attrs.first_name}} {{user.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas></div>
+            </div>
+            <div class="task-completion-right">
+                <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
+               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
+               <div>
+               <i class="fa fa-file"></i>
+               <input type='file' name ='upload_attach' id='upload-photo'/> 
+<!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
+               </div>
+                
+               <div class="task-details">
+                  <h4>Task Completion Status (%)</h4>
+                <div class = 'task_bar' style="width: 375px;float: left;">
+                         <input type="hidden" name="tea1" class="range-{{i.slug}}" id="xp_{{i.slug}}" value="{% if i.task_progress %}{{i.task_progress}}{% else %}0{% endif %}"   />
+                </div>
+<!--         SCRIPT FOR tASK PROGRESS BAR STARTS       -->
+                 <script src="/static/js/price-range.js"></script>
+                    <script>
+                       $(function(){
+                       
+                           
+                               var sl_id = '{{i.slug}}'
+                               
+                               var progress = $('#xp_'+sl_id).val();
+                                $('.range-control-handle').css('left',progress+'%');
+
+                               $('.range-'+sl_id).rangeControl({
+
+                              max: 100,
+                             
+                              delim: '', 
+                             
+                              scale: {
+                                position: 'bottom',
+                                labels: true,
+                               // interval:1
+                              },
+                              className: ''
+                            });
+
+                                $('.range-'+sl_id).on('rangeControlSlide.rangeControlEvent', function () {
+                                  // on slide event
+
+                                    
+                                 
+
+                                 // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+                                  $('#slectedNumber').html($('.range-control-current-value').text());
+                                 
+                                });
+
+                                $('.range-'+sl_id).on('rangeControlChange.rangeControlEvent', function () {
+                                     $('#slectedNumber').html($('.range-control-current-value').text());
+                                });
+
+                                $('.range-'+sl_id).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+                                });
+
+
+                                var progress = $('#xp_'+sl_id).val();
+                                $('.range-control-handle').css('left',progress+'%');
+
+                           });
+                           //$('.hide-show').first().trigger('click');
+                           //$(".hide-show").addClass('active');
+                      
+                    </script>
+<!--       SCRIPT FOR TASK PROGRESS BAR ENDS              -->
+                  <input class="task-link" type="submit" value="Add update"/>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <div class="user-timeline">
+         {% if i.task_attachments %}
+            <div id="boxscroll-timeline">
+               {% for task_attach in i.task_attachments %}
+               {% for dates,attach in task_attach.items %}
+               <div class="month-pad">{{dates|date:'jS F Y'}}</div>
+               <ul>
+                  <li>
+                     {% for a in attach %}
+                     {% if a.attachment_type == 1 %}
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
+                     
+                     <div class="right-li first-li">
+                            {% if a.attachment_file %}
+                        <p>{% if a.description %}{{a.description|safe}} {% endif %}</p>
+                        <ul>
+                           <li>
+                              <a href="{{image_url}}{{a.attachment_file.url}}">
+                                 <img src="{{image_url}}{{a.attachment_file.url}}" width="162" height="112" alt="">
+<!--                                 <div class="/static/image-hover">4 More files</div>-->
+                              </a>
+                           </li>
+                            
+                        </ul>
+                        {% get_converted_time a.created as time %}
+                        <span>{{time}}</span>
+                        {% endif %}
+                     </div>
+                     
+                  </li>
+                  {% elif a.attachment_type == 2 %}
+                  <li>
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
+                     <div class="right-li second-li">
+                     
+                        <ul>
+                           {% if a.attachment_file %}
+                           
+                           <li>
+                                
+                              <a href="{{image_url}}{{a.attachment_file.url}}">
+                              {% if a.document_type == 3 %}
+                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{a.name}}</span></a>
+                              {% elif a.document_type == 1 %}
+                              <img src="/static/img/excel-icon.png" alt=""> <span>{{a.name}}</span></a>
+                              {% else %}
+                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{a.name}}</span></a>
+                              {% endif %}
+                           </li>
+                        </ul>
+                        {% get_converted_time a.created as time %}
+                        <span>{{time}}</span>
+                        {% endif %}
+                     </div>
+                  </li>
+                  {% endif %}
+                  {% endfor %}
+                  {% task_comments dates i.id as comments %}
+                  {%if comments %}
+                  <li>
+                    {% for c in comments %}
+                     <div class="left-li">
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                            <div class="middle">
+                                <div class="text">{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}</div>
+                            </div>
+                        </div>
+                     </div>
+                     
+                     <div class="right-li third-li">
+                        <ul>
+                           <li>{% if c.text %}{{c.text}}{% endif %}</li>
+                        </ul>
+                        {% get_converted_time c.created as time %}
+                        <span>{{time}}</span>
+                            
+                     </div>
+                     {% endfor %}
+                     
+                  </li>
+                  {% endif %}
+               </ul>
+               {% endfor %}
+               {% endfor %}
+            </div>
+            {% else %}
+                    <li>No updates</li>
+                  {% endif %}
+         </div>
+      </div>
+      {% endfor %}
+    <!-- Progress % circle script -->
+<script src="/static/js/jQuery-plugin-progressbar.js"></script>
+
+<script>
+$(".progress-bar").loading();
+</script>
+  
+      
+      <script src="/static/js/price-range.js"></script>
+<script>
+   $(function(){
+   
+       $('.hide-show').on('click',function(){
+           var sl_id = $(this).attr('id')
+           
+           var progress = $('#xp_'+sl_id).val();
+            $('.range-control-handle').css('left',progress+'%');
+
+           $('.range-'+sl_id).rangeControl({
+
+          max: 100,
+         
+          delim: '', 
+         
+          scale: {
+            position: 'bottom',
+            labels: true,
+           // interval:1
+          },
+          className: ''
+        });
+
+            $('.range-'+sl_id).on('rangeControlSlide.rangeControlEvent', function () {
+              // on slide event
+
+                
+             
+
+             // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+              $('#slectedNumber').html($('.range-control-current-value').text());
+             
+            });
+
+            $('.range-'+sl_id).on('rangeControlChange.rangeControlEvent', function () {
+                 $('#slectedNumber').html($('.range-control-current-value').text());
+            });
+
+            $('.range-'+sl_id).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+            });
+
+
+            var progress = $('#xp_'+sl_id).val();
+            $('.range-control-handle').css('left',progress+'%');
+
+       });
+       
+   }
+   );
+</script>
+
+<script>
+    $(function(){
+        var key = "{{request.GET.task_slug}}"
+        if (key !=''){
+            $('.range-'+key).rangeControl({
+
+                  max: 100,
+                 
+                  delim: '', 
+                 
+                  scale: {
+                    position: 'bottom',
+                    labels: true,
+                   // interval:1
+                  },
+                  className: ''
+            });
+
+            $('.range-'+key).on('rangeControlSlide.rangeControlEvent', function () {
+              // on slide event
+
+
+                 // $('#childAgeView').show().children().text(this.value.split(' ').join(', '));
+                  $('#slectedNumber').html($('.range-control-current-value').text());
+                 
+                });
+
+                $('.range-'+key).on('rangeControlChange.rangeControlEvent', function () {
+                     $('#slectedNumber').html($('.range-control-current-value').text());
+                });
+
+                $('.range-'+key).on('rangeControlAddHandle.rangeControlEvent', function () {
+
+
+                });
+
+
+            var progress = $('#xp_'+key).val();
+            if (progress != 'None'){
+                alert("Task completion status is updated to "+progress+"% successfully");
+            }
+            $('.range-control-handle').css('left',progress+'%');
+
+            $(".div-"+key).show();
+            $(".hide-show").addClass('active');
+            
+        }
+        else{
+        //$('.hide-show').first().trigger('click');
+        //$(".hide-show").addClass('active');
+        }
+       });
+</script>
+</html>

@@ -5,6 +5,7 @@ from projectmanagement.views import (create_project,project_list,
     upload_parameter,manage_parameter,manage_parameter_values,project_summary,
     delete_upload_image,remove_record,)
 from projectmanagement.manage_roles import manage_funder_relation
+from projectmanagement.common_method import details_of_tasks
 
 urlpatterns = [
     url(r'^add/$',create_project),
@@ -21,4 +22,5 @@ urlpatterns = [
     url(r'^delete/upload/image/$',delete_upload_image),
     url(r'^remove/record/$',remove_record),
     url(r'^manage/funder/$',manage_funder_relation),
+    url(r'^task/details/$',details_of_tasks),
 ]
