@@ -516,6 +516,7 @@ display: none;
 {% endif %}
 
 {% if f.update_type == 'tranche' or f.update_type == 'tranche_history' %}
+
 {% if forloop.counter|divisibleby:2 %}
 <li class="timeline-left">
 {% else %}
