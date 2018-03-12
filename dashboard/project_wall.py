@@ -36,9 +36,7 @@ def get_date_range(request,projectobj):
 @check_loggedin_access
 def get_project_updates(request):
 #	start_date = '2017-01-01'
-#	end_date = '2018-02-28'
-	# import ipdb; ipdb.set_trace()
-	
+#	end_date = '2018-02-28'	
 	key = 'updates_wall'
 	main_data = []
 	utc=pytz.UTC
@@ -121,7 +119,6 @@ def get_parameter_updates(projectobj):
 	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None)
 	parameter_created_data = []
 	for p in parameter_value:
-		import ipdb; ipdb.set_trace()
 		data = {'date':p.created,'upload_date':p.start_date,
 				'modified_by':get_modified_by_user(p.modified_by) if p.modified_by else projectobj.created_by.attrs,
 				'update_type':'parameter','keyparameter_name':p.keyparameter.name}
