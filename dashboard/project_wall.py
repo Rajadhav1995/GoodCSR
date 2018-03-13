@@ -196,13 +196,11 @@ def get_tranche_update(projectobj,slug):
 				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 		tranche_list.append(data)
 		temp_var = 0
-		print "--------------------"
 		for th in t.history.all():
 
 			new_var = int(th.modified.strftime("%Y%m%d%H%M%S"))
 			modified_time = int(th.modified.strftime("%Y%m%d%H%M%S"))
 			created_time = int(th.created.strftime("%Y%m%d%H%M%S"))
-			# import ipdb; ipdb.set_trace()
 			if (temp_var != new_var) and (created_time != modified_time) and ((th.utilized_amount == th.get_previous_by_history_date().utilized_amount)):# or (th.planned_amount != th.get_previous_by_history_date().planned_amount)):
 				print th.modified,"modified"
 				
@@ -212,7 +210,6 @@ def get_tranche_update(projectobj,slug):
 					'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 				tranche_history_data.append(history_data)
 			temp_var = new_var
-	# import ipdb; ipdb.set_trace()
 	final_tranche = tranche_list + tranche_history_data
 	final_tranche.sort(key=lambda item:item['date'], reverse=True)
 	return final_tranche
