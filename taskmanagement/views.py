@@ -669,8 +669,8 @@ class ExpectedDatesCalculator():
             expected_end_date = main_task.end_date
             if(len(dep_dates) > 0):
                 expected_start_date,expected_end_date = self.get_expected_dates(dep_dates,main_task)
-            ret = {'expected_start_date': expected_start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')),
-                   'expected_end_date': expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))}
+            ret = {'expected_start_date': expected_start_date,
+                   'expected_end_date': expected_end_date}
             self.data[taskid] = ret
             main_task.expected_start_date = ret['expected_start_date']
             main_task.expected_end_date = ret['expected_end_date']
