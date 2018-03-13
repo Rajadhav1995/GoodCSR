@@ -134,7 +134,10 @@ display: none;
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
       <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
     </div>
-    <!-- <div style="float:right;position: relative;left: -60px;">
+
+    <!-- <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "get" >
+
+    <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
@@ -146,7 +149,8 @@ display: none;
             <input type="text" id="to" name="to" value="{{request.GET.end_dt}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
-    </div> -->
+    </div>
+    </form> -->
 </div>
 {{request.GET.date}}
 {% if final_data %}
@@ -606,6 +610,15 @@ No Updates
 <script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
 
 <script type="text/javascript">
+   $(document).ready(function(){
+       $("#to").change(function(){
+       $("#filter_form").submit();
+       });
+   });
+   $('#error').hide();
+</script>
+
+<script type="text/javascript">
 $(window).load(function() {
     if ( $('#hide_button').length > 0 ) {
         $('#hide_button').prop('disabled', false);
@@ -668,11 +681,7 @@ $(document).ready(function() {
           defaultDate: "+1w",
           changeMonth: true,
           numberOfMonths: 1,
-          onSelect: function(date, instance) {
-            // alert(date);
-            
-            window.location = "/dashboard/updates/?slug=test-proj-pmu&key=updates&strt_dt="+date;
-          }
+          
         })
         .on( "change", function() {
           to.datepicker( "option", "minDate", getDate( this ) );
@@ -681,10 +690,7 @@ $(document).ready(function() {
         defaultDate: "+1w",
         changeMonth: true,
         numberOfMonths:1,
-        onSelect: function(date, instance) {
-            // alert(date);
-            window.location = "/dashboard/updates/?slug=test-proj-pmu&key=updates&end_dt="+date;
-          }
+        
       })
       .on( "change", function() {
         from.datepicker( "option", "maxDate", getDate( this ) );
