@@ -21,13 +21,13 @@ from menu_decorators import check_loggedin_access
 from media.forms import NoteForm
 
 def get_date_range(request,projectobj):
-
+	# import ipdb; ipdb.set_trace()
 	if request.GET.get('strt_dt'):
-		start_date = datetime.strptime(request.GET.get('strt_dt'),"%m/%d/%Y")
+		start_date = datetime.strptime(request.GET.get('from'),"%m/%d/%Y")
 	else:
 		start_date = projectobj.start_date
 	if request.GET.get('end_dt'):
-		end_date = datetime.strptime(request.GET.get('end_dt'),"%m/%d/%Y")
+		end_date = datetime.strptime(request.GET.get('to'),"%m/%d/%Y")
 	else:
 		end_date = datetime.now() + timedelta(days=1)
 	return start_date,end_date
@@ -37,10 +37,11 @@ def get_date_range(request,projectobj):
 def get_project_updates(request):
 #	start_date = '2017-01-01'
 #	end_date = '2018-02-28'	
+	
 	key = 'updates_wall'
 	main_data = []
 	utc=pytz.UTC
-	
+		
 	filter_key = request.GET.get('filter')
 	slug = request.GET.get('slug')
 	projectobj = Project.objects.get_or_none(slug=slug)
@@ -185,27 +186,33 @@ def get_trance_updates(projectobj,slug):
 
 def get_tranche_update(projectobj,slug):
 	
-	tranches = Tranche.objects.filter(project=projectobj)
+	tranches = Tranche.objects.filter(active=2,project=projectobj).order_by('id')
 	tranche_list = []
 	tranche_history_data = []
 	for t in tranches:
+		print t.created,"created"
 		data = {'date':t.created,'update_type':'tranche','planned_amount':t.planned_amount,
 				'modified_by':get_modified_by_user(t.modified_by) if t.modified_by else projectobj.created_by.attrs,'tranche_name':t.name,
 				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 		tranche_list.append(data)
 		temp_var = 0
+		print "--------------------"
 		for th in t.history.all():
-			new_var = int(th.modified.strftime("%Y%m%d%H%M"))
+
+			new_var = int(th.modified.strftime("%Y%m%d%H%M%S"))
 			modified_time = int(th.modified.strftime("%Y%m%d%H%M%S"))
 			created_time = int(th.created.strftime("%Y%m%d%H%M%S"))
-			if (new_var != temp_var) and (created_time != modified_time):
-				print new_var,temp_var,created_time,modified_time
+			# import ipdb; ipdb.set_trace()
+			if (temp_var != new_var) and (created_time != modified_time) and ((th.utilized_amount == th.get_previous_by_history_date().utilized_amount)):# or (th.planned_amount != th.get_previous_by_history_date().planned_amount)):
+				print th.modified,"modified"
+				
 				history_data = {'date':th.modified,'update_type':'tranche_history','planned_amount':th.planned_amount,
 					'modified_by':get_modified_by_user(t.modified_by) if t.modified_by else projectobj.created_by.attrs,
 					'tranche_name':th.name,
 					'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 				tranche_history_data.append(history_data)
 			temp_var = new_var
+	# import ipdb; ipdb.set_trace()
 	final_tranche = tranche_list + tranche_history_data
 	final_tranche.sort(key=lambda item:item['date'], reverse=True)
 	return final_tranche
@@ -215,7 +222,6 @@ def get_budget_updates(projectobj):
 	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
 	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2).exclude(planned_unit_cost="")
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
-
 
 	line_total = sum(map(float,line_item_amount_list))
 
