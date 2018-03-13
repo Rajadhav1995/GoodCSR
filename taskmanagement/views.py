@@ -448,7 +448,7 @@ def my_tasks_details(request):
         tasks_today = task_list.filter(start_date = today).order_by('-id')
         tasks_tomorrow = task_list.filter(start_date = tomorrow).order_by('-id')
         tasks_remain = task_list.filter(start_date__gte = remain_days).order_by('-id')
-        closed_tasks = Task.objects.filter(status=2).order_by('-id')
+        closed_tasks = task_list.filter(status=2).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]

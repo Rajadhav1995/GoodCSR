@@ -243,7 +243,45 @@ else{
    });
    });
 </script>
-
+<script>
+   //Toggle
+   
+   	$('.user-menu').on('click',function(){
+   		$('.dropdown-menu').slideDown(350);
+   
+   	});
+   	$('.select-down').on('click',function(){
+           $('.dropdown-menu1').slideDown(350);
+   
+       });
+   
+   	$(document).ready(function(e) {
+   		/*Content Show/Hide */
+   		$('.hide-cont').hide();
+   		$('.close-cont').hide();
+   		$('.view-cont').click(function(){
+   			$('.hide-cont').slideDown(350);
+   			$('.close-cont').show();
+   			$('.view-cont').hide();
+   		});
+   		$('.close-cont').click(function(){
+   			$('.hide-cont').slideUp(350);
+   			$('.close-cont').hide();
+   			$('.view-cont').show();
+   		});
+   		$(document).trigger( "click" );
+   	});
+   
+   	$(document).click(function(){
+   
+   		$('.user-menu, .select-down').click(function(event){
+   			event.stopPropagation();
+   		});
+   
+   		$('.dropdown-menu, .dropdown-menu1').slideUp(350);
+   
+   	});
+</script>
 
 <!-- Progress % circle script -->
 <script src="/static/js/jQuery-plugin-progressbar.js"></script>
