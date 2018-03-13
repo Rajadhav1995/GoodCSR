@@ -66,4 +66,5 @@ def details_of_tasks(request):
     ids = request.GET.get('id')
     obj_list = Task.objects.filter(id= int(ids))
     return render(request,'taskmanagement/my_task_details.html', {'tasks': obj_list},RequestContext(request))
-#    return HttpResponse(html)
+    
+    

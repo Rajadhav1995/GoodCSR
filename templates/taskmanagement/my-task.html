@@ -152,8 +152,16 @@ margin-top: -6px;
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script>
 $(document).ready(function() {
-$('.hide-show').first().trigger('click');
+var slug = "{{request.GET.task_slug}}"
+if (slug != ''){
+    $('#'+slug).trigger('click');
+    $('.hide-show').addClass('active');
+   }
+else{
+   
+    $('.hide-show').first().trigger('click');
         $(".hide-show").addClass('active');
+    }
 });
 </script>
 

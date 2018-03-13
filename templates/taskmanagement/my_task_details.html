@@ -31,7 +31,7 @@
          <div class="planned-pad">
             <ul>
                <li><span>Assigned to</span> 
-                   <div class="middle_text"><canvas class="user-icon" data-name="{{i.assigned_to}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                   <div class="middle_text"><canvas class="user-icon"  width="30"  data-name="{{i.assigned_to}}" height="30" style="border-radius: 30px; width: 30px; height: 30px;color:red"></canvas>
                         <div class="middle">
                             <div class="text">{% if i.assigned_to.attrs.first_name %}{{i.assigned_to.attrs.first_name}}  {{i.assigned_to.attrs.last_name}}{% else %}{{i.assigned_to.name}}{% endif %}</div>
                         </div>
@@ -355,4 +355,12 @@ $(".progress-bar").loading();
         }
        });
 </script>
+<script type="text/javascript" src="/static/js/katweKibsletterAvatarjs.js"></script>
+       <script type="text/javascript">
+           katweKibsAvatar.init({
+               dataChars: 2,
+               width:100,
+               height:100
+           });
+       </script>
 </html>
