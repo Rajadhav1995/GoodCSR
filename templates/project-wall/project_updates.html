@@ -106,6 +106,17 @@ display: none;
   box-shadow: none !important;
   width: 81% !important;
 }
+pre{
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif,open sans,arial,sans-serif;
+  margin-bottom: 10px;
+  overflow: auto;
+  width: auto;
+  padding: 5px;
+  background-color: #549c85;
+  width: 650px!ie7;
+  padding-bottom: 20px!ie7;
+  max-height: 600px;
+}
 </style>
 <body>
 
@@ -391,11 +402,11 @@ display: none;
               
                 <div class="text">
 
-                    <p class="short_comment{{forloop.counter}}">{{f.short_comment | safe}}{% if f.more_comment %}...{% endif %}</p>
+                    <p class="short_comment{{forloop.counter}}"><pre>{{f.more_comment | safe}}</pre><!-- {% if f.more_comment %}...{% endif %} --></p>
                     {% if f.more_comment %}
-                    <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
-                        <p class="text_content{{forloop.counter}}">{{f.short_comment | safe}}{{f.more_comment | safe}}</p>
-                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p>
+                    <!-- <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
+                        <p class="text_content{{forloop.counter}}">{{f.short_comment}}{{f.more_comment}}</p>
+                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p> -->
                     {% endif %}
                     <p>Note added</p>
                     
