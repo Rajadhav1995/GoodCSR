@@ -153,22 +153,22 @@ pre{
       <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
     </div>
 
-    <!-- <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "get" >
-
+    <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
+      {% csrf_token %}
     <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
-            <input type="text" id="from" name="from" value="{{request.GET.strt_dt}}" style="border:1px solid #dedede">
+            <input type="text" id="from" name="from" value="{{request.POST.from}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
         <div style="float:left;position: relative;z-index:1000 ">
             <label for="to" style="font-weight:normal">to</label>
-            <input type="text" id="to" name="to" value="{{request.GET.end_dt}}" style="border:1px solid #dedede">
+            <input type="text" id="to" name="to" value="{{request.POST.to}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
     </div>
-    </form> -->
+    </form>
 </div>
 {{request.GET.date}}
 {% if final_data %}
