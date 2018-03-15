@@ -152,7 +152,12 @@ window.parent.location.reload();
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
 <script src='https://www.google.com/recaptcha/api.js'></script>
-
+<script src="/static/ckeditor/static/ckeditor/ckeditor/ckeditor.js"></script>
+<script>
+                // Replace the <textarea id="editor1"> with a CKEditor
+                // instance, using default configuration.
+                CKEDITOR.replace( 'comment' );
+            </script>
 
 <script>
 function myFunction() {

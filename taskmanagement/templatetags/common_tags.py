@@ -16,17 +16,33 @@ from functools import partial
 
 
 #According to Wikipedia the exact definition of a goal is:
-# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
-#In other words, any planning you do for the future regardless of what it is, is a goal. 
-#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
-# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
+# A desired result a person or a system envisions, 
+# plans and commits to achieve a personal or organizational 
+# desired end-point in some sort of assumed development. 
+# Many people endeavor to reach goals within a finite time by setting deadlines. 
+#In other words, any planning you do for the future 
+# regardless of what it is, is a goal. 
+#So the next time you are planning on doing the weekly chores or 
+# decide on watching that really cool action movie after work, 
+# always keep in mind that these small tasks account as goals and 
+# while seemingly insignificant you are goal setting.
+# Just like how sunlight can't burn through anything without a 
+# magnifying glass focusing it, 
 #you can't achieve anything unless a goal is focusing your effort. 
 #Because at the end of the day goals are what give you direction in life. 
 #By setting goals for yourself you give yourself a target to shoot for. 
-#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
+#This sense of direction is what allows your mind to focus on a target and 
+# rather than waste energy shooting aimlessly,
 # allows you to hit your target and reach your goal. 
-#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
-#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
+#By setting goals for yourself you are able to measure your progress because
+ # you always have a fixed endpoint or benchmark to compare with. 
+ # Take this scenario for example: David makes a goal to write a book with 
+ # a minimum of 300 pages. He starts writing every day and works really hard 
+ # but along the way, he loses track of how many more pages he has written and 
+ # how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has 
+# already written and he instantly determines his progress and knows how much 
+# further he needs to go.
 
 @register.assignment_tag
 def get_details(obj):
@@ -102,14 +118,15 @@ def get_modified_by_user(user_id):
 
 def task_updates_list(key,task_progress,start_date,end_date):
 # this is to get the task updates 
-# where the combination of updates would be filtered and displayed
+# where the combination of updates would be 
+# filtered and displayed
     task_data = []
     utc=pytz.UTC
     slug = task_progress.activity.project.slug
     if key == 'project_tasks':
         task_progress_history = task_progress.history.filter(task_progress__isnull=False,modified__range = [start_date,end_date]).order_by('-id')
     else:
-        task_progress_history = task_progress.history.filter(created__range=[start_date,end_date]).order_by('-id')
+        task_progress_history = task_progress.history.filter(modified__range=[start_date,end_date]).order_by('-id')
     temp_var = 0
     for i in task_progress_history:
         new_var = int(i.modified.strftime("%Y%m%d%H%M%S"))
@@ -163,7 +180,9 @@ def task_comments_progress(date,task_id, attach):
     start_date = datetime.combine(date, datetime.min.time())
     end_date = datetime.combine(date, datetime.max.time())
     task_progress = Task.objects.get(id=task_id)
-    # to make common function for project tasks updates and updates wall (tasks history objects)
+    # to make common function for project tasks updates and 
+    # updates wall (tasks history objects)
+    # ##################
     # based on the key ,task , start date and end date we are getting the details ,
     # particular task
     task_data = task_updates_list(key,task_progress,start_date,end_date)
@@ -192,7 +211,6 @@ def attachment_json_for_comments(task_id,attach):
             task_history = task_object.history.filter(modified__range = (start_time,end_time))
             if task_history:
                 task_history = task_history[0]
-        # import ipdb;ipdb.set_trace()
         if task_history:
 
             attachment_data = {'name':i.created_by.attrs,
@@ -237,7 +255,8 @@ def get_task_comments(comment_date,task_id):
     return comment_data
 
 def get_removed_questions(questions,block,project_report,block_type,quest_removed):
-    # to get the removed questions list for that particular block 
+    # to get the removed questions list for 
+    # that particular block 
     removed_ques=[]
     parent_ques=[]
     final_questions=[]
@@ -273,7 +292,9 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     return final_questions,remove_id
     
 def get_removed_populate_questions(questions,project_report,block_type,quest_removed):
-    # to get the removed questions list which are auto populated questions for that particular block
+    # to get the removed questions list which are 
+    # auto populated questions for that 
+    # particular block
     removed_ques=[]
     remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
@@ -297,7 +318,8 @@ def get_removed_populate_questions(questions,project_report,block_type,quest_rem
     
 @register.assignment_tag 
 def get_questions(block,project_report,block_type,quest_removed):
-    # to get the questions that are tagged in that particular section
+    # to get the questions that are tagged in that 
+    # particular section
     question_list = []
     question_dict={} 
     report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
@@ -316,7 +338,8 @@ def get_questions(block,project_report,block_type,quest_removed):
 
 @register.assignment_tag 
 def get_auto_populated_questions(ques_id,project,project_report,block_type,quest_removed):
-    # to get the auto populated questions that are tagged to that particular section
+    # to get the auto populated questions that 
+    # are tagged to that particular section
     data = {}
     question = Question.objects.get_or_none(id=ques_id)
     sub_quest_list = []
@@ -326,7 +349,8 @@ def get_auto_populated_questions(ques_id,project,project_report,block_type,quest
     cover_image = Attachment.objects.get_or_none(description__iexact = "cover image",attachment_type = 1,
             content_type = ContentType.objects.get_for_model(project_report),
             object_id = project_report.id)
-    # details dict is to get the details of two sections on first click of generate report
+    # details dict is to get the details of two sections 
+    # on first click of generate report
     details = {'report_type':project_report.get_report_type_display(),
         'report_duration':project_report.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d")+' TO '+project_report.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),
         'prepared_by':project_report.created_by.attrs.get('first_name')+' '+project_report.created_by.attrs.get('last_name'),'client_name':mapping_view.funder.organization,
@@ -345,7 +369,8 @@ def get_auto_populated_questions(ques_id,project,project_report,block_type,quest
     
 @register.assignment_tag 
 def get_milestones(quarter,report_obj,type_id):
-# to get the milestones or activities that are save for particular quarters
+# to get the milestones or activities that 
+# are save for particular quarters
     report_miles = []
     data = {}
     slug = {1:'milestone-section',2:'activity-section'}
@@ -371,7 +396,9 @@ def get_mile_images(mile_id):
     return image_miles
     
 def get_sub_answers(details,sub_questions,project_report,project):
-# to get the answers of auto populated questions calculating based on whether there is answer object to that question 
+# to get the answers of auto populated questions 
+# calculating based on whether there is answer 
+# object to that question 
     data = {}
     sub_quest_list = []
     keys = details.keys()
@@ -411,7 +438,8 @@ def get_org_logos(data,project,keys,details,sub):
     
 @register.assignment_tag 
 def get_gantt_details(v,projectobj):
-# this function to get the gantt chart details for the particular quarter that is generated
+# this function to get the gantt chart details 
+# for the particular quarter that is generated
     start_date = v.split('to')[0].rstrip()
     end_date = v.split('to')[1].lstrip()
     start_date = datetime.strptime(start_date[:19], '%Y-%m-%d').date()
@@ -422,7 +450,9 @@ def get_gantt_details(v,projectobj):
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     return taskdict
 
-@register.assignment_tag     
+@register.assignment_tag
+# this function will get 
+# report quarters
 def get_report_quarters(report_type,start_date,end_date,budget_quarters):
     month_dict = {1:'January',2:'February',3:'March',4:'April',5:'May',
                       6:'June',7:'July',8:'August',9:'September',
@@ -446,6 +476,8 @@ def get_report_quarters(report_type,start_date,end_date,budget_quarters):
     return report_duration,quarter_duration
     
 @register.assignment_tag
+# this template tag will return
+# converted time in local timezone
 def get_converted_time(created):
     created_time = created.replace(tzinfo=pytz.utc)
     convert_time = created_time.astimezone(pytz.timezone('Asia/Kolkata'))
@@ -453,6 +485,8 @@ def get_converted_time(created):
     return time
     
 @register.assignment_tag
+# this template tag will return from and to 
+# date for quarter
 def get_from_to_dates(date):
     start_date =end_date=''
     date_list=[]
@@ -466,12 +500,16 @@ def get_from_to_dates(date):
     return start_date,end_date
 
 @register.assignment_tag
+# this template tag will return
+# quarter names from dict
 def get_quarter_names(key,number_dict):
     name=''
     name = number_dict.get(key)
     return name
 
 @register.assignment_tag
+# this template tag will return 
+# month name from date format
 def get_month_name(date):
     from datetime import datetime
     month_name = date.split(' to ')[0]
@@ -506,6 +544,9 @@ def get_taskcompletion(obj):
     return percent
 
 @register.assignment_tag
+# this template tag is to 
+# get project parameter type 
+# if numeric it will return 0 or else 1
 def get_parameter_type(obj):
     for i in obj:
         if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
@@ -514,7 +555,7 @@ def get_parameter_type(obj):
             pie_chart = 1
     return pie_chart
  
-@register.assignment_tag    
+@register.assignment_tag
 def get_block_tab_removed(questions,block_type,report_obj):
     tab_removed = ''
     removed_id = ''
@@ -532,7 +573,9 @@ def get_block_tab_removed(questions,block_type,report_obj):
     return tab_removed,remove_id
     
 from calendar import monthrange
-@register.assignment_tag   
+@register.assignment_tag
+# this template tag is to get Month name
+# as per month number
 def get_monthly_date(period):
     month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
                       'June':6,'July':7,'August':8,'September':9,
@@ -547,17 +590,24 @@ def get_monthly_date(period):
     return period
 
 @register.filter
+# this template tag is to get value as 
+# per key
 def get_item(dictionary, key):
     return dictionary.get(key)
 
 import json
 @register.assignment_tag
+# converting gantt chart data into json format
+# from python dict format
 def taskdict_json(taskdict):
     taskdict = json.loads(taskdict)
     return taskdict
 
+# this funtionality is to 
+# trim long file name and showin ... and last few chars 
+# of file name
+# ex "somefilename_abc...xyz.jpg"
 def string_trim(string):
-    # import ipdb; ipdb.set_trace()
     file_extension = string.split('.')
     if len(string) > 19:
         new_string = string[:25] + '...' + file_extension[0][-6:] + '.'+file_extension[-1]
@@ -565,6 +615,9 @@ def string_trim(string):
         new_string = string
     return new_string
 
+# this fuctionality is for restriction string
+# length and sending string in two chunks
+# for "read more" text functionality
 def read_more_text(text):
     if len(text) > 50:
         short_text = text[:190]
@@ -574,6 +627,9 @@ def read_more_text(text):
         more_text = ''
     return short_text,more_text
 
+# this functionality is to fet attachement type 
+# taking file name and returning file type along with file
+# extension
 def get_attachment_type(file_name):
     image_format = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c ', 'fpx', 'pcd', 'png']
     docs_format = ['rtf', 'odt', 'docx', 'pot', 'pxt', 'txt', 'odf', 'doc']

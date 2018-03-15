@@ -13,7 +13,14 @@
 
 <style>
 
+.order_list .timeline-left ul li{list-style-type: disc;}
+.order_list .timeline-right ul li{list-style-type: disc;}
+.order_list .timeline-left ol li{list-style-type: disc;}
+.order_list .timeline-right ol li{list-style-type: disc;}
 
+
+.order_list .timeline-left li { list-style-type: disc;width: 100%; float: left; margin-bottom: 0px;  color: #fff;font-size: 14px;}
+.order_list .timeline-right li { list-style-type: disc;width: 100%; float: left; margin-bottom: 0px;  color: #fff;font-size: 14px;}
 .blog_timeline li { margin-bottom: 80px;position: relative;width: 50%;float: left;clear: left;}
 .blog_timeline {padding: 20px 0;list-style: none;position: relative; float: left;width: 100%}
 .blog_timeline li.timeline-right {float: right;clear: right;margin-bottom: 100px;}
@@ -99,10 +106,21 @@ display: none;
   box-shadow: none !important;
   width: 81% !important;
 }
+pre{
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif,open sans,arial,sans-serif;
+  margin-bottom: 10px;
+  overflow: auto;
+  width: auto;
+  padding: 5px;
+  background-color: #549c85;
+  width: 650px!ie7;
+  padding-bottom: 20px!ie7;
+  max-height: 600px;
+}
 </style>
 <body>
 
-<div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:60px;top:290px;">
+<div id="" class="clearfix header_fixed right_menu position_fixed " style="position:fixed; right:60px;top:290px;">
   <div class="menu-toggle-holder">
      <p style="float:left;position: relative; top: 4px; left: -40px; font-size: 16px;">Tags</p>
      <div class="center"> <span class="label">Menu</span>
@@ -124,7 +142,7 @@ display: none;
         </div>
     </nav>
     </div>
-    <section class="content-part forms_section">
+    <section class="content-part forms_section order_list">
 <div class="row">
 <div class="white_bg">
   <div class=" content">
@@ -135,22 +153,22 @@ display: none;
       <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
     </div>
 
-    <!-- <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "get" >
-
+    <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
+      {% csrf_token %}
     <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
-            <input type="text" id="from" name="from" value="{{request.GET.strt_dt}}" style="border:1px solid #dedede">
+            <input type="text" id="from" name="from" value="{{request.POST.from}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
         <div style="float:left;position: relative;z-index:1000 ">
             <label for="to" style="font-weight:normal">to</label>
-            <input type="text" id="to" name="to" value="{{request.GET.end_dt}}" style="border:1px solid #dedede">
+            <input type="text" id="to" name="to" value="{{request.POST.to}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
     </div>
-    </form> -->
+    </form>
 </div>
 {{request.GET.date}}
 {% if final_data %}
@@ -383,11 +401,12 @@ display: none;
             <div class="timeline-body text-justify">
               
                 <div class="text">
-                    <p class="short_comment{{forloop.counter}}">{{f.short_comment}}{% if f.more_comment %}...{% endif %}</p>
+
+                    <p class="short_comment{{forloop.counter}}"><pre>{{f.more_comment | safe}}</pre><!-- {% if f.more_comment %}...{% endif %} --></p>
                     {% if f.more_comment %}
-                    <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
+                    <!-- <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
                         <p class="text_content{{forloop.counter}}">{{f.short_comment}}{{f.more_comment}}</p>
-                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p>
+                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p> -->
                     {% endif %}
                     <p>Note added</p>
                     
