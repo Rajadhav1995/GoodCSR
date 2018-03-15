@@ -500,7 +500,6 @@ $(document).ready(function(){
         }
                    },
                        error : function() {
-                       console.log('error');
                    }
                 });
     });
@@ -761,7 +760,7 @@ else{
     }
 }
 var total = parseInt(100 - (utilized + disbursed))
-console.log(total , utilized , disbursed);
+//console.log(total , utilized , disbursed);
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
 
