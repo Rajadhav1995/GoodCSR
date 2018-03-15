@@ -601,7 +601,7 @@ under 0 Milestones</h5>
       {% if project_funders.funder %}
 
       <tr>
-            <td style="width:28%;"><canvas class="user-icon" data-name="{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}}{{project_funders.funder.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}</label></a></td>
+            <td style="width:28%;"><canvas class="user-icon" data-name="{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}} {{project_funders.funder.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}</label></a></td>
             <td style="width:19%;">{{project_funders.funder.organization}}</td>
             <td style="width:26%;">{% if project_funders.funder.designation %}{{project_funders.funder.designation}} {% else %} - {% endif %}</td>
             <td style="width:19%;">Funder
