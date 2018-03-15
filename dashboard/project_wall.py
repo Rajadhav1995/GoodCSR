@@ -48,7 +48,8 @@ def get_project_updates(request):
 	projectobj = Project.objects.get_or_none(slug=slug)
 	start_date,end_date = get_date_range(request,projectobj)
 	
-	task_list = Task.objects.filter(activity__project=projectobj,active=2).order_by('-id')
+	task_list = Task.objects.filter(activity__project=projectobj,active=2,created__range=[start_date,end_date]).order_by('-id')
+	
 	plain_task = []
 	history_task_data = []
 	if request.GET.get('filter') == 'task' or request.GET.get('filter') == None:
@@ -65,21 +66,20 @@ def get_project_updates(request):
 	main_data = history_task_data + plain_task
 	budget_final_list = []
 	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
-		budget_final_list = get_budget_updates(projectobj)
+		budget_final_list = get_budget_updates(projectobj,start_date,end_date)
 	file_data_final = []
 	timeline_data_final = []
 	if request.GET.get('filter') == 'file' or request.GET.get('filter') == 'timeline' or request.GET.get('filter') == None:
-		# import ipdb; ipdb.set_trace()
 		file_data_final = get_file_updates(projectobj,start_date,end_date,filter_key)
 	final_parameter_data = []
 	if request.GET.get('filter') == 'parameter' or request.GET.get('filter') == None:
-		final_parameter_data = get_parameter_updates(projectobj)
+		final_parameter_data = get_parameter_updates(projectobj,start_date,end_date)
 	note_list = []
 	if request.GET.get('filter') == 'note' or request.GET.get('filter') == None:
 		note_list = get_project_note(projectobj,request,start_date,end_date)
 	tranche_list = []
 	if request.GET.get('filter') == 'tranche' or request.GET.get('filter') == None:
-		tranche_list = get_tranche_update(projectobj,slug)
+		tranche_list = get_tranche_update(projectobj,slug,start_date,end_date)
 	budget_final_list.sort(key=lambda item:item['date'], reverse=True)
 	filter_dict = {'task':main_data,'note':note_list}
 	final_data = main_data + file_data_final + budget_final_list + note_list + final_parameter_data + tranche_list
@@ -96,7 +96,7 @@ def get_file_updates(projectobj,start_date,end_date,filter_key):
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
 	for f in file_update:
 
-		history = f.history.filter(created__range=[start_date,end_date]).order_by('modified')
+		history = f.history.filter(modified__range=[start_date,end_date]).order_by('modified')
 		history_data = []
 
 		for k in history[:2]:
@@ -113,9 +113,9 @@ def get_file_updates(projectobj,start_date,end_date,filter_key):
 		final_file_data = timeline_data + file_data
 	return final_file_data
 
-def get_parameter_updates(projectobj):
+def get_parameter_updates(projectobj,start_date,end_date):
 	parameter_data = []
-	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None)
+	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None,created__range=[start_date,end_date])
 	parameter_created_data = []
 	for p in parameter_value:
 		data = {'date':p.created,'upload_date':p.start_date,
@@ -123,7 +123,7 @@ def get_parameter_updates(projectobj):
 				'update_type':'parameter','keyparameter_name':p.keyparameter.name}
 		parameter_data.append(data)
 	parameter_history_data = []
-	project_parameter = ProjectParameter.objects.filter(project=projectobj,parent__isnull=True)
+	project_parameter = ProjectParameter.objects.filter(project=projectobj,parent__isnull=True,created__range=[start_date,end_date])
 	
 	for parameter in project_parameter:
 		
@@ -131,8 +131,7 @@ def get_parameter_updates(projectobj):
 						'date':parameter.created,'update_type':'parameter_created'}
 		parameter_created_data.append(created_data)
 		parameter_time = int(parameter.created.strftime("%Y%m%d%H%M%S"))
-		parameter_history = parameter.history.all()[0::2]
-
+		parameter_history = parameter.history.filter(modified__range=[start_date,end_date])[0::2]
 		for history in parameter_history:
 			history_time = int(history.modified.strftime("%Y%m%d%H%M%S"))
 			if int(history_time) != int(parameter_time):
@@ -182,9 +181,9 @@ def get_trance_updates(projectobj,slug):
 	tranche_history_data.sort(key=lambda item:item['date'], reverse=True)
 	return tranche_history_data
 
-def get_tranche_update(projectobj,slug):
+def get_tranche_update(projectobj,slug,start_date,end_date):
 	
-	tranches = Tranche.objects.filter(active=2,project=projectobj).order_by('id')
+	tranches = Tranche.objects.filter(active=2,project=projectobj,created__range=[start_date,end_date]).order_by('id')
 	tranche_list = []
 	tranche_history_data = []
 	for t in tranches:
@@ -193,7 +192,7 @@ def get_tranche_update(projectobj,slug):
 				'tranche_url':PMU_URL + '/project/tranche/list/' + '?slug='+slug}
 		tranche_list.append(data)
 		temp_var = 0
-		for th in t.history.all():
+		for th in t.history.filter(modified__range=[start_date,end_date]):
 
 			new_var = int(th.modified.strftime("%Y%m%d%H%M%S"))
 			modified_time = int(th.modified.strftime("%Y%m%d%H%M%S"))
@@ -210,10 +209,10 @@ def get_tranche_update(projectobj,slug):
 	final_tranche.sort(key=lambda item:item['date'], reverse=True)
 	return final_tranche
 
-def get_budget_updates(projectobj):
+def get_budget_updates(projectobj,start_date,end_date):
 	budgetlist = []
 	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
-	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2).exclude(planned_unit_cost="")
+	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2,created__range=[start_date,end_date]).exclude(planned_unit_cost="")
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
 
 	line_total = sum(map(float,line_item_amount_list))
@@ -221,7 +220,7 @@ def get_budget_updates(projectobj):
 	budget_data_list = []
 	budget_count = budget_period.count()
 	for q in budget_period:
-		budgethistory = q.history.all()
+		budgethistory = q.history.filter(modified__range=[start_date,end_date])
 		temp_var = 0
 		for k in budgethistory:
 			new_var = int(k.modified.strftime("%Y%m%d%H%M"))

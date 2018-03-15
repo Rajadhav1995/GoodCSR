@@ -126,7 +126,7 @@ def task_updates_list(key,task_progress,start_date,end_date):
     if key == 'project_tasks':
         task_progress_history = task_progress.history.filter(task_progress__isnull=False,modified__range = [start_date,end_date]).order_by('-id')
     else:
-        task_progress_history = task_progress.history.filter(created__range=[start_date,end_date]).order_by('-id')
+        task_progress_history = task_progress.history.filter(modified__range=[start_date,end_date]).order_by('-id')
     temp_var = 0
     for i in task_progress_history:
         new_var = int(i.modified.strftime("%Y%m%d%H%M%S"))
