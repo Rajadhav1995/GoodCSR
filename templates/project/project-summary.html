@@ -614,7 +614,7 @@ under 0 Milestones</h5>
       {% if projectuserlist %}
       {% for i in projectuserlist %}
       <tr>
-            <td style="width:28%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}}{{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</label></a></td>
+            <td style="width:28%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</label></a></td>
             <td style="width:19%;">{{i.user.organization}}</td>
             <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:19%;">{{i.role.name}}
