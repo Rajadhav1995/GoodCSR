@@ -307,7 +307,6 @@ jQuery("#activate_tagator2").keyup(function () {
 
 function task_details(task_id){
     $('.right-div-details').html('');
-        console.log(" calling ajaxcall "+task_id)
            var sl_id = task_id
             $.ajax({
             url:'/project/task/details/',
@@ -320,7 +319,6 @@ function task_details(task_id){
                 
             },
             error : function(){
-            console.log('sai')
             }
         });
         

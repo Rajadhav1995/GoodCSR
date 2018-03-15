@@ -621,8 +621,8 @@ tr { page-break-inside: avoid; overflow: visible !important; }
 
                     var loc_url = '{{image}}'
                     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    console.log(timeline_lengths);
-                    console.log(timeloop.length)
+                    //console.log(timeline_lengths);
+                    //console.log(timeloop.length)
                    // for(var j=1;j<=timeloop.length;j++)
                     // { 
 
@@ -633,19 +633,19 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                         else{
                             lengths = timeline_lengths;
                         }
-                         console.log(i)
-                        console.log(lengths)
+                      //   console.log(i)
+                       // console.log(lengths)
                         
-                        console.log(timeline_data)
+                       // console.log(timeline_data)
                         var wrapper = $(".timeline-slide_" + "{{timeperiod}}"+"_"+{{t}});
 
                         for (i; i < lengths ; i++)
                         {
-                          console.log(i)
+                          //console.log(i)
                           var obj = timeline_data[i]
                           var name = obj.name;
                         var url =  loc_url +"/"+"/static/img/milestone-icon.png";
-                          console.log(obj);
+                         // console.log(obj);
                           if (obj.url) {
                             var url = loc_url + obj.url;
                             }
@@ -960,7 +960,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             <script>
                 {% get_gantt_details v projectobj as taskdict %}
                 var jsonData = {{taskdict|safe}}
-                console.log(jsonData);
+                //console.log(jsonData);
                 var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
                 // console.log(jsonData.tasks);
                 // Get today and tomorrows date
@@ -1094,7 +1094,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
       }
       // For Milestones
       var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
+      //console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
         var mileId = 111,
           mileStatus = 'gmilestone redmile '
@@ -1108,7 +1108,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
         var tempArray = [];
         var n = 0;
         $.each(depTask, function (index, value) {
-          console.log('value', n);
+      //    console.log('value', n);
           tempArray.push({
             'id': value
           });
@@ -1118,17 +1118,17 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             }
             if (i == (depTask.length - 1)) {
 
-              console.log('Array', depTask)
-              console.log('Max Date', Math.max(tempArray.date));
+        //      console.log('Array', depTask)
+         //     console.log('Max Date', Math.max(tempArray.date));
             }
           }
           n++;
         });
-        console.log("tempArray", tempArray);
+       // console.log("tempArray", tempArray);
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
-        console.log('depTask', depTask[0]);
+        //console.log('depTask', depTask[0]);
         if (depTask[ln] == tempId) {
           var d1 = new Date(eEndDate);
           var d2 = new Date(eEndDate);
@@ -1149,7 +1149,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             var d4 = new Date(completionDate);
             var timeDiff = (d3.getTime() + 86400) - d4.getTime();
             var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
+          //  console.log('DiffDays', diffDays);
             if (diffDays < 0) {
               var dur = rem = Math.abs(diffDays);
               if (dur < 8) {
@@ -1170,7 +1170,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 rem = Math.floor(rem % 365);
                 mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+          //    console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
               var dur = rem = Math.abs(diffDays);
@@ -1195,7 +1195,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 rem = Math.floor(rem % 365);
                 mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+           //   console.log('Diff days', mileName);
             }
           }
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
@@ -1320,7 +1320,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 }
               });
               $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
+             // console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
               if (count == 0) {
                 $(previous).css('top', '0px');
                 count++;
@@ -1511,7 +1511,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                         {% get_parameter_values reportupdates.1 paramobj as parameter_values %}
                         var new_data_pin = 0;
                         var data11 = {{parameter_values.0.0 | safe}};
-                        console.log("mahiti.org");
+                        //console.log("mahiti.org");
                         var values = "comm{{forloop.counter}}"
                         var pin_title = "{{parameter_values.1.0 | safe}}"
                         // var pin_title = pin_title[new_data_pin]

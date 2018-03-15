@@ -1100,7 +1100,7 @@
                   {% for i,v in currentquarter_list.items %}
                       {% get_gantt_details v projectobj as taskdict %}
                       var jsonData = {{taskdict|safe}}
-                  console.log(jsonData);
+                  //console.log(jsonData);
                   var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
                   // console.log(jsonData.tasks);
                   // Get today and tomorrows date
@@ -1235,7 +1235,7 @@
                   }
                   // For Milestones
                   var completionDate = this.actual_end_date;
-                  console.log('Complete date', completionDate);
+                  //console.log('Complete date', completionDate);
                   $.each(jsonData.milestones, function (i) {
                   var mileId = 111,
                   mileStatus = 'gmilestone redmile '
@@ -1250,7 +1250,7 @@
                   var tempArray = [];
                   var n = 0;
                   $.each(depTask, function (index, value) {
-                  console.log('value', n);
+                 // console.log('value', n);
                   tempArray.push({
                   'id': value
                   });
@@ -1260,18 +1260,18 @@
                   }
                   if (i == (depTask.length - 1)) {
 
-                  console.log('Array', depTask)
-                  console.log('Max Date',Math.max(tempArray.date));
+                 // console.log('Array', depTask)
+                 // console.log('Max Date',Math.max(tempArray.date));
                   }
                   }
                   n++;
                   });
-                  console.log("tempArray", tempArray);
+                 // console.log("tempArray", tempArray);
                   //end of  the added script
                   // if (depTask.length == 1) {
                   var ln = depTask.length;
                   ln--;
-                  console.log('depTask', depTask[0]);
+                  //console.log('depTask', depTask[0]);
                   if (depTask[ln] == tempId) {
                   var d1 = new Date(eEndDate);
                   var d2 = new Date(eEndDate);
@@ -1292,7 +1292,7 @@
                   var d4 = new Date(completionDate);
                   var timeDiff = (d3.getTime() + 86400) - d4.getTime();
                   var diffDays = Math.ceil(timeDiff / 86400000);
-                  console.log('DiffDays', diffDays);
+                 // console.log('DiffDays', diffDays);
                   if (diffDays < 0) {
                   var dur = rem = Math.abs(diffDays);
                   if (dur < 8) {
@@ -1319,7 +1319,7 @@
                   mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
                   };
                   //ended script
-                  console.log('Diff days', mileName);
+                  //console.log('Diff days', mileName);
                   } else {
                   mileStatus = 'gmilestone greenmile '
                   var dur = rem = Math.abs(diffDays);
@@ -1344,7 +1344,7 @@
                   rem = Math.floor(rem % 365);//new line
                   mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";//modified
                   };
-                  console.log('Diff days', mileName);
+                 // console.log('Diff days', mileName);
                   }
                   }
                   g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
@@ -2072,7 +2072,7 @@
        {
          var obj = ff[i]
          var name = obj.name;
-         console.log(obj);
+         //console.log(obj);
          if (obj.url) {
            var url = loc_url + obj.url;
            }
@@ -2479,7 +2479,7 @@
      'use strict';
 
      $(window).on('ariaAccordion.initialised', function(event, element) {
-       console.log('initialised');
+      // console.log('initialised');
      });
 
      $('.accordion-group').first().ariaAccordion({
@@ -2575,7 +2575,7 @@
    {% for i,v in futurequarter_list.items %}
        {% get_gantt_details v projectobj as taskdict %}
        var jsonData = {{taskdict|safe}}
-       console.log(jsonData)
+       //console.log(jsonData)
        var g = new JSGantt.GanttChart(document.getElementById('gwContainer_next'), 'week');
        // console.log(jsonData.tasks);
        // Get today and tomorrows date
@@ -2687,7 +2687,7 @@
          }
          // For Milestones
          var completionDate = this.actual_end_date;
-         console.log('Complete date', completionDate);
+        // console.log('Complete date', completionDate);
          $.each(jsonData.milestones, function (i) {
            var mileId = 111, mileStatus = 'gmilestone redmile '
            depTask = [];
@@ -2699,7 +2699,7 @@
            // if (depTask.length == 1) {
            var ln = depTask.length;
            ln--;
-           console.log('depTask', depTask[0]);
+          // console.log('depTask', depTask[0]);
            if (depTask[ln] == tempId) {
              var d1 = new Date(eEndDate);
              var d2 = new Date(eEndDate);
@@ -2720,14 +2720,14 @@
                var d4 = new Date(completionDate);
                var timeDiff = (d3.getTime() + 86400) - d4.getTime();
                var diffDays = Math.ceil(timeDiff / 86400000);
-               console.log('DiffDays', diffDays);
+              // console.log('DiffDays', diffDays);
                if (diffDays < 0) {
                  var dur = Math.abs(diffDays);
                  if (dur < 8) { mileName += " - Delayed by " + dur + " day(s)" };
                  if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Delayed by " + dur + "+ week(s)" };
                  if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Delayed by " + dur + "+ month(s)" };
                  if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Delayed by " + dur + "+ year(s)" };
-                 console.log('Diff days', mileName);
+               //  console.log('Diff days', mileName);
                } else {
                  mileStatus = 'gmilestone greenmile '
                  var dur = Math.abs(diffDays);
@@ -2736,7 +2736,7 @@
                  if (dur >= 8 && dur < 30) { dur = Math.floor(dur / 7); mileName += " - Ahead by " + dur + "+ week(s)" };
                  if (dur >= 30 && dur < 365) { dur = Math.floor(dur / 30); mileName += " - Ahead by " + dur + "+ month(s)" };
                  if (dur >= 365) { dur = Math.floor(dur / 360); mileName += " - Ahead by " + dur + "+ year(s)" };
-                 console.log('Diff days', mileName);
+                // console.log('Diff days', mileName);
                }
              }
              g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
@@ -3047,9 +3047,9 @@
                $('.tab_'+section).hide();
                },
            error: function(XMLHttpRequest, textStatus, errorThrown){
-               console.log("remove error")
-              console.log(XMLHttpRequest);
-              console.log(errorThrown);
+              // console.log("remove error")
+             // console.log(XMLHttpRequest);
+             // console.log(errorThrown);
            }
        });
 
