@@ -65,8 +65,22 @@
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">
                 {% csrf_token %}
                 <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
-               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
+               <textarea name="comment" id= "comment_" maxlength="500" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
+                                <div id="textarea_feedback" style="float: right;"></div>
                <div>
+               <script>
+                        $(document).ready(function() {
+                            var text_max = 500;
+                            $('#textarea_feedback').html(text_max + ' characters remaining');
+
+                            $('#comment_').keyup(function() {
+                                var text_length = $('#comment_').val().length;
+                                var text_remaining = text_max - text_length;
+
+                                $('#textarea_feedback').html(text_remaining + ' characters remaining');
+                            });
+               
+               </script>
                <i class="fa fa-file"></i>
                <input type='file' name ='upload_attach' id='upload-photo'/> 
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
@@ -363,4 +377,25 @@ $(".progress-bar").loading();
                height:100
            });
        </script>
+<script>
+$('#comment_').keypress(function (e) {
+    var regex = new RegExp("^[a-zA-Z0-9]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+}).on('paste', function (e) {
+  var regex = new RegExp("^[a-zA-Z0-9]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+});
+</script>
 </html>

@@ -1418,6 +1418,8 @@ Highcharts.chart(values, {
 </script>
 
 <script>
+var key = '{{request.GET.key}}'
+{% if key == 'summary' %}
 var data = {{budget|safe}}
 //console.log(data);
 //var utilized = data.utilized/(data.utilized + data.total)*100
@@ -1626,7 +1628,7 @@ setInterval(function () {
     }
 
 }, 800);
-
+{% endif %}
 </script>
 
 <script>

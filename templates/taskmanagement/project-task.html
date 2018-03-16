@@ -181,6 +181,9 @@ font-size: 14px;
             </div>
             <div class="task-completion-right">
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">{% csrf_token %}
+                    {% if request.GET.items %}
+    <input type="hidden" name="next" value="{{request.GET.items}}">
+    {% endif %}
                 <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
                               
                <textarea name="comment" id='comment_{{i.id}}' maxlength="500"  onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..." required></textarea>
@@ -195,6 +198,25 @@ font-size: 14px;
                                 var text_remaining = text_max - text_length;
 
                                 $('#textarea_feedback_{{i.id}}').html(text_remaining + ' characters remaining');
+                            });
+                            $('#comment_{{i.id}}').keypress(function (e) {
+                                var regex = new RegExp("^[a-zA-Z0-9]+$");
+                                var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                                if (regex.test(str)) {
+                                    return true;
+                                }
+
+                                e.preventDefault();
+                                return false;
+                            }).on('paste', function (e) {
+                              var regex = new RegExp("^[a-zA-Z0-9]+$");
+                                var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                                if (regex.test(str)) {
+                                    return true;
+                                }
+
+                                e.preventDefault();
+                                return false;
                             });
                         });
                 </script>
@@ -849,5 +871,4 @@ jQuery("#activate_tagator2").keyup(function () {
       });
            });
 </script>
-
 {% endblock %}

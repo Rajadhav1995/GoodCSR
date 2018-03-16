@@ -670,5 +670,15 @@ function funder_val() {
         return ((k >= 65 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||(k >= 38 && k <= 41) || (k>=44 && k<=46));
         }
         );
+    $('#id_description').keypress(function (e) {
+    var regex = new RegExp("^[a-zA-Z0-9]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+});
     </script>
 {% endblock %}
