@@ -150,10 +150,10 @@ pre{
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
-      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
+      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Create Note</button></a>
     </div>
 
-    <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
+    <!-- <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
       {% csrf_token %}
     <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
@@ -168,7 +168,7 @@ pre{
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
     </div>
-    </form>
+    </form> -->
 </div>
 {{request.GET.date}}
 {% if final_data %}
@@ -468,9 +468,9 @@ pre{
             <div class="timeline-body text-justify">
                <div class="">
                 <div class="image_uploaded">
-                <p style="color:#fff">  <span>Uploaded values for #parameter <b>{{f.keyparameter_name}}</b> for {{f.upload_date | date:"M Y"}}</span></p>
+                <p style="color:#fff">  <span>Uploaded values for parameter <b>{{f.keyparameter_name}}</b> for {{f.upload_date | date:"M Y"}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
                 </div>
                 
                 
@@ -497,9 +497,9 @@ pre{
             <div class="timeline-body text-justify">
                <div class="">
                 <div class="image_uploaded">
-                <p style="color:#fff">  <span>Edited #parameter <b>{{f.parameter_name}}</b></span></p>
+                <p style="color:#fff">  <span>Edited parameter <b>{{f.parameter_name}}</b></span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
                 </div>
                 
                 
@@ -528,7 +528,7 @@ pre{
                 <div class="image_uploaded">
                 <p style="color:#fff">  <span>Created a new parameter <b>{{f.parameter_name}}</b></span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
                 </div>
                 
                 
@@ -555,9 +555,9 @@ pre{
             <div class="timeline-body text-justify">
                <div class="">
                 <div class="image_uploaded">
-                <p style="color:#fff">  <span>{% if f.update_type == 'tranche_history' %}Edited {% else %}Added a {% endif %} #tranche <b><u><a target="_blank" href={{f.tranche_url}}>{{f.tranche_name}}</a></u></b> with planned amount <br> ₹ {{f.planned_amount}}</span></p>
+                <p style="color:#fff">  <span>{% if f.update_type == 'tranche_history' %}Edited {% else %}Added a {% endif %} tranche <b><u><a target="_blank" href={{f.tranche_url}}>{{f.tranche_name}}</a></u></b> with planned amount <br> ₹ {{f.planned_amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Tranche</p></a></div>
                 </div>
                 
                 
