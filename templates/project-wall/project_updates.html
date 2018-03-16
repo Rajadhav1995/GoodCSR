@@ -402,11 +402,11 @@ pre{
               
                 <div class="text">
 
-                    <p class="short_comment{{forloop.counter}}"><pre>{{f.more_comment | safe}}</pre><!-- {% if f.more_comment %}...{% endif %} --></p>
+                    <p class="short_comment{{forloop.counter}}">{{f.more_comment | safe}}{% if f.more_comment %}...{% endif %}</p>
                     {% if f.more_comment %}
-                    <!-- <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
+                    <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
                         <p class="text_content{{forloop.counter}}">{{f.short_comment}}{{f.more_comment}}</p>
-                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p> -->
+                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p>
                     {% endif %}
                     <p>Note added</p>
                     
