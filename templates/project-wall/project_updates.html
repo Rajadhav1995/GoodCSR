@@ -136,6 +136,7 @@ pre{
         <a {% if filter_key == 'note' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=note" rel="1">Notes</a>
         <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="3">Tranches</a>
         <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=timeline" rel="2">TimelineProgress</a>
+        <a {% if filter_key == 'parameter' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=parameter" rel="2">Parameter</a>
         <a {% if filter_key == None %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
         <!-- <a href="#" rel="1">Report</a> -->
         
