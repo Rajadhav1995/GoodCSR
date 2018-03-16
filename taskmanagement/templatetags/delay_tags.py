@@ -80,6 +80,7 @@ def get_cat_delay_point(obj,key):
     return diff,slug
 
 def get_max_diff_tasks(obj):
+
     today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     ExpectedDatesCalculator(task=obj)
     planned_date = obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
@@ -95,6 +96,9 @@ def get_max_diff_tasks(obj):
     return maxi
 
 def get_task_delay_ponts(obj):
+# this specifes the task dealy points ,wheter the task is dealyed or ahead and 
+# also specifies the name and task progress of a task and is appended to a list
+
     maxi=''
     task_data_list = []
     tasks_obj = Task.objects.filter(activity=obj).order_by('end_date')
@@ -109,6 +113,10 @@ def get_task_delay_ponts(obj):
     return task_data_list
 
 def get_activity_delay_point(super_obj):
+    # this function is to get the details of activities for a particular super
+    #category and appending the dictionary of activities into a list
+    # and also we are getting the task details for that particular activity \
+    # and appending to a list and returning to the function called
     data = []
     act_list = {}
     data_task=[]
@@ -129,6 +137,12 @@ def get_activity_delay_point(super_obj):
 from collections import OrderedDict
 @register.assignment_tag
 def super_category_delay(project_slug):
+# this is to get the data of the super categories and their respective
+# activities and tasks
+# here we are importing the final data to json so that it will be easily 
+# retreived in the script
+# here we get the super categories to that particular project and get its id,name
+# and what are all the activites to that particluar super category
     series = []
     act_dict = OrderedDict()
     cat_dict ={}

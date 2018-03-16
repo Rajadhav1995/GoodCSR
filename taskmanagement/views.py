@@ -644,11 +644,11 @@ class ExpectedDatesCalculator():
 
         # If actual dates are populated, return those
         if (main_task.actual_end_date):
-            main_task.expected_start_date = main_task.actual_start_date
-            main_task.expected_end_date = main_task.actual_end_date
+            main_task.expected_start_date = main_task.actual_start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+            main_task.expected_end_date = main_task.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
 
-            ret = {'expected_start_date': main_task.actual_start_date,
-                   'expected_end_date': main_task.actual_end_date}
+            ret = {'expected_start_date': main_task.actual_start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')),
+                   'expected_end_date': main_task.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))}
 
             self.data[taskid] = ret
             return main_task

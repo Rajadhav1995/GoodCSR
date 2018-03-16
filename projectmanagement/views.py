@@ -193,6 +193,7 @@ def budget_tranche(request):
             obj = form.save(commit=False)
             obj.project = project
             obj.recommended_by = UserProfile.objects.get(id=request.POST.get('recommended_by'))
+            add_modified_by_user(obj,request)
             obj.save()
             budgetobj = Budget.objects.latest_one(project = project,active=2)
             final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
