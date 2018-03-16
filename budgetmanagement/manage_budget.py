@@ -174,7 +174,7 @@ def get_budget_quarter_names(budgetobj):
         ed = ed - timedelta(days=1)
         if ed > budget_enddate:
             ed = budget_enddate
-        quarter_list.append(sd.strftime("%b")+"-"+ed.strftime("%b"))
+        quarter_list.append(sd.strftime("%b'%y")+" - "+ed.strftime("%b'%y"))
         sd = ed + timedelta(days=1)
     return quarter_list
 
