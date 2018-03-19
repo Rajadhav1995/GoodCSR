@@ -136,6 +136,7 @@ pre{
         <a {% if filter_key == 'note' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=note" rel="1">Notes</a>
         <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="3">Tranches</a>
         <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=timeline" rel="2">TimelineProgress</a>
+        <a {% if filter_key == 'parameter' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=parameter" rel="2">Parameter</a>
         <a {% if filter_key == None %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
         <!-- <a href="#" rel="1">Report</a> -->
         
@@ -150,10 +151,10 @@ pre{
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
-      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Creat a Note</button></a>
+      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Create Note</button></a>
     </div>
 
-    <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
+    <!-- <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
       {% csrf_token %}
     <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
@@ -168,7 +169,7 @@ pre{
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
     </div>
-    </form>
+    </form> -->
 </div>
 {{request.GET.date}}
 {% if final_data %}
@@ -184,7 +185,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.created_by.attrs.first_name | slice:":1"}}{{f.created_by.attrs.last_name | slice:":1"}}</p>
-    <h3 class="hover_name">{{f.created_by.attrs.first_name}}{{f.created_by.attrs.last_name}}</h3>
+    <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
    </div>
     <div class="timeline-panel">
         
@@ -231,8 +232,8 @@ pre{
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
 
-    <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}} {{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p>
-      <h3 class="hover_name">{% if f.modified %}{{f.modified_by.first_name}}{{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}}{{f.created_by.attrs.last_name}}{% endif %}</h3>
+    <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}}{{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p>
+      <h3 class="hover_name">{% if f.modified %}{{f.modified_by.first_name}} {{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}{% endif %}</h3>
     </div>
         <div class="timeline-panel">
         
@@ -286,7 +287,7 @@ pre{
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}}{{f.created_by.attrs.last_name |slice:":1"}}</p>
       <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
     </div>
         <div class="timeline-panel">
@@ -363,7 +364,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
@@ -392,7 +393,7 @@ pre{
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}}{{f.created_by.attrs.last_name |slice:":1"}}</p>
       <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
     </div>
         <div class="timeline-panel">
@@ -402,11 +403,11 @@ pre{
               
                 <div class="text">
 
-                    <p class="short_comment{{forloop.counter}}"><pre>{{f.more_comment | safe}}</pre><!-- {% if f.more_comment %}...{% endif %} --></p>
+                    <p class="short_comment{{forloop.counter}}">{{f.short_comment}}{% if f.more_comment %}...{% endif %}</p>
                     {% if f.more_comment %}
-                    <!-- <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
+                    <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
                         <p class="text_content{{forloop.counter}}">{{f.short_comment}}{{f.more_comment}}</p>
-                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p> -->
+                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p>
                     {% endif %}
                     <p>Note added</p>
                     
@@ -462,15 +463,17 @@ pre{
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
     <div class="timeline-panel hide_box">
         
             <div class="timeline-body text-justify">
                <div class="">
                 <div class="image_uploaded">
-                <p style="color:#fff">  <span>Uploaded values for #parameter <b>{{f.keyparameter_name}}</b> for {{f.upload_date | date:"M Y"}}</span></p>
+                <p style="color:#fff">  <span>Uploaded values for parameter <b>{{f.keyparameter_name}}</b> for {{f.upload_date | date:"M Y"}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
                 </div>
                 
                 
@@ -490,16 +493,16 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
             <div class="timeline-body text-justify">
                <div class="">
                 <div class="image_uploaded">
-                <p style="color:#fff">  <span>Edited #parameter <b>{{f.parameter_name}}</b></span></p>
+                <p style="color:#fff">  <span>Edited parameter <b>{{f.parameter_name}}</b></span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
                 </div>
                 
                 
@@ -519,7 +522,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
@@ -528,7 +531,7 @@ pre{
                 <div class="image_uploaded">
                 <p style="color:#fff">  <span>Created a new parameter <b>{{f.parameter_name}}</b></span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
                 </div>
                 
                 
@@ -548,16 +551,16 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
             <div class="timeline-body text-justify">
                <div class="">
                 <div class="image_uploaded">
-                <p style="color:#fff">  <span>{% if f.update_type == 'tranche_history' %}Edited {% else %}Added a {% endif %} #tranche <b><u><a target="_blank" href={{f.tranche_url}}>{{f.tranche_name}}</a></u></b> with planned amount <br> ₹ {{f.planned_amount}}</span></p>
+                <p style="color:#fff">  <span>{% if f.update_type == 'tranche_history' %}Edited {% else %}Added a {% endif %} tranche <b><u><a target="_blank" href={{f.tranche_url}}>{{f.tranche_name}}</a></u></b> with planned amount <br> ₹ {{f.planned_amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
-                    <!-- <div class="progress_time"><a href="#"><p>#Budget</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p>#Tranche</p></a></div>
                 </div>
                 
                 

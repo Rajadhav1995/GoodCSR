@@ -152,7 +152,7 @@ def get_project_note(projectobj,request,start_date,end_date):
 				'attachment_name':string_trim(n.attachment_file.url.split('/')[-1]) if n.attachment_file else '',
 				'attachment_link':PMU_URL + str(n.attachment_file.url) if n.attachment_file else '',
 				'update_type':'note','created_by':n.created_by,
-				'description':n.description,'more_comment':n.comment}
+				'description':n.description,'more_comment':more_comment_text}
 		note_list.append(data)
 	return note_list
 

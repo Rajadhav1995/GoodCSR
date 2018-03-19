@@ -23,6 +23,7 @@ from pmu.settings import (SAMITHA_URL,PMU_URL)
 from common_method import unique_slug_generator,add_keywords,add_modified_by_user
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 from menu_decorators import check_loggedin_access
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Views for projectmanagement
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
@@ -125,6 +126,16 @@ def funder_mapping(funder,implementation_partner,total_budget,obj):
             implementation_partner=implementation_partner,total_budget=total_budget)
     return mapping
 
+def pagination(request, plist):
+    paginator = Paginator(plist, 10)
+    page = request.GET.get('page', 1)
+    try:
+        plist = paginator.page(page)
+    except PageNotAnInteger:
+        plist = paginator.page(1)
+    except EmptyPage:
+        plist = paginator.page(paginator.num_pages)
+    return plist
 
 def project_list(request):
     '''
@@ -133,6 +144,8 @@ def project_list(request):
     user_id = request.session.get('user_id')
     logged_user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(logged_user_obj)
+    obj_list = pagination(request,obj_list)
+
     return render(request,'project/listing.html',locals())
 
 def get_project_budget_utilized_amount(projectobj,budgetobj):
@@ -552,7 +565,7 @@ def project_summary(request):
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
-    project_location=ProjectLocation.objects.filter(content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+    project_location=ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=obj.id)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
