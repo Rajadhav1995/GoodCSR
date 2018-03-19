@@ -232,27 +232,7 @@ $(document).ready(function(){
 var count=0;
     $('#id_task_dependency').on('change',function(){
     if(count==0){
-        event.preventDefault();
-        var dependency_id = $('#id_task_dependency').val();
-        $.ajax({
-            url:'/managing/tasks/maximum/end_date/',
-            type:'GET',
-            data:{'id':JSON.stringify(dependency_id)},
-            dataType:"json",
-            success:function(data){
-            if (data.expected_start_date != ""){
-                document.getElementById("id_start_date").value = data.expected_start_date;
-                var date = data.expected_start_date
-                $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
-             }
-            else {
-                $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-                }
-               count=1; 
-            },
-            error : function(){}
-        });
-        return false;
+        count = count+1;
         }
     else{
         var dependency_id = $('#id_task_dependency').val();
