@@ -463,7 +463,9 @@ pre{
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
     <div class="timeline-panel hide_box">
         
             <div class="timeline-body text-justify">
