@@ -93,7 +93,6 @@ def get_max_diff_tasks(obj):
         maxi = 0
     else:
         maxi = int(-(diff))
-        print obj.name,diff
     return maxi
 
 def get_task_delay_ponts(obj):
