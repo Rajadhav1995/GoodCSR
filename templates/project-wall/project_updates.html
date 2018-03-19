@@ -185,7 +185,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.created_by.attrs.first_name | slice:":1"}}{{f.created_by.attrs.last_name | slice:":1"}}</p>
-    <h3 class="hover_name">{{f.created_by.attrs.first_name}}{{f.created_by.attrs.last_name}}</h3>
+    <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
    </div>
     <div class="timeline-panel">
         
@@ -233,7 +233,7 @@ pre{
     <div class="timeline-badge primary"><p></p></div>
 
     <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}} {{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p>
-      <h3 class="hover_name">{% if f.modified %}{{f.modified_by.first_name}}{{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}}{{f.created_by.attrs.last_name}}{% endif %}</h3>
+      <h3 class="hover_name">{% if f.modified %}{{f.modified_by.first_name}} {{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}{% endif %}</h3>
     </div>
         <div class="timeline-panel">
         
@@ -364,7 +364,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
@@ -491,7 +491,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
@@ -520,7 +520,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
@@ -549,7 +549,7 @@ pre{
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
    <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
-    <h3 class="hover_name">{{f.modified_by.first_name}}{{f.modified_by.last_name}}</h3>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
    </div>
     <div class="timeline-panel hide_box">
         
