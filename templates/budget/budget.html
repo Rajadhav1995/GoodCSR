@@ -18,9 +18,9 @@
             	<h3>Budget</h3>
                  <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
-                	<li><span class="yellow-circle"></span> Planned <span class="right-li">₹ {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">₹ {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}₹  {{projectobj.project_budget_details.utilized_cost}} {% else %} ₹ 0 {% endif %} </span></li>
+                	<li><span class="yellow-circle"></span> Planned <span class="right-li">₹ {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">₹ {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}₹  {{projectobj.project_budget_details.utilized_cost | get_currency}} {% else %} ₹ 0 {% endif %} </span></li>
                 </ul>
             </div>
             <div class="budget-right-pad">
@@ -771,7 +771,7 @@ else{
     }
 }
 var total = parseInt(100 - (utilized + disbursed))
-console.log(total , utilized , disbursed);
+console.log("Budget gauge",total , utilized , disbursed);
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
 

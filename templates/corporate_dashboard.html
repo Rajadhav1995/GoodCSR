@@ -277,9 +277,9 @@
                 <h3>Budget</h3>
                 <div id="total_budget{{i.id}}" style="width: 100%;float: none; height: 139px; overflow: hidden; border-bottom: 1px solid #ccc;"></div>
                 <ul>
-                    <li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {% if i.project_budget_details.planned_cost %} {{i.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">Rs. {% if i.project_budget_details.disbursed_cost %} {{i.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if i.project_budget_details.utilized_cost %}Rs.  {{i.project_budget_details.utilized_cost}} {% else %} Rs. 0 {% endif %} </span></li>
+                    <li><span class="yellow-circle"></span> Planned <span class="right-li">Rs. {% if i.project_budget_details.planned_cost %} {{i.project_budget_details.planned_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">Rs. {% if i.project_budget_details.disbursed_cost %} {{i.project_budget_details.disbursed_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if i.project_budget_details.utilized_cost %}Rs.  {{i.project_budget_details.utilized_cost | get_currency}} {% else %} Rs. 0 {% endif %} </span></li>
                 </ul>
                 </div>
             </div>
