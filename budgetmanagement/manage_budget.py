@@ -9,7 +9,7 @@ from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from projectmanagement.models import (Project,MasterCategory,UserProfile)
 from .models import (Budget,SuperCategory,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                     Tranche,)
-from media.models import (Comment,Attachment)
+from media.models import (Comment,Attachment,ProjectLocation)
 from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
