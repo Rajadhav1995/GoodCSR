@@ -642,5 +642,5 @@ def get_attachment_type(file_name):
 
 @register.assignment_tag
 def get_projct_location(projectobj):
-    project_location=ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return project_location
