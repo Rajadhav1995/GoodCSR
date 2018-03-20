@@ -470,6 +470,7 @@ def my_tasks_details(request):
         taskdict = ast.literal_eval(json.dumps(rdd.content))
     #   code for My Calendar
     projectobj = project
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     user_obj = user
     key = request.GET.get('key')
     if status == '1':
