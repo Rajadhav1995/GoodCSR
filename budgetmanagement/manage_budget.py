@@ -444,6 +444,7 @@ def budgetview(request):
     '''  Redirecting to the budget summary page based on the budget object creation status '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     super_categorylist = SuperCategory.objects.filter(budget = budgetobj,active=2).exclude(parent=None)
     user_id = request.session.get('user_id')

@@ -228,6 +228,7 @@ def tranche_list(request):
     status = get_assigned_users(user,obj)
     key = request.GET.get('key')
     projectobj = obj
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):

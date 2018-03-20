@@ -32,6 +32,7 @@ def list_document(request):
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user,obj)
     projectobj = obj
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return render(request,'attachment/listing.html',locals())
 	
 def timeline_upload(request):
