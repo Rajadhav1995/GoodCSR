@@ -29,6 +29,7 @@ from django.db.models import Q
 # Create your views here.
 from projectmanagement.common_method import add_modified_by_user
 from menu_decorators import check_loggedin_access
+from media.models import ProjectLocation
 
 @check_loggedin_access
 def listing(request):
@@ -469,6 +470,7 @@ def my_tasks_details(request):
         taskdict = ast.literal_eval(json.dumps(rdd.content))
     #   code for My Calendar
     projectobj = project
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     user_obj = user
     key = request.GET.get('key')
     if status == '1':

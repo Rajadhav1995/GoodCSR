@@ -1,7 +1,7 @@
 from django import template
 register = template.Library()
 from datetime import datetime
-from media.models import Comment,Attachment
+from media.models import Comment,Attachment,ProjectLocation
 from django.contrib.contenttypes.models import ContentType
 import pytz
 import requests,ast
@@ -639,3 +639,9 @@ def get_attachment_type(file_name):
     else:
         attachment_file_type = 'doc'
     return attachment_file_type
+
+@register.assignment_tag
+def get_projct_location(projectobj):
+    print "mahit",projectobj.id
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
+    return project_location
