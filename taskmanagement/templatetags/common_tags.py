@@ -510,7 +510,6 @@ def get_images(obj):
 @register.assignment_tag
 def get_taskcompletion(obj):
     total_tasks = completed_tasks = 0
-    milestones = []
     project = obj
     tasks = Task.objects.filter(activity__project = project)
     total_tasks = tasks.count()

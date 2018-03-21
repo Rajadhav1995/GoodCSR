@@ -554,11 +554,8 @@ def budget_lineitem_update(budget_parameters,request):
 
 def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj):
     for quarter,value in quarter_list.items():
-        start_date = value.split('to')[0].rstrip()
-        end_date = value.split('to')[1].lstrip()
         result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
     return line_itemlist
-
 
 def budgetlineitemedit(request):
     '''  Function to edit the budget line item'''
