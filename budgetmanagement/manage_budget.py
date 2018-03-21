@@ -577,7 +577,6 @@ def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,pr
                                 'end_date':end_date,'j':j,'budgetobj':budgetobj,
                                 'projectobj':projectobj,'request':request,
                                 'quarter':quarter}
-            budget_saving = budget_lineitem_update(budget_parameters,request)
     return line_itemlist
 
 
@@ -652,5 +651,5 @@ def delete_category(request):
     budget_id=request.GET.get('budget_id')
     project_slug = request.GET.get('slug')
     catgry_id = request.GET.get('cat_id')
-    catgery_del = SuperCategory.objects.get(id=catgry_id).delete()
+    SuperCategory.objects.get(id=catgry_id).delete()
     return HttpResponseRedirect('/manage/project/budget/category/listing/?budget_id='+str(budget_id)+'&slug='+project_slug)
