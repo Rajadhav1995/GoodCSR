@@ -185,18 +185,15 @@ def active_change(request,model_name):
     # this is common function to change status of object
     # 
     ids = request.GET.get('id')
-    status = request.GET.get('status')
     url=request.META.get('HTTP_REFERER')
     model = ContentType.objects.get(model = model_name)
     obj = model.model_class().objects.get_or_none(id=int(ids))
     if  obj.active ==2:
         obj.active=0
         obj.save()
-        msg = 'deactivate'
     elif obj.active==0:
         obj.active=2
         obj.save()
-        msg ='active'
     return HttpResponseRedirect(url)
 
 from django.http import JsonResponse
@@ -226,13 +223,10 @@ def task_auto_computation_date(request):
     # to compute start date of the tasks dependent
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    obj = None
     try:
         task = Task.objects.get(active=2,id= int(ids))
         end_date = task.end_date.strftime('%Y-%m-%d')
     except:
-        obj = None
         end_date = ''
     return JsonResponse({"computation_date":end_date})
 
@@ -241,7 +235,6 @@ def milestone_overdue(request):
     # the max end date of the tasks tagged to the milestone
     # 
     task_ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
     tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
     try:
         milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
@@ -257,7 +250,6 @@ def total_tasks_completed(slug):
     total_tasks = completed_tasks=total_milestones = 0
     milestones = []
     project = Project.objects.get_or_none(slug = slug)
-    activity = Activity.objects.filter(project=project)
     milestones= Milestone.objects.filter(project = project)
     tasks = Task.objects.filter(activity__project = project)
     total_tasks = tasks.count()
@@ -278,8 +270,6 @@ def my_tasks_listing(project,user,status):
     # to get the tasks which is overdue to today 
     # 
     today = datetime.today().date()
-    task_lists=[]
-    activities = Activity.objects.filter(project = project)
     if status == '0':
         task_list = Task.objects.filter(assigned_to=user)
         tasks_list =task_list.filter(start_date__lt = today).exclude(status=2).order_by('-start_date')
@@ -308,15 +298,10 @@ def get_tasks_status(project,task,uploads):
 def updates(obj_list):
     # to get the recent updates of the projects 
     # 
-    formats = '%H:%M %p'
     uploads = []
-    task_completed = {}
-    completed_tasks = []
-    task_uploads = {}
     for project in obj_list:
         project = Project.objects.get_or_none(id = int(project.id))
         uploads = get_project_updates(project,uploads)
-        activity = Activity.objects.filter(project=project)
         task_list = Task.objects.filter(activity__project = project)
         for task in task_list:
             attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
@@ -361,8 +346,6 @@ def task_offset_date(task):
     task = Task.objects.get(id = int(task))
     start_date = task.start_date.strftime('%y-%m-%d')
     end_date = task.end_date.strftime('%y-%m-%d')
-    offset = end_date - start_date
-    
 
 def corp_total_budget(obj_list):
     # bar chart for the total budget in corporate dashboard
@@ -372,7 +355,7 @@ def corp_total_budget(obj_list):
     project_list=[]
     corp_budget={}
     disbursed=[]
-    planned_cost = utilized_cost =disbursed_amount= 0
+    planned_cost = utilized_cost = 0
     if obj_list:
         for project in obj_list:
             budget_details = project.project_budget_details()
@@ -520,7 +503,6 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
-        progress= request.POST.get('tea1')
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -547,7 +529,6 @@ def task_comments(request):
             # added to get the task updates done by particular user saved in modified_by 
             add_modified_by_user(comment,request)
             comment.save()
-        progress_status = create_task_progress(request,task)
         # added to get the task updates done by particular user saved in modified_by 
         add_modified_by_user(task,request)
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
@@ -563,8 +544,6 @@ def get_tasks_objects(request):
     # tis is to get task objects
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    obj = None
     start_dates=[]
     task_list = Task.objects.filter(active=2,id__in = eval(ids))
     populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
@@ -766,7 +745,6 @@ class GanttChartData(APIView):
             else:
                 max_date = datetime(year=int(this_year),month=int(this_month)+1,day=1)
             user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-            project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
             # Run this command on server for it to work -  sudo mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root mysql 
             tasks = Task.objects.filter(Q(start_date__lt=max_date),Q(end_date__gte=min_date),active=2,assigned_to=user).order_by('-id')
             activities = Activity.objects.filter(active=2).order_by('-id')
@@ -798,7 +776,6 @@ def convert_budget(val):
     # 
     import locale
     import re
-    loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
     val = float('{:.2f}'.format(float(val)))
     if val <= 99999.99:
         val = re.sub(u'\u20b9', ' ', locale.currency(val, grouping=True).decode('utf-8')).strip()
@@ -817,8 +794,6 @@ def get_activites_list(request):
     # this funtion is to get activity list
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    obj = None
     activity=[]
     if ids != '[]':
         obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
@@ -834,8 +809,6 @@ def get_super_selected(request):
     # 
     ids = request.GET.get('id')
     form = request.GET.get('form')
-    url=request.META.get('HTTP_REFERER')
-    activity=[]
     if form == 'TaskForm':
         obj_list = Activity.objects.filter(active=2,id = ids)
     else :
@@ -849,7 +822,6 @@ def get_activity_selected(request):
     # this funtion is to get selected activity
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
     obj_list = Task.objects.filter(id__in = eval(ids))
     activity = [i.activity.id for i in obj_list]
     return JsonResponse({"activity":activity})
@@ -871,7 +843,6 @@ from django.http import JsonResponse
 def get_activity_tasks(request):
     # this funtion is to get activity tasks
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
     obj_list = Activity.objects.filter(id__in = eval(ids)).values_list('id',flat=True)
     task_list = Task.objects.filter(activity__id__in = obj_list)
     tasks = [{'id':i.id,'name':i.name} for i in task_list]
@@ -882,7 +853,6 @@ def tasks_max_end_date(request):
     # this funtion is to get maximum date of task and end date of task
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
     tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})

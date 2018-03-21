@@ -11,9 +11,7 @@ def key_parameter_chart(obj,parameter_id):
     pip_title_name = []
     pin_title_name = []
     counter =0
-    parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     pie_object = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
-    parameter_obj = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     
     for y in pie_object:
         if y.parameter_type=='PIN' or y.parameter_type=='PIP':
@@ -68,11 +66,8 @@ def get_index_quarter(report_obj):
     
 def get_month_dict(data):
     year = data.get('year')
-    s_year = data.get('s_year')
-    e_year = data.get('e_year')
     post_mnth = data.get('post_mnth')
     pre_mnth = data.get('pre_mnth')
-    report_year = data.get('report_year')
     key = data.get('key')
     month = ''
     if key == 'future':
@@ -108,12 +103,9 @@ def get_budget_month_year(budgetobj):
 
 def get_months_classified(years_dict,report_obj,budget_obj):
     # 
-    #this is to get the dict of the previous,current and next months 
+    #this is to get the dict of the previous,
+    # current and next months 
     # 
-    month_dict = {0:'',1:'January',2:'February',3:'March',4:'April',5:'May',
-                      6:'June',7:'July',8:'August',9:'September',
-                      10:'October',11:'November',12:'December',13:''}
-    last_month_logic = {1:12,12:1}
     previous_month = {}
     current_month = {}
     future_month = {}
@@ -187,7 +179,6 @@ def get_budget_months(budget_obj):
     # 
     sm = budget_obj.actual_start_date.month
     em = budget_obj.end_date.month
-    mnth_diff = em-sm
     years_dict={}
     mnth_list = []
     s_year = budget_obj.start_date.year
@@ -202,10 +193,9 @@ def get_budget_months(budget_obj):
     return years_dict
 
 def get_monthly_logic(report_obj,budget_obj):
-    #this is to get the previous,current and next months dict
+    #this is to get the previous,
+    # current and next months dict
     # 
-    total_months=[]
-    years_list = []
     current_month ={}
     previous_month = {}
     future_month = {}
@@ -215,17 +205,50 @@ def get_monthly_logic(report_obj,budget_obj):
 
 
 # allows you to hit your target and reach your goal. 
-#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
-#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
+#By setting goals for yourself you are able to measure
+# your progress because you always have a fixed 
+# endpoint or benchmark to compare with. 
+# Take this scenario for example: David makes a 
+# 
+# 
+# 
+# goal to write a book with a minimum of 300 pages. 
+# He starts writing every day and works really hard 
+# but along the way, he loses track of how many more 
+# pages he has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of 
+# pages he has already written and he instantly determines 
+# his progress and knows how much further he needs to go.
 # 
 # 
 # 
 # allows you to hit your target and reach your goal. 
-#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
-#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
+#By setting goals for yourself you are able to measure 
+# your progress because you always have a fixed endpoint 
+# or benchmark to compare with. Take this scenario 
+# for example: David makes a goal to write a book with a 
+# minimum of 300 pages. He starts writing every day and works 
+# really hard but along the way, he loses track of how many 
+# 
+# 
+# more pages he has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of 
+# pages he has already written and he instantly determines his 
+# progress and knows how much further he needs to go.
 # 
 # 
 # allows you to hit your target and reach your goal. 
-#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
-#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
+#By setting goals for yourself you are able to measure 
+# your progress because you always have a fixed endpoint 
+# or benchmark to compare with. Take this scenario 
+# for example: David makes a goal to write a book with 
+# 
+# 
+# a minimum of 300 pages. He starts writing every day and 
+# works really hard but along the way, he loses track of 
+# how many more pages he has written and how much more 
+# he needs to write. 
+#So rather than panicking David simply counts the number 
+# of pages he has already written and he instantly determines 
+# his progress and knows how much further he needs to go.
 # 
