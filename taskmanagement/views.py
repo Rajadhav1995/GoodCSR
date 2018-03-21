@@ -203,7 +203,6 @@ def task_dependencies(request):
     start_date = ''
     tasks = []
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
     obj = None
     try:    
         obj = Activity.objects.get_or_none(active=2,id= int(ids))
@@ -344,8 +343,6 @@ def corp_task_completion_chart(obj_list):
  
 def task_offset_date(task):
     task = Task.objects.get(id = int(task))
-    start_date = task.start_date.strftime('%y-%m-%d')
-    end_date = task.end_date.strftime('%y-%m-%d')
 
 def corp_total_budget(obj_list):
     # bar chart for the total budget in corporate dashboard

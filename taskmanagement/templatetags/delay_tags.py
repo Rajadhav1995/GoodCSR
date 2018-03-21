@@ -99,12 +99,9 @@ def get_cat_delay_point(obj,key):
     return diff,slug
 
 def get_max_diff_tasks(obj):
-
-    today = datetime.datetime.now().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     ExpectedDatesCalculator(task=obj)
     planned_date = obj.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     expected_end = obj.expected_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
-    planned_start = obj.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
     diff = (expected_end - planned_date).days
     if diff ==0 and obj.status ==2:
         maxi = 0
