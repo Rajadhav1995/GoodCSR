@@ -365,8 +365,7 @@ def get_currency(amount):
         amount_type = group_amount[-2:]
         if int(amount_type) == 0:
             group_amount = group_amount[:-3]
-        else:
-            group_amount = group_amount
+        
     return group_amount
 
 @register.filter

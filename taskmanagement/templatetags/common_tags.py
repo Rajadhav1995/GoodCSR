@@ -504,7 +504,6 @@ def get_month_name(date):
 
 @register.assignment_tag
 def get_images(obj):
-    obj = obj
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='Project')).order_by('-created')
     return attachment
 
