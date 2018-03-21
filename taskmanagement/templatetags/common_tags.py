@@ -55,7 +55,6 @@ def get_details(obj):
     convert_time = time_zone.astimezone(pytz.timezone('Asia/Kolkata'))
     time = convert_time.strftime(formats)
     date = obj.get('date').strftime('%d %B %Y') if obj.get('date') else ''
-    description = obj.get('attach') or ''
     task_status = obj.get('task_status') or ''
     file_type = obj.get('file_type') or ''
     if task_status and task_status.status == 2:
@@ -66,7 +65,6 @@ def get_details(obj):
     
 @register.assignment_tag   
 def task_comments(date,task_id):
-    attach={}
     task_comment=[]
     
     comment_list = Comment.objects.filter(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_id).order_by('-id')
@@ -75,7 +73,6 @@ def task_comments(date,task_id):
     return task_comment
 
 def task_progress_history_details(task_data,attach_obj,i,comment_obj):
-    utc=pytz.UTC
     if not attach_obj:
         if comment_obj and (i.get_previous_by_created().task_progress != i.task_progress):
         # if i.get_previous_by_created().task_progress != i.task_progress:
@@ -121,7 +118,6 @@ def task_updates_list(key,task_progress,start_date,end_date):
 # where the combination of updates would be 
 # filtered and displayed
     task_data = []
-    utc=pytz.UTC
     slug = task_progress.activity.project.slug
     if key == 'project_tasks':
         task_progress_history = task_progress.history.filter(task_progress__isnull=False,modified__range = [start_date,end_date]).order_by('-id')
@@ -130,15 +126,10 @@ def task_updates_list(key,task_progress,start_date,end_date):
     temp_var = 0
     for i in task_progress_history:
         new_var = int(i.modified.strftime("%Y%m%d%H%M%S"))
-        
         if (int(new_var)-int(temp_var)) > 10 and i.task_progress:
-            
             previous_task_progress = i.get_previous_by_created().task_progress
-            task_time = i.modified
-            next_tick = task_time.second +1
-            
+            task_time = i.modified            
             task_prev_tick = task_time.second -1
-
             try:
                 start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
             except:
@@ -195,8 +186,6 @@ def attachment_json_for_comments(task_id,attach):
     attachment_data = []
     for i in attach:
         time = i.created
-        
-        next_tick = time.second +1
         prev_tick = time.second -1
         try:
             start_time = time.replace(microsecond=499999,second=prev_tick)
@@ -274,9 +263,7 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
             else:
                 removed_ques.append(ques)
         if quest_removed == 'false':
-            final_questions = questions.exclude(id__in =[rmv.id for rmv in removed_ques ]).order_by('id')
-            fianl_questions = list(chain(final_questions)).extend(list(chain(questions.filter(id__in = [pt.id for pt in parent_ques]).order_by('id'))))
-            
+            final_questions = questions.exclude(id__in =[rmv.id for rmv in removed_ques ]).order_by('id')            
         else:
             final_quest = questions.filter(id__in = [rmv.id for rmv in removed_ques]).values_list('id',flat=True)
             main_quest = Question.objects.filter(block=block).exclude(parent=None)[0]
@@ -340,7 +327,6 @@ def get_questions(block,project_report,block_type,quest_removed):
 def get_auto_populated_questions(ques_id,project,project_report,block_type,quest_removed):
     # to get the auto populated questions that 
     # are tagged to that particular section
-    data = {}
     question = Question.objects.get_or_none(id=ques_id)
     sub_quest_list = []
     sub_questions = Question.objects.filter(parent = question,block__block_type=0)
@@ -388,7 +374,6 @@ def get_milestones(quarter,report_obj,type_id):
 @register.assignment_tag 
 def get_mile_images(mile_id):
 #to get the milestone and activity images 
-    data = {}
     image_miles= []
     if mile_id:
         miles_obj =  ReportMilestoneActivity.objects.get_or_none(id=mile_id)
@@ -521,7 +506,6 @@ def get_month_name(date):
 def get_images(obj):
     obj = obj
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='Project')).order_by('-created')
-    image = PMU_URL
     return attachment
 
 @register.assignment_tag
@@ -540,7 +524,6 @@ def get_taskcompletion(obj):
         percent = 0
     if milestones:
         total_milestones = milestones.count()
-    data={'total_tasks':total_tasks,'completed_tasks':completed_tasks,'total_milestones':total_milestones,'percent':percent}
     return percent
 
 @register.assignment_tag
@@ -558,7 +541,6 @@ def get_parameter_type(obj):
 @register.assignment_tag
 def get_block_tab_removed(questions,block_type,report_obj):
     tab_removed = ''
-    removed_id = ''
     remove_obj=RemoveQuestion.objects.get_or_none(quarter_report= report_obj,block_type=block_type)
     if remove_obj:
         removed_list = literal_eval(remove_obj.text)
@@ -632,7 +614,6 @@ def read_more_text(text):
 # extension
 def get_attachment_type(file_name):
     image_format = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c ', 'fpx', 'pcd', 'png']
-    docs_format = ['rtf', 'odt', 'docx', 'pot', 'pxt', 'txt', 'odf', 'doc']
     file_extension = file_name.split('.')[-1]
     if file_extension in image_format:
         attachment_file_type = 'image'
@@ -642,6 +623,5 @@ def get_attachment_type(file_name):
 
 @register.assignment_tag
 def get_projct_location(projectobj):
-    print "mahit",projectobj.id
     project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return project_location

@@ -571,12 +571,6 @@ def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,pr
                        'row_order':int(j),
                        'quarter_order':int(quarter),
                        }
-            budget_parameters = {'budgetperiodid':budgetperiodid,
-                                'budget_dict':budget_dict,
-                                'result':result,'start_date':start_date,
-                                'end_date':end_date,'j':j,'budgetobj':budgetobj,
-                                'projectobj':projectobj,'request':request,
-                                'quarter':quarter}
     return line_itemlist
 
 

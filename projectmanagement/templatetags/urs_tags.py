@@ -89,7 +89,6 @@ def get_user_project(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(user_obj)
-    project_count = obj_list.count()
     return obj_list
 
 @register.assignment_tag
@@ -170,7 +169,6 @@ def get_org_logo(projectobj):
     ''' calling function to return the company logo based on the project'''
     companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
     validation_data = json.loads(companyobj.content)
-    front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
     ngo_logo = validation_data.get('ngo_image')
     return org_logo,ngo_logo
@@ -218,8 +216,6 @@ def get_parameter(obj,block_id):
     main_list =[]
     master_list = []
     master_names = []
-    pie_chart = ''
-    single_parameter = 0
     report_para = []
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
@@ -229,23 +225,18 @@ def get_parameter(obj,block_id):
                 main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
                 master_list.append(main_list)
                 master_names.append(i.keyparameter.name)
-                if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
-                    pie_chart = 0
-                else:
-                    pie_chart = 1
     return report_para
 
 @register.assignment_tag
 def get_parameter_values(obj,para_obj):
 
-    # this template tag is used to get json data for parameter pie chart 
+    # this template tag is used to get json 
+    # data for parameter pie chart 
     main_list =[]
     master_list = []
     master_names = []
     parameter_type = ''
     numeric_parameter_value = 0
-    report_para = []
-
     from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
     if para_obj.keyparameter:
         main_list = pie_chart_mainlist_report(para_obj.keyparameter,obj.start_date,obj.end_date)
@@ -269,10 +260,10 @@ import locale
 import re
 @register.filter
 def currency(value):
-    # this template tag is to convert number into currency format 
+    # this template tag is to convert 
+    # number into currency format 
     if value == '':
         value = 0
-    loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
     value = float('{:.2f}'.format(float(value)))
     if value <= 99999.99:
         value = re.sub(u'\u20b9', ' ', locale.currency(value, grouping=True).decode('utf-8')).strip()
@@ -298,8 +289,8 @@ def get_budget_detail(block,quarter):
 
 @register.assignment_tag
 def get_about_parameter(quarter,obj,block):
-    # template tag to get parameter detail quarter wise in report detail page
-    about_parameter = ''
+    # template tag to get parameter detail 
+    # quarter wise in report detail page
     question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
     report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
@@ -309,7 +300,8 @@ def get_about_parameter(quarter,obj,block):
 
 @register.assignment_tag
 def get_about_quarter(quarter,obj,block):
-    # this template tag we are using to get quarter details in report detai page
+    # this template tag we are using to get quarter
+    # details in report detai page
     answer_obj = ''
     about_quarter = ''
     question = Question.objects.get_or_none(slug='about-the-quarter',block__order=block)
@@ -429,7 +421,6 @@ def get_index_page_number(quarter):
         page_obj.save()
     lista.append(13)
     page_obj = Answer.objects.get(text__iexact='index_count')
-    page_number = page_obj.object_id
     page_obj.object_id = 1
     function_count = int(page_obj.inline_answer)
     page_obj.inline_answer = function_count
@@ -450,7 +441,6 @@ def is_ceo_user(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get_or_none(user_reference_id = int(user_id ))
     ceo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 5)
-    admin_user = user_obj.is_admin_user
     if ceo_user:
         status = 0
     else:
