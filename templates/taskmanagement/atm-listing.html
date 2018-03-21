@@ -814,7 +814,7 @@ $(document).ready(function(){
     $.each(jsonData.supercategories,function(){
       console.log('supr',this.name)
       if(this.name != ""){
-        $(".scrollmenu").append("<a class='link-pad text-md-center' onClick='superData("+this.id+")'>"+this.name+"</a>");
+        $(".scrollmenu").append("<a class='link-pad text-md-center' onClick='superData("+this.id+");superData("+this.id+");'>"+this.name+"</a>");
         }
     });
     temp = {{ser_hist|safe}};
@@ -1156,7 +1156,6 @@ $(document).ready(function(){
           ids.push(this.task);
         }
       });
-      console.log("asort2b",pvaData,ids);
       $.each(pvaData,function(i){
         if(ids.indexOf(pvaData[i].id)==-1){
           console.log('asort2v',ids.indexOf(pvaData[i].id)==-1);
@@ -1166,7 +1165,6 @@ $(document).ready(function(){
           pvaData[i].end_date = 0;
         }
       });
-      console.log("asort2",pvaData,ids);
       setTimeout(redraw(),5000);
     }
 </script>
