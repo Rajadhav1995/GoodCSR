@@ -399,6 +399,10 @@ $(document).ready(function() {
     if ($("id_start_date").val()!=''){
               var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
               document.getElementById("id_start_date").value = start_date
+              var date = start_date.split('-')
+              var new_date = new Date(date[0], date[1] -1,date[2]);
+                    new_date.setDate(new_date.getDate());
+                $( "#id_start_date" ).datepicker("option", "minDate", new_date);
           }
     
     if ($("id_end_date").val()!=''){
