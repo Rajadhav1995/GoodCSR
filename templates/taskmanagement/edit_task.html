@@ -136,6 +136,7 @@ function showCheckboxes() {
 <script>
     $(document).ready(function() {
         $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true});
+        //$( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
         $( "#id_actual_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
         $( "#id_actual_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
@@ -175,13 +176,7 @@ function showCheckboxes() {
             success:function(data){
                 if (data.project_start_date != ""){
                     document.getElementById("id_start_date").value = data.project_start_date;
-                    var date = data.project_start_date
-                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date,changeMonth: true,changeYear: true });
                  }
-                else{
-                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-                    }
-
             },
             error : function(){}
         });
@@ -245,12 +240,8 @@ var count=0;
                 if (data.calculation != ""){
                     document.getElementById("id_start_date").value = data.calculation;
                     var date = data.calculation
-                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: date,changeMonth: true,changeYear: true });
                  }
-                else {
-                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-                    }
-                    
                 },
                 error : function(){}
             });
@@ -272,6 +263,7 @@ $(document).ready(function() {
     if ($("id_start_date").val()!=''){
               var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
               document.getElementById("id_start_date").value = start_date
+              $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: start_date,changeMonth: true,changeYear: true });
           }
     if ($("id_end_date").val()!=''){
               var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
