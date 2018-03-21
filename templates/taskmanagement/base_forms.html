@@ -378,7 +378,7 @@ $('#id_task_dependency').on('change',function(e){
             if (data.calculation != ""){
                 var date = data.calculation.split('-');
                 var new_date = new Date(date[0], date[1] -1,date[2]);
-                    new_date.setDate(new_date.getDate() + 1);
+                    new_date.setDate(new_date.getDate());
                 $( "#id_start_date" ).datepicker("option", "minDate", new_date);
              }
             },
