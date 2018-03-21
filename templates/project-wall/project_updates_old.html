@@ -1,0 +1,402 @@
+ {% extends 'project/project-summary.html' %}
+{% load urs_tags %}
+
+{% block content %}
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<link rel="stylesheet" href="/static/css/main-68c112ec48.css">
+
+<style>
+
+.blog_timeline li { margin-bottom: 40px;position: relative;width: 50%;float: left;clear: left;}
+.blog_timeline {padding: 20px 0;list-style: none;position: relative; float: left;}
+.blog_timeline li.timeline-right {float: right;clear: right;margin-bottom: 110px;}
+.blog_timeline li:nth-child(2) {margin-top: 80px;}
+.blog_timeline:before {top: 0;bottom: 0;position: absolute;content: " ";width: 3px;background-color: #eee;
+    left: 50%;margin-left: -1.5px;border: 2px dashed #232323;}
+.blog_timeline li > .timeline-badge {color: #232323;width: 24px;height: 24px;line-height: 50px;font-size: 1.4em;cursor: pointer;text-align: center;
+    position: absolute;top: 0px;right: -12px;z-index: 9;}
+.blog_timeline li > .timeline-badge{ }
+.timeline-right .timeline-badge{ text-align: left !important;left: -9px !important;right: -13px !important;}
+.timeline-left .timeline-badge{ text-align: right !important;right: -15px !important;}
+.blog_timeline .timeline-left .timeline-panel{width: 85%;float: left}
+.timeline-right .timeline-panel{width: 85%;float: right !important}
+.timeline-right .date{ position: absolute;float: left; left: -70px; font-size: 14px; color: #3b9e84; text-align: center;top:7px;font-weight: bold}
+.timeline-left .date{ position: absolute;float: right !important; right: -65px; font-size: 14px; font-weight: bold; color: #3b9e84; text-align: center;top:7px;}
+.timeline-right .two_letters p{width: 35px;height: 35px;border-radius: 50px;border: 2px solid #3b9e84; text-align: center;
+    position: absolute;left: 15px; line-height: 35px;}
+.timeline-left .two_letters p{width: 35px;height: 35px;border-radius: 50px;border: 2px solid #3b9e84; text-align: center;
+    position: absolute;right: 15px; line-height: 35px;}
+.timeline-badge p{background: #aa3d5c;border-radius: 50px;width: 20px;height: 20px;border:1px solid #232323}
+/*input[type=file]{width:100px;color:transparent;float: left}*/
+.image_uploaded{width: 100%;float: left; background: #3b9e84;padding: 40px 10px 10px;border-radius: 8px;margin-bottom: 0px;}
+.file_name{border: 1px solid #d0c173; padding: 4px 10px; margin-top: 10px; float: left; width: 100%; background: #f1f3e9; border-radius: 5px;}
+.timeline-left  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
+.timeline-right  .text{width: 100%;float: left; background: #3b9e84;padding: 10px 10px 10px;border-radius: 8px;}
+.text p{margin-bottom: 15px;color: #fff}
+.progress_time{ background: #f1f3e9;float: left; padding: 5px 15px; border-radius: 5px; margin-top: 10px;margin-right: 10px;}
+.progress_time p{margin-bottom: 0px;color: #232323; }
+.timeline-left .file_name{margin-top: 0px}
+.timeline-right .file_name{margin-top: 0px}
+.cont-wrap{text-align: left}
+.cont-wrap li a { border: 1px solid #a8a8a8;padding: 0.2em 0.5em;}
+.cont-wrap ul li:nth-child(2){margin-top: 5px;}
+.cont-wrap ul li { display: inline-block;  width:auto; margin: 5px 1px;margin: 5px 1px 0px; clear: none;}
+.calender_ico {position: relative; left: -30px;}
+.cont-wrap ul li:hover{background:  #3b9e84; border: 1px solid #3b9e84;color: #fff;}
+.cont-wrap ul li:hover a{border: 0px;color: #fff !important}
+.read_more{float: left; border-bottom: 1px solid #fff; padding-bottom: 0px;}
+.less_more{float: left; border-bottom: 1px solid #fff; padding-bottom: 0px;}
+#tagcloud{max-width: 350px; height: 200px;overflow: auto;background: #3b9e84; padding: 10px 20px; border-radius: 5px;box-shadow: 0px 0px 5px rgba(0,0,0,0.6);  border: 1px solid #fff;}
+#tagcloud a{text-decoration: underline; padding: 0px 5px}
+#tagcloud a:hover{color:#d0c173 !important}
+
+
+</style>
+<body>
+
+<div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:65px;top:240px;">
+  <div class="menu-toggle-holder">
+     <p style="float:left;position:relative; top:15px; left:-30px;">Tags</p>
+     <div class="center"> <span class="label">Menu</span>
+      <button id="menu-toggle" class="c-hamburger c-hamburger--htx"><span> </span></button>
+     </div>
+ </div> 
+ <nav id="nav" class="nav-primary">
+           <div class="cont-wrap" style="background:#fff">
+           <div id="tagcloud" >
+        <a href="#" rel="1">Task</a>
+        <a href="#" rel="2">Image</a>
+        <a href="#" rel="3">Budget</a>
+        <a href="#" rel="1">Meeting</a>
+        <a href="#" rel="2">Tranches</a>
+        <a href="#" rel="3">TimelineProgress</a>
+        <a href="#" rel="1">Report</a>
+        
+        </div>
+    </nav>
+    </div>
+<div class="container">
+  <div class=" content">
+  
+<div style="margin:20px 0px;float: left; width: 100%;">
+    <div style="float:left">
+      <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button>
+    </div>
+    <div style="float:right">
+      <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
+        <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
+            <label for="from" style="font-weight:normal">From</label>
+            <input type="text" id="from" name="from" style="border:1px solid #dedede">
+            <img src="/static/img/calender.png" class="calender_ico">
+        </div>
+        <div style="float:left;position: relative;z-index:1000 ">
+            <label for="to" style="font-weight:normal">to</label>
+            <input type="text" id="to" name="to" style="border:1px solid #dedede">
+            <img src="/static/img/calender.png" class="calender_ico">
+        </div>
+    </div>
+</div>
+
+<ul class="blog_timeline">
+
+{% for f in file_data %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>AT</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-6">
+                <div class="image_uploaded">
+                <p style="color:#fff">{{f.created_by.attrs.first_name}} Uploaded <span>{% if f.file_type == 'Image' and f.image_type == True %}image{% else %}Document{%endif%}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                 
+                 {% if f.file_type == 'Image' and f.image_type == True %}
+                    <div class="progress_time"><a href="#"><p># Timeline Progress</p></a></div>
+                  {% else %}
+                    <div class="progress_time"><a href="#"><p># Document</p></a></div>
+                  {% endif %}
+                </div>
+
+                {% if f.history %}
+                {% for y in f.history %}
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                <div class="file_name">
+                  <p><b>File: </b><a href="{{f.image_url}}">{{y.file_name}}</a></p>
+                  <p><b>Description: </b>{{y.description}}</p>
+               </div>
+               {% endfor %}
+               {% endif %}
+             </div>
+        </div>
+    </div>
+</li>       
+{% endfor %}
+
+{% for i in budget_datar %}
+<li class="timeline-left">
+ <p class="date">{{i.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>AD</p></div>
+    <div class="timeline-panel">
+        
+            <div class="timeline-body text-justify">
+               <div class="col-md-6">
+                <div class="image_uploaded">
+                <p style="color:#fff"><b>{{i.created_by.name}}</b> Uploaded <span>image</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#Budget</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endfor %}
+
+{% for t in main_data %}
+{% if t.update_type == 'tasks_history' %}
+{% if t.comment_text or t.task_progress != None %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-right">
+{% else %}
+<li class="timeline-left">
+{%endif%}
+<p class="date">{{t.date | date:"d M"}}</p>
+    <div class="timeline-badge primary"><p></p></div>
+    <div class="two_letters"><p>AT</p></div>
+        <div class="timeline-panel">
+        
+
+            <div class="timeline-body text-justify">
+              
+                <div class="text">
+                    <p>{{t.comment_text}}</p>
+                    <p>Task status changed from {% if t.previous_task_progress == None %}0{% else %}{{t.previous_task_progress}}{% endif %}% to {{t.task_progress}}% </p>
+                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
+                </div>
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                <div class="file_name">
+                    <p><b>Task:</b>{{t.task_name}}</p>
+                    <p><b>Activity:</b>{{t.activity_name}}</p>
+                    <p><b>Supercategory:</b>{{t.supercategory}}</p>
+                </div>
+                {% if t.file_name %}
+                <div style=" float: left;text-align: center; width: 100%;">
+                   <img src="/static/img/line-bar-small.png">
+                </div>
+                    <div class="file_name">
+                        <p><b>File:</b>image2.png</p>
+                        <p><b>Description:</b>Field Location1</p>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+</li>
+{% endif %}
+
+{% elif t.update_type == 'tasks' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+<p class="date">{{t.date | date:"d M"}}</p>
+    <div class="timeline-badge primary"><p></p></div>
+    <div class="two_letters"><p>AT</p></div>
+        <div class="timeline-panel">
+        
+
+            <div class="timeline-body text-justify">
+              
+                <div class="text">
+                    <p>{{t.comment_text}}</p>
+                    <p>Task created by {{t.created_by}} </p>
+                    <div class="progress_time"><a href="#"><p># Task</p></a></div>
+                    <!-- <div class="progress_time"><a href="#"><p># Image</p></a></div> -->
+                    <div class="progress_time"><a href="#"><p># Delay</p></a></div>
+                </div>
+
+                <div style=" float: left;text-align: center; width: 100%;">
+                  <img src="/static/img/line-bar-small.png">
+                </div>
+                <div class="file_name">
+                    <p><b>Task:</b>{{t.task_name}}</p>
+                    <p><b>Activity:</b>{{t.activity_name}}</p>
+                    <p><b>Supercategory:</b>{{t.supercategory}}</p>
+                </div>
+                {% if t.file_name %}
+                <div style=" float: left;text-align: center; width: 100%;">
+                   <img src="/static/img/line-bar-small.png">
+                </div>
+                    <div class="file_name">
+                        <p><b>File:</b>image2.png</p>
+                        <p><b>Description:</b>Field Location1</p>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+</li>
+
+
+{% endif %}
+{% endfor %}
+
+				
+			</ul>
+		</div>
+    </div>
+ 
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Create a Note</h4>
+        </div>
+        <div class="modal-body">
+         <form>
+             <div >
+                 <div class="form-group">
+                     <span>Comment</span>
+                 <textarea class="form-control" rows="1" placeholder="Comment"></textarea>
+                 </div>
+                 <div class="form-group">
+                 <span>Attachment</span>
+                <input type="file">
+                 </div>
+                 <div class="form-group">
+                 <span>Description</span>
+                 <textarea class="form-control" rows="4" placeholder="Description"></textarea>
+                 </div>
+                 <div class="form-group">
+                  
+                 </div>
+             </div>
+         </form>
+        </div>
+        <div class="modal-footer">
+         <button type="button" class="btn btn-success" data-dismiss="modal" style="background:#3b9e84;border:1px solid #3b9e84 color:#fff;float:right">Create</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<script src="/static/js/jquery.min.js"></script> 
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!--<script>
+    window.pressed = function(){
+    var a = document.getElementById('aa');
+    if(a.value == "")
+    {
+        fileLabel.innerHTML = "Choose file";
+    }
+    else
+    {
+        var theSplit = a.value.split('\\');
+        fileLabel.innerHTML = theSplit[theSplit.length-1];
+    }
+};
+    </script>-->
+    <script>
+  $( function() {
+    var dateFormat = "mm/dd/yy",
+      from = $( "#from" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 1
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#to" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths:1
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+  } );
+  </script>
+  
+  <script type="text/javascript" src="/static/js/jqcloud.min.js"></script>
+<!--<link rel="stylesheet" href="/static/css/jqcloud.css">
+
+<script type="text/javascript">	
+	/*FancyBox*/
+	$(document).ready(function(){
+	    var words = [{'text': 'task', 'link': '/task/', 'weight': 3}, {'text': 'Image', 'link': '/image/', 'weight': 3}, {'text': 'Budget', 'link': '/budget/', 'weight': 4}, {'text': 'Meeting', 'link': '/meeting/', 'weight': 5}, {'text': 'Tranches', 'link': '/tranches/', 'weight': 3}, {'text': 'TimelineProgress', 'link': '/timelineProgress/', 'weight': 4}, {'text': 'Report', 'link': '/Report/', 'weight': 5}];
+	    $('#new-cloud').jQCloud(words,{
+	    width:350,
+	    height:250,
+	    shape: 'rectangular'
+	    });
+	});
+	</script>-->
+	<script src="/static/js/jquery.tagcloud.js"></script>
+<script>
+$("#tagcloud a").tagcloud({
+	size: {start: 12, middle:18, end: 20, unit: "px"},
+	color: {start: '#fff', end: '#fff'}
+});
+</script>
+	
+<script>
+     $('.less_more').hide();
+    $('.text_content').hide();
+    $('.read_more').click(function(){
+    $('.less_more').show();
+         $('.text_content').show();
+          $('.read_more').hide();
+        
+    });
+     
+    $('.less_more').click(function(){
+    $('.read_more').show();
+         $('.text_content').hide();
+        $('.less_more').hide();
+        
+    });
+    
+     </script>
+     <script src="/static/js/main-adc980b5d8.js"></script>
+</body>
+{% endblock %}
+</html>
