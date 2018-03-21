@@ -8,3 +8,5 @@ __pycache__
 /ckeditor/**/*
 *.ipynb
 testcase.py
+gitssh
+gitssh.pub

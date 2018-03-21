@@ -14,7 +14,7 @@ from simple_history.admin import SimpleHistoryAdmin
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
-
+from context_processors import *
 class Attachment(BaseContent):
     # model to attach files.
     #content_type is a foriegn key, verbose_name- is a function differing with _"
@@ -32,6 +32,7 @@ class Attachment(BaseContent):
     URL = models.URLField("Link url", max_length=200, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True)
     timeline_progress = models.BooleanField(default=True)
+    history = HistoricalRecords()
 
     def __unicode__(self):
         return str(self.id) or self.object_id
@@ -48,7 +49,10 @@ class Attachment(BaseContent):
         keywords = FileKeywords.objects.filter(active=2,object_id=self.id,content_type=ContentType.objects.get(model='Attachment')).values_list('key',flat=True)
         key_list = Keywords.objects.filter(id__in=keywords).values_list('name',flat=True)
         return list(key_list)
-
+    
+#    def __init__(self,*args, **kwargs):
+#        pass
+#        #global_variables(request)
 class Keywords(BaseContent):
     name = models.CharField(max_length=100, **OPTIONAL)
 
@@ -126,3 +130,13 @@ class ScreenshotMedia(BaseContent):
     def __unicode__(self):
         return str(self.id) or ''
 
+class Note(BaseContent):
+    project = models.ForeignKey("projectmanagement.Project", **OPTIONAL)
+    created_by = models.ForeignKey(UserProfile, related_name='note_created_user', **OPTIONAL)
+    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)    
+    description = models.CharField("Description", max_length=600, **OPTIONAL)
+    comment = RichTextField(**OPTIONAL)
+    history = HistoricalRecords()
+
+    def __unicode__(self):
+        return str(self.id)

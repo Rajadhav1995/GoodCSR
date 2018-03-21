@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from pmu.settings import (SAMITHA_URL,)
 from projectmanagement.models import UserProfile
 from media.models import Section,Article
+from django.core.cache import cache
 
 def signin(request):
     if request.session.get('user_id'):
@@ -23,6 +24,8 @@ def signin(request):
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
         if validation_data.get('status') == 2:
             request.session['user_id'] = validation_data.get('user_id')
+            temp_user_id = request.session['user_id']
+            cache.set('temp_user', temp_user_id)
             if next:
                 return HttpResponseRedirect(next)
             else:
@@ -36,6 +39,8 @@ def signin(request):
 def signout(request):
     session = request.session.get('user_id')
     request.session['user_id'] = ''
+    temp_user_id = request.session['user_id']
+    cache.set('temp_user', temp_user_id)
     return HttpResponseRedirect('/')
 
 def homepage(request):

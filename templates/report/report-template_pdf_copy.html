@@ -773,7 +773,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
                 {% else %}
                 <div class="margin_top30 page_height">
                 {% endif %}
-                {% show_budget_table v 3 projectreportobj.report_type as budget_table %}
+                {% show_budget_table v 3 projectreportobj as budget_table %}
                 {% if budget_table == True %}
                     <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                     <div class="white-box">
@@ -1571,7 +1571,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% endif %} <!-- ends for parameter section  -->
             {% if quest.slug == "budget-utlization-tranches" %}
             <div class="margin_top30">
-              {% show_budget_table v 4 projectreportobj.report_type as budget_table %}
+              {% show_budget_table v 4 projectreportobj as budget_table %}
                 {% if budget_table == True %}
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
                 <div class="white-box">
@@ -1765,7 +1765,7 @@ tr { page-break-inside: avoid; overflow: visible !important; }
             {% if quest.slug == "budget-utlization-tranches" %}
             <div class="margin_top30">
                 <P class="color_green" style="border-bottom:0px">Budget Utilisation and tranches</P>
-                {% show_budget_table v 5 projectreportobj.report_type as budget_table %}
+                {% show_budget_table v 5 projectreportobj as budget_table %}
                 {% if budget_table == True %}
                 <div class="white-box">
                     <div>

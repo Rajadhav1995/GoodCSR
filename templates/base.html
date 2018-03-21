@@ -8,7 +8,7 @@
 <title>Samhita GoodCSR</title>
 
 <!--CSS Srat-->
-<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/static/css/AdminLTE.min.css" />
 <link rel="stylesheet" href="/static/css/bootstrap.css" />
 <link rel="stylesheet" href="/static/css/style.css" />
@@ -49,7 +49,7 @@
 <!--  <link rel="stylesheet" href="/resources/demos/style.css">-->
 
 <!--Progress bar script -->
-<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="/static/css/jQuery-plugin-progressbar.css">
 
 
@@ -135,7 +135,7 @@ ga('send', 'pageview');
                 <!--</div>-->
               </li>
               <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
-              <!-- <li><a {% if key == "mycalendar" %} class="active" {% endif %} href = "/managing/my-calendar/details/?slug={{request.GET.slug}}&key=mycalendar&status=2">My Calendar </a></li> -->
+              <li><a {% if key == "mycalendar" %} class="active" {% endif %} href = "/managing/my-calendar/details/?slug=&key=mycalendar&status=2">My Calendar </a></li>
         {% get_user_permission request as user_obj %}
         {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or pmo_access == 2 %}

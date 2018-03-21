@@ -18,9 +18,9 @@
             	<h3>Budget</h3>
                  <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
-                	<li><span class="yellow-circle"></span> Planned <span class="right-li">₹ {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">₹ {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}₹  {{projectobj.project_budget_details.utilized_cost}} {% else %} ₹ 0 {% endif %} </span></li>
+                	<li><span class="yellow-circle"></span> Planned <span class="right-li">₹ {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">₹ {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}₹  {{projectobj.project_budget_details.utilized_cost | get_currency}} {% else %} ₹ 0 {% endif %} </span></li>
                 </ul>
             </div>
             <div class="budget-right-pad">
@@ -157,7 +157,7 @@
                      <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                     <!--  Added to display attachment using a template tag                    -->
                      {% get_line_attach line_itemobj as attach %}
-                     <td align="center" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;" href={{image_url}}{{attach.image_url}} target="_blank"><img src='/static/img/attachment-icon.png' /></a>{% else %} - {% endif %}  </td>
+                     <td align="center" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;" href={{image_url}}{{attach.image_url}} target="_blank"><img src='/static/img/40.png' /></a>{% else %} - {% endif %}  </td>
                      {% endwith %}
                      {% endfor %}
             </tr>
@@ -546,7 +546,7 @@ Highcharts.chart('planned_utilized', {
         }
     }, {
         title: {
-            text: '2016-2017',
+            text: '',
             align: "middle",
             rotation: 360
         },
@@ -614,12 +614,27 @@ Highcharts.chart('Budget_location', {
                 enabled: true,
                 layout: 'horizontal',
                 align: 'center',
-                width: 200,
+                width: 250,
+                height: 'auto',
                 verticalAlign: 'bottom',
                 useHTML: true,
                 labelFormatter: function() {
-
-                    return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                    var str = '<span>' + this.name +' - Rs.  '+ this.y.toFixed(0).replace(/(\d)(?=(\d\d)+\d$)/g, "$1,");
+                                        
+                    var newStr = str.replace(/(.{37})/g, "$1<br/>")+'</span>';
+                    
+                    return newStr;
+                },
+                navigation: {
+                    activeColor: '#3E576F',
+                    animation: true,
+                    arrowSize: 12,
+                    inactiveColor: '#CCC',
+                    style: {
+                        fontWeight: 'bold',
+                        color: '#333',
+                        fontSize: '12px'
+                    }
                 }
             },
             series: [{
@@ -756,7 +771,7 @@ else{
     }
 }
 var total = parseInt(100 - (utilized + disbursed))
-console.log(total , utilized , disbursed);
+console.log("Budget gauge",total , utilized , disbursed);
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
 

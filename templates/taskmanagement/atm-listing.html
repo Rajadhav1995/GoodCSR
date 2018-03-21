@@ -1,7 +1,7 @@
 {% extends 'project/project-summary.html' %}
 {% load urs_tags %}
 {% load common_tags %}
-{% load dealy_tags %}
+{% load delay_tags %}
 <!--Content part starts-->
 
 {% block content %}
@@ -9,12 +9,13 @@
 <!--Content part starts-->
 <section class="content-part">
   <div class="row">
-      <div class=" white-box white-pad">
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-  </div>
+<!--      <div class=" white-box white-pad">-->
+    
+<!--  </div>-->
+  
   <div class=" white-box white-pad">
   <div style="width: 50%;float: left;">
-  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Planned vs Actual Task Completion</div>
+  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Planned vs Actual Task Completion<span title="The planned graph shows maps out the completion of various tasks as planned. The actual graph maps what percentage of the planned work the completed and partially completed tasks at a particular point in time represent."> (i)</span></div>
   <div id="pvaSuper">
     <div class="scrollmenu">
     </div>
@@ -22,7 +23,14 @@
   <div id="pvaContainer" style="width: 100%;float: left;"></div >
   </div>
   <div style="width: 50%;float: left;">
-  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;">Super Category Completion</div>
+  
+    
+  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;" id="super_name">Super Category Completion</div>
+  <div class="highcharts-title" style="width: 100%;font-size:18px;text-align: center;" id="delay_name">Progress/ Delay Drill Down</div>
+  <div class="" style="float: right;">
+  <a class="link-pad text-md-center" id="button_delay" >Progress/ Delay Drill Down</a>
+    <a class="link-pad text-md-center" id="button_category" >Super Category Completion</a></div>
+  <div id="container" style="width: 100%;float: left; height: 400px; margin: 0 auto"></div>
   <div id="Super_Completion" style="width: 100%;float: left;"></div>
   </div>
   </div>
@@ -149,56 +157,12 @@
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <script src="/static/js/jquery.nicescroll.min.js"></script>
  <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
+ 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js" type="text/javascript" />
-<script src="/static/js/highcharts.js" type="text/javascript"></script>
-<script src="/static/js/drilldown.js" type="text/javascript"></script>
-<script>
-function activity(name,slug,act_id,super_cat_id) {
-    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
-}
-function task(name,slug,task_id,act_id,super_id) {
-    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
-}
 
-function milestone(name,slug,mile_id,task_ids) {
-    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
-}
-</script>
 
-<!--script for filters by- malcolm-->
-<script>
-function filter(target,parent,type) {
-    if ($(target).hasClass('fa-filter')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").each(function () {
-        var child = $(this).children()[0];
-        $(this).show();
-        if(type=="activity"){
-        var actFilter = $(parent).attr('act_id');
-        if ($(child).attr('activity_id') != actFilter) {
-          $(this).hide();
-        }
-        }else if(type=="milestone"){
-        var actFilter = $(parent).attr('task_ids');
-        if (actFilter.includes($(child).attr('task_id'))==false) {
-          $(this).hide();
-        }
-        }
-      });
-      $('.fa-ban').not(target).each(function(){
-        $(this).toggleClass('fa fa-ban');
-        $(this).toggleClass('fa fa-filter');
-      });
-      // Code to filter tasks when the button is clicked
-    } else if ($(target).hasClass('fa-ban')) {
-      $(target).toggleClass('fa fa-ban');
-      $(target).toggleClass('fa fa-filter');
-      $("#boxscroll-atm1>ul>li").show();
-  // Code to show all tasks when the button is clicked
-  }
-}
-</script>
+
 
 
 <script>
@@ -297,7 +261,7 @@ $(document).ready(function(){
 </script>
 
 <!---datepicker script-->
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
   $(function() {
   $( ".datepicker" ).datepicker({
@@ -307,13 +271,16 @@ $(document).ready(function(){
   });
   });
 </script>
-<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
-  <script src="/static/js/jsgantt.js" type="text/javascript"></script>
+  
 <!-- script for gantt chart starts here-->
 
 <script>
-    var jsonData = {{taskdict|safe}};
+    jsonData = {{taskdict|safe}};
     console.log(jsonData);
+</script>
+<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/jsgantt.js" type="text/javascript"></script>
+<script>
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -723,9 +690,9 @@ $(document).ready(function(){
   </script>
 <!--script for super categories starts -->
 
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/highcharts-more.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script>
     console.log('gSuper',gSuperName,gSuperComp)
     if (gSuperName.length > 0) {
@@ -864,7 +831,8 @@ $(document).ready(function(){
       var d = this.modified;
       this.modified = new Date(d);
       this.modified.setHours(0, 0, 0, 0);
-      this.modified = new Date(this.modified);  
+      this.modified = new Date(this.modified);
+      if(this.actual_end_date==null) this.actual_end_date = this.modified; 
     })
       $.each(jsonData.tasks,function(i,n){
         $.each(jsonData.activities,function(j,m){
@@ -885,7 +853,7 @@ $(document).ready(function(){
       temp.id = this.id;
       temp.modified = this.actual_end_date;
       temp.actual_end_date = this.actual_end_date;
-      if(this.actual_end_date==null && this.task_progress==100){
+      if(this.actual_end_date==null){
       temp.modified = this.expected_end_date;
       temp.actual_end_date = this.expected_end_date;
       }
@@ -894,7 +862,6 @@ $(document).ready(function(){
       temp.task_progress = this.task_progress;
       if(temp.modified!=null && temp.actual_end_date!=null) pvaData.push(temp);
     })
-    console.log("pva1",pvaSorted);
     }
     function filteract(){
     //Get rows with unique date and task
@@ -904,18 +871,35 @@ $(document).ready(function(){
         flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
         pvaSorted.push(pvaData[i]);
     }
+    console.log("pvaSort",pvaSorted);
     var week = d3.timeFormat("%Y-%U");
 
     var actnest = d3.nest().key(function (d) {
+      if(d.actual_end_date!=null){
+        console.log("Check ac",new Date(d.actual_end_date).getTime())
+        if(new Date(d.actual_end_date).getTime() >= new Date().getTime()) {return week(new Date()-604800000);}
+        else if(new Date(d.actual_end_date).getTime() < new Date().getTime()) {return week(new Date(d.actual_end_date));}
+      }else{
+        return null;
+      }
+    }).entries(pvaSorted);
+
+    var actnest2 = d3.nest().key(function (d) {
       if(d.actual_end_date!=null && new Date(d.actual_end_date).getTime() <= new Date().getTime()){
         console.log("Check ac",new Date(d.actual_end_date).getTime())
         return week(new Date(d.actual_end_date));
       }else{
         return null;
       }
+    }).rollup(function (v){
+      var tmp = [];
+      for(var l=0;l<pTasks.length;l++){
+        var w = (new Date(pTasks[l].end_date).getTime() - new Date(pTasks[l].start_date).getTime()+1);
+        tmp.push({"id":pTasks[l].id,"task_progress": 0,"name":pTasks[l].name,"weight":w,"actual_start_date":pTasks[l].actual_start_date,"actual_end_date":pTasks[l].actual_end_date});
+        }
+      return tmp;
     }).entries(pvaSorted);
-    console.log("Check actual",actnest);
-    
+    console.log("Data ",pvaSorted,actnest2)
     var plannest = d3.nest().key(function (d) {
         if(ids.length==0){
         return week(new Date(d.end_date));
@@ -941,13 +925,6 @@ $(document).ready(function(){
     var maxComp = 0;
     var chartData = [];
     console.log("Plannest",plannest)
-    // $.each(plannest, function(){
-    //   $.each(this.values,function(){
-    //     var weight = diffDates(this.start_date,this.end_date);
-    //     if(weight==0){weight=1;} 
-    //     maxComp += (weight * 100);
-    //   })
-    // })
     // --- For Planned Tasks ---
     plannest.sort(function(a,b){
       return new Date(b.modified) - new Date(a.modified);
@@ -958,14 +935,14 @@ $(document).ready(function(){
       var week = getNextWeek(plankey[0],plankey[1]);
       var comp = 0;
       $.each(this.values,function(){
-        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
+        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
         comp += (weight * 100);
-        console.log("keys", comp, this.id , weight);
+        // console.log("keys", comp, this.id , weight);
       })
       chartData.push([(week.getTime()+19800000),comp]);
       }
     });
-    console.log("CD",chartData,maxComp,plannest)
+    console.log("CD",chartData,maxComp)
     chartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
@@ -980,63 +957,97 @@ $(document).ready(function(){
       this[1] = Math.round((this[1]/maxComp)*100);
     });
     console.log("Map2",plannest,actnest) 
-    // var cArray = Object.keys(map).map(function(elem) {
-    // return { date: elem, count: map[elem]/100 }
-    // })
-    // console.log("Map",cArray)
-    // var chartData = [];
-    // var Cprev = [{date:"",count:0}];
-    // $.each(cArray,function(n,i){
-    //   chartData.push([(new Date(this.date)).getTime(),(this.count+Cprev.count)]);
-    //   console.log("Value",Cprev,"this",(this.count+Cprev.count))
-    //   if(n>-1){Cprev = cArray[(n)];}
-    // })
-    // chartData.reverse();
     // --- For Actual Tasks --- 
     var AmaxComp = 0;
     var AchartData = [];
     actnest.sort(function(a,b){
-      return new Date(b.end_date) - new Date(a.end_date);
+      console.log("SORT",a,b)
+      return new Date(a.values[0].actual_end_date) - new Date(b.values[0].actual_end_date);
     });
-    console.log("Asort",actnest)
-    $.each(actnest , function(){
+    $.each(actnest,function(i,v){
+      actnest2[i].key = this.key;
+    console.log("Check actual",actnest2[i].value);
+      $.each(this.values,function(){
+        $.each(actnest2[i].value, function(m,n){
+          if(actnest2[i+1]!=undefined) {
+          var c = actnest2[i+1].value[m];
+          console.log("keey",m,i+1,c);
+          if(this.task_progress >= c.task_progress) c.task_progress = this.task_progress;
+          }
+        })
+      var b = actnest2[i].value.filter( n => n.id == this.id );
+      console.log("keey2",b,this,actnest2);
+      if(this.task_progress != null && b.length>0 && b[0].task_progress<=this.task_progress) b[0].task_progress = this.task_progress;
+      console.log("keey3",this);
+      });
+    });
+
+    console.log("Asort",actnest2)
+    // $.each(actnest , function(){
+    //   if(this.key!="null"){
+    //     var plankey = this.key.toString().split('-');
+    //     var week = getNextWeek(plankey[0],plankey[1]);
+    //     var compA = 0;
+    //     var weekUID = [];
+    //     console.log(new Date(week),"Key",this.values.length)
+    //     //Remove tasks with same id in the same week 
+    //     for(var k=0; k<this.values.length; k++) {
+    //         console.log(flags[this.values[k].id],'weelUID2');
+    //         if( flags[(this.values[k].id)]) continue;
+    //         flags[(this.values[k].id)] = true;
+    //         weekUID.push(this.values[k]);
+    //     }
+    //         console.log(weekUID,'weelUID');
+    //     $.each(weekUID,function(){
+    //       var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
+    //       compA += (weight * this.task_progress);
+    //       console.log("taskval",this.id,compA);
+    //     })
+    //     AchartData.push([(week.getTime()+19800000),compA]);
+    //   }
+    // });
+    $.each(actnest2, function(){
       if(this.key!="null"){
         var plankey = this.key.toString().split('-');
         var week = getNextWeek(plankey[0],plankey[1]);
         var compA = 0;
         var weekUID = [];
-        console.log(new Date(week),"Key",this.values.length)
+        // console.log(new Date(week),"Key4",this)
         //Remove tasks with same id in the same week 
-        for(var k=0; k<this.values.length; k++) {
-            console.log(flags[this.values[k].id],'weelUID2');
-            if( flags[(this.values[k].id)]) continue;
-            flags[(this.values[k].id)] = true;
-            weekUID.push(this.values[k]);
-        }
-            console.log(weekUID,'weelUID');
-        $.each(weekUID,function(){
-          var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
-          compA += (weight * this.task_progress);
-          console.log("taskval",this.id,compA);
+        // for(var k=0; k<this.value.length; k++) {
+        //     // console.log(flags[this.value[k].id],'weelUID2');
+        //     if( flags[(this.value[k].id)]) continue;
+        //     flags[(this.value[k].id)] = true;
+        //     weekUID.push(this.value[k]);
+        // }
+        //     console.log(weekUID,'weelUID');
+        $.each(this.value,function(){
+          var tp = 0;
+          if(this.task_progress != "None") tp = this.task_progress;
+          // var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
+          compA += (Math.abs(this.weight) * parseInt(tp));
+          console.log("CDA2",week,compA)
         })
-        AchartData.push([(week.getTime()+19800000),compA]);
+        AchartData.push([(week.getTime()+19800000),Math.round((compA/maxComp)*100)]);
+          console.log("CDA22",week,compA/maxComp)
+
       }
     });
-    console.log("aCD",AchartData,AmaxComp)
+    console.log("CDA21",AchartData,maxComp)
     AchartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
     console.log("aCDA",AchartData)
     temp = 0;
-    $.each(AchartData,function(){
-      AmaxComp += this[1];
-      this[1] = this[1] + temp;
-      temp = this[1];
-    })
-    $.each(AchartData,function(){
-      this[1] = Math.round((this[1]/maxComp)*100);
-    });
-    console.log("PVA",AchartData,pvaData);
+    // $.each(AchartData,function(){
+    //   AmaxComp += this[1];
+    //   this[1] = this[1] + temp;
+    //   temp = this[1];
+    // })
+    // $.each(AchartData,function(){
+    //   this[1] = Math.round((this[1]/maxComp)*100);
+    // });
+    console.log("PVA",AchartData);
     PVAChart = Highcharts.chart('pvaContainer', {
       chart: {
         type: 'spline',
@@ -1138,7 +1149,7 @@ $(document).ready(function(){
       filteract();
     }
     function superData(id){
-      ids=[];
+      ids=[-1];
       chartInit();
       $.each(sc,function(){
         if(this.super == id){
@@ -1156,7 +1167,7 @@ $(document).ready(function(){
         }
       });
       console.log("asort2",pvaData,ids);
-      setTimeout(redraw(),3000);
+      setTimeout(redraw(),5000);
     }
 </script>
 <!-- script for planned vs actual ends -->
@@ -1172,25 +1183,29 @@ $(document).ready(function() {
 });
 </script>
 <!--SCRIPT FOR DEALY DRILL DOWN STARTS    -->
-<!--<script src="http://github.highcharts.com/master/highcharts.js"></script>-->
-<!--<script src="http://github.highcharts.com/master/modules/drilldown.js"></script>-->
+<script src="/static/js/highcharts.js"></script>
+<script src="/static/js/drilldown.js"></script>
 
 <script>
 var project_slug = '{{request.GET.slug}}'
 {% super_category_delay request.GET.slug as super_list %}
-var categories = {{super_list|safe}}
+var categories = {{super_list.0|safe}}
+var act_task = {{super_list.1|safe}}
 console.log('super_cat');
 console.log(categories);
-$(function() {
+console.log(act_task);
 
   // Create the chart
     
+  $(function() {
+
+  // Create the chart
   $('#container').highcharts({
       chart: {
         type: 'bar'
       },
       title: {
-        text: 'Delay Drill Down'
+        text: ''
       },
       xAxis: {
         type: 'category',
@@ -1210,7 +1225,14 @@ $(function() {
         series: {
           borderWidth: 1,
           dataLabels: {
-            enabled: false,
+            enabled: true,
+            formatter: function ()  {
+            if(this.y == 0) return "On time";
+            else if(this.y>0) return "Ahead by "+this.y+" day(s)";
+            else if(this.y<0) return "Delayed by "+Math.abs(parseInt(this.y))+" day(s)";
+                    },
+            inside: false
+                  
           }
         }
       },
@@ -1221,63 +1243,7 @@ $(function() {
         data: categories,
       }],
       drilldown: {
-        series: [{
-          id: 'activity',
-          name: 'Activity',
-          color: '#006C90',
-          data: [{
-            name: 'Refurbishment',
-            y: 1,
-            drilldown: 'task'
-          }, {
-            name: 'Operation',
-            y: -2,
-            drilldown: 'task'
-          }, {
-            name: 'Maintenance',
-            y: -3,
-            drilldown: 'task'
-          }, {
-            name: 'Behavioural Change Communication',
-            y: 4,
-            drilldown: 'task'
-          }]
-        },
-        {
-            id:'activity1',
-            name:'Activity',
-            color:'#006C90',
-            data: [{
-            name: 'Maintenance',
-            y: -3,
-            drilldown: 'task'
-          }, {
-            name: 'Behavioural Change Communication',
-            y: 4,
-            drilldown: 'task'
-          }]
-        }, 
-        {
-          id: 'task',
-          name: 'Task',
-          data: [{
-            name: 'Hiring of Project Staff',
-            y: -1,
-            task_progress: 20
-          }, {
-            name: 'Operations',
-            y: 4,
-            task_progress: 90
-          }, {
-            name: 'Maintainence Support',
-            y: -3,
-            task_progress: 40
-          }, {
-            name: 'Documentation of Case Studies',
-            y: -4,
-            task_progress: 70
-          }]
-        }]
+        series: act_task,
       }, function(chart){	
         	
 			console.log(chart,'this')
@@ -1288,5 +1254,100 @@ $(function() {
 
 </script>
 <!--SCRIPT FOR DELAY DRILL DOWN (ENDS)    -->
+<script>
+function activity(name,slug,act_id,super_cat_id) {
+    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
+}
+function task(name,slug,task_id,act_id,super_id) {
+    window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
+}
+
+function milestone(name,slug,mile_id,task_ids) {
+    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
+}
+</script>
+
+<!--script for filters by- malcolm-->
+<script>
+function filter(target,parent,type) {
+    if ($(target).hasClass('fa-filter')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
+      $("#boxscroll-atm1>ul>li").each(function () {
+        var child = $(this).children()[0];
+        $(this).show();
+        if(type=="activity"){
+        var actFilter = $(parent).attr('act_id');
+        if ($(child).attr('activity_id') != actFilter) {
+          $(this).hide();
+        }
+        }else if(type=="milestone"){
+        var actFilter = $(parent).attr('task_ids');
+        if (actFilter.includes($(child).attr('task_id'))==false) {
+          $(this).hide();
+        }
+        }
+      });
+      $('.fa-ban').not(target).each(function(){
+        $(this).toggleClass('fa fa-ban');
+        $(this).toggleClass('fa fa-filter');
+      });
+      // Code to filter tasks when the button is clicked
+    } else if ($(target).hasClass('fa-ban')) {
+      $(target).toggleClass('fa fa-ban');
+      $(target).toggleClass('fa fa-filter');
+      $("#boxscroll-atm1>ul>li").show();
+  // Code to show all tasks when the button is clicked
+  }
+}
+</script>
+<script>
+$("#super_name").show();
+$("#delay_name").hide();
+$("#container").hide();
+$("#button_category").hide();
+$("#button_delay").click(function(){
+$("#super_name").hide();
+$("#delay_name").show();
+$("#container").show();
+$("#Super_Completion").hide();
+
+
+$("#button_category").show();
+$("#button_delay").hide();
+});
+
+$("#button_category").click(function(){
+$("#super_name").show();
+$("#delay_name").hide();
+$("#Super_Completion").show();
+
+$("#container").hide();
+$("#button_delay").show();
+$("#button_category").hide();
+});
+
+
+</script>
+<style>
+
+text.highcharts-drilldown-axis-label {
+ color: #dedede !important; 
+fill: #666666 !important;
+}
+path.highcharts-button-symbol {
+    display: none;
+}
+highcharts-button-hover .highcharts-button-symbol {
+    display: none;
+}
+g.highcharts-button.highcharts-contextbutton.highcharts-button-normal {
+    display: none;
+}
+.link-pad:hover {
+    background: #169776;
+    color: #fff !important;
+}
+</style>
 {% endblock %}
 

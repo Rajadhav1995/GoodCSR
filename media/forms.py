@@ -1,13 +1,13 @@
 from projectmanagement.models import Project,MasterCategory,UserProfile,Program,ProjectFunderRelation
 from collections import OrderedDict
 from django import forms
-from media.models import Attachment
+from media.models import Attachment,Note
 from django.contrib.admin import widgets
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from media.models import ContactPersonInformation
-# from captcha.fields import ReCaptchaField
+from captcha.fields import ReCaptchaField
 from django.utils.translation import gettext as _
 from django.conf import settings
 import requests
@@ -67,8 +67,22 @@ class ContactPersonForm(forms.ModelForm):
     organization_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     mobile_number = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
     message = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
-    # captcha = ReCaptchaField(attrs={'theme' : 'white'}, required=True)
+    captcha = ReCaptchaField(attrs={'theme' : 'white'}, required=True)
 
     class Meta:
         model = ContactPersonInformation
         fields  = ('name','email','organization_name','mobile_number','message')
+
+class NoteForm(forms.ModelForm):
+    '''
+    This is model form to create nte in project update wall
+    '''
+    comment = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
+    attachment_file = forms.ImageField(label=_('Attach File'),required=False, error_messages = {'invalid':_("Image files only")}, widget=forms.FileInput)
+    class Meta:
+        model = Note
+        fields  = ('description','attachment_file','comment')
+        widgets = {
+            "file": MyClearableFileInput(),
+        }

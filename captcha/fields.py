@@ -31,11 +31,12 @@ class ReCaptchaField(forms.CharField):
         JavaScript variables as specified in
         https://code.google.com/apis/recaptcha/docs/customization.html
         """
-        public_key = public_key
+        public_key = public_key if public_key else \
+            settings.RECAPTCHA_PUBLIC_KEY
         self.private_key = private_key if private_key else \
             settings.RECAPTCHA_PRIVATE_KEY
         self.use_ssl = use_ssl if use_ssl is not None else getattr(
-            settings, 'RECAPTCHA_USE_SSL', True)
+            settings, 'RECAPTCHA_USE_SSL', False)
 
         self.widget = ReCaptcha(
             public_key=public_key, use_ssl=self.use_ssl, attrs=attrs)

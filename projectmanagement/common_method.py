@@ -43,3 +43,15 @@ def add_keywords(keys,obj,model,edit):
         else:
             key_object = Keywords.objects.create(name=i.strip())
             key_obj = FileKeywords.objects.create(key=key_object,content_type=ContentType.objects.get(model=model),object_id=obj.id )
+
+
+
+def add_modified_by_user(obj,request):
+    '''This is function is to save the modified by user so that if any task or
+    project is assigned to another user if he performs any updations to task or
+    project we can display that particular user has done some changes to the 
+    project or tasks '''
+    temp_user = request.session.get('user_id')
+    obj.modified_by = temp_user
+    obj.save()
+    return obj

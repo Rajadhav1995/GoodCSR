@@ -1,7 +1,7 @@
 from django import template
 register = template.Library()
 from datetime import datetime
-from media.models import Comment,Attachment
+from media.models import Comment,Attachment,ProjectLocation
 from django.contrib.contenttypes.models import ContentType
 import pytz
 import requests,ast
@@ -13,6 +13,36 @@ from ast import literal_eval
 from itertools import chain
 from operator import is_not
 from functools import partial
+
+
+#According to Wikipedia the exact definition of a goal is:
+# A desired result a person or a system envisions, 
+# plans and commits to achieve a personal or organizational 
+# desired end-point in some sort of assumed development. 
+# Many people endeavor to reach goals within a finite time by setting deadlines. 
+#In other words, any planning you do for the future 
+# regardless of what it is, is a goal. 
+#So the next time you are planning on doing the weekly chores or 
+# decide on watching that really cool action movie after work, 
+# always keep in mind that these small tasks account as goals and 
+# while seemingly insignificant you are goal setting.
+# Just like how sunlight can't burn through anything without a 
+# magnifying glass focusing it, 
+#you can't achieve anything unless a goal is focusing your effort. 
+#Because at the end of the day goals are what give you direction in life. 
+#By setting goals for yourself you give yourself a target to shoot for. 
+#This sense of direction is what allows your mind to focus on a target and 
+# rather than waste energy shooting aimlessly,
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because
+ # you always have a fixed endpoint or benchmark to compare with. 
+ # Take this scenario for example: David makes a goal to write a book with 
+ # a minimum of 300 pages. He starts writing every day and works really hard 
+ # but along the way, he loses track of how many more pages he has written and 
+ # how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has 
+# already written and he instantly determines his progress and knows how much 
+# further he needs to go.
 
 @register.assignment_tag
 def get_details(obj):
@@ -44,44 +74,135 @@ def task_comments(date,task_id):
         task_comment.append(i)
     return task_comment
 
-@register.assignment_tag
-def task_comments_progress(date,task_id, attach):
+def task_progress_history_details(task_data,attach_obj,i,comment_obj):
+    utc=pytz.UTC
+    if not attach_obj:
+        if comment_obj and (i.get_previous_by_created().task_progress != i.task_progress):
+        # if i.get_previous_by_created().task_progress != i.task_progress:
+            cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
+                'task_progress':i.task_progress,'attachment':0,
+                'previous_task_progress':i.get_previous_by_created().task_progress,}
+            task_data.append(cell_one)
+        elif (i.get_previous_by_created().task_progress != i.task_progress):
+            
+            cell_one = {'name':'','comment_text':'','date':i.modified,
+                'task_progress':i.task_progress,'attachment':0,
+                'previous_task_progress':i.get_previous_by_created().task_progress,}
+            task_data.append(cell_one)
+        elif comment_obj and (i.get_previous_by_created().task_progress == i.task_progress):
+            cell_one = {'name':comment_obj.created_by.attrs,'comment_text':comment_obj.text,'date':i.modified,
+                'task_progress':i.task_progress,'attachment':0,
+                'previous_task_progress':i.get_previous_by_created().task_progress}
+            task_data.append(cell_one)
+        
+    elif attach_obj:
+        attachment_data = {'name':attach_obj.created_by.attrs,
+            'description':attach_obj.description,
+            'date':attach_obj.created,'attachment':1,
+            'attachment_type':attach_obj.attachment_type,
+            'document_type':attach_obj.document_type,
+            'image_url':PMU_URL + attach_obj.attachment_file.url,
+            'task_progress':i.task_progress,
+            'previous_task_progress':i.get_previous_by_created().task_progress,
+            'file_name':attach_obj.name}
+        task_data.append(attachment_data)
+    return task_data
+
+def get_modified_by_user(user_id):
+    if user_id:
+        user_object = UserProfile.objects.get_or_none(user_reference_id=int(user_id))
+    else:
+        user_object = ''
+    if user_object:
+        return user_object.attrs
+
+def task_updates_list(key,task_progress,start_date,end_date):
+# this is to get the task updates 
+# where the combination of updates would be 
+# filtered and displayed
     task_data = []
-    
-    task_progress = Task.objects.get(id=task_id)
-    task_progress_history = task_progress.history.filter(modified__range = (datetime.combine(date, datetime.min.time()),datetime.combine(date, datetime.max.time())))
+    utc=pytz.UTC
+    slug = task_progress.activity.project.slug
+    if key == 'project_tasks':
+        task_progress_history = task_progress.history.filter(task_progress__isnull=False,modified__range = [start_date,end_date]).order_by('-id')
+    else:
+        task_progress_history = task_progress.history.filter(modified__range=[start_date,end_date]).order_by('-id')
+    temp_var = 0
     for i in task_progress_history:
-        if i.task_progress:
+        new_var = int(i.modified.strftime("%Y%m%d%H%M%S"))
+        
+        if (int(new_var)-int(temp_var)) > 10 and i.task_progress:
+            
             previous_task_progress = i.get_previous_by_created().task_progress
             task_time = i.modified
             next_tick = task_time.second +1
             
             task_prev_tick = task_time.second -1
+
             try:
                 start_time = task_time.replace(microsecond=499999,second=task_prev_tick)
             except:
                 start_time = task_time.replace(microsecond=499999,second=59)
             end_time = task_time.replace(microsecond=999999)
-            attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time))
-            if not attach_obj:
-                cell_one = {'name':'','comment_text':'','date':i.modified,
-                        'task_progress':i.task_progress,'attachment':0,
-                        'previous_task_progress':i.get_previous_by_created().task_progress if i.get_previous_by_created().task_progress!=None else 0,}
-                task_data.append(cell_one)
-    task_data.append(attachment_json_for_comments(task_id,attach))
-    
+            
+            attach_obj = Attachment.objects.get_or_none(created__range=(start_time,end_time),content_type=ContentType.objects.get(model=('task')),object_id=task_progress.id)
+            comment_obj = Comment.objects.get_or_none(active=2,content_type=ContentType.objects.get(model=('task')),object_id=task_progress.id,\
+                        created__range=(start_time,end_time))     
+            if key == 'project_tasks': 
+                # this for project tasks updates section 
+                task_data = task_progress_history_details(task_data,attach_obj,i,comment_obj)
+                
+            else:
+                # this is for updates wall
+#                if previous_task_progress != i.task_progress:
+                history_data = get_task_attachment(i,attach_obj,previous_task_progress,slug,comment_obj)
+                task_data.append(history_data)
+        temp_var = new_var
+    return task_data
+
+def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
+    history_data = {'task_name':obj.name,'activity_name':obj.activity.name,
+                'supercategory':obj.activity.super_category,'date':obj.modified,
+                'task_progress':obj.task_progress,'previous_task_progress':previous_task_progress,
+                'update_type':'tasks_history','created_by':obj.created_by,'modified_by':get_modified_by_user(obj.modified_by),
+                'task_link':PMU_URL+'/managing/my-tasks/details/?slug='+slug+'&key=projecttasks&status=1'}
+    if attach_obj:
+        attachment_file_type = get_attachment_type(attach_obj.attachment_file.url.split('/')[-1])
+        history_data.update({'file_name':string_trim(attach_obj.attachment_file.url.split('/')[-1]) if attach_obj.attachment_file else '','file_description':attach_obj.description,'file_url':PMU_URL + '/' +str(attach_obj.attachment_file),'attachment_file_type':attachment_file_type})
+    if comment_obj:
+        history_data.update({'comment_text':comment_obj.text})
+    return history_data
+
+@register.assignment_tag
+def task_comments_progress(date,task_id, attach):
+    task_data = []
+    key = 'project_tasks'
+    start_date = datetime.combine(date, datetime.min.time())
+    end_date = datetime.combine(date, datetime.max.time())
+    task_progress = Task.objects.get(id=task_id)
+    # to make common function for project tasks updates and 
+    # updates wall (tasks history objects)
+    # ##################
+    # based on the key ,task , start date and end date we are getting the details ,
+    # particular task
+    task_data = task_updates_list(key,task_progress,start_date,end_date)
+    # task_data.append(attachment_json_for_comments(task_id,attach))
     task_data = filter(partial(is_not, None), task_data)
     task_data.sort(key=lambda item:item['date'], reverse=True)
     return task_data
 
 def attachment_json_for_comments(task_id,attach):
-    attachment_data = {}
+    attachment_data = []
     for i in attach:
         time = i.created
-        data ={}
+        
         next_tick = time.second +1
         prev_tick = time.second -1
-        start_time = time.replace(microsecond=499999,second=prev_tick)
+        try:
+            start_time = time.replace(microsecond=499999,second=prev_tick)
+        except:
+            start_time = time.replace(microsecond=499999,second=59)
+
         end_time = time.replace(microsecond=999999)
         task_object = Task.objects.get(id=task_id)
         try:
@@ -91,6 +212,7 @@ def attachment_json_for_comments(task_id,attach):
             if task_history:
                 task_history = task_history[0]
         if task_history:
+
             attachment_data = {'name':i.created_by.attrs,
             'description':i.description,
             'date':i.created,'attachment':1,
@@ -100,7 +222,17 @@ def attachment_json_for_comments(task_id,attach):
             'task_progress':task_history.task_progress,
             'previous_task_progress':task_history.get_previous_by_created().task_progress,
             'file_name':i.attachment_file.name.split('/')[-1]}
-            return attachment_data
+    return attachment_data
+
+@register.assignment_tag
+def get_task_status(task_id):
+    task_progress = Task.objects.get(id=task_id)
+    task_progress_history = task_progress.history.filter(task_progress__isnull=False)
+    if task_progress_history:
+        status = 1
+    else:
+        status = 0
+    return status
 
 from datetime import date
 @register.assignment_tag
@@ -123,7 +255,8 @@ def get_task_comments(comment_date,task_id):
     return comment_data
 
 def get_removed_questions(questions,block,project_report,block_type,quest_removed):
-    # to get the removed questions list for that particular block 
+    # to get the removed questions list for 
+    # that particular block 
     removed_ques=[]
     parent_ques=[]
     final_questions=[]
@@ -159,7 +292,9 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     return final_questions,remove_id
     
 def get_removed_populate_questions(questions,project_report,block_type,quest_removed):
-    # to get the removed questions list which are auto populated questions for that particular block
+    # to get the removed questions list which are 
+    # auto populated questions for that 
+    # particular block
     removed_ques=[]
     remove_id=''
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
@@ -183,7 +318,8 @@ def get_removed_populate_questions(questions,project_report,block_type,quest_rem
     
 @register.assignment_tag 
 def get_questions(block,project_report,block_type,quest_removed):
-    # to get the questions that are tagged in that particular section
+    # to get the questions that are tagged in that 
+    # particular section
     question_list = []
     question_dict={} 
     report_obj=ProjectReport.objects.get_or_none(id=project_report.id)
@@ -202,7 +338,8 @@ def get_questions(block,project_report,block_type,quest_removed):
 
 @register.assignment_tag 
 def get_auto_populated_questions(ques_id,project,project_report,block_type,quest_removed):
-    # to get the auto populated questions that are tagged to that particular section
+    # to get the auto populated questions that 
+    # are tagged to that particular section
     data = {}
     question = Question.objects.get_or_none(id=ques_id)
     sub_quest_list = []
@@ -212,7 +349,8 @@ def get_auto_populated_questions(ques_id,project,project_report,block_type,quest
     cover_image = Attachment.objects.get_or_none(description__iexact = "cover image",attachment_type = 1,
             content_type = ContentType.objects.get_for_model(project_report),
             object_id = project_report.id)
-    # details dict is to get the details of two sections on first click of generate report
+    # details dict is to get the details of two sections 
+    # on first click of generate report
     details = {'report_type':project_report.get_report_type_display(),
         'report_duration':project_report.start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d")+' TO '+project_report.end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d"),
         'prepared_by':project_report.created_by.attrs.get('first_name')+' '+project_report.created_by.attrs.get('last_name'),'client_name':mapping_view.funder.organization,
@@ -231,7 +369,8 @@ def get_auto_populated_questions(ques_id,project,project_report,block_type,quest
     
 @register.assignment_tag 
 def get_milestones(quarter,report_obj,type_id):
-# to get the milestones or activities that are save for particular quarters
+# to get the milestones or activities that 
+# are save for particular quarters
     report_miles = []
     data = {}
     slug = {1:'milestone-section',2:'activity-section'}
@@ -257,7 +396,9 @@ def get_mile_images(mile_id):
     return image_miles
     
 def get_sub_answers(details,sub_questions,project_report,project):
-# to get the answers of auto populated questions calculating based on whether there is answer object to that question 
+# to get the answers of auto populated questions 
+# calculating based on whether there is answer 
+# object to that question 
     data = {}
     sub_quest_list = []
     keys = details.keys()
@@ -297,7 +438,8 @@ def get_org_logos(data,project,keys,details,sub):
     
 @register.assignment_tag 
 def get_gantt_details(v,projectobj):
-# this function to get the gantt chart details for the particular quarter that is generated
+# this function to get the gantt chart details 
+# for the particular quarter that is generated
     start_date = v.split('to')[0].rstrip()
     end_date = v.split('to')[1].lstrip()
     start_date = datetime.strptime(start_date[:19], '%Y-%m-%d').date()
@@ -308,7 +450,9 @@ def get_gantt_details(v,projectobj):
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     return taskdict
 
-@register.assignment_tag     
+@register.assignment_tag
+# this function will get 
+# report quarters
 def get_report_quarters(report_type,start_date,end_date,budget_quarters):
     month_dict = {1:'January',2:'February',3:'March',4:'April',5:'May',
                       6:'June',7:'July',8:'August',9:'September',
@@ -332,6 +476,8 @@ def get_report_quarters(report_type,start_date,end_date,budget_quarters):
     return report_duration,quarter_duration
     
 @register.assignment_tag
+# this template tag will return
+# converted time in local timezone
 def get_converted_time(created):
     created_time = created.replace(tzinfo=pytz.utc)
     convert_time = created_time.astimezone(pytz.timezone('Asia/Kolkata'))
@@ -339,6 +485,8 @@ def get_converted_time(created):
     return time
     
 @register.assignment_tag
+# this template tag will return from and to 
+# date for quarter
 def get_from_to_dates(date):
     start_date =end_date=''
     date_list=[]
@@ -352,12 +500,16 @@ def get_from_to_dates(date):
     return start_date,end_date
 
 @register.assignment_tag
+# this template tag will return
+# quarter names from dict
 def get_quarter_names(key,number_dict):
     name=''
     name = number_dict.get(key)
     return name
 
 @register.assignment_tag
+# this template tag will return 
+# month name from date format
 def get_month_name(date):
     from datetime import datetime
     month_name = date.split(' to ')[0]
@@ -392,6 +544,9 @@ def get_taskcompletion(obj):
     return percent
 
 @register.assignment_tag
+# this template tag is to 
+# get project parameter type 
+# if numeric it will return 0 or else 1
 def get_parameter_type(obj):
     for i in obj:
         if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
@@ -400,7 +555,7 @@ def get_parameter_type(obj):
             pie_chart = 1
     return pie_chart
  
-@register.assignment_tag    
+@register.assignment_tag
 def get_block_tab_removed(questions,block_type,report_obj):
     tab_removed = ''
     removed_id = ''
@@ -418,7 +573,9 @@ def get_block_tab_removed(questions,block_type,report_obj):
     return tab_removed,remove_id
     
 from calendar import monthrange
-@register.assignment_tag   
+@register.assignment_tag
+# this template tag is to get Month name
+# as per month number
 def get_monthly_date(period):
     month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
                       'June':6,'July':7,'August':8,'September':9,
@@ -433,11 +590,58 @@ def get_monthly_date(period):
     return period
 
 @register.filter
+# this template tag is to get value as 
+# per key
 def get_item(dictionary, key):
     return dictionary.get(key)
 
 import json
 @register.assignment_tag
+# converting gantt chart data into json format
+# from python dict format
 def taskdict_json(taskdict):
     taskdict = json.loads(taskdict)
     return taskdict
+
+# this funtionality is to 
+# trim long file name and showin ... and last few chars 
+# of file name
+# ex "somefilename_abc...xyz.jpg"
+def string_trim(string):
+    file_extension = string.split('.')
+    if len(string) > 19:
+        new_string = string[:25] + '...' + file_extension[0][-6:] + '.'+file_extension[-1]
+    else:
+        new_string = string
+    return new_string
+
+# this fuctionality is for restriction string
+# length and sending string in two chunks
+# for "read more" text functionality
+def read_more_text(text):
+    if len(text) > 50:
+        short_text = text[:190]
+        more_text = text[50:]
+    else:
+        short_text = text
+        more_text = ''
+    return short_text,more_text
+
+# this functionality is to fet attachement type 
+# taking file name and returning file type along with file
+# extension
+def get_attachment_type(file_name):
+    image_format = ['tif', 'tiff', 'gif', 'jpeg', 'jpg', 'jif', 'jfif', 'jp2', 'jpx', 'j2k', 'j2c ', 'fpx', 'pcd', 'png']
+    docs_format = ['rtf', 'odt', 'docx', 'pot', 'pxt', 'txt', 'odf', 'doc']
+    file_extension = file_name.split('.')[-1]
+    if file_extension in image_format:
+        attachment_file_type = 'image'
+    else:
+        attachment_file_type = 'doc'
+    return attachment_file_type
+
+@register.assignment_tag
+def get_projct_location(projectobj):
+    print "mahit",projectobj.id
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
+    return project_location

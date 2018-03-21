@@ -20,9 +20,10 @@ from django.contrib.sessions.models import Session
 from taskmanagement.views import total_tasks_completed,updates
 from taskmanagement.models import Milestone,Activity,Task
 from pmu.settings import (SAMITHA_URL,PMU_URL)
-from common_method import unique_slug_generator,add_keywords
+from common_method import unique_slug_generator,add_keywords,add_modified_by_user
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 from menu_decorators import check_loggedin_access
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Views for projectmanagement
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
@@ -98,6 +99,7 @@ def create_project(request):
             obj.request_status = 4
             obj.created_by = UserProfile.objects.get(user_reference_id=user_id)
             obj.slug = unique_slug_generator(obj,instance)
+            obj.modified_by = user_id # added to save the modified by user (priya)
             obj.save()
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
@@ -124,6 +126,16 @@ def funder_mapping(funder,implementation_partner,total_budget,obj):
             implementation_partner=implementation_partner,total_budget=total_budget)
     return mapping
 
+def pagination(request, plist):
+    paginator = Paginator(plist, 10)
+    page = request.GET.get('page', 1)
+    try:
+        plist = paginator.page(page)
+    except PageNotAnInteger:
+        plist = paginator.page(1)
+    except EmptyPage:
+        plist = paginator.page(paginator.num_pages)
+    return plist
 
 def project_list(request):
     '''
@@ -132,6 +144,8 @@ def project_list(request):
     user_id = request.session.get('user_id')
     logged_user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(logged_user_obj)
+    obj_list = pagination(request,obj_list)
+
     return render(request,'project/listing.html',locals())
 
 def get_project_budget_utilized_amount(projectobj,budgetobj):
@@ -139,7 +153,7 @@ def get_project_budget_utilized_amount(projectobj,budgetobj):
     budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('id', flat=True)
     budget_period_utilizedamount = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_periodlist).values_list('utilized_unit_cost', flat=True)
     budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
-    final_budget_period_utilizedamount = sum(map(int,budget_period_utilizedamount))
+    final_budget_period_utilizedamount = sum(map(float,budget_period_utilizedamount))
     return final_budget_period_utilizedamount
 
 def auto_update_tranche_amount(final_budget_utilizedamount,project):
@@ -192,6 +206,7 @@ def budget_tranche(request):
             obj = form.save(commit=False)
             obj.project = project
             obj.recommended_by = UserProfile.objects.get(id=request.POST.get('recommended_by'))
+            add_modified_by_user(obj,request)
             obj.save()
             budgetobj = Budget.objects.latest_one(project = project,active=2)
             final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
@@ -199,6 +214,7 @@ def budget_tranche(request):
             return HttpResponseRedirect('/project/tranche/list/?slug=%s' %slug)
     return render(request,'budget/tranche.html',locals())
 
+@check_loggedin_access
 def tranche_list(request):
     '''
     This function is for listing of project tranches                                
@@ -212,6 +228,7 @@ def tranche_list(request):
     status = get_assigned_users(user,obj)
     key = request.GET.get('key')
     projectobj = obj
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -253,6 +270,8 @@ def add_parameter(request):
         parent_obj = ProjectParameter.objects.create(parameter_type=parameter_type,\
                                 project=project,aggregation_function=agg_type,name = name,\
                                 instructions=instruction)
+        # to save modified_by user to get the updates 
+        add_modified_by_user(parent_obj,request)
         if name_count != 0:
             for i in range(name_count):
                 name = 'name['+str(i+1)+']'
@@ -309,6 +328,8 @@ def edit_parameter(request):
                             parent=parent_obj,instructions=request.POST.get(instruction),aggregation_function=agg_type,\
                             parameter_type=parent_obj.parameter_type)
         parent_obj.save()
+        # to save modified_by user to get the updates in updates section
+        add_modified_by_user(parent_obj,request)
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parent_obj.project.slug)
     return render(request,'project/edit_key_parameter.html',locals())
 
@@ -348,12 +369,15 @@ def upload_parameter(request):
                 parameter_value_list.append(int(request.POST.get(value)))
                 obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
+                add_modified_by_user(obj,request)
             parameter_value_list = sum(parameter_value_list)
             create_parameter_values = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=parameter_value_list,\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
+            add_modified_by_user(create_parameter_values,request)
         else:
             obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
+            add_modified_by_user(obj,request)
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %parameter.project.slug)
     return render(request,'project/key_parameter.html',locals())
 
@@ -542,7 +566,6 @@ def project_summary(request):
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
-    project_location=ProjectLocation.objects.filter(content_type = ContentType.objects.get(model='project'),object_id=obj.id)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
