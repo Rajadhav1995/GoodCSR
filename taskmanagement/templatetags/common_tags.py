@@ -509,7 +509,7 @@ def get_images(obj):
 
 @register.assignment_tag
 def get_taskcompletion(obj):
-    total_tasks = completed_tasks = total_milestones = 0
+    total_tasks = completed_tasks = 0
     milestones = []
     project = obj
     tasks = Task.objects.filter(activity__project = project)
@@ -521,8 +521,6 @@ def get_taskcompletion(obj):
         percent =int((float(completed_tasks) / total_tasks)*100)
     else:
         percent = 0
-    if milestones:
-        total_milestones = milestones.count()
     return percent
 
 @register.assignment_tag
