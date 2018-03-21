@@ -80,7 +80,6 @@ def check_menu_permission(user,menuname):
     #
 #    import ipdb;ipdb.set_trace()
     status = False
-    menuname = menuname
     if user and menuname:
         try:
             user_obj = UserRoles.objects.get(user=user)
