@@ -24,6 +24,11 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from calendar import monthrange
 
+#The monthrange() method is used to get weekday of first day of the month
+# and number of days in month, for the specified year and month .monthrange(year, month)
+#Year to get weekday of the first day of the month and number of days in month.
+#Month to get weekday of the first day of the month and number of days in a month.
+
 
 def report_form(request):
     #to save the report type and duration
@@ -545,6 +550,23 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     return answer
 
 def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
+# this function is to save the paramters seelction in the report generated 
+# for the current quarter updates.
+# where we are getting the items of POST method and looping it 
+# while looping we are making a list of items that are related to parameters
+# based on the id of the paramters 
+# if it is add section then we will create an object in ReportParameter 
+# with quarterreportobj ,keyparameter selected and the description enter by user
+# else we do geet of that particular reportparameter object and save the keyparameter
+# selected and description and save it
+# to know the user we get the user obj based on the seesion 
+#In order to save answers for the report question of parameters we get all the 
+# ids of ReportParameter and in an dictioanry we store the list of ids,quarter obj
+# question ,object id,and user so that to create aanswer of that question 
+# if it is edit then we will get or none of that answer saved already to that 
+#question and append the parameter ids and save it
+# else create new answer with the dict created before
+ 
     add_section = request.POST.get('add_section')
     para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
     for k in sorted(para_detail):
@@ -584,6 +606,17 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
     return answer
 
 def saving_of_quarters_section(request):
+# here we are saving the quarter sections 
+# get the project obj,projectreport obj and slug
+# now baased on the report type (monthly or qquarter)
+# we are gettting the previous, curent and next quarters or months
+# to save the previous quarter or monthly get all the items list using POST and FILES method 
+# split based on the key values of 1,2,3(1:previous,2:current,3:next)
+# now with the list obtained pass it to the fucntions get_report_based_quarter()
+#where we get the list of milestone ,parameters.piclist and quarterreport obj ids
+# based on the ids we can get the values of that inputs and save the details
+# this is done for other current and next quarters or monthly report
+#
     slug = request.GET.get('slug')
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
