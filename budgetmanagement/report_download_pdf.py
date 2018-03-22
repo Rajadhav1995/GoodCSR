@@ -19,7 +19,6 @@ def download_report_generation(request):
     answer_list ={}
     answer = ''
     slug = request.GET.get('slug')
-    image_url = PMU_URL
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
     report_obj = ProjectReport.objects.get_or_none(project=project,id=report_id)
@@ -38,7 +37,7 @@ def download_report_generation(request):
         'donor':mapping_view.funder.organization,
         'implement_ngo':mapping_view.implementation_partner.organization,
         'no_of_beneficiaries':project.no_of_beneficiaries,'project_duration':project.start_date.strftime('%Y-%m-%d')+' TO '+project.end_date.strftime('%Y-%m-%d'),
-        'location':project.get_locations()}
+        'location':project.get_locations(),'report_quarter':report_quarter}
         
     quest_list = Question.objects.filter(active=2,block__block_type = 0).exclude(qtype='OT')
     for question in quest_list:
@@ -55,7 +54,6 @@ def download_report_generation(request):
                 answer = ''
         answer_list[str(question.slug)] = answer
     master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-    location = ProjectLocation.objects.filter(object_id=project.id)
     # this is to make html to pdf 
     
     template = get_template('report/report-pdf-download.html')
@@ -66,6 +64,7 @@ def download_report_generation(request):
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), dest=result,  link_callback=fetch_resources )
     response = HttpResponse(result.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename = '+str(file_name)+''
+    response['pdf'] = pdf
     return response
     
 def fetch_resources(uri, rel):
@@ -130,11 +129,7 @@ def pdfconverter(request):
 
     return response
 
-def pdf_header_data(report):
-    report_obj=ProjectReport.objects.get(id=report)
-    question = Question.objects.get(slug='report_name')
-    ans = Answer.objects.get(question=question,object_id=t.id)
-    return ans.text,
+
 
 
 def pdf_header(request):

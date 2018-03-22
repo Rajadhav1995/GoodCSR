@@ -262,8 +262,8 @@ def get_quarters(projectobj):
     from datetime import datetime
     data = get_quarter_report_logic(projectobj)
     report_start_date = data['sd']
-    projectobj_enddate = data['projectobj_enddate']
-    no_of_quarters = data['no_of_quarters']
+#    projectobj_enddate = data['projectobj_enddate']
+#    no_of_quarters = data['no_of_quarters']
     report_end_date = data['ed']
     report_start_date = datetime.strptime(str(report_start_date)[:19], '%Y-%m-%d %H:%M:%S')
     report_end_date = datetime.strptime(str(report_end_date)[:19], '%Y-%m-%d %H:%M:%S')
@@ -299,7 +299,7 @@ def get_quarter_report(request,itemlist,quarter):
     for line in itemlist:
         if str(quarter) == line.split('_')[2]:
             line_list = line.split('_')
-            name = line.split('_')[0]
+            name = line_list[0]
             result.update({name:request.POST.get(line)})
     return result
 
@@ -343,7 +343,7 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
                 }
                 answerobj = Answer.objects.get_or_none(question__id=question_id,quarter=quarterreportobj)
                 if not answerobj:
-                    answer = Answer.objects.create(**answer_dict)
+                    Answer.objects.create(**answer_dict)
                 else:
                     answerobj.text = request.POST.get(line)
                     answerobj.save()
@@ -389,7 +389,6 @@ def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarte
     # 
     imageobj = None
     milestone_images = {}
-    act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Picture')]
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
     
@@ -476,7 +475,7 @@ def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,res
     else:
         object_id,name = get_milestones_activitieslist(quarterreportobj,2,result)
         description = result.get('about the activity','')
-        activityobj = Activity.objects.get_or_none(id=int(object_id))
+        milestoneobj = Activity.objects.get_or_none(id=int(object_id))
         ma_type = 2
         content_type = ContentType.objects.get_for_model(Activity)
     # here checking for add or edit so that to get the ReportMilestoneActivity object
@@ -504,7 +503,6 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     # 
     # this function is to save milestone activity
     # 
-    mil_activity_count = obj_count_list.get('milestone_count')
     pic_count = obj_count_list.get('milestone_pic_count')
     milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
@@ -526,7 +524,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
                 result.update({name[0].lower():request.POST.get(mile_attribute)})
                 pic_list1 =[p for p in pic_list if p.split('_')[-2] == i]
         milestoneobj = report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,result)
-        imageobj = quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list1,quarterreportobj)
+        quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list1,quarterreportobj)
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     milestone_ids = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2).values_list("id",flat=True)
     milestone_ids = map(int,milestone_ids)
@@ -608,7 +606,7 @@ def saving_of_quarters_section(request):
         parameter_count = request.POST.get('parameter_count_1',0)
         if milestone_count > 0:
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
-            answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
+            milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
 # clients requirement not to provide paramerter selection in previous quarter list so commented
 # end of parameter saving function
 #    to save the Current quarter updates:
@@ -624,9 +622,9 @@ def saving_of_quarters_section(request):
         parameter_count = request.POST.get('current_parameter_count_1',0)
         if activity_count > 0:
             obj_count_list = {'milestone_pic_count':activity_pic_count,'milestone_count':activity_count,}
-            answer = milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
+            milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
         if parameter_count > 0:
-            answer = report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
+            report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
 #    to save the next quarter updates:
     quarter_list = futurequarter_list
     next_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
@@ -731,10 +729,9 @@ from taskmanagement.templatetags import common_tags
 def get_index_contents(slug,report_id):
 # to get the index contents dynamically by using a dictionay passing the contents
     contents = OrderedDict()
-    index={}
     quarters = {}
     number_dict ={}
-    project = Project.objects.get_or_none(slug=slug)
+    
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
     # this two functions get_previous_tab_quests and get_block_tab_removed 
     # are used so that to get to know whether the tab is removed or not with out saving the report
@@ -827,7 +824,6 @@ def save_removed_fields(request):
     removed_list=[]
     questions=[]
     ids = literal_eval(request.GET.get('id'))
-    url = str(request.GET.get('redirect_url'))
     report_id = literal_eval(request.GET.get('report_id'))
     report_obj = ProjectReport.objects.get_or_none(id=report_id)
     block_type = literal_eval(request.GET.get('block_type'))
@@ -866,7 +862,6 @@ from itertools import chain
 
 def save_added_fields(request):
     child_quest = []
-    quest_list=[]
     child_quest_list=[]
     get_slug = {'upload-picture':'picture-description','picture-description':'upload-picture'}
     act_mile_slug = {'about-the-actvity':'activity-name','milestone-description':'milestone-name'}
