@@ -152,65 +152,7 @@ def report_section_form(request):
 from budgetmanagement.common_method import key_parameter_chart
 from projectmanagement.views import parameter_pie_chart,get_timeline_process
 from budgetmanagement.manage_budget import get_budget_quarters,tanchesamountlist
-def html_to_pdf_view(request):
-    # this function is to generate pdf with css and images.
-    # here we are passing same variables which 
-    # we are sending in report_detail function
-    # 
-    project_slug = request.GET.get('slug')
-    image_url = PMU_URL
-    project_report_id = request.GET.get('report_id')
-    answer_list ={}
-    answer = ''
-    contents,quarters,number_dict = get_index_contents(project_slug,project_report_id)
-    for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
-        contents[key]=value
-    project = Project.objects.get_or_none(slug = project_slug)
-    parameter_obj = ProjectParameter.objects.filter(active= 2,project=project,parent=None)
-    # calling function to get JSON data for pie chart display
-    master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_obj)
-    report_obj = ProjectReport.objects.get_or_none(id=project_report_id)
-    report_quarter = QuarterReportSection.objects.filter(project=report_obj).order_by('quarter_type')
-    # mapping view is to show funder and implementation partner relation
-    mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    budgetobj = Budget.objects.latest_one(project = project,active=2)
-    budget_period = ProjectBudgetPeriodConf.objects.filter(project = project,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
-    quarter_list = get_budget_quarters(budgetobj)
-    report_quest_list = Question.objects.filter(active=2,block__block_type = 0)
-    project_tranche_list = Tranche.objects.filter(project = project,active=2)
-    tranche_amount = tanchesamountlist(project_tranche_list)
-    planned_amount = tranche_amount['planned_amount']
-    actual_disbursed_amount = tranche_amount['actual_disbursed_amount']
-    recommended_amount = tranche_amount['recommended_amount']
-    utilized_amount = tranche_amount['utilized_amount']
-    projectreportobj = ProjectReport.objects.get_or_none(id=project_report_id)
-    previousquarter_list,currentquarter_list,futurequarter_list = get_quarters(projectreportobj)
-    # for basic details of project report we are sending all fields in dictionary 
-    answer_list = report_question_list(report_quest_list,report_obj,project)
-    # here we are sending/rendering all variable to generate PDF 
-    html_string = render_to_string('report/new-pdf.html', {
-        'answer_list':answer_list,'answer':answer,'previousquarter_list':previousquarter_list,
-        'currentquarter_list':currentquarter_list,'futurequarter_list':futurequarter_list,
-        'utilized_amount':utilized_amount,'recommended_amount':recommended_amount,
-        'actual_disbursed_amount':actual_disbursed_amount,'planned_amount':planned_amount,
-        'quarter_list':quarter_list,'budget_period':budget_period,'image_url':image_url,
-        'project':project,'report_quarter':report_quarter,'report_obj':report_obj,'contents':contents,
-        'quarters':quarters})
 
-    html = HTML(string=html_string)
-    # first we are writing new PDF and sending request to download file in pdf format
-    from pmu.settings import BASE_DIR
-    import datetime
-    dd = datetime.datetime.today()
-    file_name = project.name +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
-    html.write_pdf(target=BASE_DIR + '/static/pdf-reports/'+file_name);
-    fs = FileSystemStorage()
-    with fs.open(BASE_DIR +'/static/pdf-reports/'+ file_name) as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename=file_name'
-        return response
-
-    return response
 
 def get_org_report_logo(answer_obj,ques,report_obj):
     answer=''

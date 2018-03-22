@@ -32,6 +32,7 @@ def list_document(request):
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user,obj)
     projectobj = obj
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return render(request,'attachment/listing.html',locals())
 	
 def timeline_upload(request):
@@ -162,3 +163,46 @@ def city_list(request):
         city_obj = Boundary.objects.filter(boundary_level=3,parent__id=ids).order_by('name').values('id','name')
         results['res']=list(city_obj)
         return HttpResponse(json.dumps(results), content_type='application/json')
+
+#    The dict type has been reimplemented to use a more compact 
+# representation based on a proposal by Raymond Hettinger and 
+# similar to the PyPy dict implementation. 
+# This resulted in dictionaries using 20% to 25% less memory
+# when compared to Python 3.5.
+#    Customization of class creation has been simplified with the new protocol.
+#    The class attribute definition order is now preserved.
+#    The order of elements in **kwargs now corresponds to 
+# the order in which keyword arguments were passed to the function.
+#    DTrace and SystemTap probing support has been added.
+#    The new PYTHONMALLOC environment variable can now 
+# be used to debug the interpreter memory allocation and access errors.
+
+#Significant improvements in the standard library:
+
+#    The asyncio module has received new features, 
+# significant usability and performance improvements, and a
+ # fair amount of bug fixes. Starting with Python 3.6 the 
+ # asyncio module is no longer provisional and its API is considered stable.
+#    A new file system path protocol has been implemented 
+# to support path-like objects. All standard library functions 
+# operating on paths have been updated to work with the new protocol.
+#    The datetime module has gained support for Local Time Disambiguation.
+#    The typing module received a number of improvements.
+#    The tracemalloc module has been significantly reworked 
+# and is now used to provide better output for ResourceWarning 
+# as well as provide better diagnostics for memory allocation errors. 
+# See the PYTHONMALLOC section for more information.
+
+#Security improvements:
+
+#    The new secrets module has been added to simplify 
+# the generation of cryptographically strong pseudo-random 
+# numbers suitable for managing secrets such as account authentication,
+# tokens, and similar.
+#    On Linux, os.urandom() now blocks until the system urandom 
+# entropy pool is initialized to increase the security. 
+# See the PEP 524 for the rationale.
+#    The hashlib and ssl modules now support OpenSSL 1.1.0.
+#    The default settings and feature set of the ssl module have been improved.
+#    The hashlib module received support for the BLAKE2, SHA-3 
+# and SHAKE hash algorithms and the scrypt() key derivation function.

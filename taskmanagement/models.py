@@ -71,7 +71,6 @@ class Task(BaseContent):
             return False
     
     def task_attachments(self):
-        attach_dict = {}
         inner_attach=[]
         from datetime import datetime
         from media.models import Attachment,Comment

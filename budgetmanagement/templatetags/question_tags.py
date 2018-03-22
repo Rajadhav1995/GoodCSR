@@ -157,7 +157,6 @@ def get_timeline_progress(projectobj,v):
 @register.assignment_tag
 def get_timeline_json(projectobj,quarter_obj):
     timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = quarter_obj.start_date,date__lte = quarter_obj.end_date ).order_by('date')
-    today = datetime.today()
     milestone = Milestone.objects.filter(project = projectobj,overdue__gte = quarter_obj.start_date,overdue__lte = quarter_obj.end_date)
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     return timeline_json,timeline_json_length
@@ -167,7 +166,6 @@ def get_timeline_json_pdf(projectobj,quarter_obj):
     start_date = quarter_obj.split(' to ')[0].rstrip()
     end_date = quarter_obj.split(' to ')[1].rstrip()
     timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = start_date,date__lte = end_date ).order_by('date')
-    today = datetime.today()
     milestone = Milestone.objects.filter(project = projectobj,overdue__gte = start_date,overdue__lte = end_date)
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     if timeline_json_length >5:
@@ -205,9 +203,6 @@ def get_removed_quest_list(quest_removed,quest_list,quarter_question_list):
 @register.assignment_tag   
 def get_final_questions(quarter_question_list,block_type,object_id,period,report_id,quest_removed):
     quest_list = []
-    removed_ques = []
-    main_quest = []
-    block_slug = {3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
     remove_obj_id=''
     if object_id != None :
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
@@ -229,8 +224,6 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
     
 @register.assignment_tag
 def get_previous_removed(sub_questions,quest_removed,remove_id):
-    final_list=[]
-    main_quest = []
     try:
         quest_list = RemoveQuestion.objects.get(id=remove_id)
     except:
@@ -326,7 +319,6 @@ def show_budget_table(date,block_id,report_obj):
         month_list = OrderedDict(((start + timedelta(_)).strftime(r"%-m"), None) for _ in xrange((end - start).days)).keys()
         month_list = map(int,month_list)
         first_month = month_list[0::3]
-        second_month = month_list[1::3]
         third_month = month_list[2::3]
         if (block_id == 3 and month in third_month) or (block_id == 4) or (block_id == 5 and month in first_month):
             budget_table = True

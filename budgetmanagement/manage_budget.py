@@ -9,7 +9,7 @@ from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from projectmanagement.models import (Project,MasterCategory,UserProfile)
 from .models import (Budget,SuperCategory,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                     Tranche,)
-from media.models import (Comment,Attachment)
+from media.models import (Comment,Attachment,ProjectLocation)
 from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
@@ -444,6 +444,7 @@ def budgetview(request):
     '''  Redirecting to the budget summary page based on the budget object creation status '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     super_categorylist = SuperCategory.objects.filter(budget = budgetobj,active=2).exclude(parent=None)
     user_id = request.session.get('user_id')
@@ -553,32 +554,8 @@ def budget_lineitem_update(budget_parameters,request):
 
 def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj):
     for quarter,value in quarter_list.items():
-        start_date = value.split('to')[0].rstrip()
-        end_date = value.split('to')[1].lstrip()
         result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
-        if result["subheading"]:
-            budget_dict = {
-                       'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
-                       'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
-                       'subheading':result['subheading'],
-                       'unit':result['unit'],
-                       'unit_type':result['unit-type'],
-                       'rate':result['rate'],
-                       'planned_unit_cost':result['planned-cost'],
-                       'start_date':start_date,
-                       'end_date':end_date,
-                       'row_order':int(j),
-                       'quarter_order':int(quarter),
-                       }
-            budget_parameters = {'budgetperiodid':budgetperiodid,
-                                'budget_dict':budget_dict,
-                                'result':result,'start_date':start_date,
-                                'end_date':end_date,'j':j,'budgetobj':budgetobj,
-                                'projectobj':projectobj,'request':request,
-                                'quarter':quarter}
-            budget_saving = budget_lineitem_update(budget_parameters,request)
     return line_itemlist
-
 
 def budgetlineitemedit(request):
     '''  Function to edit the budget line item'''
@@ -651,5 +628,5 @@ def delete_category(request):
     budget_id=request.GET.get('budget_id')
     project_slug = request.GET.get('slug')
     catgry_id = request.GET.get('cat_id')
-    catgery_del = SuperCategory.objects.get(id=catgry_id).delete()
+    SuperCategory.objects.get(id=catgry_id).delete()
     return HttpResponseRedirect('/manage/project/budget/category/listing/?budget_id='+str(budget_id)+'&slug='+project_slug)

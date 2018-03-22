@@ -170,7 +170,7 @@ $(document).ready(function(){
       
       <div class="cont-det">
          <h2>Location coverage</h2>
-
+         {% get_projct_location projectobj as project_location %}
          {% if project_location %}
             
             {% for j in project_location %}

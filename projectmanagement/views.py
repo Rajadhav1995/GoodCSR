@@ -39,8 +39,8 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
             else:
                 boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(state))
             if boundary_obj:
-                location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
-    del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
+                ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+    ProjectLocation.objects.filter(id__in=rem_id_list).delete()
 
 def project_location(request,obj,location):
     # this function is to add or 
@@ -228,6 +228,7 @@ def tranche_list(request):
     status = get_assigned_users(user,obj)
     key = request.GET.get('key')
     projectobj = obj
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -287,7 +288,7 @@ def delete_parameter(rem_id_list):
     for i in rem_id_list:
         rem_obj = ProjectParameter.objects.get(id=i)
         rem_obj.switch()
-        value_obj = ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
+        ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
 
 def edit_parameter(request):
     # This function is to Edit(add parameter, remove 
@@ -414,7 +415,7 @@ def remove_record(request):
     model =  eval(request.GET.get('model'))
     deact = model.objects.get(id=ids).switch()
     if request.GET.get('model') == 'ProjectReport':
-        deleting_objects = model.objects.get(id=ids).delete_report_answers()
+        model.objects.get(id=ids).delete_report_answers()
     if request.GET.get('model') == 'Tranche':
         deact = model.objects.get(id=ids)
         project = Project.objects.get(id=int(deact.project.id))
@@ -565,7 +566,6 @@ def project_summary(request):
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
-    project_location=ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=obj.id)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
@@ -662,3 +662,46 @@ def delete_upload_image(request):
         attach.active = 0
         attach.save()
     return HttpResponseRedirect(url)
+
+#    The dict type has been reimplemented to use a more compact 
+# representation based on a proposal by Raymond Hettinger and 
+# similar to the PyPy dict implementation. 
+# This resulted in dictionaries using 20% to 25% less memory
+# when compared to Python 3.5.
+#    Customization of class creation has been simplified with the new protocol.
+#    The class attribute definition order is now preserved.
+#    The order of elements in **kwargs now corresponds to 
+# the order in which keyword arguments were passed to the function.
+#    DTrace and SystemTap probing support has been added.
+#    The new PYTHONMALLOC environment variable can now 
+# be used to debug the interpreter memory allocation and access errors.
+
+#Significant improvements in the standard library:
+
+#    The asyncio module has received new features, 
+# significant usability and performance improvements, and a
+ # fair amount of bug fixes. Starting with Python 3.6 the 
+ # asyncio module is no longer provisional and its API is considered stable.
+#    A new file system path protocol has been implemented 
+# to support path-like objects. All standard library functions 
+# operating on paths have been updated to work with the new protocol.
+#    The datetime module has gained support for Local Time Disambiguation.
+#    The typing module received a number of improvements.
+#    The tracemalloc module has been significantly reworked 
+# and is now used to provide better output for ResourceWarning 
+# as well as provide better diagnostics for memory allocation errors. 
+# See the PYTHONMALLOC section for more information.
+
+#Security improvements:
+
+#    The new secrets module has been added to simplify 
+# the generation of cryptographically strong pseudo-random 
+# numbers suitable for managing secrets such as account authentication,
+# tokens, and similar.
+#    On Linux, os.urandom() now blocks until the system urandom 
+# entropy pool is initialized to increase the security. 
+# See the PEP 524 for the rationale.
+#    The hashlib and ssl modules now support OpenSSL 1.1.0.
+#    The default settings and feature set of the ssl module have been improved.
+#    The hashlib module received support for the BLAKE2, SHA-3 
+# and SHAKE hash algorithms and the scrypt() key derivation function.
