@@ -10,7 +10,13 @@
 <section class="green-pad">
 	<div class="row">
 	<div class="image-pad orglogo ">
-    	<a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'></a>
+        {% if user_obj.is_admin_user == True %}
+        <a href="javascript:void(0);"><img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'></a>
+        {% else %}
+        {% get_user_project request as project %}
+        {% get_org_logo project.0 as org_logo %}
+        <a href="javascript:void(0);"><img src="{{org_logo.0}}" alt="" title="" height='85px' width = '100px'></a>
+        {% endif %}
     </div>    
     <h3>{{user_obj.organization|title}}</h3>
 <!--    <a class="green-link" href="javascript:void(0);"> <img src="/static/img/founder-info.png" alt=""> &nbsp;Funder Info</a>-->
