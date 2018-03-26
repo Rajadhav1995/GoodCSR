@@ -157,9 +157,9 @@
                                                                                     </div>
                                                                                     <input type='hidden' name='cat_count' value=6 />
                                                                            <div class="form-group addmilestone click_buttons">
-                                                                            <div class="link-left">
+                                                                            <div class="link-right">
                                                                                 <input type="hidden"/>
-                                                                            <a href='javascript:void(0);' class="add_clone_6">Add more categories</a>
+                                                                            <a href='javascript:void(0);' class="budget_button add_clone">Add more categories</a>
                                                                             </div>
                                                                             <div></div>
                                                                             
@@ -335,10 +335,8 @@
 
 <script >
 $(document).ready(function(){
-    var count = $('input[name^=cat_count]').val();
-     var add_button = $('.add_clone_'+count);
-     var new_count = parseInt(count)+1;
-        $(add_button).click(function(){
+    
+        $('.add_clone').click(function(){
              count = parseInt($('input[name^=cat_count]').val());
              new_count = parseInt(count)+1;
                 var $newDiv = $('.data_row_left_1'+':last').clone();
@@ -363,7 +361,7 @@ $(document).ready(function(){
             
                 $('input[name^=cat_count]').val(new_count);
                 
-                $(this).attr('class', 'add_clone_' + new_count);
+                //$(this).attr('class', 'add_clone_' + new_count);
             
             
         });
