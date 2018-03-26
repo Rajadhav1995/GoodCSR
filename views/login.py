@@ -10,6 +10,8 @@ from media.models import Section,Article
 from django.core.cache import cache
 
 def signin(request):
+    # this function is for
+    # login from goodcsr db
     if request.session.get('user_id'):
         return HttpResponseRedirect('/dashboard/')
     if request.method == 'POST':
@@ -37,7 +39,6 @@ def signin(request):
 
 
 def signout(request):
-    session = request.session.get('user_id')
     request.session['user_id'] = ''
     temp_user_id = request.session['user_id']
     cache.set('temp_user', temp_user_id)
