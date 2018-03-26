@@ -106,21 +106,21 @@
                                                                         <p>2. Super Categories</p>
                                                                     </div>
                                                                     <form class="budget_form super_categories">
-                                                                        <div class="col-md-12">
+                                                                        <div class="col-md-12 ">
                                                                             <div class=" ">
-                                                                                <div class="">
+                                                                                <div class=" ">
                                                                                     <div class="form-group">
                                                                                         <label>Super Categories Label</label>
                                                                                         <input class="form-control" type="text" name="super-category" required>
                                                                                     </div>
-                                                                                    <div class="col-md-6 padding_left">
+                                                                                    <div class="col-md-6 padding_left data_row_left_1">
                                                                                         <div class="form-group">
                                                                                             <label>Category 1</label>
                                                                                            <input class="form-control" type="text" name="category_1"  required />
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-md-6 padding_right">
+                                                                                    <div class="col-md-6 padding_right data_row_right_2">
                                                                                         <div class="form-group">
                                                                                             <label>Category 2</label>
                                                                                             <input class="form-control" type="text" name="category_2"  >
@@ -141,21 +141,29 @@
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                            <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-md-6 padding_left">
+                                                                                    <div class="col-md-6 padding_left data_row_left_6">
                                                                                         <div class="form-group">
                                                                                             <label>Category 5</label>
                                                                                             <input class="form-control" type="text" name="category_5"  >
                                                                                             <input type="checkbox" class="check_unsaved">                                                                                                <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-md-6 padding_right">
+                                                                                    <div class="col-md-6 padding_right data_row_right_6">
                                                                                         <div class="form-group">
                                                                                             <label>Category 6</label>
-                                                                                            <input class="form-control" type="text" name="category_6" >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>
+                                                                                            <input class="form-control text_input" type="text" name="category_6" >
+                                                                                            <input type="checkbox" class="check_unsaved check">                                                                                                        <span>Unsaved</span>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <input type='hidden' name='cat_count' value=6 />
+                                                                           <div class="form-group addmilestone click_buttons">
+                                                                            <div class="link-left">
+                                                                                <input type="hidden"/>
+                                                                            <a href='javascript:void(0);' class="add_clone_6">Add more categories</a>
+                                                                            </div>
+                                                                            <div></div>
                                                                             
+                                                                          </div>
                                                                             {% endif %}
 
                                                                             <div class="click_buttons">
@@ -323,6 +331,44 @@
 
 });
   
+</script>
+
+<script >
+$(document).ready(function(){
+    var count = $('input[name^=cat_count]').val();
+     var add_button = $('.add_clone_'+count);
+     var new_count = parseInt(count)+1;
+        $(add_button).click(function(){
+             count = parseInt($('input[name^=cat_count]').val());
+             new_count = parseInt(count)+1;
+                var $newDiv = $('.data_row_left_1'+':last').clone();
+            
+            $($newDiv).find('label,input').each(function(){
+                
+                $(this).text('Category '+new_count);
+                $(this).attr('name','category_'+new_count);
+                $(this).val('');
+                
+            });
+            if(count%2 == 0){
+                $($newDiv).insertAfter('.data_row_right_'+count+':last');
+                
+                $newDiv.removeClass().addClass('col-md-6 padding_left data_row_left_'+new_count);
+            }
+            else{
+                $($newDiv).insertAfter('.data_row_left_'+count+':last');
+                
+                $newDiv.removeClass().addClass('col-md-6 padding_right data_row_right_'+new_count);
+            }
+            
+                $('input[name^=cat_count]').val(new_count);
+                
+                $(this).attr('class', 'add_clone_' + new_count);
+            
+            
+        });
+        
+});
 </script>
 {% endblock %}
 
