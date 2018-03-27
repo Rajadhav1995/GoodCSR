@@ -4,7 +4,6 @@
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
 from django.contrib import admin
-
 # Register your models here.
 # Register your models here.
 # Register your models here.
