@@ -25,17 +25,9 @@ from collections import OrderedDict
 
 register = template.Library()
 #According to Wikipedia the exact definition of a goal is:
-# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
-#In other words, any planning you do for the future regardless of what it is, is a goal. 
-#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
-# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
-#you can't achieve anything unless a goal is focusing your effort. 
-#Because at the end of the day goals are what give you direction in life. 
-#By setting goals for yourself you give yourself a target to shoot for. 
-#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
-# allows you to hit your target and reach your goal. 
-#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
-#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
+# A desired result a person or a system envisions, 
+# plans and commits to achieve a personal or organizational
+
 @register.assignment_tag
 def to_and(value):
     return value.replace(" ","_")
@@ -114,6 +106,12 @@ def get_milestone_name(mileobj):
         name = mileobj.name
     return name
 
+#This sense of direction is what allows your mind 
+# to focus on a target and rather than waste energy shooting aimlessly,
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure 
+# your progress because you always have a fixed endpoint 
+# or benchmark to compare with. Take this scenario for example: 
 
 @register.assignment_tag
 def get_parameters_list(quest,quarterreportobj):
@@ -134,6 +132,17 @@ def get_milestone_list(quest,quarterreportobj):
     except:
         act_mile_list = []
     return act_mile_list
+
+
+# David makes a goal to write a book with a minimum of 300 pages. 
+# He starts writing every day and works really hard but 
+# along the way, he loses track of how many more pages he 
+# has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of 
+# pages he has already written and he instantly determines 
+# his progress and knows how much further he needs to go.
+
+
 
 @register.assignment_tag
 def get_mile_act_images(mileobj):
@@ -238,6 +247,16 @@ def get_previous_removed(sub_questions,quest_removed,remove_id):
         sub_quest_list = sub_questions
     return sub_quest_list
     
+# without a magnifying glass focusing it, 
+#you can't achieve anything unless a goal is 
+# focusing your effort. 
+#Because at the end of the day goals are what 
+# give you direction in life. 
+#By setting goals for yourself you give 
+# yourself a target to shoot for. 
+
+
+
 @register.assignment_tag
 def get_previous_tab_quests(block_id):
     block_slug = {1:"cover-page",2:"project-summary-sheet",3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
@@ -278,6 +297,14 @@ def get_sorted_list(final_quest_list):
     final_list = Question.objects.filter(id__in=list(set(ids_list))).order_by('id')
     return final_list
 
+#So the next time you are planning on doing the weekly 
+# chores or decide on watching that really cool action 
+# movie after work, always keep in mind that these small 
+# tasks account as goals and while seemingly 
+# insignificant you are goal setting.
+# Just like how sunlight can't burn through anything 
+
+
 @register.assignment_tag
 def get_budget_period(projectobj,budgetobj,v):
     from datetime import datetime
@@ -303,6 +330,15 @@ def get_row_details(row,quarter,projectobj):
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj
 
+
+# desired end-point in some sort of assumed development. 
+# Many people endeavor to reach goals within a finite 
+# time by setting deadlines. 
+#In other words, any planning you do for the future 
+# regardless of what it is, is a goal. 
+
+
+# this template tag is for 
 @register.assignment_tag
 def show_budget_table(date,block_id,report_obj):
     if report_obj.report_type == 2:

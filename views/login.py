@@ -39,12 +39,18 @@ def signin(request):
 
 
 def signout(request):
+    # this function is for 
+    # user session logout
+    # 
     request.session['user_id'] = ''
     temp_user_id = request.session['user_id']
     cache.set('temp_user', temp_user_id)
     return HttpResponseRedirect('/')
 
 def homepage(request):
+    # # this function is for 
+    # showing dynamic homepage 
+    # 
     if request.session.get('user_id'):
         return HttpResponseRedirect('/dashboard/')
     banner_images = Section.objects.filter(article__slug='banner-images', active=2)
@@ -54,6 +60,10 @@ def homepage(request):
     return render(request,'homepage/home_page.html', locals())
 
 def login_popup(request):
+    # this function is for 
+    # showing login popup
+    # 
+    # function NOT IN USE
     return render(request,'homepage/login_popup.html',locals())
 
 def get_image():
