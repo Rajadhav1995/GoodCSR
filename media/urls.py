@@ -4,6 +4,12 @@ from media.views import list_document,timeline_upload,upload_attachment,edit_att
 
 # URLs for media management
 # 
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 urlpatterns = [
     url(r'^doc/$',upload_attachment),
     url(r'^edit/$',edit_attachment),

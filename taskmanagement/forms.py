@@ -17,6 +17,9 @@ from userprofile.models import (ProjectUserRoleRelationship,)
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
 STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 MILESTONE_CHOICES=((0,' '),(1, 'Open'), (3, 'Ongoing'),)
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
@@ -62,7 +65,9 @@ class ActivityForm(forms.ModelForm):
             msg = u"Please select super category"
             self._errors["super_category"] = self.error_class([msg])
         
-
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
@@ -140,6 +145,9 @@ class TaskForm(forms.ModelForm):
             msg = u"Actual End date should be greater than Actual start date."
             self._errors["actual_end_date"] = self.error_class([msg])
 
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary

@@ -8,6 +8,9 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
 from userprofile.models import (ProjectUserRoleRelationship,RoleTypes)
 
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 BUDGET_TYPE = ((1,'Yearly'),(2,'Quarterly'),(3,'Half Yearly'))
 STATUS_CHOICES = ((0,''),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 # this is form for adding and editing project
@@ -45,7 +48,9 @@ class ProjectForm(forms.ModelForm):
 			# Always return cleaned_data
 		return cleaned_data
 
-
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 class ProjectMappingForm(forms.ModelForm):
 	# this form is to map funder and implementation 
 	# parnert with the project
@@ -65,7 +70,9 @@ class ProjectUserRoleRelationshipForm(forms.ModelForm):
         model = ProjectUserRoleRelationship
         fields = ('user','role')
 
-
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
                           ('PIP', 'Pie Chart Percent'),
                           ('NUM','Number'),
