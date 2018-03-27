@@ -10,6 +10,11 @@ from pmu.settings import BASE_DIR
 from django.contrib import messages
 from django.core.mail import send_mail
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def feedback(request):
     # this function is to save and edit feedback form
     # in homepage
