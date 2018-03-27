@@ -773,12 +773,13 @@ def convert_budget(val):
     # 
     import locale
     import re
+    locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
     val = float('{:.2f}'.format(float(val)))
     if val <= 99999.99:
-        val = re.sub(u'\u20b9', ' ', locale.currency(val, grouping=True).decode('utf-8')).strip()
+        val = re.sub(u'\u20b9', ' ', locale.currency(int(val), grouping=True).decode('utf-8')).strip()
         return re.sub(r'\.00', '', val)
     elif val >= 100000.99 and val <= 9999999.99:
-        val = re.sub(u'\u20b9', ' ', locale.currency(val / 100000, grouping=True).decode('utf-8')).strip()
+        val = re.sub(u'\u20b9', ' ', locale.currency(int(val) / 100000, grouping=True).decode('utf-8')).strip()
         return str(float(val)) + ' ' + 'Lac'
     else:
         h = locale.format("%d", val)
