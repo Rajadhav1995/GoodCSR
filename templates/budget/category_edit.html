@@ -94,7 +94,7 @@
                                  <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
                               </div>
                            </div>
-                           <div class="col-md-6 padding_right">
+                           <div class="col-md-6 padding_right data_row_right_2">
                               <div class="form-group">
                                  <label>Category 2</label>
                                  <input class="form-control" type="text" name="category_2"  >
@@ -115,20 +115,28 @@
                                  <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
                               </div>
                            </div>
-                           <div class="col-md-6 padding_left">
+                           <div class="col-md-6 padding_left data_row_left_5">
                               <div class="form-group">
                                  <label>Category 5</label>
                                  <input class="form-control" type="text" name="category_5"  >
                                  <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
                               </div>
                            </div>
-                           <div class="col-md-6 padding_right">
+                           <div class="col-md-6 padding_right data_row_right_6">
                               <div class="form-group">
                                  <label>Category 6</label>
                                  <input class="form-control" type="text" name="category_6" >
                                  <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
                               </div>
                            </div>
+                           <input type='hidden' name='cat_count' value=6 />
+                           <div class="form-group addmilestone click_buttons">
+                                <div class="link-right">
+                                    <input type="hidden"/>
+                                     <a href='javascript:void(0);' class="budget_button add_clone">Add more categories</a>
+                                </div>
+                                <div></div>
+                          </div>
                          {% else %}
                          <input type="hidden" name="key" value="{{key}}" class="form-control">
                             <input type="hidden" name="cat_id" value="{{cat_id}}" class="form-control">
@@ -153,3 +161,37 @@
       </div>
    </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+        $('.add_clone').click(function(){
+        
+             count = parseInt($('input[name^=cat_count]').val());
+             new_count = parseInt(count)+1;
+                var $newDiv = $('.data_row_right_2'+':last').clone();
+            
+            $($newDiv).find('label,input').each(function(){
+                
+                $(this).text('Category '+new_count);
+                $(this).attr('name','category_'+new_count);
+                $(this).val('');
+                
+            });
+            if(count%2 == 0){
+                $($newDiv).insertAfter('.data_row_right_'+count+':last');
+                
+                $newDiv.removeClass().addClass('col-md-6 padding_left data_row_left_'+new_count);
+            }
+            else{
+                $($newDiv).insertAfter('.data_row_left_'+count+':last');
+                
+                $newDiv.removeClass().addClass('col-md-6 padding_right data_row_right_'+new_count);
+            }
+            
+                $('input[name^=cat_count]').val(new_count);
+                
+                //$(this).attr('class', 'add_clone_' + new_count);
+            
+            
+        });
+        
+</script>
