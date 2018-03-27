@@ -144,6 +144,11 @@ def get_budget_logic(budgetobj):
                    'ed':ed,'no_of_quarters':no_of_quarters}
     return output_data
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_budget_quarters(budgetobj):
     ''' To get the quarter list i this format 2017-10-01 to 2017-12-31 '''
     data = get_budget_logic(budgetobj)
@@ -178,6 +183,11 @@ def get_budget_quarter_names(budgetobj):
         sd = ed + timedelta(days=1)
     return quarter_list
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_lineitem_result(line_itemlist,quarter,request):
     ''' To get the results for each row and for each quarter '''
     result = {}
@@ -241,6 +251,11 @@ def projectlineitemadd(request):
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&added=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/budget_lineitem.html",locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def projectbudgetdetail(request):
     '''  budget page details based on the project. (old function.)'''
     project_slug = request.GET.get('slug')
@@ -274,6 +289,11 @@ def get_year_quarterlist(selected_year,budget_id):
         sd = ed + timedelta(days=1)
     return quarter_list
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def year_quarter_list(request):
     ''' Ajax call function for utilization filter'''
     selected_year = request.GET.get('year')
@@ -340,7 +360,11 @@ def upload_budget_utlized(line_itemlist,i,request,budget_periodobj):
                     attachobj.save()
     return line_item_updated_values
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def budgetutilization(request):
     ''' Report utilization update based on the quarter selected '''
     budget_period = []
@@ -394,6 +418,11 @@ def budgetutilization(request):
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug))
     return render(request,"budget/budget_utilization.html",locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def budget_amount_list(budgetobj,projectobj,quarter_list):
     ''' to get the overall budget amount '''
     quarter_planned_amount = {}
@@ -425,6 +454,11 @@ def tanchesamountlist(tranche_list):
                        }
      return tranche_amount
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def budget_supercategory_value(projectobj,budgetobj):
     colors= [
     '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
@@ -479,7 +513,11 @@ def budgetview(request):
         category_names = SuperCategory.objects.filter(project=projectobj).exclude(parent=None)
     return render(request,"budget/budget.html",locals())
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def inactivatingthelineitems(projectobj,lineobj_list):
     '''
         inactivating the removed line items
@@ -589,6 +627,11 @@ def budgetlineitemedit(request):
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+"&edit=true&final_budget_amount="+str(final_budget_amount))
     return render(request,"budget/edit_budgetlineitem.html",locals())
     
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def category_listing(request):
     # this is to list the categories which are added 
     budget_id = request.GET.get('budget_id')
@@ -623,6 +666,11 @@ def category_add(request):
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+'&key=budget')
     return render(request,"budget/category_edit.html",locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def delete_category(request):
     # this is to delete a category
     budget_id=request.GET.get('budget_id')
