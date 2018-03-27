@@ -6,7 +6,11 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 
 from captcha._compat import want_bytes, urlencode, Request, urlopen, PY2
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 DEFAULT_API_SSL_SERVER = "//www.google.com/recaptcha/api"  # made ssl agnostic
 DEFAULT_API_SERVER = "//www.google.com/recaptcha/api"  # made ssl agnostic
 DEFAULT_VERIFY_SERVER = "www.google.com"
@@ -70,7 +74,16 @@ def displayhtml(public_key,
          'options': mark_safe(json.dumps(attrs, indent=2))
          })
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def submit(recaptcha_challenge_field,
            recaptcha_response_field,
            private_key,
@@ -128,7 +141,11 @@ def submit(recaptcha_challenge_field,
             'User-agent': 'reCAPTCHA Python'
         }
     )
-
+    # When working with any programming language, you include comments
+    # in the code to notate your work. This details what certain parts 
+    # know what you were up to when you wrote the code. This is a necessary
+    # practice, and good developers make heavy use of the comment system. 
+    # Without it, things can get real confusing, real fast.
     httpresp = urlopen(req)
     if getattr(settings, "NOCAPTCHA", False):
         data = json.loads(httpresp.read().decode('utf-8'))
@@ -148,3 +165,14 @@ def submit(recaptcha_challenge_field,
         return RecaptchaResponse(is_valid=True)
     else:
         return RecaptchaResponse(is_valid=False, error_code=return_values[1])
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

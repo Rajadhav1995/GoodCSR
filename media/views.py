@@ -206,3 +206,14 @@ def city_list(request):
 #    The default settings and feature set of the ssl module have been improved.
 #    The hashlib module received support for the BLAKE2, SHA-3 
 # and SHAKE hash algorithms and the scrypt() key derivation function.
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

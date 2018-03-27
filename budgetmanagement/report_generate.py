@@ -928,3 +928,14 @@ def save_added_fields(request):
         remove_quest_obj.text = ques_list
         remove_quest_obj.save()
     return JsonResponse({'status':'ok','ids_list':child_quest_list})
+    
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
