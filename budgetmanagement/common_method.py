@@ -3,7 +3,8 @@ from projectmanagement.models import *
 from calendar import monthrange
 
 def key_parameter_chart(obj,parameter_id):
-	
+	# this is common method for sending
+    # pie chart json format
     colors=['#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319','#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
     main_list = []
     name_list = []
@@ -14,6 +15,8 @@ def key_parameter_chart(obj,parameter_id):
     pie_object = ProjectParameter.objects.filter(active= 2,project=obj,parent=None)
     
     for y in pie_object:
+        # checking for pie chart type (pie chart numbers or 
+            # pie chart with percentage)
         if y.parameter_type=='PIN' or y.parameter_type=='PIP':
             values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y).values_list('parameter_value',flat=True))
             value = aggregate_project_parameters(pie_object[0],values)
@@ -32,6 +35,8 @@ def key_parameter_chart(obj,parameter_id):
             pip_title_name.append(str(y.name))
     master_sh = para_name
     master_sh_len = {key:len(values) for key,values in master_sh.items()}
+    # here we are using lambda function to get
+    # unique id for different type of pie chart type
     master_pin = map(lambda x: "Batch_size_" + str(x), range(master_sh_len.get('PIN',0)))
     master_pip = map(lambda x: "Beneficary_distribution_"+ str(x), range(master_sh_len.get('PIP',0)))
     
@@ -40,6 +45,10 @@ def key_parameter_chart(obj,parameter_id):
 import pytz
 from budgetmanagement.models import Answer ,QuarterReportSection
 from budgetmanagement.templatetags import question_tags
+# 
+# this function is to get index contents
+# for project report pdf and view
+# 
 def get_index_quarter(report_obj):
     previousquarter_list={}
     currentquarter_list={}
@@ -64,6 +73,11 @@ def get_index_quarter(report_obj):
             futurequarter_list.update({int(i.quarter_order):period})
     return previousquarter_list,currentquarter_list,futurequarter_list
     
+# this fun ction is to get
+# month number and month name
+# this function will return month name
+# from date
+# 
 def get_month_dict(data):
     year = data.get('year')
     post_mnth = data.get('post_mnth')

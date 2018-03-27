@@ -263,11 +263,15 @@ def get_previous_tab_quests(block_id):
     block = int(block_id)
     ques_ids_list =Question.objects.filter(active=2,block__slug=block_slug.get(block)).values_list('id',flat=True).order_by('id')
     return map(int,(list(chain(ques_ids_list))))
-    
+   
+
+# this template tag is to get removed
+# fields from report create/edit form
 @register.assignment_tag
 def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
     tab_removed = ''
     removed_list = []
+    # checking condition if obj is none or not
     if object_id != 'None' and str(object_id) != '' and object_id != None:
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
         remove_obj = RemoveQuestion.objects.get_or_none(active=2,quarter_report= report_obj,
@@ -290,6 +294,8 @@ def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
     return tab_removed,remove_id
 
 
+# this is splited function for
+# to get sorted question list
 def get_sorted_list(final_quest_list):
     ids_list = []
     for i in final_quest_list:
@@ -305,6 +311,8 @@ def get_sorted_list(final_quest_list):
 # Just like how sunlight can't burn through anything 
 
 
+# this template tag is for 
+# getting month in specific budget period
 @register.assignment_tag
 def get_budget_period(projectobj,budgetobj,v):
     from datetime import datetime
@@ -315,6 +323,8 @@ def get_budget_period(projectobj,budgetobj,v):
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2,start_date = start_date,end_date = end_date).values_list('row_order', flat=True).distinct()
     return budget_period
 
+# this template tag is for 
+# getting month in specific budget period
 @register.assignment_tag
 def get_month_budget_period(projectobj,budgetobj,v):
     from datetime import datetime
@@ -323,6 +333,7 @@ def get_month_budget_period(projectobj,budgetobj,v):
     
 @register.assignment_tag
 def get_row_details(row,quarter,projectobj):
+    # this template tag is for 
     # this template tag is used to get budget lineitems details
     try:
         line_itemobj = BudgetPeriodUnit.objects.get(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
@@ -339,6 +350,7 @@ def get_row_details(row,quarter,projectobj):
 
 
 # this template tag is for 
+# showing budget table in project report view
 @register.assignment_tag
 def show_budget_table(date,block_id,report_obj):
     if report_obj.report_type == 2:
