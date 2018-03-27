@@ -8,9 +8,6 @@ from projectmanagement.models import Project
 from budgetmanagement.models import *
 from media.models import Attachment,Comment
 from django.core.signals import got_request_exception
-from context_processors import *
-user_login = Signal(providing_args=["request", "user"])
-
 
 '''This is to update the tasks object startdate and end date'''
 @receiver(post_save, sender=Task)
@@ -37,4 +34,13 @@ def milestone_completion_status(sender,**kwargs):
             mile_obj.status=2
             mile_obj.save()
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

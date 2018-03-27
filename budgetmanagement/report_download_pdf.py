@@ -14,7 +14,11 @@ import StringIO
 import pdfkit
 from pmu.settings import BASE_DIR,PMU_URL
 
-    
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.    
 def fetch_resources(uri, rel):
     import os
     import cgi
@@ -42,6 +46,8 @@ def pdf_view(request):
 
 
 def pdfconverter(request):
+    # this function we are using to generate pdf 
+    # for project report 
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
@@ -70,17 +76,18 @@ def pdfconverter(request):
     except:
         return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()
+    # after generating pdf file we are saving it in
+    # /static/pdf-reports/ directory and after that
+    # 
     with fs.open(BASE_DIR +'/static/pdf-reports/'+ file_name) as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename='+file_name
         return response
-
     return response
 
-
-
-
 def pdf_header(request):
+    # this function is to show header
+    # in pdf project report
     image_url = PMU_URL
     report_id = int(request.GET.get('report_id'))
     impl_part_ques = Question.objects.get_or_none(slug='logos')
@@ -96,7 +103,35 @@ def pdf_header(request):
     return render(request,'report/header.html',locals())
 
 def pdf_footer(request):
+    # this function is to show footer 
+    # in pdf project report
     image_url = PMU_URL
     report_id = int(request.GET.get('report_id'))
     report = ProjectReport.objects.get(id=report_id)
     return render(request,'report/footer.html',locals())
+
+
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

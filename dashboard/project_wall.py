@@ -20,6 +20,11 @@ from taskmanagement.templatetags.common_tags import get_modified_by_user,string_
 from menu_decorators import check_loggedin_access
 from media.forms import NoteForm
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_date_range(request,projectobj):
 	
 	if request.POST.get('from'):
@@ -264,3 +269,14 @@ def create_note(request):
 		# return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
 		return HttpResponseRedirect('/dashboard/add/note/?slug='+str(project_slug))
 	return render(request,'project-wall/create-note.html',locals())
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

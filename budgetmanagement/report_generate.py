@@ -82,6 +82,11 @@ def report_form(request):
             quarter_msg = "Already Report is generated to this Quarter"
     return render(request,'report/report-form.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def report_listing(request):
     # listing of the generated reports in the lisiting page
     # 
@@ -120,6 +125,11 @@ def save_section_answers(quest_ids,project_report,request,data,user):
             answer.save()
     return answer
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def report_section_form(request):
     # to save the two sections cover page 
     # and project summary page data
@@ -176,7 +186,11 @@ def get_org_report_logo(answer_obj,ques,report_obj):
             answer = "/static/img/GoodCSR_color_circle.png"
     return answer
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def report_question_list(report_quest_list,report_obj,project):
     answer_list = {}
     image_url = PMU_URL
@@ -194,6 +208,11 @@ def report_question_list(report_quest_list,report_obj,project):
         answer_list[str(ques.slug)] = answer
     return answer_list
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def report_detail(request):
 # to display the details in the view report of the genreated report
     slug = request.GET.get('slug')
@@ -258,6 +277,11 @@ def get_quarter_report_logic(projectobj):
     return output_data
 
 import pytz
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_quarters(projectobj):
     # this function is to get all quarters as per 
     # budget start date and budget end date
@@ -323,10 +347,12 @@ def display_blocks(request):
     project = Project.objects.get_or_none(slug=project_slug)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
     return (locals())
-    
 
-
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,projectreportobj,user_obj,quarter):
     #this is the actual report saving we are using 
     # 
@@ -360,6 +386,11 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
                 parameter_list.append(line)
     return milestone_list,parameter_list,pic_list
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_report_based_quarter(request,quarter_list,projectreportobj,previous_itemlist):
     # this funtion is to get report based quarter
     # 
@@ -443,6 +474,11 @@ def get_activities_list(request,quarterreportobj):
         act_count = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Activi')]
     return act_count
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_milestones_activitieslist(quarterreportobj,num,result):
     #    to get the milestone-activities for particular 
     # project based on the quarter. 
@@ -503,7 +539,11 @@ def report_milestone_save(request,quarterreportobj,add_section,name1,mile_id,res
     return milestoneobj
 
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj):
     # 
     # this function is to save milestone activity
@@ -549,6 +589,11 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
         answer = Answer.objects.create(**milestone_answer_dict)
     return answer
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj):
 # this function is to save the paramters seelction in the report generated 
 # for the current quarter updates.
@@ -675,6 +720,11 @@ def get_report_quarterlist(projectreportobj,projectobj):
     return previousquarter_list,currentquarter_list,futurequarter_list
 
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def finalreportdesign(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
@@ -759,6 +809,11 @@ def get_heading_listing(report_obj,key):
 from collections import OrderedDict
 from budgetmanagement.templatetags import question_tags
 from taskmanagement.templatetags import common_tags
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_index_contents(slug,report_id):
 # to get the index contents dynamically by using a dictionay passing the contents
     contents = OrderedDict()
@@ -813,7 +868,11 @@ def get_index_contents(slug,report_id):
     return contents,quarters,number_dict
 
 from ast import literal_eval
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def remove_milesact_child(ques_obj,ids):
     removed_list = []
     child_ques = Question.objects.filter(parent = ques_obj.parent).values_list('id',flat=True)
@@ -850,6 +909,11 @@ def get_removed_list(quest_ids_list,removed_ques,created):
         removed_ques.text = sorted(list(set(removed_list)))
     return removed_list
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 from django.http import JsonResponse
 def save_removed_fields(request):
     quest_ids_list = []
@@ -892,7 +956,11 @@ def save_removed_fields(request):
     return JsonResponse({'status':'ok','ids_list':sorted(removed_list)})
     
 from itertools import chain
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def save_added_fields(request):
     child_quest = []
     child_quest_list=[]
@@ -928,3 +996,14 @@ def save_added_fields(request):
         remove_quest_obj.text = ques_list
         remove_quest_obj.save()
     return JsonResponse({'status':'ok','ids_list':child_quest_list})
+    
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

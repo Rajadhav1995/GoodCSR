@@ -14,10 +14,10 @@ from simple_history.admin import SimpleHistoryAdmin
 
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
-from context_processors import *
 class Attachment(BaseContent):
     # model to attach files.
     #content_type is a foriegn key, verbose_name- is a function differing with _"
+    # 
     created_by = models.ForeignKey(
         UserProfile, related_name='document_created_user', **OPTIONAL)
     attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
@@ -38,16 +38,20 @@ class Attachment(BaseContent):
         return str(self.id) or self.object_id
 
     def get_sub_documents(self):
+        # 
         try:
             subdocuments = Attachment.objects.filter(active=2,parent=self)
             documents = [{'name':i.name,'file':PHOTO_URL+'/'+i.organisationdocument.document.url} for i in subdocuments]
         except:
             documents = []
+            # 
         return documents
 
     def get_file_keywords(self):
+        # 
         keywords = FileKeywords.objects.filter(active=2,object_id=self.id,content_type=ContentType.objects.get(model='Attachment')).values_list('key',flat=True)
         key_list = Keywords.objects.filter(id__in=keywords).values_list('name',flat=True)
+        # 
         return list(key_list)
     
 #    def __init__(self,*args, **kwargs):
@@ -58,7 +62,7 @@ class Keywords(BaseContent):
 
     def __unicode__(self):
         return self.name or ''
-
+# 
 class FileKeywords(BaseContent):
     key = models.ForeignKey(Keywords, **OPTIONAL)
     order_no = models.IntegerField(default=0)
@@ -69,9 +73,9 @@ class FileKeywords(BaseContent):
         return self.key.name or ''
 
 LOCATION_TYPE = ((0, 'Urban'), (1, 'Semi-urban'), (2, 'Rural'))
-
+# 
 class ProjectLocation(BaseContent):
-
+    # 
     location = models.ForeignKey("projectmanagement.Boundary", **OPTIONAL)
     created_by = models.ForeignKey('projectmanagement.UserProfile', **OPTIONAL)
     area = models.CharField(max_length=200, **OPTIONAL)
@@ -84,7 +88,7 @@ class ProjectLocation(BaseContent):
 
     def __unicode__(self):
         return str(self.id)
-
+# 
 class Comment(BaseContent):
     text = models.TextField(**OPTIONAL)
     created_by = models.ForeignKey(
@@ -92,15 +96,16 @@ class Comment(BaseContent):
     content_type = models.ForeignKey(ContentType,null=True,blank=True, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_id = models.IntegerField(_('object ID'),null=True,blank=True)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
-
+# 
 class Article(BaseContent):
     name = models.CharField("Name", max_length=300, **OPTIONAL)
     description = models.TextField(**OPTIONAL)
     listing_order = models.IntegerField(default=0, **OPTIONAL)
     parent = models.ForeignKey('self', **OPTIONAL)
     slug = models.SlugField(_("Slug"), blank=True)
-
+# 
 class Section(BaseContent):
+    # 
     name = models.CharField("Name", max_length=300, **OPTIONAL)
     description = RichTextField(**OPTIONAL)
     summary = RichTextField(**OPTIONAL)
@@ -109,14 +114,14 @@ class Section(BaseContent):
     image = ImageWithThumbsField(upload_to='static/%Y/%m/%d', sizes=((90,120),(360,480)),blank=True,null=True,help_text="Image size should be 930x300 pixels")
     listing_order = models.IntegerField(default=0, blank=True, null=True)
     slug = models.SlugField(_("Slug"), blank=True)
-
+# 
 class ContactPersonInformation(BaseContent):
     name = models.CharField("Name", max_length=300, **OPTIONAL)
     email = models.CharField("Email", max_length=500, **OPTIONAL)
     organization_name = models.CharField("Organization Name", max_length=600, **OPTIONAL)
     mobile_number = models.CharField("Mobile Number", max_length=50, **OPTIONAL)
     message = models.TextField(**OPTIONAL)
-
+# 
 IMAGE_TYPE = ((1,'Pie-Image'),(2,'Gatt-image'),)
 class ScreenshotMedia(BaseContent):
 
@@ -129,7 +134,7 @@ class ScreenshotMedia(BaseContent):
 
     def __unicode__(self):
         return str(self.id) or ''
-
+# 
 class Note(BaseContent):
     project = models.ForeignKey("projectmanagement.Project", **OPTIONAL)
     created_by = models.ForeignKey(UserProfile, related_name='note_created_user', **OPTIONAL)
@@ -140,3 +145,15 @@ class Note(BaseContent):
 
     def __unicode__(self):
         return str(self.id)
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
