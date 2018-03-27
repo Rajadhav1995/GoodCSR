@@ -43,7 +43,11 @@ class TaskSerializer(serializers.ModelSerializer):
             date = obj.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
             return date
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class ActivitySerializer(serializers.ModelSerializer):
     activity_type = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
@@ -62,7 +66,11 @@ class ActivitySerializer(serializers.ModelSerializer):
     def get_active(self, obj):
         return obj.get_active_display()
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class MilestoneSerializer(serializers.ModelSerializer):
     active = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
@@ -77,7 +85,11 @@ class MilestoneSerializer(serializers.ModelSerializer):
     def get_status(self, obj):
         return obj.get_status_display()
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class SuperCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -85,7 +97,11 @@ class SuperCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
         
         
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class ProjectSerializer(serializers.ModelSerializer):
     
     class Meta:
