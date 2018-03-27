@@ -382,6 +382,7 @@ def upload_parameter(request):
     return render(request,'project/key_parameter.html',locals())
 
 def manage_parameter(request):
+    # 
     # This function is to manange(list) all 
     # key parameter for perticular project
     # 
@@ -406,6 +407,11 @@ def manage_parameter_values1(request):
     values = aggregate_project_parameters(parameter,child_parameter)
     return render(request,'project/parameter_value_list.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def remove_record(request):
     # This is common method to delete(deactivate) record from db. 
     # Pass model name and its id
@@ -460,6 +466,11 @@ def manage_parameter_values(request):
     [title_list.append(str(i.name)) for i in names]
     return render(request,'project/parameter_value_list.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def aggregate_project_parameters(param, values):
     # Function to do calculations as per 
     # user selection (for key parameter values)
@@ -498,6 +509,11 @@ def aggregate_project_parameters(param, values):
     ret['parent_name'] = None if param.parent is None else param.parent.name
     return aggr
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def project_total_budget(slug):
     # to display the total budget ,disbursed,
     # utilized percent in project summary page
@@ -652,6 +668,11 @@ def pie_chart_mainlist_report(obj,start_date,end_date):
     return main_list
 
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def delete_upload_image(request):
     # this function is to delete image from timeline                                
     # 

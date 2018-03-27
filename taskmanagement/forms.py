@@ -17,7 +17,11 @@ from userprofile.models import (ProjectUserRoleRelationship,)
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
 STATUS_CHOICES = ((0,' '),(1, 'Open'), (2, 'Close'), (3, 'Ongoing'),)
 MILESTONE_CHOICES=((0,' '),(1, 'Open'), (3, 'Ongoing'),)
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class ActivityForm(forms.ModelForm):
     # form to add activities
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
@@ -59,6 +63,11 @@ class ActivityForm(forms.ModelForm):
             self._errors["super_category"] = self.error_class([msg])
         
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class TaskForm(forms.ModelForm):
     # this form is to add task
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
@@ -131,6 +140,11 @@ class TaskForm(forms.ModelForm):
             msg = u"Actual End date should be greater than Actual start date."
             self._errors["actual_end_date"] = self.error_class([msg])
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class MilestoneForm(forms.ModelForm):
     # form to add milestone
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=False,max_length=200)
