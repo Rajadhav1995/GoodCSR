@@ -56,6 +56,11 @@ def listing(request):
     ser_hist = serializers.serialize('json',task_hist)
     return render(request,'taskmanagement/atm-listing.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def update_task_completion(request,add,status):
     # this function is to update status of
     # task as per status choice selected by user
@@ -181,6 +186,11 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     else:
         return render(request,'taskmanagement/base_forms.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def active_change(request,model_name):
     # this is common function to change status of object
     # 
@@ -294,6 +304,11 @@ def get_tasks_status(project,task,uploads):
             'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest(),'file_type':''})
     return uploads
  
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def updates(obj_list):
     # to get the recent updates of the projects 
     # 
@@ -395,6 +410,11 @@ def corp_total_budget_disbursed(obj_list):
     total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @check_loggedin_access
 def my_tasks_details(request):
     #  to get my task details
@@ -449,9 +469,11 @@ def my_tasks_details(request):
         rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
         taskdict = ast.literal_eval(json.dumps(rdd.content))
     #   code for My Calendar
+    projectobj = project
     user_obj = user
     key = request.GET.get('key')
     if status == '1':
+        project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
         return render(request,'taskmanagement/project-task.html',locals())
     elif status == '0':
         return render(request,'taskmanagement/my-task.html',locals())
@@ -482,6 +504,12 @@ def create_task_progress(request,task):
             task.save()
     return task
     
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
 def task_comments(request):
     # to save the updates of tasks like 
     # attachments / progress bar / comments
@@ -551,6 +579,12 @@ def get_tasks_objects(request):
     return JsonResponse({"calculation":expected_end_date})
 
 import pytz
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class ExpectedDatesCalculator():
 
     """ This class takes a task  or a list of tasks ActiveQuery Objects and
@@ -700,6 +734,12 @@ def related_tasks(project_id, i_task=None, activity=None, milestone=None):
         return (descendants | ancestors).distinct()
 
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
 class GanttChartData(APIView):
 
     def get(self, request, format=None):
@@ -764,7 +804,12 @@ class GanttChartData(APIView):
         super_categories.append({"id":'',"active":'',"created":"","modified":"","name":"","slug":"","description":'',"budget":'',"parent":'',"project":''})
         taskdict['supercategories'] = super_categories
         return Response(taskdict)
-        
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.        
         
 def convert_budget(val):
     """Convert the Values to Rs,Lakhs,Crores."""
@@ -798,7 +843,13 @@ def get_activites_list(request):
         obj_list = Activity.objects.filter(active=2,project__slug=slug)
     activity = [{'id':i.id,'name':i.name,'super_name':i.super_category.name} for i in obj_list]
     return JsonResponse({"activity":activity})
-    
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
 from django.http import JsonResponse
 def get_super_selected(request):
     # this funtion is to get super selected
@@ -853,4 +904,8 @@ def tasks_max_end_date(request):
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

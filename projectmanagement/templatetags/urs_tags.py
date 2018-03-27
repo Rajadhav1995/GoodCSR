@@ -64,6 +64,11 @@ def get_funder(projectobj):
     funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
     return funderobj
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def userprojectlist(user_obj):
     # this template tag is used to get project list as per user
     if user_obj.is_admin_user == True:
@@ -119,6 +124,11 @@ def get_quarter_details(row,quarter,projectobj):
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def get_month_quarter_details(row,v,quarter,projectobj):
     # this template tag is used to get budget lineitems details
@@ -194,6 +204,11 @@ def diff_month(d1, d2):
         duration = duration + 1
     return duration
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def get_duration_month(date):
     # this template tag is used to get duration by date range
@@ -287,6 +302,11 @@ def get_budget_detail(block,quarter):
         budget_detail = answer_obj.text
     return budget_detail
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def get_about_parameter(quarter,obj,block):
     # template tag to get parameter detail 
@@ -368,6 +388,11 @@ def get_currency(amount):
         
     return group_amount
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.filter
 def get_ordinal_number(number):
     #  this filter will return ordinal number
@@ -428,6 +453,11 @@ def get_index_page_number(quarter):
 
     return lista[function_count]
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.filter
 def location_split(value, sep = "."):
     # this filter is to separate location
@@ -504,3 +534,14 @@ def get_line_attach(line_itemobj):
     except:
         attach = None
     return attach_dict
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

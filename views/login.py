@@ -66,6 +66,12 @@ def login_popup(request):
     # function NOT IN USE
     return render(request,'homepage/login_popup.html',locals())
 
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_image():
     import matplotlib.pyplot as plt
  
@@ -89,3 +95,9 @@ def get_image():
      
     plt.axis('equal')
     plt.savefig(results_dir + sample_file_name)
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
