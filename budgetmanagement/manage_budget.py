@@ -592,7 +592,30 @@ def budget_lineitem_update(budget_parameters,request):
 
 def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,projectobj):
     for quarter,value in quarter_list.items():
+        start_date = value.split('to')[0].rstrip()
+        end_date = value.split('to')[1].lstrip()
         result,budgetperiodid = get_budget_edit_result(line_itemlist,quarter,request)
+        if result["subheading"]:
+            budget_dict = {
+                       'category_id':SuperCategory.objects.get_or_none(id = result['location']).id,
+                       'heading_id':MasterCategory.objects.get_or_none(id = result['heading']).id,
+                       'subheading':result['subheading'],
+                       'unit':result['unit'],
+                       'unit_type':result['unit-type'],
+                       'rate':result['rate'],
+                       'planned_unit_cost':result['planned-cost'],
+                       'start_date':start_date,
+                       'end_date':end_date,
+                       'row_order':int(j),
+                       'quarter_order':int(quarter),
+                       }
+            budget_parameters = {'budgetperiodid':budgetperiodid,
+                                'budget_dict':budget_dict,
+                                'result':result,'start_date':start_date,
+                                'end_date':end_date,'j':j,'budgetobj':budgetobj,
+                                'projectobj':projectobj,'request':request,
+                                'quarter':quarter}
+            budget_saving = budget_lineitem_update(budget_parameters,request)
     return line_itemlist
 
 def budgetlineitemedit(request):
