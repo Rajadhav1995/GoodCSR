@@ -46,6 +46,10 @@ def key_parameter_chart(obj,parameter_id):
     
     return master_pip,master_pin,pin_title_name,pip_title_name,master_sh
     
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
 import pytz
 from budgetmanagement.models import Answer ,QuarterReportSection
 from budgetmanagement.templatetags import question_tags
@@ -82,6 +86,10 @@ def get_index_quarter(report_obj):
 # this function will return month name
 # from date
 # 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
 def get_month_dict(data):
     year = data.get('year')
     post_mnth = data.get('post_mnth')
@@ -106,6 +114,10 @@ def get_days_month(report_year,mnth):
         days = 30
     return days
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
 def get_budget_month_year(budgetobj):
     # 
     # this function is to get budget as per month
@@ -171,7 +183,11 @@ def get_months_classified(years_dict,report_obj,budget_obj):
         elif report_month == e_mnth and report_year == e_year :
             future_month={}
     return previous_month,current_month,future_month
-                   
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
 def get_years_list(year_diff,s_year,e_year,sm,em):
 # this is to get the years of the budget and list of 
 # months of that particular year in a dict
@@ -210,6 +226,10 @@ def get_budget_months(budget_obj):
         years_dict = get_years_list(year_diff,s_year,e_year,sm,em)
     return years_dict
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
 def get_monthly_logic(report_obj,budget_obj):
     #this is to get the previous,
     # current and next months dict

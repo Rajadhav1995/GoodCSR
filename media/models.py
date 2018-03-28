@@ -11,10 +11,15 @@ from projectmanagement.models import (BaseContent,UserProfile)
 from budgetmanagement.models import (ReportParameter,)
 from simple_history.models import HistoricalRecords
 from simple_history.admin import SimpleHistoryAdmin
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
 class Attachment(BaseContent):
+    # 
     # model to attach files.
     #content_type is a foriegn key, verbose_name- is a function differing with _"
     # 
@@ -62,7 +67,11 @@ class Keywords(BaseContent):
 
     def __unicode__(self):
         return self.name or ''
-# 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class FileKeywords(BaseContent):
     key = models.ForeignKey(Keywords, **OPTIONAL)
     order_no = models.IntegerField(default=0)
@@ -88,7 +97,11 @@ class ProjectLocation(BaseContent):
 
     def __unicode__(self):
         return str(self.id)
-# 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class Comment(BaseContent):
     text = models.TextField(**OPTIONAL)
     created_by = models.ForeignKey(
@@ -103,7 +116,11 @@ class Article(BaseContent):
     listing_order = models.IntegerField(default=0, **OPTIONAL)
     parent = models.ForeignKey('self', **OPTIONAL)
     slug = models.SlugField(_("Slug"), blank=True)
-# 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class Section(BaseContent):
     # 
     name = models.CharField("Name", max_length=300, **OPTIONAL)
@@ -121,7 +138,11 @@ class ContactPersonInformation(BaseContent):
     organization_name = models.CharField("Organization Name", max_length=600, **OPTIONAL)
     mobile_number = models.CharField("Mobile Number", max_length=50, **OPTIONAL)
     message = models.TextField(**OPTIONAL)
-# 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 IMAGE_TYPE = ((1,'Pie-Image'),(2,'Gatt-image'),)
 class ScreenshotMedia(BaseContent):
 
@@ -134,7 +155,11 @@ class ScreenshotMedia(BaseContent):
 
     def __unicode__(self):
         return str(self.id) or ''
-# 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class Note(BaseContent):
     project = models.ForeignKey("projectmanagement.Project", **OPTIONAL)
     created_by = models.ForeignKey(UserProfile, related_name='note_created_user', **OPTIONAL)

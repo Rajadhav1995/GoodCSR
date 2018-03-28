@@ -20,7 +20,9 @@ from django.forms import ClearableFileInput
 # Without it, things can get real confusing, real fast.
 class MyClearableFileInput(ClearableFileInput):
      template_with_initial = '<br>%(input_text)s: %(input)s'
-
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
 class AttachmentForm(forms.ModelForm):
     '''
@@ -37,7 +39,9 @@ class AttachmentForm(forms.ModelForm):
             "file": MyClearableFileInput(),
         }
 
-
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 class ImageUpload(forms.ModelForm):
     '''
     This is model form to upload Image for Project
@@ -51,7 +55,9 @@ class ImageUpload(forms.ModelForm):
         widgets = {
             "file": MyClearableFileInput(),
         }
-
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 class ImageUploadTimeline(forms.ModelForm):
     '''
     This is model form to upload Image for Project
@@ -62,7 +68,9 @@ class ImageUploadTimeline(forms.ModelForm):
     class Meta:
         model = Attachment
         fields  = ('date','description','attachment_file','name')
-
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
