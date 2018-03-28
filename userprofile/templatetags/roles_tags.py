@@ -4,7 +4,11 @@ from userprofile.models import Menus, RoleConfig, RoleTypes, UserRoles
 
 register = template.Library()
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 
 @register.filter
 def get_all_menus(value):
@@ -45,7 +49,11 @@ def get_user_menu_list(request):
 
     return menu_list
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.filter
 def has_permission_for_action(request, key):
      
@@ -67,11 +75,20 @@ def has_permission_for_action(request, key):
 
     return success
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.filter
 def make_string(val1, val2):
     return val1+"&"+val2
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def check_menu_permission(user,menuname):
 
@@ -95,19 +112,14 @@ def check_menu_permission(user,menuname):
     if user.is_superuser:
         status = True
     return status
-    
-@register.assignment_tag
-def get_menu_list():
-    menu = Menus.objects.filter(parent=None)
-    return menu
-
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
-# When working with any programming language, you include comments
-# in the code to notate your work. This details what certain parts 
-# know what you were up to when you wrote the code. This is a necessary
-# practice, and good developers make heavy use of the comment system. 
+@register.assignment_tag
+def get_menu_list():
+    menu = Menus.objects.filter(parent=None)
+    return menu
+
 # Without it, things can get real confusing, real fast.
