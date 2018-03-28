@@ -295,7 +295,7 @@
                     count++; /* To increase the count */
                     /* further functionalitie to split the name and append row number to each input type */
                     $(tR).attr('id', "data_row_"+count);
-                    $(tR).find('td input, td select td span').each(function(){
+                    $(tR).find('td input, td select, td span').each(function(){
                     $(this).val('')
                       if ($(this).attr('name')){
                            if ($(this).attr('name').split('_').length == 3){
