@@ -275,9 +275,6 @@ def get_budget_updates(projectobj,start_date,end_date):
 			tranch = Tranche.objects.filter(project=projectobj)
 			for i in tranch:
 				tranch_hist = i.history.all()
-				# trnches_history_ids.extend(tranch_hist)
-				print "--------"
-				# print tranch_hist.modified
 	
 	return budgetlist
 
