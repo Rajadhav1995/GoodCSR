@@ -208,13 +208,14 @@
 }
 </style>
 <script>
+    slug = '{{request.GET.slug}}'
     function cat_validate(id,name){
     var id = id.split('_')[1];
     if (name !=''){
     $.ajax({
                 url:'/manage/project/category/exists/',
                 type:'GET',
-                data:{'cat_name':name},
+                data:{'cat_name':name,'slug':slug},
                 dataType:"json",
                 success:function(data){
                         if (data.name_exists == 'True'){

@@ -711,7 +711,8 @@ def delete_category(request):
 from django.http import JsonResponse
 def category_name_validate(request):
     cat_name = request.GET.get('cat_name')
-    cat_obj = SuperCategory.objects.filter(name__iexact=cat_name)
+    slug = request.GET.get('slug')
+    cat_obj = SuperCategory.objects.filter(name__iexact=cat_name,project__slug=str(slug))
     if cat_obj:
         name_exists = 'True'
     else:
