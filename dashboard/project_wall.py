@@ -250,10 +250,8 @@ def get_budget_updates(projectobj,start_date,end_date):
 			
 			if int(new_var) != int(temp_var):
 				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by),'utilized_amount':k.utilized_unit_cost}
-				print k.modified
 				budget_data_list.append(data)
 			temp_var = new_var
-	# import ipdb; ipdb.set_trace()
 	result = defaultdict(float)
 	items = defaultdict(list)
 	for idx,d in enumerate(budget_data_list):
@@ -261,9 +259,10 @@ def get_budget_updates(projectobj,start_date,end_date):
 		items[d['date']].append(d['amount'])
 	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
 	count_budget_list = [{'date': name, 'count': len(value)} for name, value in items.items()]
-	
+	# import ipdb; ipdb.set_trace()
 	utc=pytz.UTC
 	from pytz import timezone
+	trnches_history_ids = []
 	for c,d,e in zip(budget_final_dict,budget_data_list,count_budget_list):
 		
 		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
@@ -271,6 +270,14 @@ def get_budget_updates(projectobj,start_date,end_date):
 		if e.get('count') == budget_count or e.get('count') == budget_count-1:
 			data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
 			budgetlist.append(data)
+		else:
+			print e.get('date')
+			tranch = Tranche.objects.filter(project=projectobj)
+			for i in tranch:
+				tranch_hist = i.history.all()
+				# trnches_history_ids.extend(tranch_hist)
+				print "--------"
+				# print tranch_hist.modified
 	
 	return budgetlist
 
