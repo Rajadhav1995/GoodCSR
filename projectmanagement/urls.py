@@ -6,6 +6,11 @@ from projectmanagement.views import (create_project,project_list,
     delete_upload_image,remove_record,)
 from projectmanagement.manage_roles import manage_funder_relation
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 urlpatterns = [
     url(r'^add/$',create_project),
     url(r'^list/$',project_list),
@@ -22,3 +27,13 @@ urlpatterns = [
     url(r'^remove/record/$',remove_record),
     url(r'^manage/funder/$',manage_funder_relation),
 ]
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

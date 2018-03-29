@@ -21,7 +21,11 @@ from projectmanagement.manager import ActiveQuerySet
 # HistoricalRecords to keep track of the object creation/modification
 BUDGET_TYPE = ((1,'Yearly'),(2,'Quarterly'),(3,'Half Yearly'))
 BUDGET_STATUS = ((0,''),(1, 'Requested'), (2, 'Request more information'), (3, 'Reject'), (4,'Approved'),)
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class Budget(BaseContent):
     project = models.ForeignKey('projectmanagement.Project')
     status = models.IntegerField(choices=BUDGET_STATUS,default=0)
@@ -47,6 +51,11 @@ class SuperCategory(BaseContent):
     def __str__(self):
         return str(self.id) if self.id else str(0)
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class ProjectBudgetPeriodConf(BaseContent):
     budget = models.ForeignKey(Budget,**OPTIONAL)
     name = models.CharField(max_length=300,**OPTIONAL)
@@ -74,6 +83,11 @@ class Tranche(BaseContent):
     disbursed_date = models.DateField(**OPTIONAL)
     history = HistoricalRecords()
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 EXPENSES_TYPE = ((1,'Programmatic'),(2,'Non-programmatic'))
 class BudgetPeriodUnit(BaseContent):
 # ----to set budget period
@@ -99,6 +113,11 @@ class BudgetPeriodUnit(BaseContent):
     def __str__(self):
         return str(self.id)
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 REPORT_TYPE = ((1,'Quarterly'),(2,'Monthly'))
 class ProjectReport(BaseContent):
     project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
@@ -120,6 +139,11 @@ class ProjectReport(BaseContent):
         remove_question = RemoveQuestion.objects.filter(quarter_report = report_obj).delete()
         return locals()
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 QUARTER_TYPE = ((1,'Previous Quarter Updates'),(2,'Current Quarter Updates'),(3,'Future Quarter Updates'))
 class QuarterReportSection(BaseContent):
     project = models.ForeignKey(ProjectReport,**OPTIONAL)
@@ -136,6 +160,11 @@ class QuarterReportSection(BaseContent):
     def __str__(self):
         return str(self.id)
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 MA_TYPE = ((1,'Milestone'),(2,'Activity'))
 class ReportMilestoneActivity(BaseContent):
     quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
@@ -164,6 +193,7 @@ class ReportParameter(BaseContent):
     def __str__(self):
         return str(self.id)
 
+
 # Survey kind of strucutre
 class Survey(BaseContent):
     name = models.CharField(max_length=300,**OPTIONAL)
@@ -185,8 +215,12 @@ class Block(BaseContent):
     order = models.IntegerField(default=0)
     code = models.CharField(max_length=100,**OPTIONAL)
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class Question(BaseContent):
-
     QTYPE_CHOICES = (
         ('T', 'Text Input'), ('S', 'Select One Choice'), ('R', 'Radio List'),
         ('C', 'Checkbox List'), ('D', 'Date'),('M','Master'),('F','File Field'),
@@ -216,7 +250,11 @@ class Question(BaseContent):
     def __unicode__(self):
         return str(self.text) or str(self.id)
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class Answer(BaseContent):
     user = models.ForeignKey(
         "projectmanagement.UserProfile", related_name='report_user', **OPTIONAL)
@@ -249,3 +287,19 @@ class RemoveQuestion(BaseContent):
     
     def __unicode__(self):
         return str(self.text) or str(self.id)
+        
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

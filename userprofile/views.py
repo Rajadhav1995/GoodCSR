@@ -99,7 +99,11 @@ class Manage(object):
         return "/close/?msg=%s added successfully." %(self.kwargs['model'])
 
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 
 class UserListView(Manage, ListView):
     # class based method is used for listing
@@ -143,7 +147,11 @@ class UserEditView(Manage, UpdateView):
             self.fields = ['menu', 'view','add', 'edit','delete' ]
         return super(UserEditView, self).get_form_class()
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class UserActive(Manage, DeleteView):
     #class based method to activate and deactivate objects for all models
     
@@ -174,6 +182,11 @@ def get_roleconfig_details(conf,perms,role):
             roleconf.update('view')
     return roleconf
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def manage_role(request, pk):
     #-------------------------#
     # managing roles of user 
@@ -218,7 +231,25 @@ def active(request,pk):
         return JsonResponse({'status': obj.active})
 
 def handler404(request):
+    # handling 404 error page in project
     return render(request, '404.html', status=404)
 
 def handler500(request):
+    # handling 500 error page in project
     return render(request, '500.html', status=500)
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

@@ -61,6 +61,9 @@ def get_tranche_form(slug):
 						'recommended_by','due_date','disbursed_date')
 	return TrancheForm
 
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 class TrancheForms(forms.ModelForm):
 	actual_disbursed_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 	recommended_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
@@ -73,9 +76,18 @@ class TrancheForms(forms.ModelForm):
 		fields  = ('name','planned_amount','actual_disbursed_amount','recommended_amount',\
 					'due_date','disbursed_date')
 
+# Django provides a range of tools and libraries 
+# to help you build forms to accept input from 
+# site visitors, and then process and respond to the input.
 class ProjectBudgetForm(forms.ModelForm):
 	actual_start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	class Meta:
 		model = Budget
 		fields = ('actual_start_date','end_date',)
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

@@ -11,7 +11,11 @@ from projectmanagement.models import Project,Boundary
 from media.forms import AttachmentForm,ImageUpload,ImageUploadTimeline
 from projectmanagement.common_method import unique_slug_generator,add_keywords
 from menu_decorators import check_loggedin_access
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 # this views is to manage media
 @check_loggedin_access
 def list_document(request):
@@ -35,6 +39,11 @@ def list_document(request):
     project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return render(request,'attachment/listing.html',locals())
 	
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def timeline_upload(request):
     # this function is to upload images in 
     # timeline (for project summary page)
@@ -67,6 +76,11 @@ def timeline_upload(request):
     timeline = 1
     return render(request,'taskmanagement/forms.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def upload_attachment(request):
     '''
     This function is to upload Image/Document 
@@ -110,6 +124,11 @@ def upload_attachment(request):
 
     return render(request,'attachment/doc_upload.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def edit_attachment(request):
     '''
     This function is to edit Image/Document
@@ -206,3 +225,9 @@ def city_list(request):
 #    The default settings and feature set of the ssl module have been improved.
 #    The hashlib module received support for the BLAKE2, SHA-3 
 # and SHAKE hash algorithms and the scrypt() key derivation function.
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

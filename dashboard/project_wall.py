@@ -20,12 +20,19 @@ from taskmanagement.templatetags.common_tags import get_modified_by_user,string_
 from menu_decorators import check_loggedin_access
 from media.forms import NoteForm
 
+# this function is to display project updates in project wall
+# 
+# this function is to get date range to show datewise 
+# project updates
 def get_date_range(request,projectobj):
-	
+	# if user selecting date then we are filtering with selected date
+	# otherwise we are taking project start date and todays date 
+	# to show all updates
 	if request.POST.get('from'):
 		start_date = datetime.strptime(request.POST.get('from'),"%m/%d/%Y")
 	else:
-		start_date = projectobj.start_date
+		start_date = projectobj.created
+		# start_date = datetime.combine(start_date, datetime.min.time())
 	if request.POST.get('to'):
 		end_date = datetime.strptime(request.POST.get('to'),"%m/%d/%Y")
 	else:
@@ -38,18 +45,17 @@ def get_date_range(request,projectobj):
 def get_project_updates(request):
 #	start_date = '2017-01-01'
 #	end_date = '2018-02-28'	
-	
+	# here is main module where we are sending all project updates in
+	# dict format by calling respective function
 	key = 'updates_wall'
 	main_data = []
-	utc=pytz.UTC
-		
+	utc=pytz.UTC	
 	filter_key = request.GET.get('filter')
 	slug = request.GET.get('slug')
 	projectobj = Project.objects.get_or_none(slug=slug)
 	start_date,end_date = get_date_range(request,projectobj)
 	
 	task_list = Task.objects.filter(activity__project=projectobj,active=2,created__range=[start_date,end_date]).order_by('-id')
-	
 	plain_task = []
 	history_task_data = []
 	if request.GET.get('filter') == 'task' or request.GET.get('filter') == None:
@@ -64,8 +70,13 @@ def get_project_updates(request):
 			for i in history_data:
 			    history_task_data.append(i)
 	main_data = history_task_data + plain_task
+	
 	budget_final_list = []
+	# here we have to check which update filter user selected
+	# here we have to check filter_key is empty or not
+	# if filter_key is empty then we are showing all updates
 	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
+
 		budget_final_list = get_budget_updates(projectobj,start_date,end_date)
 	file_data_final = []
 	timeline_data_final = []
@@ -82,15 +93,20 @@ def get_project_updates(request):
 		tranche_list = get_tranche_update(projectobj,slug,start_date,end_date)
 	budget_final_list.sort(key=lambda item:item['date'], reverse=True)
 	filter_dict = {'task':main_data,'note':note_list}
+	# here we are adding all type of project updates in variable
 	final_data = main_data + file_data_final + budget_final_list + note_list + final_parameter_data + tranche_list
 	if filter_key == 'task':
 		final_data = main_data
+	# here we are sorting all update data dict 
+	# by date
 	final_data.sort(key=lambda item:item['date'], reverse=True)
 	key = 'updates'
 	url = PMU_URL
 	return render(request,'project-wall/project_updates.html',locals())
 
 def get_file_updates(projectobj,start_date,end_date,filter_key):
+	# this function will return all file updates 
+	# in dict format
 	file_data = []
 	timeline_data = []
 	file_update = Attachment.objects.filter(active=2,created__range=[start_date,end_date],object_id=projectobj.id,content_type = ContentType.objects.get_for_model(projectobj))
@@ -114,6 +130,8 @@ def get_file_updates(projectobj,start_date,end_date,filter_key):
 	return final_file_data
 
 def get_parameter_updates(projectobj,start_date,end_date):
+	# this function will return all parameter updates 
+	# in dict format
 	parameter_data = []
 	parameter_value = ProjectParameterValue.objects.filter(keyparameter__project=projectobj,keyparameter__parent=None,created__range=[start_date,end_date])
 	parameter_created_data = []
@@ -143,6 +161,8 @@ def get_parameter_updates(projectobj,start_date,end_date):
 	return final_parameter_data
 
 def get_project_note(projectobj,request,start_date,end_date):
+	# this function will return all note updates 
+	# in dict format
 	note_obj = Note.objects.filter(project=projectobj,created__range=[start_date,end_date])
 	note_list = []
 	for n in note_obj:
@@ -157,6 +177,8 @@ def get_project_note(projectobj,request,start_date,end_date):
 	return note_list
 
 def get_trance_updates(projectobj,slug):
+	# this function will return all tranche updates 
+	# in dict format
 	tranches = Tranche.objects.filter(project=projectobj)
 	tranche_list = []
 	tranche_history_data = []
@@ -182,7 +204,8 @@ def get_trance_updates(projectobj,slug):
 	return tranche_history_data
 
 def get_tranche_update(projectobj,slug,start_date,end_date):
-	
+	# this function will return all tranche updates 
+	# in dict format
 	tranches = Tranche.objects.filter(active=2,project=projectobj,created__range=[start_date,end_date]).order_by('id')
 	tranche_list = []
 	tranche_history_data = []
@@ -210,13 +233,13 @@ def get_tranche_update(projectobj,slug,start_date,end_date):
 	return final_tranche
 
 def get_budget_updates(projectobj,start_date,end_date):
+	# this function will return all budget updates 
+	# in dict format
 	budgetlist = []
 	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
 	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2,created__range=[start_date,end_date]).exclude(planned_unit_cost="")
 	line_item_amount_list = list(budget_period.values_list('planned_unit_cost',flat=True))
-
 	line_total = sum(map(float,line_item_amount_list))
-
 	budget_data_list = []
 	budget_count = budget_period.count()
 	for q in budget_period:
@@ -227,7 +250,6 @@ def get_budget_updates(projectobj,start_date,end_date):
 			
 			if int(new_var) != int(temp_var):
 				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.planned_unit_cost,'modified_by':get_modified_by_user(k.modified_by),'utilized_amount':k.utilized_unit_cost}
-
 				budget_data_list.append(data)
 			temp_var = new_var
 	result = defaultdict(float)
@@ -237,9 +259,10 @@ def get_budget_updates(projectobj,start_date,end_date):
 		items[d['date']].append(d['amount'])
 	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
 	count_budget_list = [{'date': name, 'count': len(value)} for name, value in items.items()]
-	
+	# import ipdb; ipdb.set_trace()
 	utc=pytz.UTC
 	from pytz import timezone
+	trnches_history_ids = []
 	for c,d,e in zip(budget_final_dict,budget_data_list,count_budget_list):
 		
 		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
@@ -247,9 +270,20 @@ def get_budget_updates(projectobj,start_date,end_date):
 		if e.get('count') == budget_count or e.get('count') == budget_count-1:
 			data = {'date':history_date,'amount':c.get('amount'),'update_type':'budget_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
 			budgetlist.append(data)
+		else:
+			print e.get('date')
+			tranch = Tranche.objects.filter(project=projectobj)
+			for i in tranch:
+				tranch_hist = i.history.all()
+				# trnches_history_ids.extend(tranch_hist)
+				print "--------"
+				# print tranch_hist.modified
+	
 	return budgetlist
 
 def create_note(request):
+	# this function is to create note in project wall page
+	# 
 	created_by = UserProfile.objects.get_or_none(id=request.session.get('user_id'))
 	slug=request.GET.get('slug')
 	if request.method=='POST':
