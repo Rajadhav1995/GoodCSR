@@ -615,7 +615,7 @@ def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,pr
                                 'end_date':end_date,'j':j,'budgetobj':budgetobj,
                                 'projectobj':projectobj,'request':request,
                                 'quarter':quarter}
-            budget_saving = budget_lineitem_update(budget_parameters,request)
+            budget_lineitem_update(budget_parameters,request)
     return line_itemlist
 
 def budgetlineitemedit(request):
