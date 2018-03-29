@@ -14,7 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from .forms import(ProjectBudgetForm,)
 from datetime import datetime
 from menu_decorators import check_loggedin_access
-from projectmanagement.common_method import add_modified_by_user
+from projectmanagement.common_method import add_modified_by_user,unique_slug_generator
 
 '''
 This file is about saving of budget line items,
@@ -684,7 +684,8 @@ def category_add(request):
                     super_obj.name = request.POST.get(i)
                 except:
                     super_obj= SuperCategory.objects.create(name = request.POST.get(i),project = project_obj,parent=super_parent,budget = budget_obj)
-                super_obj.slug = slugify(super_obj.name)
+                instance =''
+                super_obj.slug = unique_slug_generator(super_obj,instance)
                 super_obj.save()
         return HttpResponseRedirect('/manage/project/budget/view/?slug='+str(project_slug)+'&key=budget')
     return render(request,"budget/category_edit.html",locals())
@@ -707,14 +708,22 @@ def delete_category(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
-
+from django.http import JsonResponse
+def category_name_validate(request):
+    cat_name = request.GET.get('cat_name')
+    cat_obj = SuperCategory.objects.filter(name__iexact=cat_name)
+    if cat_obj:
+        name_exists = 'True'
+    else:
+        name_exists = 'False'
+    return JsonResponse({"name_exists":name_exists})
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
 
-# When working with any programming language, you include comments
+# When working with any programming language, you include commentsgory
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 

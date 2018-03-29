@@ -83,50 +83,51 @@
                <input type="hidden" name="slug" value="{{project_slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
                <input type="hidden" name="budget_id" value="{{budget_id}}" class="form-control" maxlength="200">
                <div class="row">
-                  <div class="col-md-6 nopadding">
+                  <div class="col-md-10 nopadding">
                      <div class="budget_create">
                         <div class="col-md-12">
                         {% if key == 'add' %}
-                           <div class="col-md-6 padding_left">
+                           
+                           <div class="col-md-6 padding_left data_row_left_1">
                               <div class="form-group">
                                  <label>Category 1</label>
-                                 <input class="form-control" type="text" name="category_1"  required />
-                                 <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
+                                 <input class="form-control" type="text" name="category_1" id='category_1' onblur="cat_validate(id,this.value)" required />
+                                 <input type="checkbox" class="check_unsaved"> <span class="error_div_1">Unsaved</span>
                               </div>
                            </div>
                            <div class="col-md-6 padding_right data_row_right_2">
                               <div class="form-group">
                                  <label>Category 2</label>
-                                 <input class="form-control" type="text" name="category_2"  >
-                                 <input type="checkbox"class="check_unsaved"><span>Unsaved</span>
+                                 <input class="form-control" type="text" name="category_2" id='category_2' onblur="cat_validate(id,this.value)" >
+                                 <input type="checkbox"class="check_unsaved"><span class="error_div_2">Unsaved</span>
                               </div>
                            </div>
-                           <div class="col-md-6 padding_left">
+                           <div class="col-md-6 padding_left data_row_left_3">
                               <div class="form-group">
                                  <label>Category 3</label>
-                                 <input class="form-control" type="text" name="category_3"  >
-                                 <input type="checkbox" class="check_unsaved"><span>Unsaved</span>
+                                 <input class="form-control" type="text" name="category_3" id='category_3' onblur="cat_validate(id,this.value)" >
+                                 <input type="checkbox" class="check_unsaved"><span class="error_div_3">Unsaved</span>
                               </div>
                            </div>
-                           <div class="col-md-6 padding_right">
+                           <div class="col-md-6 padding_right data_row_right_4">
                               <div class="form-group">
                                  <label>Category 4</label>
-                                 <input class="form-control" type="text" name="category_4"  >
-                                 <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
+                                 <input class="form-control" type="text" name="category_4" id='category_4' onblur="cat_validate(id,this.value)" >
+                                 <input type="checkbox" class="check_unsaved"> <span class="error_div_4">Unsaved</span>
                               </div>
                            </div>
                            <div class="col-md-6 padding_left data_row_left_5">
                               <div class="form-group">
                                  <label>Category 5</label>
-                                 <input class="form-control" type="text" name="category_5"  >
-                                 <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
+                                 <input class="form-control" type="text" name="category_5" id='category_5' onblur="cat_validate(id,this.value)" >
+                                 <input type="checkbox" class="check_unsaved"> <span class="error_div_5">Unsaved</span>
                               </div>
                            </div>
                            <div class="col-md-6 padding_right data_row_right_6">
                               <div class="form-group">
                                  <label>Category 6</label>
-                                 <input class="form-control" type="text" name="category_6" >
-                                 <input type="checkbox" class="check_unsaved"> <span>Unsaved</span>
+                                 <input class="form-control" type="text" name="category_6" id='category_6' onblur="cat_validate(id,this.value)" >
+                                 <input type="checkbox" class="check_unsaved"> <span class="error_div_6">Unsaved</span>
                               </div>
                            </div>
                            <input type='hidden' name='cat_count' value=6 />
@@ -152,7 +153,7 @@
                      </div>
                   </div>
                </div>
-               <input class="budget_button" type="submit" value="Submit"/>  
+               <input class="budget_button save_button" type="submit" value="Submit"/>  
                <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
             </form>
             {% endif %}
@@ -173,8 +174,12 @@
                 
                 $(this).text('Category '+new_count);
                 $(this).attr('name','category_'+new_count);
+                $(this).attr('id','category_'+new_count);
                 $(this).val('');
                 
+            });
+            $($newDiv).find('span').each(function(){
+                $(this).attr('class','error_div_'+new_count);
             });
             if(count%2 == 0){
                 $($newDiv).insertAfter('.data_row_right_'+count+':last');
@@ -195,3 +200,39 @@
         });
         
 </script>
+<style>
+.isDisabled { cursor: not-allowed; }
+.form-group {
+    height: 107px;
+    margin-bottom: 0px;
+}
+</style>
+<script>
+    function cat_validate(id,name){
+    var id = id.split('_')[1];
+    if (name !=''){
+    $.ajax({
+                url:'/manage/project/category/exists/',
+                type:'GET',
+                data:{'cat_name':name},
+                dataType:"json",
+                success:function(data){
+                        if (data.name_exists == 'True'){
+                            $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already exists</div>');
+                        
+                            $(".save_button").attr('disabled', 'disabled');
+                            $('.save_button').addClass('isDisabled');
+                       }
+                        else{
+                            $('.error_class').hide();
+                            $(".save_button").attr('disabled', false);
+                            $('.save_button').removeClass('isDisabled');
+                        }
+                      },
+                      
+                    });
+                    return false;
+    }
+    }
+</script>
+
