@@ -436,7 +436,7 @@ def budget_amount_list(budgetobj,projectobj,quarter_list):
         budget_period_utilizedamount = map(lambda x:x if x else 0,budget_period_utilizedamount)
         final_budget_period_utilizedamount = sum(map(float,budget_period_utilizedamount))
         quarter_planned_amount.update({i:final_budget_period_plannedamount})
-        quarter_utilized_amount.update({i:final_budget_period_utilizedamount})
+        quarter_utilized_amount.update({i:round(final_budget_period_utilizedamount,2)})
     budget_period_plannedamount = quarter_planned_amount.values()
     budget_period_utilizedamount = quarter_utilized_amount.values()
     return map(int,budget_period_plannedamount),map(float,budget_period_utilizedamount)
