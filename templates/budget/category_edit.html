@@ -219,6 +219,7 @@
                 dataType:"json",
                 success:function(data){
                         if (data.name_exists == 'True'){
+                            $('.error_class').hide();
                             $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already exists</div>');
                         
                             $(".save_button").attr('disabled', 'disabled');
