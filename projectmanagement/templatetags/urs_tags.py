@@ -61,7 +61,10 @@ def get_user_permission_pmo(request):
 @register.assignment_tag
 def get_funder(projectobj):
     # this template tag is used to get funder relation
-    funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
+    try:
+        funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
+    except:
+        funderobj = None
     return funderobj
 
 # When working with any programming language, you include comments
