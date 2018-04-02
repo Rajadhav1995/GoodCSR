@@ -174,7 +174,8 @@
     
         <a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Manage Super Category</a>
         {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
+        {% is_pmo_user user_obj as pmo_user %}
+        {% if user_obj.is_admin_user == True or pmo_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     	<a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Report Utilization</a>
 <!--    	    <a href="javascript:void(0);" class="link-pad1"> Edit/Update Budget</a>-->
         <a href="/manage/project/budget/lineitem/edit/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Edit/Update Budget</a>
@@ -506,7 +507,7 @@ $(document).ready(function(){
 
 
 <!---datepicker script-->
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
 	$(function() {
 	$( ".datepicker" ).datepicker({
