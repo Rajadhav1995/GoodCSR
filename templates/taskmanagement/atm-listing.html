@@ -935,9 +935,8 @@ $(document).ready(function(){
       var week = getNextWeek(plankey[0],plankey[1]);
       var comp = 0;
       $.each(this.values,function(){
-        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
+        var weight = Math.abs((new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1));
         comp += (weight * 100);
-        // console.log("keys", comp, this.id , weight);
       })
       chartData.push([(week.getTime()+19800000),comp]);
       }
