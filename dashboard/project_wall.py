@@ -313,10 +313,11 @@ def get_budget_utilization_updates(projectobj,start_date,end_date):
 	from pytz import timezone
 	trnches_history_ids = []
 	for c,d,e in zip(budget_final_dict,budget_data_list,count_budget_list):
-		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
-		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
-		data = {'date':history_date,'amount':c.get('amount'),'update_type':'utilization_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
-		budgetlist.append(data)
+		if e.get('count') != budget_count or e.get('count') != budget_count-1:
+			history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
+			history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
+			data = {'date':history_date,'amount':c.get('amount'),'update_type':'utilization_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
+			budgetlist.append(data)
 	return budgetlist
 
 
