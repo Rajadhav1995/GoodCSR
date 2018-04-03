@@ -61,10 +61,10 @@ def get_user_permission_pmo(request):
 @register.assignment_tag
 def get_funder(projectobj):
     # this template tag is used to get funder relation
-    try:
-        funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
-    except:
+    if projectobj == '':
         funderobj = None
+    else:
+        funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
     return funderobj
 
 # When working with any programming language, you include comments
@@ -97,6 +97,7 @@ def get_user_project(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(user_obj)
+
     return obj_list
 
 @register.assignment_tag
@@ -176,6 +177,7 @@ def get_utlizedline_total(row,projectobj):
 @register.assignment_tag
 def get_org_logo(projectobj):
     # this template tag is used to get ogrganozation logo
+    # import ipdb; ipdb.set_trace()
     funderobj = get_funder(projectobj)
     data = {'company_name':str(funderobj.funder.organization) if funderobj else '',
             'ngo_name':str(funderobj.implementation_partner.organization if funderobj else '')}
@@ -517,7 +519,6 @@ def pmo_role(request):
     project = Project.objects.get_or_none(slug=request.GET.get('slug'))
     pmo_user = ProjectUserRoleRelationship.objects.get_or_none(active=2,project=project,role=3,user=user_obj)
     pmo_user_list = ProjectUserRoleRelationship.objects.filter(active=2,role=3,user=user_obj)
-    # import ipdb; ipdb.set_trace()
     if pmo_user:
         option = 1
     else:
