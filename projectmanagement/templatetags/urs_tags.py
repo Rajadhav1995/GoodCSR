@@ -539,6 +539,15 @@ def get_line_attach(line_itemobj):
         attach = None
     return attach_dict
 
+@register.assignment_tag
+def is_pmo_user(user_obj):
+    pmo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 3)
+    if pmo_user:
+        status = True
+    else:
+        status = False
+    return status
+
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
