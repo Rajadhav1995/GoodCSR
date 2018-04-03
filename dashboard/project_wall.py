@@ -78,6 +78,10 @@ def get_project_updates(request):
 	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
 
 		budget_final_list = get_budget_updates(projectobj,start_date,end_date)
+	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
+
+		budget_utilization = get_budget_utilization_updates(projectobj,start_date,end_date)
+
 	file_data_final = []
 	timeline_data_final = []
 	if request.GET.get('filter') == 'file' or request.GET.get('filter') == 'timeline' or request.GET.get('filter') == None:
@@ -94,7 +98,7 @@ def get_project_updates(request):
 	budget_final_list.sort(key=lambda item:item['date'], reverse=True)
 	filter_dict = {'task':main_data,'note':note_list}
 	# here we are adding all type of project updates in variable
-	final_data = main_data + file_data_final + budget_final_list + note_list + final_parameter_data + tranche_list
+	final_data = main_data + file_data_final + budget_final_list + note_list + final_parameter_data + tranche_list + budget_utilization
 	if filter_key == 'task':
 		final_data = main_data
 	# here we are sorting all update data dict 
@@ -277,6 +281,44 @@ def get_budget_updates(projectobj,start_date,end_date):
 				tranch_hist = i.history.all()
 	
 	return budgetlist
+
+def get_budget_utilization_updates(projectobj,start_date,end_date):
+	budgetlist = []
+	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
+	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2,created__range=[start_date,end_date]).exclude(planned_unit_cost="")
+	line_item_amount_list = list(budget_period.values_list('utilized_unit_cost',flat=True))
+	# line_total = sum(map(float,line_item_amount_list))
+	budget_count = budget_period.count()
+	budget_data_list = []
+	for q in budget_period:
+		budgethistory = q.history.filter(modified__range=[start_date,end_date])
+		temp_var = 0
+		for k in budgethistory:
+			new_var = int(k.modified.strftime("%Y%m%d%H%M"))
+			
+			if int(new_var) != int(temp_var) and k.utilized_unit_cost != None:
+				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.utilized_unit_cost,'modified_by':get_modified_by_user(k.modified_by),'utilized_amount':k.utilized_unit_cost}
+				budget_data_list.append(data)
+			temp_var = new_var
+	result = defaultdict(float)
+	
+	items = defaultdict(list)
+	for idx,d in enumerate(budget_data_list):
+		result[d['date']] += float(d['amount']) if d['amount'] else float(0)
+		items[d['date']].append(d['amount'])
+	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
+	count_budget_list = [{'date': name, 'count': len(value)} for name, value in items.items()]
+	
+	utc=pytz.UTC
+	from pytz import timezone
+	trnches_history_ids = []
+	for c,d,e in zip(budget_final_dict,budget_data_list,count_budget_list):
+		history_date = datetime.strptime(c.get('date'), '%Y-%m-%d-%H-%M')
+		history_date = history_date.replace(tzinfo=timezone('UTC')).replace(second=1)
+		data = {'date':history_date,'amount':c.get('amount'),'update_type':'utilization_history','modified_by':d.get('modified_by') if d.get('modified_by') else budget_period[0].created_by.attrs }
+		budgetlist.append(data)
+	return budgetlist
+
 
 def create_note(request):
 	# this function is to create note in project wall page
