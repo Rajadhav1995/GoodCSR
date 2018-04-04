@@ -71,8 +71,6 @@ def admin_dashboard(request):
         projectobj = paginator.page(1)
     except EmptyPage:
         projectobj = paginator.page(paginator.num_pages)
-    finally:
-        projectobj = obj_list
     return render(request,'corporate_dashboard.html',locals())
 
 # When working with any programming language, you include comments
