@@ -95,7 +95,7 @@
                                                                             </div>
                                                                             
                                                                             {% else %}
-                                                                                                    <form id="ic_form" action="/manage/project/budget/category/add/?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" class="budget_form">{% csrf_token %}
+                                                                                                    <form id="ic_form" action="/manage/project/budget/category/add/?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" class="budget_form category_form">{% csrf_token %}
                         <input type="hidden" name="slug" value="{{project_slug}}">
                         <input type="hidden" name="budget_id" value="{{budget_id}}">
                     {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
@@ -114,47 +114,47 @@
                                                                                         <input class="form-control" type="text" name="super-category" required>
                                                                                     </div>
                                                                                     <div class="col-md-6 padding_left data_row_left_1">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 1</label>
-                                                                                           <input class="form-control" type="text" name="category_1"  required />
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                          <div class="form-group">
+                                                                                             <label>Category 1</label>
+                                                                                             <input class="form-control" type="text" name="category_1" id='category_1' onblur="cat_validate(id,this.value)" required />
+                                                                                             <input type="checkbox" class="check_unsaved"> <span class="error_div_1">Unsaved</span>
+                                                                                          </div>
+                                                                                       </div>
                                                                                     <div class="col-md-6 padding_right data_row_right_2">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 2</label>
-                                                                                            <input class="form-control" type="text" name="category_2"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_left">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 3</label>
-                                                                                            <input class="form-control" type="text" name="category_3"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_right">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 4</label>
-                                                                                            <input class="form-control" type="text" name="category_4"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                            <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_left data_row_left_6">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 5</label>
-                                                                                            <input class="form-control" type="text" name="category_5"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                          <div class="form-group">
+                                                                                             <label>Category 2</label>
+                                                                                             <input class="form-control" type="text" name="category_2" id='category_2' onblur="cat_validate(id,this.value)" >
+                                                                                             <input type="checkbox"class="check_unsaved"><span class="error_div_2">Unsaved</span>
+                                                                                          </div>
+                                                                                       </div>
+                                                                                    <div class="col-md-6 padding_left data_row_left_3">
+                                                                                          <div class="form-group">
+                                                                                             <label>Category 3</label>
+                                                                                             <input class="form-control" type="text" name="category_3" id='category_3' onblur="cat_validate(id,this.value)" >
+                                                                                             <input type="checkbox" class="check_unsaved"><span class="error_div_3">Unsaved</span>
+                                                                                          </div>
+                                                                                       </div>
+                                                                                    <div class="col-md-6 padding_right data_row_right_4">
+                                                                                          <div class="form-group">
+                                                                                             <label>Category 4</label>
+                                                                                             <input class="form-control" type="text" name="category_4" id='category_4' onblur="cat_validate(id,this.value)" >
+                                                                                             <input type="checkbox" class="check_unsaved"> <span class="error_div_4">Unsaved</span>
+                                                                                          </div>
+                                                                                       </div>
+                                                                                    <div class="col-md-6 padding_left data_row_left_5">
+                                                                                          <div class="form-group">
+                                                                                             <label>Category 5</label>
+                                                                                             <input class="form-control" type="text" name="category_5" id='category_5' onblur="cat_validate(id,this.value)" >
+                                                                                             <input type="checkbox" class="check_unsaved"> <span class="error_div_5">Unsaved</span>
+                                                                                          </div>
+                                                                                       </div>
                                                                                     <div class="col-md-6 padding_right data_row_right_6">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 6</label>
-                                                                                            <input class="form-control text_input" type="text" name="category_6" >
-                                                                                            <input type="checkbox" class="check_unsaved check">                                                                                                        <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                          <div class="form-group">
+                                                                                             <label>Category 6</label>
+                                                                                             <input class="form-control" type="text" name="category_6" id='category_6' onblur="cat_validate(id,this.value)" >
+                                                                                             <input type="checkbox" class="check_unsaved"> <span class="error_div_6">Unsaved</span>
+                                                                                          </div>
+                                                                                       </div>
                                                                                     <input type='hidden' name='cat_count' value=6 />
                                                                            <div class="form-group addmilestone click_buttons">
                                                                             <div class="link-right">
@@ -171,7 +171,7 @@
                                                                                                                         {% if key == "budget" %}
                                     <div class="col-md-12">
                                        <div class="form-group">
-                                        <input type="submit" class="budget_button" value="Save and add SuperCategory">
+                                        <input type="submit" class="budget_button save_categories" id = "" value="Save and add SuperCategory">
                                     {% else %}
                                         <input type="submit" value="Save and add Budget Lineitems" class="budget_button">
                                     {% endif %}
@@ -367,6 +367,38 @@ $(document).ready(function(){
         });
         
 });
+</script>
+<style>
+.isDisabled { cursor: not-allowed; }
+.form-group {
+    height: 107px;
+    margin-bottom: 0px;
+}
+</style>
+<script>
+    function cat_validate(id,name){
+    var value = name;
+    var id = id.split('_')[1];
+    var ids = parseInt(ids);
+    var count = 0;
+    $("form.category_form :input").each(function(){
+    
+     var input_val = $(this).val(); // This is the jquery object of the input, do what you will
+     if (input_val == value && count != 4 && input_val != ''){
+        $('.error_class').hide();
+                            $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already exists</div>');
+        $(".save_categories").attr('disabled', 'disabled');
+                            $(".save_categories").addClass('isDisabled');
+        return false;
+     }
+     else{
+     count++;
+     $('.error_class').hide();
+                            $(".save_categories").attr('disabled', false);
+                            $('.save_categories').removeClass('isDisabled');
+     }
+});
+}
 </script>
 {% endblock %}
 
