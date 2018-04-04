@@ -383,6 +383,33 @@ pre{
 </li>
 {% endif %}
 
+{% if f.update_type == 'utilization_history' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel hide_box">
+        
+            <div class="timeline-body text-justify">
+               <div class="">
+                <div class="image_uploaded">
+                <p style="color:#fff">Updated  <span>the Utilization Amount <br> ₹ {{f.amount}}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#BudgetUtilization</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
 
 
 {% if f.update_type == 'note' %}
