@@ -198,7 +198,7 @@ class Project(BaseContent):
         # this model method is for total task count for project
         from taskmanagement.models import Activity,Task
         project = Project.objects.get(id= self.id)
-        task_count = Task.objects.filter(activity__project= project).count()
+        task_count = Task.objects.filter(active=2,activity__project= project).count()
         return task_count
         
     def tasks_completed(self):
@@ -207,7 +207,7 @@ class Project(BaseContent):
         from datetime import datetime
         completed_tasks = 0
         project = Project.objects.get(id= self.id)
-        task_list = Task.objects.filter(activity__project= project)
+        task_list = Task.objects.filter(active=2,activity__project= project)
         for task in task_list:
             if task.status == 2:
                 completed_tasks = completed_tasks + 1

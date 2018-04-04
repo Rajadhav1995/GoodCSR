@@ -78,7 +78,7 @@ def get_project_updates(request):
 	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
 
 		budget_final_list = get_budget_updates(projectobj,start_date,end_date)
-	if request.GET.get('filter') == 'budget' or request.GET.get('filter') == None:
+	if request.GET.get('filter') == 'utilization' or request.GET.get('filter') == None:
 
 		budget_utilization = get_budget_utilization_updates(projectobj,start_date,end_date)
 

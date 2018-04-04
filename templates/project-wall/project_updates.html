@@ -133,9 +133,11 @@ pre{
         <a {% if filter_key == 'task' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=task" rel="3">Task</a>
         <a {% if filter_key == 'file' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=file" rel="2">Image</a>
         <a {% if filter_key == 'budget' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=budget" rel="3">Budget</a>
+        <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=utilization" rel="1">BudgetUtilization</a>
         <a {% if filter_key == 'note' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=note" rel="1">Notes</a>
         <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="3">Tranches</a>
         <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=timeline" rel="2">TimelineProgress</a>
+
         <a {% if filter_key == 'parameter' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=parameter" rel="2">Parameter</a>
         <a {% if filter_key == None %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
         <!-- <a href="#" rel="1">Report</a> -->
