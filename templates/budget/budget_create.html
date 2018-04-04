@@ -385,10 +385,8 @@ $(document).ready(function(){
     
      var input_val = $(this).val(); // This is the jquery object of the input, do what you will
      if (input_val == value && count != 4 && input_val != ''){
-        debugger;
         $('.error_class').hide();
                             $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already exists</div>');
-                            debugger;
         $(".save_categories").attr('disabled', 'disabled');
                             $(".save_categories").addClass('isDisabled');
         return false;
