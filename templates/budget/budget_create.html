@@ -152,22 +152,22 @@
                       </div>
                       </div>
                       <input type='hidden' name='cat_count' value=6 />
-                      <div class="addmilestone click_buttons">
-                      <div class="link-right">
+                      <div class="addmilestone click_buttons" style="width:auto;float:left">
+                      <div class="link-right"> 
                       <input type="hidden"/>
                       <a href='javascript:void(0);' class="budget_button add_clone">Add more categories</a>
                       </div>
                       <div></div>
                       </div>
                       {% endif %}
-                      <div class="click_buttons">
+                      <div class="click_buttons" style="width:auto;float:right">
                       <div class="link-right">
                       {% if key == "budget" %}
                       <div class="col-md-12">
                       <div class="form-group">
-                      <input type="submit" class="budget_button save_categories" id = "" value="Save and add SuperCategory">
+                      <input type="submit" class="budget_button save_categories1" id = "submitbutton" value="Save and add SuperCategory">
                       {% else %}
-                      <input type="submit" value="Save and add Budget Lineitems" class="budget_button">
+                      <input type="submit" id="submitbutton" value="Save and add Budget Lineitems" class="budget_button save_categories1" onclick="return ddlValidate();">
                       {% endif %}
                       <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}&key=summary'">
                       </div>
@@ -198,6 +198,7 @@
 <script src="/static/js/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="/static/css/jquery.tag-editor.css">
 <!-- <script type="text/javascript" src="/static/js/wizard/jquery.smartWizard.js"></script>-->
+
 <script>
   //Toggle
           
@@ -362,22 +363,21 @@
   
    var input_val = $(this).val(); // This is the jquery object of the input, do what you will
    if (input_val == value && count != 4 && input_val != ''){
-      $('.error_class').hide();
-                          $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already exists</div>');
-      $(".save_categories").attr('disabled', 'disabled');
-                          $(".save_categories").addClass('isDisabled');
+
+                        $('.error_class').hide();
+                        $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already existsss</div>');
+                        $(".save_categories1").attr('disabled', 'disabled');
+                        // $('#submitbutton').attr('disabled','disabled');
+                        $(".save_categories1").addClass('isDisabled');
       return false;
    }
    else{
    count++;
    $('.error_class').hide();
-                          $(".save_categories").attr('disabled', false);
-                          $('.save_categories').removeClass('isDisabled');
+                          $(".save_categories1").attr('disabled', false);
+                          $('.save_categories1').removeClass('isDisabled');
    }
   });
   }
 </script>
 {% endblock %}
-
-
-

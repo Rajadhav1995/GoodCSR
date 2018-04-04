@@ -131,7 +131,7 @@
                               </div>
                            </div>
                            <input type='hidden' name='cat_count' value=6 />
-                           <div class="form-group addmilestone click_buttons">
+                           <div class="addmilestone click_buttons" style="margin-top:0px;width:auto">
                                 <div class="link-right">
                                     <input type="hidden"/>
                                      <a href='javascript:void(0);' class="budget_button add_clone">Add more categories</a>
@@ -150,11 +150,12 @@
                            </div>
                          {% endif %}
                         </div>
+                   <input class="budget_button save_button" type="submit" value="Submit"/>  
+               <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
+               </div>
+              
                      </div>
                   </div>
-               </div>
-               <input class="budget_button save_button" type="submit" value="Submit"/>  
-               <a class="btn btn-success" href="javascript:parent.jQuery.fancybox.close();" style="margin-right:5px;float: right;  padding:3px 15px;">Close</a>
             </form>
             {% endif %}
          </div>
