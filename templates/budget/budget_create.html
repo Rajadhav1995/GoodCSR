@@ -3,206 +3,193 @@
 {% endblock %}
 {% block content %}
 <section class="content-part">
-            <div class = "row">
-                <div class="white-box">
-                    <div class="col-md-12">
-                        <div>
-                            <section class="content">
-                                <div class="">
-                                    <div class="listing-body signup_form_height">
-                                        <div class="box-body">
-                                            <div class="clearfix"></div>
-                                            <div class="">
-                                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                                    <div class="wizard_form">
-                                                        <div id="wizard" class="form_wizard wizard_horizontal">
-                                                            <ul class="wizard_steps nav nav-tabs">
-<!--                                                                <li class="active">-->
-<!--                                                                    <a href="#step-1" data-toggle="tab">-->
-<!--                                                                        <span class="step_no">1</span>-->
-<!--                                                                        <span class="step_descr"> Step 1<br />-->
-<!--                                                    <label class="main-label text-bold">Budget Info</label>-->
-
-<!--                                        </span>-->
-<!--                                                                    </a>-->
-<!--                                                                </li>-->
-
-<!--                                                                <li>-->
-<!--                                                                    <a href="#step-2" data-toggle="tab">-->
-<!--                                                                        <span class="step_no">2</span>-->
-<!--                                                                        <span class="step_descr">Step 2<br />-->
-<!--                                                    <label class="main-label text-bold">Super Categories</label>-->
-
-<!--                                        </span>-->
-<!--                                                                    </a>-->
-<!--                                                                </li>-->
-<!--                                                                <li>-->
-<!--                                                                    <a href="#step-3" data-toggle="tab">-->
-<!--                                                                        <span class="step_no">3</span>-->
-<!--                                                                        <span class="step_descr">Step 3<br />-->
-<!--                                                    <label class="main-label text-bold">Budget Line Items</label>-->
-
-<!--                                        </span>-->
-<!--                                                                    </a>-->
-<!--                                                                </li>-->
-
-                                                            </ul>
-                                                            <div class="tab-content box_shadow">
-                                                            
-                                                                <div id="step-1" class="tab-pane fade in active">
-                                                                   {% if key == 'budget' %}
-                                                                    <div class="col-md-offset-2 col-md-8">
-                                                                       <div class="budget_create">
-                                                                        <h3>Create Budget</h3>
-                                                                        <p>1. Budget Info</p>
-                                                                    </div>
-                                                                        
-
-                        
-                        <form id="ic_form" action="." method = "post" class="budget_form">{% csrf_token %}
+  <div class = "row">
+  <div class="white-box">
+  <div class="col-md-12">
+  <div>
+  <section class="content">
+    <div class="">
+    <div class="listing-body signup_form_height">
+      <div class="box-body">
+        <div class="clearfix"></div>
+        <div class="">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="wizard_form">
+              <div id="wizard" class="form_wizard wizard_horizontal">
+                <ul class="wizard_steps nav nav-tabs">
+                  <!--                                                                <li class="active">-->
+                  <!--                                                                    <a href="#step-1" data-toggle="tab">-->
+                  <!--                                                                        <span class="step_no">1</span>-->
+                  <!--                                                                        <span class="step_descr"> Step 1<br />-->
+                  <!--                                                    <label class="main-label text-bold">Budget Info</label>-->
+                  <!--                                        </span>-->
+                  <!--                                                                    </a>-->
+                  <!--                                                                </li>-->
+                  <!--                                                                <li>-->
+                  <!--                                                                    <a href="#step-2" data-toggle="tab">-->
+                  <!--                                                                        <span class="step_no">2</span>-->
+                  <!--                                                                        <span class="step_descr">Step 2<br />-->
+                  <!--                                                    <label class="main-label text-bold">Super Categories</label>-->
+                  <!--                                        </span>-->
+                  <!--                                                                    </a>-->
+                  <!--                                                                </li>-->
+                  <!--                                                                <li>-->
+                  <!--                                                                    <a href="#step-3" data-toggle="tab">-->
+                  <!--                                                                        <span class="step_no">3</span>-->
+                  <!--                                                                        <span class="step_descr">Step 3<br />-->
+                  <!--                                                    <label class="main-label text-bold">Budget Line Items</label>-->
+                  <!--                                        </span>-->
+                  <!--                                                                    </a>-->
+                  <!--                                                                </li>-->
+                </ul>
+                <div class="tab-content box_shadow">
+                  <div id="step-1" class="tab-pane fade in active">
+                    {% if key == 'budget' %}
+                    <div class="col-md-offset-2 col-md-8">
+                      <div class="budget_create">
+                        <h3>Create Budget</h3>
+                        <p>1. Budget Info</p>
+                      </div>
+                      <form id="ic_form" action="." method = "post" class="budget_form">
+                        {% csrf_token %}
                         <input type="hidden" name="slug" value="{{project_slug}}">
-                    {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
-                    <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
-                                                                            <div class="col-md-8">
-                                                                                <div class=" ">
-                                                                                    <div class="">
-                                                                                        <div class="form-group">
-                                                                                            <label>Project</label>
-                                                                                            <input class = 'form-control' type="text" name="project" value="{{projectobj.name}}" readonly />
-                                                                                        </div>
-                                                                                        <div class="form-group">
-                                                                                            <div class="form-group">
-                                                                                                <label>Start Date</label>
-                                                                                                                        <input type="text" name="actual_start_date" readonly="true" required="" class="form-control" id="id_actual_start_date" value = {{projectobj.start_date|date:"Y-m-d"}} />                           
-								{{ form.actual_start_date.errors }}
-                                <font color=#fc282f><b><span id="dateError1"></span></b></font>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="form-group">
-                                                                                            <div class="form-group">
-                                                                                                <label>End Date</label>
-                                {{ form.end_date }}
-								{{ form.end_date.errors }}
-                                <font color=#fc282f><b><span id="dateError"></span></b></font>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="form-group">
-                                                                                            <label>Budget Duration</label>
-                                                                                            <input class="form-control" type="text" id="id_duration"  readonly /> 
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            
-                                                                            {% else %}
-                                                                                                    <form id="ic_form" action="/manage/project/budget/category/add/?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" class="budget_form">{% csrf_token %}
+                        {% if message %}
+                        <p style="color:red"><b>{{message}}</b></p>
+                        {% endif %}
+                        <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
+                        <div class="col-md-8">
+                          <div class=" ">
+                            <div class="">
+                              <div class="form-group">
+                                <label>Project</label>
+                                <input class = 'form-control' type="text" name="project" value="{{projectobj.name}}" readonly />
+                              </div>
+                              <div class="form-group">
+                                <div class="form-group">
+                                  <label>Start Date</label>
+                                  <input type="text" name="actual_start_date" readonly="true" required="" class="form-control" id="id_actual_start_date" value = {{projectobj.start_date|date:"Y-m-d"}} />                           
+                                  {{ form.actual_start_date.errors }}
+                                  <font color=#fc282f><b><span id="dateError1"></span></b></font>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="form-group">
+                                  <label>End Date</label>
+                                  {{ form.end_date }}
+                                  {{ form.end_date.errors }}
+                                  <font color=#fc282f><b><span id="dateError"></span></b></font>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label>Budget Duration</label>
+                                <input class="form-control" type="text" id="id_duration"  readonly /> 
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% else %}
+                      <form id="ic_form" action="/manage/project/budget/category/add/?slug={{project_slug}}&budget_id={{budget_id}}" method = "post" class="budget_form category_form">
+                        {% csrf_token %}
                         <input type="hidden" name="slug" value="{{project_slug}}">
                         <input type="hidden" name="budget_id" value="{{budget_id}}">
-                    {% if message %}<p style="color:red"><b>{{message}}</b></p>{% endif %}
-                                        <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
-                                                                                                                                             <div class="col-md-offset-2 col-md-8">
-                                                                   <div class="budget_create">
-                                                                        <h3>Create Budget</h3>
-                                                                        <p>2. Super Categories</p>
-                                                                    </div>
-                                                                    <form class="budget_form super_categories">
-                                                                        <div class="col-md-12 ">
-                                                                            <div class=" ">
-                                                                                <div class=" ">
-                                                                                    <div class="form-group">
-                                                                                        <label>Super Categories Label</label>
-                                                                                        <input class="form-control" type="text" name="super-category" required>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_left data_row_left_1">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 1</label>
-                                                                                           <input class="form-control" type="text" name="category_1"  required />
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                        <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_right data_row_right_2">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 2</label>
-                                                                                            <input class="form-control" type="text" name="category_2"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_left">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 3</label>
-                                                                                            <input class="form-control" type="text" name="category_3"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                    <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_right">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 4</label>
-                                                                                            <input class="form-control" type="text" name="category_4"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                            <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_left data_row_left_6">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 5</label>
-                                                                                            <input class="form-control" type="text" name="category_5"  >
-                                                                                            <input type="checkbox" class="check_unsaved">                                                                                                <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-6 padding_right data_row_right_6">
-                                                                                        <div class="form-group">
-                                                                                            <label>Category 6</label>
-                                                                                            <input class="form-control text_input" type="text" name="category_6" >
-                                                                                            <input type="checkbox" class="check_unsaved check">                                                                                                        <span>Unsaved</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <input type='hidden' name='cat_count' value=6 />
-                                                                           <div class="form-group addmilestone click_buttons">
-                                                                            <div class="link-right">
-                                                                                <input type="hidden"/>
-                                                                            <a href='javascript:void(0);' class="budget_button add_clone">Add more categories</a>
-                                                                            </div>
-                                                                            <div></div>
-                                                                            
-                                                                          </div>
-                                                                            {% endif %}
-
-                                                                            <div class="click_buttons">
-                                                                                <div class="link-right">
-                                                                                                                        {% if key == "budget" %}
-                                    <div class="col-md-12">
-                                       <div class="form-group">
-                                        <input type="submit" class="budget_button" value="Save and add SuperCategory">
-                                    {% else %}
-                                        <input type="submit" value="Save and add Budget Lineitems" class="budget_button">
-                                    {% endif %}
-                                        <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}&key=summary'">
-                                        </div>
-                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </section>
-
-                        </div>
-
+                        {% if message %}
+                        <p style="color:red"><b>{{message}}</b></p>
+                        {% endif %}
+                        <small>Note: Fields marked with Asterisk (<span class="required" style="color:red">*</span>) are mandatory</small></br></br>
+                        <div class="col-md-offset-2 col-md-8">
+                          <div class="budget_create">
+                            <h3>Create Budget</h3>
+                            <p>2. Super Categories</p>
+                          </div>
+                      <form class="budget_form super_categories">
+                      <div class="col-md-12 ">
+                      <div class=" ">
+                      <div class=" ">
+                      <div class="form-group">
+                      <label>Super Categories Label</label>
+                      <input class="form-control" type="text" name="super-category" required>
+                      </div>
+                      <div class="col-md-6 padding_left data_row_left_1">
+                      <div class="form-group">
+                      <label>Category 1</label>
+                      <input class="form-control" type="text" name="category_1" id='category_1' onblur="cat_validate(id,this.value)" required />
+                      <input type="checkbox" class="check_unsaved"> <span class="error_div_1">Unsaved</span>
+                      </div>
+                      </div>
+                      <div class="col-md-6 padding_right data_row_right_2">
+                      <div class="form-group">
+                      <label>Category 2</label>
+                      <input class="form-control" type="text" name="category_2" id='category_2' onblur="cat_validate(id,this.value)" >
+                      <input type="checkbox"class="check_unsaved"><span class="error_div_2">Unsaved</span>
+                      </div>
+                      </div>
+                      <div class="col-md-6 padding_left data_row_left_3">
+                      <div class="form-group">
+                      <label>Category 3</label>
+                      <input class="form-control" type="text" name="category_3" id='category_3' onblur="cat_validate(id,this.value)" >
+                      <input type="checkbox" class="check_unsaved"><span class="error_div_3">Unsaved</span>
+                      </div>
+                      </div>
+                      <div class="col-md-6 padding_right data_row_right_4">
+                      <div class="form-group">
+                      <label>Category 4</label>
+                      <input class="form-control" type="text" name="category_4" id='category_4' onblur="cat_validate(id,this.value)" >
+                      <input type="checkbox" class="check_unsaved"> <span class="error_div_4">Unsaved</span>
+                      </div>
+                      </div>
+                      <div class="col-md-6 padding_left data_row_left_5">
+                      <div class="form-group">
+                      <label>Category 5</label>
+                      <input class="form-control" type="text" name="category_5" id='category_5' onblur="cat_validate(id,this.value)" >
+                      <input type="checkbox" class="check_unsaved"> <span class="error_div_5">Unsaved</span>
+                      </div>
+                      </div>
+                      <div class="col-md-6 padding_right data_row_right_6">
+                      <div class="form-group">
+                      <label>Category 6</label>
+                      <input class="form-control" type="text" name="category_6" id='category_6' onblur="cat_validate(id,this.value)" >
+                      <input type="checkbox" class="check_unsaved"> <span class="error_div_6">Unsaved</span>
+                      </div>
+                      </div>
+                      <input type='hidden' name='cat_count' value=6 />
+                      <div class="addmilestone click_buttons" style="width:auto;float:left">
+                      <div class="link-right"> 
+                      <input type="hidden"/>
+                      <a href='javascript:void(0);' class="budget_button add_clone">Add more categories</a>
+                      </div>
+                      <div></div>
+                      </div>
+                      {% endif %}
+                      <div class="click_buttons" style="width:auto;float:right">
+                      <div class="link-right">
+                      {% if key == "budget" %}
+                      <div class="col-md-12">
+                      <div class="form-group">
+                      <input type="submit" class="budget_button save_categories1" id = "submitbutton" value="Save and add SuperCategory">
+                      {% else %}
+                      <input type="submit" id="submitbutton" value="Save and add Budget Lineitems" class="budget_button save_categories1" onclick="return ddlValidate();">
+                      {% endif %}
+                      <input class="btn btn-primary" style="margin-right:5px;float: right;" type="button" value="Cancel" onClick="parent.location='/project/summary/?slug={{project_slug}}&key=summary'">
+                      </div>
+                      </div>
+                      </div>
+                      </div>
+                      </form>
+                      </div>
+                      </div>
+                      </div>
+                      </div>
                     </div>
-      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  </section>
+  </div>
+  </div>
+  </div>
 </section>
-
-
-
 <script src="/static/js/jquery-migrate-1.0.0.js"></script>
 <script src="/static/js/jquery.validate.min.js"></script>
 <script src="/static/js/jquery-ui.js"></script>
@@ -213,32 +200,31 @@
 <!-- <script type="text/javascript" src="/static/js/wizard/jquery.smartWizard.js"></script>-->
 
 <script>
-//Toggle
-        
-         $('.user-menu').on('click',function(){
-          $('.dropdown-menu').slideToggle();
+  //Toggle
           
-        });
-         $(document).ready(function(e) {    
-    /*Content Show/Hide */
-    $('.hide-cont').hide();
-    $('.close-cont').hide();
-    $('.view-cont').click(function(){
-        $('.hide-cont').slideDown(350);
-        $('.close-cont').show();
-        $('.view-cont').hide();
-    });
-    $('.close-cont').click(function(){
-        $('.hide-cont').slideUp(350);
-        $('.close-cont').hide();
-        $('.view-cont').show();
-    }); 
- });
-    
+           $('.user-menu').on('click',function(){
+            $('.dropdown-menu').slideToggle();
+            
+          });
+           $(document).ready(function(e) {    
+      /*Content Show/Hide */
+      $('.hide-cont').hide();
+      $('.close-cont').hide();
+      $('.view-cont').click(function(){
+          $('.hide-cont').slideDown(350);
+          $('.close-cont').show();
+          $('.view-cont').hide();
+      });
+      $('.close-cont').click(function(){
+          $('.hide-cont').slideUp(350);
+          $('.close-cont').hide();
+          $('.view-cont').show();
+      }); 
+   });
+      
 </script>
-
 <style>
-.error{color:red; min-width: 200px;}
+  .error{color:red; min-width: 200px;}
 </style>
 <script>
   $( function() {
@@ -248,66 +234,59 @@
     $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd', changeMonth: true,changeYear: true});
   } );
 </script>
-
-    <script type="text/javascript">
-        var expanded = false;
-
-        function showCheckboxes() {
-            var checkboxes = document.getElementById("checkboxes");
-            if (!expanded) {
-                checkboxes.style.display = "block";
-                expanded = true;
-            } else {
-                checkboxes.style.display = "none";
-                expanded = false;
-            }
-        }
-    </script>
-
 <script type="text/javascript">
-    $(document).ready(function(){
-
-        $.validator.addMethod("endDate", function(value, element) {
-            var startDate = $('#id_actual_start_date').val();
-            aa = startDate.split("-")
-            aab = [aa[2], aa[1], aa[0]]
-            sd = aab.join("-")
-            bb = value.split("-")
-            bbb = [bb[2], bb[1], bb[0]]
-            ed = bbb.join("-") 
-            return Date.parse(sd) <= Date.parse(ed) || value == "";
-        }, "* End date must be after start date");
-        
-        $("#ic_form").validate({
-            rules :
-            {
-                actual_start_date : {required:true},
-                end_date : {required:true},
-            },
-            messages:
-            {
-                actual_start_date : {required : "Please Choose the Start Date"},
-                end_date : {required:"Please Choose the End Date"},
-            },
-    
-            highlight: function (element) {
-                $(element).parent().addClass('error')
-            },
-            unhighlight: function (element) {
-                $(element).parent().removeClass('error')
-            },
-        });
-        });
-        
+  var expanded = false;
+  
+  function showCheckboxes() {
+      var checkboxes = document.getElementById("checkboxes");
+      if (!expanded) {
+          checkboxes.style.display = "block";
+          expanded = true;
+      } else {
+          checkboxes.style.display = "none";
+          expanded = false;
+      }
+  }
 </script>
-
-
-
+<script type="text/javascript">
+  $(document).ready(function(){
+  
+      $.validator.addMethod("endDate", function(value, element) {
+          var startDate = $('#id_actual_start_date').val();
+          aa = startDate.split("-")
+          aab = [aa[2], aa[1], aa[0]]
+          sd = aab.join("-")
+          bb = value.split("-")
+          bbb = [bb[2], bb[1], bb[0]]
+          ed = bbb.join("-") 
+          return Date.parse(sd) <= Date.parse(ed) || value == "";
+      }, "* End date must be after start date");
+      
+      $("#ic_form").validate({
+          rules :
+          {
+              actual_start_date : {required:true},
+              end_date : {required:true},
+          },
+          messages:
+          {
+              actual_start_date : {required : "Please Choose the Start Date"},
+              end_date : {required:"Please Choose the End Date"},
+          },
+  
+          highlight: function (element) {
+              $(element).parent().addClass('error')
+          },
+          unhighlight: function (element) {
+              $(element).parent().removeClass('error')
+          },
+      });
+      });
+      
+</script>
 <style>
-.error{color:red; min-width: 200px;}
+  .error{color:red; min-width: 200px;}
 </style>
-
-
 <script>
   $("#id_end_date").datepicker({
     dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true,
@@ -323,50 +302,82 @@
             document.getElementById('dateError').innerHTML=""
             document.getElementById('dateError1').innerHTML=""
         };
-
+  
         var months = (end.getFullYear() - start.getFullYear()) * 12;
         months += end.getMonth() - start.getMonth();
         document.getElementById("id_duration").value = months;
     }
-
-});
+  
+  });
   
 </script>
-
 <script >
-$(document).ready(function(){
-    
-        $('.add_clone').click(function(){
-             count = parseInt($('input[name^=cat_count]').val());
-             new_count = parseInt(count)+1;
-                var $newDiv = $('.data_row_right_2'+':last').clone();
-            
-            $($newDiv).find('label,input').each(function(){
-                
-                $(this).text('Category '+new_count);
-                $(this).attr('name','category_'+new_count);
-                $(this).val('');
-                
-            });
-            if(count%2 == 0){
-                $($newDiv).insertAfter('.data_row_right_'+count+':last');
-                
-                $newDiv.removeClass().addClass('col-md-6 padding_left data_row_left_'+new_count);
-            }
-            else{
-                $($newDiv).insertAfter('.data_row_left_'+count+':last');
-                
-                $newDiv.removeClass().addClass('col-md-6 padding_right data_row_right_'+new_count);
-            }
-            
-                $('input[name^=cat_count]').val(new_count);
-                
-                //$(this).attr('class', 'add_clone_' + new_count);
-            
-            
-        });
-        
-});
+  $(document).ready(function(){
+      
+          $('.add_clone').click(function(){
+               count = parseInt($('input[name^=cat_count]').val());
+               new_count = parseInt(count)+1;
+                  var $newDiv = $('.data_row_right_2'+':last').clone();
+              
+              $($newDiv).find('label,input').each(function(){
+                  
+                  $(this).text('Category '+new_count);
+                  $(this).attr('name','category_'+new_count);
+                  $(this).val('');
+                  
+              });
+              if(count%2 == 0){
+                  $($newDiv).insertAfter('.data_row_right_'+count+':last');
+                  
+                  $newDiv.removeClass().addClass('col-md-6 padding_left data_row_left_'+new_count);
+              }
+              else{
+                  $($newDiv).insertAfter('.data_row_left_'+count+':last');
+                  
+                  $newDiv.removeClass().addClass('col-md-6 padding_right data_row_right_'+new_count);
+              }
+              
+                  $('input[name^=cat_count]').val(new_count);
+                  
+                  //$(this).attr('class', 'add_clone_' + new_count);
+              
+              
+          });
+          
+  });
+</script>
+<style>
+  .isDisabled { cursor: not-allowed; }
+  .form-group {
+  height: 107px;
+  margin-bottom: 0px;
+  }
+</style>
+<script>
+  function cat_validate(id,name){
+  var value = name;
+  var id = id.split('_')[1];
+  var ids = parseInt(ids);
+  var count = 0;
+  $("form.category_form :input").each(function(){
+  
+   var input_val = $(this).val(); // This is the jquery object of the input, do what you will
+   if (input_val == value && count != 4 && input_val != ''){
+
+                        $('.error_class').hide();
+                        $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already existsss</div>');
+                        $(".save_categories1").attr('disabled', 'disabled');
+                        // $('#submitbutton').attr('disabled','disabled');
+                        $(".save_categories1").addClass('isDisabled');
+      return false;
+   }
+   else{
+   count++;
+   $('.error_class').hide();
+                          $(".save_categories1").attr('disabled', false);
+                          $('.save_categories1').removeClass('isDisabled');
+   }
+  });
+  }
 </script>
 {% endblock %}
-

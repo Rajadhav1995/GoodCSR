@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from .views import *
 from .forms import *
+from .manage_task import *
 
 # URLS for Task management
 # 
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'supercategories/selected/$',get_super_selected),
     url(r'activities/selected/$',get_activity_selected),
     url(r'^activity/related/tasks/$',get_activity_tasks),
+    url(r'^task/remove/$',remove_task),
 #    url(r'^tasks/maximum/end_date/$',tasks_max_end_date),
     
 #    url(r'^tasks/updates/(?P<obj_id>.*)/$',taskdateupdates),

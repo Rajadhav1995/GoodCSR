@@ -133,9 +133,11 @@ pre{
         <a {% if filter_key == 'task' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=task" rel="3">Task</a>
         <a {% if filter_key == 'file' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=file" rel="2">Image</a>
         <a {% if filter_key == 'budget' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=budget" rel="3">Budget</a>
+        <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=utilization" rel="1">BudgetUtilization</a>
         <a {% if filter_key == 'note' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=note" rel="1">Notes</a>
         <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="3">Tranches</a>
         <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=timeline" rel="2">TimelineProgress</a>
+
         <a {% if filter_key == 'parameter' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=parameter" rel="2">Parameter</a>
         <a {% if filter_key == None %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
         <!-- <a href="#" rel="1">Report</a> -->
@@ -154,7 +156,7 @@ pre{
       <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Create Note</button></a>
     </div>
 
-    <!-- <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
+    <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
       {% csrf_token %}
     <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
@@ -169,7 +171,7 @@ pre{
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
     </div>
-    </form> -->
+    </form>
 </div>
 {{request.GET.date}}
 {% if final_data %}
@@ -399,7 +401,7 @@ pre{
             <div class="timeline-body text-justify">
                <div class="">
                 <div class="image_uploaded">
-                <p style="color:#fff">Updated  <span>the Utilization Amount <br> ₹ {{f.amount}}</span></p>
+                <p style="color:#fff">Updated  <span>the Utilization Amount ₹ {{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
                     <div class="progress_time"><a href="#"><p>#BudgetUtilization</p></a></div>
                 </div>

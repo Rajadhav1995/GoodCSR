@@ -39,10 +39,10 @@ def listing(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
-    activity_list = Activity.objects.filter(project = project).order_by('-id')
+    activity_list = Activity.objects.filter(active=2,project = project).order_by('-id')
     
-    task_list = Task.objects.filter(activity__project=project).order_by('-id')
-    milestone = Milestone.objects.filter(project=project).order_by('-id')
+    task_list = Task.objects.filter(active=2,activity__project=project).order_by('-id')
+    milestone = Milestone.objects.filter(active=2,project=project).order_by('-id')
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
     status = get_assigned_users(user,project)
     import json
@@ -244,7 +244,7 @@ def milestone_overdue(request):
     # the max end date of the tasks tagged to the milestone
     # 
     task_ids = request.GET.get('id')
-    tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
+    tasks_obj = Task.objects.filter(active=2,id__in = eval(task_ids)).values_list('end_date',flat = True)
     try:
         milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     except:
@@ -259,8 +259,8 @@ def total_tasks_completed(slug):
     total_tasks = completed_tasks=total_milestones = 0
     milestones = []
     project = Project.objects.get_or_none(slug = slug)
-    milestones= Milestone.objects.filter(project = project)
-    tasks = Task.objects.filter(activity__project = project)
+    milestones= Milestone.objects.filter(active=2,project = project)
+    tasks = Task.objects.filter(active=2,activity__project = project)
     total_tasks = tasks.count()
     for t in tasks:
         if t.status == 2:
@@ -280,10 +280,10 @@ def my_tasks_listing(project,user,status):
     # 
     today = datetime.today().date()
     if status == '0':
-        task_list = Task.objects.filter(assigned_to=user)
+        task_list = Task.objects.filter(active=2,assigned_to=user)
         tasks_list =task_list.filter(start_date__lt = today).exclude(status=2).order_by('-start_date')
     else:
-        tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).exclude(status=2).order_by('-start_date')
+        tasks_list = Task.objects.filter(active=2,activity__project = project,start_date__lt = today).exclude(status=2).order_by('-start_date')
     return tasks_list
     
 def get_project_updates(project,uploads):
@@ -316,7 +316,7 @@ def updates(obj_list):
     for project in obj_list:
         project = Project.objects.get_or_none(id = int(project.id))
         uploads = get_project_updates(project,uploads)
-        task_list = Task.objects.filter(activity__project = project)
+        task_list = Task.objects.filter(active=2,activity__project = project)
         for task in task_list:
             attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
             for attach in attach_list:
@@ -433,11 +433,11 @@ def my_tasks_details(request):
         tasks_today = project.get_todays_tasks(today,user,status)
         tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
         tasks_remain = project.get_remaining_tasks(remain_days,user,status)
-        closed_tasks = Task.objects.filter(status=2,activity__project__id=project.id).order_by('-id')
+        closed_tasks = Task.objects.filter(active=2,status=2,activity__project__id=project.id).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
-        task_activities = Task.objects.filter(id__in=task_ids)
+        task_activities = Task.objects.filter(active=2,id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
         category_list = [{'id':i.activity.super_category.id,
                               'name':i.activity.super_category.name} for i in task_activities]
@@ -702,7 +702,7 @@ def get_descendants(task):
     # this funtion is to get descendants
     # 
     descendants = Task.objects.filter(task_dependency=task.id)
-    ret_descendants = Task.objects.filter(
+    ret_descendants = Task.objects.filter(active=2,
         task_dependency=task.id)
     for descendant in descendants.all():
         ret_descendants = (
@@ -726,7 +726,7 @@ def get_ancestors(task):
 
 def related_tasks(project_id, i_task=None, activity=None, milestone=None):
     # 
-    tasks = Task.objects.filter(activity__project=project_id)
+    tasks = Task.objects.filter(active=2,activity__project=project_id)
     task = Task.objects.get(pk=i_task)
     if (task is None):
         return tasks
@@ -762,9 +762,9 @@ class GanttChartData(APIView):
         status = request.data.get('status')
         if start_date and end_date:
             # this is to get gant chart in  the report form according to the quarters
-            tasks = Task.objects.filter(activity__project=i_project_id,actual_start_date__gte=start_date,actual_end_date__lte=end_date)
+            tasks = Task.objects.filter(active=2,activity__project=i_project_id,actual_start_date__gte=start_date,actual_end_date__lte=end_date)
             if not tasks:
-                tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date)
+                tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date,active=2)
             activities = Activity.objects.filter(id__in=[i.activity.id for i in tasks])
             milestones = Milestone.objects.filter(task__id__in=[i.id for i in tasks])
             projects = Project.objects.filter(id=i_project_id)
@@ -792,7 +792,7 @@ class GanttChartData(APIView):
             supercategories = SuperCategory.objects.exclude(parent=None)
         else:
             # this to get the gantt chart in the summary and tasks and milestone page
-            tasks = Task.objects.filter(activity__project=i_project_id)
+            tasks = Task.objects.filter(active=2,activity__project=i_project_id)
             activities = Activity.objects.filter(project=i_project_id)
             milestones = Milestone.objects.filter(project=i_project_id)
             projects = Project.objects.filter(id=i_project_id)
@@ -873,7 +873,7 @@ def get_activity_selected(request):
     # this funtion is to get selected activity
     # 
     ids = request.GET.get('id')
-    obj_list = Task.objects.filter(id__in = eval(ids))
+    obj_list = Task.objects.filter(active=2,id__in = eval(ids))
     activity = [i.activity.id for i in obj_list]
     return JsonResponse({"activity":activity})
 
@@ -881,7 +881,7 @@ def get_assigned_users(user,project):
     # this funtion is to get assigned users
     # 
     project_obj = Project.objects.filter(created_by=user)
-    tasks = Task.objects.filter(activity__project = project,assigned_to = user)
+    tasks = Task.objects.filter(active=2,activity__project = project,assigned_to = user)
     if project_obj and tasks:
         assigned = "2"
     elif tasks:
@@ -895,7 +895,7 @@ def get_activity_tasks(request):
     # this funtion is to get activity tasks
     ids = request.GET.get('id')
     obj_list = Activity.objects.filter(id__in = eval(ids)).values_list('id',flat=True)
-    task_list = Task.objects.filter(activity__id__in = obj_list)
+    task_list = Task.objects.filter(active=2,activity__id__in = obj_list)
     tasks = [{'id':i.id,'name':i.name} for i in task_list]
     return JsonResponse({"task":tasks})
 
@@ -904,7 +904,7 @@ def tasks_max_end_date(request):
     # this funtion is to get maximum date of task and end date of task
     # 
     ids = request.GET.get('id')
-    tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)
+    tasks_end_dates = Task.objects.filter(active=2,id__in = eval(ids)).values_list('end_date',flat=True)
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})
 
