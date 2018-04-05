@@ -156,7 +156,7 @@ pre{
       <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; " id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Create Note</button></a>
     </div>
 
-    <!-- <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
+    <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
       {% csrf_token %}
     <div style="float:right;position: relative;left: -60px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
@@ -171,7 +171,7 @@ pre{
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
     </div>
-    </form> -->
+    </form>
 </div>
 {{request.GET.date}}
 {% if final_data %}

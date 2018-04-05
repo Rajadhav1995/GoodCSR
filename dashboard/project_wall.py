@@ -297,15 +297,19 @@ def get_budget_utilization_updates(projectobj,start_date,end_date):
 			new_var = int(k.modified.strftime("%Y%m%d%H%M"))
 			
 			if int(new_var) != int(temp_var) and k.utilized_unit_cost != None:
-				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.utilized_unit_cost,'modified_by':get_modified_by_user(k.modified_by),'utilized_amount':k.utilized_unit_cost}
+				quarter_ = get_project_quarter(k.start_date,k.end_date)
+				data = 	{'date':k.modified.strftime("%Y-%m-%d-%H-%M"),'amount':k.utilized_unit_cost,
+				'modified_by':get_modified_by_user(k.modified_by),'utilized_amount':k.utilized_unit_cost,
+					'quarter':quarter_}
 				budget_data_list.append(data)
 			temp_var = new_var
 	result = defaultdict(float)
-	
 	items = defaultdict(list)
+	quarter_ = defaultdict(list)
 	for idx,d in enumerate(budget_data_list):
 		result[d['date']] += float(d['amount']) if d['amount'] else float(0)
 		items[d['date']].append(d['amount'])
+		quarter_[d['date']].append(d['quarter'])
 	budget_final_dict = [{'date': name, 'amount': int(value)} for name, value in result.items()]
 	count_budget_list = [{'date': name, 'count': len(value)} for name, value in items.items()]
 	
@@ -320,6 +324,8 @@ def get_budget_utilization_updates(projectobj,start_date,end_date):
 			budgetlist.append(data)
 	return budgetlist
 
+def get_project_quarter(start_date,end_date):
+	return start_date.month//4 + 1
 
 def create_note(request):
 	# this function is to create note in project wall page
