@@ -337,6 +337,7 @@ def upload_parameter(request):
     # This function is to add values to key parameter which 
     # are added by admin (parameters number is dynamic)
     # 
+    # import ipdb; ipdb.set_trace()
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
@@ -379,6 +380,19 @@ def upload_parameter(request):
                                 start_date=date,end_date=end_date,submit_date=submit_date)
             add_modified_by_user(obj,request)
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %parameter.project.slug)
+    return render(request,'project/key_parameter.html',locals())
+
+def edit_parameter_values(request):
+    # edit_value
+    ids =  request.GET.get('id')
+    # import ipdb; ipdb.set_trace()
+    month_name = request.GET.get('month').split(' ')[0]
+    strptime(month_name,'%B').tm_mon
+    parameter = ProjectParameter.objects.get(id=ids)
+    key_parameter = ProjectParameter.objects.filter(active= 2,parent=parameter)
+    key_parameter_list = [i.id for i in key_parameter]
+    key_parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list)
+
     return render(request,'project/key_parameter.html',locals())
 
 def manage_parameter(request):
@@ -451,7 +465,7 @@ def manage_parameter_values(request):
                 data = []
                 obj = parameter_value.filter(start_date__month=k,start_date__year=l)
                 if obj.exists():
-                    month_name = calendar.month_name[k] +' "'+ str(l)
+                    month_name = calendar.month_name[k] +' '+ str(l)
                     data.append(month_name)
                     [ data.append(int(u.parameter_value)) for u in obj]
                 master_data.append(data)

@@ -286,7 +286,7 @@ def get_budget_updates(projectobj,start_date,end_date):
 def get_budget_utilization_updates(projectobj,start_date,end_date):
 	budgetlist = []
 	budget_conf_list = list(ProjectBudgetPeriodConf.objects.filter(project=projectobj,active=2).values_list('id',flat=True))
-	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2,created__range=[start_date,end_date]).exclude(planned_unit_cost="")
+	budget_period = BudgetPeriodUnit.objects.filter(budget_period__id__in=budget_conf_list,active=2).exclude(planned_unit_cost="")
 	line_item_amount_list = list(budget_period.values_list('utilized_unit_cost',flat=True))
 	# line_total = sum(map(float,line_item_amount_list))
 	budget_count = budget_period.count()
