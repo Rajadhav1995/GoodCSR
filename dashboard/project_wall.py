@@ -34,10 +34,10 @@ def get_date_range(request,projectobj):
 		start_date = projectobj.created
 		# start_date = datetime.combine(start_date, datetime.min.time())
 	if request.POST.get('to'):
-		end_date = datetime.strptime(request.POST.get('to'),"%m/%d/%Y")
+		end_date = datetime.strptime(request.POST.get('to'),"%m/%d/%Y") + timedelta(days=1)
 	else:
 		end_date = datetime.now() + timedelta(days=1)
-	# import ipdb; ipdb.set_trace()
+	
 	return start_date,end_date
 
 
