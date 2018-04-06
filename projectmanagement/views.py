@@ -337,7 +337,7 @@ def upload_parameter(request):
     # This function is to add values to key parameter which 
     # are added by admin (parameters number is dynamic)
     # 
-    # import ipdb; ipdb.set_trace()
+    
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
     parameter = ProjectParameter.objects.get(id=ids)
@@ -385,14 +385,23 @@ def upload_parameter(request):
 def edit_parameter_values(request):
     # edit_value
     ids =  request.GET.get('id')
-    # import ipdb; ipdb.set_trace()
-    month_name = request.GET.get('month').split(' ')[0]
-    strptime(month_name,'%B').tm_mon
+    date1 = request.GET.get('month')
+    date = request.GET.get('month').split(' ')
+    month_no = strptime(date[0],'%B').tm_mon
+    year = int(date[1])
+    start_date=str(year)+str(month_no)
+    date_obj = datetime.datetime.strptime(start_date, "%Y%m")
     parameter = ProjectParameter.objects.get(id=ids)
     key_parameter = ProjectParameter.objects.filter(active= 2,parent=parameter)
     key_parameter_list = [i.id for i in key_parameter]
-    key_parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list)
-
+    key_parameter_value = list(ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list,start_date=date_obj))
+    main_para = zip(key_parameter,key_parameter_value)
+    if request.method == 'POST':
+        for i in key_parameter_value:
+            parameter_obj = ProjectParameterValue.objects.get(id=i.id)
+            parameter_obj.parameter_value = request.POST.get(str(i.id))
+            parameter_obj.save()
+        return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
     return render(request,'project/key_parameter.html',locals())
 
 def manage_parameter(request):
@@ -455,6 +464,7 @@ def manage_parameter_values(request):
     end = project.end_date.year
     parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=parameter).order_by('id')
     names = ProjectParameter.objects.filter(active= 2,parent=parameter)
+    # import ipdb; ipdb.set_trace()
     title_list = []
     title_list.append('Month')
     import calendar

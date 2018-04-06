@@ -31,7 +31,11 @@ width:450px;
             <!-- /.box-header -->
             <div class="box-body">
             
+            {% if date %}
+            <form autocomplete="off" id="prog_edit" action="/project/parameter/value/edit/?id={{ids}}&month={{date1}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            {% else %}
             <form autocomplete="off" id="prog_edit" action="/project/upload/parameter/value/?id={{ids}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            {% endif %}
             
             {% csrf_token %}
 
@@ -42,7 +46,11 @@ width:450px;
                                     <label>Select Year<font color="red">*</font></label>
                                     <div>
                                 <select class='form-control' id='gYear' name='year' onchange="configureDropDownLists(this)">
+                                    {% if date %}
+                                    <option selected value='{{date.1}}'>{{date.1}}</option>
+                                    {% else %}
                                 <option value='0'>--Select Year--</option>
+                                {% endif %}
                                 </select>
                                 <p style="color: red;">
                                     
@@ -58,9 +66,15 @@ width:450px;
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                    <label>Select Month<font color="red">*</font></label>
+                                        
+                                        <label>Select Month<font color="red">*</font></label>                                       
                                     <div>
+                                        {% if date %}
+                                        <select title="Please select year first" class='form-control' id="ddl2" name="month">
+                                        <option selected value='{{date.0}}'>{{date.0}}</option></select>
+                                        {% else %}
                                 <select title="Please select year first" class='form-control' id="ddl2" name="month"></select>
+                                {% endif %}
                                 <p style="color: red;">
                                     
                                 
@@ -96,19 +110,36 @@ width:450px;
 
                         </div>
                         {% endif %} -->
-                        {% for i in key_parameter %}
+                        {% if date %}
+                        
+                        {% for i,j in main_para %}
                         <div class="row">
                                     <div class="col-md-6 nopadding">
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>{{i.name}} <font color="red">*</font></label>
-                                            <input class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}" maxlength="8" required><br>
+                                            <input value="{{j.parameter_value}}" class="form-control" type="number" name="{{j.id}}" id="value{{i.id}}" maxlength="8" required><br>
                                             {% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                         {% endfor %}
+                        {% else %}
+                        {% for i in key_parameter %}
+                        <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>{{i.name}} <font color="red">*</font></label>
+                                            <input value="23" class="form-control" type="number" name="value[{{i.id}}]" id="value{{i.id}}" maxlength="8" required><br>
+                                            {% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% endfor %}
+                        {% endif %}
                         <div class="col-md-12">
                             <div class="form-group">
                         <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
