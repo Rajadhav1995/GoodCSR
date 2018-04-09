@@ -11,7 +11,7 @@ from projectmanagement.forms import *
 from budgetmanagement.forms import get_tranche_form,TrancheForms
 from budgetmanagement.models import (Tranche,ProjectReport,Budget,
                                     ProjectBudgetPeriodConf,BudgetPeriodUnit)
-from media.models import Attachment,Keywords,FileKeywords,ProjectLocation
+from media.models import Attachment,Keywords,FileKeywords,ProjectLocation,Comment
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -185,6 +185,8 @@ def budget_tranche(request):
         tranche_id =  request.GET.get('tranche_id')
         obj = Tranche.objects.get_or_none(id=tranche_id)
         form = TrancheForms(instance = obj)
+        comment = Comment.objects.get(content_type = ContentType.objects.get(model='tranche'),object_id=obj.id)
+        # import ipdb; ipdb.set_trace()
     except:
         pass
     user_id = request.session.get('user_id')
@@ -208,6 +210,8 @@ def budget_tranche(request):
             obj.recommended_by = UserProfile.objects.get(id=request.POST.get('recommended_by'))
             add_modified_by_user(obj,request)
             obj.save()
+
+            Comment.objects.create(active=2,content_type = ContentType.objects.get(model='tranche'),object_id=obj.id,text=request.POST.get('comment'))
             budgetobj = Budget.objects.latest_one(project = project,active=2)
             final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
             auto_update_tranche_amount(final_budget_utilizedamount,project)
@@ -340,6 +344,7 @@ def upload_parameter(request):
     
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
+    import ipdb; ipdb.set_trace()
     parameter = ProjectParameter.objects.get(id=ids)
     project = parameter.project
     strt = project.start_date.year
@@ -376,6 +381,7 @@ def upload_parameter(request):
                                 start_date=date,end_date=end_date,submit_date=submit_date)
             add_modified_by_user(create_parameter_values,request)
         else:
+            import ipdb; ipdb.set_trace()
             obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
             add_modified_by_user(obj,request)
@@ -492,7 +498,7 @@ def manage_parameter_values(request):
         obj = ProjectParameterValue.objects.filter(keyparameter=parameter)
         data = []
         for j in obj:
-            month = calendar.month_name[j.start_date.month] + ' "' + str(j.start_date.year)
+            month = calendar.month_name[j.start_date.month] + ' ' + str(j.start_date.year)
             value = j.parameter_value
             master_data.append([month,value])
     [title_list.append(str(i.name)) for i in names]

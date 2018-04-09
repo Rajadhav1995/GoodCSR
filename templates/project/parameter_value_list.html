@@ -46,6 +46,7 @@
             <tr>
                 <th>Month</th>
                 <th>{{parameter.name}}</th>
+                <th></th>
             </tr>
         </thead>
         
@@ -53,7 +54,9 @@
         <tr>
             
             <b><td>{{i.0}}</td></b>
-            <td>{{i.1}}</td>           
+            <td>{{i.1}}</td>
+            <td><a class="budget_button" href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}"><i class="fa fa-edit"></i> Edit</button></a>
+            <a href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}&key=1" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a></td>
             </td>
         </tr>{% endfor %}
         {% endif %}
