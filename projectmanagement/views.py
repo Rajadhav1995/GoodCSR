@@ -396,6 +396,14 @@ def edit_parameter_values(request):
     key_parameter_list = [i.id for i in key_parameter]
     key_parameter_value = list(ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list,start_date=date_obj))
     main_para = zip(key_parameter,key_parameter_value)
+    # import ipdb; ipdb.set_trace()
+    if request.GET.get('key') == '1':
+        for i in key_parameter_value:
+            i.switch()
+        parent_parameter=ProjectParameterValue.objects.get(keyparameter=parameter,start_date=date_obj)
+        parent_parameter.active=0
+        parent_parameter.save()
+        return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
     if request.method == 'POST':
         for i in key_parameter_value:
             parameter_obj = ProjectParameterValue.objects.get(id=i.id)

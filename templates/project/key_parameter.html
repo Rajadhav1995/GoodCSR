@@ -70,7 +70,7 @@ width:450px;
                                         <label>Select Month<font color="red">*</font></label>                                       
                                     <div>
                                         {% if date %}
-                                        <select title="Please select year first" class='form-control' id="ddl2" name="month">
+                                        <select title="Please select year first" class='form-control' id="ddl21" name="month">
                                         <option selected value='{{date.0}}'>{{date.0}}</option></select>
                                         {% else %}
                                 <select title="Please select year first" class='form-control' id="ddl2" name="month"></select>
@@ -160,6 +160,14 @@ width:450px;
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+<script>
+{% if date %}
+$("#gYear").prop("disabled", true);
+$("#ddl21").prop("disabled", true);
+{% endif %}
+</script>
+
 <script type="text/javascript">
 $('#ddl2').prop('disabled', true);
 $('#month_div').hide()
