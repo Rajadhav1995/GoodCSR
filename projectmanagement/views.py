@@ -337,6 +337,7 @@ def edit_parameter(request):
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parent_obj.project.slug)
     return render(request,'project/edit_key_parameter.html',locals())
 
+import calendar
 def upload_parameter(request):
     # This function is to add values to key parameter which 
     # are added by admin (parameters number is dynamic)
@@ -344,7 +345,7 @@ def upload_parameter(request):
     
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
-    import ipdb; ipdb.set_trace()
+    
     parameter = ProjectParameter.objects.get(id=ids)
     project = parameter.project
     strt = project.start_date.year
@@ -357,7 +358,10 @@ def upload_parameter(request):
     end_date = parameter.project.end_date
     month = ['January','February','March','April','May','June','July','August','September','October','November','December']
     month_id = [1,2,3,4,5,6,7,8,9,10,11,12]
+    parameter_month = ProjectParameterValue.objects.filter(active=2,keyparameter=parameter)
+    parameter_value_month = [calendar.month_name[i.start_date.month] for i in parameter_month]
     month_zip = zip(month,month_id)
+    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         month = request.POST.get('month')
         year = int(request.POST.get('year'))
@@ -373,7 +377,7 @@ def upload_parameter(request):
             for i in key_parameter:
                 value = 'value['+str(i.id)+']'
                 parameter_value_list.append(int(request.POST.get(value)))
-                obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value),\
+                obj = ProjectParameterValue.objects.create(active=2, keyparameter=i,parameter_value=request.POST.get(value),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
                 add_modified_by_user(obj,request)
             parameter_value_list = sum(parameter_value_list)
@@ -381,7 +385,6 @@ def upload_parameter(request):
                                 start_date=date,end_date=end_date,submit_date=submit_date)
             add_modified_by_user(create_parameter_values,request)
         else:
-            import ipdb; ipdb.set_trace()
             obj = ProjectParameterValue.objects.create(keyparameter=parameter,parameter_value=request.POST.get('value'),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
             add_modified_by_user(obj,request)
@@ -398,23 +401,27 @@ def edit_parameter_values(request):
     start_date=str(year)+str(month_no)
     date_obj = datetime.datetime.strptime(start_date, "%Y%m")
     parameter = ProjectParameter.objects.get(id=ids)
+    single_parameter = ProjectParameterValue.objects.get(active= 2,keyparameter=parameter,start_date=date_obj)
     key_parameter = ProjectParameter.objects.filter(active= 2,parent=parameter)
     key_parameter_list = [i.id for i in key_parameter]
     key_parameter_value = list(ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list,start_date=date_obj))
     main_para = zip(key_parameter,key_parameter_value)
-    # import ipdb; ipdb.set_trace()
     if request.GET.get('key') == '1':
         for i in key_parameter_value:
             i.switch()
-        parent_parameter=ProjectParameterValue.objects.get(keyparameter=parameter,start_date=date_obj)
+        parent_parameter=ProjectParameterValue.objects.get(active=2,keyparameter=parameter,start_date=date_obj)
         parent_parameter.active=0
         parent_parameter.save()
         return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
     if request.method == 'POST':
-        for i in key_parameter_value:
-            parameter_obj = ProjectParameterValue.objects.get(id=i.id)
-            parameter_obj.parameter_value = request.POST.get(str(i.id))
-            parameter_obj.save()
+        if key_parameter_value != []:
+            for i in key_parameter_value:
+                parameter_obj = ProjectParameterValue.objects.get(actve=2,id=i.id)
+                parameter_obj.parameter_value = request.POST.get(str(i.id))
+                parameter_obj.save()
+        else:
+            single_parameter.parameter_value = request.POST.get('value')
+            single_parameter.save()
         return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
     return render(request,'project/key_parameter.html',locals())
 
@@ -495,7 +502,7 @@ def manage_parameter_values(request):
                 master_data.append(data)
             master_data = filter(None, master_data)
     else:
-        obj = ProjectParameterValue.objects.filter(keyparameter=parameter)
+        obj = ProjectParameterValue.objects.filter(active=2,keyparameter=parameter)
         data = []
         for j in obj:
             month = calendar.month_name[j.start_date.month] + ' ' + str(j.start_date.year)

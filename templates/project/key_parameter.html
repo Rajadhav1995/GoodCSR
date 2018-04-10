@@ -91,7 +91,7 @@ width:450px;
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>{{parameter.name}} <font color="red">*</font></label>
-                                            <input class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>
+                                            <input value='{{single_parameter.parameter_value}}' class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>
                                             </div><font color="green">{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}</font>
                                         </div>
                                     </div>
@@ -126,6 +126,7 @@ width:450px;
                                 </div>
                         {% endfor %}
                         {% else %}
+                        
                         {% for i in key_parameter %}
                         <div class="row">
                                     <div class="col-md-6 nopadding">
@@ -206,6 +207,8 @@ var index;
 var start=0;
 var end;
 var master_list;
+var month_validate = {{parameter_value_month | safe}};
+console.log(month_validate);
 var master_list1 = [];
 var index = arr.indexOf("January");
 for (i=0; i < year.length; i++) {
@@ -215,6 +218,7 @@ for (i=0; i < year.length; i++) {
     index += 12
     master_list1[i] = first_list
 }
+debugger;
  function configureDropDownLists (type){
     $("#ddl2 option").remove();
     $('#ddl2').removeAttr("title");
