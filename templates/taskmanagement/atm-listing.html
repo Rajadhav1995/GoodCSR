@@ -59,11 +59,12 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')"></i> <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i>
+               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')" title="filter"></i> 
                 {% get_user_permission request as user_obj %}
-                {% is_pmo_user user_obj as pmo_user %}
-                    {% if pmo_user == True %}
-                <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}')"></i>{% endif %}
+                    {% pmo_role request as pmo_access %}
+                    {% if user_obj.is_admin_user == True or pmo_access == 1 %}
+                <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')" title="edit"></i>
+                <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}')" title="remove"></i>{% endif %}
                </span>
 
 <!--               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>-->
@@ -95,11 +96,13 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
-                  <li><a href="javascript:void(0);" task_id={{task.id}} activity_id={{task.activity.id}} category_id={{task.activity.super_category.id}}>{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')"></i>
+                  <li><a href="javascript:void(0);" task_id={{task.id}} activity_id={{task.activity.id}} category_id={{task.activity.super_category.id}}>{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}
                     {% get_user_permission request as user_obj %}
-                    {% is_pmo_user user_obj as pmo_user %}
-                    {% if pmo_user == True %}
-                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}')"></i>{% endif %}
+                    {% pmo_role request as pmo_access %}
+                    {% if user_obj.is_admin_user == True or pmo_access == 1 %}
+                    <i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')" title="edit"></i>
+                    
+                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}')" title="remove"></i>{% endif %}
                   </span>
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
@@ -128,11 +131,15 @@
                   {% if milestone %}
                   {% for mile in milestone %}
                   
-                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')"></i><i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}
+                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')" title="filter"></i>
                     {% get_user_permission request as user_obj %}
-                    {% is_pmo_user user_obj as pmo_user %}
-                    {% if pmo_user == True %}
-                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}')"></i>{% endif %}
+                    {% pmo_role request as pmo_access %}
+                    {% if user_obj.is_admin_user == True or pmo_access == 1 %}
+                    <i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')" title="edit"></i>{% endif %}
+                    
+                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}')" title="remove"></i>
+                    
+                    {% endif %}
                   </span>
 <!--                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>-->
 
@@ -564,7 +571,7 @@ $(document).ready(function(){
       function ganttRedo() {
         var previous = null;
         var p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 = null;
-        var mile = false;
+        var mile = fadelse;
         $(".gtaskbarcontainer").each(function (index) {
           currParent = $(this).parent().parent().parent();
           listParent = currParent.attr('id').replace('row', '');
@@ -1324,6 +1331,10 @@ g.highcharts-button.highcharts-contextbutton.highcharts-button-normal {
     background: #169776;
     color: #fff !important;
 }
+.green-content i.fa {
+    margin: 0px 3px;}
+    .hover_text{display: none;}
+    .fa-remove:before:hover.hover_text{display: block;}
 </style>
 {% endblock %}
 

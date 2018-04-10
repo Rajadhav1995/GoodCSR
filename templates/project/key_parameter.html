@@ -31,7 +31,11 @@ width:450px;
             <!-- /.box-header -->
             <div class="box-body">
             
+            {% if date %}
+            <form autocomplete="off" id="prog_edit" action="/project/parameter/value/edit/?id={{ids}}&month={{date1}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            {% else %}
             <form autocomplete="off" id="prog_edit" action="/project/upload/parameter/value/?id={{ids}}" class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
+            {% endif %}
             
             {% csrf_token %}
 
@@ -42,7 +46,11 @@ width:450px;
                                     <label>Select Year<font color="red">*</font></label>
                                     <div>
                                 <select class='form-control' id='gYear' name='year' onchange="configureDropDownLists(this)">
+                                    {% if date %}
+                                    <option selected value='{{date.1}}'>{{date.1}}</option>
+                                    {% else %}
                                 <option value='0'>--Select Year--</option>
+                                {% endif %}
                                 </select>
                                 <p style="color: red;">
                                     
@@ -58,9 +66,15 @@ width:450px;
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                    <label>Select Month<font color="red">*</font></label>
+                                        
+                                        <label>Select Month<font color="red">*</font></label>                                       
                                     <div>
+                                        {% if date %}
+                                        <select title="Please select year first" class='form-control' id="ddl21" name="month">
+                                        <option selected value='{{date.0}}'>{{date.0}}</option></select>
+                                        {% else %}
                                 <select title="Please select year first" class='form-control' id="ddl2" name="month"></select>
+                                {% endif %}
                                 <p style="color: red;">
                                     
                                 
@@ -77,7 +91,7 @@ width:450px;
                                         <div class="col-md-12">
                                             <div class="form-group">
                                             <label>{{parameter.name}} <font color="red">*</font></label>
-                                            <input class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>
+                                            <input value='{{single_parameter.parameter_value}}' class="form-control" type="number" name="value" id="value{{parameter.id}}" required=True>
                                             </div><font color="green">{% if parameter.instructions %}{{parameter.instructions}}{% else %}{% endif %}</font>
                                         </div>
                                     </div>
@@ -96,6 +110,23 @@ width:450px;
 
                         </div>
                         {% endif %} -->
+                        {% if date %}
+                        
+                        {% for i,j in main_para %}
+                        <div class="row">
+                                    <div class="col-md-6 nopadding">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                            <label>{{i.name}} <font color="red">*</font></label>
+                                            <input value="{{j.parameter_value}}" class="form-control" type="number" name="{{j.id}}" id="value{{i.id}}" maxlength="8" required><br>
+                                            {% if i.instructions %}{{i.instructions}}{% else %}{% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% endfor %}
+                        {% else %}
+                        
                         {% for i in key_parameter %}
                         <div class="row">
                                     <div class="col-md-6 nopadding">
@@ -109,6 +140,7 @@ width:450px;
                                     </div>
                                 </div>
                         {% endfor %}
+                        {% endif %}
                         <div class="col-md-12">
                             <div class="form-group">
                         <input class="budget_button" type="submit" value="Save" onclick="return ddlValidate();" />
@@ -129,6 +161,14 @@ width:450px;
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.js"></script>
 <link rel="stylesheet" href="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.tag-editor.css">
+
+<script>
+{% if date %}
+$("#gYear").prop("disabled", true);
+$("#ddl21").prop("disabled", true);
+{% endif %}
+</script>
+
 <script type="text/javascript">
 $('#ddl2').prop('disabled', true);
 $('#month_div').hide()
@@ -167,6 +207,8 @@ var index;
 var start=0;
 var end;
 var master_list;
+var month_validate = {{parameter_value_month | safe}};
+console.log(month_validate);
 var master_list1 = [];
 var index = arr.indexOf("January");
 for (i=0; i < year.length; i++) {
@@ -176,6 +218,7 @@ for (i=0; i < year.length; i++) {
     index += 12
     master_list1[i] = first_list
 }
+debugger;
  function configureDropDownLists (type){
     $("#ddl2 option").remove();
     $('#ddl2').removeAttr("title");
