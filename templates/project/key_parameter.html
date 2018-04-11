@@ -176,6 +176,7 @@ var monthNames = [ "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December" ];
 var arr = [];
 var year = []
+var rem = []
 var month_no = Number({{start_date.month}});
 var datFrom = new Date({{start_date.year}}, {{start_date.month}}, {{start_date.day}});
 if (month_no==12) {
@@ -208,6 +209,7 @@ var start=0;
 var end;
 var master_list;
 var month_validate = {{parameter_value_month | safe}};
+var month_validate1 = {{parameter_value_month | safe}};
 console.log(month_validate);
 var master_list1 = [];
 var index = arr.indexOf("January");
@@ -216,9 +218,28 @@ for (i=0; i < year.length; i++) {
     first_list = arr.slice(start,index)
     start=index;
     index += 12
-    master_list1[i] = first_list
+    
+    // alert(first_list);
+    Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
+    };
+    first_list2 = first_list.diff( month_validate );
+    first_list3 = first_list2
+    // debugger;
+    // var rem = []
+    // rem = first_list.diff(first_list3)
+    // for (i=0; i < rem.length; i++) {
+    //     var removeItem = rem[i]
+    //     month_validate.splice( $.inArray(removeItem,month_validate) ,1 );
+    // }
+    // // month_validate.splice( $.inArray(rem,month_validate) ,1 );
+    // alert(first_list2);
+    master_list1[i] = first_list2
+    
 }
-debugger;
+// alert(master_list1);
+// master_list1 = master_list1.filter(function(n){ return n != undefined });
+// if (master_list1[1] == undefined){i=0;console.log("aditya")};
  function configureDropDownLists (type){
     $("#ddl2 option").remove();
     $('#ddl2').removeAttr("title");
@@ -230,6 +251,8 @@ debugger;
    if (selected_year == year[i]) {
     
     rrr = master_list1[i]
+    // alert(master_list1);
+    // debugger;
     for (i = 0; i < rrr.length; i++) {
                 createOption(ddl2, rrr[i], rrr[i]);
             }
