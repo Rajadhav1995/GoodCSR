@@ -109,10 +109,11 @@
                       <label>Super Categories Label</label>
                       <input class="form-control" type="text" name="super-category" required>
                       </div>
+                      <div class="super_form">
                       <div class="col-md-6 padding_left data_row_left_1">
                       <div class="form-group">
                       <label>Category 1</label>
-                      <input class="form-control" type="text" name="category_1" id='category_1' onblur="cat_validate(id,this.value)" required />
+                      <input class="form-control" type="text" name="category_1" id='category_1' required />
                       <input type="checkbox" class="check_unsaved"> <span class="error_div_1">Unsaved</span>
                       </div>
                       </div>
@@ -158,6 +159,7 @@
                       <a href='javascript:void(0);' class="budget_button add_clone">Add more categories</a>
                       </div>
                       <div></div>
+                      </div>
                       </div>
                       {% endif %}
                       <div class="click_buttons" style="width:auto;float:right">
@@ -323,8 +325,14 @@
                   
                   $(this).text('Category '+new_count);
                   $(this).attr('name','category_'+new_count);
+                  $(this).attr('id','category_'+new_count);
                   $(this).val('');
                   
+              });
+              $($newDiv).find('span').each(function(){
+                  
+                  $(this).attr('class','error_div_'+new_count);
+                  $(this).attr('id','category_'+new_count);
               });
               if(count%2 == 0){
                   $($newDiv).insertAfter('.data_row_right_'+count+':last');
@@ -355,29 +363,41 @@
 </style>
 <script>
   function cat_validate(id,name){
+  
   var value = name;
   var id = id.split('_')[1];
   var ids = parseInt(ids);
   var count = 0;
-  $("form.category_form :input").each(function(){
+  var arr = new Array();
+  if (value !=''){
+  $(".super_form :input").each(function(){
   
-   var input_val = $(this).val(); // This is the jquery object of the input, do what you will
-   if (input_val == value && count != 4 && input_val != ''){
-
-                        $('.error_class').hide();
-                        $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already existsss</div>');
-                        $(".save_categories1").attr('disabled', 'disabled');
-                        // $('#submitbutton').attr('disabled','disabled');
-                        $(".save_categories1").addClass('isDisabled');
-      return false;
+   var input_val = $(this).val();
+    // This is the jquery object of the input, do what you will
+   if(input_val !='on' && input_val !=''){
+   arr.push(input_val);
    }
-   else{
-   count++;
-   $('.error_class').hide();
-                          $(".save_categories1").attr('disabled', false);
-                          $('.save_categories1').removeClass('isDisabled');
+   var results = [];
+    for (var i = 0; i < arr.length - 1; i++) {
+        for (var j=i+1; j<= arr.length ;j++){
+            if (arr[i] == arr[j]) {
+                arr.pop();              
+                    $('.error_class').hide();
+                            $('.error_div_'+id).after('<div class="error_class" style="color:red;font:3px;">This category name already exists</div>');
+                            $(".save_categories1").attr('disabled', 'disabled');
+                            // $('#submitbutton').attr('disabled','disabled');
+                            $(".save_categories1").addClass('isDisabled');
+          return false;
+       }
+       else{
+       $('.error_class').hide();
+                              $(".save_categories1").attr('disabled', false);
+                              $('.save_categories1').removeClass('isDisabled');
+       }
+   }
    }
   });
+  }
   }
 </script>
 {% endblock %}
