@@ -355,6 +355,7 @@ def upload_parameter(request):
     key_parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list)
     existing_month = [k.start_date.month for k in key_parameter_value]
     start_date = parameter.project.start_date
+    
     end_date = parameter.project.end_date
     month = ['January','February','March','April','May','June','July','August','September','October','November','December']
     month_id = [1,2,3,4,5,6,7,8,9,10,11,12]
