@@ -417,7 +417,7 @@ def edit_parameter_values(request):
     if request.method == 'POST':
         if key_parameter_value != []:
             for i in key_parameter_value:
-                parameter_obj = ProjectParameterValue.objects.get(actve=2,id=i.id)
+                parameter_obj = ProjectParameterValue.objects.get(active=2,id=i.id)
                 parameter_obj.parameter_value = request.POST.get(str(i.id))
                 parameter_obj.save()
         else:

@@ -82,10 +82,11 @@ width:450px;
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                                    <label>Name</label>
+                                    <label>Parameter Title</label>
                                 <input class="form-control" type="text" name="name" id="name" placeholder="Parameter Name" required>
                                 <br>
-                                <b><input class="form-control" type="text" name="instruction" id="name" placeholder="Instruction" required></b>
+                                <label>Instruction for User</label>
+                                <b><input class="form-control" type="text" name="instruction" id="inst1" placeholder="Instruction" required></b>
                             </div>
                                     </div>
                                 </div>
@@ -97,8 +98,8 @@ width:450px;
                     <div class="form-group">
                         <div class="input_fields_wrap">
                             <button class="add_field_button">Add More</button>
-                            <div><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name" required>
-                                <b><input class="form-control" type="text" name="instruction[1]" id="name" placeholder="Instruction" required></b>
+                            <div><label>Parameter Title</label><input class="form-control" value="{{i.name}}" type="text" name="name[1]" placeholder="Parameter Name" required>
+                                <b><label>Instruction</label><input class="form-control" type="text" name="instruction[1]" id="name" placeholder="Instruction" required></b>
                             </div>
                         </div>
                         </div>
@@ -180,7 +181,7 @@ $(document).ready(function() {
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
             // $(wrapper).append('<div><input type="text" name="location['+x+']"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            $(wrapper).append('<div><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/ required><b><input class="form-control" type="text" name="instruction['+x+']" id="name" placeholder="Instruction" required></b><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><label>Parameter Title</label><input class="form-control" placeholder="Parameter Name" type="text" name="name['+x+']"/ required><b><label>Instruction</label><input class="form-control" type="text" name="instruction['+x+']" id="name" placeholder="Instruction" required></b><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
         document.getElementById("activity_count").value = x;
 
