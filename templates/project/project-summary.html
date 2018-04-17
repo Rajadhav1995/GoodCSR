@@ -595,7 +595,7 @@ under 0 Milestones</h5>
                 {% get_user_permission request as user_obj %}
                 {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-edit" title="Edit" style="color: #429576;"></i></a><!-- <a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-remove" style="float:right; padding-right: 13px; padding-top: 2px;" title="remove"></i></a> -->
+            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-edit" title="Edit" style="color: #429576;padding-right: 26px;"></i></a><!-- <a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-remove" style="float:right; padding-right: 13px; padding-top: 2px;" title="remove"></i></a> -->
               <!-- <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')" title="edit"></i> --></td>{% endif %}
       </tr>
       {% endif %}
@@ -608,7 +608,7 @@ under 0 Milestones</h5>
             <td style="width:19%;">Funder
                 {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=1"><i class="fa fa-edit" title="Edit" style="color: #429576;"></i></a><!-- <a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-remove" style="float:right; padding-right: 13px; padding-top: 2px;" title="remove"></i></a> --></td>{% endif %}
+            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=1"><i class="fa fa-edit" title="Edit" style="color: #429576; padding-right: 26px;"></i></a><!-- <a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-remove" style="float:right; padding-right: 13px; padding-top: 2px;" title="remove"></i></a> --></td>{% endif %}
       </tr>
       {% endif %}
 
@@ -1301,8 +1301,8 @@ Highcharts.chart(values, {
             legend: {
                 enabled: true,
                 layout: 'horizontal',
-                align: 'left',
-                width: 400,
+                align: 'center',
+                width: 200,
                 verticalAlign: 'bottom',
                 useHTML: true,
                 labelFormatter: function() {

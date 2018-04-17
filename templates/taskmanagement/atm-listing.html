@@ -59,12 +59,12 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')" title="filter"></i> 
+               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 2px;" onclick="filter(this,this.parentNode.parentNode,'activity')" title="Filter"></i> 
                 {% get_user_permission request as user_obj %}
                     {% pmo_role request as pmo_access %}
                     {% if user_obj.is_admin_user == True or pmo_access == 1 %}
-                <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')" title="edit"></i>
-                <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}')" title="remove"></i>{% endif %}
+                <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')" title="Edit Activity"></i>
+                <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}')" title="Remove Activity"></i>{% endif %}
                </span>
 
 <!--               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>-->
@@ -100,9 +100,9 @@
                     {% get_user_permission request as user_obj %}
                     {% pmo_role request as pmo_access %}
                     {% if user_obj.is_admin_user == True or pmo_access == 1 %}
-                    <i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')" title="edit"></i>
+                    <i class="fa fa-edit" style="float:right; padding-left: 2px;" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')" title="Edit Task"></i>
                     
-                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}')" title="remove"></i>{% endif %}
+                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}')" title="Remove Task"></i>{% endif %}
                   </span>
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
@@ -131,13 +131,13 @@
                   {% if milestone %}
                   {% for mile in milestone %}
                   
-                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')" title="filter"></i>
+                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 2px;" onclick="filter(this,this.parentNode.parentNode,'milestone')" title="Filter"></i>
                     {% get_user_permission request as user_obj %}
                     {% pmo_role request as pmo_access %}
                     {% if user_obj.is_admin_user == True or pmo_access == 1 %}
-                    <i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')" title="edit"></i>{% endif %}
+                    <i class="fa fa-edit" style="float:right; padding-left: 2px;" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')" title="Edit Milestone"></i>{% endif %}
                     
-                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}')" title="remove"></i>
+                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}')" title="Remove Milestone"></i>
                     
                     {% endif %}
                   </span>

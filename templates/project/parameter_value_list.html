@@ -13,8 +13,8 @@
     </div>
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
-        <h3>Parameter Uploaded Values for {{parameter.name}}</h3>
-        <div style="float: right;"><a style="margin:0px 5px" class="budget_button" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key=2">Back</a><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}">Upload Values</a></div>
+        <h3>Values added for parameter: {{parameter.name}}</h3>
+        <div style="float: right;"><a style="margin:0px 5px" class="budget_button" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key=2">Back</a><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}"> <b>+</b> New Value</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
             
         {% if parameter_value %}
