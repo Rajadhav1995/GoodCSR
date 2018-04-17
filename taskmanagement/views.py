@@ -526,6 +526,7 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
+        progress= request.POST.get('tea1')
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -552,6 +553,7 @@ def task_comments(request):
             # added to get the task updates done by particular user saved in modified_by 
             add_modified_by_user(comment,request)
             comment.save()
+            create_task_progress(request,task)
         # added to get the task updates done by particular user saved in modified_by 
         add_modified_by_user(task,request)
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
