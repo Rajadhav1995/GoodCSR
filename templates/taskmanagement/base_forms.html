@@ -134,6 +134,7 @@ function showCheckboxes() {
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   
 <script>
+    
     $(document).ready(function() {
         $( "#id_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true});
         $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
@@ -311,14 +312,13 @@ $(document).ready(function() {
             data:{id:select_id},
             dataType:"json",
             success:function(data){
+                var date = data.project_start_date.split('-');
+                var new_date = new Date(date[0],date[1] -1,date[2]);
                 if (data.project_start_date != ""){
                     document.getElementById("id_start_date").value = data.project_start_date;
-                    var date = data.project_start_date
-                    $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date,changeMonth: true,changeYear: true });
+                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new_date,changeMonth: true,changeYear: true });
                  }
-                else{
-                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-                    }
+                
 
             },
             error : function(){}
@@ -330,7 +330,6 @@ $(document).ready(function() {
 </script>
 
 <script>
-///managing/tasks/expected-date/caluclator/
     $(document).ready(function() {
     if ('{{model_name}}' == 'Task'){
     
@@ -377,14 +376,11 @@ $('#id_task_dependency').on('change',function(e){
             dataType:"json",
             success:function(data){
             if (data.calculation != ""){
-                document.getElementById("id_start_date").value = data.calculation;
-                var date = data.calculation
-                $("#id_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
+                var date = data.calculation.split('-');
+                var new_date = new Date(date[0], date[1] -1,date[2]);
+                    new_date.setDate(new_date.getDate());
+                $( "#id_start_date" ).datepicker("option", "minDate", new_date);
              }
-            else {
-                $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true });
-                }
-                
             },
             error : function(){}
         });
@@ -403,7 +399,12 @@ $(document).ready(function() {
     if ($("id_start_date").val()!=''){
               var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
               document.getElementById("id_start_date").value = start_date
+              var date = start_date.split('-')
+              var new_date = new Date(date[0], date[1] -1,date[2]);
+                    new_date.setDate(new_date.getDate());
+                $( "#id_start_date" ).datepicker("option", "minDate", new_date);
           }
+    
     if ($("id_end_date").val()!=''){
               var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
               document.getElementById("id_end_date").value = start_date

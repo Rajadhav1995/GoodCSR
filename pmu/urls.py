@@ -26,7 +26,7 @@ from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
                                             budgetview,year_quarter_list,
                                             budgetlineitemedit,month_quarter_list,
                                             category_listing,category_add,
-                                            delete_category,)
+                                            delete_category,category_name_validate)
 from userprofile.views import *
 import userprofile
 from django.conf.urls import handler404, handler500
@@ -53,6 +53,7 @@ roles_patterns = ([
     url(r'^project/budget/category/listing/$',category_listing),
     url(r'^project/budget/add/category/$',category_add),
     url(r'^project/budget/category/delete/$',delete_category),
+    url(r'project/category/exists/$',category_name_validate),
 
 ])
 

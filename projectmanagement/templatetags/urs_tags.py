@@ -61,9 +61,17 @@ def get_user_permission_pmo(request):
 @register.assignment_tag
 def get_funder(projectobj):
     # this template tag is used to get funder relation
-    funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
+    if projectobj == '':
+        funderobj = None
+    else:
+        funderobj = ProjectFunderRelation.objects.get_or_none(project = projectobj)
     return funderobj
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def userprojectlist(user_obj):
     # this template tag is used to get project list as per user
     if user_obj.is_admin_user == True:
@@ -89,7 +97,7 @@ def get_user_project(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(user_obj)
-    project_count = obj_list.count()
+
     return obj_list
 
 @register.assignment_tag
@@ -120,6 +128,11 @@ def get_quarter_details(row,quarter,projectobj):
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def get_month_quarter_details(row,v,quarter,projectobj):
     # this template tag is used to get budget lineitems details
@@ -164,13 +177,13 @@ def get_utlizedline_total(row,projectobj):
 @register.assignment_tag
 def get_org_logo(projectobj):
     # this template tag is used to get ogrganozation logo
+    # import ipdb; ipdb.set_trace()
     funderobj = get_funder(projectobj)
     data = {'company_name':str(funderobj.funder.organization) if funderobj else '',
             'ngo_name':str(funderobj.implementation_partner.organization if funderobj else '')}
     ''' calling function to return the company logo based on the project'''
     companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
     validation_data = json.loads(companyobj.content)
-    front_image = validation_data.get('organization_logo')
     org_logo = validation_data.get('front_image')
     ngo_logo = validation_data.get('ngo_image')
     return org_logo,ngo_logo
@@ -196,6 +209,11 @@ def diff_month(d1, d2):
         duration = duration + 1
     return duration
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def get_duration_month(date):
     # this template tag is used to get duration by date range
@@ -218,8 +236,6 @@ def get_parameter(obj,block_id):
     main_list =[]
     master_list = []
     master_names = []
-    pie_chart = ''
-    single_parameter = 0
     report_para = []
     if answer_obj:
         report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
@@ -229,23 +245,18 @@ def get_parameter(obj,block_id):
                 main_list = pie_chart_mainlist_report(i.keyparameter,obj.start_date,obj.end_date)
                 master_list.append(main_list)
                 master_names.append(i.keyparameter.name)
-                if i.keyparameter.parameter_type == 'NUM' or i.keyparameter.parameter_type == 'CUR':
-                    pie_chart = 0
-                else:
-                    pie_chart = 1
     return report_para
 
 @register.assignment_tag
 def get_parameter_values(obj,para_obj):
 
-    # this template tag is used to get json data for parameter pie chart 
+    # this template tag is used to get json 
+    # data for parameter pie chart 
     main_list =[]
     master_list = []
     master_names = []
     parameter_type = ''
     numeric_parameter_value = 0
-    report_para = []
-
     from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
     if para_obj.keyparameter:
         main_list = pie_chart_mainlist_report(para_obj.keyparameter,obj.start_date,obj.end_date)
@@ -269,10 +280,10 @@ import locale
 import re
 @register.filter
 def currency(value):
-    # this template tag is to convert number into currency format 
+    # this template tag is to convert 
+    # number into currency format 
     if value == '':
         value = 0
-    loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
     value = float('{:.2f}'.format(float(value)))
     if value <= 99999.99:
         value = re.sub(u'\u20b9', ' ', locale.currency(value, grouping=True).decode('utf-8')).strip()
@@ -296,10 +307,15 @@ def get_budget_detail(block,quarter):
         budget_detail = answer_obj.text
     return budget_detail
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def get_about_parameter(quarter,obj,block):
-    # template tag to get parameter detail quarter wise in report detail page
-    about_parameter = ''
+    # template tag to get parameter detail 
+    # quarter wise in report detail page
     question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
     report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
@@ -309,7 +325,8 @@ def get_about_parameter(quarter,obj,block):
 
 @register.assignment_tag
 def get_about_quarter(quarter,obj,block):
-    # this template tag we are using to get quarter details in report detai page
+    # this template tag we are using to get quarter
+    # details in report detai page
     answer_obj = ''
     about_quarter = ''
     question = Question.objects.get_or_none(slug='about-the-quarter',block__order=block)
@@ -373,10 +390,14 @@ def get_currency(amount):
         amount_type = group_amount[-2:]
         if int(amount_type) == 0:
             group_amount = group_amount[:-3]
-        else:
-            group_amount = group_amount
+        
     return group_amount
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.filter
 def get_ordinal_number(number):
     #  this filter will return ordinal number
@@ -429,7 +450,6 @@ def get_index_page_number(quarter):
         page_obj.save()
     lista.append(13)
     page_obj = Answer.objects.get(text__iexact='index_count')
-    page_number = page_obj.object_id
     page_obj.object_id = 1
     function_count = int(page_obj.inline_answer)
     page_obj.inline_answer = function_count
@@ -438,6 +458,11 @@ def get_index_page_number(quarter):
 
     return lista[function_count]
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @register.filter
 def location_split(value, sep = "."):
     # this filter is to separate location
@@ -450,7 +475,6 @@ def is_ceo_user(request):
     user_id = request.session.get('user_id')
     user_obj = UserProfile.objects.get_or_none(user_reference_id = int(user_id ))
     ceo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 5)
-    admin_user = user_obj.is_admin_user
     if ceo_user:
         status = 0
     else:
@@ -495,7 +519,6 @@ def pmo_role(request):
     project = Project.objects.get_or_none(slug=request.GET.get('slug'))
     pmo_user = ProjectUserRoleRelationship.objects.get_or_none(active=2,project=project,role=3,user=user_obj)
     pmo_user_list = ProjectUserRoleRelationship.objects.filter(active=2,role=3,user=user_obj)
-    # import ipdb; ipdb.set_trace()
     if pmo_user:
         option = 1
     else:
@@ -515,3 +538,23 @@ def get_line_attach(line_itemobj):
     except:
         attach = None
     return attach_dict
+
+@register.assignment_tag
+def is_pmo_user(user_obj):
+    pmo_user = ProjectUserRoleRelationship.objects.filter(user = user_obj,role__code = 3)
+    if pmo_user:
+        status = True
+    else:
+        status = False
+    return status
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

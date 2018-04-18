@@ -18,9 +18,9 @@
             	<h3>Budget</h3>
                  <div id="total_budget" style="width: 100%;float: left;"></div>
                 <ul>
-                	<li><span class="yellow-circle"></span> Planned <span class="right-li">₹ {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">₹ {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost}} {% else %} 0 {% endif %} </span></li>
-                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}₹  {{projectobj.project_budget_details.utilized_cost}} {% else %} ₹ 0 {% endif %} </span></li>
+                	<li><span class="yellow-circle"></span> Planned <span class="right-li">₹ {% if projectobj.project_budget_details.planned_cost %} {{projectobj.project_budget_details.planned_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="light-green-circle"></span> Disbursed <span class="right-li">₹ {% if projectobj.project_budget_details.disbursed_cost %} {{projectobj.project_budget_details.disbursed_cost | get_currency}} {% else %} 0 {% endif %} </span></li>
+                    <li><span class="green-circle"></span> Utilized <span class="right-li"> {% if projectobj.project_budget_details.utilized_cost %}₹  {{projectobj.project_budget_details.utilized_cost | get_currency}} {% else %} ₹ 0 {% endif %} </span></li>
                 </ul>
             </div>
             <div class="budget-right-pad">
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="right-budget">
-        	<h3>Budget by Location</h3>
+        	<h3>Budget by Super Category</h3>
             <div id="Budget_location" style="width: 100%;float: left;"></div>
             <!--  <ul>
                 <li><span class="yellow-circle"></span> Nabarangpur</li>
@@ -170,9 +170,12 @@
 
         
     <div class="link-right">
-            {% with "report-utilization"|make_string:"add" as keystring %}
-        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
 
+    
+        <a href="/manage/project/budget/category/listing/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Manage Super Category</a>
+        {% get_user_permission request as user_obj %}
+        {% is_pmo_user user_obj as pmo_user %}
+        {% if user_obj.is_admin_user == True or pmo_user == True or user_obj.organization_type == 2 and user_obj.owner == True %}
     	<a href="/manage/project/budget/report-utilization/?budget_id={{budgetobj.id}}&slug={{project_slug}}" class="link-pad1">Report Utilization</a>
     	{% endif %}
     	{% endwith %}
@@ -510,7 +513,7 @@ $(document).ready(function(){
 
 
 <!---datepicker script-->
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
 	$(function() {
 	$( ".datepicker" ).datepicker({
@@ -550,7 +553,7 @@ Highcharts.chart('planned_utilized', {
         }
     }, {
         title: {
-            text: '2016-2017',
+            text: '',
             align: "middle",
             rotation: 360
         },
@@ -618,12 +621,27 @@ Highcharts.chart('Budget_location', {
                 enabled: true,
                 layout: 'horizontal',
                 align: 'center',
-                width: 200,
+                width: 250,
+                height: 'auto',
                 verticalAlign: 'bottom',
                 useHTML: true,
                 labelFormatter: function() {
-
-                    return '<div style="text-align: left;float:left;font-weight: normal;">' + this.name +' - '+ this.percentage.toFixed(1) + '%</div>';
+                    var str = '<span>' + this.name +' - Rs.  '+ this.y.toFixed(0).replace(/(\d)(?=(\d\d)+\d$)/g, "$1,");
+                                        
+                    var newStr = str.replace(/(.{37})/g, "$1<br/>")+'</span>';
+                    
+                    return newStr;
+                },
+                navigation: {
+                    activeColor: '#3E576F',
+                    animation: true,
+                    arrowSize: 12,
+                    inactiveColor: '#CCC',
+                    style: {
+                        fontWeight: 'bold',
+                        color: '#333',
+                        fontSize: '12px'
+                    }
                 }
             },
             series: [{
@@ -760,7 +778,7 @@ else{
     }
 }
 var total = parseInt(100 - (utilized + disbursed))
-//console.log(total , utilized , disbursed);
+
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
 

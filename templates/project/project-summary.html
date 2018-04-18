@@ -206,7 +206,7 @@ $(document).ready(function(){
       
       <div class="cont-det">
          <h2>Location coverage</h2>
-
+         {% get_projct_location projectobj as project_location %}
          {% if project_location %}
             
             {% for j in project_location %}
@@ -603,7 +603,7 @@ under 0 Milestones</h5>
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
         </div>
   </div>
-
+<a class="button hexagon" NAME="BOTTOM">Chcete se dozvědět více?</a>
     <div class="white-box-left user-list-box">
     <div class="table-responsive">
     <table class="table-resp" cellpadding="0" cellspacing="0" border="0">
@@ -624,39 +624,40 @@ under 0 Milestones</h5>
       {% if project_funders.implementation_partner %}
 
       <tr>
-            <td style="width:28%;"><canvas class="user-icon" data-name="{% if project_funders.implementation_partner.attrs.first_name %}{{project_funders.implementation_partner.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ project_funders.implementation_partner.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if project_funders.implementation_partner.attrs.first_name %}{{project_funders.implementation_partner.attrs.first_name}}{{project_funders.implementation_partner.attrs.last_name}} {% else %} {{ project_funders.implementation_partner.name }} {% endif %}</label></a></td>
+            <td style="width:28%;"><canvas class="user-icon" data-name="{% if project_funders.implementation_partner.attrs.first_name %}{{project_funders.implementation_partner.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ project_funders.implementation_partner.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if project_funders.implementation_partner.attrs.first_name %}{{project_funders.implementation_partner.attrs.first_name}} {{project_funders.implementation_partner.attrs.last_name}} {% else %} {{ project_funders.implementation_partner.name }} {% endif %}</label></a></td>
             <td style="width:19%;">{{project_funders.implementation_partner.organization}}</td>
             <td style="width:26%;">{% if project_funders.implementation_partner.designation %}{{project_funders.implementation_partner.designation}} {% else %} - {% endif %}</td>
             <td style="width:19%;">Implementation Partner
                 {% get_user_permission request as user_obj %}
                 {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=0" class="btn btn-primary">Edit</a></td>{% endif %}
+            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-edit" title="Edit" style="color: #429576;padding-right: 26px;"></i></a><!-- <a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-remove" style="float:right; padding-right: 13px; padding-top: 2px;" title="remove"></i></a> -->
+              <!-- <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')" title="edit"></i> --></td>{% endif %}
       </tr>
       {% endif %}
       {% if project_funders.funder %}
 
       <tr>
-            <td style="width:28%;"><canvas class="user-icon" data-name="{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}}{{project_funders.funder.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}</label></a></td>
+            <td style="width:28%;"><canvas class="user-icon" data-name="{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if project_funders.funder.attrs.first_name %}{{project_funders.funder.attrs.first_name}} {{project_funders.funder.attrs.last_name}} {% else %} {{ project_funders.funder.name }} {% endif %}</label></a></td>
             <td style="width:19%;">{{project_funders.funder.organization}}</td>
             <td style="width:26%;">{% if project_funders.funder.designation %}{{project_funders.funder.designation}} {% else %} - {% endif %}</td>
             <td style="width:19%;">Funder
                 {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=1" class="btn btn-primary" >Edit</a></td>{% endif %}
+            <td style="width:10%;"><a href="/project/manage/funder/?slug={{obj.slug}}&key=1"><i class="fa fa-edit" title="Edit" style="color: #429576; padding-right: 26px;"></i></a><!-- <a href="/project/manage/funder/?slug={{obj.slug}}&key=0"><i class="fa fa-remove" style="float:right; padding-right: 13px; padding-top: 2px;" title="remove"></i></a> --></td>{% endif %}
       </tr>
       {% endif %}
 
       {% if projectuserlist %}
       {% for i in projectuserlist %}
       <tr>
-            <td style="width:28%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}}{{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</label></a></td>
+            <td style="width:28%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</label></a></td>
             <td style="width:19%;">{{i.user.organization}}</td>
             <td style="width:26%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
             <td style="width:19%;">{{i.role.name}}
                 {% get_user_permission request as user_obj %}
         {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}&key=summary">Edit</a></td>{% endif %}
+            <td style="width:10%;"><a href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}&key=summary"><i title="Edit" class="fa fa-edit" style="color: #429576;"></i></a><a href="/project/remove/record/?id={{i.id}}&model=ProjectUserRoleRelationship" onclick="return confirm('Are you sure you want to Delete user')"><i title="Delete user" class="fa fa-remove" style="float:right; padding-right: 13px;color: #429576; padding-top: 2px;" title="Delete User"></i></a></td>{% endif %}
       </tr>
       {% endfor %}
       {% else %}
@@ -1336,8 +1337,8 @@ Highcharts.chart(values, {
             legend: {
                 enabled: true,
                 layout: 'horizontal',
-                align: 'left',
-                width: 400,
+                align: 'center',
+                width: 200,
                 verticalAlign: 'bottom',
                 useHTML: true,
                 labelFormatter: function() {

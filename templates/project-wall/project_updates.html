@@ -13,20 +13,28 @@
 
 <style>
 
+.order_list .timeline-left ul li{list-style-type: disc;}
+.order_list .timeline-right ul li{list-style-type: disc;}
+.order_list .timeline-left ol li{list-style-type: disc;}
+.order_list .timeline-right ol li{list-style-type: disc;}
 
+
+.order_list .timeline-left li { list-style-type: disc;width: 100%; float: left; margin-bottom: 0px;  color: #fff;font-size: 14px;}
+.order_list .timeline-right li { list-style-type: disc;width: 100%; float: left; margin-bottom: 0px;  color: #fff;font-size: 14px;}
 .blog_timeline li { margin-bottom: 80px;position: relative;width: 50%;float: left;clear: left;}
-.blog_timeline {padding: 20px 0;list-style: none;position: relative; float: left;width: 100%}
-.blog_timeline li.timeline-right {float: right;clear: right;margin-bottom: 116px;}
-.blog_timeline .timeline-left {margin-top: 140px;}
-.blog_timeline:before {top: 0;bottom: 0;position: absolute;content: " ";width: 3px;background-color: #eee;
+.blog_timeline {padding: 50px 0;list-style: none;position: relative; float: left;width: 100%}
+.blog_timeline li.timeline-right {float: right;clear: right;margin-bottom: 100px;}
+.blog_timeline .timeline-left {margin-top: 76px;}
+.blog_timeline:before {top: 28px;bottom: 0;position: absolute;content: " ";width: 3px;background-color: #eee;
     left: 50%;margin-left: -1.5px;border: 2px dashed #232323;}
 .blog_timeline li > .timeline-badge {color: #232323;width: 24px;height: 24px;line-height: 50px;font-size: 1.4em;cursor: pointer;text-align: center;
     position: absolute;top: 0px;right: -12px;z-index: 9;}
 .blog_timeline li > .timeline-badge{ }
 .timeline-right .timeline-badge{ text-align: left !important;left: -9px !important;right: -13px !important;}
 .timeline-left .timeline-badge{ text-align: right !important;right: -15px !important;}
-.blog_timeline .timeline-left .timeline-panel{width: 85%;float: left}
-.timeline-right .timeline-panel{width: 85%;float: right !important}
+.blog_timeline .timeline-left .timeline-panel{    width: 79%; float: left;box-shadow: 0px 0px 3px; padding: 20px; border-radius: 8px; margin-left: 20px;}
+.timeline-right .timeline-panel{ width: 79%; float: right; box-shadow: 0px 0px 3px; padding: 20px; border-radius: 8px; margin-right: 20px;}
+
 .timeline-right .date{ position: absolute;float: left; left: -70px; font-size: 14px; color: #3b9e84; text-align: center;top:7px;font-weight: bold}
 .timeline-left .date{ position: absolute;float: right !important; right: -65px; font-size: 14px; font-weight: bold; color: #3b9e84; text-align: center;top:7px;}
 .timeline-right .two_letters p{width: 35px;height: 35px;border-radius: 50px;border: 2px solid #3b9e84; text-align: center;
@@ -74,10 +82,45 @@ margin: 10px 0px;
 #no-overflow .clearfix.header_fixed.right_menu.position_fixed .cont-wrap {
 display: none;
 }
+
+.fancybox-skin{position:relative;top:60px;}
+.fancybox-skin .fancybox-inner{height:520px !important}
+.fancybox-close {
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 1004;
+}
+
+.timeline-right .hover_name{display: none}
+.timeline-right .two_letters:hover .hover_name {display: block; position: absolute;left: 14px;top: 35px;font-size: 14px; z-index: 1000;}
+.timeline-left .hover_name{display: none}
+.timeline-left .two_letters:hover .hover_name {display: block; position: absolute;right: 14px;top: 35px;font-size: 14px; z-index: 1000;}
+#tagcloud .active{color:#232323 !important; background:#fff !important; }
+
+.hide_box {
+  padding: 0px !important;
+  box-shadow: none !important;
+  width: 81% !important;
+}
+pre{
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif,open sans,arial,sans-serif;
+  margin-bottom: 10px;
+  overflow: auto;
+  width: auto;
+  padding: 5px;
+  background-color: #549c85;
+  width: 650px!ie7;
+  padding-bottom: 20px!ie7;
+  max-height: 600px;
+}
 </style>
 <body>
 
-<!-- <div id="" class="clearfix header_fixed right_menu position_fixed" style="position:fixed; right:60px;top:290px;">
+<div id="" class="clearfix header_fixed right_menu position_fixed " style="position:fixed; right:60px;top:290px;">
   <div class="menu-toggle-holder">
      <p style="float:left;position: relative; top: 4px; left: -40px; font-size: 16px;">Tags</p>
      <div class="center"> <span class="label">Menu</span>
@@ -87,18 +130,22 @@ display: none;
  <nav id="nav" style="background: none;right: 0px;" class="nav-primary">
            <div class="cont-wrap" >
            <div id="tagcloud" >
-        <a href="#" rel="1">Task</a>
-        <a href="#" rel="2">Image</a>
-        <a href="#" rel="3">Budget</a>
-        <a href="#" rel="1">Meeting</a>
-        <a href="#" rel="2">Tranches</a>
-        <a href="#" rel="3">TimelineProgress</a>
-        <a href="#" rel="1">Report</a>
+        <a {% if filter_key == 'task' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=task" rel="3">Task</a>
+        <a {% if filter_key == 'file' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=file" rel="2">Image</a>
+        <a {% if filter_key == 'budget' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=budget" rel="3">Budget</a>
+        <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=utilization" rel="1">BudgetUtilization</a>
+        <a {% if filter_key == 'note' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=note" rel="1">Notes</a>
+        <a {% if filter_key == 'tranche' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=tranche" rel="3">Tranches</a>
+        <a {% if filter_key == 'timeline' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=timeline" rel="2">TimelineProgress</a>
+
+        <a {% if filter_key == 'parameter' %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates&filter=parameter" rel="2">Parameter</a>
+        <a {% if filter_key == None %}class="active"{% endif %} href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates" rel="1">Show all</a>
+        <!-- <a href="#" rel="1">Report</a> -->
         
         </div>
     </nav>
-    </div> -->
-    <section class="content-part forms_section">
+    </div>
+    <section class="content-part forms_section order_list">
 <div class="row">
 <div class="white_bg">
   <div class=" content">
@@ -106,29 +153,35 @@ display: none;
 <div style="margin:20px 0px;float: left; width: 100%;">
     <div style="float:left">
       <!-- <button class="btn btn-sucess" style="background:#3b9e84; color:#fff" data-toggle="modal" data-target="#myModal">Create a Note</button> -->
-      <!-- <a href="/dashboard/add/note/?slug={{slug}}" class="iframe"><button type="button" style="background:#3b9e84; color:#fff" class="singup btn btn-sucess">Creat a Note</button></a> -->
+      <a href="/dashboard/add/note/?slug={{slug}}" class="iframe1 hide_button"><button type="button" style="background:#3b9e84; color:#fff; font-size: 15px; margin-top: -40px;" id="hide_button" class="singup btn btn-sucess btn-lg" disabled="disabled">Create Note</button></a>
     </div>
-    <!-- <div style="float:right;position: relative;left: -60px;">
+
+    <form id="filter_form" action=".?slug={{slug}}&key=updates" method = "POST" >
+      {% csrf_token %}
+    <div style="float:right;position: relative;left: -90px;margin-top: -17px;">
       <p style="float:left;position: relative;top: 4px;color:#3b9e84"><b>Filter By:</b></p>
         <div style="float:left;position: relative; left: 15px;z-index:1000 "> 
             <label for="from" style="font-weight:normal">From</label>
-            <input type="text" id="from" name="from" style="border:1px solid #dedede">
+            <input type="text" id="from" name="from" value="{{request.POST.from}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
         </div>
         <div style="float:left;position: relative;z-index:1000 ">
             <label for="to" style="font-weight:normal">to</label>
-            <input type="text" id="to" name="to" style="border:1px solid #dedede">
+            <input type="text" id="to" name="to" value="{{request.POST.to}}" style="border:1px solid #dedede">
             <img src="/static/img/calender.png" class="calender_ico">
-        </div>
-    </div> -->
+        </div><div style="float: left;position: relative;z-index: 1000;margin-left: -10px;"> <a style="color: #549c85;" href="{{url}}/dashboard/updates/?slug={{slug}}&key=updates"><u>Clear Filter</u></a>
+    </div>
+    </form>
+    <!-- <div style="float: left;width: 100%;text-align: center;">
+      Reset Filter
+  </div> -->
 </div>
-
+{{request.GET.date}}
 {% if final_data %}
 <ul class="blog_timeline">
 {% for f in final_data %}
 
 {% if f.update_type == 'file' %}
-
 {% if forloop.counter|divisibleby:2 %}
 <li class="timeline-left">
 {% else %}
@@ -136,11 +189,13 @@ display: none;
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.created_by.attrs.first_name | slice:":1"}}{{f.created_by.attrs.last_name | slice:":1"}}</p></div>
+   <div class="two_letters"><p>{{f.created_by.attrs.first_name | slice:":1"}}{{f.created_by.attrs.last_name | slice:":1"}}</p>
+    <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
+   </div>
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff">Uploaded <span>{% if f.file_type == 'Image' %}Image{% else %}Document{%endif%}</span> to project</p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -182,7 +237,9 @@ display: none;
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
 
-    <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}} {{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p></div>
+    <div class="two_letters"><p>{% if f.modified %}{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}{% else %}{{f.created_by.attrs.first_name|slice:":1"}}{{f.created_by.attrs.last_name|slice:":1"}}{% endif %}</p>
+      <h3 class="hover_name">{% if f.modified %}{{f.modified_by.first_name}} {{f.modified_by.last_name}}{% else %}{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}{% endif %}</h3>
+    </div>
         <div class="timeline-panel">
         
 
@@ -190,13 +247,13 @@ display: none;
               
                 <div class="text">
                     {% if f.file_name %}
+                    <p>{% if f.file_description %}"{{f.file_description}}" {% endif %}</p>
                     <p>{% if f.attachment_file_type == 'image' %} An image has been uploaded. {% else %} A document has been uploaded.{% endif %}</p>
-                    <p>"{{f.file_description}}"</p>
                     {% else %}
-                    <p>{{f.comment_text}}</p>
+                    <p>{% if f.comment_text %} "{{f.comment_text}}"{% endif %}</p>
+                    <p>{% if f.attachment_file_type == 'image' %} An image has been uploaded. {% else %} A document has been uploaded.{% endif %}</p>
                     {% endif %}
-                    {% if f.file_name %}
-                    <p>File: <a href='{{f.file_url}}' target="_blank"><u>{{f.file_name}}</u></a>{% endif %}</p>
+                    
                     {% if f.previous_task_progress != f.task_progress %}
                     <p>Task status changed from {% if f.previous_task_progress == None %}0{% else %}{{f.previous_task_progress}}{% endif %}% to {{f.task_progress}}%
                     {% endif %}</p>
@@ -235,7 +292,9 @@ display: none;
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p></div>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}}{{f.created_by.attrs.last_name |slice:":1"}}</p>
+      <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
+    </div>
         <div class="timeline-panel">
         
 
@@ -287,7 +346,7 @@ display: none;
     <div class="timeline-panel">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff"><b>{{f.created_by}}</b> updated  <span>the budget. Total budget amount is now <br> ₹{{f.budget_total}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -309,11 +368,13 @@ display: none;
 {%endif%}
  <p class="date">{{f.date | date:"d M"}}</p>
   <div class="timeline-badge primary"><p></p></div>
-   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}} {{f.modified_by.last_name |slice:":1"}}</p></div>
-    <div class="timeline-panel">
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel hide_box">
         
             <div class="timeline-body text-justify">
-               <div class="col-md-10">
+               <div class="">
                 <div class="image_uploaded">
                 <p style="color:#fff">Updated  <span>the budget. Total budget amount is now <br> ₹ {{f.amount}}</span></p>
                  <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
@@ -327,6 +388,33 @@ display: none;
 </li>
 {% endif %}
 
+{% if f.update_type == 'utilization_history' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel hide_box">
+        
+            <div class="timeline-body text-justify">
+               <div class="">
+                <div class="image_uploaded">
+                <p style="color:#fff">Updated  <span>the Utilization Amount ₹ {{f.amount}}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#BudgetUtilization</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
 
 
 {% if f.update_type == 'note' %}
@@ -337,18 +425,21 @@ display: none;
 {%endif%}
 <p class="date">{{f.date | date:"d M"}}</p>
     <div class="timeline-badge primary"><p></p></div>
-    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}} {{f.created_by.attrs.last_name |slice:":1"}}</p></div>
+    <div class="two_letters"><p>{{f.created_by.attrs.first_name |slice:":1"}}{{f.created_by.attrs.last_name |slice:":1"}}</p>
+      <h3 class="hover_name">{{f.created_by.attrs.first_name}} {{f.created_by.attrs.last_name}}</h3>
+    </div>
         <div class="timeline-panel">
         
 
             <div class="timeline-body text-justify">
               
                 <div class="text">
+
                     <p class="short_comment{{forloop.counter}}">{{f.short_comment}}{% if f.more_comment %}...{% endif %}</p>
                     {% if f.more_comment %}
-                    <p class="read_more{{forloop.counter}}"><u>Read more >></u></p>
+                    <p class="read_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Read more >></u></p>
                         <p class="text_content{{forloop.counter}}">{{f.short_comment}}{{f.more_comment}}</p>
-                        <p class="less_more{{forloop.counter}}"><u>Less >></u></p>
+                        <p class="less_more{{forloop.counter}}" onmouseover="" style="cursor: pointer;"><u>Less >></u></p>
                     {% endif %}
                     <p>Note added</p>
                     
@@ -362,9 +453,9 @@ display: none;
                 </div>
                 
                 
-                <div style=" float: left;text-align: center; width: 100%;">
+                <!-- <div style=" float: left;text-align: center; width: 100%;">
                    <img src="/static/img/line-bar-small.png">
-                </div>
+                </div> -->
                     <div class="file_name">
                         <p><b>File: </b><a href='{{f.attachment_link}}' target="_blank"><u>{{f.attachment_name}}</u></a></p>
                         <p><b>Description: </b> {{f.description}}</p>
@@ -396,6 +487,120 @@ display: none;
 {% endif %}
 
 
+{% if f.update_type == 'parameter' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel hide_box">
+        
+            <div class="timeline-body text-justify">
+               <div class="">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>Uploaded values for parameter <b>{{f.keyparameter_name}}</b> for {{f.upload_date | date:"M Y"}}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+
+{% if f.update_type == 'parameter_history' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel hide_box">
+        
+            <div class="timeline-body text-justify">
+               <div class="">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>Edited parameter <b>{{f.parameter_name}}</b></span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+
+{% if f.update_type == 'parameter_created' %}
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel hide_box">
+        
+            <div class="timeline-body text-justify">
+               <div class="">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>Created a new parameter <b>{{f.parameter_name}}</b></span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#Parameter</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
+
+{% if f.update_type == 'tranche' or f.update_type == 'tranche_history' %}
+
+{% if forloop.counter|divisibleby:2 %}
+<li class="timeline-left">
+{% else %}
+<li class="timeline-right">
+{%endif%}
+ <p class="date">{{f.date | date:"d M"}}</p>
+  <div class="timeline-badge primary"><p></p></div>
+   <div class="two_letters"><p>{{f.modified_by.first_name |slice:":1"}}{{f.modified_by.last_name |slice:":1"}}</p>
+    <h3 class="hover_name">{{f.modified_by.first_name}} {{f.modified_by.last_name}}</h3>
+   </div>
+    <div class="timeline-panel hide_box">
+        
+            <div class="timeline-body text-justify">
+               <div class="">
+                <div class="image_uploaded">
+                <p style="color:#fff">  <span>{% if f.update_type == 'tranche_history' %}Edited {% else %}Added a {% endif %} tranche <b><u><a target="_blank" href={{f.tranche_url}}>{{f.tranche_name}}</a></u></b> with planned amount <br> ₹ {{f.planned_amount}}</span></p>
+                 <!-- <div><input type='file' title="Choose a video please" id="aa" onchange="pressed()" placeholder="Browse..."><label id="fileLabel"></label></div>-->
+                    <div class="progress_time"><a href="#"><p>#Tranche</p></a></div>
+                </div>
+                
+                
+             </div>
+        </div>
+    </div>
+</li>
+{% endif %}
 
 {% endfor %}
 
@@ -455,17 +660,33 @@ No Updates
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/js/jquery.sticky.js"></script>
+<script src="/static/js/jquery.simplePopup.js" type="text/javascript"></script>
 <link rel="stylesheet" href="/static/css/jquery.fancybox.css" type="text/css" media="screen" />
 <script type="text/javascript" src="/static/js/jquery.fancybox.js"></script>
 
+<script type="text/javascript">
+   $(document).ready(function(){
+       $("#to").change(function(){
+       $("#filter_form").submit();
+       });
+   });
+   $('#error').hide();
+</script>
 
+<script type="text/javascript">
+$(window).load(function() {
+    if ( $('#hide_button').length > 0 ) {
+        $('#hide_button').prop('disabled', false);
+    }
+});
+</script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $(".iframe").fancybox({
+    $(".iframe1").fancybox({
         type: 'iframe',
-        onCanceal: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
-        alert('aaaa');
+        'showCloseButton' : true,
+        afterCloses: function () { // USE THIS IT IS YOUR ANSWER THE KEY WORD IS "afterClose"
         parent.location.reload(true);
     }
         
@@ -514,7 +735,8 @@ $(document).ready(function() {
         .datepicker({
           defaultDate: "+1w",
           changeMonth: true,
-          numberOfMonths: 1
+          numberOfMonths: 1,
+          
         })
         .on( "change", function() {
           to.datepicker( "option", "minDate", getDate( this ) );
@@ -522,7 +744,8 @@ $(document).ready(function() {
       to = $( "#to" ).datepicker({
         defaultDate: "+1w",
         changeMonth: true,
-        numberOfMonths:1
+        numberOfMonths:1,
+        
       })
       .on( "change", function() {
         from.datepicker( "option", "maxDate", getDate( this ) );

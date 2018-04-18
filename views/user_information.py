@@ -13,6 +13,12 @@ def get_user_role(userprofileobj):
     roleobj = RoleTypes.objects.get(code = code)
     return roleobj
 
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class UserInformationStorage(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -44,6 +50,16 @@ class UserInformationStorage(APIView):
         response = {'msg':"created successfully",'status':2}
         return Response(response)
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def saveimage(request):
     url=request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(url)
@@ -64,3 +80,14 @@ class GeneratePdf(View):
      }
      pdf = render_to_pdf('report/invoice.html', data)
      return HttpResponse(pdf, content_type='application/pdf')
+
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

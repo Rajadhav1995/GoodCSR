@@ -86,15 +86,38 @@
         </tr>
         {% endfor %}
 
+
   </tbody>
 </table>
+
+
         </div>
-          <div class="pagination_no">
-        <div id="pagination-long"></div>
-    </div>
+          
     </div>
     
-    
+    {% if obj_list.has_other_pages %}
+    <div align="right" class="right_box">
+  <ul class="pagination">
+    {% if obj_list.has_previous %}
+      <li><a href="?page={{ obj_list.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in obj_list.paginator.page_range %}
+      {% if obj_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if obj_list.has_next %}
+      <li><a href="?page={{ obj_list.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
     
     </div>
 </section>

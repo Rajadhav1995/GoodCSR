@@ -11,7 +11,7 @@ from projectmanagement.forms import *
 from budgetmanagement.forms import get_tranche_form,TrancheForms
 from budgetmanagement.models import (Tranche,ProjectReport,Budget,
                                     ProjectBudgetPeriodConf,BudgetPeriodUnit)
-from media.models import Attachment,Keywords,FileKeywords,ProjectLocation
+from media.models import Attachment,Keywords,FileKeywords,ProjectLocation,Comment
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -23,6 +23,7 @@ from pmu.settings import (SAMITHA_URL,PMU_URL)
 from common_method import unique_slug_generator,add_keywords,add_modified_by_user
 from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
 from menu_decorators import check_loggedin_access
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Views for projectmanagement
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
@@ -38,8 +39,8 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
             else:
                 boundary_obj = Boundary.objects.get_or_none(id=request.POST.get(state))
             if boundary_obj:
-                location_create=ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
-    del_location = ProjectLocation.objects.filter(id__in=rem_id_list).delete()
+                ProjectLocation.objects.create(location=boundary_obj,program_type=request.POST.get(location_type),content_type = ContentType.objects.get(model='project'),object_id=obj.id)
+    ProjectLocation.objects.filter(id__in=rem_id_list).delete()
 
 def project_location(request,obj,location):
     # this function is to add or 
@@ -125,6 +126,16 @@ def funder_mapping(funder,implementation_partner,total_budget,obj):
             implementation_partner=implementation_partner,total_budget=total_budget)
     return mapping
 
+def pagination(request, plist):
+    paginator = Paginator(plist, 10)
+    page = request.GET.get('page', 1)
+    try:
+        plist = paginator.page(page)
+    except PageNotAnInteger:
+        plist = paginator.page(1)
+    except EmptyPage:
+        plist = paginator.page(paginator.num_pages)
+    return plist
 
 def project_list(request):
     '''
@@ -133,6 +144,8 @@ def project_list(request):
     user_id = request.session.get('user_id')
     logged_user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(logged_user_obj)
+    obj_list = pagination(request,obj_list)
+
     return render(request,'project/listing.html',locals())
 
 def get_project_budget_utilized_amount(projectobj,budgetobj):
@@ -172,6 +185,8 @@ def budget_tranche(request):
         tranche_id =  request.GET.get('tranche_id')
         obj = Tranche.objects.get_or_none(id=tranche_id)
         form = TrancheForms(instance = obj)
+        comment = Comment.objects.get(content_type = ContentType.objects.get(model='tranche'),object_id=obj.id)
+        # import ipdb; ipdb.set_trace()
     except:
         pass
     user_id = request.session.get('user_id')
@@ -193,7 +208,10 @@ def budget_tranche(request):
             obj = form.save(commit=False)
             obj.project = project
             obj.recommended_by = UserProfile.objects.get(id=request.POST.get('recommended_by'))
+            add_modified_by_user(obj,request)
             obj.save()
+
+            Comment.objects.create(active=2,content_type = ContentType.objects.get(model='tranche'),object_id=obj.id,text=request.POST.get('comment'))
             budgetobj = Budget.objects.latest_one(project = project,active=2)
             final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
             auto_update_tranche_amount(final_budget_utilizedamount,project)
@@ -214,6 +232,7 @@ def tranche_list(request):
     status = get_assigned_users(user,obj)
     key = request.GET.get('key')
     projectobj = obj
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return render(request,'budget/listing.html',locals())
 
 def key_parameter(request):
@@ -273,7 +292,7 @@ def delete_parameter(rem_id_list):
     for i in rem_id_list:
         rem_obj = ProjectParameter.objects.get(id=i)
         rem_obj.switch()
-        value_obj = ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
+        ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
 
 def edit_parameter(request):
     # This function is to Edit(add parameter, remove 
@@ -318,12 +337,15 @@ def edit_parameter(request):
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s' %parent_obj.project.slug)
     return render(request,'project/edit_key_parameter.html',locals())
 
+import calendar
 def upload_parameter(request):
     # This function is to add values to key parameter which 
     # are added by admin (parameters number is dynamic)
     # 
+    
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
+    
     parameter = ProjectParameter.objects.get(id=ids)
     project = parameter.project
     strt = project.start_date.year
@@ -333,10 +355,14 @@ def upload_parameter(request):
     key_parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list)
     existing_month = [k.start_date.month for k in key_parameter_value]
     start_date = parameter.project.start_date
+    
     end_date = parameter.project.end_date
     month = ['January','February','March','April','May','June','July','August','September','October','November','December']
     month_id = [1,2,3,4,5,6,7,8,9,10,11,12]
+    parameter_month = ProjectParameterValue.objects.filter(active=2,keyparameter=parameter)
+    parameter_value_month = [calendar.month_name[i.start_date.month] for i in parameter_month]
     month_zip = zip(month,month_id)
+    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         month = request.POST.get('month')
         year = int(request.POST.get('year'))
@@ -352,7 +378,7 @@ def upload_parameter(request):
             for i in key_parameter:
                 value = 'value['+str(i.id)+']'
                 parameter_value_list.append(int(request.POST.get(value)))
-                obj = ProjectParameterValue.objects.create(keyparameter=i,parameter_value=request.POST.get(value),\
+                obj = ProjectParameterValue.objects.create(active=2, keyparameter=i,parameter_value=request.POST.get(value),\
                                 start_date=date,end_date=end_date,submit_date=submit_date)
                 add_modified_by_user(obj,request)
             parameter_value_list = sum(parameter_value_list)
@@ -366,7 +392,42 @@ def upload_parameter(request):
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %parameter.project.slug)
     return render(request,'project/key_parameter.html',locals())
 
+def edit_parameter_values(request):
+    # edit_value
+    ids =  request.GET.get('id')
+    date1 = request.GET.get('month')
+    date = request.GET.get('month').split(' ')
+    month_no = strptime(date[0],'%B').tm_mon
+    year = int(date[1])
+    start_date=str(year)+str(month_no)
+    date_obj = datetime.datetime.strptime(start_date, "%Y%m")
+    parameter = ProjectParameter.objects.get(id=ids)
+    single_parameter = ProjectParameterValue.objects.get(active= 2,keyparameter=parameter,start_date=date_obj)
+    key_parameter = ProjectParameter.objects.filter(active= 2,parent=parameter)
+    key_parameter_list = [i.id for i in key_parameter]
+    key_parameter_value = list(ProjectParameterValue.objects.filter(active= 2,keyparameter__in=key_parameter_list,start_date=date_obj))
+    main_para = zip(key_parameter,key_parameter_value)
+    if request.GET.get('key') == '1':
+        for i in key_parameter_value:
+            i.switch()
+        parent_parameter=ProjectParameterValue.objects.get(active=2,keyparameter=parameter,start_date=date_obj)
+        parent_parameter.active=0
+        parent_parameter.save()
+        return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
+    if request.method == 'POST':
+        if key_parameter_value != []:
+            for i in key_parameter_value:
+                parameter_obj = ProjectParameterValue.objects.get(active=2,id=i.id)
+                parameter_obj.parameter_value = request.POST.get(str(i.id))
+                parameter_obj.save()
+        else:
+            single_parameter.parameter_value = request.POST.get('value')
+            single_parameter.save()
+        return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
+    return render(request,'project/key_parameter.html',locals())
+
 def manage_parameter(request):
+    # 
     # This function is to manange(list) all 
     # key parameter for perticular project
     # 
@@ -391,6 +452,11 @@ def manage_parameter_values1(request):
     values = aggregate_project_parameters(parameter,child_parameter)
     return render(request,'project/parameter_value_list.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def remove_record(request):
     # This is common method to delete(deactivate) record from db. 
     # Pass model name and its id
@@ -400,7 +466,7 @@ def remove_record(request):
     model =  eval(request.GET.get('model'))
     deact = model.objects.get(id=ids).switch()
     if request.GET.get('model') == 'ProjectReport':
-        deleting_objects = model.objects.get(id=ids).delete_report_answers()
+        model.objects.get(id=ids).delete_report_answers()
     if request.GET.get('model') == 'Tranche':
         deact = model.objects.get(id=ids)
         project = Project.objects.get(id=int(deact.project.id))
@@ -420,6 +486,7 @@ def manage_parameter_values(request):
     end = project.end_date.year
     parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=parameter).order_by('id')
     names = ProjectParameter.objects.filter(active= 2,parent=parameter)
+    # import ipdb; ipdb.set_trace()
     title_list = []
     title_list.append('Month')
     import calendar
@@ -430,21 +497,26 @@ def manage_parameter_values(request):
                 data = []
                 obj = parameter_value.filter(start_date__month=k,start_date__year=l)
                 if obj.exists():
-                    month_name = calendar.month_name[k] +' "'+ str(l)
+                    month_name = calendar.month_name[k] +' '+ str(l)
                     data.append(month_name)
                     [ data.append(int(u.parameter_value)) for u in obj]
                 master_data.append(data)
             master_data = filter(None, master_data)
     else:
-        obj = ProjectParameterValue.objects.filter(keyparameter=parameter)
+        obj = ProjectParameterValue.objects.filter(active=2,keyparameter=parameter)
         data = []
         for j in obj:
-            month = calendar.month_name[j.start_date.month] + ' "' + str(j.start_date.year)
+            month = calendar.month_name[j.start_date.month] + ' ' + str(j.start_date.year)
             value = j.parameter_value
             master_data.append([month,value])
     [title_list.append(str(i.name)) for i in names]
     return render(request,'project/parameter_value_list.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def aggregate_project_parameters(param, values):
     # Function to do calculations as per 
     # user selection (for key parameter values)
@@ -483,6 +555,11 @@ def aggregate_project_parameters(param, values):
     ret['parent_name'] = None if param.parent is None else param.parent.name
     return aggr
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def project_total_budget(slug):
     # to display the total budget ,disbursed,
     # utilized percent in project summary page
@@ -551,7 +628,6 @@ def project_summary(request):
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
-    project_location=ProjectLocation.objects.filter(content_type = ContentType.objects.get(model='project'),object_id=obj.id)
     project_funders = ProjectFunderRelation.objects.get_or_none(project = obj)
     attachment = Attachment.objects.filter(object_id=obj.id,content_type=ContentType.objects.get(model='project'))
     image = PMU_URL
@@ -638,6 +714,11 @@ def pie_chart_mainlist_report(obj,start_date,end_date):
     return main_list
 
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def delete_upload_image(request):
     # this function is to delete image from timeline                                
     # 
@@ -648,3 +729,46 @@ def delete_upload_image(request):
         attach.active = 0
         attach.save()
     return HttpResponseRedirect(url)
+
+#    The dict type has been reimplemented to use a more compact 
+# representation based on a proposal by Raymond Hettinger and 
+# similar to the PyPy dict implementation. 
+# This resulted in dictionaries using 20% to 25% less memory
+# when compared to Python 3.5.
+#    Customization of class creation has been simplified with the new protocol.
+#    The class attribute definition order is now preserved.
+#    The order of elements in **kwargs now corresponds to 
+# the order in which keyword arguments were passed to the function.
+#    DTrace and SystemTap probing support has been added.
+#    The new PYTHONMALLOC environment variable can now 
+# be used to debug the interpreter memory allocation and access errors.
+
+#Significant improvements in the standard library:
+
+#    The asyncio module has received new features, 
+# significant usability and performance improvements, and a
+ # fair amount of bug fixes. Starting with Python 3.6 the 
+ # asyncio module is no longer provisional and its API is considered stable.
+#    A new file system path protocol has been implemented 
+# to support path-like objects. All standard library functions 
+# operating on paths have been updated to work with the new protocol.
+#    The datetime module has gained support for Local Time Disambiguation.
+#    The typing module received a number of improvements.
+#    The tracemalloc module has been significantly reworked 
+# and is now used to provide better output for ResourceWarning 
+# as well as provide better diagnostics for memory allocation errors. 
+# See the PYTHONMALLOC section for more information.
+
+#Security improvements:
+
+#    The new secrets module has been added to simplify 
+# the generation of cryptographically strong pseudo-random 
+# numbers suitable for managing secrets such as account authentication,
+# tokens, and similar.
+#    On Linux, os.urandom() now blocks until the system urandom 
+# entropy pool is initialized to increase the security. 
+# See the PEP 524 for the rationale.
+#    The hashlib and ssl modules now support OpenSSL 1.1.0.
+#    The default settings and feature set of the ssl module have been improved.
+#    The hashlib module received support for the BLAKE2, SHA-3 
+# and SHAKE hash algorithms and the scrypt() key derivation function.

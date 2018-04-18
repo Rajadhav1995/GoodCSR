@@ -71,7 +71,6 @@ class Task(BaseContent):
             return False
     
     def task_attachments(self):
-        attach_dict = {}
         inner_attach=[]
         from datetime import datetime
         from media.models import Attachment,Comment
@@ -109,3 +108,13 @@ class Milestone(BaseContent):
     def __str__(self):
         return smart_str(self.name)
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

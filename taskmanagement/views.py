@@ -29,6 +29,7 @@ from django.db.models import Q
 # Create your views here.
 from projectmanagement.common_method import add_modified_by_user
 from menu_decorators import check_loggedin_access
+from media.models import ProjectLocation
 
 @check_loggedin_access
 def listing(request):
@@ -38,10 +39,10 @@ def listing(request):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get_or_none(slug =request.GET.get('slug'))
     project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
-    activity_list = Activity.objects.filter(project = project).order_by('-id')
+    activity_list = Activity.objects.filter(active=2,project = project).order_by('-id')
     
-    task_list = Task.objects.filter(activity__project=project).order_by('-id')
-    milestone = Milestone.objects.filter(project=project).order_by('-id')
+    task_list = Task.objects.filter(active=2,activity__project=project).order_by('-id')
+    milestone = Milestone.objects.filter(active=2,project=project).order_by('-id')
     project_funders = ProjectFunderRelation.objects.get_or_none(project = project)
     status = get_assigned_users(user,project)
     import json
@@ -55,6 +56,11 @@ def listing(request):
     ser_hist = serializers.serialize('json',task_hist)
     return render(request,'taskmanagement/atm-listing.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def update_task_completion(request,add,status):
     # this function is to update status of
     # task as per status choice selected by user
@@ -180,22 +186,24 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     else:
         return render(request,'taskmanagement/base_forms.html',locals())
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def active_change(request,model_name):
     # this is common function to change status of object
     # 
     ids = request.GET.get('id')
-    status = request.GET.get('status')
     url=request.META.get('HTTP_REFERER')
     model = ContentType.objects.get(model = model_name)
     obj = model.model_class().objects.get_or_none(id=int(ids))
     if  obj.active ==2:
         obj.active=0
         obj.save()
-        msg = 'deactivate'
     elif obj.active==0:
         obj.active=2
         obj.save()
-        msg ='active'
     return HttpResponseRedirect(url)
 
 from django.http import JsonResponse
@@ -205,7 +213,6 @@ def task_dependencies(request):
     start_date = ''
     tasks = []
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
     obj = None
     try:    
         obj = Activity.objects.get_or_none(active=2,id= int(ids))
@@ -225,13 +232,10 @@ def task_auto_computation_date(request):
     # to compute start date of the tasks dependent
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    obj = None
     try:
         task = Task.objects.get(active=2,id= int(ids))
         end_date = task.end_date.strftime('%Y-%m-%d')
     except:
-        obj = None
         end_date = ''
     return JsonResponse({"computation_date":end_date})
 
@@ -240,8 +244,7 @@ def milestone_overdue(request):
     # the max end date of the tasks tagged to the milestone
     # 
     task_ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    tasks_obj = Task.objects.filter(id__in = eval(task_ids)).values_list('end_date',flat = True)
+    tasks_obj = Task.objects.filter(active=2,id__in = eval(task_ids)).values_list('end_date',flat = True)
     try:
         milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     except:
@@ -256,9 +259,8 @@ def total_tasks_completed(slug):
     total_tasks = completed_tasks=total_milestones = 0
     milestones = []
     project = Project.objects.get_or_none(slug = slug)
-    activity = Activity.objects.filter(project=project)
-    milestones= Milestone.objects.filter(project = project)
-    tasks = Task.objects.filter(activity__project = project)
+    milestones= Milestone.objects.filter(active=2,project = project)
+    tasks = Task.objects.filter(active=2,activity__project = project)
     total_tasks = tasks.count()
     for t in tasks:
         if t.status == 2:
@@ -277,13 +279,11 @@ def my_tasks_listing(project,user,status):
     # to get the tasks which is overdue to today 
     # 
     today = datetime.today().date()
-    task_lists=[]
-    activities = Activity.objects.filter(project = project)
     if status == '0':
-        task_list = Task.objects.filter(assigned_to=user)
+        task_list = Task.objects.filter(active=2,assigned_to=user)
         tasks_list =task_list.filter(start_date__lt = today).exclude(status=2).order_by('-start_date')
     else:
-        tasks_list = Task.objects.filter(activity__project = project,start_date__lt = today).exclude(status=2).order_by('-start_date')
+        tasks_list = Task.objects.filter(active=2,activity__project = project,start_date__lt = today).exclude(status=2).order_by('-start_date')
     return tasks_list
     
 def get_project_updates(project,uploads):
@@ -304,19 +304,19 @@ def get_tasks_status(project,task,uploads):
             'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest(),'file_type':''})
     return uploads
  
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def updates(obj_list):
     # to get the recent updates of the projects 
     # 
-    formats = '%H:%M %p'
     uploads = []
-    task_completed = {}
-    completed_tasks = []
-    task_uploads = {}
     for project in obj_list:
         project = Project.objects.get_or_none(id = int(project.id))
         uploads = get_project_updates(project,uploads)
-        activity = Activity.objects.filter(project=project)
-        task_list = Task.objects.filter(activity__project = project)
+        task_list = Task.objects.filter(active=2,activity__project = project)
         for task in task_list:
             attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
             for attach in attach_list:
@@ -358,10 +358,6 @@ def corp_task_completion_chart(obj_list):
  
 def task_offset_date(task):
     task = Task.objects.get(id = int(task))
-    start_date = task.start_date.strftime('%y-%m-%d')
-    end_date = task.end_date.strftime('%y-%m-%d')
-    offset = end_date - start_date
-    
 
 def corp_total_budget(obj_list):
     # bar chart for the total budget in corporate dashboard
@@ -371,7 +367,7 @@ def corp_total_budget(obj_list):
     project_list=[]
     corp_budget={}
     disbursed=[]
-    planned_cost = utilized_cost =disbursed_amount= 0
+    planned_cost = utilized_cost = 0
     if obj_list:
         for project in obj_list:
             budget_details = project.project_budget_details()
@@ -414,6 +410,11 @@ def corp_total_budget_disbursed(obj_list):
     total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
     return total_disbursed 
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 @check_loggedin_access
 def my_tasks_details(request):
     #  to get my task details
@@ -432,11 +433,11 @@ def my_tasks_details(request):
         tasks_today = project.get_todays_tasks(today,user,status)
         tasks_tomorrow = project.get_todays_tasks(tomorrow,user,status)
         tasks_remain = project.get_remaining_tasks(remain_days,user,status)
-        closed_tasks = Task.objects.filter(status=2,activity__project__id=project.id).order_by('-id')
+        closed_tasks = Task.objects.filter(active=2,status=2,activity__project__id=project.id).order_by('-id')
         remain_tasks = list(set(list(chain(tasks_remain,closed_tasks))))
         task_listing = list(chain(over_due ,tasks_today ,tasks_tomorrow,remain_tasks))
         task_ids = [int(i.id) for i in task_listing]
-        task_activities = Task.objects.filter(id__in=task_ids)
+        task_activities = Task.objects.filter(active=2,id__in=task_ids)
         activity_list=set([i.activity for i in task_activities])
         category_list = [{'id':i.activity.super_category.id,
                               'name':i.activity.super_category.name} for i in task_activities]
@@ -472,6 +473,7 @@ def my_tasks_details(request):
     user_obj = user
     key = request.GET.get('key')
     if status == '1':
+        project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
         return render(request,'taskmanagement/project-task.html',locals())
     elif status == '0':
         return render(request,'taskmanagement/my-task.html',locals())
@@ -502,6 +504,12 @@ def create_task_progress(request,task):
             task.save()
     return task
     
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
 def task_comments(request):
     # to save the updates of tasks like 
     # attachments / progress bar / comments
@@ -547,7 +555,7 @@ def task_comments(request):
             # added to get the task updates done by particular user saved in modified_by 
             add_modified_by_user(comment,request)
             comment.save()
-        progress_status = create_task_progress(request,task)
+            create_task_progress(request,task)
         # added to get the task updates done by particular user saved in modified_by 
         add_modified_by_user(task,request)
         
@@ -564,8 +572,6 @@ def get_tasks_objects(request):
     # tis is to get task objects
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    obj = None
     start_dates=[]
     task_list = Task.objects.filter(active=2,id__in = eval(ids))
     populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
@@ -578,6 +584,12 @@ def get_tasks_objects(request):
     return JsonResponse({"calculation":expected_end_date})
 
 import pytz
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 class ExpectedDatesCalculator():
 
     """ This class takes a task  or a list of tasks ActiveQuery Objects and
@@ -647,11 +659,11 @@ class ExpectedDatesCalculator():
 
         # If actual dates are populated, return those
         if (main_task.actual_end_date):
-            main_task.expected_start_date = main_task.actual_start_date
-            main_task.expected_end_date = main_task.actual_end_date
+            main_task.expected_start_date = main_task.actual_start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
+            main_task.expected_end_date = main_task.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))
 
-            ret = {'expected_start_date': main_task.actual_start_date,
-                   'expected_end_date': main_task.actual_end_date}
+            ret = {'expected_start_date': main_task.actual_start_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata')),
+                   'expected_end_date': main_task.actual_end_date.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Kolkata'))}
 
             self.data[taskid] = ret
             return main_task
@@ -695,14 +707,18 @@ def get_descendants(task):
     # this funtion is to get descendants
     # 
     descendants = Task.objects.filter(task_dependency=task.id)
-    ret_descendants = Task.objects.filter(
+    ret_descendants = Task.objects.filter(active=2,
         task_dependency=task.id)
     for descendant in descendants.all():
         ret_descendants = (
             ret_descendants | get_descendants(descendant))
     return ret_descendants
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def get_ancestors(task):
     # this funtion is to get ancentors
     # 
@@ -715,7 +731,7 @@ def get_ancestors(task):
 
 def related_tasks(project_id, i_task=None, activity=None, milestone=None):
     # 
-    tasks = Task.objects.filter(activity__project=project_id)
+    tasks = Task.objects.filter(active=2,activity__project=project_id)
     task = Task.objects.get(pk=i_task)
     if (task is None):
         return tasks
@@ -726,6 +742,12 @@ def related_tasks(project_id, i_task=None, activity=None, milestone=None):
         ancestors = get_ancestors(task)
         return (descendants | ancestors).distinct()
 
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 
 class GanttChartData(APIView):
 
@@ -745,9 +767,9 @@ class GanttChartData(APIView):
         status = request.data.get('status')
         if start_date and end_date:
             # this is to get gant chart in  the report form according to the quarters
-            tasks = Task.objects.filter(activity__project=i_project_id,actual_start_date__gte=start_date,actual_end_date__lte=end_date)
+            tasks = Task.objects.filter(active=2,activity__project=i_project_id,actual_start_date__gte=start_date,actual_end_date__lte=end_date)
             if not tasks:
-                tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date)
+                tasks = Task.objects.filter(activity__project=i_project_id,start_date__gte=start_date,end_date__lte=end_date,active=2)
             activities = Activity.objects.filter(id__in=[i.activity.id for i in tasks])
             milestones = Milestone.objects.filter(task__id__in=[i.id for i in tasks])
             projects = Project.objects.filter(id=i_project_id)
@@ -767,7 +789,6 @@ class GanttChartData(APIView):
             else:
                 max_date = datetime(year=int(this_year),month=int(this_month)+1,day=1)
             user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-            project_user_relation = ProjectUserRoleRelationship.objects.get_or_none(id=user.id)
             # Run this command on server for it to work -  sudo mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root mysql 
             tasks = Task.objects.filter(Q(start_date__lt=max_date),Q(end_date__gte=min_date),active=2,assigned_to=user).order_by('-id')
             activities = Activity.objects.filter(active=2).order_by('-id')
@@ -776,7 +797,7 @@ class GanttChartData(APIView):
             supercategories = SuperCategory.objects.exclude(parent=None)
         else:
             # this to get the gantt chart in the summary and tasks and milestone page
-            tasks = Task.objects.filter(activity__project=i_project_id)
+            tasks = Task.objects.filter(active=2,activity__project=i_project_id)
             activities = Activity.objects.filter(project=i_project_id)
             milestones = Milestone.objects.filter(project=i_project_id)
             projects = Project.objects.filter(id=i_project_id)
@@ -792,14 +813,19 @@ class GanttChartData(APIView):
         super_categories.append({"id":'',"active":'',"created":"","modified":"","name":"","slug":"","description":'',"budget":'',"parent":'',"project":''})
         taskdict['supercategories'] = super_categories
         return Response(taskdict)
-        
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.        
         
 def convert_budget(val):
     """Convert the Values to Rs,Lakhs,Crores."""
     # 
     import locale
     import re
-    loc = locale.setlocale(locale.LC_MONETARY, 'en_IN')
+    locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
     val = float('{:.2f}'.format(float(val)))
     if val <= 99999.99:
         val = re.sub(u'\u20b9', ' ', locale.currency(val, grouping=True).decode('utf-8')).strip()
@@ -818,8 +844,6 @@ def get_activites_list(request):
     # this funtion is to get activity list
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    obj = None
     activity=[]
     if ids != '[]':
         obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
@@ -828,15 +852,19 @@ def get_activites_list(request):
         obj_list = Activity.objects.filter(active=2,project__slug=slug)
     activity = [{'id':i.id,'name':i.name,'super_name':i.super_category.name} for i in obj_list]
     return JsonResponse({"activity":activity})
-    
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+
 from django.http import JsonResponse
 def get_super_selected(request):
     # this funtion is to get super selected
     # 
     ids = request.GET.get('id')
     form = request.GET.get('form')
-    url=request.META.get('HTTP_REFERER')
-    activity=[]
     if form == 'TaskForm':
         obj_list = Activity.objects.filter(active=2,id = ids)
     else :
@@ -850,8 +878,7 @@ def get_activity_selected(request):
     # this funtion is to get selected activity
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    obj_list = Task.objects.filter(id__in = eval(ids))
+    obj_list = Task.objects.filter(active=2,id__in = eval(ids))
     activity = [i.activity.id for i in obj_list]
     return JsonResponse({"activity":activity})
 
@@ -859,7 +886,7 @@ def get_assigned_users(user,project):
     # this funtion is to get assigned users
     # 
     project_obj = Project.objects.filter(created_by=user)
-    tasks = Task.objects.filter(activity__project = project,assigned_to = user)
+    tasks = Task.objects.filter(active=2,activity__project = project,assigned_to = user)
     if project_obj and tasks:
         assigned = "2"
     elif tasks:
@@ -872,9 +899,8 @@ from django.http import JsonResponse
 def get_activity_tasks(request):
     # this funtion is to get activity tasks
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
     obj_list = Activity.objects.filter(id__in = eval(ids)).values_list('id',flat=True)
-    task_list = Task.objects.filter(activity__id__in = obj_list)
+    task_list = Task.objects.filter(active=2,activity__id__in = obj_list)
     tasks = [{'id':i.id,'name':i.name} for i in task_list]
     return JsonResponse({"task":tasks})
 
@@ -883,9 +909,17 @@ def tasks_max_end_date(request):
     # this funtion is to get maximum date of task and end date of task
     # 
     ids = request.GET.get('id')
-    url=request.META.get('HTTP_REFERER')
-    tasks_end_dates = Task.objects.filter(id__in = eval(ids)).values_list('end_date',flat=True)
+    tasks_end_dates = Task.objects.filter(active=2,id__in = eval(ids)).values_list('end_date',flat=True)
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})
 
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

@@ -8,7 +8,11 @@ from django.views.decorators.http import require_POST as post_only
 import urllib
 from views.login import signin
 from projectmanagement.templatetags.urs_tags import userprojectlist
-
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 def check_loggedin_access(view):
     def is_auth(request, *args, **kwargs):
         user_id = request.session.get('user_id')
@@ -32,6 +36,39 @@ def check_loggedin_access(view):
             return render(request, 'login.html', locals())
         return view(request, *args, **kwargs)
     return is_auth
-
-
-
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress 
+#because you always have a fixed endpoint or benchmark to compare with. 
+#Take this scenario for example: David makes a goal to write a book with
+# a minimum of 300 pages. He starts writing every day and works really 
+# hard but along the way, he loses track of how many more pages he has 
+# written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has 
+#already written and he instantly determines his progress and knows how much 
+#further he needs to go. allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because
+# you always have a fixed endpoint or benchmark to compare with. Take this 
+# scenario for example: David makes a goal to write a book with a minimum of
+#  300 pages. He starts writing every day and works really hard but along the 
+#  way, he loses track of how many more pages he has written and how much more 
+#  he needs to write. 
+#So rather than panicking David simply counts the number of pages he has already
+# written and he instantly determines his progress and knows how much further he
+#  needs to go. allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because you
+# always have a fixed endpoint or benchmark to compare with. Take this scenario 
+# for example: David makes a goal to write a book with a minimum of 300 pages.
+#  He starts writing every day and works really hard but along the way,
+#   he loses track of how many more pages he has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of pages he has 
+#already written and he instantly determines his progress and knows how much 
+#further he needs to go. allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure your progress because 
+#you always have a fixed endpoint or benchmark to compare with. Take this 
+#scenario for example: David makes a goal to write a book with a minimum of 
+#300 pages. He starts writing every day and works really hard but along the 
+#way, he loses track of how many more pages he has written and how much more 
+#he needs to write. 
+#So rather than panicking David simply counts the number of pages he has 
+#already written and he instantly determines his progress and knows how much 
+#further he needs to go.

@@ -59,16 +59,22 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}
-               {% with "activities"|make_string:"edit" as keystring %}
-                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-               <span>({{i.get_activity_type_display}}) 
-               <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')"></i>
-               <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i>
+
+               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 2px;" onclick="filter(this,this.parentNode.parentNode,'activity')" title="Filter"></i> 
+                {% get_user_permission request as user_obj %}
+                    {% pmo_role request as pmo_access %}
+                    {% if user_obj.is_admin_user == True or pmo_access == 1 %}
+                <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')" title="Edit Activity"></i>
+                <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}')" title="Remove Activity"></i>{% endif %}
                </span>
-                    {% endif %}
-                {% endwith %}
-                    
+
+<!--               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i></span>-->
+               <!-- {% get_user_permission request as user_obj %} -->
+<!--                    {% if user_obj.is_admin_user == True %}-->
+                  
+                      <!-- <a href="/managing/Activity/ActivityForm/edit/{{i.slug}}/?key={{project.slug}}"></a> -->
+                  
+<!--                    {% endif %}-->
                     </a>
                </li>
                {% endfor %}
@@ -93,12 +99,14 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
-                  <li><a href="javascript:void(0);" task_id={{task.id}} activity_id={{task.activity.id}} category_id={{task.activity.super_category.id}}>{{task.name}} 
-                  {% with "tasks"|make_string:"edit" as keystring %}
-                        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-                  <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')"></i></span>
-                  {% endif %}
-                  {% endwith %}
+                  <li><a href="javascript:void(0);" task_id={{task.id}} activity_id={{task.activity.id}} category_id={{task.activity.super_category.id}}>{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}
+                    {% get_user_permission request as user_obj %}
+                    {% pmo_role request as pmo_access %}
+                    {% if user_obj.is_admin_user == True or pmo_access == 1 %}
+                    <i class="fa fa-edit" style="float:right; padding-left: 2px;" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')" title="Edit Task"></i>
+                    
+                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}')" title="Remove Task"></i>{% endif %}
+                  </span>
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
@@ -129,15 +137,17 @@
                   {% if milestone %}
                   {% for mile in milestone %}
                   
-                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}}
-                  {% with "milestone"|make_string:"edit" as keystring %}
-                        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-                   <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} 
-                   <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')"></i>
-                   <i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}
-                   </span>
-                   {% endif %}
-                   {% endwith %}
+
+                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 2px;" onclick="filter(this,this.parentNode.parentNode,'milestone')" title="Filter"></i>
+                    {% get_user_permission request as user_obj %}
+                    {% pmo_role request as pmo_access %}
+                    {% if user_obj.is_admin_user == True or pmo_access == 1 %}
+                    <i class="fa fa-edit" style="float:right; padding-left: 2px;" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')" title="Edit Milestone"></i>{% endif %}
+                    
+                    <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}')" title="Remove Milestone"></i>
+                    
+                    {% endif %}
+                  </span>
 <!--                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>-->
 
 
@@ -181,51 +191,6 @@
  
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js" type="text/javascript" />
-
-
-
-
-
-<script>
-//Toggle
-    
-  $('.user-menu').on('click',function(){
-    $('.dropdown-menu').slideDown(350);
-  
-  });
-  $('.select-down').on('click',function(){
-        $('.dropdown-menu1').slideDown(350);
-          
-    });
-  
-  $(document).ready(function(e) { 
-    /*Content Show/Hide */
-    $('.hide-cont').hide();
-    $('.close-cont').hide();
-    $('.view-cont').click(function(){
-      $('.hide-cont').slideDown(350);
-      $('.close-cont').show();
-      $('.view-cont').hide();
-    });
-    $('.close-cont').click(function(){
-      $('.hide-cont').slideUp(350);
-      $('.close-cont').hide();
-      $('.view-cont').show();
-    }); 
-    $(document).trigger( "click" );
-  });
-  
-  $(document).click(function(){
-  
-    $('.user-menu, .select-down').click(function(event){
-      event.stopPropagation();
-    });
-  
-    $('.dropdown-menu, .dropdown-menu1').slideUp(350);   
-  
-  });    
-</script>
-
     <script type="text/javascript">
    
   
@@ -292,11 +257,12 @@ $(document).ready(function(){
   });
   });
 </script>
-<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
-  <script src="/static/js/jsgantt.js" type="text/javascript"></script>
   
 <!-- script for gantt chart starts here-->
 
+
+<link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/jsgantt.js" type="text/javascript"></script>
 <script>
     var jsonData = {{taskdict|safe}};
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
@@ -603,7 +569,7 @@ $(document).ready(function(){
       function ganttRedo() {
         var previous = null;
         var p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 = null;
-        var mile = false;
+        var mile = fadelse;
         $(".gtaskbarcontainer").each(function (index) {
           currParent = $(this).parent().parent().parent();
           listParent = currParent.attr('id').replace('row', '');
@@ -819,7 +785,7 @@ $(document).ready(function(){
     }
     $.each(jsonData.supercategories,function(){
       if(this.name != ""){
-        $(".scrollmenu").append("<a class='link-pad text-md-center' onClick='superData("+this.id+")'>"+this.name+"</a>");
+        $(".scrollmenu").append("<a class='link-pad text-md-center' onClick='superData("+this.id+");superData("+this.id+");'>"+this.name+"</a>");
         }
     });
     temp = {{ser_hist|safe}};
@@ -836,7 +802,8 @@ $(document).ready(function(){
       var d = this.modified;
       this.modified = new Date(d);
       this.modified.setHours(0, 0, 0, 0);
-      this.modified = new Date(this.modified);  
+      this.modified = new Date(this.modified);
+      if(this.actual_end_date==null) this.actual_end_date = this.modified; 
     })
       $.each(jsonData.tasks,function(i,n){
         $.each(jsonData.activities,function(j,m){
@@ -857,7 +824,7 @@ $(document).ready(function(){
       temp.id = this.id;
       temp.modified = this.actual_end_date;
       temp.actual_end_date = this.actual_end_date;
-      if(this.actual_end_date==null && this.task_progress==100){
+      if(this.actual_end_date==null){
       temp.modified = this.expected_end_date;
       temp.actual_end_date = this.expected_end_date;
       }
@@ -878,13 +845,29 @@ $(document).ready(function(){
     var week = d3.timeFormat("%Y-%U");
 
     var actnest = d3.nest().key(function (d) {
+      if(d.actual_end_date!=null){
+        console.log("Check ac",new Date(d.actual_end_date).getTime())
+        if(new Date(d.actual_end_date).getTime() >= new Date().getTime()) {return week(new Date()-604800000);}
+        else if(new Date(d.actual_end_date).getTime() < new Date().getTime()) {return week(new Date(d.actual_end_date));}
+      }else{
+        return null;
+      }
+    }).entries(pvaSorted);
+
+    var actnest2 = d3.nest().key(function (d) {
       if(d.actual_end_date!=null && new Date(d.actual_end_date).getTime() <= new Date().getTime()){
         return week(new Date(d.actual_end_date));
       }else{
         return null;
       }
+    }).rollup(function (v){
+      var tmp = [];
+      for(var l=0;l<pTasks.length;l++){
+        var w = (new Date(pTasks[l].end_date).getTime() - new Date(pTasks[l].start_date).getTime()+1);
+        tmp.push({"id":pTasks[l].id,"task_progress": 0,"name":pTasks[l].name,"weight":w,"actual_start_date":pTasks[l].actual_start_date,"actual_end_date":pTasks[l].actual_end_date});
+        }
+      return tmp;
     }).entries(pvaSorted);
-    
     var plannest = d3.nest().key(function (d) {
         if(ids.length==0){
         return week(new Date(d.end_date));
@@ -909,13 +892,6 @@ $(document).ready(function(){
     // }, {}) 
     var maxComp = 0;
     var chartData = [];
-    // $.each(plannest, function(){
-    //   $.each(this.values,function(){
-    //     var weight = diffDates(this.start_date,this.end_date);
-    //     if(weight==0){weight=1;} 
-    //     maxComp += (weight * 100);
-    //   })
-    // })
     // --- For Planned Tasks ---
     plannest.sort(function(a,b){
       return new Date(b.modified) - new Date(a.modified);
@@ -926,7 +902,7 @@ $(document).ready(function(){
       var week = getNextWeek(plankey[0],plankey[1]);
       var comp = 0;
       $.each(this.values,function(){
-        var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
+        var weight = Math.abs((new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1));
         comp += (weight * 100);
       })
       chartData.push([(week.getTime()+19800000),comp]);
@@ -935,6 +911,7 @@ $(document).ready(function(){
     chartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
+    console.log("CDA",chartData)
     temp = 0;
     $.each(chartData,function(){
       maxComp += this[1];
@@ -944,55 +921,89 @@ $(document).ready(function(){
     $.each(chartData,function(){
       this[1] = Math.round((this[1]/maxComp)*100);
     });
-    // var cArray = Object.keys(map).map(function(elem) {
-    // return { date: elem, count: map[elem]/100 }
-    // })
-    // console.log("Map",cArray)
-    // var chartData = [];
-    // var Cprev = [{date:"",count:0}];
-    // $.each(cArray,function(n,i){
-    //   chartData.push([(new Date(this.date)).getTime(),(this.count+Cprev.count)]);
-    //   console.log("Value",Cprev,"this",(this.count+Cprev.count))
-    //   if(n>-1){Cprev = cArray[(n)];}
-    // })
-    // chartData.reverse();
+    console.log("Map2",plannest,actnest) 
     // --- For Actual Tasks --- 
     var AmaxComp = 0;
     var AchartData = [];
     actnest.sort(function(a,b){
-      return new Date(b.end_date) - new Date(a.end_date);
+      return new Date(a.values[0].actual_end_date) - new Date(b.values[0].actual_end_date);
     });
-    $.each(actnest , function(){
+    $.each(actnest,function(i,v){
+      actnest2[i].key = this.key;
+      $.each(this.values,function(){
+        $.each(actnest2[i].value, function(m,n){
+          if(actnest2[i+1]!=undefined) {
+          var c = actnest2[i+1].value[m];
+          if(this.task_progress >= c.task_progress) c.task_progress = this.task_progress;
+          }
+        })
+      var b = actnest2[i].value.filter( n => n.id == this.id );
+      if(this.task_progress != null && b.length>0 && b[0].task_progress<=this.task_progress) b[0].task_progress = this.task_progress;
+      });
+    });
+
+    console.log("Asort",actnest2)
+    // $.each(actnest , function(){
+    //   if(this.key!="null"){
+    //     var plankey = this.key.toString().split('-');
+    //     var week = getNextWeek(plankey[0],plankey[1]);
+    //     var compA = 0;
+    //     var weekUID = [];
+    //     console.log(new Date(week),"Key",this.values.length)
+    //     //Remove tasks with same id in the same week 
+    //     for(var k=0; k<this.values.length; k++) {
+    //         console.log(flags[this.values[k].id],'weelUID2');
+    //         if( flags[(this.values[k].id)]) continue;
+    //         flags[(this.values[k].id)] = true;
+    //         weekUID.push(this.values[k]);
+    //     }
+    //         console.log(weekUID,'weelUID');
+    //     $.each(weekUID,function(){
+    //       var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
+    //       compA += (weight * this.task_progress);
+    //       console.log("taskval",this.id,compA);
+    //     })
+    //     AchartData.push([(week.getTime()+19800000),compA]);
+    //   }
+    // });
+    $.each(actnest2, function(){
       if(this.key!="null"){
         var plankey = this.key.toString().split('-');
         var week = getNextWeek(plankey[0],plankey[1]);
         var compA = 0;
         var weekUID = [];
+        // console.log(new Date(week),"Key4",this)
         //Remove tasks with same id in the same week 
-        for(var k=0; k<this.values.length; k++) {
-            if( flags[(this.values[k].id)]) continue;
-            flags[(this.values[k].id)] = true;
-            weekUID.push(this.values[k]);
-        }
-        $.each(weekUID,function(){
-          var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime());
-          compA += (weight * this.task_progress);
+        // for(var k=0; k<this.value.length; k++) {
+        //     // console.log(flags[this.value[k].id],'weelUID2');
+        //     if( flags[(this.value[k].id)]) continue;
+        //     flags[(this.value[k].id)] = true;
+        //     weekUID.push(this.value[k]);
+        // }
+        //     console.log(weekUID,'weelUID');
+        $.each(this.value,function(){
+          var tp = 0;
+          if(this.task_progress != "None") tp = this.task_progress;
+          // var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
+          compA += (Math.abs(this.weight) * parseInt(tp));
         })
-        AchartData.push([(week.getTime()+19800000),compA]);
+        AchartData.push([(week.getTime()+19800000),Math.round((compA/maxComp)*100)]);
+
       }
     });
     AchartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
+    console.log("aCDA",AchartData)
     temp = 0;
-    $.each(AchartData,function(){
-      AmaxComp += this[1];
-      this[1] = this[1] + temp;
-      temp = this[1];
-    })
-    $.each(AchartData,function(){
-      this[1] = Math.round((this[1]/maxComp)*100);
-    });
+    // $.each(AchartData,function(){
+    //   AmaxComp += this[1];
+    //   this[1] = this[1] + temp;
+    //   temp = this[1];
+    // })
+    // $.each(AchartData,function(){
+    //   this[1] = Math.round((this[1]/maxComp)*100);
+    // });
     PVAChart = Highcharts.chart('pvaContainer', {
       chart: {
         type: 'spline',
@@ -1094,7 +1105,7 @@ $(document).ready(function(){
       filteract();
     }
     function superData(id){
-      ids=[];
+      ids=[-1];
       chartInit();
       $.each(sc,function(){
         if(this.super == id){
@@ -1103,13 +1114,14 @@ $(document).ready(function(){
       });
       $.each(pvaData,function(i){
         if(ids.indexOf(pvaData[i].id)==-1){
+          console.log('asort2v',ids.indexOf(pvaData[i].id)==-1);
           pvaData[i].id = 0;
           pvaData[i].modified = 0;
           pvaData[i].start_date = 0;
           pvaData[i].end_date = 0;
         }
       });
-      setTimeout(redraw(),3000);
+      setTimeout(redraw(),5000);
     }
 </script>
 <!-- script for planned vs actual ends -->
@@ -1204,6 +1216,15 @@ function task(name,slug,task_id,act_id,super_id) {
 function milestone(name,slug,mile_id,task_ids) {
     window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
 }
+function remove_item(name,model,item_id) {
+    if (confirm('Are you sure you want to Delete?')) {
+    window.location.href="/managing/task/remove/?name="+ name +"&model="+model+"&item_id="+item_id;
+    } else {
+      return false;
+
+        }
+    
+}
 </script>
 
 <!--script for filters by- malcolm-->
@@ -1287,6 +1308,10 @@ g.highcharts-button.highcharts-contextbutton.highcharts-button-normal {
     background: #169776;
     color: #fff !important;
 }
+.green-content i.fa {
+    margin: 0px 3px;}
+    .hover_text{display: none;}
+    .fa-remove:before:hover.hover_text{display: block;}
 </style>
 {% endblock %}
 

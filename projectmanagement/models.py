@@ -197,8 +197,7 @@ class Project(BaseContent):
         # this model method is for total task count for project
         from taskmanagement.models import Activity,Task
         project = Project.objects.get(id= self.id)
-        activity = Activity.objects.filter(project = project)
-        task_count = Task.objects.filter(activity__project= project).count()
+        task_count = Task.objects.filter(active=2,activity__project= project).count()
         return task_count
         
     def tasks_completed(self):
@@ -207,8 +206,7 @@ class Project(BaseContent):
         from datetime import datetime
         completed_tasks = 0
         project = Project.objects.get(id= self.id)
-        activity = Activity.objects.filter(project = project)
-        task_list = Task.objects.filter(activity__project= project)
+        task_list = Task.objects.filter(active=2,activity__project= project)
         for task in task_list:
             if task.status == 2:
                 completed_tasks = completed_tasks + 1
@@ -223,7 +221,6 @@ class Project(BaseContent):
         planned_cost = budget_periodunitlist.aggregate(Sum('planned_unit_cost')).values()[0]
         utilized_cost = budget_periodunitlist.aggregate(Sum('utilized_unit_cost')).values()[0]
         disbursed_cost = Tranche.objects.filter(project = self,active=2).aggregate(Sum('actual_disbursed_amount')).values()[0] or 0
-        total_percent = 100
         try:
             disbursed_percent = int((disbursed_cost/planned_cost)*100) if disbursed_cost else 0
             utilized_percent = int((utilized_cost/planned_cost)*100) if utilized_cost else 0 
@@ -318,6 +315,7 @@ class ProjectParameter(BaseContent):
     aggregation_function = models.TextField(choices=AGGREGATION_FUNCTION_CHOICES, default='ADD')
     parent = models.ForeignKey('self', **OPTIONAL)
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
+    history = HistoricalRecords()
     
     def __str__(self):
         return str(self.id)

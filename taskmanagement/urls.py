@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from .views import *
 from .forms import *
+from .manage_task import *
 
 # URLS for Task management
 # 
@@ -24,7 +25,19 @@ urlpatterns = [
     url(r'supercategories/selected/$',get_super_selected),
     url(r'activities/selected/$',get_activity_selected),
     url(r'^activity/related/tasks/$',get_activity_tasks),
-    url(r'^tasks/maximum/end_date/$',tasks_max_end_date),
+    url(r'^task/remove/$',remove_task),
+#    url(r'^tasks/maximum/end_date/$',tasks_max_end_date),
     
 #    url(r'^tasks/updates/(?P<obj_id>.*)/$',taskdateupdates),
 ]
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

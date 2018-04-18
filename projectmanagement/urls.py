@@ -3,10 +3,15 @@ from django.contrib import admin
 from projectmanagement.views import (create_project,project_list,
     budget_tranche,key_parameter,tranche_list,add_parameter,edit_parameter,
     upload_parameter,manage_parameter,manage_parameter_values,project_summary,
-    delete_upload_image,remove_record,)
+    delete_upload_image,remove_record,edit_parameter_values,)
 from projectmanagement.manage_roles import manage_funder_relation
 from projectmanagement.common_method import details_of_tasks
 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 urlpatterns = [
     url(r'^add/$',create_project),
     url(r'^list/$',project_list),
@@ -23,4 +28,15 @@ urlpatterns = [
     url(r'^remove/record/$',remove_record),
     url(r'^manage/funder/$',manage_funder_relation),
     url(r'^task/details/$',details_of_tasks),
+    url(r'^parameter/value/edit/$',edit_parameter_values),
 ]
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.

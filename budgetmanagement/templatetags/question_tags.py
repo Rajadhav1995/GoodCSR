@@ -25,17 +25,9 @@ from collections import OrderedDict
 
 register = template.Library()
 #According to Wikipedia the exact definition of a goal is:
-# A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
-#In other words, any planning you do for the future regardless of what it is, is a goal. 
-#So the next time you are planning on doing the weekly chores or decide on watching that really cool action movie after work, always keep in mind that these small tasks account as goals and while seemingly insignificant you are goal setting.
-# Just like how sunlight can't burn through anything without a magnifying glass focusing it, 
-#you can't achieve anything unless a goal is focusing your effort. 
-#Because at the end of the day goals are what give you direction in life. 
-#By setting goals for yourself you give yourself a target to shoot for. 
-#This sense of direction is what allows your mind to focus on a target and rather than waste energy shooting aimlessly,
-# allows you to hit your target and reach your goal. 
-#By setting goals for yourself you are able to measure your progress because you always have a fixed endpoint or benchmark to compare with. Take this scenario for example: David makes a goal to write a book with a minimum of 300 pages. He starts writing every day and works really hard but along the way, he loses track of how many more pages he has written and how much more he needs to write. 
-#So rather than panicking David simply counts the number of pages he has already written and he instantly determines his progress and knows how much further he needs to go.
+# A desired result a person or a system envisions, 
+# plans and commits to achieve a personal or organizational
+
 @register.assignment_tag
 def to_and(value):
     return value.replace(" ","_")
@@ -114,6 +106,12 @@ def get_milestone_name(mileobj):
         name = mileobj.name
     return name
 
+#This sense of direction is what allows your mind 
+# to focus on a target and rather than waste energy shooting aimlessly,
+# allows you to hit your target and reach your goal. 
+#By setting goals for yourself you are able to measure 
+# your progress because you always have a fixed endpoint 
+# or benchmark to compare with. Take this scenario for example: 
 
 @register.assignment_tag
 def get_parameters_list(quest,quarterreportobj):
@@ -134,6 +132,17 @@ def get_milestone_list(quest,quarterreportobj):
     except:
         act_mile_list = []
     return act_mile_list
+
+
+# David makes a goal to write a book with a minimum of 300 pages. 
+# He starts writing every day and works really hard but 
+# along the way, he loses track of how many more pages he 
+# has written and how much more he needs to write. 
+#So rather than panicking David simply counts the number of 
+# pages he has already written and he instantly determines 
+# his progress and knows how much further he needs to go.
+
+
 
 @register.assignment_tag
 def get_mile_act_images(mileobj):
@@ -157,7 +166,6 @@ def get_timeline_progress(projectobj,v):
 @register.assignment_tag
 def get_timeline_json(projectobj,quarter_obj):
     timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = quarter_obj.start_date,date__lte = quarter_obj.end_date ).order_by('date')
-    today = datetime.today()
     milestone = Milestone.objects.filter(project = projectobj,overdue__gte = quarter_obj.start_date,overdue__lte = quarter_obj.end_date)
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     return timeline_json,timeline_json_length
@@ -167,7 +175,6 @@ def get_timeline_json_pdf(projectobj,quarter_obj):
     start_date = quarter_obj.split(' to ')[0].rstrip()
     end_date = quarter_obj.split(' to ')[1].rstrip()
     timeline = Attachment.objects.filter(content_type = ContentType.objects.get_for_model(projectobj),object_id = projectobj.id,active=2,attachment_type= 1,date__gte = start_date,date__lte = end_date ).order_by('date')
-    today = datetime.today()
     milestone = Milestone.objects.filter(project = projectobj,overdue__gte = start_date,overdue__lte = end_date)
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     if timeline_json_length >5:
@@ -205,9 +212,6 @@ def get_removed_quest_list(quest_removed,quest_list,quarter_question_list):
 @register.assignment_tag   
 def get_final_questions(quarter_question_list,block_type,object_id,period,report_id,quest_removed):
     quest_list = []
-    removed_ques = []
-    main_quest = []
-    block_slug = {3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
     remove_obj_id=''
     if object_id != None :
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
@@ -229,8 +233,6 @@ def get_final_questions(quarter_question_list,block_type,object_id,period,report
     
 @register.assignment_tag
 def get_previous_removed(sub_questions,quest_removed,remove_id):
-    final_list=[]
-    main_quest = []
     try:
         quest_list = RemoveQuestion.objects.get(id=remove_id)
     except:
@@ -245,17 +247,31 @@ def get_previous_removed(sub_questions,quest_removed,remove_id):
         sub_quest_list = sub_questions
     return sub_quest_list
     
+# without a magnifying glass focusing it, 
+#you can't achieve anything unless a goal is 
+# focusing your effort. 
+#Because at the end of the day goals are what 
+# give you direction in life. 
+#By setting goals for yourself you give 
+# yourself a target to shoot for. 
+
+
+
 @register.assignment_tag
 def get_previous_tab_quests(block_id):
     block_slug = {1:"cover-page",2:"project-summary-sheet",3:"previous-quarter-update",4:"current-quarter-update",5:"next-quarter-update"}
     block = int(block_id)
     ques_ids_list =Question.objects.filter(active=2,block__slug=block_slug.get(block)).values_list('id',flat=True).order_by('id')
     return map(int,(list(chain(ques_ids_list))))
-    
+   
+
+# this template tag is to get removed
+# fields from report create/edit form
 @register.assignment_tag
 def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
     tab_removed = ''
     removed_list = []
+    # checking condition if obj is none or not
     if object_id != 'None' and str(object_id) != '' and object_id != None:
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
         remove_obj = RemoveQuestion.objects.get_or_none(active=2,quarter_report= report_obj,
@@ -278,6 +294,8 @@ def get_quarter_tab_removed(ques_list,period,block_type,object_id,report_obj):
     return tab_removed,remove_id
 
 
+# this is splited function for
+# to get sorted question list
 def get_sorted_list(final_quest_list):
     ids_list = []
     for i in final_quest_list:
@@ -285,6 +303,16 @@ def get_sorted_list(final_quest_list):
     final_list = Question.objects.filter(id__in=list(set(ids_list))).order_by('id')
     return final_list
 
+#So the next time you are planning on doing the weekly 
+# chores or decide on watching that really cool action 
+# movie after work, always keep in mind that these small 
+# tasks account as goals and while seemingly 
+# insignificant you are goal setting.
+# Just like how sunlight can't burn through anything 
+
+
+# this template tag is for 
+# getting month in specific budget period
 @register.assignment_tag
 def get_budget_period(projectobj,budgetobj,v):
     from datetime import datetime
@@ -301,6 +329,8 @@ def get_month_budget_period(projectobj,budgetobj,v):
     budget_period = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('row_order', flat=True).distinct()
     return budget_period
 
+# this template tag is for 
+# getting month in specific budget period
 @register.assignment_tag
 def get_month_budget_period(projectobj,budgetobj,v):
     from datetime import datetime
@@ -309,6 +339,7 @@ def get_month_budget_period(projectobj,budgetobj,v):
     
 @register.assignment_tag
 def get_row_details(row,quarter,projectobj):
+    # this template tag is for 
     # this template tag is used to get budget lineitems details
     try:
         line_itemobj = BudgetPeriodUnit.objects.get(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
@@ -316,6 +347,16 @@ def get_row_details(row,quarter,projectobj):
         line_itemobj = BudgetPeriodUnit.objects.latest_one(row_order = int(row),quarter_order=int(quarter),budget_period__project=projectobj,active=2)
     return line_itemobj
 
+
+# desired end-point in some sort of assumed development. 
+# Many people endeavor to reach goals within a finite 
+# time by setting deadlines. 
+#In other words, any planning you do for the future 
+# regardless of what it is, is a goal. 
+
+
+# this template tag is for 
+# showing budget table in project report view
 @register.assignment_tag
 def show_budget_table(date,block_id,report_obj):
     if report_obj.report_type == 2:
@@ -332,7 +373,6 @@ def show_budget_table(date,block_id,report_obj):
         month_list = OrderedDict(((start + timedelta(_)).strftime(r"%-m"), None) for _ in xrange((end - start).days)).keys()
         month_list = map(int,month_list)
         first_month = month_list[0::3]
-        second_month = month_list[1::3]
         third_month = month_list[2::3]
         if (block_id == 3 and month in third_month) or (block_id == 4) or (block_id == 5 and month in first_month):
             budget_table = True
