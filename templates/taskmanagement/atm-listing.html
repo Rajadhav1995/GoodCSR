@@ -59,7 +59,6 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-
                <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 2px;" onclick="filter(this,this.parentNode.parentNode,'activity')" title="Filter"></i> 
                 {% get_user_permission request as user_obj %}
                     {% pmo_role request as pmo_access %}
@@ -85,11 +84,9 @@
          </div>
          <div class="clear"></div>
                   {% get_user_permission_pmo request as user_obj %}
-                    {% with "activities"|make_string:"add" as keystring %}
-                        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                    {% if user_obj == 1 %}
                     <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
                     {% endif %}
-                    {% endwith %}
       </div>
    </div>
       <div class="green-box-lft">
@@ -111,7 +108,6 @@
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
 <!--                     {% endif %}-->
-
                     </a>
                   </li>
                   {% endfor %}
@@ -122,11 +118,9 @@
             </div>
             <div class="clear"></div>
             {% get_user_permission_pmo request as user_obj %}
-                    {% with "tasks"|make_string:"add" as keystring %}
-                        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                    {% if user_obj == 1 %}
             <a class="add-task" href="/managing/Task/TaskForm/add/?slug={{project.slug}}">Add Task</a>
                 {% endif %}
-                {% endwith %}
          </div>
       </div>
       <div class="green-box-lft">
@@ -137,7 +131,6 @@
                   {% if milestone %}
                   {% for mile in milestone %}
                   
-
                   <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} <i class="fa fa-filter" style="float:right; padding-left: 2px;" onclick="filter(this,this.parentNode.parentNode,'milestone')" title="Filter"></i>
                     {% get_user_permission request as user_obj %}
                     {% pmo_role request as pmo_access %}
@@ -165,11 +158,9 @@
             </div>
             <div class="clear"></div>
                 {% get_user_permission_pmo request as user_obj %}
-                    {% with "milestone"|make_string:"add" as keystring %}
-                        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                    {% if user_obj == 1 %}
                 <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
                 {% endif %}
-                {% endwith %}
          </div>
       </div>
    </div>

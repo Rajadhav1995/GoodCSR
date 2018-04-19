@@ -452,11 +452,13 @@ function numberWithCommas(x) {
 <!--       <button>Save Image</button>-->
 <!--        </form>-->
 
-        {% with "upload-parameters"|make_string:"view" as keystring %}
-                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+        {% get_user_permission request as user_obj %}
+        {% pmo_role request as pmo_access %}
+        {% if user_obj.is_admin_user == True or pmo_access == 1 or user_obj.organization_type == 2  and user_obj.owner == True %}
+        
+        
         <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
-        {% endwith %}
         </div>
 
         <ul class="key_parameter parameter">
@@ -506,11 +508,10 @@ function numberWithCommas(x) {
     </div>
     <div class="white-box timeline-white">
     	<h2>Timeline Progress</h2>
-        {% with "upload-images"|make_string:"view" as keystring %}
-            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-        <a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
-        {% endif %}
-        {% endwith %}
+    	    {% get_user_permission request as user_obj %}
+        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
+    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
+    	{% endif %}
         <div class="clear"></div>
 <!-- timeline slider -->
         {% if timeline_json != '[]' %}

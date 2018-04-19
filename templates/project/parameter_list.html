@@ -40,11 +40,11 @@
         <h3><a href="/project/summary/?slug={{slug}}&key=summary">{{project_name}}</a></h3>
         
 <!--        {% get_user_permission request as user_obj %}-->
-    {% with "upload-parameters"|make_string:"add" as keystring %}
-            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+<!--    {% with "upload-parameters"|make_string:"add" as keystring %}-->
+<!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
         <div style="float: right;"><a class="budget_button" href="/project/parameter/add/?slug={{slug}}&key={{key}}">Add Parameter</a></div>
-        {% endif %}
-        {% endwith %}
+<!--        {% endif %}-->
+<!--        {% endwith %}-->
         <!-- {% if parameter_count >= 4 %}
         <div style="float: right;"><a class="budget_button" href="#" onclick="count_validate()">Add Parameter</a></div>
         {% else %}
@@ -56,11 +56,11 @@
             <tr>
                 <th>Project Parameter </th>
                 <th>Parameter Type</th>
-        {% with "upload-parameters"|make_string:"edit" as keystring %}
-            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+<!--        {% with "upload-parameters"|make_string:"edit" as keystring %}-->
+<!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
                 <th>Action</th>
-                {% endif %}
-                {% endwith %}
+<!--                {% endif %}-->
+<!--                {% endwith %}-->
             </tr>
         </thead>
         
@@ -68,16 +68,16 @@
         <tr>
             <td>{{i.name}}</td>
             <td>{{i.get_parameter_type_display}}</td>
-                {% with "upload-parameters"|make_string:"edit" as keystring %}
-                             {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+<!--        {% with "upload-parameters"|make_string:"edit" as keystring %}-->
+<!--                     {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
 
             
             <td><a class="budget_button" href="/project/upload/parameter/value/?id={{i.id}}">Add Values</button></a>
                 <a class="budget_button" href="/project/parameter/values/manage/?id={{i.id}}">Manage Values</button></a>
                 <a class="budget_button" href="/project/parameter/edit/?id={{i.id}}"><i class="fa fa-edit"></i> Edit</button></a>
                 <a href="/project/remove/record/?id={{i.id}}&model=ProjectParameter" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a>
-            {% endif %}
-            {% endwith %}
+<!--            {% endif %}-->
+<!--            {% endwith %}-->
                 <!-- <a href="/project/parameter/edit/?id={{i.id}}"><i class="fa fa-edit"></i></a> -->
 <!--  -->
                 <!-- /project/parameter/values/manage/?id={{i.id}} -->
