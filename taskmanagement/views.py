@@ -519,9 +519,12 @@ def task_comments(request):
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
     
     MAX_UPLOAD_SIZE = "5242880"
-    #   "2621440" 
-    nexts = eval(request.POST.get('next'))
-    url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1])
+    #   "2621440"
+    try:
+        nexts = eval(request.POST.get('next'))
+        url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1])
+    except:
+        url = '/managing/my-tasks/details/?slug=&key=mytasks&status=0'
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
