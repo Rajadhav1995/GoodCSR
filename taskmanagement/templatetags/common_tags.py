@@ -165,6 +165,7 @@ def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
 
 @register.assignment_tag
 def task_comments_progress(date,task_id, attach):
+    import ipdb; ipdb.set_trace()
     task_data = []
     key = 'project_tasks'
     start_date = datetime.combine(date, datetime.min.time())
