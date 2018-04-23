@@ -522,7 +522,7 @@ def task_comments(request):
     #   "2621440"
     try:
         nexts = eval(request.POST.get('next'))
-        url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1])
+        url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1]+'&'+str(nexts[3][0])+'='+str(nexts[3][1]))
     except:
         url = '/managing/my-tasks/details/?slug=&key=mytasks&status=0'
     user_id = request.session.get('user_id')
