@@ -599,7 +599,7 @@ def string_trim(string):
 def read_more_text(text):
     if len(text) > 50:
         short_text = text[:190]
-        more_text = text[50:]
+        more_text = text[190:]
     else:
         short_text = text
         more_text = ''
