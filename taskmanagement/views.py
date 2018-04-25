@@ -293,7 +293,7 @@ def get_project_updates(project,uploads):
         attach_lists = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(project),object_id = project.id).order_by('created')
         for a in attach_lists:
             uploads.append({'project_name':project.name,'task_name':'','attach':a.description,'file_type':a.get_attachment_type_display(),
-            'user_name':a.created_by.email if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''})
+            'user_name':a.created_by.attrs.get('first_name') + ' ' +a.created_by.attrs.get('last_name') if a.created_by else '','time':a.created,'date':a.created.date(),'task_status':''})
     return uploads
     
 def get_tasks_status(project,task,uploads):
@@ -301,7 +301,7 @@ def get_tasks_status(project,task,uploads):
     # 
     if task.status == 2 and task.history.latest():
         uploads.append({'project_name':project.name,'task_name':task.name,'attach':'',
-            'user_name':task.created_by.email if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest(),'file_type':''})
+            'user_name':task.created_by.attrs.get('first_name') + ' ' +task.created_by.attrs.get('last_name') if task.created_by else '','time':task.modified,'date':task.modified.date(),'task_status':task.history.latest(),'file_type':''})
     return uploads
  
 # When working with any programming language, you include comments
@@ -321,7 +321,7 @@ def updates(obj_list):
             attach_list = Attachment.objects.filter(active=2,content_type = ContentType.objects.get_for_model(task),object_id = task.id).order_by('created')
             for attach in attach_list:
                 uploads.append({'project_name':project.name,'task_name':task.name,'attach':attach.description,
-                'user_name':attach.created_by.email if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest(),'file_type':''})
+                'user_name':attach.created_by.attrs.get('first_name') + ' ' +attach.created_by.attrs.get('last_name')  if attach.created_by else '','time':attach.created,'date':attach.created.date(),'task_status':task.history.latest(),'file_type':''})
             uploads = get_tasks_status(project,task,uploads)
     try:
         uploads = sorted(uploads, key=lambda key: key['time'],reverse=True)
@@ -442,7 +442,6 @@ def my_tasks_details(request):
         category_list = [{'id':i.activity.super_category.id,
                               'name':i.activity.super_category.name} for i in task_activities]
         category_list = [ast.literal_eval(sub) for sub in set([str(cate) for cate in category_list])]
-        # import ipdb; ipdb.set_trace()
     elif status == '0':
         over_due = my_tasks_listing(project,user,status)
         task_list = Task.objects.filter(active=2,assigned_to=user)
@@ -552,6 +551,7 @@ def task_comments(request):
             # added to get the task updates done by particular user saved in modified_by 
             add_modified_by_user(comment,request)
             comment.save()
+            create_task_progress(request,task)
         # added to get the task updates done by particular user saved in modified_by 
         add_modified_by_user(task,request)
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
