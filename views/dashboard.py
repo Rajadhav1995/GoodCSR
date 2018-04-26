@@ -11,8 +11,9 @@ from menu_decorators import check_loggedin_access
 from pmu.settings import PMU_URL
 from django.core.paginator import Paginator,Page
 import json
+from django.contrib.auth.decorators import login_required
 #create views of dashboard
-
+#@login_required(login_url='/login/')
 @check_loggedin_access
 def admin_dashboard(request):
     # this function is to show detail view of dashboard
