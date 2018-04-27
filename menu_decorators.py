@@ -31,7 +31,7 @@ def check_loggedin_access(view):
                 return render(request, 'login.html', locals())
         elif request.method == 'POST':
             user = signin(request)
-        elif user_id == '':
+        elif user_id == '' or user_id == None :
             message = "Permission Denined!!!Please login with credentials."
             return render(request, 'login.html', locals())
         return view(request, *args, **kwargs)
