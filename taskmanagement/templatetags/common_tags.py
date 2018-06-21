@@ -58,9 +58,8 @@ def get_details(obj):
     task_status = obj.get('task_status') or ''
     file_type = obj.get('file_type') or ''
     if task_status and task_status.status == 2:
-        closed_tasks = '''<li><canvas class="user-icon" data-name=" '''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
-    update = '''<li><canvas class="user-icon" data-name=" '''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' uploaded <u>'''+ file_type +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
-
+        closed_tasks = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
+    update = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' uploaded <u>'''+ file_type +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
     return update,closed_tasks 
     
 @register.assignment_tag   
@@ -166,6 +165,7 @@ def get_task_attachment(obj,attach_obj,previous_task_progress,slug,comment_obj):
 
 @register.assignment_tag
 def task_comments_progress(date,task_id, attach):
+    import ipdb; ipdb.set_trace()
     task_data = []
     key = 'project_tasks'
     start_date = datetime.combine(date, datetime.min.time())
@@ -599,7 +599,7 @@ def string_trim(string):
 def read_more_text(text):
     if len(text) > 50:
         short_text = text[:190]
-        more_text = text[50:]
+        more_text = text[190:]
     else:
         short_text = text
         more_text = ''
