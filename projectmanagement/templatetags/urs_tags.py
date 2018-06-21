@@ -282,6 +282,9 @@ import re
 def currency(value):
     # this template tag is to convert 
     # number into currency format 
+    import locale
+    import re
+    locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
     if value == '':
         value = 0
     value = float('{:.2f}'.format(float(value)))
