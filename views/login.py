@@ -25,6 +25,7 @@ def signin(request):
 #            r = requests.post(SAMITHA_URL + '/pmu/login/', data=data)
         except requests.exceptions.ConnectionError:
             status_code = "Connection refused"
+        print(r.data)
         validation_data = json.loads(r.data)
 #        userobj = UserProfile.objects.get_or_none(email=str(request.POST.get('username')))
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
