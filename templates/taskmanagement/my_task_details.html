@@ -388,7 +388,7 @@ $('#comment_').keypress(function (e) {
     e.preventDefault();
     return false;
 }).on('paste', function (e) {
-  var regex = new RegExp("^^[0-9a-zA-Z \b /g .]+$");
+  var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
     var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
     if (regex.test(str)) {
         return true;
