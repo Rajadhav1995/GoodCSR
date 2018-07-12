@@ -185,9 +185,11 @@ def get_org_logo(projectobj):
     data = {'company_name':str(funderobj.funder.organization) if funderobj else '',
             'ngo_name':str(funderobj.implementation_partner.organization if funderobj else '')}
     ''' calling function to return the company logo based on the project'''
-    http = urllib3.PoolManager()
-    companyobj = http.request('POST',SAMITHA_URL + '/pmu/company/logo/', fields = data)
-    validation_data = json.loads(companyobj.data)
+#    http = urllib3.PoolManager()
+#    companyobj = http.request('POST',SAMITHA_URL + '/pmu/company/logo/', fields = data)
+    headers = {'content-type': 'application/json'}
+    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', json.dumps(data),headers=headers)
+    validation_data = companyobj.json()
     org_logo = validation_data.get('front_image')
     ngo_logo = validation_data.get('ngo_image')
     return org_logo,ngo_logo
