@@ -30,6 +30,7 @@ from django.db.models import Q
 from projectmanagement.common_method import add_modified_by_user
 from menu_decorators import check_loggedin_access
 from media.models import ProjectLocation
+import os
 
 @check_loggedin_access
 def listing(request):
@@ -421,6 +422,9 @@ def my_tasks_details(request):
     # 
     image_url = PMU_URL
     status=request.GET.get('status')
+    # msg comes task update
+    upload_msg = request.GET.get('msg')
+    upload_msg = upload_msg if upload_msg else ''
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
     remain_days = today + timedelta(days=2)
@@ -442,7 +446,6 @@ def my_tasks_details(request):
         category_list = [{'id':i.activity.super_category.id,
                               'name':i.activity.super_category.name} for i in task_activities]
         category_list = [ast.literal_eval(sub) for sub in set([str(cate) for cate in category_list])]
-        # import ipdb; ipdb.set_trace()
     elif status == '0':
         over_due = my_tasks_listing(project,user,status)
         task_list = Task.objects.filter(active=2,assigned_to=user)
@@ -513,7 +516,7 @@ def create_task_progress(request,task):
 def task_comments(request):
     # to save the updates of tasks like 
     # attachments / progress bar / comments
-    # 
+    #
     msg =""
     url = request.META.get('HTTP_REFERER')
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
@@ -521,7 +524,7 @@ def task_comments(request):
     slug = request.GET.get('slug')
     key = request.GET.get('key')
     status=request.GET.get('status')
-    MAX_UPLOAD_SIZE = "5242880"
+    MAX_UPLOAD_SIZE = 5242880
     #   "2621440"
     try:
         nexts = eval(request.POST.get('next'))
@@ -539,7 +542,10 @@ def task_comments(request):
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
             file_name = upload_file.name.split('.')[0]
-            if upload_file.size <= MAX_UPLOAD_SIZE:
+            #  upload docu validation kartik
+            from dashboard.project_wall import note_file_validation
+            save_status = note_file_validation(upload_file)
+            if not save_status:
                 attach = Attachment.objects.create(description = request.POST.get('comment'),
                     attachment_type = application_type.get(file_type),
                     document_type = doc_type.get(file_type),
@@ -552,8 +558,9 @@ def task_comments(request):
                 # added to get the task updates done by particular user saved in modified_by 
                 add_modified_by_user(attach,request)
                 attach.save()
+                create_task_progress(request,task)
             else:
-                msg = "yess"
+                msg = save_status
         elif request.POST.get('comment')!= '':
             comment = Comment.objects.create(text = request.POST.get('comment'),
                 created_by = user,content_type = ContentType.objects.get(model=('task')),

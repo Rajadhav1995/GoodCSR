@@ -62,10 +62,11 @@ from django.shortcuts import render_to_response,render
 from django.template import RequestContext
 def details_of_tasks(request):
     # this funtion is to show the details of task in my tasks page
-    # 
+    #
     ids = request.GET.get('id')
+    error_msg = request.GET.get('msg')
     obj_list = Task.objects.filter(id= int(ids))
-    return render(request,'taskmanagement/my_task_details.html', {'tasks': obj_list},RequestContext(request))
+    return render(request,'taskmanagement/my_task_details.html', {'tasks': obj_list, 'msg':error_msg},RequestContext(request))
     
     
 

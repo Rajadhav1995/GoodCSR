@@ -309,11 +309,12 @@ jQuery("#activate_tagator2").keyup(function () {
 function task_details(task_id){
     $('.right-div-details').html('');
            var sl_id = task_id
+           var filemsg = "{{upload_msg}}"
             $.ajax({
             url:'/project/task/details/',
             type:'GET',
             async: false,
-            data:{id:sl_id,},
+            data:{id:sl_id,msg:filemsg},
             dataType:"html",
             success:function(data){
                 $('.right-div-details').html(data);
