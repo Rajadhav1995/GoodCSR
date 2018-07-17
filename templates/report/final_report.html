@@ -895,7 +895,7 @@
                             <div class="col-md-6 report_text" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{j|add:previous_len}}">
 
                                 <p>{{quest.text|title}}</p>
-                                <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                                <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"></textarea>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
@@ -1122,7 +1122,7 @@
                             <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{j|add:previous_len}}">
                                 <p>{{quest.text|title}}</p>
                                 <div class="">
-                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                                    <textarea type="text" id="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_2_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"></textarea>
                                 </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},4,'{{reportupdates.1}}','{{v}}','{{j|add:previous_len}}')">Remove</a></h5>
                             </div>
@@ -1528,7 +1528,7 @@
                         {% if quest.slug == "about-the-quarter" %}
                             <div class="col-md-12 report_text current_quarter" style="padding:0px; margin-bottom:30px" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
-                                <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                                <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="" class="textarea_file"></textarea>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
                         {% endif %}
@@ -1628,7 +1628,7 @@
                             <div class="col-md-12 report_text current_quarter" id="ques_{{quest.id}}_{{future_len}}">
                                 <p>{{quest.text|title}}</p>
                                 <div class="">
-                                    <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"> </textarea>
+                                    <textarea type="text" id="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" name="{{quest.slug}}_3_{{i}}_{{quest.id}}_{{j}}" value="{{text}}"  class="textarea_file"></textarea>
                                 </div>
                                 <h5><a href="javascript:void(0);" onclick="return remove_fields({{quest.id}},5,'{{reportupdates.1}}','{{v}}','{{future_len}}')">Remove</a></h5>
                             </div>
@@ -2286,7 +2286,7 @@ $(document).ready(function() {
     $(document).ready(function() {
       'use strict';
           $(window).on('ariaAccordion.initialised', function(event, element) {
-            console.log('initialised');
+            //console.log('initialised');
           });
 
           $('.accordion-group').first().ariaAccordion({
@@ -2386,7 +2386,6 @@ $(document).ready(function() {
    {% for i,v in currentquarter_list.items %}
        {% get_gantt_details v projectobj as taskdict %}
        var jsonData = {{taskdict|safe}}
-    console.log(jsonData);
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -2520,7 +2519,7 @@ $(document).ready(function() {
       }
       // For Milestones
       var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
+      //console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
         var mileId = 111,
           mileStatus = 'gmilestone redmile '
@@ -2534,7 +2533,7 @@ $(document).ready(function() {
         var tempArray = [];
         var n = 0;
         $.each(depTask, function (index, value) {
-          console.log('value', n);
+          //console.log('value', n);
           tempArray.push({
             'id': value
           });
@@ -2544,17 +2543,17 @@ $(document).ready(function() {
             }
             if (i == (depTask.length - 1)) {
 
-              console.log('Array', depTask)
-              console.log('Max Date', Math.max(tempArray.date));
+              //console.log('Array', depTask)
+              //console.log('Max Date', Math.max(tempArray.date));
             }
           }
           n++;
         });
-        console.log("tempArray", tempArray);
+        //console.log("tempArray", tempArray);
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
-        console.log('depTask', depTask[0]);
+        //console.log('depTask', depTask[0]);
         if (depTask[ln] == tempId) {
           var d1 = new Date(eEndDate);
           var d2 = new Date(eEndDate);
@@ -2575,7 +2574,7 @@ $(document).ready(function() {
             var d4 = new Date(completionDate);
             var timeDiff = (d3.getTime() + 86400) - d4.getTime();
             var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
+            //console.log('DiffDays', diffDays);
             if (diffDays < 0) {
               var dur = rem = Math.abs(diffDays);
               if (dur < 8) {
@@ -2596,7 +2595,7 @@ $(document).ready(function() {
                 rem = Math.floor(rem % 365);
                 mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+              //console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
               var dur = rem = Math.abs(diffDays);
@@ -2621,7 +2620,7 @@ $(document).ready(function() {
                 rem = Math.floor(rem % 365);
                 mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+              //console.log('Diff days', mileName);
             }
           }
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
@@ -2746,7 +2745,7 @@ $(document).ready(function() {
                 }
               });
               $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
+              //console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
               if (count == 0) {
                 $(previous).css('top', '0px');
                 count++;
@@ -2799,7 +2798,7 @@ $(document).ready(function() {
    {% for i,v in futurequarter_list.items %}
        {% get_gantt_details v projectobj as taskdict %}
        var jsonData = {{taskdict|safe}}
-    console.log(jsonData);
+    //console.log(jsonData);
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer_next'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -2933,7 +2932,7 @@ $(document).ready(function() {
       }
       // For Milestones
       var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
+      //console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
         var mileId = 111,
           mileStatus = 'gmilestone redmile '
@@ -2947,7 +2946,7 @@ $(document).ready(function() {
         var tempArray = [];
         var n = 0;
         $.each(depTask, function (index, value) {
-          console.log('value', n);
+          //console.log('value', n);
           tempArray.push({
             'id': value
           });
@@ -2957,17 +2956,17 @@ $(document).ready(function() {
             }
             if (i == (depTask.length - 1)) {
 
-              console.log('Array', depTask)
-              console.log('Max Date', Math.max(tempArray.date));
+              //console.log('Array', depTask)
+              //console.log('Max Date', Math.max(tempArray.date));
             }
           }
           n++;
         });
-        console.log("tempArray", tempArray);
+        //console.log("tempArray", tempArray);
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
-        console.log('depTask', depTask[0]);
+        //console.log('depTask', depTask[0]);
         if (depTask[ln] == tempId) {
           var d1 = new Date(eEndDate);
           var d2 = new Date(eEndDate);
@@ -2988,7 +2987,7 @@ $(document).ready(function() {
             var d4 = new Date(completionDate);
             var timeDiff = (d3.getTime() + 86400) - d4.getTime();
             var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
+            //console.log('DiffDays', diffDays);
             if (diffDays < 0) {
               var dur = rem = Math.abs(diffDays);
               if (dur < 8) {
@@ -3009,7 +3008,7 @@ $(document).ready(function() {
                 rem = Math.floor(rem % 365);
                 mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+              //console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
               var dur = rem = Math.abs(diffDays);
@@ -3159,7 +3158,7 @@ $(document).ready(function() {
                 }
               });
               $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
+              //console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
               if (count == 0) {
                 $(previous).css('top', '0px');
                 count++;
@@ -3266,9 +3265,10 @@ $(document).ready(function() {
 <!--    $('#'+div_id).addClass('ui-corner','top');-->
 <!--    }-->
 <!--</script>-->
-<!-- Script for save and exit starts -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
-<script src="https://malsup.github.com/jquery.form.js"></script>
+<!-- Script for save and exit starts  rfeert-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script> 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
 <script>
     var request_url = "{{request.get_full_path|safe}}"
     $('#save_and_exit').on('click',function(){
@@ -3359,10 +3359,9 @@ $(document).ready(function() {
                     
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
-                console.log("remove error")
                //console.log(XMLHttpRequest.responseText);
-               console.log(XMLHttpRequest);
-               console.log(errorThrown);
+               //console.log(XMLHttpRequest);
+               //console.log(errorThrown);
             }
         });
 
@@ -3389,9 +3388,9 @@ $(document).ready(function() {
                 $('.tab_'+section).hide();
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown){
-                console.log("remove error")
-               console.log(XMLHttpRequest);
-               console.log(errorThrown);
+                //console.log("remove error")
+               //console.log(XMLHttpRequest);
+               //console.log(errorThrown);
             }
         });
             

@@ -20,6 +20,9 @@ from media.models import (Comment,Attachment)
 from userprofile.models import ProjectUserRoleRelationship
 from taskmanagement.models import Activity
 from media.models import (Attachment,ScreenshotMedia)
+import urllib3
+import simplejson as json
+
 
 #According to Wikipedia the exact definition of a goal is:
 # A desired result a person or a system envisions, plans and commits to achieve a personal or organizational desired end-point in some sort of assumed development. Many people endeavor to reach goals within a finite time by setting deadlines. 
@@ -181,8 +184,11 @@ def get_org_logo(projectobj):
     data = {'company_name':str(funderobj.funder.organization) if funderobj else '',
             'ngo_name':str(funderobj.implementation_partner.organization if funderobj else '')}
     ''' calling function to return the company logo based on the project'''
-    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', data=data)
-    validation_data = json.loads(companyobj.content)
+#    http = urllib3.PoolManager()
+#    companyobj = http.request('POST',SAMITHA_URL + '/pmu/company/logo/', fields = data)
+    headers = {'content-type': 'application/json'}
+    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', json.dumps(data),headers=headers)
+    validation_data = companyobj.json()
     org_logo = validation_data.get('front_image')
     ngo_logo = validation_data.get('ngo_image')
     return org_logo,ngo_logo
@@ -281,6 +287,9 @@ import re
 def currency(value):
     # this template tag is to convert 
     # number into currency format 
+    import locale
+    import re
+    locale.setlocale( locale.LC_ALL, 'en_IN.UTF-8' )
     if value == '':
         value = 0
     value = float('{:.2f}'.format(float(value)))

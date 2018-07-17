@@ -406,7 +406,7 @@ width:450px;
                     <input style="width: 0px;" value="" name="rem_id" id="rem_id" type="hidden"/>
                     <input style="width: 0px;" value="" name="city_var" id="city_var" type="hidden"/>
 
-                        <input class="btn btn-primary" type="submit" value="Save" onclick="return ddlValidate();" />
+                        <input class="btn btn-primary" type="submit" value="Save" id="mysubmit" onclick="return ddlValidate();" />
                         <a class="btn btn-success" href="/project/list/">Cancel</button></a>
                     </div>
                 </div>
@@ -548,10 +548,12 @@ $(document).ready(function() {
         if (end <= start) {
             alert("'End date' should be greater than 'Start date'")
             document.getElementById('dateError').innerHTML="End date should be greater than Start date"
+            document.getElementById("mysubmit").disabled = true;
         };
         if (end > start) {
             document.getElementById('dateError').innerHTML=""
             document.getElementById('dateError1').innerHTML=""
+            document.getElementById("mysubmit").disabled = false;
         };
 
         var months = (end.getFullYear() - start.getFullYear()) * 12;
@@ -574,6 +576,7 @@ $(document).ready(function() {
 function date_validate() {
     if ($('#id_start_date').val()>$('#id_end_date').val()){
         alert("'End date' should be greater than 'Start date'");
+        document.getElementById("mysubmit").disabled = true;
         return false;
         } else {
             return true;
@@ -658,4 +661,27 @@ function funder_val() {
         
 });
 </script>
+<script type="text/javascript">
+    $('#id_name').keypress(function( e ){
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k >= 65 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||(k >= 38 && k <= 41) || (k>=44 && k<=46));
+        }
+     ).on('paste', function (e) {
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k >= 65 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||(k >= 38 && k <= 41) || (k>=44 && k<=46));
+        }
+        );
+    $('#id_description').keypress(function (e) {
+    var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+});
+    </script>
 {% endblock %}

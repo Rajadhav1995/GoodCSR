@@ -231,7 +231,7 @@
 <script>
   $( function() {
     var date = "{{projectobj.start_date|safe}}"
-    console.log(date);
+    //console.log(date);
     $("#id_actual_start_date").datepicker({ dateFormat: 'yy-mm-dd', minDate: date ,changeMonth: true,changeYear: true});
     $( "#id_end_date" ).datepicker({ dateFormat: 'yy-mm-dd', changeMonth: true,changeYear: true});
   } );

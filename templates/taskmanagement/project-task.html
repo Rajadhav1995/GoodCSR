@@ -1,6 +1,6 @@
 {% extends 'project/project-summary.html' %}
 {% load common_tags %}
-{% load urs_tags %}
+{% load urs_tags roles_tags %}
 
 {% block content %}
 
@@ -181,14 +181,53 @@ font-size: 14px;
             </div>
             <div class="task-completion-right">
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">{% csrf_token %}
+                    {% if request.GET.items %}
+    <input type="hidden" name="next" value="{{request.GET.items}}">
+    {% endif %}
                 <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
-               <textarea name="comment" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..." required></textarea>
+                              
+               <textarea name="comment" id='comment_{{i.id}}' maxlength="500"  onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..." required></textarea>
+                 <div id="textarea_feedback_{{i.id}}" style="float: right;"></div>
+                 <script>
+                        $(document).ready(function() {
+                            var text_max = 500;
+                            $('#textarea_feedback_{{i.id}}').html(text_max + ' characters remaining');
+
+                            $('#comment_{{i.id}}').keyup(function() {
+                                var text_length = $('#comment_{{i.id}}').val().length;
+                                var text_remaining = text_max - text_length;
+
+                                $('#textarea_feedback_{{i.id}}').html(text_remaining + ' characters remaining');
+                            });
+                            $('#comment_{{i.id}}').keypress(function (e) {
+                                var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+                                var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                                if (regex.test(str)) {
+                                    return true;
+                                }
+
+                                e.preventDefault();
+                                return false;
+                            }).on('paste', function (e) {
+                              var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+                                var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                                if (regex.test(str)) {
+                                    return true;
+                                }
+
+                                e.preventDefault();
+                                return false;
+                            });
+                        });
+                </script>
                <div>
                <!-- <i class="fa fa-file"></i> -->
                <input type='file' name ='upload_attach' id='upload-photo'/> 
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
-                
+               
+        {% with "project-tasks"|make_string:"add" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                <div class="task-details">
                   <h4>Task Completion Status (%)</h4>
                 <div class = 'task_bar' style="width: 375px;float: left;">
@@ -253,6 +292,8 @@ font-size: 14px;
                         </script>
 <!--                  SCRIPT FOR TASK PROGRESS BAR      -->
                   <input class="task-link" type="submit" value="Add update"/>
+              {% endif %}
+              {% endwith %}
                   </form>
                </div>
             </div>
@@ -830,6 +871,4 @@ jQuery("#activate_tagator2").keyup(function () {
       });
            });
 </script>
-
-
 {% endblock %}

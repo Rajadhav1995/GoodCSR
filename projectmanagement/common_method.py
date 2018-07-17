@@ -1,6 +1,8 @@
 from projectmanagement.models import *
 from projectmanagement.utils import random_string_generator
 from media.models import Keywords,FileKeywords
+from taskmanagement.models import Task
+from django.http import HttpResponse
 
 # Here are some common methods whis we are using in 
 # different places in this project
@@ -55,6 +57,17 @@ def add_modified_by_user(obj,request):
     obj.modified_by = temp_user
     obj.save()
     return obj
+    
+from django.shortcuts import render_to_response,render
+from django.template import RequestContext
+def details_of_tasks(request):
+    # this funtion is to show the details of task in my tasks page
+    # 
+    ids = request.GET.get('id')
+    obj_list = Task.objects.filter(id= int(ids))
+    return render(request,'taskmanagement/my_task_details.html', {'tasks': obj_list},RequestContext(request))
+    
+    
 
 #    The dict type has been reimplemented to use a more compact 
 # representation based on a proposal by Raymond Hettinger and 

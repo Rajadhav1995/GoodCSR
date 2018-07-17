@@ -158,8 +158,8 @@ width:450px;
 <input type="hidden" name="keyss" id="keyss" value="{{keyss}}">
   </div>
   </div>
-<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://rawgit.com/Pixabay/jQuery-tagEditor/master/jquery.caret.min.js"></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
@@ -377,4 +377,38 @@ $(function () {
         
 });
 </script>
+<script >
+$(document).ready(function() {
+    $('#id_name').keypress(function( e ){
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k >= 65 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||(k >= 38 && k <= 41) || (k>=44 && k<=46));
+        }
+     ).on('paste', function (e) {
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k >= 65 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||(k >= 38 && k <= 41) || (k>=44 && k<=46));
+        }
+        );
+  });
+  $('#id_description').keypress(function (e) {
+    var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+}).on('paste', function (e) {
+  var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+});
+    </script>
 {% endblock %}

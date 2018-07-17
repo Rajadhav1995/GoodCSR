@@ -5,6 +5,7 @@ from projectmanagement.views import (create_project,project_list,
     upload_parameter,manage_parameter,manage_parameter_values,project_summary,
     delete_upload_image,remove_record,edit_parameter_values,)
 from projectmanagement.manage_roles import manage_funder_relation
+from projectmanagement.common_method import details_of_tasks
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
@@ -26,6 +27,7 @@ urlpatterns = [
     url(r'^delete/upload/image/$',delete_upload_image),
     url(r'^remove/record/$',remove_record),
     url(r'^manage/funder/$',manage_funder_relation),
+    url(r'^task/details/$',details_of_tasks),
     url(r'^parameter/value/edit/$',edit_parameter_values),
 ]
 # When working with any programming language, you include comments

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load urs_tags %}
+{% load roles_tags %}
 {% block section %}
 {% endblock %}
 {% block content %}
@@ -8,10 +9,12 @@
 <style>
 .budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
 </style>
+<!--{% with "project-list"|make_string:"view" as keystring %}-->
+<!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
 <section class="content-part forms_section">
     <div class="row">
     <div class="content-top">
-      
+
         <!--<form>
           <div class="multiselect">
             <div class="selectBox" onclick="showCheckboxes()">
@@ -48,8 +51,12 @@
                 <th>Implementation Partner</th>
                 <th>Funder</th>
                 <th>Status</th>
+<!--                {% with "project-list"|make_string:"edit" as keystring %}-->
+<!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
                 <th>Action</th>
                 <th>Manage</th>
+<!--            {% endif %}-->
+<!--            {% endwith %}-->
             </tr>
         </thead>
         
@@ -61,9 +68,9 @@
             <td>{{funder_mapping.implementation_partner.organization}} </td>
             <td>{{funder_mapping.funder.organization}}</td>            
             <td>{{i.get_active_display}}</td>
-            
-            
-            <td>
+<!--            {% with "project-list"|make_string:"edit" as keystring %}-->
+<!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
+           <td>
                 {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True or pmo_access == 1 %}
                 <a class="budget_button" href="/project/add/?slug={{i.slug}}">Edit</button></a>
                 {% endif %}
@@ -77,6 +84,8 @@
                 {% endif %}
            
             </td>
+<!--            {% endif %}-->
+<!--            {% endwith %}-->
         </tr>
         {% endfor %}
 
@@ -115,6 +124,8 @@
     
     </div>
 </section>
+<!--{% endif %}-->
+<!--        {% endwith %}-->
 <script>
 //Toggle
         
@@ -195,7 +206,7 @@ function showCheckboxes() {
                 firstPage: 1,
                 useUrlParameter: false,
                 onClickCallback: function(requestedPage) {
-                    console.log('Requested page from #pagination-long: ' + requestedPage);
+                    //console.log('Requested page from #pagination-long: ' + requestedPage);
                 }
             });
         });

@@ -1,6 +1,7 @@
 from django import template
 from django.contrib.auth.models import User
 from userprofile.models import Menus, RoleConfig, RoleTypes, UserRoles
+from projectmanagement.models import UserProfile
 
 register = template.Library()
 
@@ -61,18 +62,22 @@ def has_permission_for_action(request, key):
     # Check for the permission of user for the action of menu 
     # 
     
-    user = request.user or None
+#    user = request.user or None
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id )
     menu, permission_key = key.split('&')
     success = False
     if user is not None:
-        user_role = UserRoles.objects.get(user = user)
-        for role in user_role.role_type.all():
-            role_config = RoleConfig.objects.get(role = role,
-                        menu__slug = menu)
-            if getattr(role_config, permission_key):
-                success = True
-                break
-
+        if  not user.is_admin_user == True:
+            user_role = UserRoles.objects.get_or_none(user = user)
+            for role in user_role.role_type.all():
+                role_config = RoleConfig.objects.get(role = role,
+                            menu__slug = menu)
+                if getattr(role_config, permission_key):
+                    success = True
+                    break
+        else:
+            success = True
     return success
 
 # When working with any programming language, you include comments
@@ -95,7 +100,6 @@ def check_menu_permission(user,menuname):
     # 
     # to check for the permission of user for the menu section
     #
-#    import ipdb;ipdb.set_trace()
     status = False
     if user and menuname:
         try:
@@ -119,7 +123,11 @@ def check_menu_permission(user,menuname):
 # Without it, things can get real confusing, real fast.
 @register.assignment_tag
 def get_menu_list():
-    menu = Menus.objects.filter(parent=None)
+    menu = Menus.objects.filter(parent=None,main_menu=True,active=2)
     return menu
 
-# Without it, things can get real confusing, real fast.
+@register.assignment_tag
+def get_special_menu_list():
+    menu = Menus.objects.filter(parent=None,main_menu=False,active=2)
+    return menu
+

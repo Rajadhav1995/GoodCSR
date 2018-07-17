@@ -76,7 +76,7 @@ $(document).ready(function ()
     {
         sname = $(this).context.name.split('_');
         if (sname.length == 2){
-            console.log(sname[1])
+            //console.log(sname[1])
             $("[id$=_"+parseInt(sname[1])+"]").attr('required', 'required')
         }
         else{

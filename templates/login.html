@@ -53,11 +53,11 @@ ga('send', 'pageview');
     <input type="hidden" name="next" value="{{request.GET.items}}">
     {% endif %}
       <div class="form-group has-feedback">
-        <input required='True' name="username" type="username" class="form-control" placeholder="Username">
+        <input required='True' name="username" type="username" class="form-control" placeholder="Username" autocomplete="off">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input required='True' name="password" type="password" class="form-control" placeholder="Password">
+        <input required='True' name="password" type="password" class="form-control" placeholder="Password" autocomplete="off">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">

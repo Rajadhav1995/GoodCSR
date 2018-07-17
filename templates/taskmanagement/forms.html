@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load roles_tags %}
 {% block section %}
 <div></div>
 {% endblock %}
@@ -13,6 +14,8 @@
 
     <!-- Main content -->
 
+        {% with "upload-images"|make_string:"add" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
 <section class="content-part">
 	<div class="row">
 	{% if timeline == 1 %}
@@ -53,6 +56,12 @@
     
     </div>
 </section>
+{% else %}
+You do not have access pls contact administrator
+{% endif %}
+{% endwith %}
+
+  
 <script>
 //Toggle
         
@@ -83,7 +92,7 @@
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src = "/static/js/jquery.multi-select.js"></script>
 

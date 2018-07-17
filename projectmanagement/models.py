@@ -16,7 +16,6 @@ from thumbs import ImageWithThumbsField
 from simple_history.admin import SimpleHistoryAdmin
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
-from django.template.defaultfilters import slugify
 import datetime
 
 #----------------------introduction------------------------------------------#

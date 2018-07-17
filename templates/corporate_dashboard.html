@@ -4,6 +4,7 @@
 {% load humanize %}
 
 {% block section %}
+<meta name="referrer" content="no-referrer" />
 <div class="clear"></div>
 
 <!--Green pad starts-->
@@ -677,9 +678,6 @@
 <script>
 $(document).ready(function() {
 var map_data = {{json_data | safe}}
-console.log('mahitiitiititii');
-console.log(map_data);
-console.log(map_data[0]);
         // Titles on Hover
         var titles = document.getElementsByClassName("active-map-area");
         for(var i = 0; i < titles.length; i++) {
@@ -690,10 +688,8 @@ console.log(map_data[0]);
         map_data.map(function(k){
             if(k.nap>0){
                 var highlight = document.getElementsByClassName("map-area-IN-"+k.name);
-                console.log("Highlight",highlight[0].attributes.fill);
                 highlight[0].setAttribute('fill', '#D8C47F');
                 // highlight[0].innerHTML = "<title>"+highlight[0].getAttribute("aria-label")+"-  "+k.nap+"</title>";
-                console.log("Highlight2",highlight[0].attributes.fill);
             }
         });
 		
@@ -710,8 +706,6 @@ var disbursed_budget = (data.disbursed)
 lRange = 0,hRange = 10;
 if(data.projects.length<10){hRange = data.projects.length}
 lnRange = data.projects.length;
-console.log("hello");
-console.log(disbursed_budget);
 
 $(function(){
         //-------------------------------------------------------
@@ -1381,10 +1375,8 @@ var gaugeOptions = {
 
 <script type="text/javascript">
 var data = {{budget | safe}}
-console.log(data);
 var disbursed = data.disbursed_percent
 var total = 100 - disbursed
-console.log(disbursed);
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
   

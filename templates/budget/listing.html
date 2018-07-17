@@ -1,5 +1,5 @@
 {% extends 'project/project-summary.html' %}
-{% load urs_tags %}
+{% load urs_tags roles_tags %}
 
 
 
@@ -56,6 +56,7 @@
             </tr>            
         </thead>
         
+        
         {% for i in tranche_list %}
         <tr>
             <td>{{i.name}}</td>
@@ -75,6 +76,7 @@
             
         </tr>
         {% endfor %}
+
 
   </tbody>
 </table>
@@ -167,7 +169,7 @@ function showCheckboxes() {
                 firstPage: 1,
                 useUrlParameter: false,
                 onClickCallback: function(requestedPage) {
-                    console.log('Requested page from #pagination-long: ' + requestedPage);
+                    //console.log('Requested page from #pagination-long: ' + requestedPage);
                 }
             });
         });

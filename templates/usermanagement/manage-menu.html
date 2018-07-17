@@ -104,7 +104,6 @@ function activate(val){
         type: 'GET', 
         url: '/usermanagement/manage/active/'+val+'/',
         success: function(data) {
-            console.log(data.status)  
             if(data.status) { 
                 $('.activate-'+val).hide();
                 $('.deactivate-'+val).show();

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load common_tags %}
-{% load urs_tags %}
+{% load urs_tags roles_tags %}
 {% block section %}
 {% load humanize %}
 
@@ -9,7 +9,14 @@
 <link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css">
 <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
 <script src="/static/slick/slick.js" type="text/javascript" charset="utf-8"></script>
-
+<style>
+.timeline_p {
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+</style>
 <script type="text/javascript">
     $(document).on('ready', function() {
      
@@ -106,14 +113,56 @@ $(document).ready(function(){
     </ul>
     </div>
     
-    
+    {% with "generate-report"|make_string:"view" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
     <a id="myBtn1" class="green-link green-link1" href="/report/listing/?slug={{request.GET.slug}}&key=generate-report" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    {% endif %}
+    {% endwith %}
+    
+
 <!--    <a id="myBtn1" class="green-link green-link1" href="/report/survey/quarter/?slug={{request.GET.slug}}" style="margin-top:30px;"> &nbsp;Temp Generate Report</a>-->
 <!--    <a id="myBtn1" class="green-link green-link1" href="/report/final/design/?slug={{request.GET.slug}}" style="margin-top:30px;"> &nbsp;Generate Report with design</a>-->
 
     <!-- <a id="myBtn1" class="green-link green-link1 iframe" href="/report/generation-form/?slug={{request.GET.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a> -->
-    
-     <div class="menu-bottom">
+<!--        {% get_special_menu_list as menu %}-->
+<!--         <div class="menu-bottom">-->
+<!--            <ul>-->
+<!--            {% for i in menu %}-->
+<!--                {% with i.slug|make_string:"view" as keystring %}-->
+<!--                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
+<!--                        {% if i.slug == "project-summary" %}-->
+<!--                        <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>-->
+<!--                        {% elif i.slug == "updates" %}-->
+<!--                        <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>-->
+<!--                        {% elif i.slug == "tasks-milestones" %}-->
+<!--                        <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>-->
+<!--                        {% elif i.slug == "budget" %}-->
+<!--                        <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>-->
+<!--                        {% elif i.slug == "files" %}-->
+<!--                        <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>-->
+<!--                        {% elif i.slug == "tranches" %}-->
+<!--                        <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>-->
+<!--                        {% elif i.slug == "project-tasks" %}-->
+<!--                        <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>-->
+<!--                    {% endif %}-->
+<!--                    {% endif %}-->
+<!--                {% endwith %}-->
+<!--            {% endfor %}-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--     <div class="menu-bottom">-->
+<!--        <ul>-->
+<!--          <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>-->
+<!--          <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>-->
+<!--          <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>-->
+<!--          <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>-->
+<!--          <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>-->
+<!--<!--            <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>-->
+<!--            <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>-->
+<!--        </ul>-->
+<!--     </div>-->
+
+    <div class="menu-bottom">
         <ul>
           <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
           <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
@@ -271,7 +320,7 @@ $(document).ready(function() {
     {
       var obj = ff[i]
       var name = obj.name;
-      console.log(obj);
+    //  console.log(obj);
       if (obj.url) {
         var url = loc_url + obj.url;
         }else{
@@ -292,15 +341,15 @@ $(document).ready(function() {
 
       if (i % 2) {
         if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<li class="event-up">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
-          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+          $(wrapper).append(' <li class="event-up red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><div class= "image_tag"><img src="/static/img/milestone-icon.png" alt=""></div><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       } else {
         if (obj.type == 'image') {
-        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p>'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
+        $(wrapper).append('<li class="event-down">&nbsp;<div class="event-img"><img height=112px width=162px src='+url+' alt=""><p class="timeline_p">'+name+'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+month+'</span></div></li>');
         }else{
-          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p>'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
+          $(wrapper).append(' <li class="event-down red-down current-event">&nbsp;<div class="event-img"><h3>Milestone Achieved</h3><img src="/static/img/milestone-icon.png" alt=""><p class="timeline_p">'+ name +'</p></div><div class="event-circle"></div><div class="event-date">'+date1+'<span>'+ month +'</span></div></a></li>');
         };
       };
     }
@@ -320,7 +369,7 @@ $(document).ready(function() {
       var title = obj.title;
       var title_id = title.replace(/ /g,'').replace(/[^a-zA-Z 0-9 ]/g, "")
       var wrapper         = $(".numeric_parameter_"+ title_id); //Fields wrapper
-      console.log(obj);
+     // console.log(obj);
       if (obj.type == 'CUR') {
         var url = loc_url + '/' + "static/img/budget-icon.png";
         var value = numDifferentiation(obj.value);
@@ -415,6 +464,7 @@ function numberWithCommas(x) {
 <!--        <form action="/save/image/?slug={{slug}}" method="POST" enctype="multipart/form-data">{% csrf_token %}-->
 <!--       <button>Save Image</button>-->
 <!--        </form>-->
+
         {% get_user_permission request as user_obj %}
         {% pmo_role request as pmo_access %}
         {% if user_obj.is_admin_user == True or pmo_access == 1 or user_obj.organization_type == 2  and user_obj.owner == True %}
@@ -632,11 +682,11 @@ under 0 Milestones</h5>
   </table>
 	</table>
     </div>
-        {% get_user_permission request as user_obj %}
-        {% pmo_role request as pmo_access %}
-        {% if user_obj.is_admin_user == True or pmo_access == 1 or user_obj.organization_type == 2  and user_obj.owner == True %}
+    {% with "add-user"|make_string:"view" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
     <a href="/manage/project/role/add/?slug={{obj.slug}}&key=summary" class="link-pad">Add User</a>
-    {% endif %}
+        {% endif %}
+    {% endwith %}
     </div>
     <div class="white-box-right">
     	<h2>Recent Updates</h2>
@@ -844,7 +894,7 @@ function confirm_alert(node) {
       }
       // For Milestones
       var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
+     // console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
         var mileId = 111,
           mileStatus = 'gmilestone redmile '
@@ -858,7 +908,7 @@ function confirm_alert(node) {
         var tempArray = [];
         var n = 0;
         $.each(depTask, function (index, value) {
-          console.log('value', n);
+         // console.log('value', n);
           tempArray.push({
             'id': value
           });
@@ -868,17 +918,17 @@ function confirm_alert(node) {
             }
             if (i == (depTask.length - 1)) {
 
-              console.log('Array', depTask)
-              console.log('Max Date', Math.max(tempArray.date));
+           //   console.log('Array', depTask)
+           //   console.log('Max Date', Math.max(tempArray.date));
             }
           }
           n++;
         });
-        console.log("tempArray", tempArray);
+       // console.log("tempArray", tempArray);
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
-        console.log('depTask', depTask[0]);
+       // console.log('depTask', depTask[0]);
         if (depTask[ln] == tempId) {
           var d1 = new Date(eEndDate);
           var d2 = new Date(eEndDate);
@@ -899,7 +949,7 @@ function confirm_alert(node) {
             var d4 = new Date(completionDate);
             var timeDiff = (d3.getTime() + 86400) - d4.getTime();
             var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
+           // console.log('DiffDays', diffDays);
             if (diffDays < 0) {
               var dur = rem = Math.abs(diffDays);
               if (dur < 8) {
@@ -920,7 +970,7 @@ function confirm_alert(node) {
                 rem = Math.floor(rem % 365);
                 mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+           //   console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
               var dur = rem = Math.abs(diffDays);
@@ -945,7 +995,7 @@ function confirm_alert(node) {
                 rem = Math.floor(rem % 365);
                 mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+           //   console.log('Diff days', mileName);
             }
           }
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
@@ -1070,7 +1120,7 @@ function confirm_alert(node) {
                 }
               });
               $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
+           //   console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
               if (count == 0) {
                 $(previous).css('top', '0px');
                 count++;
@@ -1326,8 +1376,8 @@ Highcharts.chart(values, {
 <script type="text/javascript">
 {% for pip in master_sh.PIP %}
 var data2 = {{pip | safe}};
-console.log("mahiti_s");
-console.log(data2);
+//console.log("mahiti_s");
+//console.log(data2);
 var values = "Beneficary_distribution_" + (new_data_pip).toString()
 var pip_title = {{pip_title_name | safe}}
 var pip_title = pip_title[new_data_pip]
@@ -1383,8 +1433,10 @@ Highcharts.chart(values, {
 </script>
 
 <script>
+var key = '{{request.GET.key}}'
+{% if key == 'summary' %}
 var data = {{budget|safe}}
-console.log(data);
+//console.log(data);
 //var utilized = data.utilized/(data.utilized + data.total)*100
 //var disbursed = data.disbursed/(data.disbursed + data.total)*100
 var utilized = data.utilized_percent
@@ -1401,7 +1453,7 @@ else {
 }
 var total = 100 - (utilized + disbursed)
 
-console.log(total , utilized , disbursed);
+//console.log(total , utilized , disbursed);
 var gaugeOptions = {
 
     chart: {
@@ -1591,7 +1643,7 @@ setInterval(function () {
     }
 
 }, 800);
-
+{% endif %}
 </script>
 
 <script>

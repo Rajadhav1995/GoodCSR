@@ -203,10 +203,7 @@ def manage_role(request, pk):
         #     (<Role_Config: salutation>, [])
         # ]
         for conf,perms in perm_data:
-            
             roleconf = get_roleconfig_details(conf,perms,role)
-
-            
     return render(request, 'usermanagement/manage-role.html', locals())
 
 
@@ -219,12 +216,10 @@ def manage_menu(request, pk):
 
     return render(request, 'usermanagement/manage-menu.html', locals())
 
-def active(request,pk):
+def object_active(request,pk):
 
     # Activate or deactivate a model object
     # Then redirect to listing page
-
-
         obj=RoleConfig.objects.get(pk=pk)
         obj.switch()
         obj.save()

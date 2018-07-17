@@ -695,7 +695,6 @@
                                     {% else %}
                                         {% get_month_budget_period projectobj budgetobj v as budget_period  %}
                                     {% endif %}
-
                                         {% for row in budget_period %}
                                         <tr class = "data_row">
                                             {% get_row_details row i projectobj as lineitemobj %}
@@ -887,7 +886,7 @@
                 var jsonData = {{taskdict|safe}}
                 var gantt_range='{{v}}'
                 var gantt_date = gantt_range.split(' to ')[0]
-                console.log(jsonData);
+                //console.log(jsonData);
                 var g = new JSGantt.GanttChart(document.getElementById('gwContainer_current'), 'week');
                 // console.log(jsonData.tasks);
                 // Get today and tomorrows date
@@ -1021,7 +1020,7 @@
       }
       // For Milestones
       var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
+     // console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
         var mileId = 111,
           mileStatus = 'gmilestone redmile '
@@ -1035,7 +1034,7 @@
         var tempArray = [];
         var n = 0;
         $.each(depTask, function (index, value) {
-          console.log('value', n);
+       //   console.log('value', n);
           tempArray.push({
             'id': value
           });
@@ -1045,17 +1044,17 @@
             }
             if (i == (depTask.length - 1)) {
 
-              console.log('Array', depTask)
-              console.log('Max Date', Math.max(tempArray.date));
+         //     console.log('Array', depTask)
+          //    console.log('Max Date', Math.max(tempArray.date));
             }
           }
           n++;
         });
-        console.log("tempArray", tempArray);
+        //console.log("tempArray", tempArray);
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
-        console.log('depTask', depTask[0]);
+       // console.log('depTask', depTask[0]);
         if (depTask[ln] == tempId) {
           var d1 = new Date(eEndDate);
           var d2 = new Date(eEndDate);
@@ -1076,7 +1075,7 @@
             var d4 = new Date(completionDate);
             var timeDiff = (d3.getTime() + 86400) - d4.getTime();
             var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
+          //  console.log('DiffDays', diffDays);
             if (diffDays < 0) {
               var dur = rem = Math.abs(diffDays);
               if (dur < 8) {
@@ -1097,7 +1096,7 @@
                 rem = Math.floor(rem % 365);
                 mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+            //  console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
               var dur = rem = Math.abs(diffDays);
@@ -1122,7 +1121,7 @@
                 rem = Math.floor(rem % 365);
                 mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
+             // console.log('Diff days', mileName);
             }
           }
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
@@ -1247,7 +1246,7 @@
                 }
               });
               $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
+            //  console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
               if (count == 0) {
                 $(previous).css('top', '0px');
                 count++;
@@ -1459,7 +1458,7 @@
                         {% get_parameter_values reportupdates.1 paramobj as parameter_values %}
                         var new_data_pin = 0;
                         var data11 = {{parameter_values.0.0 | safe}};
-                        console.log("mahiti.org");
+            //            console.log("mahiti.org");
                         var values = "comm{{forloop.counter}}"
                         var pin_title = "{{parameter_values.1.0 | safe}}"
                         // var pin_title = pin_title[new_data_pin]

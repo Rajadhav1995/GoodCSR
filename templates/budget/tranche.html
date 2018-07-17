@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load roles_tags %}
 {% block section %}
 <div> </div>
 {% endblock %}
@@ -22,7 +22,7 @@
               <h3 class="border_line">Add Tranche for {{project.name}}</h3>
           </div>
             
-            
+<!--  test          -->
             <!-- /.box-header -->
             
             <form action="/project/budget/tranche/?slug={{slug}}" class ="form-horizantal budget_form" id="tranche" method='POST' enctype="multipart/form-data">{% csrf_token %}
@@ -175,7 +175,7 @@
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script src="/static/js/jquery.quicksearch.js"></script>
 <script src = "/static/js/jquery.multi-select.js"></script>      
 

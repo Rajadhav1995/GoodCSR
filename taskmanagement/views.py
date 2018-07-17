@@ -514,11 +514,19 @@ def task_comments(request):
     # attachments / progress bar / comments
     # 
     msg =""
+    url = request.META.get('HTTP_REFERER')
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
-    url=request.META.get('HTTP_REFERER')
+    slug = request.GET.get('slug')
+    key = request.GET.get('key')
+    status=request.GET.get('status')
     MAX_UPLOAD_SIZE = "5242880"
-    #   "2621440" 
+    #   "2621440"
+    try:
+        nexts = eval(request.POST.get('next'))
+        url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1]+'&'+str(nexts[3][0])+'='+str(nexts[3][1]))
+    except:
+        url = url
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     from media.models import Comment
@@ -554,6 +562,7 @@ def task_comments(request):
             create_task_progress(request,task)
         # added to get the task updates done by particular user saved in modified_by 
         add_modified_by_user(task,request)
+        
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
         
     return HttpResponseRedirect(url)

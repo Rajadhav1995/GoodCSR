@@ -1,5 +1,5 @@
 {% extends 'project/project-summary.html' %}
-{% load urs_tags %}
+{% load urs_tags roles_tags %}
 
 {% block content %}
 <style>
@@ -70,11 +70,15 @@ function exportToForm(){
       <th>Tags</th>
       <!-- <th>Source</th> -->
       <th>Upload Date </th>
+<!--      {% with "files"|make_string:"edit" as keystring %}-->
+<!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
       {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
       <th>Manage </th>
       {% else %}
       <th> </th>
       {% endif %}
+<!--      {% endif %}-->
+<!--      {% endwith %}-->
     </tr>
   </thead>
   <tbody>
@@ -110,11 +114,15 @@ function exportToForm(){
         
       <!-- <td>Task: Dhenuki Labours Unit</td> -->
       <td align="center">{{i.created}}</td>
+      {% with "files"|make_string:"edit" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
       <td align="right">
         {% get_user_permission request as user_obj %}
             {% pmo_role request as pmo_access %}
                 {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
-       <a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Attachment" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>{% endif %} </td>
+       <a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Attachment" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>{% endif %} </td>{% endif %} {% endwith %}
+      <!-- <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td> -->
+    </tr>
       <!-- <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td> -->
     </tr>
     {% endfor %}
@@ -235,7 +243,7 @@ function showCheckboxes() {
                 firstPage: 1,
                 useUrlParameter: false,
                 onClickCallback: function(requestedPage) {
-                    console.log('Requested page from #pagination-long: ' + requestedPage);
+                    //console.log('Requested page from #pagination-long: ' + requestedPage);
                 }
             });
         });

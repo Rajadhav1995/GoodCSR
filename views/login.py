@@ -8,6 +8,8 @@ from pmu.settings import (SAMITHA_URL,)
 from projectmanagement.models import UserProfile
 from media.models import Section,Article
 from django.core.cache import cache
+import urllib3
+import simplejson as json
 
 def signin(request):
     # this function is for
@@ -17,17 +19,19 @@ def signin(request):
     if request.method == 'POST':
         next = request.POST.get('next')
         data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
+        headers = {'content-type': 'application/json'}
         try:
-            r = requests.post(SAMITHA_URL + '/pmu/login/', data=data)
+#            http = urllib3.PoolManager()
+#            r = http.request('POST',SAMITHA_URL + '/pmu/login/', fields = data)
+            response = requests.post(SAMITHA_URL + '/pmu/login/', json.dumps(data),headers=headers)
         except requests.exceptions.ConnectionError:
             status_code = "Connection refused"
-        validation_data = json.loads(r.content)
+#        validation_data = json.loads(r.data)
+        validation_data = response.json()
 #        userobj = UserProfile.objects.get_or_none(email=str(request.POST.get('username')))
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
-        if validation_data.get('status') == 2:
-            request.session['user_id'] = validation_data.get('user_id')
-            temp_user_id = request.session['user_id']
-            cache.set('temp_user', temp_user_id)
+        if validation_data.get('status') == "2":
+            request.session['user_id'] = int(validation_data.get('user_id'))
             if next:
                 return HttpResponseRedirect(next)
             else:
@@ -43,8 +47,8 @@ def signout(request):
     # user session logout
     # 
     request.session['user_id'] = ''
-    temp_user_id = request.session['user_id']
-    cache.set('temp_user', temp_user_id)
+    for key in request.session.keys():
+        del request.session[key]
     return HttpResponseRedirect('/')
 
 def homepage(request):

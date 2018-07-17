@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from  django.http import HttpResponse,HttpResponseRedirect
 from projectmanagement.models import (Project,)
-from userprofile.models import (ProjectUserRoleRelationship,)
+from userprofile.models import (ProjectUserRoleRelationship,UserRoles)
 from .forms import(ProjectUserRoleRelationshipForm,)
 from projectmanagement.models import ProjectFunderRelation,UserProfile
 # this section is to manage role wise access to different functionalities
@@ -32,6 +32,10 @@ def projectuseradd(request):
             projectuserobj = form1.save()
             projectuserobj.project = projectobj
             projectuserobj.save()
+            userroleobj,created = UserRoles.objects.get_or_create(user = projectuserobj.user)
+            userroleobj.role_type.add(projectuserobj.role)
+            userroleobj.email = projectuserobj.user.email
+            userroleobj.save()
             msg = "form is submitted"
             if str(redirect_key) == "summary":
                 return HttpResponseRedirect('/project/summary/?slug='+str(project_slug))
@@ -56,7 +60,11 @@ def projectuseredit(request):
         # import ipdb; ipdb.set_trace()
         form = ProjectUserRoleRelationshipForm(request.POST, instance = pmobj)
         if form.is_valid():
-            form.save()
+            projectuserobj = form.save()
+            userroleobj,created = UserRoles.objects.get_or_create(user = projectuserobj.user)
+            userroleobj.role_type.add(projectuserobj.role)
+            userroleobj.email = projectuserobj.user.email
+            userroleobj.save()
             if str(redirect_key) == "summary":
                 return HttpResponseRedirect('/project/summary/?slug='+str(project_slug))
             return HttpResponseRedirect('/manage/project/role/list/?slug='+str(project_slug))

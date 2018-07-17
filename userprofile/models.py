@@ -31,6 +31,7 @@ class Menus(BaseContent):
     backend_link = models.CharField(max_length=512, blank=True)
     icon = models.CharField(max_length=512, blank=True)
     menu_order = models.IntegerField(null=True, blank=True)
+    main_menu = models.BooleanField(default=True)
 
     class Meta:
         ordering = ('menu_order',)

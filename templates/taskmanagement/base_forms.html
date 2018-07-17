@@ -497,6 +497,48 @@ $(document).ready(function() {
     });
 </script>
 
+<script >
+$('#id_name').keypress(function (e) {
+    var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+}).on('paste', function (e) {
+  var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+});
+  
+  $('#id_description').keypress(function (e) {
+    var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+}).on('paste', function (e) {
+  var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+
+    e.preventDefault();
+    return false;
+});
+    </script>
+
 
 {% endblock %}
 

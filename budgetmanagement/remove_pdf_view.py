@@ -48,6 +48,7 @@ def remove_functionality_pdf_view(request):
     # end of the display cover page and summary #ENDS
     projectobj = Project.objects.get_or_none(slug=slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
+    # test the projectreport_obj
     projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
     answer_list = report_question_list(quest_list,projectreportobj,projectobj)

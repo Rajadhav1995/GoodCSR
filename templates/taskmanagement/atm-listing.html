@@ -1,5 +1,5 @@
 {% extends 'project/project-summary.html' %}
-{% load urs_tags %}
+{% load urs_tags roles_tags %}
 {% load common_tags %}
 {% load delay_tags %}
 <!--Content part starts-->
@@ -251,13 +251,11 @@ $(document).ready(function(){
   
 <!-- script for gantt chart starts here-->
 
-<script>
-    jsonData = {{taskdict|safe}};
-    console.log(jsonData);
-</script>
+
 <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css" />
 <script src="/static/js/jsgantt.js" type="text/javascript"></script>
 <script>
+    var jsonData = {{taskdict|safe}};
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
@@ -396,7 +394,6 @@ $(document).ready(function(){
       }
       // For Milestones
       var completionDate = this.actual_end_date;
-      console.log('Complete date', completionDate);
       $.each(jsonData.milestones, function (i) {
         var mileId = 111,
           mileStatus = 'gmilestone redmile '
@@ -410,7 +407,6 @@ $(document).ready(function(){
         var tempArray = [];
         var n = 0;
         $.each(depTask, function (index, value) {
-          console.log('value', n);
           tempArray.push({
             'id': value
           });
@@ -420,17 +416,13 @@ $(document).ready(function(){
             }
             if (i == (depTask.length - 1)) {
 
-              console.log('Array', depTask)
-              console.log('Max Date', Math.max(tempArray.date));
             }
           }
           n++;
         });
-        console.log("tempArray", tempArray);
         // if (depTask.length == 1) {
         var ln = depTask.length;
         ln--;
-        console.log('depTask', depTask[0]);
         if (depTask[ln] == tempId) {
           var d1 = new Date(eEndDate);
           var d2 = new Date(eEndDate);
@@ -451,7 +443,6 @@ $(document).ready(function(){
             var d4 = new Date(completionDate);
             var timeDiff = (d3.getTime() + 86400) - d4.getTime();
             var diffDays = Math.ceil(timeDiff / 86400000);
-            console.log('DiffDays', diffDays);
             if (diffDays < 0) {
               var dur = rem = Math.abs(diffDays);
               if (dur < 8) {
@@ -472,7 +463,6 @@ $(document).ready(function(){
                 rem = Math.floor(rem % 365);
                 mileName += " - Delayed by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
             } else {
               mileStatus = 'gmilestone greenmile '
               var dur = rem = Math.abs(diffDays);
@@ -497,7 +487,6 @@ $(document).ready(function(){
                 rem = Math.floor(rem % 365);
                 mileName += " - Ahead by " + dur + " year(s), " + rem + " day(s)";
               };
-              console.log('Diff days', mileName);
             }
           }
           g.AddTaskItem(new JSGantt.TaskItem(mileId, mileName, mileStart, mileEnd,
@@ -622,7 +611,6 @@ $(document).ready(function(){
                 }
               });
               $(this).css('top', parseInt($(previous).css('top')) + padding + 'px');
-              console.log("gtaskbarcontainer",this,$(previous).css('top'),$(this).css('top'),$(collideDiv));
               if (count == 0) {
                 $(previous).css('top', '0px');
                 count++;
@@ -671,11 +659,9 @@ $(document).ready(function(){
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script>
-    console.log('gSuper',gSuperName,gSuperComp)
     if (gSuperName.length > 0) {
       var SuperRemain = new Array();
       $.each(gSuperName,function(i){
-        console.log("gSuper",gSuperComp[i],gSuperName[i])        
         if(gSuperName[i]==""){
           gSuperComp.splice(i,1);
           gSuperName.splice(i,1);
@@ -789,7 +775,6 @@ $(document).ready(function(){
       return ISOweekStart;
     }
     $.each(jsonData.supercategories,function(){
-      console.log('supr',this.name)
       if(this.name != ""){
         $(".scrollmenu").append("<a class='link-pad text-md-center' onClick='superData("+this.id+");superData("+this.id+");'>"+this.name+"</a>");
         }
@@ -848,7 +833,6 @@ $(document).ready(function(){
         flags[(pvaData[i].id).toString()+(pvaData[i].modified).toString()] = true;
         pvaSorted.push(pvaData[i]);
     }
-    console.log("pvaSort",pvaSorted);
     var week = d3.timeFormat("%Y-%U");
 
     var actnest = d3.nest().key(function (d) {
@@ -863,7 +847,6 @@ $(document).ready(function(){
 
     var actnest2 = d3.nest().key(function (d) {
       if(d.actual_end_date!=null && new Date(d.actual_end_date).getTime() <= new Date().getTime()){
-        console.log("Check ac",new Date(d.actual_end_date).getTime())
         return week(new Date(d.actual_end_date));
       }else{
         return null;
@@ -876,7 +859,6 @@ $(document).ready(function(){
         }
       return tmp;
     }).entries(pvaSorted);
-    console.log("Data ",pvaSorted,actnest2)
     var plannest = d3.nest().key(function (d) {
         if(ids.length==0){
         return week(new Date(d.end_date));
@@ -901,7 +883,6 @@ $(document).ready(function(){
     // }, {}) 
     var maxComp = 0;
     var chartData = [];
-    console.log("Plannest",plannest)
     // --- For Planned Tasks ---
     plannest.sort(function(a,b){
       return new Date(b.modified) - new Date(a.modified);
@@ -918,7 +899,6 @@ $(document).ready(function(){
       chartData.push([(week.getTime()+19800000),comp]);
       }
     });
-    console.log("CD",chartData,maxComp)
     chartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
@@ -937,24 +917,19 @@ $(document).ready(function(){
     var AmaxComp = 0;
     var AchartData = [];
     actnest.sort(function(a,b){
-      console.log("SORT",a,b)
       return new Date(a.values[0].actual_end_date) - new Date(b.values[0].actual_end_date);
     });
     $.each(actnest,function(i,v){
       actnest2[i].key = this.key;
-    console.log("Check actual",actnest2[i].value);
       $.each(this.values,function(){
         $.each(actnest2[i].value, function(m,n){
           if(actnest2[i+1]!=undefined) {
           var c = actnest2[i+1].value[m];
-          console.log("keey",m,i+1,c);
           if(this.task_progress >= c.task_progress) c.task_progress = this.task_progress;
           }
         })
       var b = actnest2[i].value.filter( n => n.id == this.id );
-      console.log("keey2",b,this,actnest2);
       if(this.task_progress != null && b.length>0 && b[0].task_progress<=this.task_progress) b[0].task_progress = this.task_progress;
-      console.log("keey3",this);
       });
     });
 
@@ -1002,14 +977,11 @@ $(document).ready(function(){
           if(this.task_progress != "None") tp = this.task_progress;
           // var weight = (new Date(this.end_date).getTime() - new Date(this.start_date).getTime()+1);
           compA += (Math.abs(this.weight) * parseInt(tp));
-          console.log("CDA2",week,compA)
         })
         AchartData.push([(week.getTime()+19800000),Math.round((compA/maxComp)*100)]);
-          console.log("CDA22",week,compA/maxComp)
 
       }
     });
-    console.log("CDA21",AchartData,maxComp)
     AchartData.sort(function(a,b){
       return new Date(a[0]) - new Date(b[0]);
     });
@@ -1023,7 +995,6 @@ $(document).ready(function(){
     // $.each(AchartData,function(){
     //   this[1] = Math.round((this[1]/maxComp)*100);
     // });
-    console.log("PVA",AchartData);
     PVAChart = Highcharts.chart('pvaContainer', {
       chart: {
         type: 'spline',
@@ -1165,9 +1136,6 @@ var project_slug = '{{request.GET.slug}}'
 {% super_category_delay request.GET.slug as super_list %}
 var categories = {{super_list.0|safe}}
 var act_task = {{super_list.1|safe}}
-console.log('super_cat');
-console.log(categories);
-console.log(act_task);
 
   // Create the chart
     
@@ -1220,7 +1188,7 @@ console.log(act_task);
         series: act_task,
       }, function(chart){	
         	
-			console.log(chart,'this')
+			//console.log(chart,'this')
         }
       
     })
