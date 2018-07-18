@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load common_tags %}
+{% load roles_tags %}
 <html>
 <head>
 <meta charset="utf-8" />
@@ -121,40 +122,67 @@ ga('send', 'pageview');
            <div class="m-menu"><a href="#mobNav"><span></span><span></span><span></span></a></div>       
            <nav id="smoothmenu" class="ddsmoothmenu">
             <ul>
-              <li><a href="/dashboard/" class="active">Dashboard</a></li>
-              <li class="user-wrap"><a href="javascript:void(0);">
-                Projects
-                <i class="fa fa-angle-down"></i></a>
-                <!--<div class="details" id="marketPlace">-->
-                  <ul class="project-scroll-bar">
-                  {% get_user_project request as obj_list %}
-                      {% for i in obj_list %}
-                          <li><a href="/project/summary/?slug={{i.slug}}&key=summary"><p class="trunc" style="width:180px;height:26px;margin-bottom:0px"> {{i.name}}</p></a></li>
-                      {% endfor %}
-                  </ul>
-                <!--</div>-->
-              </li>
-              <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
-              <li><a {% if key == "mycalendar" %} class="active" {% endif %} href = "/managing/my-calendar/details/?slug=&key=mycalendar&status=2">My Calendar </a></li>
-        {% get_user_permission request as user_obj %}
-        {% pmo_role request as pmo_access %}
-        {% if user_obj.is_admin_user == True or pmo_access == 2 %}
-        <li class="user-wrap"><a href="javascript:void(0);">
-                Settings
-                <i class="fa fa-angle-down"></i></a>
-                <!--<div class="details" id="marketPlace">-->
-                  <ul>
-                        <li><a href="/project/list/">Project List</a></li>
-                        <li><a href="/project/add/">Add New Project</a></li>
-                        <!-- <li><a href="/usermanagement/list/role">Role</a></li> -->
-<!--                        <li><a href="/managing/Task/listing/">Tasks</a></li>-->
-<!--                    	<li><a href="/managing/Milestone/listing/">Milestone</a></li>-->
+                      {% get_menu_list as menu %}
+                        {% for i in menu %}
+                                {% with i.slug|make_string:"view" as keystring %}
+                                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                                    {% if i.get_sub_menus %}
+                                        <li class="user-wrap"> <a href="javascript:void(0);"> {{i.name|title}}
+                                        <i class="fa fa-angle-down"></i></a>
+                                        <ul>
+                                        {% for j in i.get_sub_menus %}
+                                        {% with j.slug|make_string:"view" as keystring %}
+                                        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                                            
+                                        {% if j.get_sub_menus %}
+                                                    <li class="dropdown dropdown-submenu">
+                                                    <a href="#" data-toggle="dropdown">{{j.name|title}}
+                                                    </a>
+                                                        <ul>
+                                                            {% for k in j.get_sub_menus %}
+                                                                {% with k.slug|make_string:"view" as keystring %}
+                                                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                                                            <li><a href="{{k.backend_link}}">{{k.name|title}}</a></li>
+                                                        {% endif %}
+                                                        {% endwith %}
+                                                    {% endfor %}
+                                                    </ul>
 
-                  </ul>
-                <!--</div>-->
-              </li>
-            {% endif %}
-            </ul>
+                                                </li>
+
+                                        {% else %}
+                                            
+                                            <li><a href="{{j.backend_link}}">{{j.name|title}}</a></li>
+                                            
+                                            {% endif %}
+                                        
+                                        {% endif %}
+                                        {% endwith %}
+                                        {% endfor %}
+                                        </ul>
+                                    {% elif i.slug == "projects" %}
+                                      <li class="user-wrap"><a href="javascript:void(0);">
+                                        Projects
+                                        <i class="fa fa-angle-down"></i></a>
+                                          <ul class="project-scroll-bar">
+                                          
+                                          {% get_user_project request as obj_list %}
+                                              {% for i in obj_list %}
+                                                  <li><a href="/project/summary/?slug={{i.slug}}&key=summary"><p class="trunc" style="width:180px;height:26px;margin-bottom:0px"> {{i.name}}</p></a></li>
+                                              {% endfor %}
+                                          </ul>
+                                      </li>
+                                    {% elif i.slug == "my-tasks" %}
+                                    <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>
+                                    {% elif i.slug == "my-calendar" %}
+                                    <li><a {% if key == "mycalendar" %} class="active" {% endif %} href = "/managing/my-calendar/details/?slug=&key=mycalendar&status=2">My Calendar </a></li>
+                                    {% else %}
+                                        <li><a href="{{i.backend_link}}" class="active">{{i.name|title}} </li>
+                                {% endif %}
+                                {% endif %}
+                                {% endwith %}
+                                {% endfor %}
+                    </ul>
           </nav>
             <div class="menu-rgt">
     

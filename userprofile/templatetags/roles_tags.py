@@ -131,3 +131,7 @@ def get_special_menu_list():
     menu = Menus.objects.filter(parent=None,main_menu=False,active=2)
     return menu
 
+#@register.assignment_tag
+#def has_user_permission(request):
+#    
+

@@ -1,0 +1,13 @@
+{% load common_tags %}
+         {% get_hash_value task.user.id as hashval %}
+         <li><a href="/user-summary/{{hashval}}/" class="h3">{% for i in task.user.all %}{{ i }}{%endfor%}</a></li>
+         
+         
+ 
+
+
+def user_task_details(request,pk):
+    try:
+        pk = decryptHashVal(pk)
+    except:
+        pk = None

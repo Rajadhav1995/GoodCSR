@@ -124,32 +124,32 @@ $(document).ready(function(){
 <!--    <a id="myBtn1" class="green-link green-link1" href="/report/final/design/?slug={{request.GET.slug}}" style="margin-top:30px;"> &nbsp;Generate Report with design</a>-->
 
     <!-- <a id="myBtn1" class="green-link green-link1 iframe" href="/report/generation-form/?slug={{request.GET.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a> -->
-<!--        {% get_special_menu_list as menu %}-->
-<!--         <div class="menu-bottom">-->
-<!--            <ul>-->
-<!--            {% for i in menu %}-->
-<!--                {% with i.slug|make_string:"view" as keystring %}-->
-<!--                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
-<!--                        {% if i.slug == "project-summary" %}-->
-<!--                        <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>-->
-<!--                        {% elif i.slug == "updates" %}-->
-<!--                        <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>-->
-<!--                        {% elif i.slug == "tasks-milestones" %}-->
-<!--                        <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>-->
-<!--                        {% elif i.slug == "budget" %}-->
-<!--                        <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>-->
-<!--                        {% elif i.slug == "files" %}-->
-<!--                        <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>-->
-<!--                        {% elif i.slug == "tranches" %}-->
-<!--                        <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>-->
-<!--                        {% elif i.slug == "project-tasks" %}-->
-<!--                        <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>-->
-<!--                    {% endif %}-->
-<!--                    {% endif %}-->
-<!--                {% endwith %}-->
-<!--            {% endfor %}-->
-<!--            </ul>-->
-<!--        </div>-->
+        {% get_special_menu_list as menu %}
+         <div class="menu-bottom">
+            <ul>
+            {% for i in menu %}
+                {% with i.slug|make_string:"view" as keystring %}
+                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                        {% if i.slug == "project-summary" %}
+                        <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
+                        {% elif i.slug == "updates" %}
+                        <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
+                        {% elif i.slug == "tasks-milestones" %}
+                        <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>
+                        {% elif i.slug == "budget" %}
+                        <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
+                        {% elif i.slug == "files" %}
+                        <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>
+                        {% elif i.slug == "tranches" %}
+                        <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
+                        {% elif i.slug == "project-tasks" %}
+                        <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
+                    {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+            </ul>
+        </div>
 <!--     <div class="menu-bottom">-->
 <!--        <ul>-->
 <!--          <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>-->
@@ -162,18 +162,18 @@ $(document).ready(function(){
 <!--        </ul>-->
 <!--     </div>-->
 
-    <div class="menu-bottom">
-        <ul>
-          <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
-          <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
-          <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>
-          <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
-          <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>
-          <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
-<!--            <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>-->
-            <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
-        </ul>
-     </div>
+<!--    <div class="menu-bottom">-->
+<!--        <ul>-->
+<!--          <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>-->
+<!--          <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>-->
+<!--          <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>-->
+<!--          <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>-->
+<!--          <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>-->
+<!--          <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>-->
+<!--<!--            <li><a {% if key == "mytasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=mytasks&status=0">My Tasks </a></li>-->
+<!--            <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>-->
+<!--        </ul>-->
+<!--     </div>-->
     </div>
 
 <div id="pop1" class="simplePopup">
@@ -190,6 +190,7 @@ $(document).ready(function(){
           </li>
           <li> <img src="/static/img/pop-up/dureation.jpg">
             <p> Total Budget <span>₹ {{projectobj.total_budget | intcomma}}</span> </p>
+            
           </li>
         </ul>
 
@@ -465,13 +466,19 @@ function numberWithCommas(x) {
 <!--       <button>Save Image</button>-->
 <!--        </form>-->
 
-        {% get_user_permission request as user_obj %}
-        {% pmo_role request as pmo_access %}
-        {% if user_obj.is_admin_user == True or pmo_access == 1 or user_obj.organization_type == 2  and user_obj.owner == True %}
+<!--        {% get_user_permission request as user_obj %}-->
+<!--        {% pmo_role request as pmo_access %}-->
+<!--        {% if user_obj.is_admin_user == True or pmo_access == 1 or user_obj.organization_type == 2  and user_obj.owner == True %}-->
+<!--        -->
+<!--        -->
+<!--        <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>-->
+<!--        {% endif %}-->
         
-        
+        {% with "upload-parameters"|make_string:"view" as keystring %}
+                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
         <a class="link-pad timeline-image" href="/project/parameter/manage/?slug={{slug}}&key=2">Upload Parameters</a>
         {% endif %}
+        {% endwith %}
         </div>
 
         <ul class="key_parameter parameter">
@@ -521,10 +528,16 @@ function numberWithCommas(x) {
     </div>
     <div class="white-box timeline-white">
     	<h2>Timeline Progress</h2>
-    	    {% get_user_permission request as user_obj %}
-        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}
-    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
-    	{% endif %}
+<!--    	    {% get_user_permission request as user_obj %}-->
+<!--        {% if user_obj.is_admin_user == True or user_obj.organization_type == 2 %}-->
+<!--    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>-->
+<!--    	{% endif %}-->
+    	
+    	{% with "upload-images"|make_string:"view" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+        <a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
+        {% endif %}
+        {% endwith %}
         <div class="clear"></div>
 <!-- timeline slider -->
         {% if timeline_json != '[]' %}
@@ -617,7 +630,6 @@ under 0 Milestones</h5>
         <div id="gwContainer" className="col-md-12 gantt" style="padding-top: '25px', position: 'relative', height: 'auto', width:'100%'"></div>
         </div>
   </div>
-<a class="button hexagon" NAME="BOTTOM">Chcete se dozvědět více?</a>
     <div class="white-box-left user-list-box">
     <div class="table-responsive">
     <table class="table-resp" cellpadding="0" cellspacing="0" border="0">

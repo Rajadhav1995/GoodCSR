@@ -42,8 +42,12 @@
         <div style="float: right;">
             {% get_user_permission request as user_obj %}
             {% pmo_role request as pmo_access %}
-                {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
-                <a class="budget_button" href="/project/budget/tranche/?slug={{slug}}">Add Tranche</a>{% endif %}</div><br>
+                {% with "tranches"|make_string:"add" as keystring %}
+                {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                <a class="budget_button" href="/project/budget/tranche/?slug={{slug}}">Add Tranche</a>
+                {% endif %}
+            {% endwith %}
+         </div><br>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -52,7 +56,11 @@
                 <th>Due Date</th>
                 <th>Disbursed Date</th>
                 <th  align="center">Disbursed Amount (in ₹)</th>
+                {% with "tranches"|make_string:"edit" as keystring %}
+                {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                 <th>Action</th>
+                {% endif %}
+                {% endwith %}
             </tr>            
         </thead>
         
@@ -68,11 +76,14 @@
             {% get_user_permission request as user_obj %}
             {% pmo_role request as pmo_access %}
             
+           {% with "tranches"|make_string:"edit" as keystring %}
+                {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
             <td>
-                {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
                 <a class="budget_button" href="/project/budget/tranche/?slug={{slug}}&tranche_id={{i.id}}"><i class="fa fa-edit"></i> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Tranche" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>
-                {% endif %}
+                
             </td>
+            {% endif %}
+            {% endwith %}
             
         </tr>
         {% endfor %}

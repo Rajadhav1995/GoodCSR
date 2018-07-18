@@ -54,10 +54,13 @@ function exportToForm(){
     </div>
     <div class="white-box white-pad"><div style="float: right;">
       {% get_user_permission request as user_obj %}
-            {% pmo_role request as pmo_access %}
-                {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
-      <a class="budget_button" href="/upload/doc/?model=Project&slug={{slug}}&key=2">Add Image</a>
-      <a class="budget_button" href="/upload/doc/?model=Project&slug={{slug}}&key=1">Add Document</a>{% endif %}</div>
+            {% with "files"|make_string:"add" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                  <a class="budget_button" href="/upload/doc/?model=Project&slug={{slug}}&key=2">Add Image</a>
+                  <a class="budget_button" href="/upload/doc/?model=Project&slug={{slug}}&key=1">Add Document</a>
+      {% endif %}
+      {% endwith %}
+    </div>
     <div class="table-responsive">
     	<table class="table table-striped table-bordered sort_table" id="dest">
   <thead>
@@ -70,15 +73,11 @@ function exportToForm(){
       <th>Tags</th>
       <!-- <th>Source</th> -->
       <th>Upload Date </th>
-<!--      {% with "files"|make_string:"edit" as keystring %}-->
-<!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
-      {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
+            {% with "files"|make_string:"edit" as keystring %}
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
       <th>Manage </th>
-      {% else %}
-      <th> </th>
       {% endif %}
-<!--      {% endif %}-->
-<!--      {% endwith %}-->
+      {% endwith %}
     </tr>
   </thead>
   <tbody>
@@ -120,7 +119,9 @@ function exportToForm(){
         {% get_user_permission request as user_obj %}
             {% pmo_role request as pmo_access %}
                 {% if user_obj.is_admin_user == True or user_obj.organization_type == 1 or pmo_access == 1 %}
-       <a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Attachment" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>{% endif %} </td>{% endif %} {% endwith %}
+       <a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Attachment" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>
+       {% endif %} </td>
+       {% endif %} {% endwith %}
       <!-- <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td> -->
     </tr>
       <!-- <td align="center"><a class="budget_button" href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> Edit</a></td> -->
