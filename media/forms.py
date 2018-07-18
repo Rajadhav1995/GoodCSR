@@ -13,6 +13,7 @@ from django.conf import settings
 import requests
 from django.forms import ClearableFileInput
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
+import os
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
@@ -39,7 +40,15 @@ class AttachmentForm(forms.ModelForm):
         widgets = {
             "file": MyClearableFileInput(),
         }
-
+    def clean_attachment_file(self):
+        content = self.cleaned_data.get('attachment_file')
+        content_type = content.content_type.split('/')[1] if content else ''
+        if content and content_type in settings.DOC_CONTENT_TYPE and os.path.splitext(content.name)[1] in settings.DOC_EXTENSION_LIST:
+            if content.size > settings.MAX_UPLOAD_SIZE:
+                self._errors['attachment_file']=self.error_class(['File size 5 Mb or less'])
+        else:
+            self._errors['attachment_file']=self.error_class(['File format not supported'])
+        return content
 # Django provides a range of tools and libraries 
 # to help you build forms to accept input from 
 # site visitors, and then process and respond to the input.
@@ -53,11 +62,22 @@ class ImageUpload(forms.ModelForm):
     class Meta:
         model = Attachment
         fields  = ('description','attachment_file','name')
-        widgets = {
+        widgets = {	
             "file": MyClearableFileInput(),
         }
+
+    def clean_attachment_file(self):
+        content = self.cleaned_data.get('attachment_file')
+        content_type = content.content_type.split('/')[0] if content else ''
+        if content_type == 'image' and content:
+            if content.size > settings.IMG_UPLOAD_SIZE:
+                self._errors['attachment_file']=self.error_class(['Image size 1 Mb or less'])
+        else:
+            self._errors['attachment_file']=self.error_class(['This image format is not supported'])
+        return content
+
 # Django provides a range of tools and libraries 
-# to help you build forms to accept input from 
+# to help you build forms to accept input from 1
 # site visitors, and then process and respond to the input.
 class ImageUploadTimeline(forms.ModelForm):
     '''
@@ -69,6 +89,15 @@ class ImageUploadTimeline(forms.ModelForm):
     class Meta:
         model = Attachment
         fields  = ('date','description','attachment_file','name')
+    def clean_attachment_file(self):
+        content = self.cleaned_data.get('attachment_file')
+        content_type = content.content_type.split('/')[0] if content else ''
+        if content_type == 'image' and content:
+            if content.size > settings.IMG_UPLOAD_SIZE:
+                self._errors['attachment_file']=self.error_class(['Image size 1 Mb or less'])
+        else:
+            self._errors['attachment_file']=self.error_class(['This image format is not supported'])
+        return content
 # Django provides a range of tools and libraries 
 # to help you build forms to accept input from 
 # site visitors, and then process and respond to the input.
@@ -77,6 +106,8 @@ class ImageUploadTimeline(forms.ModelForm):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+
+
 class ContactPersonForm(forms.ModelForm):
     '''
     This is model form is to save contact information of visitor 

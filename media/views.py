@@ -69,10 +69,6 @@ def timeline_upload(request):
             f.modified_by = user_id
             f.save()
             return HttpResponseRedirect('/project/summary/?slug='+project.slug)
-        else :
-            return HttpResponseRedirect('/project/summary/?slug='+project.slug)
-    else:
-        form=ImageUploadTimeline()
     timeline = 1
     return render(request,'taskmanagement/forms.html',locals())
 
@@ -114,13 +110,13 @@ def upload_attachment(request):
                 obj.attachment_type=1
                 obj.timeline_progress = False
             obj.save()
-        try:
-            keys = request.POST.get('keywords').split(',')
-            key_model = 'Attachment'
-            keywords = add_keywords(keys,obj,key_model,0)
-        except:
-            pass
-        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
+            try:
+                keys = request.POST.get('keywords').split(',')
+                key_model = 'Attachment'
+                keywords = add_keywords(keys,obj,key_model,0)
+            except:
+                pass
+            return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
 
     return render(request,'attachment/doc_upload.html',locals())
 

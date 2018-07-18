@@ -19,6 +19,8 @@ from taskmanagement.templatetags import common_tags
 from taskmanagement.templatetags.common_tags import get_modified_by_user,string_trim,read_more_text
 from menu_decorators import check_loggedin_access
 from media.forms import NoteForm
+from pmu import settings
+import os
 
 # this function is to display project updates in project wall
 # 
@@ -328,20 +330,41 @@ def get_budget_utilization_updates(projectobj,start_date,end_date):
 def get_project_quarter(start_date,end_date):
 	return start_date.month//4 + 1
 
+# function for validation of file for note
+def note_file_validation(attachment_file):
+	msg = ''
+	# file vali
+	if attachment_file and attachment_file.size >= settings.MAX_UPLOAD_SIZE:
+		msg = 'File size should be less then 5Mb'
+	if attachment_file and attachment_file.content_type.split('/')[0] == 'image':
+		if os.path.splitext(attachment_file.name)[1] not in settings.IMAGE_EXTENSION_LIST:
+			msg = 'File format not supported'
+	elif attachment_file and attachment_file.content_type.split('/')[1] not in settings.DOC_CONTENT_TYPE:
+		msg = 'File format not supported'
+		# img validation
+	return msg
+
+
 def create_note(request):
 	# this function is to create note in project wall page
-	# 
+	#
 	created_by = UserProfile.objects.get_or_none(id=request.session.get('user_id'))
 	slug=request.GET.get('slug')
 	if request.method=='POST':
 		project_slug = request.POST.get('slug')
-		projectobj = Project.objects.get(slug=project_slug)
-		note_create = Note.objects.create(project=projectobj,\
+		slug = project_slug
+		attachment_file=request.FILES['attachment']
+		save_status = note_file_validation(attachment_file)
+		if not save_status:
+			projectobj = Project.objects.get(slug=project_slug)
+			note_create = Note.objects.create(project=projectobj,\
 						comment=request.POST.get('comment'),
 						description=request.POST.get('description'),
 						attachment_file=request.FILES['attachment'],
 						created_by=created_by)
-		messages.success(request, 'Note added successfully!')
-		# return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
-		return HttpResponseRedirect('/dashboard/add/note/?slug='+str(project_slug))
+			messages.success(request, 'Note added successfully!')
+			# return HttpResponseRedirect('/dashboard/updates/?slug='+str(project_slug))
+			return HttpResponseRedirect('/dashboard/add/note/?slug='+str(project_slug))
+		else:
+			msg = save_status
 	return render(request,'project-wall/create-note.html',locals())

@@ -65,7 +65,7 @@
                 <form action ='/managing/my-tasks/updates/' id = 'updation_form' method='POST' enctype="multipart/form-data">
                 {% csrf_token %}
                 <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
-               <textarea name="comment" id= "comment_" maxlength="500" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..."></textarea>
+               <textarea name="comment" id= "comment_" maxlength="500" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..." required></textarea>
                                 <div id="textarea_feedback" style="float: right;"></div>
                <div>
                <script>
@@ -82,7 +82,8 @@
                         });
                </script>
                <i class="fa fa-file"></i>
-               <input type='file' name ='upload_attach' id='upload-photo'/> 
+               <input type='file' name ='upload_attach' id='upload-photo'/></br>
+               <b class="error" style="color:red;">{{msg}}</b>
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
                 
@@ -152,96 +153,148 @@
             </div>
          </div>
          <div class="user-timeline">
+                    
          {% if i.task_attachments %}
             <div id="boxscroll-timeline">
                {% for task_attach in i.task_attachments %}
                {% for dates,attach in task_attach.items %}
+               {% task_comments_progress dates i.id attach as comments %}
+                  
+              {%if comments %}
                <div class="month-pad">{{dates|date:'jS F Y'}}</div>
                <ul>
+
+                  {% for c in comments %}
+                      {% if c.attachment == 0 %}
+                      
+                      
+                      <li>
+                        
+                         <div class="left-li">
+                          
+                            <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                                <div class="middle">
+                                    <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
+                                </div>
+                            </div>
+                         </div>
+                         
+                         <div class="right-li third-li">
+                          {% if c.comment_text %}
+                              <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
+                                <ul style="">
+                                  
+                                  <li style="width:100%;margin-bottom:5px">{% if c.comment_text %}{{c.comment_text}}{% endif %}</li>
+                                  
+                                </ul>
+                                {% get_converted_time c.date as time %}
+                                
+                                <span>{{time}}</span>
+                                
+                              </div>
+                              {% if c.previous_task_progress != c.task_progress %}
+                              <p style=" float: left; width: 39%;"> Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
+                              {% endif %}
+                          
+                          {% else %}
+                           
+                            <p style=" float: left; width: 100%; margin-top:15px;"> Task completion changed from <b>   {% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
+                             {% get_converted_time c.date as time %}
+                            <br><span>{{time}}</span>   
+                          {% endif %}
+                            
+                     </div>
+                     
+                  </li>
+                  
+                  {% endif %}
+                  {% if c.attachment == 1 %}
+<!-- ---------------------------------------------------------------------------------------- -->
                   <li>
-                     {% for a in attach %}
-                     {% if a.attachment_type == 1 %}
+                    
+                     
+                     {% if c.attachment_type == 1 %}
                      <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                             <div class="middle">
-                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
+                                <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
                             </div>
                         </div>
                      </div>
                      
                      <div class="right-li first-li">
-                            {% if a.attachment_file %}
-                        <p>{% if a.description %}{{a.description|safe}} {% endif %}</p>
-                        <ul>
-                           <li>
-                              <a href="{{image_url}}{{a.attachment_file.url}}">
-                                 <img src="{{image_url}}{{a.attachment_file.url}}" width="162" height="112" alt="">
+                            
+                        
+                        
+                        <div style="float:left; width:56%;margin-right:20px; margin-bottom:10px">
+                          <p>{{c.description}}</p>
+                          <ul>
+                           <li style="width:100%">
+                              <a href="{{c.image_url}}">
+                                 <img src="{{c.image_url}}" width="60%" alt="">
 <!--                                 <div class="/static/image-hover">4 More files</div>-->
                               </a>
                            </li>
+                           {% get_converted_time c.date as time %}
+                        <span>{{time}}</span>
                             
                         </ul>
-                        {% get_converted_time a.created as time %}
-                        <span>{{time}}</span>
+                      </div>
+                        
+                        {% if c.previous_task_progress != c.task_progress %}
+                        <p style=" float: left; width: 39%; font-size:14px;"> Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
                         {% endif %}
                      </div>
-                     
+                    
                   </li>
-                  {% elif a.attachment_type == 2 %}
+                  {% endif %}
+                  
+                  {% if c.attachment_type == 2 %}
                   <li>
                      <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
+                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.name.first_name}} {{c.name.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
                             <div class="middle">
-                                <div class="text">{{a.created_by.attrs.first_name}} {{a.created_by.attrs.last_name}}</div>
+                                <div class="text">{{c.name.first_name}} {{c.name.last_name}}</div>
                             </div>
                         </div>
                      </div>
                      <div class="right-li second-li">
                      
+                     <div style="float:left; width:56%; margin-right:20px; margin-bottom:10px">
+                      <p>{{c.description}}</p>
                         <ul>
-                           {% if a.attachment_file %}
                            
                            <li>
                                 
-                              <a href="{{image_url}}{{a.attachment_file.url}}">
-                              {% if a.document_type == 3 %}
-                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{a.name}}</span></a>
-                              {% elif a.document_type == 1 %}
-                              <img src="/static/img/excel-icon.png" alt=""> <span>{{a.name}}</span></a>
+                              <a href="{{c.image_url}}">
+                              {% if c.document_type == 3 %}
+                              <img src="/static/img/ppt-icon.png" alt=""> <span>{{c.file_name}}</span></a>
+                              {% elif c.document_type == 1 %}
+                              <img src="/static/img/excel-icon.png" alt=""> <span>{{c.file_name}}</span></a>
                               {% else %}
-                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{a.name}}</span></a>
-                              {% endif %}
+                              <img src="/static/img/textbox-bg.png" alt=""> <span>{{c.file_name}}</span></a>
+                              {% get_converted_time c.date as time %}
+                        <span>{{time}}</span>
                            </li>
                         </ul>
-                        {% get_converted_time a.created as time %}
+                        {% get_converted_time c.date as time %}
                         <span>{{time}}</span>
+                        
                         {% endif %}
+
                      </div>
-                  </li>
+                     {% if c.previous_task_progress != c.task_progress %}
+                        <p style=" float: right; width: 39%;">Task completion changed from <b>{% if c.previous_task_progress != None %}{{c.previous_task_progress}}{% else %}0{% endif %}%</b> to <b>{{c.task_progress}}% </b></p>
+                        {% endif %}
+                  
+                  {% endif %}
+                 
+<!-- -------------------------------------------------------------------- -->
+
                   {% endif %}
                   {% endfor %}
-                  {% task_comments dates i.id as comments %}
-                  {%if comments %}
-                  <li>
-                    {% for c in comments %}
-                     <div class="left-li">
-                        <div  class="middle_text"><canvas class="user-icon" data-name="{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}" width="30" height="30" style="border-radius:30px" ></canvas>
-                            <div class="middle">
-                                <div class="text">{{c.created_by.attrs.first_name}} {{c.created_by.attrs.last_name}}</div>
-                            </div>
-                        </div>
-                     </div>
-                     
-                     <div class="right-li third-li">
-                        <ul>
-                           <li>{% if c.text %}{{c.text}}{% endif %}</li>
-                        </ul>
-                        {% get_converted_time c.created as time %}
-                        <span>{{time}}</span>
-                            
-                     </div>
-                     {% endfor %}
-                     
+                  
                   </li>
                   {% endif %}
                </ul>

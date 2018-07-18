@@ -200,7 +200,7 @@ font-size: 14px;
                                 $('#textarea_feedback_{{i.id}}').html(text_remaining + ' characters remaining');
                             });
                             $('#comment_{{i.id}}').keypress(function (e) {
-                                var regex = new RegExp("^[a-zA-Z0-9]+$");
+                                var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
                                 var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
                                 if (regex.test(str)) {
                                     return true;
@@ -209,7 +209,7 @@ font-size: 14px;
                                 e.preventDefault();
                                 return false;
                             }).on('paste', function (e) {
-                              var regex = new RegExp("^[a-zA-Z0-9]+$");
+                              var regex = new RegExp("^[0-9a-zA-Z \b /g .]+$");
                                 var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
                                 if (regex.test(str)) {
                                     return true;
@@ -222,7 +222,8 @@ font-size: 14px;
                 </script>
                <div>
                <!-- <i class="fa fa-file"></i> -->
-               <input type='file' name ='upload_attach' id='upload-photo'/> 
+               <input type='file' name ='upload_attach' id='upload-photo'/> </br>
+               <b class="error" style="color:red;">{{upload_msg}}</b>
 <!--               <label id = "size_upload" >"Please keep filesize under 5 MB"</label>-->
                </div>
                
