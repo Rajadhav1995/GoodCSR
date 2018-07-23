@@ -538,6 +538,8 @@ def task_comments(request):
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
         progress= request.POST.get('tea1')
+        comment_text = request.POST.get('comment')
+        comment_error = comment_validation(comment_text)
         if request.FILES:
             upload_file = request.FILES.get('upload_attach')
             file_type = upload_file.content_type.split('/')[0]
@@ -545,8 +547,8 @@ def task_comments(request):
             #  upload docu validation kartik
             from dashboard.project_wall import note_file_validation
             save_status = note_file_validation(upload_file)
-            if not save_status:
-                attach = Attachment.objects.create(description = request.POST.get('comment'),
+            if not save_status and not comment_error :
+                attach = Attachment.objects.create(description = comment_text,
                     attachment_type = application_type.get(file_type),
                     document_type = doc_type.get(file_type),
                     attachment_file = request.FILES.get('upload_attach'),
@@ -561,8 +563,8 @@ def task_comments(request):
                 create_task_progress(request,task)
             else:
                 msg = save_status
-        elif request.POST.get('comment')!= '':
-            comment = Comment.objects.create(text = request.POST.get('comment'),
+        elif request.POST.get('comment')!= '' and not comment_error:
+            comment = Comment.objects.create(text = comment_text,
                 created_by = user,content_type = ContentType.objects.get(model=('task')),
                 object_id = request.POST.get('task_id'))
             # added to get the task updates done by particular user saved in modified_by 
@@ -571,10 +573,17 @@ def task_comments(request):
             create_task_progress(request,task)
         # added to get the task updates done by particular user saved in modified_by 
         add_modified_by_user(task,request)
-        
+
         return HttpResponseRedirect(url+'&task_slug='+task.slug+'&msg='+msg)
         
     return HttpResponseRedirect(url)
+
+# comment length vaidation
+def comment_validation(comment):
+    comment_error = ''
+    if len(comment) >500:
+        comment_error = 'Maximum 500 characters allowed'
+    return comment_error
 
 ''' Jagpreet Added Code below for Tasks' Expected Start Date and Expected End Date''
 from dateutil import parser

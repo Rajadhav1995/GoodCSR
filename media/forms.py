@@ -12,7 +12,9 @@ from django.utils.translation import gettext as _
 from django.conf import settings
 import requests
 from django.forms import ClearableFileInput
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
+
 import os
 
 # When working with any programming language, you include comments

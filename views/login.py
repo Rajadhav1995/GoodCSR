@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from  django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from pmu.settings import (SAMITHA_URL,)
+from pmu.settings import (SAMITHA_URL,RECAPTCHA_PUBLIC_KEY)
 from projectmanagement.models import UserProfile
 from media.models import Section,Article
 from django.core.cache import cache
@@ -14,31 +14,34 @@ import simplejson as json
 def signin(request):
     # this function is for
     # login from goodcsr db
+    cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
     if request.session.get('user_id'):
         return HttpResponseRedirect('/dashboard/')
     if request.method == 'POST':
-        next = request.POST.get('next')
-        data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
-        headers = {'content-type': 'application/json'}
-        try:
+        if request.POST.get('g-recaptcha-response'):
+            next = request.POST.get('next')
+            data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
+            headers = {'content-type': 'application/json'}
+            try:
 #            http = urllib3.PoolManager()
 #            r = http.request('POST',SAMITHA_URL + '/pmu/login/', fields = data)
-            response = requests.post(SAMITHA_URL + '/pmu/login/', json.dumps(data),headers=headers)
-        except requests.exceptions.ConnectionError:
-            status_code = "Connection refused"
+                response = requests.post(SAMITHA_URL + '/pmu/login/', json.dumps(data),headers=headers)
+            except requests.exceptions.ConnectionError:
+                status_code = "Connection refused"
 #        validation_data = json.loads(r.data)
-        validation_data = response.json()
+            validation_data = response.json()
 #        userobj = UserProfile.objects.get_or_none(email=str(request.POST.get('username')))
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
-        if validation_data.get('status') == "2":
-            request.session['user_id'] = int(validation_data.get('user_id'))
-            if next:
-                return HttpResponseRedirect(next)
+            if validation_data.get('status') == "2":
+                request.session['user_id'] = int(validation_data.get('user_id'))
+                if next:
+                    return HttpResponseRedirect(next)
+                else:
+                    return HttpResponseRedirect('/dashboard/')
             else:
-                return HttpResponseRedirect('/dashboard/')
+                message = validation_data.get('msg')
         else:
-            message = validation_data.get('msg')
-    
+            cpatcha_msg = 'Invalid Captcha! Please try again'
     return render(request, 'login.html', locals())
 
 

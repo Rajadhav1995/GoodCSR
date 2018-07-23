@@ -67,6 +67,7 @@
                 <input id = "task_id " name = 'task_id' type='hidden' value = "{{i.id}}"/>
                <textarea name="comment" id= "comment_" maxlength="500" onFocus="if(this.value==this.defaultValue)this.value='';" onBlur="if(this.value=='')this.value=this.defaultValue;" placeholder = "Write a update..." required></textarea>
                                 <div id="textarea_feedback" style="float: right;"></div>
+                <b class="error" style="color:red;">{{comment_error}}</b>
                <div>
                <script>
                         $(document).ready(function() {
