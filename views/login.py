@@ -40,10 +40,17 @@ def signin(request):
                     return HttpResponseRedirect('/dashboard/')
             else:
                 message = validation_data.get('msg')
+                intermidate_login(request, message = message)
         else:
             cpatcha_msg = 'Invalid Captcha! Please try again'
+            intermidate_login(request, cpatcha_msg = cpatcha_msg)
     return render(request, 'login.html', locals())
 
+
+# introduce intermidate login page (back and refresh)
+def intermidate_login(request, message='', cpatcha_msg=''):
+    cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
+    return render(request, 'login.html', locals())
 
 def signout(request):
     # this function is for 
