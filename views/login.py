@@ -28,8 +28,8 @@ def signin(request):
             response = requests.post(SAMITHA_URL + '/pmu/login/', json.dumps(data),headers=headers)
         except requests.exceptions.ConnectionError:
             status_code = "Connection refused"
-#        validation_data = json.loads(r.data)
-        validation_data = response.json()
+        validation_data = json.loads(r.data)
+#        validation_data = response.json()
 #        userobj = UserProfile.objects.get_or_none(email=str(request.POST.get('username')))
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
         if validation_data.get('status') == "2":
