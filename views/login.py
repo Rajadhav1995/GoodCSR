@@ -18,30 +18,30 @@ def signin(request):
     if request.session.get('user_id'):
         return HttpResponseRedirect('/dashboard/')
     if request.method == 'POST':
-        if request.POST.get('g-recaptcha-response'):
-            next = request.POST.get('next')
-            data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
-            headers = {'content-type': 'application/json'}
-            try:
+#        if request.POST.get('g-recaptcha-response'):
+        next = request.POST.get('next')
+        data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
+        headers = {'content-type': 'application/json'}
+        try:
 #            http = urllib3.PoolManager()
 #            r = http.request('POST',SAMITHA_URL + '/pmu/login/', fields = data)
-                response = requests.post(SAMITHA_URL + '/pmu/login/', json.dumps(data),headers=headers)
-            except requests.exceptions.ConnectionError:
-                status_code = "Connection refused"
+            response = requests.post(SAMITHA_URL + '/pmu/login/', json.dumps(data),headers=headers)
+        except requests.exceptions.ConnectionError:
+            status_code = "Connection refused"
 #        validation_data = json.loads(r.data)
-            validation_data = response.json()
+        validation_data = response.json()
 #        userobj = UserProfile.objects.get_or_none(email=str(request.POST.get('username')))
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
-            if validation_data.get('status') == "2":
-                request.session['user_id'] = int(validation_data.get('user_id'))
-                if next:
-                    return HttpResponseRedirect(next)
-                else:
-                    return HttpResponseRedirect('/dashboard/')
+        if validation_data.get('status') == "2":
+            request.session['user_id'] = int(validation_data.get('user_id'))
+            if next:
+                return HttpResponseRedirect(next)
             else:
-                message = validation_data.get('msg')
+                return HttpResponseRedirect('/dashboard/')
         else:
-            cpatcha_msg = 'Invalid Captcha! Please try again'
+            message = validation_data.get('msg')
+#        else:
+#            cpatcha_msg = 'Invalid Captcha! Please try again'
     return render(request, 'login.html', locals())
 
 
