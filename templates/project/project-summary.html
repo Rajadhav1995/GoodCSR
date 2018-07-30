@@ -533,7 +533,7 @@ function numberWithCommas(x) {
 <!--    	<a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>-->
 <!--    	{% endif %}-->
     	
-    	{% with "upload-images"|make_string:"view" as keystring %}
+    	{% with "upload-images"|make_string:"add" as keystring %}
             {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
         <a class="link-pad" href="/upload/images/?slug={{obj.slug}}">Upload Images</a>
         {% endif %}
