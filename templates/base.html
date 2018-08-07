@@ -265,6 +265,7 @@ ga('send', 'pageview');
     <div class="row">
         <div class="f-left">
         	<ul>
+        		<li>Built By:<a href="http://mahiti.org/" style="text-decoration:underline"> Mahiti</a></li>
             	<li><a href="javascript:void(0);">Privacy Policy</a></li>
                 <li><a href="javascript:void(0);">Terms of Service</a></li>
             </ul>
@@ -334,6 +335,35 @@ ga('send', 'pageview');
       $('.dropdown-menu, .dropdown-menu1').slideUp(350);
    
     });
+</script>
+<script>
+var IDLE_TIMEOUT = 600; //seconds
+var _idleSecondsCounter = 0;
+document.onclick = function() {
+    _idleSecondsCounter = 0;
+};
+document.onmousemove = function() {
+    _idleSecondsCounter = 0;
+};
+document.onkeypress = function() {
+    _idleSecondsCounter = 0;
+};
+window.setInterval(CheckIdleTime, 1000);
+
+function logouttt(){
+document.location.href = "/logout/";
+}
+
+
+function CheckIdleTime() {
+    _idleSecondsCounter++;
+    if (_idleSecondsCounter >= IDLE_TIMEOUT) {
+        alert("Time expired!");
+       logouttt()
+       
+    }
+}
+
 </script>
 
 <!-- ----------------------------------------- -->

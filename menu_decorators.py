@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST as post_only
 import urllib
 from views.login import signin
 from projectmanagement.templatetags.urs_tags import userprojectlist
+from pmu.settings import RECAPTCHA_PUBLIC_KEY
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
@@ -15,17 +16,22 @@ from projectmanagement.templatetags.urs_tags import userprojectlist
 # Without it, things can get real confusing, real fast.
 def check_loggedin_access(view):
     def is_auth(request, *args, **kwargs):
+        cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
         user_id = request.session.get('user_id')
         next = request.GET.get('next')
         keys = ['summary','updates','task-milestone','budget','files','tranches','projecttasks','generate-report']
         if user_id:
             key = request.GET.get('key')
             project_slug = str(request.GET.get('slug'))
-            user_obj = UserProfile.objects.get(user_reference_id = user_id )
-            obj_list = userprojectlist(user_obj)
-            get_project_slug_list = obj_list.values_list("slug",flat=True)
-            if project_slug in get_project_slug_list or key not in keys:
-                user = signin(request)
+            user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
+            if user_obj:
+                obj_list = userprojectlist(user_obj)
+                get_project_slug_list = obj_list.values_list("slug",flat=True)
+                if project_slug in get_project_slug_list or key not in keys:
+                    user = signin(request)
+                else:
+                    message = "Permission Denined!!!Please Contact Administrator."
+                    return render(request, 'login.html', locals())
             else:
                 message = "Permission Denined!!!Please Contact Administrator."
                 return render(request, 'login.html', locals())
