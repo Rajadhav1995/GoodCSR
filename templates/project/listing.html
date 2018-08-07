@@ -41,7 +41,7 @@
     <div class="box-body table-responsive">
         <h3>Project List</h3>
         {% get_user_permission request as user_obj %}
-    {% with "upload-parameters"|make_string:"add" as keystring %}
+    {% with "add-new-project"|make_string:"add" as keystring %}
             {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
         <div style="float: right;"><a class="budget_button" href="/project/add/">Add Project</a></div>{% endif %}
         {% endwith %}
