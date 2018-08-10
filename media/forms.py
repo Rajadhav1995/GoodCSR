@@ -44,12 +44,15 @@ class AttachmentForm(forms.ModelForm):
         }
     def clean_attachment_file(self):
         content = self.cleaned_data.get('attachment_file')
-        content_type = content.content_type.split('/')[1] if content else ''
-        if content and content_type in settings.DOC_CONTENT_TYPE and os.path.splitext(content.name)[1] in settings.DOC_EXTENSION_LIST:
-            if content.size > settings.MAX_UPLOAD_SIZE:
-                self._errors['attachment_file']=self.error_class(['File size 5 Mb or less'])
-        else:
-            self._errors['attachment_file']=self.error_class(['File format not supported'])
+        try:
+            content_type = content.content_type.split('/')[1] if content else ''
+            if content and content_type in settings.DOC_CONTENT_TYPE and os.path.splitext(content.name)[1] in settings.DOC_EXTENSION_LIST:
+                if content.size > settings.MAX_UPLOAD_SIZE:
+                    self._errors['attachment_file']=self.error_class(['File size 5 Mb or less'])
+            else:
+                self._errors['attachment_file']=self.error_class(['File format not supported'])
+        except:
+            pass
         return content
 # Django provides a range of tools and libraries 
 # to help you build forms to accept input from 
@@ -70,12 +73,15 @@ class ImageUpload(forms.ModelForm):
 
     def clean_attachment_file(self):
         content = self.cleaned_data.get('attachment_file')
-        content_type = content.content_type.split('/')[0] if content else ''
-        if content_type == 'image' and content:
-            if content.size > settings.IMG_UPLOAD_SIZE:
-                self._errors['attachment_file']=self.error_class(['Image size 1 Mb or less'])
-        else:
-            self._errors['attachment_file']=self.error_class(['This image format is not supported'])
+        try:
+            content_type = content.content_type.split('/')[0] if content else ''
+            if content_type == 'image' and content:
+                if content.size > settings.IMG_UPLOAD_SIZE:
+                    self._errors['attachment_file']=self.error_class(['Image size 1 Mb or less'])
+            else:
+                self._errors['attachment_file']=self.error_class(['This image format is not supported'])
+        except:
+            pass
         return content
 
 # Django provides a range of tools and libraries 

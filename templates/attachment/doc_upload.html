@@ -395,7 +395,7 @@ $('#id_attachment_file').on('change', function() {
     if (file_type==1) {
     $(function() {
     $('#id_attachment_file').checkFileType({
-        allowedExtensions: ['xlsx', 'xls','csv'],
+        allowedExtensions: ['xls','csv'],
         success: function() {
             alert('Success');
         },
@@ -487,7 +487,7 @@ $(function() {
                     //options.error();
                     if (file_type==1) {
                         $(this).focus();
-                        document.getElementById('file_error').innerHTML="<br>Please Upload .xlsx or .xls or .csv file formats only "
+                        document.getElementById('file_error').innerHTML="<br>Please Upload .xls or .csv file formats only "
                     // alert("Please upload valid Excel(.csv,.xlsx,.xls) file");
                 }
                     else if (file_type==2) {

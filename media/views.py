@@ -159,14 +159,14 @@ def edit_attachment(request):
             obj.save()
             # to get the user who is modified in order to show updates
             
-        try:
-            keys = request.POST.get('keywords').split(',')
-            attach_model = 'Attachment'
+            try:
+                keys = request.POST.get('keywords').split(',')
+                attach_model = 'Attachment'
 
-            keywords = add_keywords(keys,obj,attach_model,1)
-        except:
-            pass
-        return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(request.GET.get('slug'),model))
+                keywords = add_keywords(keys,obj,attach_model,1)
+            except:
+                pass
+            return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(request.GET.get('slug'),model))
     return render(request,'attachment/doc_upload.html',locals())
 
 def city_list(request):
