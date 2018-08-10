@@ -33,7 +33,7 @@
                         <div class="col-md-6 nopadding">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                <label>{{form.project.label_tag}}</label>
+                                <label>{{form.project.label_tag}}<font color="red">*</font></label>
                                 {{form.project}}
                                 {{ form.project.errors }}
                                 </div>
@@ -46,7 +46,7 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>{{form.name.label_tag}}</label>
+                                        <label>{{form.name.label_tag}}<font color="red">*</font></label>
                                         {{form.name}}
                                         {{ form.name.errors }}
                                         </div>
@@ -58,7 +58,7 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>{{form.planned_amount.label_tag}} (<small>₹</small>)</label>
+                                        <label>{{form.planned_amount.label_tag}}<font color="red">*</font> (<small>₹</small>)</label>
                                         {{form.planned_amount}}
                                         {{ form.planned_amount.errors }}
                                         </div>
@@ -70,7 +70,7 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>{{form.actual_disbursed_amount.label_tag}} (<small>₹</small>)</label>
+                                        <label>{{form.actual_disbursed_amount.label_tag}} <font color="red">*</font>(<small>₹</small>)</label>
                                         {{form.actual_disbursed_amount}}
                                         {{ form.actual_disbursed_amount.errors }}
                                         </div>
@@ -82,7 +82,7 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>{{form.recommended_amount.label_tag}} (<small>₹</small>)</label>
+                                        <label>{{form.recommended_amount.label_tag}} <font color="red">*</font>(<small>₹</small>)</label>
                                         {{form.recommended_amount}}
                                         {{ form.recommended_amount.errors }}
                                         </div>
@@ -93,7 +93,7 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>Recommended By</label>
+                                        <label>Recommended By<font color="red">*</font></label>
 
                                         <!-- {{form.recommended_by}} -->
                                         <select name="recommended_by" required="" class="form-control" id="id_recommended_by">
@@ -124,7 +124,7 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>{{form.due_date.label_tag}}</label>
+                                        <label>{{form.due_date.label_tag}}<font color="red">*</font></label>
                                         {{form.due_date}}
                                         {{ form.due_date.errors }}
                                         </div>
@@ -147,7 +147,7 @@
                                 <div class="col-md-6 nopadding">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>Comment</label>
+                                        <label>Comment<font color="red">*</font></label>
                                         <textarea name="comment" id="comment" required="" rows="10" cols="40" value="{{comment.text}}" class="form-control text_area">{{comment.text}}</textarea>
                                         {{ form.disbursed_date.errors }}
                                         </div>
@@ -250,6 +250,8 @@
                 recommended_by : {required:true},
                 disbursed_date : {required:false},
                 due_date : {required:true},
+                comment : {required:true}
+                
             },
             messages:
             {
@@ -261,6 +263,7 @@
                 recommended_by : {required : "<font color=#fc282f>Please select User</font>"},
                 disbursed_date : {required : "<font color=#fc282f>Please enter Disbursed Date</font>"},
                 due_date : {required : "<font color=#fc282f>Please enter Due Date</font>"},
+                comment : {required : "<font color=#fc282f>Please enter Comment</font>"},
 
             },
             highlight: function (element) {

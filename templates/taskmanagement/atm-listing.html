@@ -59,12 +59,11 @@
             <ul>
                {% if activity_list %}
                {% for i in activity_list %}
-               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}
+               <li><a href="javascript:void(0);" act_id={{i.id}} category_id={{i.super_category.id}}>{{i.name}}<span>({{i.get_activity_type_display}}) <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')"></i>
                 {% with "activities"|make_string:"edit" as keystring %}
                     {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-               <span>({{i.get_activity_type_display}}) 
-               <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'activity')"></i>
                <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i>
+               <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}')" title="Remove Activity"></i>
                </span>
                     {% endif %}
                 {% endwith %}
@@ -93,12 +92,14 @@
                <ul>
                   {% if task_list %}
                   {% for task in task_list %}
-                  <li><a href="javascript:void(0);" task_id={{task.id}} activity_id={{task.activity.id}} category_id={{task.activity.super_category.id}}>{{task.name}} 
+                  <li><a href="javascript:void(0);" task_id={{task.id}} activity_id={{task.activity.id}} category_id={{task.activity.super_category.id}}>{{task.name}} <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}
                     {% with "tasks"|make_string:"edit" as keystring %}
                         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-                  <span>{{task.start_date | date:"jS M"}} - {{task.end_date | date:'jS M'}}<i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')"></i></span>
+                  <i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')"></i>
+                  <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}')" title="Remove Task"></i>
                   {% endif %}
                   {% endwith %}
+                  </span>
 <!--                    {% get_user_permission request as user_obj %}-->
 <!--                    {% if user_obj.is_admin_user == True %}-->
 <!--                     <a class="add-task" href="/managing/Task/TaskForm/edit/{{task.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a></a>-->
@@ -127,14 +128,14 @@
                   {% if milestone %}
                   {% for mile in milestone %}
                   
-                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} 
+                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}})
+                  {% if mile.status != 2 %} 
+                  <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')"></i>
                     {% get_user_permission request as user_obj %}
                     {% with "milestone"|make_string:"edit" as keystring %}
                         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-                   <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %} 
-                   <i class="fa fa-filter" style="float:right; padding-left: 5px;" onclick="filter(this,this.parentNode.parentNode,'milestone')"></i>
-                   <i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}
-                   </span>
+                   <i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>
+                   <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}')" title="Remove Milestone"></i>
                    {% endif %}
                    {% endwith %}
 <!--                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>-->
@@ -145,7 +146,9 @@
 <!--                                          <a class="add-task" href="/managing/Milestone/MilestoneForm/edit/{{mile.slug}}/?key={{project.slug}}"><i class="fa fa-edit"></i> </a> </a>-->
 <!--                  {% endif %}-->
                     </a>
+                    </span>
                   </li>
+                  {% endif %}
                   {% endfor %}
                   {% else %}
                   <li><a href="javascript:void(0);"> No milestones</a></li>
