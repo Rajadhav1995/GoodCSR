@@ -10,10 +10,15 @@ from media.models import Section,Article
 from django.core.cache import cache
 import urllib3
 import simplejson as json
+from django.contrib import messages
 
 def signin(request):
     # this function is for
     # login from goodcsr db
+    #if request.GET.get('message'):
+     #   message = request.GET.get('message')
+    #if request.GET.get('cpatcha_msg'):
+     #   cpatcha_msg = request.GET.get('cpatcha_msg')
     cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
     if request.session.get('user_id'):
         return HttpResponseRedirect('/dashboard/')
@@ -39,18 +44,19 @@ def signin(request):
                 else:
                     return HttpResponseRedirect('/dashboard/')
             else:
-                message = validation_data.get('msg')
-                intermidate_login(request, message = message)
+                mess = validation_data.get('msg')
+                messages.add_message(request, messages.INFO, mess)
+                return HttpResponseRedirect('/intermidate-login/')
         else:
-            cpatcha_msg = 'Invalid Captcha! Please try again'
-            intermidate_login(request, cpatcha_msg = cpatcha_msg)
+            mess = 'Invalid Captcha! Please try again'
+            messages.add_message(request, messages.INFO, mess)
+            return HttpResponseRedirect('/intermidate-login/')
     return render(request, 'login.html', locals())
 
 
 # introduce intermidate login page (back and refresh)
-def intermidate_login(request, message='', cpatcha_msg=''):
-    cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
-    return render(request, 'login.html', locals())
+def intermidate_login(request):
+    return HttpResponseRedirect('/login/')
 
 def signout(request):
     # this function is for 

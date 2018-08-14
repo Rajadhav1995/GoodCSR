@@ -45,9 +45,13 @@ ga('send', 'pageview');
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
+  
     <p class="login-box-msg">Sign in to start your session</p>
+    {% if messages %}
+    {% for message in messages %}
     <p class="login-box-msg"><font size="3" color="red">{{message}}</font></p>
-
+	{% endfor %}
+	{% endif %}
     <form action=".{% for i in request.GET.items %}{% if forloop.counter == 1 %}?{% else %}&{% endif %}{{i.0}}={{i.1}}{% endfor %}" method="post">{% csrf_token %}
     {% if request.GET.items %}
     <input type="hidden" name="next" value="{{request.GET.items}}">
@@ -61,7 +65,6 @@ ga('send', 'pageview');
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
        <div class="g-recaptcha" data-sitekey="{{cpatcha_public_key}}"></div>
-       <b style="color: red;"> {{cpatcha_msg}}</b>
       <div class="row">
         <div class="col-xs-8">
           
