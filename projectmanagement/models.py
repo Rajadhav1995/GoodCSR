@@ -66,7 +66,7 @@ class BaseContent(six.with_metaclass(BaseContentBase, models.Model)):
 
     ACTIVE_CHOICES = ((0, 'Inactive'), (2, 'Active'),)
     active = models.PositiveIntegerField(choices=ACTIVE_CHOICES,
-                                         default=2)
+                                         default=2, db_index=True,)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     modified_by = models.CharField(max_length=50,blank=True, null=True)
