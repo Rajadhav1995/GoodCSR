@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from projectmanagement.models import (UserProfile,)
-from userprofile.models import (RoleTypes,UserRoles)
+from userprofile.models import (RoleTypes,UserRoles,ProjectUserRoleRelationship)
 
 def get_user_role(userprofileobj):
     org_code = {'1':1,'2':2,'4':4,'0':3}
@@ -81,6 +81,34 @@ class GeneratePdf(View):
      pdf = render_to_pdf('report/invoice.html', data)
      return HttpResponse(pdf, content_type='application/pdf')
 
+
+
+def add_userroles():
+    userprofileobj = UserProfile.objects.all()
+    #import ipdb; ipdb.set_trace();
+    for userobj in userprofileobj:
+        roleobj = UserRoles.objects.get_or_none(user = userobj)
+        if not roleobj:
+            relationuser = list(ProjectUserRoleRelationship.objects.filter(user = userobj).values_list('role__id', flat=True).distinct())
+            user_role_types_id = []
+            if relationuser:
+                user_role_types_id.extend(relationuser)
+            roletypeobj = RoleTypes.objects.filter(id__in = user_role_types_id)
+            userroleobj, created = UserRoles.objects.get_or_create(user = userobj)
+            org_type_role = get_user_role(userobj)
+            userroleobj.role_type.add(org_type_role)
+            for ro in roletypeobj:
+                userroleobj.role_type.add(ro)
+            userroleobj.email = userobj.email
+            userroleobj.save()
+            print ('userroles created') 
+            
+            
+            
+            
+            
+    
+    
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
