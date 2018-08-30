@@ -11,6 +11,7 @@ from django.core.cache import cache
 import urllib3
 import simplejson as json
 from django.contrib import messages
+from rest_framework.views import APIView,Response
 
 def signin(request):
     # this function is for
@@ -116,18 +117,36 @@ def get_image():
     plt.axis('equal')
     plt.savefig(results_dir + sample_file_name)
 
-# When working with any programming language, you include comments
-# in the code to notate your work. This details what certain parts 
-# know what you were up to when you wrote the code. This is a necessary
-# practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast.
-# When working with any programming language, you include comments
-# in the code to notate your work. This details what certain parts 
-# know what you were up to when you wrote the code. This is a necessary
-# practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast.
-# When working with any programming language, you include comments
-# in the code to notate your work. This details what certain parts 
-# know what you were up to when you wrote the code. This is a necessary
-# practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast.
+class PMULoginAPI(APIView):
+    #this function is for login through the PMU db as a standalone
+    def post(self, request, *args, **kwargs):
+        """
+        User Login.
+        ---
+        parameters:
+        - name: username
+          description: Username Login
+          required: true
+          type: string
+          paramType: form
+        - name: password
+          description: Password for Login
+          paramType: form
+          required: true
+          type: string
+        """
+        print 'PMULogin API'
+        response = {}
+        data = request.data
+        user = authenticate(username = data.get('username'), password = data.get('password'))
+        if user is not None:
+            if user.is_active:
+                response.update({"status":"2","msg":"User Logged-in Succesfully",
+                                "user_id":int(user.id)})
+            else:
+                #response.update({"status":"0","msg":"User is inactive"})
+                response.update({"status":"0","msg":"Invalid Credentials"})
+        else:
+            #response.update({"status":"0","msg":"Username/Password mismatch"})
+            response.update({"status":"0","msg":"Invalid Credentials"})
+        return Response(response)

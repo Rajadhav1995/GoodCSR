@@ -187,10 +187,18 @@ def get_org_logo(projectobj):
 #    http = urllib3.PoolManager()
 #    companyobj = http.request('POST',SAMITHA_URL + '/pmu/company/logo/', fields = data)
     headers = {'content-type': 'application/json'}
-    companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', json.dumps(data),headers=headers)
-    validation_data = companyobj.json()
-    org_logo = validation_data.get('front_image')
-    ngo_logo = validation_data.get('ngo_image')
+    print "HERE"
+    try:
+        companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', json.dumps(data),headers=headers)
+    except Exception as e:
+        print "company logo request failed.",e.message
+    if(companyobj.status_code == 404):
+        companyobj = str(funderobj.funder.org_logo)
+        print companyobj,"what"
+    else:
+        validation_data = companyobj.json()
+        org_logo = validation_data.get('front_image')
+        ngo_logo = validation_data.get('ngo_image')
     return org_logo,ngo_logo
 
 @register.assignment_tag

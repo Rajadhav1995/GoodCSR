@@ -16,7 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from views import (dashboard,user_information)
 from views.user_information import (UserInformationStorage,saveimage)
-from views.login import (signin,signout,homepage,login_popup,intermidate_login )
+from views.login import (signin,signout,homepage,login_popup,intermidate_login,PMULoginAPI )
 from views.homepage import (feedback,email_validation)
 from projectmanagement.manage_roles import (projectuserslist,projectuseradd,
                                             projectuseredit)
@@ -92,7 +92,7 @@ urlpatterns = [
     url(r'^save/image/$',saveimage),
     url(r'^manage/', include(roles_patterns)),
     url(r'^usermanagement/',include(userroles_patterns)),
-    url(r'^intermidate-login/', intermidate_login)
-
+    url(r'^intermidate-login/', intermidate_login),
+    url(r'^pmu/login/$',PMULoginAPI.as_view()),
 ]
 

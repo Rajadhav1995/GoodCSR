@@ -148,7 +148,8 @@ class UserProfile(BaseContent):
     owner = models.BooleanField(default=False)
     is_admin_user = models.BooleanField(default=False)
     attrs = JSONField(default=my_default)
-
+    org_logo = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
+    
     def __unicode__(self):
         return str(self.email) or ''
 
