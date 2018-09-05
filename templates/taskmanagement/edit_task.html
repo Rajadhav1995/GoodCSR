@@ -240,7 +240,8 @@ var count=0;
                 if (data.calculation != ""){
                     document.getElementById("id_start_date").value = data.calculation;
                     var date = data.calculation
-                    $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: date,changeMonth: true,changeYear: true });
+                    //$( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: date,changeMonth: true,changeYear: true });
+                    $( "#id_start_date" ).datepicker("option", "minDate", date);
                  }
                 },
                 error : function(){}
@@ -259,11 +260,19 @@ var count=0;
 
 <script>
 $(document).ready(function() {
+	var p_sd = "{{project_startdate}}";
+	var dependency_task = "{{is_dependent}}";
     if ("{{model_name}}"=="Task"){
     if ($("id_start_date").val()!=''){
               var start_date = "{{form.start_date.value|date:'Y-m-d'}}"
               document.getElementById("id_start_date").value = start_date
+              if (dependency_task == 'true'){
               $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: start_date,changeMonth: true,changeYear: true });
+              }
+              else{
+              $( "#id_start_date" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: p_sd,changeMonth: true,changeYear: true });
+              }
+              
           }
     if ($("id_end_date").val()!=''){
               var start_date = "{{form.end_date.value|date:'Y-m-d'}}"
