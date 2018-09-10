@@ -17,7 +17,7 @@ from simple_history.admin import SimpleHistoryAdmin
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 import datetime
-
+from import_export.admin import ImportExportModelAdmin
 #----------------------introduction------------------------------------------#
 # Project Management is the application where database tables are related to project
 #--------------------ends here--------------------------------------------------#
@@ -36,7 +36,7 @@ class BaseContentBase(models.base.ModelBase):
         ):
             return mdl
 
-        class MdlAdmin(admin.ModelAdmin):
+        class MdlAdmin(ImportExportModelAdmin):
             list_display = ['__str__'] + getattr(mdl, 'admin_method', []) + [i.name for i in mdl._meta.fields]
             filter_horizontal = [i.name for i in mdl._meta.many_to_many]
 
