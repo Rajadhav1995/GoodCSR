@@ -103,7 +103,7 @@ def add_taskmanagement(request,model_name,m_form):
         form=form(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save(commit=False)
-            if m_form == 'Task_form':
+            if m_form == 'TaskForm':
                 f.task_progress = task_progress
             from projectmanagement.common_method import unique_slug_generator
             f.slug = unique_slug_generator(f,edit)
@@ -168,6 +168,8 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     form=eval(m_form)
     m=eval(model_name).objects.get_or_none(slug = str(slug))
     project = Project.objects.get(slug =request.GET.get('slug') )
+    project_startdate = project.start_date.strftime('%Y-%m-%d')
+    is_dependent = 'true' if m.task_dependency.all() else ''
     if request.method == 'POST':
         if m_form == 'TaskForm':
             task_progress = m.task_progress 
