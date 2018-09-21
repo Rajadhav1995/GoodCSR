@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.contenttypes.models import ContentType
 from userprofile.models import (ProjectUserRoleRelationship,RoleTypes)
+import bleach
+from django.conf import settings
 
 # Django provides a range of tools and libraries 
 # to help you build forms to accept input from 
@@ -33,6 +35,7 @@ class ProjectForm(forms.ModelForm):
 		model = Project
 		fields  = ('name','start_date','end_date','total_budget','budget_type',\
         			'project_status','duration','summary','program_aim','no_of_beneficiaries','cause_area','target_beneficiaries')
+    
 
 	def clean(self):
 		# this is to validate project name
@@ -47,6 +50,15 @@ class ProjectForm(forms.ModelForm):
 
 			# Always return cleaned_data
 		return cleaned_data
+    
+	def clean_summary(self):
+		summary = self.cleaned_data.get('summary', '')
+		cleaned_text = bleach.clean(summary, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+		return cleaned_text
+	def clean_program_aim(self):
+		program_aim = self.cleaned_data.get('program_aim', '')
+		cleaned_text = bleach.clean(program_aim, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+		return cleaned_text
 
 # Django provides a range of tools and libraries 
 # to help you build forms to accept input from 
