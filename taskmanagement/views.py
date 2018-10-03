@@ -484,7 +484,8 @@ def my_tasks_details(request):
         return render(request,'taskmanagement/my-task.html',locals())
     elif status == '2':
         return render(request,'taskmanagement/my-calendar.html',locals())
-    
+
+# for updating t prog
 def create_task_progress(request,task):
     # this function is to create task progress
     # 
