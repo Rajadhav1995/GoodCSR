@@ -169,7 +169,8 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     m=eval(model_name).objects.get_or_none(slug = str(slug))
     project = Project.objects.get(slug =request.GET.get('slug') )
     project_startdate = project.start_date.strftime('%Y-%m-%d')
-    is_dependent = 'true' if m.task_dependency.all() else ''
+    if model_name == 'Task':
+        is_dependent = 'true' if m.task_dependency.all() else ''
     if request.method == 'POST':
         if m_form == 'TaskForm':
             task_progress = m.task_progress 
