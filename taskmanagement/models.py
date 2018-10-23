@@ -64,7 +64,9 @@ class Task(BaseContent):
 
     def __str__(self):
         return smart_str(self.name) or ''
-
+    def __unicode__(self):
+        return unicode(self.name)
+        
     def is_dependent(self):
         task = Task.objects.filter(task_dependency = self.id)
         if task:
@@ -97,8 +99,6 @@ class Task(BaseContent):
             attach=[]
         return attach
 
-        def __unicode__(self):
-            return unicode(self.name)
 # milestone model
 class Milestone(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)
