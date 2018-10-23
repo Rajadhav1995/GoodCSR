@@ -97,6 +97,8 @@ class Task(BaseContent):
             attach=[]
         return attach
 
+        def __unicode__(self):
+            return unicode(self.name)
 # milestone model
 class Milestone(BaseContent):
     project = models.ForeignKey("projectmanagement.Project",**OPTIONAL)
