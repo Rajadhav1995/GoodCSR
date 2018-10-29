@@ -23,13 +23,13 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from calendar import monthrange
-
+from menu_decorators import check_loggedin_access
 #The monthrange() method is used to get weekday of first day of the month
 # and number of days in month, for the specified year and month .monthrange(year, month)
 #Year to get weekday of the first day of the month and number of days in month.
 #Month to get weekday of the first day of the month and number of days in a month.
 
-
+@check_loggedin_access
 def report_form(request):
     #to save the report type and duration
     # 
@@ -90,6 +90,7 @@ def report_form(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def report_listing(request):
     # listing of the generated reports in the lisiting page
     # 
@@ -728,6 +729,7 @@ def get_report_quarterlist(projectreportobj,projectobj):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def finalreportdesign(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')

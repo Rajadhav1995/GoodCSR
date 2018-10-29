@@ -4,6 +4,7 @@ from projectmanagement.models import (Project,)
 from userprofile.models import (ProjectUserRoleRelationship,UserRoles)
 from .forms import(ProjectUserRoleRelationshipForm,)
 from projectmanagement.models import ProjectFunderRelation,UserProfile
+from menu_decorators import check_loggedin_access
 # this section is to manage role wise access to different functionalities
 
 def projectuserslist(request):
@@ -14,6 +15,7 @@ def projectuserslist(request):
     projectuserlist = ProjectUserRoleRelationship.objects.filter(active=2,project__slug=project_slug)
     return render(request,'project/project_user_list.html',locals())
 
+@check_loggedin_access
 def projectuseradd(request):
     '''
     This function is to add user
@@ -44,6 +46,7 @@ def projectuseradd(request):
             msg = "Please fill the form properly"
     return render(request,'project/manage_project_user.html',locals())
 
+@check_loggedin_access
 def projectuseredit(request):
     '''
     This function is to edit user

@@ -37,6 +37,7 @@ from budgetmanagement.report_generate import *
 #already written and he instantly determines his progress and knows how much 
 #further he needs to go.
 
+@check_loggedin_access
 def remove_functionality_pdf_view(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')

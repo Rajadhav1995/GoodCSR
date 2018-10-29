@@ -44,6 +44,7 @@ def list_document(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def timeline_upload(request):
     # this function is to upload images in 
     # timeline (for project summary page)
@@ -77,6 +78,7 @@ def timeline_upload(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def upload_attachment(request):
     '''
     This function is to upload Image/Document 
@@ -125,6 +127,7 @@ def upload_attachment(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def edit_attachment(request):
     '''
     This function is to edit Image/Document

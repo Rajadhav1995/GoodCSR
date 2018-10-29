@@ -14,7 +14,7 @@
     <div class="white-box white-pad">
     <div class="box-body table-responsive">
         <h3>Values added for parameter: {{parameter.name}}</h3>
-        <div style="float: right;"><a style="margin:0px 5px" class="budget_button" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key=2">Back</a><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}"> <b>+</b> New Value</a></div>
+        <div style="float: right;"><a style="margin:0px 5px" class="budget_button" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key=2">Back</a><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}&slug={{slug}}"> <b>+</b> New Value</a></div>
     <table id="example1" class="table table-striped table-bordered" cellspacing="0" width="100%">
             
         {% if parameter_value %}
@@ -35,8 +35,8 @@
             <td>{{i.3}}</td>
             <td>{{i.4}}</td>
             <td>{{i.5}}</td>
-            <td><a class="budget_button" href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}"><i class="fa fa-edit"></i> Edit</button></a>
-            <a href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}&key=1" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a>
+            <td><a class="budget_button" href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}&slug={{slug}}"><i class="fa fa-edit"></i> Edit</button></a>
+            <a href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}&key=1&slug={{slug}}" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a>
             </td>
         </tr>{% endfor %}
 
@@ -55,8 +55,8 @@
             
             <b><td>{{i.0}}</td></b>
             <td>{{i.1}}</td>
-            <td><a class="budget_button" href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}"><i class="fa fa-edit"></i> Edit</button></a>
-            <a href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}&key=1" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a></td>
+            <td><a class="budget_button" href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}&slug={{slug}}"><i class="fa fa-edit"></i> Edit</button></a>
+            <a href="/project/parameter/value/edit/?id={{ids}}&month={{i.0}}&key=1&slug={{slug}}" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a></td>
             </td>
         </tr>{% endfor %}
         {% endif %}
