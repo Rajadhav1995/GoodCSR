@@ -193,6 +193,9 @@ class Project(BaseContent):
 
     def __str__(self):
         return smart_str(self.name) or ''
+        
+    def __unicode__(self):
+        return unicode(self.name)
 
     def total_tasks(self):
         # this model method is for total task count for project
