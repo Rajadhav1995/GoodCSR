@@ -66,7 +66,7 @@
              {% else %}
                 <td><a class="budget_button" href="/report/final/design/?slug={{project.slug}}&report_id={{i.id}}">Edit Report</button></a></td>
              {% endif %}
-            <td><a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=ProjectReport" onclick="return confirm('Are you sure you want to delete the report?')">X</button></a></td>
+            <td><a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=ProjectReport&slug={{project.slug}}" onclick="return confirm('Are you sure you want to delete the report?')">X</button></a></td>
             {% endif %}
                {% endwith %}
 

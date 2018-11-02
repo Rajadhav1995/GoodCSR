@@ -13,7 +13,7 @@ from xhtml2pdf import pisa
 import StringIO
 import pdfkit
 from pmu.settings import BASE_DIR,PMU_URL
-
+from menu_decorators import check_loggedin_access
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
@@ -44,7 +44,7 @@ def pdf_view(request):
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
 
-
+@check_loggedin_access
 def pdfconverter(request):
     # this function we are using to generate pdf 
     # for project report 

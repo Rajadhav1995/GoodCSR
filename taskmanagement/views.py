@@ -83,6 +83,7 @@ def update_task_completion(request,add,status):
             task_progress = '10'
     return task_progress
 
+@check_loggedin_access
 def add_taskmanagement(request,model_name,m_form):
     # this function is to add task 
     # as well as manage tasks(edit)
@@ -156,6 +157,7 @@ def get_form_dates_display(form):
         pass
     return end_date,actual_start_date,actual_end_date
 
+@check_loggedin_access
 def edit_taskmanagement(request,model_name,m_form,slug):
     # this function is to edit task 
     # 

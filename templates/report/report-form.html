@@ -92,6 +92,7 @@ ul li {
                     <form target="_top" autocomplete="off" id="report-form" name="feedback" action="." class ="form-horizantal budget_form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                                 <input type="hidden" name="project_slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
+                                <input type="hidden" name="slug" value="{{slug}}" id="{{slug}}" required="" class="form-control" maxlength="200">
                                 <input type="hidden" name="report_id" value="{{report_id}}" class="form-control" maxlength="200">
                                     <div class="row">
                                     <div class="col-md-6 nopadding">

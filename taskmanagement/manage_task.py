@@ -5,8 +5,9 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from taskmanagement.models import *
 from rest_framework.response import Response
+from menu_decorators import check_loggedin_access
 
-
+@check_loggedin_access
 def remove_task(request):
 	url=request.META.get('HTTP_REFERER')
 	

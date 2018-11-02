@@ -23,13 +23,13 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from calendar import monthrange
-
+from menu_decorators import check_loggedin_access
 #The monthrange() method is used to get weekday of first day of the month
 # and number of days in month, for the specified year and month .monthrange(year, month)
 #Year to get weekday of the first day of the month and number of days in month.
 #Month to get weekday of the first day of the month and number of days in a month.
 
-
+@check_loggedin_access
 def report_form(request):
     #to save the report type and duration
     # 
@@ -40,46 +40,49 @@ def report_form(request):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget_obj = Budget.objects.get_or_none(project=project)
-    from budgetmanagement.manage_budget import get_budget_quarters
-    sd = budget_obj.start_date.year
-    ed = budget_obj.end_date.year
-    difference = ed-sd
-    years_list = [sd+i for i in range(difference)]
-    years_list.append(ed)
-    budget_quarters = get_budget_quarters(budget_obj) 
-    if request.method == 'POST':
-        month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
+    if budget_obj:
+        from budgetmanagement.manage_budget import get_budget_quarters
+        sd = budget_obj.start_date.year
+        ed = budget_obj.end_date.year
+        difference = ed-sd
+        years_list = [sd+i for i in range(difference)]
+        years_list.append(ed)
+        budget_quarters = get_budget_quarters(budget_obj) 
+        if request.method == 'POST':
+            month_dict = {'January':1,'February':2,'March':3,'April':4,'May':5,
                       'June':6,'July':7,'August':8,'September':9,
                       'October':10,'November':11,'December':12}
-        data = request.POST
-        report_id=data.get('report_id')
-        project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
-        quarter_ids = data.get('quarter_type')
-        dates = budget_quarters[int(quarter_ids)]
-        dates_list = dates.split(' to ')
-        report_type = int(data.get('report_type'))
-        if report_type == 2:
-            month_name = data.get('select_month')
-            year = data.get('select_year')
-            month = month_dict.get(month_name)
-            days = monthrange(int(year), month)[1]
-            budget_start_date = str(year)+"-"+str(month)+"-"+str(1)
-            budget_end_date = str(year)+"-"+str(month)+"-"+str(days)
-            project_report = 0
-            key = "monthly-report"
-        else:
-            budget_end_date = dates_list[1] if dates_list else '' 
-            budget_start_date = dates_list[0] if dates_list else '' 
-            key = ""
-        project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
-            report_type = data.get('report_type'),start_date  = budget_start_date,
-            name = project_obj.name,end_date = budget_end_date)
-        if created or int(project_report.active) == 0 :
-            project_report.active = 2
-            project_report.save()
-            return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id='+'&key='+key)
-        else:
-            quarter_msg = "Already Report is generated to this Quarter"
+            data = request.POST
+            report_id=data.get('report_id')
+            project_obj = Project.objects.get_or_none(slug = data.get('project_slug'))
+            quarter_ids = data.get('quarter_type')
+            dates = budget_quarters[int(quarter_ids)]
+            dates_list = dates.split(' to ')
+            report_type = int(data.get('report_type'))
+            if report_type == 2:
+                month_name = data.get('select_month')
+                year = data.get('select_year')
+                month = month_dict.get(month_name)
+                days = monthrange(int(year), month)[1]
+                budget_start_date = str(year)+"-"+str(month)+"-"+str(1)
+                budget_end_date = str(year)+"-"+str(month)+"-"+str(days)
+                project_report = 0
+                key = "monthly-report"
+            else:
+                budget_end_date = dates_list[1] if dates_list else '' 
+                budget_start_date = dates_list[0] if dates_list else '' 
+                key = ""
+            project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
+                report_type = data.get('report_type'),start_date  = budget_start_date,
+                name = project_obj.name,end_date = budget_end_date)
+            if created or int(project_report.active) == 0 :
+                project_report.active = 2
+                project_report.save()
+                return HttpResponseRedirect('/report/final/design/?slug='+data.get('project_slug')+'&report_id='+str(project_report.id)+'&div_id='+'&key='+key)
+            else:
+                quarter_msg = "Already Report is generated to this Quarter"
+    else:
+        msg = True
     return render(request,'report/report-form.html',locals())
 
 # When working with any programming language, you include comments
@@ -87,6 +90,7 @@ def report_form(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def report_listing(request):
     # listing of the generated reports in the lisiting page
     # 
@@ -725,6 +729,7 @@ def get_report_quarterlist(projectreportobj,projectobj):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def finalreportdesign(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
