@@ -12,7 +12,7 @@ import urllib3
 import simplejson as json
 from django.contrib import messages
 from rest_framework.views import APIView,Response
-
+from pmu.settings import NOCAPTCHA
 def signin(request):
     # this function is for
     # login from goodcsr db
@@ -24,7 +24,7 @@ def signin(request):
     if request.session.get('user_id'):
         return HttpResponseRedirect('/dashboard/')
     if request.method == 'POST':
-        if request.POST.get('g-recaptcha-response'):
+        if request.POST.get('g-recaptcha-response') or NOCAPTCHA:
             next = request.POST.get('next')
             data = {'username':request.POST.get('username'), 'password':request.POST.get('password')}
             headers = {'content-type': 'application/json'}
