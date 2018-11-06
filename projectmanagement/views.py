@@ -173,7 +173,7 @@ def auto_update_tranche_amount(final_budget_utilizedamount,project):
                 final_budget_utilizedamount = 0
     return tranchelist
 
-
+@check_loggedin_access
 def budget_tranche(request):
     '''
     This function is for Add budget tranche
@@ -186,7 +186,6 @@ def budget_tranche(request):
         obj = Tranche.objects.get_or_none(id=tranche_id)
         form = TrancheForms(instance = obj)
         comment = Comment.objects.get(content_type = ContentType.objects.get(model='tranche'),object_id=obj.id)
-        # import ipdb; ipdb.set_trace()
     except:
         pass
     user_id = request.session.get('user_id')
@@ -253,13 +252,13 @@ def key_parameter(request):
         parameter_value = ProjectParameterValue.objects.create(keyparameter=parameter_obj,\
                     parameter_value=value,start_date=start_date,end_date=end_date)
     return render(request,'project/key_parameter.html',locals())
-
+@check_loggedin_access
 def add_parameter(request):
     '''
     This function is to add key parameter for project
     '''
     form = ProjectParameterForm()
-    slug =  request.GET.get('slug')
+    slug =  request.GET.get('slug') or request.POST.get('slug')
     key =  request.GET.get('key')
     if request.method == 'POST':
         slug =  request.GET.get('slug')
@@ -293,7 +292,8 @@ def delete_parameter(rem_id_list):
         rem_obj = ProjectParameter.objects.get(id=i)
         rem_obj.switch()
         ProjectParameterValue.objects.filter(keyparameter=rem_obj).delete()
-
+        
+@check_loggedin_access
 def edit_parameter(request):
     # This function is to Edit(add parameter, remove 
     # parameter and modify existing paramter)
@@ -302,6 +302,7 @@ def edit_parameter(request):
     form = ProjectParameterForm()
     ids =  int(request.GET.get('id'))
     obj = ProjectParameter.objects.filter(active=2,parent=ids)
+    slug = request.GET.get('slug') or request.POST.get('slug')
     parent_obj = ProjectParameter.objects.get_or_none(active=2,id=ids)
     if request.method == 'POST':
         rem_id = request.POST.get('rem_id')
@@ -338,14 +339,15 @@ def edit_parameter(request):
     return render(request,'project/edit_key_parameter.html',locals())
 
 import calendar
+
+@check_loggedin_access
 def upload_parameter(request):
     # This function is to add values to key parameter which 
     # are added by admin (parameters number is dynamic)
     # 
-    
     ids =  request.GET.get('id')
     key =  request.GET.get('key')
-    
+    slug = request.GET.get('slug') or request.POST.get('slug')
     parameter = ProjectParameter.objects.get(id=ids)
     project = parameter.project
     strt = project.start_date.year
@@ -362,7 +364,6 @@ def upload_parameter(request):
     parameter_month = ProjectParameterValue.objects.filter(active=2,keyparameter=parameter)
     parameter_value_month = [calendar.month_name[i.start_date.month] for i in parameter_month]
     month_zip = zip(month,month_id)
-    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         month = request.POST.get('month')
         year = int(request.POST.get('year'))
@@ -392,8 +393,10 @@ def upload_parameter(request):
         return HttpResponseRedirect('/project/parameter/manage/?slug=%s&key=2' %parameter.project.slug)
     return render(request,'project/key_parameter.html',locals())
 
+@check_loggedin_access
 def edit_parameter_values(request):
     # edit_value
+    slug=request.GET.get('slug') or request.POST.get('slug')
     ids =  request.GET.get('id')
     date1 = request.GET.get('month')
     date = request.GET.get('month').split(' ')
@@ -413,7 +416,7 @@ def edit_parameter_values(request):
         parent_parameter=ProjectParameterValue.objects.get(active=2,keyparameter=parameter,start_date=date_obj)
         parent_parameter.active=0
         parent_parameter.save()
-        return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
+        return HttpResponseRedirect('/project/parameter/values/manage/?id={}&slug={}'.format(parameter.id,slug))
     if request.method == 'POST':
         if key_parameter_value != []:
             for i in key_parameter_value:
@@ -423,9 +426,10 @@ def edit_parameter_values(request):
         else:
             single_parameter.parameter_value = request.POST.get('value')
             single_parameter.save()
-        return HttpResponseRedirect('/project/parameter/values/manage/?id=%s' %parameter.id)
+        return HttpResponseRedirect('/project/parameter/values/manage/?id={}&slug={}'.format(parameter.id,slug))
     return render(request,'project/key_parameter.html',locals())
-
+    
+@check_loggedin_access
 def manage_parameter(request):
     # 
     # This function is to manange(list) all 
@@ -457,6 +461,7 @@ def manage_parameter_values1(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def remove_record(request):
     # This is common method to delete(deactivate) record from db. 
     # Pass model name and its id
@@ -475,10 +480,12 @@ def remove_record(request):
         auto_update_tranche_amount(final_budget_utilizedamount,project)
     return HttpResponseRedirect(url)
 
+@check_loggedin_access
 def manage_parameter_values(request):
     # This function is to get all parameter values 
     # for perticular key parameter
     # 
+    slug = request.GET.get('slug')
     ids =  request.GET.get('id')
     parameter = ProjectParameter.objects.get(id=ids)
     project = ProjectParameter.objects.get(id=ids).project
@@ -531,7 +538,7 @@ def aggregate_project_parameters(param, values):
         for val in values:
             cnt+=1
             aggr += int(val)
-        aggr=aggr/cnt
+        aggr=aggr/cnt if cnt >0 else 0
     elif param.aggregation_function == "WAV":
         paggr=0
         for val in values:

@@ -344,7 +344,7 @@ def note_file_validation(attachment_file):
 		# img validation
 	return msg
 
-
+@check_loggedin_access
 def create_note(request):
 	# this function is to create note in project wall page
 	#

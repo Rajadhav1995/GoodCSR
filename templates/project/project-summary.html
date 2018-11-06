@@ -686,7 +686,7 @@ under 0 Milestones</h5>
             <td style="width:19%;">{{i.role.name}}
                 {% with "add-user"|make_string:"edit" as keystring %}
         	{% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-            <td style="width:10%;"><a href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}&key=summary"><i title="Edit" class="fa fa-edit" style="color: #429576;"></i></a><a href="/project/remove/record/?id={{i.id}}&model=ProjectUserRoleRelationship" onclick="return confirm('Are you sure you want to Delete user')"><i title="Delete user" class="fa fa-remove" style="float:right; padding-right: 13px;color: #429576; padding-top: 2px;" title="Delete User"></i></a></td>{% endif %} {% endwith %}
+            <td style="width:10%;"><a href="/manage/project/role/edit/?objid={{i.id}}&slug={{obj.slug}}&key=summary"><i title="Edit" class="fa fa-edit" style="color: #429576;"></i></a><a href="/project/remove/record/?id={{i.id}}&model=ProjectUserRoleRelationship&slug={{obj.slug}}" onclick="return confirm('Are you sure you want to Delete user')"><i title="Delete user" class="fa fa-remove" style="float:right; padding-right: 13px;color: #429576; padding-top: 2px;" title="Delete User"></i></a></td>{% endif %} {% endwith %}
       </tr>
       {% endfor %}
       {% else %}

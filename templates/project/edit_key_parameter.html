@@ -30,7 +30,7 @@ width:450px;
             <form autocomplete="off" id="para_add" class ="form-horizantal budget_form" action="/project/parameter/edit/?id={{ids}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
-                            
+                        <input name='slug' hidden value="{{slug}}"></input>
                         <div class="row">
                             <div class="col-md-6 nopadding">
                                 <div class="col-md-12">

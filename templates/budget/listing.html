@@ -79,7 +79,7 @@
            {% with "tranches"|make_string:"edit" as keystring %}
                 {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
             <td>
-                <a class="budget_button" href="/project/budget/tranche/?slug={{slug}}&tranche_id={{i.id}}"><i class="fa fa-edit"></i> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Tranche" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>
+                <a class="budget_button" href="/project/budget/tranche/?slug={{slug}}&tranche_id={{i.id}}"><i class="fa fa-edit"></i> Edit</a> <a class="btn btn-danger delete_function" href="/project/remove/record/?id={{i.id}}&model=Tranche&slug={{slug}}" onclick="return confirm('Are you sure you want to Delete - {{i.name}}')">X</button></a>
                 
             </td>
             {% endif %}

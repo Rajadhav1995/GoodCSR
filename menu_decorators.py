@@ -22,12 +22,13 @@ def check_loggedin_access(view):
         keys = ['summary','updates','task-milestone','budget','files','tranches','projecttasks','generate-report']
         if user_id:
             key = request.GET.get('key')
-            project_slug = str(request.GET.get('slug'))
+            project_slug = request.GET.get('slug') or request.POST.get('slug')
             user_obj = UserProfile.objects.get_or_none(user_reference_id = user_id )
             if user_obj:
                 obj_list = userprojectlist(user_obj)
                 get_project_slug_list = obj_list.values_list("slug",flat=True)
-                if project_slug in get_project_slug_list or key not in keys:
+                #if project_slug in get_project_slug_list or key not in keys:
+                if str(project_slug) in get_project_slug_list or request.path == '/dashboard/' or request.GET.get('status') == '0':
                     user = signin(request)
                 else:
                     message = "Permission Denined!!!Please Contact Administrator."

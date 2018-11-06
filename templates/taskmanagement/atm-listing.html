@@ -63,7 +63,7 @@
                 {% with "activities"|make_string:"edit" as keystring %}
                     {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                <i class="fa fa-edit" style="float:right" onclick="activity('{{i.slug}}','{{project.slug}}','{{i.id}}','{{i.super_category.id}}')"></i>
-               <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}')" title="Remove Activity"></i>
+               <i class="fa fa-remove" style="float:right; padding-right: 2px;" onclick="remove_item('{{i.slug}}','Activity','{{i.id}}','{{project.slug}}')" title="Remove Activity"></i>
                </span>
                     {% endif %}
                 {% endwith %}
@@ -96,7 +96,7 @@
                     {% with "tasks"|make_string:"edit" as keystring %}
                         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                   <i class="fa fa-edit" style="float:right" onclick="task('{{task.slug}}','{{project.slug}}','{{task.id}}','{{task.activity.id}}','{{task.activity.super_category.id}}')"></i>
-                  <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}')" title="Remove Task"></i>
+                  <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{task.slug}}','Task','{{task.id}}','{{project.slug}}')" title="Remove Task"></i>
                   {% endif %}
                   {% endwith %}
                   </span>
@@ -135,7 +135,7 @@
                     {% with "milestone"|make_string:"edit" as keystring %}
                         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                    <i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>
-                   <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}')" title="Remove Milestone"></i>
+                   <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}',{{project.slug}})" title="Remove Milestone"></i>
                    {% endif %}
                    {% endwith %}
 <!--                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>-->
@@ -1207,9 +1207,9 @@ function task(name,slug,task_id,act_id,super_id) {
 function milestone(name,slug,mile_id,task_ids) {
     window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
 }
-function remove_item(name,model,item_id) {
+function remove_item(name,model,item_id,slug) {
     if (confirm('Are you sure you want to Delete?')) {
-    window.location.href="/managing/task/remove/?name="+ name +"&model="+model+"&item_id="+item_id;
+    window.location.href="/managing/task/remove/?name="+ name +"&model="+model+"&item_id="+item_id+"&slug="+slug;
     } else {
       return false;
 
