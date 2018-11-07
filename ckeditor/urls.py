@@ -10,4 +10,3 @@ urlpatterns = patterns(
     url(r'^upload/', views.upload, name='ckeditor_upload'),
     url(r'^browse/', never_cache(staff_member_required(views.browse)), name='ckeditor_browse'),
 )
-
