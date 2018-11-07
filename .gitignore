@@ -5,6 +5,7 @@
 __pycache__
 /pmu/settings.py
 /static/**/*
+/ckeditor/**/*
 *.ipynb
 testcase.py
 gitssh
