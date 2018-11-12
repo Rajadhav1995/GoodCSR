@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 
 from captcha._compat import want_bytes, urlencode, Request, urlopen, PY2
+from pmu.settings import NOCAPTCHA
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
@@ -69,6 +70,8 @@ def displayhtml(public_key,
 
     if 'lang' not in attrs:
         attrs['lang'] = get_language()[:2]
+    if 'showCaptcha' not in attrs:
+        attrs['noCaptcha'] = NOCAPTCHA
 
     return render_to_string(
         WIDGET_TEMPLATE,

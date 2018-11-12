@@ -538,7 +538,7 @@ def aggregate_project_parameters(param, values):
         for val in values:
             cnt+=1
             aggr += int(val)
-        aggr=aggr/cnt
+        aggr=aggr/cnt if cnt >0 else 0
     elif param.aggregation_function == "WAV":
         paggr=0
         for val in values:

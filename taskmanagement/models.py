@@ -42,6 +42,8 @@ class Activity(BaseContent):
     
     def __str__(self):
         return str(self.name)
+    def __unicode__(self):
+        return unicode(self.name)
 
 # task model
 class Task(BaseContent):
@@ -62,6 +64,8 @@ class Task(BaseContent):
 
     def __str__(self):
         return smart_str(self.name) or ''
+    def __unicode__(self):
+        return unicode(self.name)
 
     def is_dependent(self):
         task = Task.objects.filter(task_dependency = self.id)
@@ -107,6 +111,8 @@ class Milestone(BaseContent):
     history = HistoricalRecords()
     def __str__(self):
         return smart_str(self.name)
+    def __unicode__(self):
+        return unicode(self.name)
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
