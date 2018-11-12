@@ -86,6 +86,7 @@ def projectbudgetlist(request):
     budgetlist = Budget.objects.filter(project__slug=project_slug)
     return render(request,"budget/budget_list.html",locals())
 
+@check_loggedin_access
 def projectbudgetadd(request):
     ''' to create budget (step 1) '''
     key = "budget"
@@ -365,6 +366,7 @@ def upload_budget_utlized(line_itemlist,i,request,budget_periodobj):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def budgetutilization(request):
     ''' Report utilization update based on the quarter selected '''
     budget_period = []
@@ -618,6 +620,7 @@ def update_budget_lineitemedit(line_itemlist,quarter_list,request,j,budgetobj,pr
             budget_lineitem_update(budget_parameters,request)
     return line_itemlist
 
+@check_loggedin_access
 def budgetlineitemedit(request):
     '''  Function to edit the budget line item'''
     project_slug = request.GET.get('slug')
@@ -655,6 +658,7 @@ def budgetlineitemedit(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def category_listing(request):
     # this is to list the categories which are added 
     budget_id = request.GET.get('budget_id')
@@ -662,6 +666,7 @@ def category_listing(request):
     listing = SuperCategory.objects.filter(budget__id=budget_id,project__slug = project_slug).exclude(parent=None)
     return render(request,"budget/category_listing.html",locals())
 
+@check_loggedin_access
 def category_add(request):
     # this is to add super categories for the project
     budget_id = request.GET.get('budget_id')
@@ -695,6 +700,7 @@ def category_add(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+@check_loggedin_access
 def delete_category(request):
     # this is to delete a category
     budget_id=request.GET.get('budget_id')
