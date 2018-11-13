@@ -8,6 +8,10 @@
 <!--Content part starts-->
 <style>
 .budget_button{background: #00998b; border: 0px; color:#fff; padding:3px 10px; border-radius:3px;}
+button.budget_button.button_section {
+    line-height: 18px;
+    margin-right: 10px;
+}
 </style>
 <!--{% with "project-list"|make_string:"view" as keystring %}-->
 <!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
@@ -45,14 +49,23 @@
             {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
         <div style="float: right;"><a class="budget_button" href="/project/add/">Add Project</a></div>{% endif %}
         {% endwith %}
-        
+    {% if obj_list %}
+    <form action='.' class="finance-report" id='download_form'>
+         <input type="hidden" name='download' value='true'>
+         <button class="budget_button button_section" type="submit" style="float: right;">Download</button>
+    </form>
+    {% endif %}
     <table id="example1" class="table table-striped table-bordered textalign_boottom" cellspacing="0" width="100%">
         <thead>
             <tr>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th>Project Name</th>
+                <th>Managed by</th>
                 <th>Implementation Partner</th>
                 <th>Funder</th>
                 <th>Status</th>
+                <th>Budget Planned</th>
 <!--                {% with "project-list"|make_string:"edit" as keystring %}-->
 <!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
                 <th>Action</th>
@@ -64,12 +77,16 @@
         
         {% for i in obj_list %}
         <tr>
+            <td style='width: 13%;'> {{i.start_date}}</td>
+            <td style='width: 13%;'> {{i.end_date}}</td>
             <td style='width:38%;'><a href="/project/summary/?slug={{i.slug}}">{{i.name}}</a></td>
             {% get_funder_mapping i as funder_mapping %}
-
+            {% get_pmo_user i as pmo_org %}
+			<td>{{pmo_org}} </td>
             <td>{{funder_mapping.implementation_partner.organization}} </td>
             <td>{{funder_mapping.funder.organization}}</td>            
             <td>{{i.get_active_display}}</td>
+            <td>₹{{i.total_budget}}</td>
 <!--            {% with "project-list"|make_string:"edit" as keystring %}-->
 <!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
            <td>
@@ -77,10 +94,11 @@
                 <a class="budget_button" href="/project/add/?slug={{i.slug}}">Edit</button></a>
                 {% endif %}
             </td>
-            <td style='width: 13%;'>
-                
+            <!--<td style='width: 13%;'>-->
+            <td>
                 {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True or pmo_access == 1 %}
-                <a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>{% endif %}  <!-- <a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a> -->  <!-- <a class="budget_button" href="/report/listing/?slug={{i.slug}}"> Manage Reports</a> --> 
+                <!--<a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>{% endif %}  -->
+                <!-- <a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a> -->  <!-- <a class="budget_button" href="/report/listing/?slug={{i.slug}}"> Manage Reports</a> --> 
                 {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True or pmo_access == 1 %}
                 <a href="/project/remove/record/?id={{i.id}}&model=Project" type="button" title="Delete Project" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')"><b>x</b></a>
                 {% endif %}

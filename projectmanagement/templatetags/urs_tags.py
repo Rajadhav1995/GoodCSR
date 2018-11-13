@@ -564,6 +564,15 @@ def is_pmo_user(user_obj):
         status = False
     return status
 
+# latest pmo of project
+@register.assignment_tag
+def get_pmo_user(project):
+    pmo_user = ProjectUserRoleRelationship.objects.filter(active=2,project = project,role__code = 3).order_by('-id')
+    org_name = ''
+    if pmo_user:
+        org_name = UserProfile.objects.get(id = pmo_user[0].user.id).organization
+    return org_name
+
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary

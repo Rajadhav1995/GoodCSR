@@ -21,9 +21,10 @@ from taskmanagement.views import total_tasks_completed,updates
 from taskmanagement.models import Milestone,Activity,Task
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from common_method import unique_slug_generator,add_keywords,add_modified_by_user
-from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder
+from projectmanagement.templatetags.urs_tags import userprojectlist,get_funder,get_funder_mapping,get_pmo_user
 from menu_decorators import check_loggedin_access
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import csv
 
 # Views for projectmanagement
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
@@ -144,10 +145,28 @@ def project_list(request):
     user_id = request.session.get('user_id')
     logged_user_obj = UserProfile.objects.get(user_reference_id = user_id )
     obj_list = userprojectlist(logged_user_obj)
+    # for download the csv report
+    if request.GET.get('download') == 'true':
+        return get_project_report(obj_list)
     obj_list = pagination(request,obj_list)
-
     return render(request,'project/listing.html',locals())
 
+
+#  csv of project listing
+def get_project_report(projects):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Project_report.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Start Date','Star Date','Project Name','Managed by','Implementation Partner','Funder','Status','Budget Planned'])
+    for pro in projects:
+        funder_mapping = get_funder_mapping(pro)
+        org_name = get_pmo_user(pro)
+        writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization, funder_mapping.funder.organization, pro.get_active_display(), pro.total_budget])
+    return response
+
+# get PMO user
+
+    
 def get_project_budget_utilized_amount(projectobj,budgetobj):
 #    to get the project utilized amount for budget 
     budget_periodlist = ProjectBudgetPeriodConf.objects.filter(project = projectobj,budget = budgetobj,active=2).values_list('id', flat=True)
