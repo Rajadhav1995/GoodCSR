@@ -121,7 +121,7 @@ class PMULoginAPI(APIView):
     #this function is for login through the PMU db as a standalone
     def post(self, request, *args, **kwargs):
         """
-        User Login.
+        User Login PMULogin API.
         ---
         parameters:
         - name: username
@@ -135,7 +135,6 @@ class PMULoginAPI(APIView):
           required: true
           type: string
         """
-        print 'PMULogin API'
         response = {}
         data = request.data
         user = authenticate(username = data.get('username'), password = data.get('password'))

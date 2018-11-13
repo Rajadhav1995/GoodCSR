@@ -192,10 +192,9 @@ def get_org_logo(projectobj):
     try:
         companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', json.dumps(data),headers=headers)
     except Exception as e:
-        print "company logo request failed.",e.message
+        print ("company logo request failed.",e.message)
     if(companyobj.status_code == 404):
-        # companyobj = str(funderobj.funder.org_logo)
-        print "company logo request failed 404."
+        print ("company logo request failed 404.")
     else:
         validation_data = companyobj.json()
         org_logo = validation_data.get('front_image')

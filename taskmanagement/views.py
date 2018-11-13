@@ -530,8 +530,6 @@ def task_comments(request):
     slug = request.GET.get('slug')
     key = request.GET.get('key')
     status=request.GET.get('status')
-    MAX_UPLOAD_SIZE = 5242880
-    #   "2621440"
     try:
         nexts = eval(request.POST.get('next'))
         url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1]+'&'+str(nexts[3][0])+'='+str(nexts[3][1]))
@@ -543,7 +541,6 @@ def task_comments(request):
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
         task = Task.objects.get_or_none(id=task_id)
-        progress= request.POST.get('tea1')
         comment_text = request.POST.get('comment')
         comment_error = comment_validation(comment_text)
         if request.FILES:
