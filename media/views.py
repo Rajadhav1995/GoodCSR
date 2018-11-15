@@ -129,6 +129,7 @@ def upload_attachment(request):
 # Without it, things can get real confusing, real fast.
 @check_loggedin_access
 def edit_attachment(request):
+    import ipdb; ipdb.set_trace();
     '''
     This function is to edit Image/Document
     '''
