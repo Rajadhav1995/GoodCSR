@@ -12,7 +12,11 @@ button.budget_button.button_section {
     line-height: 18px;
     margin-right: 10px;
 }
+#example_paginate, #example_info, .dataTables_length, .dataTables_filter {
+    display: none;
+}
 </style>
+
 <!--{% with "project-list"|make_string:"view" as keystring %}-->
 <!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
 <section class="content-part forms_section">
@@ -55,8 +59,8 @@ button.budget_button.button_section {
          <button class="budget_button button_section" type="submit" style="float: right;">Download</button>
     </form>
     {% endif %}
-    <table id="example1" class="table table-striped table-bordered textalign_boottom" cellspacing="0" width="100%">
-        <thead>
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+       <thead>
             <tr>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -171,12 +175,22 @@ button.budget_button.button_section {
     
 </script>
 <!--Content part Ends-->
-{% endblock %}
+
 
 <!-- jQuery (necessary for JavaScript plugins) -->
+
+
+<!--link rel="stylesheet" href="/static/css/bootstrap.min.css" />-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="/static/css/bootstrap-glyphicons.css" />
+<link rel="stylesheet" href="/static/css/dataTables.bootstrap.min.css" />
 <script type="text/javascript" src="js/jquery.selectbox-0.2.js"></script>
 
 
+    
+    
     
 <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
 <script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
@@ -261,6 +275,13 @@ $(function(){
             $activate_tagator1.trigger('click');
         });
     </script>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+</script>
+{% endblock %}
+
 </body>
 </html>
 
