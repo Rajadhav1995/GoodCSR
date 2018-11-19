@@ -157,11 +157,14 @@ def get_project_report(projects):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Project_report.csv"'
     writer = csv.writer(response)
-    writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Budget Planned'])
+    writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Budget Planned',
+    				'Cause Area','No of Beneficiares','Beneficiary Types'])
     for pro in projects:
         funder_mapping = get_funder_mapping(pro)
         org_name = get_pmo_user(pro)
-        writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization, funder_mapping.funder.organization, pro.get_active_display(), pro.total_budget])
+        writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization,
+         funder_mapping.funder.organization, pro.get_active_display(), pro.total_budget,pro.get_cause_area(),pro.no_of_beneficiaries,
+		 pro.get_beneficiary()])
     return response
 
 # get PMO user

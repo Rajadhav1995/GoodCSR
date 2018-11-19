@@ -273,6 +273,23 @@ class Project(BaseContent):
         loc = ','.join(loc_list)
         return loc
         
+    def get_beneficiary(self):
+        traget_beneficiarys = self.target_beneficiaries.all()
+        beneficiary_list=[]
+        for i in traget_beneficiarys:
+            beneficiary_list.append(i.name)
+        beneficiary = ','.join(beneficiary_list)
+        return beneficiary
+        
+    def get_cause_area(self):
+        cause_areas = self.cause_area.all()
+        cause_area_list=[]
+        for i in cause_areas:
+            cause_area_list.append(i.name)
+        cause_areas = ','.join(cause_area_list)
+        return cause_areas
+        
+        
         
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 
