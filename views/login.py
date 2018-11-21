@@ -40,10 +40,7 @@ def signin(request):
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
             if validation_data.get('status') == "2":
                 request.session['user_id'] = int(validation_data.get('user_id'))
-                if next:
-                    return HttpResponseRedirect(next)
-                else:
-                    return HttpResponseRedirect('/dashboard/')
+                return HttpResponseRedirect(success_login_url(next))
             else:
                 mess = validation_data.get('msg')
                 messages.add_message(request, messages.INFO, mess)
@@ -54,7 +51,13 @@ def signin(request):
             return HttpResponseRedirect('/intermidate-login/')
     return render(request, 'login.html', locals())
 
-
+# sonar fixed
+def success_login_url(next):
+    if next:
+        next_url = next
+    else:
+        next_url = '/dashboard/'
+    return next_url
 # introduce intermidate login page (back and refresh)
 def intermidate_login(request):
     return HttpResponseRedirect('/login/')
@@ -121,7 +124,7 @@ class PMULoginAPI(APIView):
     #this function is for login through the PMU db as a standalone
     def post(self, request, *args, **kwargs):
         """
-        User Login.
+        User Login PMULogin API.
         ---
         parameters:
         - name: username
@@ -135,7 +138,6 @@ class PMULoginAPI(APIView):
           required: true
           type: string
         """
-        print 'PMULogin API'
         response = {}
         data = request.data
         user = authenticate(username = data.get('username'), password = data.get('password'))

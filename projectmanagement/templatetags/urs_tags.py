@@ -192,10 +192,9 @@ def get_org_logo(projectobj):
     try:
         companyobj = requests.post(SAMITHA_URL + '/pmu/company/logo/', json.dumps(data),headers=headers)
     except Exception as e:
-        print "company logo request failed.",e.message
+        print ("company logo request failed.",e.message)
     if(companyobj.status_code == 404):
-        # companyobj = str(funderobj.funder.org_logo)
-        print "company logo request failed 404."
+        print ("company logo request failed 404.")
     else:
         validation_data = companyobj.json()
         org_logo = validation_data.get('front_image')
@@ -564,6 +563,15 @@ def is_pmo_user(user_obj):
     else:
         status = False
     return status
+
+# latest pmo of project
+@register.assignment_tag
+def get_pmo_user(project):
+    pmo_user = ProjectUserRoleRelationship.objects.filter(active=2,project = project,role__code = 3).order_by('-id')
+    org_name = ''
+    if pmo_user:
+        org_name = UserProfile.objects.get(id = pmo_user[0].user.id).organization
+    return org_name
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
