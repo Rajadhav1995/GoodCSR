@@ -653,7 +653,10 @@ def project_summary(request):
     today = datetime.datetime.today()
     milestone = Milestone.objects.filter(project__slug=slug,overdue__lte=today.now())
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
-
+    year_min = 2000
+    year_max = 3000
+    global year_min, year_max
+    
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
@@ -684,7 +687,7 @@ def parameter_pie_chart(parameter_obj):
     main_list = []
     for i in parameter_obj:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
-            number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
+            number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i,start_date__year__gte=year_min,end_date__year__lte=year_max).values_list('parameter_value',flat=True))
             number = map(int,number)
             value = aggregate_project_parameters(i,number)
             data = {'title':i.name,'value':value,'type':i.parameter_type}
@@ -717,7 +720,7 @@ def pie_chart_mainlist(obj):
     counter =0
     pie_object = ProjectParameter.objects.filter(active= 2,parent=obj)
     for y in pie_object:
-        values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y).values_list('parameter_value',flat=True))
+        values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y,start_date__year__gte=year_min,end_date__year__lte=year_max).values_list('parameter_value',flat=True))
         value = aggregate_project_parameters(pie_object[0],values)
         color = colors[counter]
         counter+=1
