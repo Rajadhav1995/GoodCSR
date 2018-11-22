@@ -152,7 +152,7 @@ def project_list(request):
     return render(request,'project/listing.html',locals())
 
 
-#  csv of project listing
+#  csv of project listing with locations
 def get_project_report(projects):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Project_report.csv"'
