@@ -100,13 +100,14 @@ button.budget_button.button_section {
             </td>
             <!--<td style='width: 13%;'>-->
             <td>
+            <div style="width:160px">
                 {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True or pmo_access == 1 %}
-                <!--<a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>{% endif %}  -->
+                <a class="budget_button" href="/manage/project/role/list/?slug={{i.slug}}"> Manage Roles</a>{% endif %}
                 <!-- <a class="budget_button" href="/upload/list/?slug={{i.slug}}&model=Project"> Manage Files</a> -->  <!-- <a class="budget_button" href="/report/listing/?slug={{i.slug}}"> Manage Reports</a> --> 
                 {% if user_obj.is_admin_user == True or user_obj.organization_type == 2  and user_obj.owner == True or pmo_access == 1 %}
                 <a href="/project/remove/record/?id={{i.id}}&model=Project" type="button" title="Delete Project" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')"><b>x</b></a>
                 {% endif %}
-           
+           </div> 
             </td>
 <!--            {% endif %}-->
 <!--            {% endwith %}-->
