@@ -147,7 +147,7 @@ def project_list(request):
     obj_list = userprojectlist(logged_user_obj)
     # for download the csv report
     if request.GET.get('download') == 'true':
-        return alternative_csv_dnwld(obj_list)
+        return get_project_report(obj_list)
     obj_list = pagination(request,obj_list)
     return render(request,'project/listing.html',locals())
 
@@ -167,7 +167,8 @@ def get_project_report(projects):
 		 pro.get_beneficiary(),pro.get_locations(),pro.duration])
     return response
 
-def alternative_csv_dnwld(projects):
+# alternative for download of project report csv
+def alternative_project_report(projects):
     import os
     from django.conf import settings
     data = open(os.path.join(settings.BASE_DIR,'static/project_report/Project_report.csv'),'w+')
