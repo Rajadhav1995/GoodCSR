@@ -147,7 +147,7 @@ def project_list(request):
     obj_list = userprojectlist(logged_user_obj)
     # for download the csv report
     if request.GET.get('download') == 'true':
-        return get_project_report(obj_list)
+        return alternative_csv_dnwld(obj_list)
     obj_list = pagination(request,obj_list)
     return render(request,'project/listing.html',locals())
 
@@ -156,6 +156,23 @@ def project_list(request):
 def get_project_report(projects):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Project_report.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Budget Planned',
+    				'Cause Area','No of Beneficiares','Beneficiary Types','Locations','Duration'])
+    for pro in projects:
+        funder_mapping = get_funder_mapping(pro)
+        org_name = get_pmo_user(pro)
+        writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization,
+         funder_mapping.funder.organization, pro.get_active_display(), pro.total_budget,pro.get_cause_area(),pro.no_of_beneficiaries,
+		 pro.get_beneficiary(),pro.get_locations(),pro.duration])
+    return response
+
+def alternative_csv_dnwld(projects):
+    import os
+    from django.conf import settings
+    data = open(os.path.join(settings.BASE_DIR,'static/project_report/Project_report.csv'),'w+')
+    response = HttpResponse(data, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=Project_report.csv'
     writer = csv.writer(response)
     writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Budget Planned',
     				'Cause Area','No of Beneficiares','Beneficiary Types','Locations','Duration'])
