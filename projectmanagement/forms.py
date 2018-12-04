@@ -50,6 +50,11 @@ class ProjectForm(forms.ModelForm):
 
 			# Always return cleaned_data
 		return cleaned_data
+		
+	def clean_name(self):
+		name = self.cleaned_data.get('name', '')
+		cleaned_text = bleach.clean(name, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+		return cleaned_text
     
 	def clean_summary(self):
 		summary = self.cleaned_data.get('summary', '')
