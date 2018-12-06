@@ -12,6 +12,8 @@ from taskmanagement.models import *
 from budgetmanagement.models import *
 from projectmanagement.models import UserProfile,Project
 from userprofile.models import (ProjectUserRoleRelationship,)
+import bleach
+from django.conf import settings
 # forms for taskmanagement
 
 ACTIVITY_CHOICES = ((1,'Core'),(2,'Non-core'),)
@@ -64,6 +66,16 @@ class ActivityForm(forms.ModelForm):
         if not super_category:
             msg = u"Please select super category"
             self._errors["super_category"] = self.error_class([msg])
+            
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
+        cleaned_text = bleach.clean(name, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+        return cleaned_text
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '')
+        cleaned_text = bleach.clean(description, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+        return cleaned_text
         
 # Django provides a range of tools and libraries 
 # to help you build forms to accept input from 
@@ -148,6 +160,10 @@ class TaskForm(forms.ModelForm):
         if actual_end_date and actual_start_date and actual_end_date < actual_start_date:
             msg = u"Actual End date should be greater than Actual start date."
             self._errors["actual_end_date"] = self.error_class([msg])
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
+        cleaned_text = bleach.clean(name, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+        return cleaned_text
 
 # Django provides a range of tools and libraries 
 # to help you build forms to accept input from 
@@ -207,3 +223,8 @@ class MilestoneForm(forms.ModelForm):
         if not task:
             msg = u"This field is required"
             self._errors["task"] = self.error_class([msg])
+            
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
+        cleaned_text = bleach.clean(name, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+        return cleaned_text
