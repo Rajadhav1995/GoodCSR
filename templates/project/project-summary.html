@@ -73,19 +73,18 @@ $(document).ready(function(){
 
 //Function to filter data by year
 function filterData(){
-  var selected = [];
-  var separator = (window.location.href.indexOf("?")===-1)?"?":"&";
-  var param = {};
+  var searchParams = new URLSearchParams(window.location.search);
+  for(let p of searchParams){
+    console.log("params",p)
+  }
+  searchParams.delete('year');
   $('.year-check-box').each(function(){
-    selected.push($(this).attr("id"));
     if ($(this).is(":checked")) {
-      selected.push($(this).attr("id"));
+      searchParams.append("year",$(this).attr("id"));
     }
-    //param+=separator+"year="+$(this).attr("id");
   });
-  param = {name : selected}
-  window.location.href = window.location.href + $.param(param);
-  console.log("Selected years:",$.param(param))
+  console.log("Selected years:",window.location.hostname,searchParams.toString(),searchParams.getAll("year"));
+  window.location = window.location.pathname + "?" + searchParams.toString();
 }
 </script>
 <style>
@@ -435,13 +434,16 @@ function numberWithCommas(x) {
 
     <div class="clear"></div>
 	<div class="content-top margin-top">
-      <!--<div class="select-area">
-      	<label>See Data: </label>
+      
+      </div>
+    <div class="clear"></div>
+    <div class="white-box white-pad">
+      <div class="select-area">
+        <button class="link-pad" onclick="filterData()"><a> Filter Data </a></button>
 
         <div class="dropdown user select-down select-width">
             <a href="javascript:void(0);" class="dropdown-toggle" >
               <p>By Year</p>
-              <i class="fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu1" id="yearFilter" style="display:none;">
               <script>
@@ -449,27 +451,32 @@ function numberWithCommas(x) {
                 start_date = new Date("{{projectobj.start_date}}");
                 end_date = new Date("{{projectobj.end_date}}");
                 console.log("Proj",start_date,end_date);
-                if(isNaN(start_date))  start_date =  new Date("01/01/2010");
-                if(isNaN(end_date)) end_date = (new Date()).getFullYear();
+                var s = new Date();
+                var e = new Date();
+                if(isNaN(end_date)){end_date = e;}
+                if(isNaN(start_date)){
+                    s.setFullYear(s.getFullYear()-5);
+                    start_date =  s;
+                  }
                 console.log("Project","{{projectobj.start_date}}","{{projectobj.end_date}}",start_date.getFullYear(),end_date.getFullYear());
+                var yearParam = (new URLSearchParams(window.location.search)).getAll('year');
+                console.log('write',yearParam)
                 for(i = start_date.getFullYear();i<=end_date.getFullYear();i++){
-                  document.write('<li><input class="year-check-box" type="checkbox" id='+i+' /><label for='+i+'><span><span></span></span>'+i+'</label></li>');
+                  var checked = "unchecked";
+                  if(yearParam.indexOf(i.toString())!=-1){checked = "checked"}
+                  document.write('<li style="min-height: 0px; text-align: left; background: #fff; width: 100%;color: #202020;font-size: 14px;padding: 5px 0;"><input class="year-check-box" type="checkbox" id='+i+' '+checked+' /><label for='+i+'><span><span></span></span>'+i+'</label></li>');
                 }
               </script>
             </ul>
           </div>
 
-          <select name="lang" class="select_box ">
+          <!--<select name="lang" class="select_box ">
             <option>Select Quarters</option>
             <option>Quarter1</option>
             <option>Quarter2</option>
-          </select>
+          </select>-->
           &nbsp;  
-          <button class="link-pad" onclick="filterData()"><a> Filter </a></button>
-        </div>-->
       </div>
-    <div class="clear"></div>
-    <div class="white-box white-pad">
     	<div class="key-program">
         <h2>Key Program Info</h2>
 
@@ -780,12 +787,14 @@ function confirm_alert(node) {
 }
 */
 </script>
-<!-- script for gantt chart starts here-->
+<script>
+    <!-- script for gantt chart starts here-->
+    var jsonData = {{taskdict|safe}}
+</script>
+
 <script src="/static/js/jsgantt.js" type="text/javascript"></script>
 {% if taskdict %}
 <script>
-    
-    var jsonData = {{taskdict|safe}}
     
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
     // console.log(jsonData.tasks);

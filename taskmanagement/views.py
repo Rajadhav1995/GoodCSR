@@ -409,11 +409,14 @@ def corp_total_budget_disbursed(obj_list):
     total = sum(total_budget)
     total_percentage = 100
     disbursed = sum(disbursed_amount)
+    utilized = sum(utilized_budget)
     try:
         disbursed_percent = (float(disbursed)/total)*100 if int(disbursed) > 0 else 0
+        utilized_percent = (float(utilized)/total)*100 if int(disbursed) > 0 else 0
     except:
         disbursed_percent = 0
-    total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent)}
+        utilized_percent = 0
+    total_disbursed = {'total':convert_budget(total),'disbursed':convert_budget(disbursed) if disbursed else 0,'total_percent':total_percentage,'disbursed_percent':int(disbursed_percent),'utilized':convert_budget(utilized) if utilized else 0,'utilized_percent': int(utilized_percent)}
     return total_disbursed 
 
 # When working with any programming language, you include comments

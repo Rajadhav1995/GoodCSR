@@ -113,19 +113,17 @@
                 <h4 class="title-pad">{% if total_beneficiaries %}{{total_beneficiaries | intcomma}} {% endif %}</h4> 
             </li>
             <li>
-              <h3>% Total budget disbursed<span></span></h3>
-                 <div id="total_budget" ></div>
-                <div class="budget-pad" style="margin-top:-20px">
-                  <p><span class="green-circle"></span> Disbursed</p>
-                    <div class="budget-value">
-                      <div class="budget-left">{{budget.disbursed}}</div>
-                        <div class="budget-right">{{budget.disbursed_percent}}%</div>
-                    </div>
-                    <p><span class="yellow-circle"></span> Total</p>
-                    <div class="budget-value budget-border">
-                      <div class="budget-left">{{budget.total}}</div>
+                <div id="total_budget" style="margin-top: 21%"></div>
+                <div class="budget-value budget-pad" style="margin-top: -25%; border-bottom: 0px;">
+                    <p><span class="yellow-circle"></span> Total Planned</p>
+                        <div class="budget-left">{{budget.total}}</div>
                         <div class="budget-right">{{budget.total_percent}}%</div>
-                    </div>
+                    <p><span class="light-green-circle"></span> Disbursed</p>
+                        <div class="budget-left">{{budget.disbursed}}</div>
+                        <div class="budget-right">{{budget.disbursed_percent}}%</div>
+                    <p><span class="green-circle"></span> Utilized</p>
+                        <div class="budget-left">{{budget.utilized}}</div>
+                        <div class="budget-right">{{budget.utilized_percent}}%</div>
                 </div>
             </li>
             <li>
@@ -219,7 +217,6 @@
 
     {% is_ceo_user request as status %}
     {% if status == 0 %}
-    <!-- New Code -->
     <div class="row">
 	<link type="text/css" rel="stylesheet" href="/static/css/lightslider.min.css" />               
     <script src="/static/js/lightslider.min.js"></script>
@@ -290,6 +287,119 @@
                 </ul>
                 </div>
             </div>
+            {% comment %} Code for Parameters {% endcomment %}
+            {% comment %} <div class="col-md-12 nopadding" style="border-left: 1px solid #ccc;">
+                <div class="key-program">
+                    <h2>Key Program Info</h2>
+                </div>
+
+                <ul class="key_parameter parameter">
+                    {% if 3 >= 4 %}
+                    <div class="table-responsive second_section3" style="width:auto;">
+                    {% else %}
+                    <div class="table-responsive first_section3" style="width:auto;">
+                    {% endif %}
+                        <table id="param_table" class="table">
+                            
+
+                            {% for k in i.get_project_params.number_json %}
+                            <td style="width:300px;" class="float_section">
+                                <div class='numeric_parameter_{{k.title|remove_spcl_char }}'  style="width:300px;"></div>
+                            </td>
+                            {% endfor %}
+
+                            {% if i.get_project_params.1 %}
+                            {% for lol in  i.get_project_params.1 %}
+                            <td style="width:300px;" class="float_section">
+                                <div style="width:300px;">
+                                    <!-- <h3>{{chart_name_pip}}</h3> -->
+                                    <div class="right-budget beni-dist">
+                                        <div id="{{lol}}" style="width: 100%;float: left;"></div>
+                                    </div>
+                                </div>
+                            </td> 
+
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if i.get_project_params.master_pip %}
+                            {% for rofl in i.get_project_params.master_pip %}
+                            <td style="width:300px;" class="float_section">
+                                <div style="width:300px;">
+                                    <div class="right-budget beni-dist beni-dist1">
+                                        <div id="{{rofl}}" style="width: 100%;float: left;"></div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            {% endfor %}
+                            {% endif %} 
+
+                        </table>
+
+                        <script type="text/javascript">
+                            var ff_all= {{i.get_project_params | safe}}
+                            var ff = ff_all.number_json;
+                            block = 0;
+                            console.log("Numbers json",ff);
+                            for(i=0;i<ff.length;i++){
+                                if(i==0){block++;}
+                                console.log(ff[i],"ff",i,"block",block);
+                                $("#param_table").append('<td style="width:300px;" class="float_section"> <div class="numeric_parameter_'+(ff[i].title).replace(/ /g,'').replace(/[^a-zA-Z 0-9 ]/g, "")+'"  style="width:300px;"></div></td>');
+                            }
+                            var lengths = ff.length;
+                            var loc_url = '{{image}}'
+                            $(document).ready(function() {
+                                //var loop_count = $('#loop_count').val()
+
+                                
+                                for (var i = 0; i < lengths ; i++)
+                                {
+                                var obj = ff[i]
+                                var title = obj.title;
+                                var title_id = title.replace(/ /g,'').replace(/[^a-zA-Z 0-9 ]/g, "")
+                                var wrapper = $(".numeric_parameter_"+ title_id); //Fields wrapper
+                                // console.log(obj);
+                                if (obj.type == 'CUR') {
+                                    var url = loc_url + '/' + "static/img/budget-icon.png";
+                                    var value = numDifferentiation(obj.value);
+                                    var class_name = "key-image parameter-position";
+                                    }else{
+                                    var class_name = "key-image-budget parameter-position";
+                                    var value = numDifferentiation_beneficiary(obj.value);
+                                    var url = loc_url + '/' + "static/img/key-icon2.png";
+                                    };
+                                    $(wrapper).append('<li class="right-budget" style="width:100%;padding:30px; min-height:290px"><h3>'+title+'</h3><img class="'+class_name+'" src='+url+' alt="" style="margin-top:0px"><h4 class="title-pad">'+value+'</h4></li>');
+                            }
+                            })
+                            function numDifferentiation(val) {
+                                if(val >= 10000000) val = '<small>₹</small>'+ (val/10000000).toFixed(2) + ' <small>Cr</small>';
+                                else if(val >= 100000) val = '<small>₹</small>'+ (val/100000).toFixed(2) + '<small>Lac</small>';
+                                else if(val >= 1000) val = '<small>₹</small>'+ numberWithCommas(val);
+                                else if(val < 1000) val = '<small>₹</small>'+ val;
+                                return val;
+                            }
+                            function numDifferentiation_beneficiary(val) {
+                                if(val >= 10000000) val = (val/10000000).toFixed(1) + ' <small>Cr</small>';
+                                else if(val >= 100000) val = (val/100000).toFixed(1) + '<small>Lac</small>';
+                                else if(val >= 1000) val = numberWithCommas(val);
+                                else if(val < 1000) val = val;
+                                return val;
+                            }
+                            function numberWithCommas(x) {
+                                x=x.toString();
+                                var lastThree = x.substring(x.length-3);
+                                var otherNumbers = x.substring(0,x.length-3);
+                                if(otherNumbers != '')
+                                lastThree = ',' + lastThree;
+                                //var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                                return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                            }
+                        </script>
+                    </div>
+                </ul>
+                </div>
+            </div> {% endcomment %}
             {% get_images i as attachment %}
 			 <div class="col-md-12" style="max-height: 190px;">
 			<ul id="responsive" class="timeline-images" style="background-color: #ccc; margin: 10px 0px; border-radius: 5px; min-width: 100%;">
@@ -304,7 +414,7 @@
 			</div>
         </div>
     </div>
-    
+
     <script src="/static/js/jQuery-plugin-progressbar.js"></script>
 
     <script>
@@ -1270,112 +1380,88 @@ Highcharts.chart('planned_utilized', {
 
 var gaugeOptions = {
 
-    chart: {
-      height:250,
-      backgroundColor: null,
-         plotBackgroundColor: null,
-            plotBackgroundImage: null,
-            plotBorderWidth: 0,
-            plotShadow: false
+                chart: {
+                    height: 250,
+                    width: 250,
+                    backgroundColor: "#f1f3e9",
+                    plotBackgroundColor: "#f1f3e9",
+                    plotBackgroundImage: "#f1f3e9",
+                    plotBorderWidth: 0,
+                    margin: [0, 0, 0, 0]
+                },
 
-    },
+                title: {
+                    text: '<h3>Budget</h3>',
+                    useHTML: true,
+                    floating: true,
+                },
 
-    title: null,
-
-      pane: {
-            center: ['50%', '75%'],
-            size: '100%',
-            startAngle: -90,
-            endAngle: 90,
-            background: {
-                borderWidth: 0,
-                backgroundColor:null,
-                innerRadius: '60%',
-                outerRadius: '100%',
-                shape: 'arc',
-            }
-        },
-
-
-    tooltip: {
-        enabled: false
-    },
-
-    // the value axis
-    yAxis: {
-            stops: [
-            [0.1, '#D0C173'], // green
-            [0.5, '#34837C'] // yellow
-            
-           
-        ],
-        lineWidth: 0,
-        minorTickInterval: null,
-        tickAmount: 0,
-        title: {
-            y: 0
-        },
-        labels: {
-            enabled: false
-        },
-       
-   },
-
-
-    // plotOptions: {
-    //    gauge: {
-    //             pivot: {
-    //                 radius: 0
-        
-    //             }, dial: {
-    //                 backgroundColor:'#7A4F59',
-    //                 borderColor: "#DAC7CC",
-    //                 radius: '100%',
-    //                 baseWidth: 2,
-    //                    baseLength: '100%',
-    //                     baseWidth: 2,
-    //                     rearLength: '0%',
-    //                     borderWidth: 0
-    //             }
-    //         }
-    // } 
-
-     plotOptions: {
-            pie: {
-                dataLabels: {
+                pane: {
+                    center: ['50%', '75%'],
+                    size: '100%',
+                    startAngle: -90,
+                    endAngle: 90,
+                    background: {
+                        borderWidth: 0,
+                        backgroundColor: '#D0C173',
+                        borderColor: '#D0C173',
+                        innerRadius: '60%',
+                        outerRadius: '100%',
+                        shape: 'arc'
+                    }
+                },
+                tooltip: {
                     enabled: false
                 },
-                startAngle: -90,
-                endAngle: 90,
-                center: ['50%', '80%']
-            },
-            gauge: {
-                dataLabels: {
-                    enabled: false
+                yAxis: {
+                    lineWidth: 0,
+                    minorTickInterval: null,
+                    tickAmount: 0,
+                    title: {
+                        y: 0
+                    },
+                    labels: {
+                        enabled: false
+                    },
+
                 },
-                pivot: {
-                    radius: 0
-        
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                        startAngle: -90,
+                        endAngle: 90,
+                        center: ['50%', '80%']
+                    },
+                    gauge: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                        pivot: {
+                            radius: 0
+
+                        }
+                        ,
+                        dial: {
+                            borderWidth: 0,
+                            backgroundColor: '#7A4F59',
+                            borderColor: "#7A4F59",
+                            radius: '0%',
+                            baseWidth: 2,
+                            baseLength: '0%',
+                            rearLength: '0%',
+                        }
+                    }
                 },
-                dial: {
-                    backgroundColor:'#7A4F59',
-                    borderColor: "#DAC7CC",
-                    radius: '105%',
-                    baseWidth: 5,
-                       baseLength: '100%',
-                        baseWidth: 2,
-                        rearLength: '0%',
-                        borderWidth: 0
-                }
-            }
-        },
-     
-};
+
+            };;
 </script>
 
 <script type="text/javascript">
 var data = {{budget | safe}}
 var disbursed = data.disbursed_percent
+var utilized = data.utilized_percent
 var total = 100 - disbursed
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
@@ -1394,12 +1480,13 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
       series: [
       {
             type: 'pie',
-       
-            innerSize: '70%',
+            size: '100%',
+            innerSize: '75%',
             data: [
 
-                    {y:disbursed,name:'Disbursed',color:'#2E9874'},
-                    {y:total,name:'Total',color:'#D0C173'}
+                    {y:utilized,name:'Utilized',color:'#006861',borderColor:'#006861'},
+                    {y:disbursed,name:'Disbursed',color:'#2E9874',borderColor:'#2E9874'},
+                    {y:total,name:'Total Planned',color:'#D0C173',borderColor:'#D0C173'}
              
               
             ]
@@ -1408,7 +1495,7 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
       {
             type: 'gauge',
             // innerSize: '100%',
-            data: [0],
+            data: [],
             
         }
     ],
@@ -1461,7 +1548,7 @@ setInterval(function () {
     }
    
 }, 800);
-
+chartSpeed.redraw();
     </script>
     <script>
 

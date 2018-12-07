@@ -237,6 +237,7 @@ class Project(BaseContent):
                           'disbursed_percent':disbursed_percent,
                           'utilized_percent':utilized_percent,
                           }
+        print "project_budget",project_budget
         return project_budget
 
     # def save(self):
@@ -288,8 +289,18 @@ class Project(BaseContent):
             cause_area_list.append(i.name)
         cause_areas = ','.join(cause_area_list)
         return cause_areas
-        
-        
+    
+    def get_project_params(self):
+        import json
+        from projectmanagement.views import parameter_pie_chart
+        # code for displaying parameters on senior management cards 
+        print "Project params"
+        parameter_list = ProjectParameter.objects.filter(active= 2,project=self,parent=None)
+        master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_list)
+        return json.dumps({"master_pip":master_pip,"master_pin":master_pin,
+        "pin_title_name":pin_title_name,"pip_title_name":pip_title_name,
+        "number_json":number_json,"master_sh":master_sh})
+
         
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
 
