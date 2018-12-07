@@ -300,9 +300,9 @@ def add_parameter(request):
     form = ProjectParameterForm()
     slug =  request.GET.get('slug') or request.POST.get('slug')
     key =  request.GET.get('key')
+    project = Project.objects.get(slug=slug)
     if request.method == 'POST':
         slug =  request.GET.get('slug')
-        project = Project.objects.get(slug=slug)
         parameter_type = request.POST.get('para_type')
         name = request.POST.get('name')
         instruction = request.POST.get('instruction')
@@ -344,6 +344,7 @@ def edit_parameter(request):
     obj = ProjectParameter.objects.filter(active=2,parent=ids)
     slug = request.GET.get('slug') or request.POST.get('slug')
     parent_obj = ProjectParameter.objects.get_or_none(active=2,id=ids)
+    project = Project.objects.get(slug=slug)
     if request.method == 'POST':
         rem_id = request.POST.get('rem_id')
         agg_type = request.POST.get('agg_type')
@@ -437,6 +438,7 @@ def upload_parameter(request):
 def edit_parameter_values(request):
     # edit_value
     slug=request.GET.get('slug') or request.POST.get('slug')
+    project = Project.objects.get(slug=slug)
     ids =  request.GET.get('id')
     date1 = request.GET.get('month')
     date = request.GET.get('month').split(' ')
@@ -478,7 +480,8 @@ def manage_parameter(request):
     slug =  request.GET.get('slug')
     parameter = ProjectParameter.objects.filter(active= 2,project__slug=slug,parent=None)
     parameter_count = parameter.count()
-    project_name = Project.objects.get(slug=slug).name
+    projectobj = Project.objects.get(slug=slug)
+    project_name = projectobj.name
     return render(request,'project/parameter_list.html',locals())
 
 def manage_parameter_values1(request):
