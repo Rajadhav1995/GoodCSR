@@ -217,10 +217,10 @@
 
     {% is_ceo_user request as status %}
     {% if status == 0 %}
-    <div class="row">
 	<link type="text/css" rel="stylesheet" href="/static/css/lightslider.min.css" />               
     <script src="/static/js/lightslider.min.js"></script>
     {% for i in projectobj %} 
+    <div class="row">
 	<div class="white-box">
         <h2 class="col-md-10">{{i.name}}</h2><a class="col-md-2 link-pad text-md-center" href="/project/summary/?slug={{i.slug}}&key=summary">View Project</a>
         <div class="col-md-12 nopadding"  style="background: #f1f3e9;">
@@ -288,7 +288,7 @@
                 </div>
             </div>
             {% comment %} Code for Parameters {% endcomment %}
-            {% comment %} <div class="col-md-12 nopadding" style="border-left: 1px solid #ccc;">
+            <div class="col-md-12 nopadding" style="border-left: 1px solid #ccc;">
                 <div class="key-program">
                     <h2>Key Program Info</h2>
                 </div>
@@ -299,9 +299,10 @@
                     {% else %}
                     <div class="table-responsive first_section3" style="width:auto;">
                     {% endif %}
-                        <table id="param_table" class="table">
-                            
-
+                        <table class="table">
+                            <tbody>
+                                <tr id="param_table_{{i.id}}">
+{% comment %} 
                             {% for k in i.get_project_params.number_json %}
                             <td style="width:300px;" class="float_section">
                                 <div class='numeric_parameter_{{k.title|remove_spcl_char }}'  style="width:300px;"></div>
@@ -312,7 +313,6 @@
                             {% for lol in  i.get_project_params.1 %}
                             <td style="width:300px;" class="float_section">
                                 <div style="width:300px;">
-                                    <!-- <h3>{{chart_name_pip}}</h3> -->
                                     <div class="right-budget beni-dist">
                                         <div id="{{lol}}" style="width: 100%;float: left;"></div>
                                     </div>
@@ -333,34 +333,43 @@
                             </td>
 
                             {% endfor %}
-                            {% endif %} 
-
+                            {% endif %}  {% endcomment %}
+                                </tr>
+                            </tbody>
                         </table>
 
                         <script type="text/javascript">
-                            var ff_all= {{i.get_project_params | safe}}
-                            var ff = ff_all.number_json;
-                            block = 0;
-                            console.log("Numbers json",ff);
-                            for(i=0;i<ff.length;i++){
-                                if(i==0){block++;}
-                                console.log(ff[i],"ff",i,"block",block);
-                                $("#param_table").append('<td style="width:300px;" class="float_section"> <div class="numeric_parameter_'+(ff[i].title).replace(/ /g,'').replace(/[^a-zA-Z 0-9 ]/g, "")+'"  style="width:300px;"></div></td>');
-                            }
-                            var lengths = ff.length;
-                            var loc_url = '{{image}}'
                             $(document).ready(function() {
-                                //var loop_count = $('#loop_count').val()
-
-                                
+                                var ff_all= {{i.get_project_params | safe}}
+                                console.log("All json",ff_all);
+                                var id = {{i.id | safe}}
+                                var ff = ff_all.number_json;
+                                console.log("Numbers json",ff);
+                                var master_pin = ff_all.master_pin;
+                                console.log("Master pin",master_pin);
+                                var master_pip = ff_all.master_pip;
+                                console.log("Master pip",master_pip);
+                                for(i=0;i<ff.length;i++){
+                                    $("#param_table_"+id).append('<td style="width:300px;" class="float_section"> <div class="numeric_parameter_'+(ff[i].title).replace(/ /g,"").replace(/[^a-zA-Z 0-9 ]/g, "")+id+'"  style="width:300px;"></div></td>');
+                                }
+                                for(i=0;i<master_pin.length;i++){
+                                    $("#param_table_"+id).append('<td style="width:300px;" class="float_section"><div style="width:300px;"><div class="right-budget beni-dist"><div id="'+master_pin[i]+'" style="width: 100%;float: left;"></div></div></div></td>');
+                                }
+                                for(i=0;i<master_pip.length;i++){
+                                    $("#param_table_"+id).append('<td style="width:300px;" class="float_section"><div style="width:300px;"><div class="right-budget beni-dist  beni-dist1"><div id="'+master_pip[i]+'" style="width: 100%;float: left;"></div></div></div></td>');
+                                }
+                                var lengths = ff.length;
+                                var loc_url = '{{image}}'
+                        
                                 for (var i = 0; i < lengths ; i++)
                                 {
                                 var obj = ff[i]
                                 var title = obj.title;
                                 var title_id = title.replace(/ /g,'').replace(/[^a-zA-Z 0-9 ]/g, "")
-                                var wrapper = $(".numeric_parameter_"+ title_id); //Fields wrapper
-                                // console.log(obj);
+                                var wrapper = $(".numeric_parameter_"+ title_id+id); //Fields wrapper
+                                console.log("Object",obj,"Wrapper",wrapper);
                                 if (obj.type == 'CUR') {
+                                    console.log("ObjectCUR",obj); 
                                     var url = loc_url + '/' + "static/img/budget-icon.png";
                                     var value = numDifferentiation(obj.value);
                                     var class_name = "key-image parameter-position";
@@ -368,6 +377,7 @@
                                     var class_name = "key-image-budget parameter-position";
                                     var value = numDifferentiation_beneficiary(obj.value);
                                     var url = loc_url + '/' + "static/img/key-icon2.png";
+                                    console.log("ObjectELSE",obj,value); 
                                     };
                                     $(wrapper).append('<li class="right-budget" style="width:100%;padding:30px; min-height:290px"><h3>'+title+'</h3><img class="'+class_name+'" src='+url+' alt="" style="margin-top:0px"><h4 class="title-pad">'+value+'</h4></li>');
                             }
@@ -399,7 +409,7 @@
                     </div>
                 </ul>
                 </div>
-            </div> {% endcomment %}
+            </div> 
             {% get_images i as attachment %}
 			 <div class="col-md-12" style="max-height: 190px;">
 			<ul id="responsive" class="timeline-images" style="background-color: #ccc; margin: 10px 0px; border-radius: 5px; min-width: 100%;">
@@ -581,36 +591,38 @@
     </script>
     {% endfor %} 
     {% if projectobj.has_other_pages %}
-    <div class="white-page">
-        <ul class="pagination pagination-sm">
-            {% if projectobj.has_previous %}
-            <li>
-                <a href="?page={{ projectobj.previous_page_number }}">&laquo;</a>
-            </li>
-            {% else %}
-            <li class="disabled">
-                <span>&laquo;</span>
-            </li>
-            {% endif %} {% for i in projectobj.paginator.page_range %} {% if projectobj.number == i %}
-            <li class="active">
-                <span>{{ i }}
-                    <!-- <span class="sr-only">(current)</span> -->
-                </span>
-            </li>
-            {% else %}
-            <li>
-                <a href="?page={{ i }}">{{ i }}</a>
-            </li>
-            {% endif %} {% endfor %} {% if projectobj.has_next %}
-            <li>
-                <a href="?page={{ projectobj.next_page_number }}">&raquo;</a>
-            </li>
-            {% else %}
-            <li class="disabled">
-                <span>&raquo;</span>
-            </li>
-            {% endif %}
-        </ul>
+    <div class="row">
+        <div class="white-page">
+            <ul class="pagination pagination-sm">
+                {% if projectobj.has_previous %}
+                <li>
+                    <a href="?page={{ projectobj.previous_page_number }}">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="disabled">
+                    <span>&laquo;</span>
+                </li>
+                {% endif %} {% for i in projectobj.paginator.page_range %} {% if projectobj.number == i %}
+                <li class="active">
+                    <span>{{ i }}
+                        <!-- <span class="sr-only">(current)</span> -->
+                    </span>
+                </li>
+                {% else %}
+                <li>
+                    <a href="?page={{ i }}">{{ i }}</a>
+                </li>
+                {% endif %} {% endfor %} {% if projectobj.has_next %}
+                <li>
+                    <a href="?page={{ projectobj.next_page_number }}">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="disabled">
+                    <span>&raquo;</span>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
     {% endif %}
 	<script>
@@ -710,68 +722,61 @@
         
     </div>   
     </div>
-    {% endif %}
-    <div class="row">
-    <div class="white-box-left">
-    <div class="table-responsive">
-    <table class="table-resp wrapper_tablescroll" cellpadding="0" cellspacing="0" border="0">
-      <thead>
-      <tr>
-        <th style="width:27%;">Users</th>
-        <th style="width:18%;">Organization</th>
-        <th style="width:25%;">Designation</th>
-        <th style="width:20%;">PMU Role</th>
-      </tr>
-      </thead>
-      <tbody>
-      {% if projectuserlist %}
-      {% for i in projectuserlist %}
-      <tr>
-
-
-            <td style="width:27%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</a></td>
-            <td style="width:18%;">{{i.user.organization}}</td>
-            <td style="width:25%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
-            <td style="width:20%;">{{i.role.name}}
-<!--            <td style="width:10%;"><a class="btn btn-primary" href="/manage/project/role/edit/?objid={{i.id}}&slug={{project_slug}}">Edit</a></td>-->
-      </tr>
-      {% endfor %}
-      {% else %}
-      <tr>
-        <td style="width:27%;"><h6>Users not tagged</h6></td>
-        <td style="width:18%;"></td>
-        <td style="width:25%;"></td>
-        <td style="width:20%;"></td>
-      </tr>
-      {% endif %}
-      </tbody>
-  </table>  
-    </div>
-<!--    <a href="manage/project/role/add/?slug={{project_slug}}" class="link-pad">Add User</a>       -->
-    </div>
-    <div class="white-box-right">
-      <h2>Recent Updates</h2>
-        <div id="boxscroll" class="updates-scroll recent_updatescroll">
-        <p><span>Today</span> - {% now "jS F Y" %}</p>
-            
-         {% if updates_list %}
-             {% for obj in updates_list %}
-             <ul>
-                    {% get_details obj as update %}
-                        {% for i in update %}
-                           {{i | safe}}
-                        {% endfor %}
-            </ul>  
-                {% endfor %}
-         {% else %}
-            <li><span>No updates </span></li>
-         {% endif %}
-        </ul>   
-        </div>
-    </div> 
-    </div>
-  </div>
 </section>
+    {% endif %}
+        <div class="white-box-left">
+            <div class="table-responsive">
+                <table class="table-resp wrapper_tablescroll" cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                        <tr>
+                            <th style="width:27%;">Users</th>
+                            <th style="width:18%;">Organization</th>
+                            <th style="width:25%;">Designation</th>
+                            <th style="width:20%;">PMU Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if projectuserlist %}
+                        {% for i in projectuserlist %}
+                        <tr>
+                                <td style="width:27%;"><canvas class="user-icon" data-name="{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}" width="30" height="30" style="border-radius:40px" ></canvas><label class="user_table">{% if i.user.attrs.first_name %}{{i.user.attrs.first_name}} {{i.user.attrs.last_name}} {% else %} {{ i.user.name }} {% endif %}</a></td>
+                                <td style="width:18%;">{{i.user.organization}}</td>
+                                <td style="width:25%;">{% if i.user.designation %}{{i.user.designation}} {% else %} {% endif %}</td>
+                                <td style="width:20%;">{{i.role.name}}
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td style="width:27%;"><h6>Users not tagged</h6></td>
+                            <td style="width:18%;"></td>
+                            <td style="width:25%;"></td>
+                            <td style="width:20%;"></td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>  
+            </div>
+        </div>
+        <div class="white-box-right">
+            <h2>Recent Updates</h2>
+            <div id="boxscroll" class="updates-scroll recent_updatescroll">
+                <p><span>Today</span> - {% now "jS F Y" %}</p>
+                <ul>
+                {% if updates_list %}
+                    {% for obj in updates_list %}
+                    <ul>
+                            {% get_details obj as update %}
+                                {% for i in update %}
+                                {{i | safe}}
+                                {% endfor %}
+                    </ul>  
+                        {% endfor %}
+                {% else %}
+                    <li><span>No updates </span></li>
+                {% endif %}
+                </ul>   
+            </div>
+        </div> 
 <!--Content part Ends-->
 {% endblock %}
 
