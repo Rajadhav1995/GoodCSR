@@ -288,52 +288,20 @@
                 </div>
             </div>
             {% comment %} Code for Parameters {% endcomment %}
-            <div class="col-md-12 nopadding" style="border-top: 1px solid #d4d6cc; margin-top: -1px;">
-                <div class="key-program col-md-12">
-                    <h2>Key Program Info</h2>
+            <div id="kpb_{{i.id}}" class="white-box white-pad col-md-12 nopadding" style="box-shadow: none; webkit-box-shadow: none; moz-box-shadow: none; display: none;" >
+                <div id="kp_{{i.id}}" class="key-program col-md-10" style="margin-top: 5px;">
+                    <h2>Key Program Parameters</h2>
                 </div>
-
-                <ul class="key_parameter parameter col-md-12 nopadding">
+                <a class="col-md-2 link-pad text-md-center" style="margin-top: 10px;" onClick="$('#pt_{{i.id}}').show();$('#kpb_{{i.id}}').hide();"> View Timeline</a>
+                <ul class="key_parameter parameter col-md-12 nopadding" >
                     {% if 3 >= 4 %}
                     <div class="table-responsive second_section3" style="width:auto;">
                     {% else %}
                     <div class="table-responsive first_section3" style="width:auto;">
                     {% endif %}
-                        <table class="table">
+                        <table class="table" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr id="param_table_{{i.id}}" style="background-color: white;">
-{% comment %} 
-                            {% for k in i.get_project_params.number_json %}
-                            <td style="width:300px;" class="float_section">
-                                <div class='numeric_parameter_{{k.title|remove_spcl_char }}'  style="width:300px;"></div>
-                            </td>
-                            {% endfor %}
-
-                            {% if i.get_project_params.1 %}
-                            {% for lol in  i.get_project_params.1 %}
-                            <td style="width:300px;" class="float_section">
-                                <div style="width:300px;">
-                                    <div class="right-budget beni-dist">
-                                        <div id="{{lol}}" style="width: 100%;float: left;"></div>
-                                    </div>
-                                </div>
-                            </td> 
-
-                            {% endfor %}
-                            {% endif %}
-
-                            {% if i.get_project_params.master_pip %}
-                            {% for rofl in i.get_project_params.master_pip %}
-                            <td style="width:300px;" class="float_section">
-                                <div style="width:300px;">
-                                    <div class="right-budget beni-dist beni-dist1">
-                                        <div id="{{rofl}}" style="width: 100%;float: left;"></div>
-                                    </div>
-                                </div>
-                            </td>
-
-                            {% endfor %}
-                            {% endif %}  {% endcomment %}
                                 </tr>
                             </tbody>
                         </table>
@@ -349,6 +317,10 @@
                                 //console.log("Master pin",master_pin);
                                 var master_pip = ff_all.master_pip;
                                 //console.log("Master pip",master_pip);
+                                var sh = ff_all.master_sh;
+                                if(ff_all.parameter_count==0){
+                                    $("#kp_"+id).html("<h5> No Parameters found.</h5>");
+                                }
                                 for(i=0;i<ff.length;i++){
                                     $("#param_table_"+id).append('<td style="width:300px;" class="float_section"> <div class="numeric_parameter_'+(ff[i].title).replace(/ /g,"").replace(/[^a-zA-Z 0-9 ]/g, "")+id+'"  style="width:300px;"></div></td>');
                                 }
@@ -357,6 +329,9 @@
                                 }
                                 for(i=0;i<master_pip.length;i++){
                                     $("#param_table_"+id).append('<td style="width:300px;" class="float_section"><div style="width:300px;"><div class="right-budget beni-dist  beni-dist1"><div id="'+master_pip[i]+id+'" style="width: 100%;float: left;"></div></div></div></td>');
+                                }
+                                if(ff_all.parameter_count<4){
+                                    $("#param_table_"+id+">.float_section").css({"float":"left","margin-right": "10px"});
                                 }
                                 var lengths = ff.length;
                                 var loc_url = '{{image}}'
@@ -537,16 +512,29 @@
                 </ul>
                 </div>
             </div> 
-            {% get_images i as attachment %}
-			 <div class="col-md-12" style="max-height: 190px;">
-			<ul id="responsive" class="timeline-images" style="background-color: #ccc; margin: 10px 0px; border-radius: 5px; min-width: 100%;">
-            {% for j in attachment %}
-            {% if j.attachment_file %}
-			  <li style="padding: 10px 0px;">
-                        <img title="{{j.description}}" class="img-responsive center-block"  style="height: 150px; width: 175px; background-color: #f1f3e9; padding: 5px 0px; border-radius: 5px;" src="{{image}}{{j.attachment_file.url}}"/>              
-              </li>
-            {% endif %}
-            {% endfor %}     
+            <div id="pt_{{i.id}}" class="key-program col-md-12 nopadding">
+                {% get_images i as attachment %}
+                {% if attachment %}
+                <div class="key-program col-md-10" style="margin-top: 5px;">
+                        <h2>Project Timeline</h2>
+                </div>
+                {% else %}
+                <div class="key-program col-md-10" style="margin-top: 5px;">
+                        <h5>No timeline images found.</h5>
+                </div>
+                {% endif %}
+                <a class="col-md-2 link-pad text-md-center" style="margin-top: 10px;" onClick="$('#kpb_{{i.id}}').show();$('#pt_{{i.id}}').hide();"> View Parameters</a>
+                
+                <div class="col-md-12" style="max-height: 190px;">
+                <ul id="responsive" class="timeline-images" style="background-color: #ccc; margin: 10px 0px; border-radius: 5px; min-width: 100%;">
+                {% for j in attachment %}
+                {% if j.attachment_file %}
+                <li style="padding: 10px 0px;">
+                            <img title="{{j.description}}" class="img-responsive center-block"  style="height: 150px; width: 175px; background-color: #f1f3e9; padding: 5px 0px; border-radius: 5px;" src="{{image}}{{j.attachment_file.url}}"/>              
+                </li>
+                {% endif %}
+                {% endfor %}     
+            </div>
 			</ul>
 			</div>
         </div>
