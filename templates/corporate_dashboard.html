@@ -226,7 +226,11 @@
         <div class="col-md-12 nopadding"  style="background: #f1f3e9;">
             <div class="col-md-9 nopadding">
                 <div class="col-md-2"  style="margin: 10px 0px;">
+                {% if i.logo %}
+                    <img class="img-responsive my-auto"  style="height: 150px;" src="/{{i.logo}}"/>
+                {% else %}
                     <img class="img-responsive my-auto"  style="height: 150px;" src="/static/img/GoodCSR_color_circle.png"/>
+                {% endif %}
                 </div>
                 <div class="col-md-10 ">
 						<ul class="col-md-8 nopadding prj_details">

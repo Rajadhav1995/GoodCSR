@@ -172,6 +172,7 @@ class Project(BaseContent):
     program = models.ForeignKey(Program,**OPTIONAL)
     request_status = models.IntegerField(choices=REQUEST_STATUS,default=0)
     name = models.CharField(max_length=300,**OPTIONAL)
+    logo = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL) 
     start_date = models.DateField(**OPTIONAL)
     end_date = models.DateField(**OPTIONAL)
     total_budget = models.IntegerField(default=0)
