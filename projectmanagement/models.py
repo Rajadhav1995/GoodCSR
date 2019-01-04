@@ -172,6 +172,7 @@ class Project(BaseContent):
     program = models.ForeignKey(Program,**OPTIONAL)
     request_status = models.IntegerField(choices=REQUEST_STATUS,default=0)
     name = models.CharField(max_length=300,**OPTIONAL)
+    logo = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL) 
     start_date = models.DateField(**OPTIONAL)
     end_date = models.DateField(**OPTIONAL)
     total_budget = models.IntegerField(default=0)
@@ -296,10 +297,11 @@ class Project(BaseContent):
         # code for displaying parameters on senior management cards 
         print "Project params"
         parameter_list = ProjectParameter.objects.filter(active= 2,project=self,parent=None)
+        parameter_count = ProjectParameter.objects.filter(active= 2,project=self,parent=None).count()
         master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_list)
         return json.dumps({"master_pip":master_pip,"master_pin":master_pin,
         "pin_title_name":pin_title_name,"pip_title_name":pip_title_name,
-        "number_json":number_json,"master_sh":master_sh})
+        "number_json":number_json,"master_sh":master_sh,"parameter_count":int(parameter_count)})
 
         
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
