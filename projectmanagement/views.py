@@ -163,7 +163,7 @@ def get_project_report(projects):
         funder_mapping = get_funder_mapping(pro)
         org_name = get_pmo_user(pro)
         writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization,
-         funder_mapping.funder.organization, pro.get_active_display(), pro.total_budget,pro.get_cause_area(),pro.no_of_beneficiaries,
+         funder_mapping.funder.organization, pro.get_active_display(), pro.project_budget_details().get('planned_cost'),pro.get_cause_area(),pro.no_of_beneficiaries,
 		 pro.get_beneficiary(),pro.get_locations()])
     return response
 

@@ -218,6 +218,7 @@ class Project(BaseContent):
         return completed_tasks
 
     def project_budget_details(self):
+        #import ipdb;ipdb.set_trace()
         from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,
                                             Tranche,BudgetPeriodUnit)
         budgetobj = Budget.objects.latest_one(project = self)
@@ -238,7 +239,6 @@ class Project(BaseContent):
                           'disbursed_percent':disbursed_percent,
                           'utilized_percent':utilized_percent,
                           }
-        print "project_budget",project_budget
         return project_budget
 
     # def save(self):

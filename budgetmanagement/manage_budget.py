@@ -477,6 +477,7 @@ def budget_supercategory_value(projectobj,budgetobj):
 
 @check_loggedin_access
 def budgetview(request):
+   
     '''  Redirecting to the budget summary page based on the budget object creation status '''
     project_slug = request.GET.get('slug')
     projectobj =  Project.objects.get_or_none(slug=project_slug)
