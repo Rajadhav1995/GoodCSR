@@ -44,6 +44,7 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
     ProjectLocation.objects.filter(id__in=rem_id_list).delete()
 
 def project_location(request,obj,location):
+    #import ipdb;ipdb.set_trace()
     # this function is to add or 
     # edit location for project
     # 
@@ -79,6 +80,8 @@ def create_project(request):
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
         location = ProjectLocation.objects.filter(object_id=obj.id,active=2)
         city_list = Boundary.objects.filter(boundary_level=3).order_by('name')
+        keyss = ','.join([str(i.name) for i in ProjectParameter.objects.filter(project=obj)])
+        key_list = ','.join([ str(i) for i in ProjectParameter.objects.filter().values_list('name',flat=True)])
     except:
         form = ProjectForm()
         location = ''
@@ -108,10 +111,16 @@ def create_project(request):
             total_budget = request.POST.get('total_budget')
             ff = funder_mapping(funder,implementation_partner,total_budget,obj)
             project_location(request,obj,location)
+            keywords=request.POST.get('keywords')
+            key_list=keywords.split(',')
+            for i in key_list:
+                para_obj=ProjectParameter.objects.create(parameter_type='NUM',name =i,project=obj)
+                para_obj.save()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
 def funder_mapping(funder,implementation_partner,total_budget,obj):
+    #import ipdb;ipdb.set_trace()
     #this function is to map implementation partner and funder
     # 
     implementation_partner = UserProfile.objects.get(id=implementation_partner)
@@ -294,6 +303,7 @@ def key_parameter(request):
     return render(request,'project/key_parameter.html',locals())
 @check_loggedin_access
 def add_parameter(request):
+    #import ipdb;ipdb.set_trace()
     '''
     This function is to add key parameter for project
     '''
@@ -473,6 +483,7 @@ def edit_parameter_values(request):
     
 @check_loggedin_access
 def manage_parameter(request):
+    import ipdb;ipdb.set_trace()
     # 
     # This function is to manange(list) all 
     # key parameter for perticular project
@@ -796,6 +807,7 @@ def delete_upload_image(request):
         attach.active = 0
         attach.save()
     return HttpResponseRedirect(url)
+
 
 #    The dict type has been reimplemented to use a more compact 
 # representation based on a proposal by Raymond Hettinger and 
