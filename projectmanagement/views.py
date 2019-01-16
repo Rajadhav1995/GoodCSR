@@ -44,7 +44,6 @@ def manage_project_location(request,location_count,obj,city_var_list,rem_id_list
     ProjectLocation.objects.filter(id__in=rem_id_list).delete()
 
 def project_location(request,obj,location):
-    #import ipdb;ipdb.set_trace()
     # this function is to add or 
     # edit location for project
     # 
@@ -114,13 +113,12 @@ def create_project(request):
             keywords=request.POST.get('keywords')
             key_list=keywords.split(',')
             for i in key_list:
-                para_obj=ProjectParameter.objects.create(parameter_type='NUM',name =i,project=obj)
+                para_obj=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True)
                 para_obj.save()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
 def funder_mapping(funder,implementation_partner,total_budget,obj):
-    #import ipdb;ipdb.set_trace()
     #this function is to map implementation partner and funder
     # 
     implementation_partner = UserProfile.objects.get(id=implementation_partner)
@@ -166,13 +164,13 @@ def get_project_report(projects):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Project_report.csv"'
     writer = csv.writer(response)
-    writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Budget Planned',
+    writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Planned Budget',
     				'Cause Area','No of Beneficiares','Beneficiary Types','Locations'])
     for pro in projects:
         funder_mapping = get_funder_mapping(pro)
         org_name = get_pmo_user(pro)
         writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization,
-         funder_mapping.funder.organization, pro.get_active_display(), pro.project_budget_details().get('planned_cost'),pro.get_cause_area(),pro.no_of_beneficiaries,
+         funder_mapping.funder.organization, pro.get_active_display(), pro.project_budget_details().get('planned_cost'),pro.get_cause_area(),pro.project_parameter_value(),
 		 pro.get_beneficiary(),pro.get_locations()])
     return response
 
@@ -303,7 +301,6 @@ def key_parameter(request):
     return render(request,'project/key_parameter.html',locals())
 @check_loggedin_access
 def add_parameter(request):
-    #import ipdb;ipdb.set_trace()
     '''
     This function is to add key parameter for project
     '''
@@ -483,7 +480,6 @@ def edit_parameter_values(request):
     
 @check_loggedin_access
 def manage_parameter(request):
-    import ipdb;ipdb.set_trace()
     # 
     # This function is to manange(list) all 
     # key parameter for perticular project
@@ -808,6 +804,13 @@ def delete_upload_image(request):
         attach.save()
     return HttpResponseRedirect(url)
 
+
+##to change the beneficary type as true##
+def beneficiary_type():
+    bene_type=ProjectParameter.objects.filter(name__icontains='Beneficiary')
+    for i in bene_type:
+        i.bene_type=True
+        i.save()
 
 #    The dict type has been reimplemented to use a more compact 
 # representation based on a proposal by Raymond Hettinger and 

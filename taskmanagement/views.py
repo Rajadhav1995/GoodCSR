@@ -245,7 +245,7 @@ def task_auto_computation_date(request):
         end_date = ''
     return JsonResponse({"computation_date":end_date})
 
-def milestone_overdue(request):     
+def milestone_overdue(request):
     # to get the overdue of the milestone i.e getting 
     # the max end date of the tasks tagged to the milestone
     # 

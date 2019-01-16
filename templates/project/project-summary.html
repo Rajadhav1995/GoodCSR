@@ -150,7 +150,7 @@ function filterData(){
                         {% elif i.slug == "updates" %}
                         <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
                         {% elif i.slug == "tasks-milestones" %}
-                        <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Tasks & Milestones</a></li>
+                        <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Activities & Milestones</a></li>
                         {% elif i.slug == "budget" %}
                         <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
                         {% elif i.slug == "files" %}

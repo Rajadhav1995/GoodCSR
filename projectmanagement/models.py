@@ -249,6 +249,13 @@ class Project(BaseContent):
     #     )
     #     super(Project, self).save()'
     
+    # to get parameter-value in projectlist(aswini)
+    def project_parameter_value(self):
+        
+        parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True).aggregate(Sum('parameter_value'))
+
+        #parameter_value ={'parameter_value':int(para_val)}
+        return parameter_value.get('parameter_value__sum')
     def get_todays_tasks(self,today,user,status):
         from taskmanagement.models import Task
         if status == '1':
@@ -350,6 +357,7 @@ class ProjectParameter(BaseContent):
     parent = models.ForeignKey('self', **OPTIONAL)
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
     history = HistoricalRecords()
+    is_beneficiary_type=models.BooleanField(default=False)
     
     def __str__(self):
         return str(self.id)
