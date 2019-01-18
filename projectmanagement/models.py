@@ -249,7 +249,7 @@ class Project(BaseContent):
     #     )
     #     super(Project, self).save()'
     
-    # to get parameter-value in projectlist(aswini)
+    # to get parameter-value in projectlist
     def project_parameter_value(self):
         
         parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True).aggregate(Sum('parameter_value'))
@@ -357,7 +357,7 @@ class ProjectParameter(BaseContent):
     parent = models.ForeignKey('self', **OPTIONAL)
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
     history = HistoricalRecords()
-    is_beneficiary_type=models.BooleanField(default=False)
+    is_beneficiary_type=models.BooleanField(default=False) 
     
     def __str__(self):
         return str(self.id)
