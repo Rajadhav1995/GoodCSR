@@ -278,7 +278,7 @@ class Project(BaseContent):
         from media.models import ProjectLocation
         project = Project.objects.get_or_none(id=self.id)
         locations = ProjectLocation.objects.filter(active=2,content_type= ContentType.objects.get_for_model(project),object_id=project.id)
-        loc_list = [i.location.name+'-'+i.location.parent.name+'-'+i.get_program_type_display() for i in locations] if locations else []
+        loc_list = [i.location.name+'-'+i.location.parent.name+'-'+i.get_program_type_display() for i in locations if locations.parent] if locations else []
         loc = ','.join(loc_list)
         return loc
         
