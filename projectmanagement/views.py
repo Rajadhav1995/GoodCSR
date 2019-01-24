@@ -171,7 +171,7 @@ def get_project_report(projects):
         org_name = get_pmo_user(pro)
         writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization,
          funder_mapping.funder.organization, pro.get_active_display(),pro.total_budget, pro.project_budget_details().get('planned_cost'),pro.get_cause_area(),
-		 pro.get_beneficiary(),pro.project_parameter_value(),pro.no_of_beneficiaries,pro.get_locations()])
+		 pro.get_beneficiary(),pro.no_of_beneficiaries,pro.project_parameter_value(),pro.get_locations()])
     return response
 
 # alternative for download of project report csv
