@@ -113,7 +113,7 @@ def create_project(request):
             keywords=request.POST.get('keywords')
             key_list=keywords.split(',')
             for i in key_list:
-                para_obj=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True)
+                para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True)
                 para_obj.save()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
