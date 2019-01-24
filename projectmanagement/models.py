@@ -252,7 +252,7 @@ class Project(BaseContent):
     # to get parameter-value in projectlist
     def project_parameter_value(self):
         
-        parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True,active=2).aggregate(Sum('parameter_value'))
+        parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True,keyparameter__active=2).aggregate(Sum('parameter_value'))
 
         #parameter_value ={'parameter_value':int(para_val)}
         return parameter_value.get('parameter_value__sum')
