@@ -80,7 +80,7 @@ def create_project(request):
         location = ProjectLocation.objects.filter(object_id=obj.id,active=2)
         city_list = Boundary.objects.filter(boundary_level=3).order_by('name')
         keyss = ','.join([str(i.name) for i in ProjectParameter.objects.filter(project=obj)])
-        key_list = ','.join([ str(i) for i in ProjectParameter.objects.filter().values_list('name',flat=True)])
+        #key_list = ','.join([ str(i) for i in ProjectParameter.objects.filter().values_list('name',flat=True)])
     except:
         form = ProjectForm()
         location = ''
@@ -165,7 +165,7 @@ def get_project_report(projects):
     response['Content-Disposition'] = 'attachment; filename="Project_report.csv"'
     writer = csv.writer(response)
     writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Planned Budget','Allocated Budget',
-    				'Cause Area','Beneficiary Types','No of Beneficiares','Actual Beneficiary','Locations'])
+    				'Cause Area','Beneficiary Types','No of Beneficiaries planned','No of Beneficiaries served','Locations'])
     for pro in projects:
         funder_mapping = get_funder_mapping(pro)
         org_name = get_pmo_user(pro)
