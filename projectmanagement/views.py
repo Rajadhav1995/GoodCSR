@@ -79,7 +79,7 @@ def create_project(request):
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
         location = ProjectLocation.objects.filter(object_id=obj.id,active=2)
         city_list = Boundary.objects.filter(boundary_level=3).order_by('name')
-        keyss = ','.join([str(i.name) for i in ProjectParameter.objects.filter(project=obj)])
+        keyss = ','.join([str(i.name) for i in ProjectParameter.objects.filter(is_beneficiary_type=True,active=2,project=obj)])
         #key_list = ','.join([ str(i) for i in ProjectParameter.objects.filter().values_list('name',flat=True)])
     except:
         form = ProjectForm()
@@ -113,7 +113,8 @@ def create_project(request):
             keywords=request.POST.get('keywords')
             key_list=keywords.split(',')
             for i in key_list:
-                para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True)
+                para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,
+                                       active=2)
                 para_obj.save()
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
