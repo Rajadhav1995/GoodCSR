@@ -31,10 +31,11 @@ class ProjectForm(forms.ModelForm):
 	start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control','readonly':'true'}), required=False)
 	duration = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control','readonly':'true'}), required=True)
+	logo = forms.FileField() 
 	class Meta:
 		model = Project
 		fields  = ('name','start_date','end_date','total_budget','budget_type',\
-        			'project_status','duration','summary','program_aim','no_of_beneficiaries','cause_area','target_beneficiaries')
+        			'project_status','duration','summary','program_aim','no_of_beneficiaries','cause_area','target_beneficiaries','logo')
     
 
 	def clean(self):

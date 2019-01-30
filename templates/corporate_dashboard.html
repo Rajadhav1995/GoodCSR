@@ -237,12 +237,26 @@
 						  <li  class="col-md-6 nopadding"> 
 							<p> No. of beneficiaries <br><span> {{i.no_of_beneficiaries}}</span> </p>
 						  </li>
+						  <li  class="col-md-6 nopadding"> 
+							<p> Actual Beneficiaries <br><span> {{i.project_parameter_value}}</span> </p>
+						  </li>
+						  
 						  <li  class="col-md-6 nopadding">  
-                            <p> Program duration <br><span>{{i.duration}} months </span><br>
+                            <p> Program Duration <br><span>{{i.start_date|date:"d-m-Y"}} to {{i.end_date|date:"d-m-Y"}}&nbsp;({{
+                            i.duration}}&nbsp;)&nbsp;months </span><br>
                             <!-- <span>({{i.start_date}} - {{i.end_date}})</span> </p> -->
 						  </li>
 						  <li  class="col-md-6 nopadding">
 							<p> Total Budget <br><span>₹ {{i.total_budget | intcomma}}</span> </p>
+						  </li>
+						  <!--li  class="col-md-6 nopadding">
+							<p> ImplementationPartner <br><span>{{i.implementation_partner.organization }}</span> </p>
+						  </li-->
+						  <li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+							<p>Implementation Partner <br><span>
+							        {% get_funder_mapping i as mapping %}
+                                     {{mapping.implementation_partner.name}}
+                            </span></p>
 						  </li>
 						  <li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
 							<p>Target Beneficiaries<br><span>
