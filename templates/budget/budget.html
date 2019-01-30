@@ -143,21 +143,21 @@
                 <td class="sticky-cell"> {{lineitemobj.heading.name}} </td>
                 <td class="sticky-cell"> {{lineitemobj.subheading}} </td>
                 {% get_line_total j projectobj as line_total %}
-                <td align="right" class="sticky-cell">{{line_total | get_currency}}</td>
+                <td align="right" class="sticky-cell tableexport-string target">{{line_total | get_currency}}</td>
                 {% get_utlizedline_total j projectobj as utilized_amount %}
-                <td align="right" class="sticky-cell">{{utilized_amount | get_currency}}</td>
-                 <td class="sticky-cell"> {{lineitemobj.unit_type}}  </td>
+                <td align="right" class="sticky-cell tableexport-string target">{{utilized_amount | get_currency}}</td>
+                <td class="sticky-cell tableexport-string target"> {{lineitemobj.unit_type}}  </td>
                 {% for i,v in quarter_list.items %}
                 {% with forloop.counter as rnum %}
                 {% get_quarter_details j i projectobj as line_itemobj %}
-                   <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {{line_itemobj.unit | get_currency}} </td>
-                    <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {{line_itemobj.rate | get_currency}}  </td>
-                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
-                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
-                     <td align="right" class="filter_{{rnum}}" value="{{rnum}}"> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
+                   <td align="right" class="filter_{{rnum}} tableexport-string target" value="{{rnum}}"> {{line_itemobj.unit | get_currency}} </td>
+                    <td align="right" class="filter_{{rnum}} tableexport-string target" value="{{rnum}}"> {{line_itemobj.rate | get_currency}}  </td>
+                     <td align="right" class="filter_{{rnum}} tableexport-string target" value="{{rnum}}"> {{line_itemobj.planned_unit_cost | get_currency}}  </td>
+                     <td align="right" class="filter_{{rnum}} tableexport-string target" value="{{rnum}}"> {% if line_itemobj.utilized_unit_cost %} {{line_itemobj.utilized_unit_cost | get_currency}} {% else %} 0 {% endif %}</td>
+                     <td align="right" class="filter_{{rnum}} tableexport-string target" value="{{rnum}}"> {% if line_itemobj.variance %} {{line_itemobj.variance | get_currency}} {% else %} 0 {% endif %}</td>
                     <!--  Added to display attachment using a template tag                    -->
                      {% get_line_attach line_itemobj as attach %}
-                     <td align="center" class="filter_{{rnum}}" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;" href={{image_url}}{{attach.image_url}} target="_blank"><img src='/static/img/40.png' /></a>{% else %} - {% endif %}  </td>
+                     <td align="center" class="filter_{{rnum}} tableexport-string target" value="{{rnum}}"> {% if attach.name %}<a style="float:left; width:100%;" href={{image_url}}{{attach.image_url}} target="_blank"><img src='/static/img/40.png' /></a>{% else %} - {% endif %}  </td>
                      {% endwith %}
                      {% endfor %}
             </tr>
@@ -170,6 +170,7 @@
 
         
     <div class="link-right">
+        <a id="export-budget-csv" href="#" class="link-pad1">Export Budget (.xlsx)</a>
             {% with "report-utilization"|make_string:"add" as keystring %}
         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
 
@@ -245,6 +246,20 @@
 <script src="/static/js/jquery.nicescroll.min.js"></script>
  <script src="/static/js/easyResponsiveTabs.js" type="text/javascript"></script>
  <script src="/static/js/jquery.stickytable.min.js" type="text/javascript"></script>
+ <script src="/static/js/Blob.js"></script>
+ <script src="/static/js/xlsx.core.min.js"></script>
+ <script src="/static/js/xlsx.js"></script>
+ <script src="/static/js/FileSaver.min.js"></script>
+ <script src="/static/js/tableexport.min.js"></script>
+ <script>
+        var table = document.getElementById('budget_table');
+        var export_xls = new TableExport(table,{formats:['xlsx'],defaultFilename:"BudgetDetails",filename:"Budget_{{project_slug}}_{{years_list|first}}-{{years_list|last}}",exportButtons:false,bootstrap: true,sheetname:"{{years_list|first}}_{{years_list|last}}",defaultSheetname:'BudgetDetails'});
+        var exportData = export_xls.getExportData()['budget_table']['xlsx'];
+        var XLSbutton = document.getElementById('export-budget-csv');
+        XLSbutton.addEventListener('click', function (e) {
+            export_xls.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+        });
+ </script>
 <script>
 //Toggle
 		
