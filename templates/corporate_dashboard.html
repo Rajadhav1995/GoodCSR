@@ -233,31 +233,16 @@
                 </div>
                 <div class="col-md-10 ">
 						<ul class="col-md-8 nopadding prj_details">
-						  <li  class="col-md-6 nopadding"> 
-							<p> No. of beneficiaries <br><span> {{i.no_of_beneficiaries}}</span> </p>
-						  </li>
-						  <li  class="col-md-6 nopadding"> 
-							<p> Actual Beneficiaries <br><span> {{i.project_parameter_value}}</span> </p>
-						  </li>
-						  
-						  <li  class="col-md-6 nopadding">  
-                            <p> Program Duration <br><span>{{i.start_date|date:"d-m-Y"}} to {{i.end_date|date:"d-m-Y"}}&nbsp;({{
-                            i.duration}}&nbsp;)&nbsp;months </span><br>
-                            <!-- <span>({{i.start_date}} - {{i.end_date}})</span> </p> -->
-						  </li>
-						  <li  class="col-md-6 nopadding">
-							<p> Total Budget <br><span>₹ {{i.total_budget | intcomma}}</span> </p>
-						  </li>
-						  <!--li  class="col-md-6 nopadding">
-							<p> ImplementationPartner <br><span>{{i.implementation_partner.organization }}</span> </p>
-						  </li-->
-						  <li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+						<li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
 							<p>Implementation Partner <br><span>
 							        {% get_funder_mapping i as mapping %}
                                      {{mapping.implementation_partner.name}}
                             </span></p>
-						  </li>
-						  <li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+						</li>
+						<li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+						   <p> Program Duration <br><span>{{i.duration}} months ({{i.start_date|date:"y-m-d"}} To {{i.end_date|date:"y-m-d"}})</span><br> 
+						</li>
+						<li class="col-md-12 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
 							<p>Target Beneficiaries<br><span>
                                     {% if i.target_beneficiaries.all %}
                                     {% for j in i.target_beneficiaries.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
@@ -266,16 +251,21 @@
                                     {% endif %}
                             </span></p>
 						  </li>
-						  <li class="col-md-12 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-							<p>Cause area<br><span>
+						  <li  class="col-md-6 nopadding">
+						    <p>Cause area<br><span>
                                     {% if i.cause_area.all %}
                                     {% for j in i.cause_area.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
                                     {% else %}
                                     <span class="col-md-7">N/A</span>
                                     {% endif %}
-                            </span></p>
+                            </span></p>  
+                            
+                            <!-- <span>({{i.start_date}} - {{i.end_date}})</span> </p> -->
 						  </li>
-						</ul>
+						  <li  class="col-md-6 nopadding"> 
+							<p> No. of beneficiaries <br><span> {{i.project_parameter_value }} | {{i.no_of_beneficiaries}}</span> </p>
+						  </li>
+					</ul>
                         <div class="col-md-4" style="padding-top: 10px">
                             {% get_taskcompletion i as totalcompletion %}
                             <p class="col-md-12 nopadding" style="padding-bottom: 15px; font-size: 16px; font-weight: bold; color: #666;">Total task completion</p>
