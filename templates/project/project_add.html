@@ -414,6 +414,8 @@ width:450px;
                     {% if obj and obj.logo.path %}
                     <a target="_blank" href="/{{obj.logo}}"></a>
                     <img src="/{{obj.logo}}" style="height: 150px; width:150px; " alt="">
+                    {% else %}
+                    <img src="/static/img/GoodCSR_color_circle.png" style="height: 150px; width:150px; alt="">
                     {% endif %}
 
                    <!-- {{form.logo}}-->
