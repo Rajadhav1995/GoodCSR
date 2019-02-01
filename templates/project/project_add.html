@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load urs_tags %}
 {% block section %}
 <div> </div>
 {% endblock %}
@@ -405,18 +405,28 @@ width:450px;
                                     (Please press Enter or TAB or ',' after typing each keyword)
                             </div>
                         </div>
-       <div class="row">
+      <div class="row">
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
                     <div class="form-group">
-                    <label>Logo<font color="red"></font></label>
-                    {{form.logo}}
+                    <label>Project Image :<font color="red"></font></label>
+                    <input type="file" name="logo"  id="logo" >
+                    {% if obj and obj.logo.path %}
+                    <a target="_blank" href="/{{obj.logo}}"></a>
+                    <img src="/{{obj.logo}}" style="height: 150px; width:150px; " alt="">
+                    {% endif %}
+
+                   <!-- {{form.logo}}-->
                     </div>
                 </div>
             </div>
         </div>
                         
-                        
+        <!--label>Logo<font color="red"></font></label>
+        {% if obj and obj.logo.path %}
+        <a target="_blank" href="/{{obj.logo}}"> uploaded logo: {{obj|filename}}</a>
+        {% endif %}
+                    {{form.logo}}-->                
                         
                         
         <div class="row">

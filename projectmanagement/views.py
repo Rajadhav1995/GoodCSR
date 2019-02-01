@@ -103,6 +103,8 @@ def create_project(request):
             obj.created_by = UserProfile.objects.get(user_reference_id=user_id)
             obj.slug = unique_slug_generator(obj,instance)
             obj.modified_by = user_id # added to save the modified by user (priya)
+            if request.FILES.get('logo'):
+                obj.logo=request.FILES.get('logo')
             obj.save()
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
@@ -116,6 +118,7 @@ def create_project(request):
                 para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,
                                        active=2)
                 para_obj.save()
+            
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 

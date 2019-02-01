@@ -239,10 +239,10 @@
                                      {{mapping.implementation_partner.name}}
                             </span></p>
 						</li>
-						<li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-						   <p> Program Duration <br><span>{{i.duration}} months ({{i.start_date|date:"y-m-d"}} To {{i.end_date|date:"y-m-d"}})</span><br> 
+						<li class="col-md-6 nopadding" style="overflow: hidden; text-overflow: ellipsis">
+						   <p> Program Duration <br><span>{{i.duration}} months <br>({{i.start_date|date:"Y-m-d"}} To {{i.end_date|date:"Y-m-d"}})<br></span><br> 
 						</li>
-						<li class="col-md-12 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+						<li class="col-md-6 nopadding" style="overflow: hidden; text-overflow: ellipsis">
 							<p>Target Beneficiaries<br><span>
                                     {% if i.target_beneficiaries.all %}
                                     {% for j in i.target_beneficiaries.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
@@ -251,7 +251,11 @@
                                     {% endif %}
                             </span></p>
 						  </li>
-						  <li  class="col-md-6 nopadding">
+						  <li  class="col-md-6 nopadding"> 
+							<p> No. of beneficiaries <br><span> {{i.project_parameter_value }} served | {{i.no_of_beneficiaries}} planned</span> </p>
+						  </li>
+						  <li  class="col-md-12 nopadding">
+						  <div class="col-md-6 nopadding">
 						    <p>Cause area<br><span>
                                     {% if i.cause_area.all %}
                                     {% for j in i.cause_area.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
@@ -259,12 +263,10 @@
                                     <span class="col-md-7">N/A</span>
                                     {% endif %}
                             </span></p>  
-                            
+                            </div>
                             <!-- <span>({{i.start_date}} - {{i.end_date}})</span> </p> -->
 						  </li>
-						  <li  class="col-md-6 nopadding"> 
-							<p> No. of beneficiaries <br><span> {{i.project_parameter_value }} | {{i.no_of_beneficiaries}}</span> </p>
-						  </li>
+					
 					</ul>
                         <div class="col-md-4" style="padding-top: 10px">
                             {% get_taskcompletion i as totalcompletion %}

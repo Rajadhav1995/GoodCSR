@@ -67,6 +67,12 @@ def admin_dashboard(request):
     except EmptyPage:
         projectobj = paginator.page(paginator.num_pages)
     return render(request,'corporate_dashboard.html',locals())
+    
+def get_cause_area(c_id):
+    
+    cause_area_list=Project.objects.filter(cause_area__id__in=[c_id])
+    
+    return cause_area_list
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
