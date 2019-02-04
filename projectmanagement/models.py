@@ -255,7 +255,7 @@ class Project(BaseContent):
         parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True,keyparameter__active=2).aggregate(Sum('parameter_value'))
 
         #parameter_value ={'parameter_value':int(para_val)}
-        return parameter_value.get('parameter_value__sum')
+        return int(parameter_value.get('parameter_value__sum') if parameter_value.get('parameter_value__sum') else 0)
     def get_todays_tasks(self,today,user,status):
         from taskmanagement.models import Task
         if status == '1':

@@ -573,6 +573,17 @@ def get_pmo_user(project):
         org_name = UserProfile.objects.get(id = pmo_user[0].user.id).organization
     return org_name
 
+
+@register.filter
+def filename(obj):
+   import os
+   try:
+       logo = os.path.basename(obj.logo.name)
+   except:
+       logo = ""
+   return logo
+   
+   
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary

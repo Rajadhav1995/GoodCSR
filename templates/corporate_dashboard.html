@@ -97,7 +97,6 @@
           </div>
         </form>-->
        
-    
     <div class="white-box white-pad">
       <h2>Key Program Info</h2>
 <!--<!--        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>-->
@@ -234,17 +233,16 @@
                 </div>
                 <div class="col-md-10 ">
 						<ul class="col-md-8 nopadding prj_details">
-						  <li  class="col-md-6 nopadding"> 
-							<p> No. of beneficiaries <br><span> {{i.no_of_beneficiaries}}</span> </p>
-						  </li>
-						  <li  class="col-md-6 nopadding">  
-                            <p> Program duration <br><span>{{i.duration}} months </span><br>
-                            <!-- <span>({{i.start_date}} - {{i.end_date}})</span> </p> -->
-						  </li>
-						  <li  class="col-md-6 nopadding">
-							<p> Total Budget <br><span>₹ {{i.total_budget | intcomma}}</span> </p>
-						  </li>
-						  <li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+						<li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+							<p>Implementation Partner <br><span>
+							        {% get_funder_mapping i as mapping %}
+                                     {{mapping.implementation_partner.name}}
+                            </span></p>
+						</li>
+						<li class="col-md-6 nopadding" style="overflow: hidden; text-overflow: ellipsis">
+						   <p> Program Duration <br><span>{{i.duration}} months <br>({{i.start_date|date:"Y-m-d"}} To {{i.end_date|date:"Y-m-d"}})<br></span><br> 
+						</li>
+						<li class="col-md-6 nopadding" style="overflow: hidden; text-overflow: ellipsis">
 							<p>Target Beneficiaries<br><span>
                                     {% if i.target_beneficiaries.all %}
                                     {% for j in i.target_beneficiaries.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
@@ -253,16 +251,23 @@
                                     {% endif %}
                             </span></p>
 						  </li>
-						  <li class="col-md-12 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-							<p>Cause area<br><span>
+						  <li  class="col-md-6 nopadding"> 
+							<p> No. of beneficiaries <br><span> {{i.project_parameter_value }} served | {{i.no_of_beneficiaries}} planned</span> </p>
+						  </li>
+						  <li  class="col-md-12 nopadding">
+						  <div class="col-md-6 nopadding">
+						    <p>Cause area<br><span>
                                     {% if i.cause_area.all %}
                                     {% for j in i.cause_area.all %}{{j}}{% if not forloop.last %}{{", "}}{% endif %}{% endfor %}
                                     {% else %}
                                     <span class="col-md-7">N/A</span>
                                     {% endif %}
-                            </span></p>
+                            </span></p>  
+                            </div>
+                            <!-- <span>({{i.start_date}} - {{i.end_date}})</span> </p> -->
 						  </li>
-						</ul>
+					
+					</ul>
                         <div class="col-md-4" style="padding-top: 10px">
                             {% get_taskcompletion i as totalcompletion %}
                             <p class="col-md-12 nopadding" style="padding-bottom: 15px; font-size: 16px; font-weight: bold; color: #666;">Total task completion</p>
@@ -1452,6 +1457,7 @@ var gaugeOptions = {
 
             };;
 </script>
+
 
 <script type="text/javascript">
 var data = {{budget | safe}}
