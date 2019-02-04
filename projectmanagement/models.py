@@ -309,6 +309,9 @@ class Project(BaseContent):
         return json.dumps({"master_pip":master_pip,"master_pin":master_pin,
         "pin_title_name":pin_title_name,"pip_title_name":pip_title_name,
         "number_json":number_json,"master_sh":master_sh,"parameter_count":int(parameter_count)})
+        
+  
+     
 
         
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))

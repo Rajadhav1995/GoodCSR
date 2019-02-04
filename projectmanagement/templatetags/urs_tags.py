@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation,ProjectParameter,
-                                        ProjectParameterValue)
+                                        ProjectParameterValue,MasterCategory)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                                 ReportParameter, Question,Answer,QuarterReportSection)
 from media.models import (Comment,Attachment)
@@ -582,7 +582,16 @@ def filename(obj):
    except:
        logo = ""
    return logo
-   
+
+@register.assignment_tag   
+def get_cause_arealist():
+    
+    cause_area=MasterCategory.objects.filter(parent__slug='cause-area')
+    respo=[]
+    for i in cause_area:
+        respo.append({'id':i.id,'name':i.name})
+
+    return respo
    
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 

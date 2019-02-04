@@ -28,6 +28,7 @@ def admin_dashboard(request):
     # view/edit project
     obj_list = urs_tags.userprojectlist(user_obj)
     project_count = obj_list.count()
+   
     projectuseridlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list("user__id",flat=True)
     projectrole_id = []
     # roles
@@ -68,11 +69,6 @@ def admin_dashboard(request):
         projectobj = paginator.page(paginator.num_pages)
     return render(request,'corporate_dashboard.html',locals())
     
-def get_cause_area(c_id):
-    
-    cause_area_list=Project.objects.filter(cause_area__id__in=[c_id])
-    
-    return cause_area_list
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 

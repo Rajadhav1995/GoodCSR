@@ -26,55 +26,133 @@
 {% endblock %}
 <!--Content part starts-->
 {% block content %}
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $('#popup').click(function(){
+	$('#pop1').simplePopup();
+    });
+});
+
+//Function to filter data by year
+function filterData(){
+  var searchParams = new URLSearchParams(window.location.search);
+  for(let p of searchParams){
+    console.log("params",p)
+  }
+  searchParams.delete('year');
+  $('.year-check-box').each(function(){
+    if ($(this).is(":checked")) {
+      searchParams.append("year",$(this).attr("id"));
+    }
+  });
+  console.log("Selected years:",window.location.hostname,searchParams.toString(),searchParams.getAll("year"));
+  window.location = window.location.pathname + "?" + searchParams.toString();
+}
+</script>
 <section class="content-part">
 	<div class="row">
 	<div class="content-top">
-<!--      <div class="select-area">-->
-<!--      	<label>See Data as </label>-->
-<!--        <select name="lang" class="select_box ">-->
-<!--            <option>Quarter1</option>-->
-<!--            <option>Quarter2</option>-->
-<!--            <option>Quarter3</option>-->
-<!--        </select>-->
-<!--        <div class="small-select">-->
-<!--        <select name="lang" class="select_box ">-->
-<!--            <option>2016</option>-->
-<!--            <option>2017</option>-->
-<!--        </select>-->
-<!--        <div class="dropdown user select-down select-width1">-->
-<!--            <a href="javascript:void(0);" class="dropdown-toggle">-->
-<!--              <p>Sep-Dec</p>-->
-<!--              <i class="fa fa-angle-down"></i>-->
-<!--            </a>-->
-<!--            <ul class="dropdown-menu1" style="display:none;">-->
-<!--            -->
-<!--              <li class="user-header">-->
-<!--                <input class="check-box" type="checkbox" id="one" />-->
-<!--                <label for="one"><span><span></span></span> Jan-Mar</label>-->
-<!--              </li>-->
-<!--              <li>-->
-<!--                <input class="check-box" type="checkbox" id="two" />-->
-<!--                <label for="two"><span><span></span></span> Apr-Jul</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="three" />-->
-<!--                <label for="three"><span><span></span></span> Aug-Sep</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="four" />-->
-<!--                <label for="four"><span><span></span></span> Oct-Dec</label>  -->
-<!--              </li>-->
-<!--              -->
-<!--            </ul>-->
-<!--          </div>-->
-<!--        <!--<select multiple="multiple" name="lang" class="select_box">-->
-<!--            <option>Sep-Dec</option>-->
-<!--            <option>Jan-Mar</option>-->
-<!--            <option>Apr-Jul</option>-->
-<!--            <option>Aug-Sep</option>-->
-<!--            <option>Oct-Dec</option>-->
-<!--        </select>-->
-<!--        </div>-->
+ <div class="select-area">
+      <div class="clear"></div>
+    <div class="white-box white-pad">
+      <div class="select-area">
+        <button class="link-pad" onclick="filterData()"><a> Filter Data </a></button>
+
+        <div class="dropdown user select-down select-width">
+            <a href="javascript:void(0);" class="dropdown-toggle" >
+              <p>By Year</p>
+            </a>
+            <ul class="dropdown-menu1" id="yearFilter" style="display:none;">
+              <script>
+                //Script to fetch data filter list values for year
+                start_date = new Date("{{projectobj.start_date}}");
+                end_date = new Date("{{projectobj.end_date}}");
+                console.log("Proj",start_date,end_date);
+                var s = new Date();
+                var e = new Date();
+                if(isNaN(end_date)){end_date = e;}
+                if(isNaN(start_date)){
+                    s.setFullYear(s.getFullYear()-5);
+                    start_date =  s;
+                  }
+                console.log("Project","{{projectobj.start_date}}","{{projectobj.end_date}}",start_date.getFullYear(),end_date.getFullYear());
+                var yearParam = (new URLSearchParams(window.location.search)).getAll('year');
+                console.log('write',yearParam)
+                for(i = start_date.getFullYear();i<=end_date.getFullYear();i++){
+                  var checked = "unchecked";
+                  if(yearParam.indexOf(i.toString())!=-1){checked = "checked"}
+                  document.write('<li style="min-height: 0px; text-align: left; background: #fff; width: 100%;color: #202020;font-size: 14px;padding: 5px 0;"><input class="year-check-box" type="checkbox" id='+i+' '+checked+' /><label for='+i+'><span><span></span></span>'+i+'</label></li>');
+                }
+              </script>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3">
+        <select class="causearea">
+            <option value="CauseArea">CauseArea</option>
+              {% get_cause_arealist as cause_area %}
+                {% for i in cause_area %}
+                <option value="{{i.id}}" >{{i.name}}</option>
+                {% endfor %}
+        </select>
+        </div>
+     
+</div>         
+ 
+        
+        <!--div class="dropdown user select-down select-width1">
+            <a href="javascript:void(0);" class="dropdown-toggle">
+              <p>By Year</p>
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu1" style="display:none;">
+            
+              <li class="user-header">
+                <input class="check-box" type="checkbox" id="one" />
+                <label for="one"><span><span></span></span> Jan-Mar</label>
+              </li>
+              <li>
+                <input class="check-box" type="checkbox" id="two" />
+                <label for="two"><span><span></span></span> Apr-Jul</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="three" />
+                <label for="three"><span><span></span></span> Aug-Sep</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="four" />
+                <label for="four"><span><span></span></span> Oct-Dec</label>  
+              </li>
+              
+            </ul>
+          </div>
+          
+          <div >
+            <p> Cause area</p>
+            <select >
+                 <option value=""></option>
+                 <option value="education">Education</option>
+                 <option value="animalwelfare">Animal Welfare</option>
+            </select>    
+            <!--select multiple name="cause_area">
+                {% get_cause_arealist as cause_area %}
+                {% for i in cause_area %}
+                <option value="{{i.id}}" >{{i.name}}</option>
+                {% endfor %}
+                
+             </select-->
+          <!--/div-->  
+        <!--<select multiple="multiple" name="lang" class="select_box">
+            <option>Sep-Dec</option>
+            <option>Jan-Mar</option>
+            <option>Apr-Jul</option>
+            <option>Aug-Sep</option>
+            <option>Oct-Dec</option>
+        </select>
+        </div>
+>
          </div>
         <!--<form>
           <div class="multiselect">
@@ -96,7 +174,8 @@
             </div>
           </div>
         </form>-->
-       
+        
+        
     <div class="white-box white-pad">
       <h2>Key Program Info</h2>
 <!--<!--        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>-->
@@ -1607,6 +1686,8 @@ Highcharts.chart('Beneficiary_Distribution', {
 
 
 </script>
+
+
 
 
          <style type="text/css">
