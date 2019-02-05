@@ -584,11 +584,12 @@ def filename(obj):
    return logo
 
 @register.assignment_tag   
-def get_cause_arealist():
-    
-    cause_area=MasterCategory.objects.filter(parent__slug='cause-area')
+def get_cause_arealist(user_obj):
+    obj_list = userprojectlist(user_obj)
+    cause_area_ids=obj_list.values_list('cause_area',flat=True)
+    cause_obj=MasterCategory.objects.filter(id__in=cause_area_ids)
     respo=[]
-    for i in cause_area:
+    for i in cause_obj:
         respo.append({'id':i.id,'name':i.name})
 
     return respo

@@ -27,30 +27,7 @@
 <!--Content part starts-->
 {% block content %}
 
-<script type="text/javascript">
 
-$(document).ready(function(){
-    $('#popup').click(function(){
-	$('#pop1').simplePopup();
-    });
-});
-
-//Function to filter data by year
-function filterData(){
-  var searchParams = new URLSearchParams(window.location.search);
-  for(let p of searchParams){
-    console.log("params",p)
-  }
-  searchParams.delete('year');
-  $('.year-check-box').each(function(){
-    if ($(this).is(":checked")) {
-      searchParams.append("year",$(this).attr("id"));
-    }
-  });
-  console.log("Selected years:",window.location.hostname,searchParams.toString(),searchParams.getAll("year"));
-  window.location = window.location.pathname + "?" + searchParams.toString();
-}
-</script>
 <section class="content-part">
 	<div class="row">
 	<div class="content-top">
@@ -58,7 +35,7 @@ function filterData(){
       <div class="clear"></div>
     <div class="white-box white-pad">
       <div class="select-area">
-        <button class="link-pad" onclick="filterData()"><a> Filter Data </a></button>
+         <form method = "POST" action = ".">{% csrf_token %}
 
         <div class="dropdown user select-down select-width">
             <a href="javascript:void(0);" class="dropdown-toggle" >
@@ -87,19 +64,22 @@ function filterData(){
                 }
               </script>
             </ul>
-          </div>
-        </div>
-        <div class="col-md-3">
-        <select class="causearea">
-            <option value="CauseArea">CauseArea</option>
-              {% get_cause_arealist as cause_area %}
-                {% for i in cause_area %}
-                <option value="{{i.id}}" >{{i.name}}</option>
+           <div class="col-md-3">
+        <select class="causearea" name="cause_area"  style="width:100%">
+           <option value="CauseArea">CauseArea</option>
+              {% get_cause_arealist user_obj as cause_obj %}
+                {% for i in cause_obj %}
+                  <option value="{{i.id}}"{% if i.id == cause_area_id %}selected{% endif %}>{{i.name}}</option>
                 {% endfor %}
         </select>
         </div>
-     
-</div>         
+          <input type="submit" name='Filter data' value=submit />
+        </div>
+   </form>
+               
+</div> 
+
+ 
  
         
         <!--div class="dropdown user select-down select-width1">
@@ -129,21 +109,7 @@ function filterData(){
             </ul>
           </div>
           
-          <div >
-            <p> Cause area</p>
-            <select >
-                 <option value=""></option>
-                 <option value="education">Education</option>
-                 <option value="animalwelfare">Animal Welfare</option>
-            </select>    
-            <!--select multiple name="cause_area">
-                {% get_cause_arealist as cause_area %}
-                {% for i in cause_area %}
-                <option value="{{i.id}}" >{{i.name}}</option>
-                {% endfor %}
-                
-             </select-->
-          <!--/div-->  
+          
         <!--<select multiple="multiple" name="lang" class="select_box">
             <option>Sep-Dec</option>
             <option>Jan-Mar</option>
@@ -1686,7 +1652,15 @@ Highcharts.chart('Beneficiary_Distribution', {
 
 
 </script>
-
+<script>
+$(document).ready(function(){
+$('#button').click(function(){ 
+     console.log($('#obj').val());
+   
+});
+});
+</script>
+                                                     
 
 
 
