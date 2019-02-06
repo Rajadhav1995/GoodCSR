@@ -27,59 +27,48 @@
 <!--Content part starts-->
 {% block content %}
 
-
+<!-- this is to filter the projects-->
 <section class="content-part">
 	<div class="row">
 	<div class="content-top">
  <div class="select-area">
       <div class="clear"></div>
     <div class="white-box white-pad">
-      <div class="select-area">
+      <div class="select_submitsection">
          <form method = "POST" action = ".">{% csrf_token %}
 
         <div class="dropdown user select-down select-width">
-            <a href="javascript:void(0);" class="dropdown-toggle" >
-              <p>By Year</p>
-            </a>
-            <ul class="dropdown-menu1" id="yearFilter" style="display:none;">
-              <script>
-                //Script to fetch data filter list values for year
-                start_date = new Date("{{projectobj.start_date}}");
-                end_date = new Date("{{projectobj.end_date}}");
-                console.log("Proj",start_date,end_date);
-                var s = new Date();
-                var e = new Date();
-                if(isNaN(end_date)){end_date = e;}
-                if(isNaN(start_date)){
-                    s.setFullYear(s.getFullYear()-5);
-                    start_date =  s;
-                  }
-                console.log("Project","{{projectobj.start_date}}","{{projectobj.end_date}}",start_date.getFullYear(),end_date.getFullYear());
-                var yearParam = (new URLSearchParams(window.location.search)).getAll('year');
-                console.log('write',yearParam)
-                for(i = start_date.getFullYear();i<=end_date.getFullYear();i++){
-                  var checked = "unchecked";
-                  if(yearParam.indexOf(i.toString())!=-1){checked = "checked"}
-                  document.write('<li style="min-height: 0px; text-align: left; background: #fff; width: 100%;color: #202020;font-size: 14px;padding: 5px 0;"><input class="year-check-box" type="checkbox" id='+i+' '+checked+' /><label for='+i+'><span><span></span></span>'+i+'</label></li>');
-                }
-              </script>
-            </ul>
-           <div class="col-md-3">
+              <div class="cause_area">
+          <select class="causearea" name="dashboard_year"  style="width:100%">
+             <option value="">By Year</option>
+               {% for i in dashboard_year %}
+                  <option value="{{i}}"{% if i == dash_year %}selected{% endif %}>{{i}}</option>
+               {% endfor %}
+         </select>
+         </div >
+           <div class="cause_area">
         <select class="causearea" name="cause_area"  style="width:100%">
-           <option value="CauseArea">CauseArea</option>
+           <option value="">CauseArea</option>
               {% get_cause_arealist user_obj as cause_obj %}
                 {% for i in cause_obj %}
                   <option value="{{i.id}}"{% if i.id == cause_area_id %}selected{% endif %}>{{i.name}}</option>
                 {% endfor %}
         </select>
+        </div >
+        <div class="submit_cause">
+          <input type="submit" class="link-pad" name='Filter data' value=submit />
         </div>
-          <input type="submit" name='Filter data' value=submit />
+         
         </div>
    </form>
+   <div class="submit_cause reset_button">
+          <a href="/dashboard/" ><input type="submit" class="link-pad" name='Filter data' value=Reset /></a>
+        </div>
+   
                
 </div> 
 
- 
+ <!-- filter section ends here for causearea and year -->
  
         
         <!--div class="dropdown user select-down select-width1">

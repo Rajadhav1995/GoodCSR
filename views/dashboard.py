@@ -12,13 +12,14 @@ from pmu.settings import PMU_URL
 from django.core.paginator import Paginator,Page
 import json
 #create views of dashboard
-
+from django.db.models import Q
 @check_loggedin_access
 def admin_dashboard(request):
     # this function is to show detail view of dashboard
     # 
     state_count = {}
     uu={}
+    dashboard_year=[2016,2017,2018,2019]
     # 
     user_id = request.session.get('user_id')
     # this function is to show detail view of dashboard
@@ -28,9 +29,17 @@ def admin_dashboard(request):
     # view/edit project
     #import ipdb;ipdb.set_trace()
     obj_list = urs_tags.userprojectlist(user_obj)
+    #this is to filter based on cause area 
     if request.method == 'POST' :
-        cause_area_id=int(request.POST.get('cause_area'))
-        obj_list=obj_list.filter(cause_area__id__in=[cause_area_id])
+        cause_area_id=request.POST.get('cause_area')
+        dash_year=request.POST.get('dashboard_year')
+        if cause_area_id:
+            cause_area_id = int(cause_area_id)
+            obj_list=obj_list.filter(cause_area__id__in=[cause_area_id])
+        if dash_year:
+            dash_year=int(dash_year)
+            obj_list=obj_list.filter(start_date__year=dash_year)    
+    #    
     project_count = obj_list.count()
     projectuseridlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list("user__id",flat=True)
     projectrole_id = []
