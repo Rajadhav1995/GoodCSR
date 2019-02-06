@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load urs_tags %}
 {% block section %}
 <div> </div>
 {% endblock %}
@@ -21,6 +21,8 @@ width:450px;
 
 <div class="clear"></div>
 <section class="content-part">
+    <div class="row">
+    <div class="col-xs-12">
     <div class='container' >
     <div class="white-box">
         
@@ -393,7 +395,42 @@ width:450px;
                 </div>
             </div>
         </div>
+        <div class="row">
+                            <label class="control-label col-md-12 col-sm-3 col-xs-12" for="first-name" >
+                                Parameters Indicating Beneficiary:
+                            </label>
+                            <div class="col-md-6 col-sm-12 col-xs-12 form-group">
+                                <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
+                                <p style="color:grey ;">
+                                    (Please press Enter or TAB or ',' after typing each keyword)
+                            </div>
+                        </div>
+      <div class="row">
+            <div class="col-md-6 nopadding">
+                <div class="col-md-12">
+                    <div class="form-group">
+                    <label>Project Image :<font color="red"></font></label>
+                    <input type="file" name="logo"  id="logo" >
+                    {% if obj and obj.logo.path %}
+                    <a target="_blank" href="/{{obj.logo}}"></a>
+                    <img src="/{{obj.logo}}" style="height: 150px; width:150px; " alt="">
+                    {% else %}
+                    <img src="/static/img/GoodCSR_color_circle.png" style="height: 150px; width:150px; " alt="">
+                    {% endif %}
 
+                   <!-- {{form.logo}}-->
+                    </div>
+                </div>
+            </div>
+        </div>
+                        
+        <!--label>Logo<font color="red"></font></label>
+        {% if obj and obj.logo.path %}
+        <a target="_blank" href="/{{obj.logo}}"> uploaded logo: {{obj|filename}}</a>
+        {% endif %}
+                    {{form.logo}}-->                
+                        
+                        
         <div class="row">
             <div class="col-md-6 nopadding">
                 <div class="col-md-12">
@@ -413,6 +450,8 @@ width:450px;
             </div>
         </div>
         
+
+        
 </form>
 </div>
   </div>
@@ -420,7 +459,15 @@ width:450px;
 <input type="hidden" name="loop_count" id="loop_count" value="{{activity_view.count}}">
   </div>
   </div>
-
+<div style="padding :0 7px 0 5px;max-width:900px;margin:auto">
+    <textarea id="hero-demo" class="tag-editor-hidden-src"></textarea>
+    <ul class="tag-editor ui-sortable" style="display:none;">
+    </ul>
+</div>
+<input type="hidden" name="key_list" id="key_list" value="{{key_list}}">
+<input type="hidden" name="keyss" id="keyss" value="{{keyss}}">
+</div>
+  </div>
 <script src="https://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
@@ -661,6 +708,56 @@ function funder_val() {
         
 });
 </script>
+<script type="text/javascript">
+$(function () {
+    //var dddd = new $('#keyss').val().split(', ');
+    $('#hero-demo').tagEditor({
+        delimiter: ',',
+        //initialTags: ['Hello', 'World', 'Example', 'Tags'],
+        initialTags: new $('#keyss').val().split(','),
+        placeholder: ' Enter Parameter name',
+        autocomplete: {
+            delay: 0,
+            position: {
+                collision: 'flip'
+            },
+            source: new $('#key_list').val().split(', ')
+        },
+        clickDelete : false,
+        beforeTagSave : beforeTagSavecb,
+        beforeTagDelete : beforeTagDeletecb,
+        onChange: onChangecb
+       /* autocomplete: {
+            source: googleSuggest,
+            minLength: 3,
+            delay: 250,
+            html: true,
+            position: {
+                collision: 'flip'
+            }
+        }*/
+    });
+    
+    function onChangecb(field, editor, tags) {
+    }
+    
+    function beforeTagSavecb(field, editor, tags, tag, val) {
+    }
+    
+    function beforeTagDeletecb(field, editor, tags, val) {
+        return true;
+    }
+
+/*
+    $('#remove_all_tags').click(function () {
+        var tags = $('#demo3').tagEditor('getTags')[0].tags;
+        for (i = 0; i < tags.length; i++) {
+            $('#demo3').tagEditor('removeTag', tags[i]);
+        }
+    });*/
+});
+</script>
+
 <script type="text/javascript">
     $('#id_name').keypress(function( e ){
         var k;

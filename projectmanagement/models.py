@@ -218,6 +218,7 @@ class Project(BaseContent):
         return completed_tasks
 
     def project_budget_details(self):
+        #import ipdb;ipdb.set_trace()
         from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,
                                             Tranche,BudgetPeriodUnit)
         budgetobj = Budget.objects.latest_one(project = self)
@@ -248,6 +249,13 @@ class Project(BaseContent):
     #     )
     #     super(Project, self).save()'
     
+    # to get parameter-value in projectlist
+    def project_parameter_value(self):
+        
+        parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True,keyparameter__active=2).aggregate(Sum('parameter_value'))
+
+        #parameter_value ={'parameter_value':int(para_val)}
+        return int(parameter_value.get('parameter_value__sum') if parameter_value.get('parameter_value__sum') else 0)
     def get_todays_tasks(self,today,user,status):
         from taskmanagement.models import Task
         if status == '1':
@@ -270,7 +278,7 @@ class Project(BaseContent):
         from media.models import ProjectLocation
         project = Project.objects.get_or_none(id=self.id)
         locations = ProjectLocation.objects.filter(active=2,content_type= ContentType.objects.get_for_model(project),object_id=project.id)
-        loc_list = [i.location.name+'-'+i.location.parent.name+'-'+i.get_program_type_display() for i in locations] if locations else []
+        loc_list = [i.location.name+'-'+i.location.parent.name+'-'+i.get_program_type_display() for i in locations if i.location.parent] if locations else []
         loc = ','.join(loc_list)
         return loc
         
@@ -300,6 +308,9 @@ class Project(BaseContent):
         return json.dumps({"master_pip":master_pip,"master_pin":master_pin,
         "pin_title_name":pin_title_name,"pip_title_name":pip_title_name,
         "number_json":number_json,"master_sh":master_sh,"parameter_count":int(parameter_count)})
+        
+  
+     
 
         
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))
@@ -348,6 +359,7 @@ class ProjectParameter(BaseContent):
     parent = models.ForeignKey('self', **OPTIONAL)
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
     history = HistoricalRecords()
+    is_beneficiary_type=models.BooleanField(default=False) 
     
     def __str__(self):
         return str(self.id)

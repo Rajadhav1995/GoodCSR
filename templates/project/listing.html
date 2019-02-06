@@ -69,7 +69,7 @@ button.budget_button.button_section {
                 <th>Implementation Partner</th>
                 <th>Funder</th>
                 <th>Status</th>
-                <th>Budget Planned</th>
+                <th>Allocated Budget </th>
 <!--                {% with "project-list"|make_string:"edit" as keystring %}-->
 <!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->
                 <th>Action</th>
@@ -90,7 +90,7 @@ button.budget_button.button_section {
             <td>{{funder_mapping.implementation_partner.organization}} </td>
             <td>{{funder_mapping.funder.organization}}</td>            
             <td>{{i.get_active_display}}</td>
-            <td>{{i.total_budget}}</td>
+            <td>{{i.project_budget_details.planned_cost}}</td>
             <!-- test column -->
 <!--            {% with "project-list"|make_string:"edit" as keystring %}-->
 <!--            {% if request.user.is_superuser or request|has_permission_for_action:keystring %}-->

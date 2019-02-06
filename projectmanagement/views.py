@@ -79,6 +79,8 @@ def create_project(request):
         mapping_view = ProjectFunderRelation.objects.get(project=obj)
         location = ProjectLocation.objects.filter(object_id=obj.id,active=2)
         city_list = Boundary.objects.filter(boundary_level=3).order_by('name')
+        keyss = ','.join([str(i.name) for i in ProjectParameter.objects.filter(is_beneficiary_type=True,active=2,project=obj)])
+        #key_list = ','.join([ str(i) for i in ProjectParameter.objects.filter().values_list('name',flat=True)])
     except:
         form = ProjectForm()
         location = ''
@@ -101,6 +103,8 @@ def create_project(request):
             obj.created_by = UserProfile.objects.get(user_reference_id=user_id)
             obj.slug = unique_slug_generator(obj,instance)
             obj.modified_by = user_id # added to save the modified by user (priya)
+            if request.FILES.get('logo'):
+                obj.logo=request.FILES.get('logo')
             obj.save()
             form.save_m2m()
             implementation_partner = request.POST.get('implementation_partner')
@@ -108,6 +112,13 @@ def create_project(request):
             total_budget = request.POST.get('total_budget')
             ff = funder_mapping(funder,implementation_partner,total_budget,obj)
             project_location(request,obj,location)
+            keywords=request.POST.get('keywords')
+            key_list=keywords.split(',')
+            for i in key_list:
+                para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,
+                                       active=2)
+                para_obj.save()
+            
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
@@ -157,14 +168,14 @@ def get_project_report(projects):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Project_report.csv"'
     writer = csv.writer(response)
-    writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Budget Planned',
-    				'Cause Area','No of Beneficiares','Beneficiary Types','Locations'])
+    writer.writerow(['Start Date','End Date','Project Name','Managed by','Implementation Partner','Funder','Status','Planned Budget','Allocated Budget',
+    				'Cause Area','Beneficiary Types','No of Beneficiaries planned','No of Beneficiaries served','Locations'])
     for pro in projects:
         funder_mapping = get_funder_mapping(pro)
         org_name = get_pmo_user(pro)
         writer.writerow([pro.start_date, pro.end_date, pro.name,org_name,funder_mapping.implementation_partner.organization,
-         funder_mapping.funder.organization, pro.get_active_display(), pro.total_budget,pro.get_cause_area(),pro.no_of_beneficiaries,
-		 pro.get_beneficiary(),pro.get_locations()])
+         funder_mapping.funder.organization, pro.get_active_display(),pro.total_budget, pro.project_budget_details().get('planned_cost'),pro.get_cause_area(),
+		 pro.get_beneficiary(),pro.no_of_beneficiaries,pro.project_parameter_value(),pro.get_locations()])
     return response
 
 # alternative for download of project report csv
@@ -796,6 +807,14 @@ def delete_upload_image(request):
         attach.active = 0
         attach.save()
     return HttpResponseRedirect(url)
+
+
+##to change the beneficary type as true##
+def beneficiary_type():
+    bene_type=ProjectParameter.objects.filter(name__icontains='Beneficiary')
+    for i in bene_type:
+        i.bene_type=True
+        i.save()
 
 #    The dict type has been reimplemented to use a more compact 
 # representation based on a proposal by Raymond Hettinger and 

@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation,ProjectParameter,
-                                        ProjectParameterValue)
+                                        ProjectParameterValue,MasterCategory)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                                 ReportParameter, Question,Answer,QuarterReportSection)
 from media.models import (Comment,Attachment)
@@ -573,6 +573,27 @@ def get_pmo_user(project):
         org_name = UserProfile.objects.get(id = pmo_user[0].user.id).organization
     return org_name
 
+
+@register.filter
+def filename(obj):
+   import os
+   try:
+       logo = os.path.basename(obj.logo.name)
+   except:
+       logo = ""
+   return logo
+
+@register.assignment_tag   
+def get_cause_arealist(user_obj):
+    obj_list = userprojectlist(user_obj)
+    cause_area_ids=obj_list.values_list('cause_area',flat=True)
+    cause_obj=MasterCategory.objects.filter(id__in=cause_area_ids)
+    respo=[]
+    for i in cause_obj:
+        respo.append({'id':i.id,'name':i.name})
+
+    return respo
+   
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
@@ -583,3 +604,5 @@ def get_pmo_user(project):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+
+
