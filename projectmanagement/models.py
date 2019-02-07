@@ -302,7 +302,6 @@ class Project(BaseContent):
         import json
         from projectmanagement.views import parameter_pie_chart
         # code for displaying parameters on senior management cards 
-        print "Project params"
         parameter_list = ProjectParameter.objects.filter(active= 2,project=self,parent=None)
         parameter_count = ProjectParameter.objects.filter(active= 2,project=self,parent=None).count()
         master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_list)
