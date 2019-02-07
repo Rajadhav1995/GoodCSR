@@ -27,7 +27,6 @@ def admin_dashboard(request):
     from projectmanagement.templatetags import urs_tags
     # getting users who has permission to
     # view/edit project
-    #import ipdb;ipdb.set_trace()
     obj_list = urs_tags.userprojectlist(user_obj)
     #this is to filter based on cause area 
     if request.method == 'POST' :
@@ -38,7 +37,8 @@ def admin_dashboard(request):
             obj_list=obj_list.filter(cause_area__id__in=[cause_area_id])
         if dash_year:
             dash_year=int(dash_year)
-            obj_list=obj_list.filter(start_date__year=dash_year)    
+            obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year)
+
     #    
     project_count = obj_list.count()
     projectuseridlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list("user__id",flat=True)
