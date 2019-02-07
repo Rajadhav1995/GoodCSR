@@ -286,7 +286,13 @@
                             </span></p>
 						  </li>
 						  <li  class="col-md-6 nopadding"> 
-							<p> No. of beneficiaries <br><span> {{i.project_parameter_value }} served | {{i.no_of_beneficiaries}} planned</span> </p>
+							<p> No. of beneficiaries <br><span>
+							{% if i.project_parameter_value %} 
+							{{i.project_parameter_value }} served | {{i.no_of_beneficiaries}} planned
+							{% else %}
+							{{i.no_of_beneficiaries}} planned
+							{% endif %}
+							</span> </p>
 						  </li>
 						  <li  class="col-md-12 nopadding">
 						  <div class="col-md-6 nopadding">
