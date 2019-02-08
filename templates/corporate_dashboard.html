@@ -47,7 +47,7 @@
          </select>
          </div >
            <div class="cause_area">
-        <select class="causearea" name="cause_area"  id= "caus_area" style="width:100%">
+        <select class="causearea" name="cause_area"  id= "id_area" style="width:100%">
            <option value="">By CauseArea</option>
               {% get_cause_arealist user_obj as cause_obj %}
                 {% for i in cause_obj %}
@@ -62,7 +62,7 @@
         </div>
    </form>
    <div class="submit_cause reset_button">
-          <button type="submit" class="link-pad" name='Filter data'  id ="obj" value=Reset >Reset</button>
+          <button type="submit" class="link-pad" name='Filter data'  id="id_reset" value=Reset >Reset</button>
         </div>
    
                
@@ -1647,14 +1647,13 @@ Highcharts.chart('Beneficiary_Distribution', {
 
 
 </script>
-<!--<script>
-$(document).ready(function(){
-$('#button').click(function(){ 
-     $('#obj').val('');
+<script>
+$('#id_reset').click(function(){ 
+     $('#year_id').val('');
+     $('#id_area').val('');
    
 });
-});
-</script>   -->
+</script>
                                                      
 
 

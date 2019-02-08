@@ -14,7 +14,6 @@ from django.contrib import messages
 from rest_framework.views import APIView,Response
 from pmu.settings import NOCAPTCHA
 def signin(request):
-    #import ipdb;ipdb.set_trace()
     # this function is for
     # login from goodcsr db
     #if request.GET.get('message'):
