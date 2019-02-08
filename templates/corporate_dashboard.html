@@ -48,7 +48,7 @@
          </div >
            <div class="cause_area">
         <select class="causearea" name="cause_area"  style="width:100%">
-           <option value="">CauseArea</option>
+           <option value="">By CauseArea</option>
               {% get_cause_arealist user_obj as cause_obj %}
                 {% for i in cause_obj %}
                   <option value="{{i.id}}"{% if i.id == cause_area_id %}selected{% endif %}>{{i.name}}</option>
@@ -56,7 +56,7 @@
         </select>
         </div >
         <div class="submit_cause">
-          <input type="submit" class="link-pad" name='Filter data' value=submit />
+          <input type="submit" class="link-pad" name='Filter data' value=Submit />
         </div>
          
         </div>
