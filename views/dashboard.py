@@ -12,9 +12,9 @@ from pmu.settings import PMU_URL
 from django.core.paginator import Paginator,Page
 import json
 #create views of dashboard
-from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
+#@csrf_exempt
 @check_loggedin_access
 def admin_dashboard(request):
     # this function is to show detail view of dashboard

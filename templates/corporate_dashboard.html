@@ -39,7 +39,7 @@
 
         <div class="dropdown user select-down select-width">
               <div class="cause_area">
-          <select class="causearea" name="dashboard_year"  style="width:100%">
+          <select class="causearea" name="dashboard_year" id="year_id" style="width:100%">
              <option value="">By Year</option>
                {% for i in dashboard_year %}
                   <option value="{{i}}"{% if i == dash_year %}selected{% endif %}>{{i}}</option>
@@ -47,7 +47,7 @@
          </select>
          </div >
            <div class="cause_area">
-        <select class="causearea" name="cause_area"  style="width:100%">
+        <select class="causearea" name="cause_area"  id= "caus_area" style="width:100%">
            <option value="">By CauseArea</option>
               {% get_cause_arealist user_obj as cause_obj %}
                 {% for i in cause_obj %}
@@ -62,7 +62,7 @@
         </div>
    </form>
    <div class="submit_cause reset_button">
-          <a href="/dashboard/" ><input type="submit" class="link-pad" name='Filter data' value=Reset /></a>
+          <button type="submit" class="link-pad" name='Filter data'  id ="obj" value=Reset /></button>
         </div>
    
                
@@ -1647,14 +1647,14 @@ Highcharts.chart('Beneficiary_Distribution', {
 
 
 </script>
-<script>
+<!--<script>
 $(document).ready(function(){
 $('#button').click(function(){ 
-     console.log($('#obj').val());
+     $('#obj').val('');
    
 });
 });
-</script>
+</script>   -->
                                                      
 
 
