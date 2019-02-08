@@ -34,12 +34,15 @@ def admin_dashboard(request):
     if request.method == 'POST' :
         cause_area_id=request.POST.get('cause_area')
         dash_year=request.POST.get('dashboard_year')
-        if cause_area_id:
-            cause_area_id = int(cause_area_id)
-            obj_list=obj_list.filter(cause_area__id__in=[cause_area_id])
-        if dash_year:
-            dash_year=int(dash_year)
-            obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year)
+    else:
+        cause_area_id=request.GET.get('cause_area')
+        dash_year=request.GET.get('dashboard_year')
+    if cause_area_id:
+        cause_area_id = int(cause_area_id)
+        obj_list=obj_list.filter(cause_area__id__in=[cause_area_id])
+    if dash_year:
+        dash_year=int(dash_year)
+        obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year)
 
     #    
     project_count = obj_list.count()

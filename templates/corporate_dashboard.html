@@ -62,7 +62,7 @@
         </div>
    </form>
    <div class="submit_cause reset_button">
-          <button type="submit" class="link-pad" name='Filter data'  id ="obj" value=Reset /></button>
+          <button type="submit" class="link-pad" name='Filter data'  id ="obj" value=Reset >Reset</button>
         </div>
    
                
@@ -760,7 +760,7 @@
             <ul class="pagination pagination-sm">
                 {% if projectobj.has_previous %}
                 <li>
-                    <a href="?page={{ projectobj.previous_page_number }}">&laquo;</a>
+                    <a href="?page={{ projectobj.previous_page_number }}&cause_area={{cause_area_id}}&dashboard_year={{dash_year}}">&laquo;</a>
                 </li>
                 {% else %}
                 <li class="disabled">
@@ -774,11 +774,11 @@
                 </li>
                 {% else %}
                 <li>
-                    <a href="?page={{ i }}">{{ i }}</a>
+                    <a href="?page={{ i }}&cause_area={{cause_area_id}}&dashboard_year={{dash_year}}">{{ i }}</a>
                 </li>
                 {% endif %} {% endfor %} {% if projectobj.has_next %}
                 <li>
-                    <a href="?page={{ projectobj.next_page_number }}">&raquo;</a>
+                    <a href="?page={{ projectobj.next_page_number }}&cause_area={{cause_area_id}}&dashboard_year={{dash_year}}">&raquo;</a>
                 </li>
                 {% else %}
                 <li class="disabled">
