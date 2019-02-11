@@ -618,7 +618,8 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
 # if it is edit then we will get or none of that answer saved already to that 
 #question and append the parameter ids and save it
 # else create new answer with the dict created before
- 
+    parent_paramter_question=None
+    answer=None
     add_section = request.POST.get('add_section')
     para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
     for k in sorted(para_detail):
@@ -641,7 +642,8 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     parameter_ids = ReportParameter.objects.filter(quarter = quarterreportobj).values_list("id",flat=True)
     parameter_ids = map(int,parameter_ids)
-    parameter_answer_dict = {
+    if parent_paramter_question:
+        parameter_answer_dict = {
             'quarter':quarterreportobj,
             'question':Question.objects.get_or_none(id=int(parent_paramter_question.id)),
             'inline_answer':parameter_ids,
@@ -649,12 +651,13 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
             'object_id':projectreportobj.id,
             'user':user_obj,
             }
-    answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj)
-    if answer:
-        answer.inline_answer = parameter_ids
-        answer.save()
-    else:
-        answer = Answer.objects.create(**parameter_answer_dict)
+            
+        answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj)
+        if answer:
+            answer.inline_answer = parameter_ids
+            answer.save()
+        else:
+            answer = Answer.objects.create(**parameter_answer_dict)
     return answer
 
 def saving_of_quarters_section(request):
@@ -668,7 +671,7 @@ def saving_of_quarters_section(request):
 #where we get the list of milestone ,parameters.piclist and quarterreport obj ids
 # based on the ids we can get the values of that inputs and save the details
 # this is done for other current and next quarters or monthly report
-#
+#   
     slug = request.GET.get('slug')
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
@@ -695,6 +698,7 @@ def saving_of_quarters_section(request):
 # clients requirement not to provide paramerter selection in previous quarter list so commented
 # end of parameter saving function
 #    to save the Current quarter updates:
+    
     quarter_list = currentquarter_list
     
     current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
