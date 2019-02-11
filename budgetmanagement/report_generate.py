@@ -75,7 +75,9 @@ def report_form(request):
             project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,\
                 report_type = data.get('report_type'),start_date  = budget_start_date,
                 name = project_obj.name,end_date = budget_end_date)
-            project_report.created_by = user
+            if created:
+                project_report.created_by = user
+                project_report.save()
             if created or int(project_report.active) == 0 :
                 project_report.active = 2
                 project_report.save()
