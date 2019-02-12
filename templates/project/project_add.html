@@ -400,7 +400,7 @@ width:450px;
                                 Parameters Indicating Beneficiary:
                             </label>
                             <div class="col-md-6 col-sm-12 col-xs-12 form-group">
-                                <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
+                                <textarea id="hero-demo" rows="4" name="keywords" class="form-control" required></textarea>
                                 <p style="color:grey ;">
                                     (Please press Enter or TAB or ',' after typing each keyword)
                             </div>
@@ -726,6 +726,7 @@ $(function () {
         clickDelete : false,
         beforeTagSave : beforeTagSavecb,
         beforeTagDelete : beforeTagDeletecb,
+        forceLowercase: false,
         onChange: onChangecb
        /* autocomplete: {
             source: googleSuggest,

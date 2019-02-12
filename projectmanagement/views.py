@@ -115,9 +115,12 @@ def create_project(request):
             keywords=request.POST.get('keywords')
             key_list=keywords.split(',')
             for i in key_list:
-                para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,
-                                       active=2)
-                para_obj.save()
+                para_obj=ProjectParameter.objects.get_or_none(parameter_type='NUM',name__iexact=i,project=obj,active=2)
+                if para_obj:
+                    para_obj.is_beneficiary_type=True
+                    para_obj.save()
+                else:
+                    para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,active=2)
             
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
