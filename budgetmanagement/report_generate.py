@@ -738,6 +738,7 @@ def get_report_quarterlist(projectreportobj,projectobj):
 # Without it, things can get real confusing, real fast.
 @check_loggedin_access
 def finalreportdesign(request):
+    
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     key = request.GET.get('key')

@@ -32,11 +32,11 @@ def admin_dashboard(request):
     obj_list = urs_tags.userprojectlist(user_obj)
     #this is to filter based on cause area 
     if request.method == 'POST' :
-        cause_area_id=request.POST.get('cause_area')
-        dash_year=request.POST.get('dashboard_year')
+        cause_area_id=request.POST.get('cause_area','')
+        dash_year=request.POST.get('dashboard_year','')
     else:
-        cause_area_id=request.GET.get('cause_area')
-        dash_year=request.GET.get('dashboard_year')
+        cause_area_id=request.GET.get('cause_area','')
+        dash_year=request.GET.get('dashboard_year','')
     if cause_area_id:
         cause_area_id = int(cause_area_id)
         obj_list=obj_list.filter(cause_area__id__in=[cause_area_id])
