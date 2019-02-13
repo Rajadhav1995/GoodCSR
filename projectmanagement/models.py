@@ -241,20 +241,11 @@ class Project(BaseContent):
                           }
         return project_budget
 
-    # def save(self):
-    #     super(Project, self).save()
-    #     date = datetime.date.today()
-    #     self.slug = '%i-%s' % (
-    #         date.day, slugify(self.name)
-    #     )
-    #     super(Project, self).save()'
-    
     # to get parameter-value in projectlist
     def project_parameter_value(self):
         
         parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True,keyparameter__active=2).aggregate(Sum('parameter_value'))
 
-        #parameter_value ={'parameter_value':int(para_val)}
         return int(parameter_value.get('parameter_value__sum') if parameter_value.get('parameter_value__sum') else 0)
     def get_todays_tasks(self,today,user,status):
         from taskmanagement.models import Task

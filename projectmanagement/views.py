@@ -80,7 +80,6 @@ def create_project(request):
         location = ProjectLocation.objects.filter(object_id=obj.id,active=2)
         city_list = Boundary.objects.filter(boundary_level=3).order_by('name')
         keyss = ','.join([str(i.name) for i in ProjectParameter.objects.filter(is_beneficiary_type=True,active=2,project=obj)])
-        #key_list = ','.join([ str(i) for i in ProjectParameter.objects.filter().values_list('name',flat=True)])
     except:
         form = ProjectForm()
         location = ''
@@ -112,8 +111,7 @@ def create_project(request):
             total_budget = request.POST.get('total_budget')
             ff = funder_mapping(funder,implementation_partner,total_budget,obj)
             project_location(request,obj,location)
-            #import ipdb;ipdb.set_trace()
-            keywords=request.POST.get('keywords')
+            keywords=request.POST.get('keywords') #this is to create the projectparameters
             key_list=keywords.split(',')
             for i in key_list:
                 para_obj=ProjectParameter.objects.get_or_none(parameter_type='NUM',name__iexact=i,project=obj,active=2)
@@ -122,6 +120,10 @@ def create_project(request):
                     para_obj.save()
                 else:
                     para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,active=2)
+            #this is to change the beneficiary type as false
+            para_obj=ProjectParameter.objects.filter(parameter_type='NUM',project=obj,active=2).exclude(name__in=key_list)
+            if para_obj:
+                para_obj.update(is_beneficiary_type=False)    
 
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
