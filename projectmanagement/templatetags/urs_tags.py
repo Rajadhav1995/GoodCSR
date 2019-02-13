@@ -584,6 +584,7 @@ def filename(obj):
    return logo
 
 #this code is for to filter based on cause area
+#this filter the causearea based on project
 @register.assignment_tag   
 def get_cause_arealist(user_obj):
     obj_list = userprojectlist(user_obj)

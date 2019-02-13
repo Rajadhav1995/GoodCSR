@@ -21,7 +21,7 @@ def admin_dashboard(request):
     # 
     state_count = {}
     uu={}
-    dashboard_year=[2016,2017,2018,2019]
+    dashboard_year=[2016,2017,2018,2019] # this list is to get the dropdown in dashboard
     # 
     user_id = request.session.get('user_id')
     # this function is to show detail view of dashboard
@@ -31,18 +31,20 @@ def admin_dashboard(request):
     # view/edit project
     obj_list = urs_tags.userprojectlist(user_obj)
     #this is to filter based on cause area 
+    # thsi method we are using in  corporatedashboard 
+    ##
     if request.method == 'POST' :
         cause_area_id=request.POST.get('cause_area','')
         dash_year=request.POST.get('dashboard_year','')
     else:
-        cause_area_id=request.GET.get('cause_area','')
-        dash_year=request.GET.get('dashboard_year','')
+        cause_area_id=request.GET.get('cause_area','') #this is to display the causearea in nextpages 
+        dash_year=request.GET.get('dashboard_year','') #this is to display the year filter in nextpages
     if cause_area_id:
         cause_area_id = int(cause_area_id)
-        obj_list=obj_list.filter(cause_area__id__in=[cause_area_id])
+        obj_list=obj_list.filter(cause_area__id__in=[cause_area_id]) # this is to filter the selected causearea 
     if dash_year:
         dash_year=int(dash_year)
-        obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year)
+        obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year) #this is filter the based on year
 
     #    
     project_count = obj_list.count()

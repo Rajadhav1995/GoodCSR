@@ -218,7 +218,6 @@ class Project(BaseContent):
         return completed_tasks
 
     def project_budget_details(self):
-        #import ipdb;ipdb.set_trace()
         from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,
                                             Tranche,BudgetPeriodUnit)
         budgetobj = Budget.objects.latest_one(project = self)
@@ -242,6 +241,8 @@ class Project(BaseContent):
         return project_budget
 
     # to get parameter-value in projectlist
+    # this model method is get the total beneficiaries served
+    
     def project_parameter_value(self):
         
         parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True,keyparameter__active=2).aggregate(Sum('parameter_value'))
