@@ -112,6 +112,7 @@ def create_project(request):
             total_budget = request.POST.get('total_budget')
             ff = funder_mapping(funder,implementation_partner,total_budget,obj)
             project_location(request,obj,location)
+            #import ipdb;ipdb.set_trace()
             keywords=request.POST.get('keywords')
             key_list=keywords.split(',')
             for i in key_list:
@@ -121,7 +122,7 @@ def create_project(request):
                     para_obj.save()
                 else:
                     para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,active=2)
-            
+
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
