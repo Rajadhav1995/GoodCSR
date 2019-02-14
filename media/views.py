@@ -19,6 +19,7 @@ from menu_decorators import check_loggedin_access
 # this views is to manage media
 @check_loggedin_access
 def list_document(request):
+    import ipdb;ipdb.set_trace()
     # this function will list documents of project
     # 
     slug =  request.GET.get('slug')
@@ -116,8 +117,8 @@ def upload_attachment(request):
                 keys = request.POST.get('keywords').split(',')
                 key_model = 'Attachment'
                 keywords = add_keywords(keys,obj,key_model,0)
-            except:
-                pass
+            except Exception as e:
+                e.message
             return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
 
     return render(request,'attachment/doc_upload.html',locals())
@@ -167,8 +168,8 @@ def edit_attachment(request):
                 attach_model = 'Attachment'
 
                 keywords = add_keywords(keys,obj,attach_model,1)
-            except:
-                pass
+            except Exception as e:
+                e.message
             return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(request.GET.get('slug'),model))
     return render(request,'attachment/doc_upload.html',locals())
 

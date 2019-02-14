@@ -37,20 +37,13 @@ from budgetmanagement.report_generate import *
 #already written and he instantly determines his progress and knows how much 
 #further he needs to go.
 
-@check_loggedin_access
-def remove_functionality_pdf_view(request):
-    slug = request.GET.get('slug')
-    report_id = request.GET.get('report_id')
-    pdf_key = int(request.GET.get('key'))
-    report_type = int(request.GET.get('report_type'))
+def get_pdf_view_download(slug,report_id,pdf_key,report_type,locals_list):
     image = PMU_URL
-    #to display the cover page and summary page sections calling the functions by passing request #STARTS)
-    locals_list = display_blocks(request)
-    # end of the display cover page and summary #ENDS
+    locals_list=locals_list
     projectobj = Project.objects.get_or_none(slug=slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     # test the projectreport_obj
-    projectreportobj = ProjectReport.objects.get_or_none(id=request.GET.get('report_id'))
+    projectreportobj = ProjectReport.objects.get_or_none(id=report_id)
     quest_list = Question.objects.filter(active=2,block__block_type = 0)
     answer_list = report_question_list(quest_list,projectreportobj,projectobj)
     if report_type == 1:
@@ -74,10 +67,25 @@ def remove_functionality_pdf_view(request):
     contents,quarters,number_dict = get_index_contents(slug,report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    if pdf_key == 1:
-        return render(request,'report/remove-pdfview.html',locals())
-    else:
-        return render(request,'report/report-template_pdf_copy.html',locals())
+    #if pdf_key == 1:
+    return (locals())
+    #else:
+     #   return render(request,'report/report-template_pdf_copy.html',locals())
+
+@check_loggedin_access
+def remove_functionality_pdf_view(request):
+    print 'statement',request.session.get('user_id')
+    slug = request.GET.get('slug')
+    report_id = request.GET.get('report_id')
+    pdf_key = int(request.GET.get('key'))
+    report_type = int(request.GET.get('report_type'))
+    
+    #to display the cover page and summary page sections calling the functions by passing request #STARTS)
+    locals_list = display_blocks(request)
+    # end of the display cover page and summary #ENDS
+    pdf_locals = get_pdf_view_download(slug,report_id,pdf_key,report_type,locals_list)
+    return render(request,'report/remove-pdfview.html',pdf_locals)
+    
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary

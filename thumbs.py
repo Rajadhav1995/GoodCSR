@@ -109,8 +109,8 @@ class ImageWithThumbsFieldFile(ImageFieldFile):
                 thumb_name = '%s.%sx%s.%s' % (split[0],w,h,split[1])
                 try:
                     self.storage.delete(thumb_name)
-                except:
-                    pass
+                except Exception as e:
+                    e.message
                         
 class ImageWithThumbsField(ImageField):
     attr_class = ImageWithThumbsFieldFile

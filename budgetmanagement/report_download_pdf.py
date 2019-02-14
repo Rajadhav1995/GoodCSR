@@ -44,6 +44,10 @@ def pdf_view(request):
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
 
+from django.template.loader import get_template
+from django.template import Context
+
+
 @check_loggedin_access
 def pdfconverter(request):
     # this function we are using to generate pdf 
@@ -65,16 +69,23 @@ def pdfconverter(request):
     import datetime
     dd = datetime.datetime.today()
     file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
-    try:
+    #try:
         # pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
-        if key == 1:
-            # old report
-            pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
-        else:
-
-            pdfkit.from_url(PMU_URL+'/report/remove/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2'+'&report_type='+str(report_obj.report_type), BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
-    except:
-        return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
+    template = 'report/report-template_pdf_copy.html'
+    from .remove_pdf_view import *
+    import requests
+    import ipdb;ipdb.set_trace()
+    locals_list = requests.get(PMU_URL+'/report/display/blocks/?slug='+str(slug)+'&report_id='+str(report_id))
+    locals_list={}
+    data = get_pdf_view_download(slug,report_id,2,report_obj.report_type,locals_list)
+    
+    template = get_template(template)
+    context = Context(data)
+    html=template.render(context)
+    pdfkit.from_string(html,BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+    #pdfkit.from_url(PMU_URL+'/report/remove/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2'+'&report_type='+str(report_obj.report_type), BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+    #except:
+     #   return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()
     # after generating pdf file we are saving it in
     # /static/pdf-reports/ directory and after that

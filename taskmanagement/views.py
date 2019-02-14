@@ -145,16 +145,16 @@ def get_form_dates_display(form):
     end_date = actual_start_date = actual_end_date = ''
     try:
         end_date = form.data['end_date']
-    except:
-        pass
+    except Exception as e:
+        e.message
     try:
         actual_start_date = form.data['actual_start_date']
-    except:
-        pass
+    except Exception as e:
+        e.message
     try:
         actual_end_date = form.data['actual_end_date']
-    except:
-        pass
+    except Exception as e:
+        e.message
     return end_date,actual_start_date,actual_end_date
 
 @check_loggedin_access
@@ -474,8 +474,8 @@ def my_tasks_details(request):
             if(request.GET.get('month') != None or request.GET.get('year') != None):
                 this_month = request.GET.get('month')
                 this_year = request.GET.get('year')
-        except:
-            pass
+        except Exception as e:
+            e.message
         data = {'status':2,'user':int(user_id), 'month':int(this_month),'year':int(this_year)}
         rdd = requests.get(PMU_URL +'/managing/gantt-chart-data/', data=data)
         taskdict = ast.literal_eval(json.dumps(rdd.content))

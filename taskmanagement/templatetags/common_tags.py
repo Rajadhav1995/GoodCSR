@@ -231,8 +231,8 @@ def get_task_comments(comment_date,task_id):
     comment_data = {}
     try:
         prev_tick = comment_date.second -1
-    except:
-        pass
+    except Exception as e:
+        e.message
     try:
         start_time = comment_date.replace(microsecond=499999,second=prev_tick)
     except:
@@ -482,8 +482,8 @@ def get_from_to_dates(date):
         if date_list:
             start_date = date_list[0]
             end_date = date_list[1]
-    except:
-        pass
+    except Exception as e:
+        e.message
     return start_date,end_date
 
 @register.assignment_tag

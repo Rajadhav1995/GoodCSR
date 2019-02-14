@@ -344,6 +344,7 @@ def display_blocks(request):
     # this is to get the two blocks cover page and project 
     # summary page so that to display the questions in dynamic
     # 
+    import ipdb;ipdb.set_trace()
     project_slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     survey = Survey.objects.get(id=1)
@@ -1010,6 +1011,16 @@ def save_added_fields(request):
         remove_quest_obj.save()
     return JsonResponse({'status':'ok','ids_list':child_quest_list})
     
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary

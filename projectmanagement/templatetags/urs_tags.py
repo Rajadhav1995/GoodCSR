@@ -237,8 +237,8 @@ def get_duration_month(date):
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
         duration = diff_month(end_date,start_date)
-    except:
-        pass
+    except Exception as e:
+        e.message
     return duration
 
 @register.assignment_tag

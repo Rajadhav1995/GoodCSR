@@ -113,21 +113,31 @@ def create_project(request):
             project_location(request,obj,location)
             keywords=request.POST.get('keywords') #this is to create the projectparameters
             key_list=keywords.split(',')
-            for i in key_list:
-                para_obj=ProjectParameter.objects.get_or_none(parameter_type='NUM',name__iexact=i,project=obj,active=2)
-                if para_obj:
-                    para_obj.is_beneficiary_type=True
-                    para_obj.save()
-                else:
-                    para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,active=2)
-            #this is to change the beneficiary type as false
-            para_obj=ProjectParameter.objects.filter(parameter_type='NUM',project=obj,active=2).exclude(name__in=key_list)
-            if para_obj:
-                para_obj.update(is_beneficiary_type=False)    
-
+            para=get_parameter_keywords(keywords,key_list,obj)# this function is to get the projectparameter keywords
+            
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
 
+# this function is to list of projectparameter keywords
+#this function is to update the projectparamter keywords
+##
+def get_parameter_keywords(keywords,key_list,obj):
+    # here we are passing the keywords 
+    # here by using split we are changing to keywords to key_list
+    for i in key_list:
+        para_obj=ProjectParameter.objects.get_or_none(parameter_type='NUM',name__iexact=i,project=obj,active=2)
+        if para_obj:
+            para_obj.is_beneficiary_type=True
+            para_obj.save()
+        else:
+            para_obj,status=ProjectParameter.objects.get_or_create(parameter_type='NUM',name =i,project=obj,is_beneficiary_type=True,active=2)
+        #this is to change the beneficiary type as false
+        para_obj=ProjectParameter.objects.filter(parameter_type='NUM',project=obj,active=2).exclude(name__in=key_list)
+        if para_obj:
+            para_obj.update(is_beneficiary_type=False)  
+    return para_obj
+##
+##
 def funder_mapping(funder,implementation_partner,total_budget,obj):
     #this function is to map implementation partner and funder
     # 
@@ -553,7 +563,6 @@ def manage_parameter_values(request):
     end = project.end_date.year
     parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=parameter).order_by('id')
     names = ProjectParameter.objects.filter(active= 2,parent=parameter)
-    # import ipdb; ipdb.set_trace()
     title_list = []
     title_list.append('Month')
     import calendar
@@ -673,9 +682,10 @@ def get_timeline_process(timeline,milestone):
 
 @check_loggedin_access
 def project_summary(request):
+#
 # to display the project details in project summary page                    
 #Displaying pie chart detail
-# 
+#   
     image_url = PMU_URL
     slug =  request.GET.get('slug')
     user_id = request.session.get('user_id')

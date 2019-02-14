@@ -80,8 +80,8 @@ def manage_funder_relation(request):
     project_slug = request.GET.get('slug')
     try:
         project_funder = request.GET.get('key')
-    except:
-        pass
+    except Exception as e:
+        e.message
     proj_obj = Project.objects.get(slug=project_slug)
     proj_funder_obj = ProjectFunderRelation.objects.get(project=proj_obj)
     funder_user = UserProfile.objects.filter(active=2,organization_type=1)
