@@ -21,7 +21,6 @@ def updateuserform():
         roletypeid = [int(j.id) for j in roletypeid]
         userroleobj.role_type.add(*roletypeid)
         userroleobj.save()
-        print "roles are tagged successuly for - %s"%i
 
 
 from collections import Counter, defaultdict

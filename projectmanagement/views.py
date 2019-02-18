@@ -709,7 +709,7 @@ def project_summary(request):
         year_min = min(years)
         year_max = max(years)
     except Exception as y:
-        print 'Year not found',y
+        y.message
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')

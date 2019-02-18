@@ -178,7 +178,7 @@ def task_comments_progress(date,task_id, attach):
     try:
         task_data = task_updates_list(key,task_progress,start_date,end_date)
     except Exception as t:
-        print "task update error:",t
+        t.message
     # task_data.append(attachment_json_for_comments(task_id,attach))
     task_data = filter(partial(is_not, None), task_data)
     task_data.sort(key=lambda item:item['date'], reverse=True)

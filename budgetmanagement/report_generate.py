@@ -354,7 +354,7 @@ def display_blocks(request):
     project_report = ProjectReport.objects.get_or_none(id=report_id)
     project = Project.objects.get_or_none(slug=project_slug)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    return (locals())
+    return JsonResponse({'data':locals()})
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 

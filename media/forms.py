@@ -125,7 +125,6 @@ class ContactPersonForm(forms.ModelForm):
     organization_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), required=True,max_length=200)
     mobile_number = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
     message = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control text_area'}), required=True)
-#    captcha = ReCaptchaField(attrs={'theme' : 'white'}, required=True)
     captcha = ReCaptchaField(widget=ReCaptchaWidget())
 
     class Meta:
