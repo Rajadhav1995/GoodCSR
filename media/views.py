@@ -19,7 +19,6 @@ from menu_decorators import check_loggedin_access
 # this views is to manage media
 @check_loggedin_access
 def list_document(request):
-    import ipdb;ipdb.set_trace()
     # this function will list documents of project
     # 
     slug =  request.GET.get('slug')

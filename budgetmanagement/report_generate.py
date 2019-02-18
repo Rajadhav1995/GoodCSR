@@ -344,7 +344,6 @@ def display_blocks(request):
     # this is to get the two blocks cover page and project 
     # summary page so that to display the questions in dynamic
     # 
-    import ipdb;ipdb.set_trace()
     project_slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     survey = Survey.objects.get(id=1)
@@ -354,7 +353,7 @@ def display_blocks(request):
     project_report = ProjectReport.objects.get_or_none(id=report_id)
     project = Project.objects.get_or_none(slug=project_slug)
     mapping_view = ProjectFunderRelation.objects.get_or_none(project=project)
-    return JsonResponse({'data':locals()})
+    return (locals())
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
