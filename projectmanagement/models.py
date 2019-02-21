@@ -218,7 +218,6 @@ class Project(BaseContent):
         return completed_tasks
 
     def project_budget_details(self):
-        #import ipdb;ipdb.set_trace()
         from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,
                                             Tranche,BudgetPeriodUnit)
         budgetobj = Budget.objects.latest_one(project = self)
@@ -241,20 +240,13 @@ class Project(BaseContent):
                           }
         return project_budget
 
-    # def save(self):
-    #     super(Project, self).save()
-    #     date = datetime.date.today()
-    #     self.slug = '%i-%s' % (
-    #         date.day, slugify(self.name)
-    #     )
-    #     super(Project, self).save()'
-    
     # to get parameter-value in projectlist
+    # this model method is get the total beneficiaries served
+    
     def project_parameter_value(self):
         
         parameter_value=ProjectParameterValue.objects.filter(keyparameter__project__id=self.id,keyparameter__is_beneficiary_type=True,keyparameter__active=2).aggregate(Sum('parameter_value'))
 
-        #parameter_value ={'parameter_value':int(para_val)}
         return int(parameter_value.get('parameter_value__sum') if parameter_value.get('parameter_value__sum') else 0)
     def get_todays_tasks(self,today,user,status):
         from taskmanagement.models import Task
@@ -302,13 +294,15 @@ class Project(BaseContent):
         import json
         from projectmanagement.views import parameter_pie_chart
         # code for displaying parameters on senior management cards 
-        print "Project params"
         parameter_list = ProjectParameter.objects.filter(active= 2,project=self,parent=None)
         parameter_count = ProjectParameter.objects.filter(active= 2,project=self,parent=None).count()
         master_pip,master_pin,pin_title_name,pip_title_name,number_json,master_sh = parameter_pie_chart(parameter_list)
         return json.dumps({"master_pip":master_pip,"master_pin":master_pin,
         "pin_title_name":pin_title_name,"pip_title_name":pip_title_name,
         "number_json":number_json,"master_sh":master_sh,"parameter_count":int(parameter_count)})
+        
+  
+     
 
         
 ACTIVITY_CHOICES = ((0, 'Primary Activities'), (1, 'Scope of work'))

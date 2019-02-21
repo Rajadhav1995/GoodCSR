@@ -34,7 +34,6 @@ def signin(request):
                 response = requests.post(SAMITHA_URL + '/pmu/login/', json.dumps(data),headers=headers)
             except requests.exceptions.ConnectionError:
                 status_code = "Connection refused"
-        #validation_data = json.loads(response.data)
             validation_data = response.json()
 #        userobj = UserProfile.objects.get_or_none(email=str(request.POST.get('username')))
 #        validation_data = {'status':2,'user_id':int(userobj.user_reference_id) if userobj else ''}
@@ -152,3 +151,9 @@ class PMULoginAPI(APIView):
             #response.update({"status":"0","msg":"Username/Password mismatch"})
             response.update({"status":"0","msg":"Invalid Credentials"})
         return Response(response)
+        
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.        

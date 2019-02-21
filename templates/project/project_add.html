@@ -400,7 +400,7 @@ width:450px;
                                 Parameters Indicating Beneficiary:
                             </label>
                             <div class="col-md-6 col-sm-12 col-xs-12 form-group">
-                                <textarea id="hero-demo" rows="4" name="keywords" class="tag-editor-hidden-src" class="form-control" required></textarea>
+                                <textarea id="hero-demo" rows="4" name="keywords" class="form-control" required></textarea>
                                 <p style="color:grey ;">
                                     (Please press Enter or TAB or ',' after typing each keyword)
                             </div>
@@ -410,10 +410,12 @@ width:450px;
                 <div class="col-md-12">
                     <div class="form-group">
                     <label>Project Image :<font color="red"></font></label>
-                    <input type="file" name="logo"  id="logo" >
+                    <input type="file" name="logo"  id="logo" ></br>
                     {% if obj and obj.logo.path %}
                     <a target="_blank" href="/{{obj.logo}}"></a>
                     <img src="/{{obj.logo}}" style="height: 150px; width:150px; " alt="">
+                    {% else %}
+                    <img src="/static/img/GoodCSR_color_circle.png" style="height: 150px; width:150px; " alt="">
                     {% endif %}
 
                    <!-- {{form.logo}}-->
@@ -724,6 +726,7 @@ $(function () {
         clickDelete : false,
         beforeTagSave : beforeTagSavecb,
         beforeTagDelete : beforeTagDeletecb,
+        forceLowercase: false,
         onChange: onChangecb
        /* autocomplete: {
             source: googleSuggest,

@@ -101,13 +101,13 @@ def add_userroles():
                 userroleobj.role_type.add(ro)
             userroleobj.email = userobj.email
             userroleobj.save()
-            print ('userroles created')
+            #print ('userroles created')
         else:
             org_type_role = get_user_role(userobj)
             if org_type_role not in roleobj.role_type.all():
                 roleobj.role_type.add(org_type_role)
                 roleobj.save()
-                print ('main role added')
+                #print ('main role added')
             
             
             

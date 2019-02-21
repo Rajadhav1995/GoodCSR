@@ -65,16 +65,10 @@ def pdfconverter(request):
     import datetime
     dd = datetime.datetime.today()
     file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
-    try:
-        # pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
-        if key == 1:
-            # old report
-            pdfkit.from_url(PMU_URL+'/report/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2', BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
-        else:
-
-            pdfkit.from_url(PMU_URL+'/report/remove/detail/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2'+'&report_type='+str(report_obj.report_type), BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
-    except:
-        return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
+    #try:
+    pdfkit.from_url(PMU_URL+'/report/pdf/download/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2'+'&report_type='+str(report_obj.report_type), BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
+    #except:
+    return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()
     # after generating pdf file we are saving it in
     # /static/pdf-reports/ directory and after that
@@ -135,3 +129,6 @@ def pdf_footer(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+
+
+

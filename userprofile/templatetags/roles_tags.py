@@ -61,8 +61,8 @@ def has_permission_for_action(request, key):
     # 
     # Check for the permission of user for the action of menu 
     # 
+    #
     
-#    user = request.user or None
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id )
     menu, permission_key = key.split('&')

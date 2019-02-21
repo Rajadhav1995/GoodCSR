@@ -26,55 +26,88 @@
 {% endblock %}
 <!--Content part starts-->
 {% block content %}
+
+<!-- this is to filter the projects-->
 <section class="content-part">
 	<div class="row">
 	<div class="content-top">
-<!--      <div class="select-area">-->
-<!--      	<label>See Data as </label>-->
-<!--        <select name="lang" class="select_box ">-->
-<!--            <option>Quarter1</option>-->
-<!--            <option>Quarter2</option>-->
-<!--            <option>Quarter3</option>-->
-<!--        </select>-->
-<!--        <div class="small-select">-->
-<!--        <select name="lang" class="select_box ">-->
-<!--            <option>2016</option>-->
-<!--            <option>2017</option>-->
-<!--        </select>-->
-<!--        <div class="dropdown user select-down select-width1">-->
-<!--            <a href="javascript:void(0);" class="dropdown-toggle">-->
-<!--              <p>Sep-Dec</p>-->
-<!--              <i class="fa fa-angle-down"></i>-->
-<!--            </a>-->
-<!--            <ul class="dropdown-menu1" style="display:none;">-->
-<!--            -->
-<!--              <li class="user-header">-->
-<!--                <input class="check-box" type="checkbox" id="one" />-->
-<!--                <label for="one"><span><span></span></span> Jan-Mar</label>-->
-<!--              </li>-->
-<!--              <li>-->
-<!--                <input class="check-box" type="checkbox" id="two" />-->
-<!--                <label for="two"><span><span></span></span> Apr-Jul</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="three" />-->
-<!--                <label for="three"><span><span></span></span> Aug-Sep</label>-->
-<!--              </li>-->
-<!--              <li>  -->
-<!--                <input class="check-box" type="checkbox" id="four" />-->
-<!--                <label for="four"><span><span></span></span> Oct-Dec</label>  -->
-<!--              </li>-->
-<!--              -->
-<!--            </ul>-->
-<!--          </div>-->
-<!--        <!--<select multiple="multiple" name="lang" class="select_box">-->
-<!--            <option>Sep-Dec</option>-->
-<!--            <option>Jan-Mar</option>-->
-<!--            <option>Apr-Jul</option>-->
-<!--            <option>Aug-Sep</option>-->
-<!--            <option>Oct-Dec</option>-->
-<!--        </select>-->
-<!--        </div>-->
+ <div class="select-area">
+      <div class="clear"></div>
+    <div class="white-box white-pad">
+      <div class="select_submitsection">
+         <form method = "POST" action = ".">{% csrf_token %}
+
+        <div class="dropdown user select-down select-width">
+              <div class="cause_area">
+          <select class="causearea" name="dashboard_year" id="year_id" style="width:100%">
+             <option value="">By Year</option>
+               {% for i in dashboard_year %}
+                  <option value="{{i}}"{% if i == dash_year %}selected{% endif %}>{{i}}</option>
+               {% endfor %}
+         </select>
+         </div >
+           <div class="cause_area">
+        <select class="causearea" name="cause_area"  id= "id_area" style="width:100%">
+           <option value="">By CauseArea</option>
+              {% get_cause_arealist user_obj as cause_obj %}
+                {% for i in cause_obj %}
+                  <option value="{{i.id}}"{% if i.id == cause_area_id %}selected{% endif %}>{{i.name}}</option>
+                {% endfor %}
+        </select>
+        </div >
+        <div class="submit_cause">
+          <input type="submit" class="link-pad" name='Filter data' value=Submit />
+        </div>
+         
+        </div>
+   </form>
+  <!-- <div class="submit_cause reset_button">
+          <button type="submit" class="link-pad" name='Filter data'  id="id_reset" value=Reset >Reset</button>
+        </div> -->
+   
+               
+</div> 
+
+ <!-- filter section ends here for causearea and year -->
+ 
+        
+        <!--div class="dropdown user select-down select-width1">
+            <a href="javascript:void(0);" class="dropdown-toggle">
+              <p>By Year</p>
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu1" style="display:none;">
+            
+              <li class="user-header">
+                <input class="check-box" type="checkbox" id="one" />
+                <label for="one"><span><span></span></span> Jan-Mar</label>
+              </li>
+              <li>
+                <input class="check-box" type="checkbox" id="two" />
+                <label for="two"><span><span></span></span> Apr-Jul</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="three" />
+                <label for="three"><span><span></span></span> Aug-Sep</label>
+              </li>
+              <li>  
+                <input class="check-box" type="checkbox" id="four" />
+                <label for="four"><span><span></span></span> Oct-Dec</label>  
+              </li>
+              
+            </ul>
+          </div>
+          
+          
+        <!--<select multiple="multiple" name="lang" class="select_box">
+            <option>Sep-Dec</option>
+            <option>Jan-Mar</option>
+            <option>Apr-Jul</option>
+            <option>Aug-Sep</option>
+            <option>Oct-Dec</option>
+        </select>
+        </div>
+>
          </div>
         <!--<form>
           <div class="multiselect">
@@ -96,7 +129,8 @@
             </div>
           </div>
         </form>-->
-       
+        
+        
     <div class="white-box white-pad">
       <h2>Key Program Info</h2>
 <!--<!--        <a class="link-pad" href="javascript:void(0);">Upload Parameters</a>-->
@@ -233,10 +267,10 @@
                 </div>
                 <div class="col-md-10 ">
 						<ul class="col-md-8 nopadding prj_details">
-						<li class="col-md-6 nopadding" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+						<li class="col-md-6 nopadding" style="overflow: hidden; text-overflow: ellipsis">
 							<p>Implementation Partner <br><span>
 							        {% get_funder_mapping i as mapping %}
-                                     {{mapping.implementation_partner.name}}
+                                     {{mapping.implementation_partner.organization}}
                             </span></p>
 						</li>
 						<li class="col-md-6 nopadding" style="overflow: hidden; text-overflow: ellipsis">
@@ -252,7 +286,13 @@
                             </span></p>
 						  </li>
 						  <li  class="col-md-6 nopadding"> 
-							<p> No. of beneficiaries <br><span> {{i.project_parameter_value }} served | {{i.no_of_beneficiaries}} planned</span> </p>
+							<p> No. of beneficiaries <br><span>
+							{% if i.project_parameter_value %} 
+							{{i.project_parameter_value }} served | {{i.no_of_beneficiaries}} planned
+							{% else %}
+							{{i.no_of_beneficiaries}} planned
+							{% endif %}
+							</span> </p>
 						  </li>
 						  <li  class="col-md-12 nopadding">
 						  <div class="col-md-6 nopadding">
@@ -720,7 +760,7 @@
             <ul class="pagination pagination-sm">
                 {% if projectobj.has_previous %}
                 <li>
-                    <a href="?page={{ projectobj.previous_page_number }}">&laquo;</a>
+                    <a href="?page={{ projectobj.previous_page_number }}&cause_area={{cause_area_id}}&dashboard_year={{dash_year}}">&laquo;</a>
                 </li>
                 {% else %}
                 <li class="disabled">
@@ -734,11 +774,11 @@
                 </li>
                 {% else %}
                 <li>
-                    <a href="?page={{ i }}">{{ i }}</a>
+                    <a href="?page={{ i }}&cause_area={{cause_area_id}}&dashboard_year={{dash_year}}">{{ i }}</a>
                 </li>
                 {% endif %} {% endfor %} {% if projectobj.has_next %}
                 <li>
-                    <a href="?page={{ projectobj.next_page_number }}">&raquo;</a>
+                    <a href="?page={{ projectobj.next_page_number }}&cause_area={{cause_area_id}}&dashboard_year={{dash_year}}">&raquo;</a>
                 </li>
                 {% else %}
                 <li class="disabled">
@@ -1607,6 +1647,15 @@ Highcharts.chart('Beneficiary_Distribution', {
 
 
 </script>
+<script>
+$('#id_reset').click(function(){ 
+     $('#year_id').val('');
+     $('#id_area').val('');
+   
+});
+</script>
+                                                     
+
 
 
          <style type="text/css">

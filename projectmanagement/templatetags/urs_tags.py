@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from pmu.settings import (SAMITHA_URL,PMU_URL)
 from projectmanagement.models import (Project, UserProfile,ProjectFunderRelation,ProjectParameter,
-                                        ProjectParameterValue)
+                                        ProjectParameterValue,MasterCategory)
 from budgetmanagement.models import (Budget,ProjectBudgetPeriodConf,BudgetPeriodUnit,
                                 ReportParameter, Question,Answer,QuarterReportSection)
 from media.models import (Comment,Attachment)
@@ -237,8 +237,8 @@ def get_duration_month(date):
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
         duration = diff_month(end_date,start_date)
-    except:
-        pass
+    except Exception as e:
+        e.message
     return duration
 
 @register.assignment_tag
@@ -582,7 +582,19 @@ def filename(obj):
    except:
        logo = ""
    return logo
-   
+
+#this code is for to filter based on cause area
+#this filter the causearea based on project
+@register.assignment_tag   
+def get_cause_arealist(user_obj):
+    obj_list = userprojectlist(user_obj)
+    cause_area_ids=obj_list.values_list('cause_area',flat=True)
+    cause_obj=MasterCategory.objects.filter(id__in=cause_area_ids)
+    respo=[]
+    for i in cause_obj:
+        respo.append({'id':i.id,'name':i.name})
+
+    return respo
    
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 

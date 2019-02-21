@@ -176,7 +176,7 @@ class ReportMilestoneActivity(BaseContent):
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id) or str(self.name) or '-'
 
 
 PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),

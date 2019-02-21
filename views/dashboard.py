@@ -12,13 +12,16 @@ from pmu.settings import PMU_URL
 from django.core.paginator import Paginator,Page
 import json
 #create views of dashboard
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 @check_loggedin_access
 def admin_dashboard(request):
     # this function is to show detail view of dashboard
     # 
     state_count = {}
     uu={}
+    dashboard_year=[2016,2017,2018,2019] # this list is to get the dropdown in dashboard
     # 
     user_id = request.session.get('user_id')
     # this function is to show detail view of dashboard
@@ -27,6 +30,25 @@ def admin_dashboard(request):
     # getting users who has permission to
     # view/edit project
     obj_list = urs_tags.userprojectlist(user_obj)
+    #this is to filter based on cause area 
+    # thsi method we are using in  corporatedashboard 
+    ##
+    if request.method == 'POST' :
+        cause_area_id=request.POST.get('cause_area','') # this is to selecting  the causearea value based on dropdown list 
+        dash_year=request.POST.get('dashboard_year','') # this is to selecting the year from dropdown list
+    ##
+    ##
+    else:
+        cause_area_id=request.GET.get('cause_area','') #this is to display the causearea in nextpages 
+        dash_year=request.GET.get('dashboard_year','') #this is to display the year filter in nextpages
+    if cause_area_id:
+        cause_area_id = int(cause_area_id)
+        obj_list=obj_list.filter(cause_area__id__in=[cause_area_id]) # this is to filter the selected causearea 
+    if dash_year:
+        dash_year=int(dash_year)
+        obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year) #this is filter the based on year
+
+    #    
     project_count = obj_list.count()
     projectuseridlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list("user__id",flat=True)
     projectrole_id = []
@@ -68,11 +90,6 @@ def admin_dashboard(request):
         projectobj = paginator.page(paginator.num_pages)
     return render(request,'corporate_dashboard.html',locals())
     
-def get_cause_area(c_id):
-    
-    cause_area_list=Project.objects.filter(cause_area__id__in=[c_id])
-    
-    return cause_area_list
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 

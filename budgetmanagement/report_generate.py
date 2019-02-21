@@ -72,9 +72,12 @@ def report_form(request):
                 budget_end_date = dates_list[1] if dates_list else '' 
                 budget_start_date = dates_list[0] if dates_list else '' 
                 key = ""
-            project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,created_by = user,\
+            project_report ,created = ProjectReport.objects.get_or_create(project = project_obj,\
                 report_type = data.get('report_type'),start_date  = budget_start_date,
                 name = project_obj.name,end_date = budget_end_date)
+            if created:
+                project_report.created_by = user
+                project_report.save()
             if created or int(project_report.active) == 0 :
                 project_report.active = 2
                 project_report.save()
@@ -615,7 +618,8 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
 # if it is edit then we will get or none of that answer saved already to that 
 #question and append the parameter ids and save it
 # else create new answer with the dict created before
- 
+    parent_paramter_question=None
+    answer=None
     add_section = request.POST.get('add_section')
     para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
     for k in sorted(para_detail):
@@ -638,7 +642,8 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
     user_obj = UserProfile.objects.get_or_none(user_reference_id = request.session.get('user_id'))
     parameter_ids = ReportParameter.objects.filter(quarter = quarterreportobj).values_list("id",flat=True)
     parameter_ids = map(int,parameter_ids)
-    parameter_answer_dict = {
+    if parent_paramter_question:
+        parameter_answer_dict = {
             'quarter':quarterreportobj,
             'question':Question.objects.get_or_none(id=int(parent_paramter_question.id)),
             'inline_answer':parameter_ids,
@@ -646,12 +651,13 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
             'object_id':projectreportobj.id,
             'user':user_obj,
             }
-    answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj)
-    if answer:
-        answer.inline_answer = parameter_ids
-        answer.save()
-    else:
-        answer = Answer.objects.create(**parameter_answer_dict)
+            
+        answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj)
+        if answer:
+            answer.inline_answer = parameter_ids
+            answer.save()
+        else:
+            answer = Answer.objects.create(**parameter_answer_dict)
     return answer
 
 def saving_of_quarters_section(request):
@@ -665,7 +671,7 @@ def saving_of_quarters_section(request):
 #where we get the list of milestone ,parameters.piclist and quarterreport obj ids
 # based on the ids we can get the values of that inputs and save the details
 # this is done for other current and next quarters or monthly report
-#
+#   
     slug = request.GET.get('slug')
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))
@@ -692,6 +698,7 @@ def saving_of_quarters_section(request):
 # clients requirement not to provide paramerter selection in previous quarter list so commented
 # end of parameter saving function
 #    to save the Current quarter updates:
+    
     quarter_list = currentquarter_list
     
     current_itemlist = [str(k) for k,v in request.POST.items() if '_2_' in str(k) if k.split('_')[1]=='2']
@@ -731,6 +738,7 @@ def get_report_quarterlist(projectreportobj,projectobj):
 # Without it, things can get real confusing, real fast.
 @check_loggedin_access
 def finalreportdesign(request):
+    
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     key = request.GET.get('key')
@@ -1002,6 +1010,16 @@ def save_added_fields(request):
         remove_quest_obj.save()
     return JsonResponse({'status':'ok','ids_list':child_quest_list})
     
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast.
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary

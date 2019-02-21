@@ -116,8 +116,8 @@ def upload_attachment(request):
                 keys = request.POST.get('keywords').split(',')
                 key_model = 'Attachment'
                 keywords = add_keywords(keys,obj,key_model,0)
-            except:
-                pass
+            except Exception as e:
+                e.message
             return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(slug,model))
 
     return render(request,'attachment/doc_upload.html',locals())
@@ -167,8 +167,8 @@ def edit_attachment(request):
                 attach_model = 'Attachment'
 
                 keywords = add_keywords(keys,obj,attach_model,1)
-            except:
-                pass
+            except Exception as e:
+                e.message
             return HttpResponseRedirect('/upload/list/?slug=%s&model=%s' %(request.GET.get('slug'),model))
     return render(request,'attachment/doc_upload.html',locals())
 

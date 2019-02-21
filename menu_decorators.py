@@ -18,6 +18,8 @@ def check_loggedin_access(view):
     def is_auth(request, *args, **kwargs):
         cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
         user_id = request.session.get('user_id')
+        if not user_id:
+            user_id=request.GET.get('has')
         next = request.GET.get('next')
         keys = ['summary','updates','task-milestone','budget','files','tranches','projecttasks','generate-report']
         if user_id:
@@ -79,3 +81,5 @@ def check_loggedin_access(view):
 #So rather than panicking David simply counts the number of pages he has 
 #already written and he instantly determines his progress and knows how much 
 #further he needs to go.
+
+
