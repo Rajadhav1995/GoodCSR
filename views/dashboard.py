@@ -34,8 +34,10 @@ def admin_dashboard(request):
     # thsi method we are using in  corporatedashboard 
     ##
     if request.method == 'POST' :
-        cause_area_id=request.POST.get('cause_area','')
-        dash_year=request.POST.get('dashboard_year','')
+        cause_area_id=request.POST.get('cause_area','') # this is to selecting  the causearea value based on dropdown list 
+        dash_year=request.POST.get('dashboard_year','') # this is to selecting the year from dropdown list
+    ##
+    ##
     else:
         cause_area_id=request.GET.get('cause_area','') #this is to display the causearea in nextpages 
         dash_year=request.GET.get('dashboard_year','') #this is to display the year filter in nextpages

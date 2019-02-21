@@ -116,7 +116,7 @@ def save_section_answers(quest_ids,project_report,request,data,user):
     for ques in sorted(quest_ids):
         question = Question.objects.get_or_none(id = int(ques))
         answer, created = Answer.objects.get_or_create(question =question,
-            content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user = user )
+            content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id)
         
         if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
             answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 

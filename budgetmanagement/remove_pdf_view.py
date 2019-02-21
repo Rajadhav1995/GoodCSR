@@ -39,7 +39,7 @@ from budgetmanagement.report_generate import *
 
 def get_pdf_view_download(slug,report_id,pdf_key,report_type,locals_list):
     image = PMU_URL
-    locals_list=locals_list
+    locals_list = locals_list
     projectobj = Project.objects.get_or_none(slug=slug)
     budgetobj = Budget.objects.latest_one(project = projectobj,active=2)
     # test the projectreport_obj
@@ -97,3 +97,17 @@ def remove_functionality_pdf_view(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+
+
+def functionality_pdf_view(request):
+    slug = request.GET.get('slug')
+    report_id = request.GET.get('report_id')
+    pdf_key = int(request.GET.get('key'))
+    report_type = int(request.GET.get('report_type'))
+    
+    #to display the cover page and summary page sections calling the functions by passing request #STARTS)
+    locals_list = display_blocks(request)
+    # end of the display cover page and summary #ENDS
+    pdf_locals = get_pdf_view_download(slug,report_id,pdf_key,report_type,locals_list)
+    return render(request,'report/remove-pdfview.html',pdf_locals)
+    

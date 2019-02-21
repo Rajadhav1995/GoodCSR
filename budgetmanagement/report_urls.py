@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from budgetmanagement.report_generate import *
-from budgetmanagement.remove_pdf_view import remove_functionality_pdf_view
+from budgetmanagement.remove_pdf_view import remove_functionality_pdf_view,functionality_pdf_view
 from budgetmanagement.report_download_pdf import (
 									pdfconverter,pdf_header,pdf_footer)
 
@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'pdf/view/footer/$',pdf_footer),
     url(r'removed/fields/$',save_removed_fields),
     url(r'adding/fields/$',save_added_fields),
+    url(r'pdf/download/$',functionality_pdf_view),
 ]
 
 # When working with any programming language, you include comments
