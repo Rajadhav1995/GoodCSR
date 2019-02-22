@@ -109,5 +109,5 @@ def functionality_pdf_view(request):
     locals_list = display_blocks(request)
     # end of the display cover page and summary #ENDS
     pdf_locals = get_pdf_view_download(slug,report_id,pdf_key,report_type,locals_list)
-    return render(request,'report/remove-pdfview.html',pdf_locals)
+    return render(request,'report/report-template_pdf_copy.html',pdf_locals)
     

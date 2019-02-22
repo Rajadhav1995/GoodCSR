@@ -33,6 +33,7 @@ from reportlab.pdfgen import canvas
 import re
 import base64
 
+
 def pdf_view(request):
     fs = FileSystemStorage()
     filename = 'testp.pdf'
@@ -43,6 +44,8 @@ def pdf_view(request):
             return response
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
+        
+
 
 @check_loggedin_access
 def pdfconverter(request):
@@ -68,16 +71,20 @@ def pdfconverter(request):
     #try:
     pdfkit.from_url(PMU_URL+'/report/pdf/download/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2'+'&report_type='+str(report_obj.report_type), BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
     #except:
-    return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
+    #return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()
     # after generating pdf file we are saving it in
-    # /static/pdf-reports/ directory and after that
-    # 
+    #/static/pdf-reports/ directory and after that
+    #
+    #message=render_to_string(BASE_DIR +'/static/pdf-reports/'+ file_name)
     with fs.open(BASE_DIR +'/static/pdf-reports/'+ file_name) as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename='+file_name
-        return response
+         #css = ['static/css/report-style.css']
+         #pdf = pdfkit.from_string(False, options=options,css=css)
+         response = HttpResponse(pdf, content_type='application/pdf')
+         response['Content-Disposition'] = 'attachment; filename='+file_name
+         return response
     return response
+    
 
 def pdf_header(request):
     # this function is to show header

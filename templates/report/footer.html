@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <header>
 <style>
-hr{border-bottom: 2px solid #a63967; width: 100%;margin-top: -1px;float: left}
+/*hr{border-bottom: 2px solid #a63967; width: 100%;margin-top: -1px;float: left}*/
 </style>
 </header>
 <head>
@@ -15,7 +15,7 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-top: -1px;float: left}
               vars[temp_var[0]] = decodeURI(temp_var[1]);
           }
       }
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
+      var css_selector_classes = [ 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -35,7 +35,7 @@ hr{border-bottom: 2px solid #a63967; width: 100%;margin-top: -1px;float: left}
         <tr>
         	<td style="text-align:left"><img src="{{image_url}}/static/img/report/logo.png" style="float:left"></td>
           <td style="text-align:right">
-             <span class="page">
+             <span class="page"></span>
           </td>
         </tr>
   </table>
