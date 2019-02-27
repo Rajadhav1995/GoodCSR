@@ -20,9 +20,14 @@ from menu_decorators import check_loggedin_access
 @check_loggedin_access
 def list_document(request):
     # this function will list documents of project
-    # 
+    #
+    #import ipdb;ipdb.set_trace() 
     slug =  request.GET.get('slug')
-    model = eval(request.GET.get('model'))
+    from django.apps import apps
+    data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
+    app_label=data.get(request.GET.get(str('model')))
+    model = apps.get_model(app_label,request.GET.get(str('model')))
+    #model = eval(request.GET.get('model'))
     try:
         obj = model.objects.get(slug=slug)
     except:

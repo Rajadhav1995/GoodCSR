@@ -26,6 +26,7 @@ from menu_decorators import check_loggedin_access
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import csv
 
+
 # Views for projectmanagement
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
     #this function is to manage project location 
@@ -531,14 +532,19 @@ def manage_parameter_values1(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
-@check_loggedin_access
+
+#@check_loggedin_access
 def remove_record(request):
     # This is common method to delete(deactivate) record from db. 
     # Pass model name and its id
     # 
+    #import ipdb;ipdb.set_trace()
     url=request.META.get('HTTP_REFERER')
     ids =  request.GET.get('id')
-    model =  eval(request.GET.get('model'))
+    from django.apps import apps
+    data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
+    app_label=data.get(request.GET.get(str('model')))
+    model = apps.get_model(app_label,request.GET.get(str('model')))
     deact = model.objects.get(id=ids).switch()
     if request.GET.get('model') == 'ProjectReport':
         model.objects.get(id=ids).delete_report_answers()
