@@ -26,6 +26,7 @@ from menu_decorators import check_loggedin_access
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import csv
 
+
 # Views for projectmanagement
 def manage_project_location(request,location_count,obj,city_var_list,rem_id_list):
     #this function is to manage project location 
@@ -531,24 +532,28 @@ def manage_parameter_values1(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
-@check_loggedin_access
+
+#@check_loggedin_access
 def remove_record(request):
     # This is common method to delete(deactivate) record from db. 
     # Pass model name and its id
-    # 
-    url=request.META.get('HTTP_REFERER')
-    ids =  request.GET.get('id')
-    model =  eval(request.GET.get('model'))
-    deact = model.objects.get(id=ids).switch()
-    if request.GET.get('model') == 'ProjectReport':
-        model.objects.get(id=ids).delete_report_answers()
-    if request.GET.get('model') == 'Tranche':
-        deact = model.objects.get(id=ids)
-        project = Project.objects.get(id=int(deact.project.id))
-        budgetobj = Budget.objects.latest_one(project = project,active=2)
-        final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
-        auto_update_tranche_amount(final_budget_utilizedamount,project)
-    return HttpResponseRedirect(url)
+    #
+	url=request.META.get('HTTP_REFERER')
+	ids =  request.GET.get('id')
+	from django.apps import apps
+	data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
+	app_label=data.get(request.GET.get(str('model')))
+	model = apps.get_model(app_label,request.GET.get(str('model')))
+	deact = model.objects.get(id=ids).switch()
+	if request.GET.get('model') == 'ProjectReport':
+		model.objects.get(id=ids).delete_report_answers()
+	if request.GET.get('model') == 'Tranche':
+		deact = model.objects.get(id=ids)
+		project = Project.objects.get(id=int(deact.project.id))
+		budgetobj = Budget.objects.latest_one(project = project,active=2)
+		final_budget_utilizedamount = get_project_budget_utilized_amount(project,budgetobj)
+		auto_update_tranche_amount(final_budget_utilizedamount,project)
+	return HttpResponseRedirect(url)
 
 @check_loggedin_access
 def manage_parameter_values(request):

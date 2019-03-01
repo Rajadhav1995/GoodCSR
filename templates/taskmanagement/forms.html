@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load roles_tags %}
+{% load roles_tags urs_tags %}
 {% block section %}
 <div></div>
 {% endblock %}
@@ -12,12 +12,75 @@
     #date_error,#min_max {color : red;}
 </style>
 
+<!--Green pad starts-->
+<section class="green-pad green-height">
+	<div class="row">
+
+	<div class="image-pad orglogo ">
+	    {% get_org_logo projectobj as org_logo %}
+    	<a href="javascript:void(0);"> {% if org_logo.0 %}<img src="{{org_logo.0}}"  alt="" title="" height='117px' width = '100px'> {% else %}<img src="/static/img/GoodCSR_color_circle.png" alt="" title="" height='117px' width = '100px'> {% endif %}</a><a href="javascript:void(0);">
+<!--    	<img src="img/logo-n.png" alt="" title="" ></a>-->
+    </div>
+    <div class="title-left">
+    {% get_funder projectobj as project_funders %}
+     {% if project_funders.project %}
+    <h4><a href="javascript:void(0);" id="popup"><p class="trunc" style="width:620px;">{{project_funders.project.name}} ⓘ<p></a></h4>
+    {% else %}
+    <h4><a href = '#'>Project Name </a></h4>
+    {% endif %}
+    <ul>
+
+    	<li><a href="javascript:void(0)"> Funded by: {% if project_funders.funder.organization %} {{project_funders.funder.organization}}  {% else %} {% endif %}</a></li>
+        <li> <a href="javascript:void(0)">NGO Partner: {% if project_funders.implementation_partner.organization %}{{project_funders.implementation_partner.organization}} {% else %} {{project_funders.implementation_partner.name}}  {% endif %}</a></li>
+    </ul>
+    </div>
+    
+    {% with "generate-report"|make_string:"view" as keystring %}
+        {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+    <a id="myBtn1" class="green-link green-link1" href="/report/listing/?slug={{request.GET.slug}}&key=generate-report" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a>
+    {% endif %}
+    {% endwith %}
+    
+
+<!--    <a id="myBtn1" class="green-link green-link1" href="/report/survey/quarter/?slug={{request.GET.slug}}" style="margin-top:30px;"> &nbsp;Temp Generate Report</a>-->
+<!--    <a id="myBtn1" class="green-link green-link1" href="/report/final/design/?slug={{request.GET.slug}}" style="margin-top:30px;"> &nbsp;Generate Report with design</a>-->
+
+    <!-- <a id="myBtn1" class="green-link green-link1 iframe" href="/report/generation-form/?slug={{request.GET.slug}}" style="margin-top:30px;"> <img src="/static/img/generator-report.png" alt=""> &nbsp;Generate Report</a> -->
+        {% get_special_menu_list as menu %}
+         <div class="menu-bottom">
+            <ul>
+            {% for i in menu %}
+                {% with i.slug|make_string:"view" as keystring %}
+                    {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
+                        {% if i.slug == "project-summary" %}
+                        <li><a  {% if key == "summary" %} class="active" {% endif %} href="/project/summary/?slug={{request.GET.slug}}&key=summary">Summary</a></li>
+                        {% elif i.slug == "updates" %}
+                        <li><a  {% if key == "updates" %} class="active" {% endif %} href="/dashboard/updates/?slug={{request.GET.slug}}&key=updates">Updates</a></li>
+                        {% elif i.slug == "tasks-milestones" %}
+                        <li><a {% if key == "task-milestone" %} class="active" {% endif %} href="/managing/listing/?slug={{request.GET.slug}}&key=task-milestone">Activities & Milestones</a></li>
+                        {% elif i.slug == "budget" %}
+                        <li><a {% if key == "budget" %} class="active" {% endif %} href="/manage/project/budget/view/?slug={{request.GET.slug}}&key=budget">Budget</a></li>
+                        {% elif i.slug == "files" %}
+                        <li><a {% if key == "files" %} class="active" {% endif %} href="/upload/list/?slug={{request.GET.slug}}&model=Project&key=files">Files</a></li>
+                        {% elif i.slug == "tranches" %}
+                        <li><a {% if key == "tranches" %} class="active" {% endif %} href="/project/tranche/list/?slug={{request.GET.slug}}&key=tranches">Tranches</a></li>
+                        {% elif i.slug == "project-tasks" %}
+                        <li><a {% if key == "projecttasks" %} class="active" {% endif %} href = "/managing/my-tasks/details/?slug={{request.GET.slug}}&key=projecttasks&status=1">Project Tasks </a></li>
+                    {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+            </ul>
+ </div>
+</section>
     <!-- Main content -->
 
         {% with "upload-images"|make_string:"add" as keystring %}
             {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
 <section class="content-part">
 	<div class="row">
+        <div class=" white-box white-pad">
+
 	{% if timeline == 1 %}
     <form id="timeline_form" class="form-horizantal budget_form" action="{{request.path}}" method='POST' enctype="multipart/form-data">{% csrf_token %}
     {% else %}
@@ -53,7 +116,7 @@
     </form>
     
     
-    
+    </div>
     </div>
 </section>
 {% else %}
