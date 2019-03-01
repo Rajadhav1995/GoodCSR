@@ -21,26 +21,27 @@ from menu_decorators import check_loggedin_access
 def list_document(request):
     # this function will list documents of project
     #
-	slug =  request.GET.get('slug')
-	from django.apps import apps
-	data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
-	app_label=data.get(request.GET.get(str('model')))
-	model = apps.get_model(app_label,request.GET.get(str('model')))
-	try:
-		obj = model.objects.get(slug=slug)
-	except:
-		ids = request.GET.get('id')
-		obj = model.objects.get(id=ids)
-	attachment = Attachment.objects.filter(active=2,object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model'))).order_by('-created')
-	image = PMU_URL
-	key = request.GET.get('key')
-	user_id = request.session.get('user_id')
-	user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-	from taskmanagement.views import get_assigned_users
-	status = get_assigned_users(user,obj)
-	projectobj = obj
-	project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
-	return render(request,'attachment/listing.html',locals())
+    slug =  request.GET.get('slug')
+    from django.apps import apps
+    data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
+    app_label=data.get(request.GET.get(str('model')))
+    model = apps.get_model(app_label,request.GET.get(str('model')))
+    #model = eval(request.GET.get('model'))
+    try:
+        obj = model.objects.get(slug=slug)
+    except:
+        ids = request.GET.get('id')
+        obj = model.objects.get(id=ids)
+    attachment = Attachment.objects.filter(active=2,object_id=obj.id,content_type=ContentType.objects.get(model=request.GET.get('model'))).order_by('-created')
+    image = PMU_URL
+    key = request.GET.get('key')
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    from taskmanagement.views import get_assigned_users
+    status = get_assigned_users(user,obj)
+    projectobj = obj
+    project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
+    return render(request,'attachment/listing.html',locals())
 	
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 

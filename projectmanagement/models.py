@@ -191,7 +191,7 @@ class Project(BaseContent):
     object_id = models.IntegerField(_('object ID'))
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")
     history = HistoricalRecords()
-
+    
     def __str__(self):
         return smart_str(self.name) or ''
         

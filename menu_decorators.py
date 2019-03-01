@@ -16,6 +16,7 @@ from pmu.settings import RECAPTCHA_PUBLIC_KEY
 # Without it, things can get real confusing, real fast.
 def check_loggedin_access(view):
     def is_auth(request, *args, **kwargs):
+        #import ipdb;ipdb.set_trace()
         cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
         user_id = request.session.get('user_id')
         if not user_id:
