@@ -533,7 +533,7 @@ def manage_parameter_values1(request):
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
 
-#@check_loggedin_access
+@check_loggedin_access
 def remove_record(request):
     # This is common method to delete(deactivate) record from db. 
     # Pass model name and its id
