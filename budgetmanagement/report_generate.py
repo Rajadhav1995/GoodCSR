@@ -983,7 +983,7 @@ def save_added_fields(request):
     tab=request.GET.get('tab')
 
     remove_quest_obj = RemoveQuestion.objects.get_or_none(id=int(request.GET.get('remove_obj')))
-    ques_list = eval(remove_quest_obj.text)
+    ques_list = literal_eval(remove_quest_obj.text)
     if tab == 'true':
         remove_quest_obj.text = []
         remove_quest_obj.save()

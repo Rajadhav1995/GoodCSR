@@ -118,7 +118,7 @@ def get_parameters_list(quest,quarterreportobj):
     try:
         answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
         answerlist = answerobj.inline_answer
-        parameterlist = ReportParameter.objects.filter(id__in = eval(answerlist),active=2)
+        parameterlist = ReportParameter.objects.filter(id__in = literal_eval(answerlist),active=2)
     except:
         parameterlist = []
     return parameterlist
@@ -128,7 +128,7 @@ def get_milestone_list(quest,quarterreportobj):
     try:
         answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
         answerlist = answerobj.inline_answer
-        act_mile_list = ReportMilestoneActivity.objects.filter(id__in = eval(answerlist))
+        act_mile_list = ReportMilestoneActivity.objects.filter(id__in = literal_eval(answerlist))
     except:
         act_mile_list = []
     return act_mile_list
@@ -198,7 +198,7 @@ def get_removed_quest_list(quest_removed,quest_list,quarter_question_list):
     else:
         remove_obj_id = quest_list.id
         final_quest_list = quarter_question_list.filter(id__in=literal_eval(quest_list.text)).order_by('id')
-        parent_quest = Question.objects.filter(id__in = eval(quest_list.text)).values_list('parent',flat=True)
+        parent_quest = Question.objects.filter(id__in = literal_eval(quest_list.text)).values_list('parent',flat=True)
         for parent in parent_quest:
             if parent :
                 main_quest.append(Question.objects.get_or_none(id=parent))
@@ -239,9 +239,9 @@ def get_previous_removed(sub_questions,quest_removed,remove_id):
         quest_list = None
     if quest_list and quest_list.text != None:
         if quest_removed == 'false':
-            sub_quest_list = sub_questions.exclude(id__in = eval(quest_list.text)).order_by('id')
+            sub_quest_list = sub_questions.exclude(id__in = literal_eval(quest_list.text)).order_by('id')
         else:
-            sub_quest_list = sub_questions.filter(id__in = eval(quest_list.text)).order_by('id')
+            sub_quest_list = sub_questions.filter(id__in = literal_eval(quest_list.text)).order_by('id')
            
     else:
         sub_quest_list = sub_questions

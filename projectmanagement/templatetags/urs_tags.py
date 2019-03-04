@@ -251,7 +251,7 @@ def get_parameter(obj,block_id):
     master_names = []
     report_para = []
     if answer_obj:
-        report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+        report_para = ReportParameter.objects.filter(id__in=literal_eval(answer_obj.inline_answer))
         from projectmanagement.views import parameter_pie_chart,pie_chart_mainlist_report
         for i in report_para:
             if i.keyparameter:
@@ -334,7 +334,7 @@ def get_about_parameter(quarter,obj,block):
     # quarter wise in report detail page
     question_obj = Question.objects.get_or_none(slug='parameter-section',block__order=block)
     answer_obj = Answer.objects.get_or_none(quarter=quarter,object_id=obj.id,question=question_obj)
-    report_para = ReportParameter.objects.filter(id__in=eval(answer_obj.inline_answer))
+    report_para = ReportParameter.objects.filter(id__in=literal_eval(answer_obj.inline_answer))
     for i in report_para:
         detil = i.description
     return detil

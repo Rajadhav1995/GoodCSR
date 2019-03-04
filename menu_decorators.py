@@ -16,7 +16,6 @@ from pmu.settings import RECAPTCHA_PUBLIC_KEY
 # Without it, things can get real confusing, real fast.
 def check_loggedin_access(view):
     def is_auth(request, *args, **kwargs):
-        #import ipdb;ipdb.set_trace()
         cpatcha_public_key = RECAPTCHA_PUBLIC_KEY
         user_id = request.session.get('user_id')
         if not user_id:
@@ -31,7 +30,7 @@ def check_loggedin_access(view):
                 obj_list = userprojectlist(user_obj)
                 get_project_slug_list = obj_list.values_list("slug",flat=True)
                 #if project_slug in get_project_slug_list or key not in keys:
-                if str(project_slug) in get_project_slug_list or request.path == '/dashboard/' or request.GET.get('status') in ['0','2']:
+                if str(project_slug) in get_project_slug_list or request.path == '/dashboard/' or request.path =='/project/remove/record/' or  request.GET.get('status') in ['0','2']:
                     user = signin(request)
                 else:
                     message = "Permission Denined!!!Please Contact Administrator."
