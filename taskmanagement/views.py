@@ -31,7 +31,7 @@ from projectmanagement.common_method import add_modified_by_user
 from menu_decorators import check_loggedin_access
 from media.models import ProjectLocation
 import os
-
+from ast import literal_eval
 @check_loggedin_access
 def listing(request):
     # this function is for listing 
@@ -94,14 +94,14 @@ def add_taskmanagement(request,model_name,m_form):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget = Budget.objects.get_or_none(project = project,active=2)
-    form=eval(m_form)
+    form=TaskForm(user_id ,project.id)
     if not budget:
         message = "Budget is not added"
         return render(request,'taskmanagement/base_forms.html',locals())
     if request.method=='POST':
         if m_form == 'TaskForm':
             task_progress = update_task_completion(request,add,status=None)
-        form=form(user_id,project.id,request.POST,request.FILES)
+        form=TaskForm(user_id,project.id,request.POST,request.FILES)
         if form.is_valid():
             f=form.save(commit=False)
             if m_form == 'TaskForm':
@@ -116,8 +116,97 @@ def add_taskmanagement(request,model_name,m_form):
             form.save_m2m()
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
     else:
-        form=form(user_id,project.id)
+        form=TaskForm(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
+
+###
+# this is the function for to add  activity
+## and edit activity 
+###
+@check_loggedin_access
+def add_activitymanagement(request,model_name,m_form):
+    # this function is to add activity
+    # as well as manage tasks(edit)
+    url=request.META.get('HTTP_REFERER')
+    add = "True"
+    edit=''
+    project = Project.objects.get(slug = request.GET.get('slug'))
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    budget = Budget.objects.get_or_none(project = project,active=2)
+    form=ActivityForm(user_id,project.id)
+    actvity_id = request.GET.get('act_id')
+    if actvity_id:
+        m=Activity.objects.get_or_none(id = int(request.GET.get('act_id')))
+        form= ActivityForm(user_id,project.id,instance=m)
+    else:
+        form= ActivityForm(user_id,project.id)
+    if not budget:
+        message = "Budget is not added"
+        return render(request,'taskmanagement/base_forms.html',locals())
+    if request.method=='POST':
+        if actvity_id:
+            form=ActivityForm(user_id,project.id,request.POST,request.FILES,instance=m)
+        else:
+            form=ActivityForm(user_id,project.id,request.POST,request.FILES)
+        if form.is_valid():
+            f=form.save(commit=False)
+            if m_form == 'TaskForm':
+                f.task_progress = task_progress
+            from projectmanagement.common_method import unique_slug_generator
+            f.slug = unique_slug_generator(f,edit)
+            f.save()
+            if model_name == 'Activity' or model_name == 'Task':
+                f.created_by = user
+                add_modified_by_user(f,request)
+                f.save()
+            form.save_m2m()
+            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+    #else:
+     #   form=ActivityForm(user_id,project.id)
+    return render(request,'taskmanagement/base_forms.html',locals())
+
+###
+# this is the form for to add milestone
+## and for edit milestone  
+###
+
+@check_loggedin_access
+def add_milestonemanagement(request,model_name,m_form):
+    # this function is to add task 
+    # as well as manage tasks(edit)
+    url=request.META.get('HTTP_REFERER')
+    add = "True"
+    edit=''
+    project = Project.objects.get(slug = request.GET.get('slug'))
+    user_id = request.session.get('user_id')
+    user = UserProfile.objects.get_or_none(user_reference_id = user_id)
+    budget = Budget.objects.get_or_none(project = project,active=2)
+    form=MilestoneForm(user_id ,project.id)
+    if not budget:
+        message = "Budget is not added"
+        return render(request,'taskmanagement/base_forms.html',locals())
+    if request.method=='POST':
+        if m_form == 'TaskForm':
+            task_progress = update_task_completion(request,add,status=None)
+        form=MilestoneForm(user_id,project.id,request.POST,request.FILES)
+        if form.is_valid():
+            f=form.save(commit=False)
+            if m_form == 'TaskForm':
+                f.task_progress = task_progress
+            from projectmanagement.common_method import unique_slug_generator
+            f.slug = unique_slug_generator(f,edit)
+            f.save()
+            if model_name == 'Activity' or model_name == 'Task':
+                f.created_by = user
+                add_modified_by_user(f,request)
+                f.save()
+            form.save_m2m()
+            return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
+    else:
+        form=MilestoneForm(user_id,project.id)
+    return render(request,'taskmanagement/base_forms.html',locals())
+
 
 def get_form_saved(form,edit,task_progress,user,project,form_dict):
     # this function is for saving form
@@ -167,9 +256,15 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     task_progress =''
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
-    form=eval(m_form)
-    m=eval(model_name).objects.get_or_none(slug = str(slug))
-    project = Project.objects.get(slug =request.GET.get('slug') )
+    project = Project.objects.get(slug =request.GET.get('slug'))
+    if m_form == 'TaskForm':
+        form=TaskForm(user_id ,project.id)
+    else:
+	    form = MilestoneForm(user_id,project.id)
+    if model_name == 'Task':
+        m=Task.objects.get_or_none(slug = str(slug))
+    else:
+		m = Milestone.objects.get_or_none(slug=str(slug))
     project_startdate = project.start_date.strftime('%Y-%m-%d')
     if model_name == 'Task':
         is_dependent = 'true' if m.task_dependency.all() else ''
@@ -177,7 +272,9 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         if m_form == 'TaskForm':
             task_progress = m.task_progress 
             task_progress = update_task_completion(request,add,m.status)
-        form=form(user_id,project.id,request.POST,request.FILES,instance=m)
+            form = TaskForm(user_id,project.id,request.POST,request.FILES,instance=m)
+        else:
+            form = MilestoneForm(user_id,project.id,request.POST,request.FILES,instance=m)
         end_date,actual_start_date,actual_end_date = get_form_dates_display(form)
         
         form_dict = {'m_form':m_form,'m':m,'model_name':model_name,'request':request}
@@ -186,11 +283,11 @@ def edit_taskmanagement(request,model_name,m_form,slug):
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
         
     else:
-         form=form(user_id,project.id,instance=m)
-    if model_name == 'Task':
-        return render(request,'taskmanagement/edit_task.html',locals())
-    else:
-        return render(request,'taskmanagement/base_forms.html',locals())
+        if m_form == 'TaskForm':
+            form=TaskForm(user_id,project.id,instance=m)
+        else:
+            form=MilestoneForm(user_id,project.id,instance=m)
+    return render(request,'taskmanagement/edit_task.html',locals())
 
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
@@ -250,7 +347,7 @@ def milestone_overdue(request):
     # the max end date of the tasks tagged to the milestone
     # 
     task_ids = request.GET.get('id')
-    tasks_obj = Task.objects.filter(active=2,id__in = eval(task_ids)).values_list('end_date',flat = True)
+    tasks_obj = Task.objects.filter(active=2,id__in = literal_eval(task_ids)).values_list('end_date',flat = True)
     try:
         milestone_overdue = max(tasks_obj).strftime('%Y-%m-%d')
     except:
@@ -534,7 +631,7 @@ def task_comments(request):
     key = request.GET.get('key')
     status=request.GET.get('status')
     try:
-        nexts = eval(request.POST.get('next'))
+        nexts =literal_eval(request.POST.get('next'))
         url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1]+'&'+str(nexts[3][0])+'='+str(nexts[3][1]))
     except:
         url = url
@@ -601,7 +698,7 @@ def get_tasks_objects(request):
     # 
     ids = request.GET.get('id')
     start_dates=[]
-    task_list = Task.objects.filter(active=2,id__in = eval(ids))
+    task_list = Task.objects.filter(active=2,id__in = literal_eval(ids))
     populated_dates = ExpectedDatesCalculator(**{'task_list':task_list})
     expected_dates = populated_dates.data
     task_ids = task_list.values_list('id',flat=True)
@@ -874,7 +971,7 @@ def get_activites_list(request):
     ids = request.GET.get('id')
     activity=[]
     if ids != '[]':
-        obj_list = Activity.objects.filter(active=2,super_category__in = eval(ids))
+        obj_list = Activity.objects.filter(active=2,super_category__in = literal_eval(ids))
     else:
         slug = request.GET.get('slug')
         obj_list = Activity.objects.filter(active=2,project__slug=slug)
@@ -896,7 +993,7 @@ def get_super_selected(request):
     if form == 'TaskForm':
         obj_list = Activity.objects.filter(active=2,id = ids)
     else :
-        obj_list = Activity.objects.filter(active=2,id__in = eval(ids))
+        obj_list = Activity.objects.filter(active=2,id__in = literal_eval(ids))
         
     super_categories = [i.super_category.id for i in obj_list]
     return JsonResponse({"super_categories":super_categories})
@@ -906,7 +1003,7 @@ def get_activity_selected(request):
     # this funtion is to get selected activity
     # 
     ids = request.GET.get('id')
-    obj_list = Task.objects.filter(active=2,id__in = eval(ids))
+    obj_list = Task.objects.filter(active=2,id__in = literal_eval(ids))
     activity = [i.activity.id for i in obj_list]
     return JsonResponse({"activity":activity})
 
@@ -927,7 +1024,7 @@ from django.http import JsonResponse
 def get_activity_tasks(request):
     # this funtion is to get activity tasks
     ids = request.GET.get('id')
-    obj_list = Activity.objects.filter(id__in = eval(ids)).values_list('id',flat=True)
+    obj_list = Activity.objects.filter(id__in = literal_eval(ids)).values_list('id',flat=True)
     task_list = Task.objects.filter(active=2,activity__id__in = obj_list)
     tasks = [{'id':i.id,'name':i.name} for i in task_list]
     return JsonResponse({"task":tasks})
@@ -937,7 +1034,7 @@ def tasks_max_end_date(request):
     # this funtion is to get maximum date of task and end date of task
     # 
     ids = request.GET.get('id')
-    tasks_end_dates = Task.objects.filter(active=2,id__in = eval(ids)).values_list('end_date',flat=True)
+    tasks_end_dates = Task.objects.filter(active=2,id__in = literal_eval(ids)).values_list('end_date',flat=True)
     expected_start_date = max(tasks_end_dates).strftime('%Y-%m-%d')
     return JsonResponse({'expected_start_date':expected_start_date})
 

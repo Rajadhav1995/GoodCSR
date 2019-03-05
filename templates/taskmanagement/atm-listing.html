@@ -80,7 +80,7 @@
                   {% get_user_permission_pmo request as user_obj %}
                     {% with "activities"|make_string:"add" as keystring %}
                         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-                    <a class="add-task" href="/managing/Activity/ActivityForm/add/?slug={{project.slug}}">Add Activity</a>
+                    <a class="add-task" href="/managing/Activity/ActivityForm/addactivity/?slug={{project.slug}}">Add Activity</a>
                     {% endif %}
                     {% endwith %}
       </div>
@@ -158,7 +158,7 @@
             <div class="clear"></div>
                 {% with "milestone"|make_string:"add" as keystring %}
                         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-                <a class="add-task" href="/managing/Milestone/MilestoneForm/add/?slug={{project.slug}}">Add Milestone</a>
+                <a class="add-task" href="/managing/Milestone/MilestoneForm/addmilestone/?slug={{project.slug}}">Add Milestone</a>
                 {% endif %}
                 {% endwith %}
          </div>
@@ -1198,14 +1198,15 @@ var act_task = {{super_list.1|safe}}
 <!--SCRIPT FOR DELAY DRILL DOWN (ENDS)    -->
 <script>
 function activity(name,slug,act_id,super_cat_id) {
-    window.location.href="/managing/Activity/ActivityForm/edit/"+ name +"/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
+    window.location.href="/managing/Activity/ActivityForm/addactivity/?slug="+slug+"&act_id="+act_id+"&category_id="+super_cat_id;
 }
 function task(name,slug,task_id,act_id,super_id) {
     window.location.href="/managing/Task/TaskForm/edit/"+ name +"/?slug="+slug+"&task_id="+task_id+"&act_id="+act_id+"&category_id="+super_id;
 }
 
 function milestone(name,slug,mile_id,task_ids) {
-    window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
+   //window.location.href="/managing/Milestone/MilestoneForm/addmilestone/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
+   window.location.href="/managing/Milestone/MilestoneForm/edit/"+ name +"/?slug="+slug+"&mile_id="+mile_id+"&task_ids="+task_ids;
 }
 function remove_item(name,model,item_id,slug) {
     if (confirm('Are you sure you want to Delete?')) {

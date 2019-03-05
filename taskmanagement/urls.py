@@ -26,6 +26,9 @@ urlpatterns = [
     url(r'activities/selected/$',get_activity_selected),
     url(r'^activity/related/tasks/$',get_activity_tasks),
     url(r'^task/remove/$',remove_task),
+    url(r'^(?P<model_name>[\w-]+)/(?P<m_form>[\w-]+)/addactivity/$',add_activitymanagement),
+    url(r'^(?P<model_name>[\w-]+)/(?P<m_form>[\w-]+)/addmilestone/$',add_milestonemanagement),
+    
 #    url(r'^tasks/maximum/end_date/$',tasks_max_end_date),
     
 #    url(r'^tasks/updates/(?P<obj_id>.*)/$',taskdateupdates),
