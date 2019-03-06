@@ -255,7 +255,7 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
     if quest_list and quest_list.text != None:
         remove_id = quest_list.id
-        for i in eval(quest_list.text):
+        for i in literal_eval(quest_list.text):
             ques = Question.objects.get_or_none(id=int(i))
             if ques.parent == None:
                 parent_ques.append(ques)
@@ -289,12 +289,12 @@ def get_removed_populate_questions(questions,project_report,block_type,quest_rem
     quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
     if quest_list and quest_list.text != None :
         remove_id = quest_list.id
-        for i in eval(quest_list.text):
+        for i in literal_eval(quest_list.text):
             ques = Question.objects.get_or_none(id=int(i))
             if ques.parent != None:
                 removed_ques.append(ques)
         if quest_removed == 'false':
-            final_questions = questions.exclude(id__in = eval(quest_list.text)).order_by('id')
+            final_questions = questions.exclude(id__in = literal_eval(quest_list.text)).order_by('id')
         else:
             final_questions = questions.filter(id__in = [rmv.id for rmv in removed_ques]).order_by('id')
     elif not quest_list and quest_removed == 'true':
@@ -367,7 +367,7 @@ def get_milestones(quarter,report_obj,type_id):
     answer = Answer.objects.get_or_none(question=question,quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
     if answer:
         milestones = answer.inline_answer if answer else ''
-        miles_list = ReportMilestoneActivity.objects.filter(id__in = eval(milestones))
+        miles_list = ReportMilestoneActivity.objects.filter(id__in =literal_eval(milestones))
         for i in miles_list:
             data = {'name':i.name,'description':i.description,'id':i.id}
             report_miles.append(data)
@@ -623,3 +623,37 @@ def get_attachment_type(file_name):
 def get_projct_location(projectobj):
     project_location = ProjectLocation.objects.filter(active=2,content_type = ContentType.objects.get(model='project'),object_id=projectobj.id)
     return project_location
+
+
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 

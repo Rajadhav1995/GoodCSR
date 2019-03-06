@@ -67,14 +67,10 @@ def get_pdf_view_download(slug,report_id,pdf_key,report_type,locals_list):
     contents,quarters,number_dict = get_index_contents(slug,report_id)
     for key, value in sorted(contents.iteritems(), key=lambda (k,v): (v,k)):
         contents[key]=value
-    #if pdf_key == 1:
     return (locals())
-    #else:
-     #   return render(request,'report/report-template_pdf_copy.html',locals())
 
 @check_loggedin_access
 def remove_functionality_pdf_view(request):
-    print 'statement',request.session.get('user_id')
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     pdf_key = int(request.GET.get('key'))

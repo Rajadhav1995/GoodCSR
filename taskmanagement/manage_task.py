@@ -10,11 +10,13 @@ from menu_decorators import check_loggedin_access
 @check_loggedin_access
 def remove_task(request):
 	url=request.META.get('HTTP_REFERER')
-	
-	model_name = eval(request.GET.get('model'))
-	
+        from django.apps import apps
+	data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
+	app_label=data.get(request.GET.get(str('model')))
+	model = apps.get_model(app_label,request.GET.get(str('model')))
+		
 	if request.GET.get('model') == 'Task':
-		obj = model_name.objects.get(slug=request.GET.get('name'))
+		obj = model.objects.get(slug=request.GET.get('name'))
 		obj.active = 0
 		obj.save()
 		milestone = Milestone.objects.filter(task=obj)
@@ -22,7 +24,7 @@ def remove_task(request):
 			j.active = 0
 			j.save()
 	elif request.GET.get('model') == 'Activity':
-		obj = model_name.objects.get(slug=request.GET.get('name'))
+		obj = model.objects.get(slug=request.GET.get('name'))
 		obj.active = 0
 		obj.save()
 		activity = Task.objects.filter(activity=obj)
@@ -34,7 +36,24 @@ def remove_task(request):
 				k.active = 0
 				k.save()
 	else:
-		obj = model_name.objects.get(slug=request.GET.get('name'))
+		obj = model.objects.get(slug=request.GET.get('name'))
 		obj.active = 0
 		obj.save()
 	return HttpResponseRedirect(url)
+
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 

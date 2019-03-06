@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from projectmanagement.models import (UserProfile,)
 from userprofile.models import (RoleTypes,UserRoles,ProjectUserRoleRelationship)
-
+from ast import literal_eval
 def get_user_role(userprofileobj):
     org_code = {'1':1,'2':2,'4':4,'0':3}
     code = org_code.get(str(userprofileobj.organization_type))
@@ -34,7 +34,7 @@ class UserInformationStorage(APIView):
                     'name':data.get('name'),
                     'designation':data.get('designation'),
                     'active':data.get('active'),
-                    'attrs':eval(data.get('attrs')),
+                    'attrs':literal_eval(data.get('attrs')),
                     }
         userprofileobj = UserProfile.objects.get_or_none(user_reference_id = data.get('user_reference_id'))
         if not userprofileobj:

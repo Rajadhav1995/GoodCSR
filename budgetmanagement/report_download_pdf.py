@@ -54,7 +54,6 @@ def pdfconverter(request):
     slug = request.GET.get('slug')
     report_id = request.GET.get('report_id')
     project = Project.objects.get_or_none(slug = slug)
-    key = int(request.GET.get('key'))
     # 1 for old pdf and 2 for new pdf
     report_obj = ProjectReport.objects.get(id=report_id)
     options = {
@@ -68,18 +67,9 @@ def pdfconverter(request):
     import datetime
     dd = datetime.datetime.today()
     file_name = project.slug +'_' +dd.strftime('%d_%m_%Y_%s') +".pdf"
-    #try:
     pdfkit.from_url(PMU_URL+'/report/pdf/download/?slug='+str(slug)+'&report_id='+str(report_id)+'&key='+'2'+'&report_type='+str(report_obj.report_type), BASE_DIR +'/static/pdf-reports/'+ file_name,options=options)
-    #except:
-    #return HttpResponseRedirect(PMU_URL+'/static/pdf-reports/'+ file_name)
     fs = FileSystemStorage()
-    # after generating pdf file we are saving it in
-    #/static/pdf-reports/ directory and after that
-    #
-    #message=render_to_string(BASE_DIR +'/static/pdf-reports/'+ file_name)
     with fs.open(BASE_DIR +'/static/pdf-reports/'+ file_name) as pdf:
-         #css = ['static/css/report-style.css']
-         #pdf = pdfkit.from_string(False, options=options,css=css)
          response = HttpResponse(pdf, content_type='application/pdf')
          response['Content-Disposition'] = 'attachment; filename='+file_name
          return response
@@ -136,6 +126,30 @@ def pdf_footer(request):
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
 
 
 
