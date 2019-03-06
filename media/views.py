@@ -26,7 +26,6 @@ def list_document(request):
     data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
     app_label=data.get(request.GET.get(str('model')))
     model = apps.get_model(app_label,request.GET.get(str('model')))
-    #model = eval(request.GET.get('model'))
     try:
         obj = model.objects.get(slug=slug)
     except:
