@@ -23,7 +23,11 @@ def list_document(request):
     #
     slug =  request.GET.get('slug')
     from django.apps import apps
-    data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
+    data={'Project':'projectmanagement','Task':'taskmanagement',
+          'Budget':'budgetmanagement','Userprofile':'userprofile',
+          'Media':'media','Activity':'taskmanagement',
+          'Milestone':'taskmanagement','Tranche':'budgetmanagement',
+          'ProjectReport':'budgetmanagement'}
     app_label=data.get(request.GET.get(str('model')))
     model = apps.get_model(app_label,request.GET.get(str('model')))
     try:

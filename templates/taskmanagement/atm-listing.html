@@ -135,7 +135,7 @@
                     {% with "milestone"|make_string:"edit" as keystring %}
                         {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
                    <i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>
-                   <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}',{{project.slug}})" title="Remove Milestone"></i>
+                   <i class="fa fa-remove" style="float:right; padding-left: 2px;" onclick="remove_item('{{mile.slug}}','Milestone','{{mile.id}}','{{project.slug}}')" title="Remove Milestone"></i>
                    {% endif %}
                    {% endwith %}
 <!--                  <li><a href="javascript:void(0);" mile_id={{mile.id}} task_ids=[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]>{{mile.name}} <span>(Due - {{mile.overdue|date:'jS M'}}){% if mile.status != 2 %}<i class="fa fa-edit" style="float:right" onclick="milestone('{{mile.slug}}','{{project.slug}}','{{mile.id}}','[{% for i in mile.task.all %}{{i.id}}{% if not forloop.last %},{% endif %}{% endfor %}]')"></i>{% endif %}</span>-->
