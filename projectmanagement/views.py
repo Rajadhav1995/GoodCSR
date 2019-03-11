@@ -541,7 +541,8 @@ def remove_record(request):
 	url=request.META.get('HTTP_REFERER')
 	ids =  request.GET.get('id')
 	from django.apps import apps
-	data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement','Userprofile':'userprofile','Media':'media'}
+	data={'Project':'projectmanagement','Task':'taskmanagement','Budget':'budgetmanagement',
+              'Userprofile':'userprofile','Media':'media','ProjectReport':'budgetmanagement','Tranche':'budgetmanagement'}
 	app_label=data.get(request.GET.get(str('model')))
 	model = apps.get_model(app_label,request.GET.get(str('model')))
 	deact = model.objects.get(id=ids).switch()

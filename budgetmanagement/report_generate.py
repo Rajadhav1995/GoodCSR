@@ -113,10 +113,11 @@ def save_section_answers(quest_ids,project_report,request,data,user):
     # common function to save the 
     # two sections data in answer table 
     answer=None
+    answer=Answer.objects.filter(content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,active=2,question_id__in=quest_ids).update(active=0)
     for ques in sorted(quest_ids):
         question = Question.objects.get_or_none(id = int(ques))
         answer, created = Answer.objects.get_or_create(question =question,
-            content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id)
+            content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user=user)
         
         if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
             answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 
@@ -379,7 +380,7 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
                 'object_id':projectreportobj.id,
                 'user':user_obj,
                 }
-                answerobj = Answer.objects.get_or_none(question__id=question_id,quarter=quarterreportobj)
+                answerobj = Answer.objects.filter(question__id=question_id,quarter=quarterreportobj,active=2,user = user_obj).update(active=0)
                 if not answerobj:
                     Answer.objects.create(**answer_dict)
                 else:
@@ -429,7 +430,7 @@ def get_report_based_quarter(request,quarter_list,projectreportobj,previous_item
 
 def quarter_image_save(request,milestoneobj,projectobj,pic_count,pic_list,quarterreportobj):
     #    Common functionality to save the images
-    # 
+    #
     imageobj = None
     milestone_images = {}
     quest_list = Question.objects.filter(slug='upload-picture').values_list('id',flat=True)
@@ -588,7 +589,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
             'object_id':projectreportobj.id,
             'user':user_obj,
             }
-    answer =  Answer.objects.get_or_none(question = milestone_answer_dict.get('question'),quarter=quarterreportobj)
+    answer =  Answer.objects.get_or_none(question = milestone_answer_dict.get('question'),quarter=quarterreportobj,active=2)
     if answer:
         answer.inline_answer = milestone_ids
         answer.save()
@@ -652,7 +653,7 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
             'user':user_obj,
             }
             
-        answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj)
+        answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj,active=2)
         if answer:
             answer.inline_answer = parameter_ids
             answer.save()
