@@ -15,7 +15,7 @@ def remove_task(request):
               'Budget':'budgetmanagement','Userprofile':'userprofile',
               'Media':'media','Activity':'taskmanagement',
               'Milestone':'taskmanagement','Tranche':'budgetmanagement',
-              'ProjectReport':'budgetmanagement'}
+              'ProjectReport':'budgetmanagement','Attachment':'media','Keywords':'media'}
 	app_label=data.get(request.GET.get(str('model')))
 	model = apps.get_model(app_label,request.GET.get(str('model')))
 		
