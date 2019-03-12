@@ -136,7 +136,7 @@ def add_activitymanagement(request,model_name,m_form):
     budget = Budget.objects.get_or_none(project = project,active=2)
     form=ActivityForm(user_id,project.id)
     
-    actvity_id = request.GET.get('act_id') if request.method == 'GET' else request.POST.get('act_id')
+    actvity_id = request.GET.get('act_id','') if request.method == 'GET' else request.POST.get('act_id','')
     if actvity_id:
         m=Activity.objects.get_or_none(id = int(actvity_id))
         form= ActivityForm(user_id,project.id,instance=m)
