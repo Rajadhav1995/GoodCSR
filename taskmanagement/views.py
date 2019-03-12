@@ -135,9 +135,10 @@ def add_activitymanagement(request,model_name,m_form):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget = Budget.objects.get_or_none(project = project,active=2)
     form=ActivityForm(user_id,project.id)
-    actvity_id = request.GET.get('act_id')
+    
+    actvity_id = request.GET.get('act_id') if request.method == 'GET' else request.POST.get('act_id')
     if actvity_id:
-        m=Activity.objects.get_or_none(id = int(request.GET.get('act_id')))
+        m=Activity.objects.get_or_none(id = int(actvity_id))
         form= ActivityForm(user_id,project.id,instance=m)
     else:
         form= ActivityForm(user_id,project.id)
@@ -165,7 +166,6 @@ def add_activitymanagement(request,model_name,m_form):
     #else:
      #   form=ActivityForm(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
-
 ###
 # this is the form for to add milestone
 ## and for edit milestone  
