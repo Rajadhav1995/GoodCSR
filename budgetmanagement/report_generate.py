@@ -113,11 +113,11 @@ def save_section_answers(quest_ids,project_report,request,data,user):
     # common function to save the 
     # two sections data in answer table 
     answer=None
-    answer=Answer.objects.filter(content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,active=2,question_id__in=quest_ids).update(active=0)
+    answer=Answer.objects.filter(content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,active=2,question_id__in=list(set(quest_ids))).update(active=0)
     for ques in sorted(quest_ids):
         question = Question.objects.get_or_none(id = int(ques))
         answer, created = Answer.objects.get_or_create(question =question,
-            content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user=user)
+            content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user=user,active=2)
         
         if request.FILES.get(question.slug+'_'+str(question.id)) and (question.qtype == 'F' or question.qtype == 'API'):
             answer.attachment_file = request.FILES.get(question.slug+'_'+str(question.id)) 
@@ -380,12 +380,15 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
                 'object_id':projectreportobj.id,
                 'user':user_obj,
                 }
-                answerobj = Answer.objects.filter(question__id=question_id,quarter=quarterreportobj,active=2,user = user_obj).update(active=0)
-                if not answerobj:
-                    Answer.objects.create(**answer_dict)
-                else:
-                    answerobj.text = request.POST.get(line)
+                answerobj = Answer.objects.get_or_none(question__id=question_id,quarter=quarterreportobj,active=2)
+                if answerobj:
+                    answerobj.active=0
                     answerobj.save()
+                answer_obj,created = Answer.objects.get_or_create(question__id=question_id,                                              content_type=ContentType.objects.get_for_model(projectreportobj),
+                            object_id=projectreportobj.id,quarter=quarterreportobj,user=user_obj,active=2)
+                answer_obj.text=request.POST.get(line)
+                answer_obj.save()   
+                #Answer.objects.create(**answer_dict)
             elif len(line_list) == 7:
                 milestone_list.append(line)
             elif len(line_list) == 8 and line_list[6] != "parameter":
@@ -556,6 +559,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     # 
     # this function is to save milestone activity
     # 
+    #import ipdb;ipdb.set_trace()
     pic_count = obj_count_list.get('milestone_pic_count')
     milestoneobj = ReportMilestoneActivity.objects.filter(quarter=quarterreportobj,active=2)
     add_section = request.POST.get('add_section')# this is to know whether it is add or edit page
@@ -589,12 +593,14 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
             'object_id':projectreportobj.id,
             'user':user_obj,
             }
-    answer =  Answer.objects.get_or_none(question = milestone_answer_dict.get('question'),quarter=quarterreportobj,active=2)
+    answer =  Answer.objects.get_or_none(question = milestone_answer_dict.get('question'),quarter=quarterreportobj,active=2,user=user_obj)
     if answer:
+        answer.active=0
         answer.inline_answer = milestone_ids
         answer.save()
-    else:
-        answer = Answer.objects.create(**milestone_answer_dict)
+    	answer,created= Answer.objects.get_or_create(question = milestone_answer_dict.get('question'),quarter=quarterreportobj,active=2,user=user_obj,object_id=projectreportobj.id)
+        answer.inline_answer =milestone_ids
+        answer.save()
     return answer
 
 # When working with any programming language, you include comments
@@ -655,10 +661,13 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
             
         answer =  Answer.objects.get_or_none(question = parameter_answer_dict.get('question'),quarter=quarterreportobj,active=2)
         if answer:
+            answer.active=0
             answer.inline_answer = parameter_ids
             answer.save()
-        else:
-            answer = Answer.objects.create(**parameter_answer_dict)
+            answer ,created= Answer.objects.get_or_create(question = parameter_answer_dict.get('question'),quarter=quarterreportobj,content_type=ContentType.objects.get_for_model(projectreportobj),
+object_id=projectreportobj.id,user=user_obj,active=2)
+            answer.inline_answer =parameter_ids
+            answer.save()
     return answer
 
 def saving_of_quarters_section(request):
@@ -673,6 +682,7 @@ def saving_of_quarters_section(request):
 # based on the ids we can get the values of that inputs and save the details
 # this is done for other current and next quarters or monthly report
 #   
+    #import ipdb;ipdb.set_trace()
     slug = request.GET.get('slug')
     projectobj = Project.objects.get_or_none(slug=slug)
     projectreportobj = ProjectReport.objects.get_or_none(id=request.POST.get('report_id'))

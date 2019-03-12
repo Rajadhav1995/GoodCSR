@@ -38,7 +38,7 @@ def get_previous_question_value(quest,quarter,i,report_obj,quarter_obj):
     heading_label = {'previous-quarter-update':"Previous Quarter Updates",'current-quarter-update':"Current Quarter Updates",'next-quarter-update':"Next Quarter Updates",}
     month_label = {'previous-quarter-update':"Previous Month Updates",'current-quarter-update':"Current Month Updates",'next-quarter-update':"Next Month Updates",}
     text = ""
-    answer_obj = Answer.objects.get_or_none(question=quest,quarter=quarter_obj[1],content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+    answer_obj = Answer.objects.get_or_none(question=quest,quarter=quarter_obj[1],content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id,active=2)
     if answer_obj:
         text = answer_obj.text 
     else:
@@ -213,6 +213,7 @@ def get_removed_quest_list(quest_removed,quest_list,quarter_question_list):
 def get_final_questions(quarter_question_list,block_type,object_id,period,report_id,quest_removed):
     quest_list = []
     remove_obj_id=''
+    #import ipdb;ipdb.set_trace()
     if object_id != None :
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period,
