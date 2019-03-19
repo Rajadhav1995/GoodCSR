@@ -252,7 +252,7 @@ def get_removed_questions(questions,block,project_report,block_type,quest_remove
     parent_ques=[]
     final_questions=[]
     remove_id=''
-    quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
+    quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type,active=2)
     if quest_list and quest_list.text != None:
         remove_id = quest_list.id
         for i in literal_eval(quest_list.text):
@@ -286,7 +286,7 @@ def get_removed_populate_questions(questions,project_report,block_type,quest_rem
     # particular block
     removed_ques=[]
     remove_id=''
-    quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type)
+    quest_list = RemoveQuestion.objects.get_or_none(quarter_report=project_report,block_type=block_type,active=2)
     if quest_list and quest_list.text != None :
         remove_id = quest_list.id
         for i in literal_eval(quest_list.text):
@@ -364,10 +364,10 @@ def get_milestones(quarter,report_obj,type_id):
     slug = {1:'milestone-section',2:'activity-section'}
     question = Question.objects.get_or_none(slug=slug.get(type_id))
     
-    answer = Answer.objects.get_or_none(question=question,quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+    answer = Answer.objects.get_or_none(question=question,quarter = quarter,content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id,active=2)
     if answer:
         milestones = answer.inline_answer if answer else ''
-        miles_list = ReportMilestoneActivity.objects.filter(id__in =literal_eval(milestones))
+        miles_list = ReportMilestoneActivity.objects.filter(id__in =literal_eval(milestones),active=2)
         for i in miles_list:
             data = {'name':i.name,'description':i.description,'id':i.id}
             report_miles.append(data)

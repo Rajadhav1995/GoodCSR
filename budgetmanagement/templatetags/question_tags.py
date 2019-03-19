@@ -53,7 +53,7 @@ def get_previous_question_value(quest,quarter,i,report_obj,quarter_obj):
 
 @register.assignment_tag
 def get_previous_subquestions(quest):
-    question_list = Question.objects.filter(parent=quest).order_by("order")
+    question_list = Question.objects.filter(parent=quest,active=2).order_by("order")
     return question_list
 
 @register.assignment_tag
@@ -72,7 +72,7 @@ def getreport_status(report_id,v,num):
 @register.assignment_tag
 def get_answer_question(quest,quarterreportobj):
     try:
-        answerobj = Answer.objects.get(question = quest,quarter=quarterreportobj)
+        answerobj = Answer.objects.get(question = quest,quarter=quarterreportobj,active=2)
         text = answerobj.text
     except:
         text = ""
@@ -116,9 +116,9 @@ def get_milestone_name(mileobj):
 @register.assignment_tag
 def get_parameters_list(quest,quarterreportobj):
     try:
-        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
+        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj,active=2)
         answerlist = answerobj.inline_answer
-        parameterlist = ReportParameter.objects.filter(id__in = literal_eval(answerlist),active=2)
+        parameterlist = ReportParameter.objects.filter(id__in = literal_eval(answerlist))
     except:
         parameterlist = []
     return parameterlist
@@ -126,7 +126,7 @@ def get_parameters_list(quest,quarterreportobj):
 @register.assignment_tag
 def get_milestone_list(quest,quarterreportobj):
     try:
-        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
+        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj,active=2)
         answerlist = answerobj.inline_answer
         act_mile_list = ReportMilestoneActivity.objects.filter(id__in = literal_eval(answerlist))
     except:
@@ -213,7 +213,6 @@ def get_removed_quest_list(quest_removed,quest_list,quarter_question_list):
 def get_final_questions(quarter_question_list,block_type,object_id,period,report_id,quest_removed):
     quest_list = []
     remove_obj_id=''
-    #import ipdb;ipdb.set_trace()
     if object_id != None :
         quarter_report = QuarterReportSection.objects.get_or_none(id=object_id.id)
         quest_list = RemoveQuestion.objects.get_or_none(quarter_report__id=report_id,block_type=block_type,quarter_period=period,

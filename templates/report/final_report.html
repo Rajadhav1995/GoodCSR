@@ -1197,7 +1197,6 @@
                             </div>
                         {% endif %}
 
-
                         <!--                            this is for milestone section-->
 
                         {% if quest.slug == "activity-section" %}
@@ -1217,7 +1216,6 @@
                                 <div class="col-md-6 report_text parameter_section ">
 
                                 {% for act_quest in activity_questions %}
-
                                     {% if act_quest.slug == "activity-name" %}
                                     <div class=" report_text" id="ques_{{act_ques.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
@@ -1289,7 +1287,6 @@
                                    </div>
 
                             {% endif %}
-
 <!--                     this is for parameter selection -->
                         {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">
