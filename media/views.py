@@ -59,7 +59,7 @@ def timeline_upload(request):
     slug = request.GET.get('slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
-    projectobj=Project.objects.get(slug=slug)
+    projectobj=''
     from projectmanagement.templatetags import urs_tags
     project_obj = urs_tags.get_org_logo(projectobj)
     try:
