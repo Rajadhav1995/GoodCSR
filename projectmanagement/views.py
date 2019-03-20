@@ -545,7 +545,8 @@ def remove_record(request):
               'Budget':'budgetmanagement','Userprofile':'userprofile',
               'Media':'media','Activity':'taskmanagement',
               'Milestone':'taskmanagement','Tranche':'budgetmanagement',
-              'ProjectReport':'budgetmanagement','Attachment':'media','Keywords':'media'}
+              'ProjectReport':'budgetmanagement','Attachment':'media',
+              'Keywords':'media','ProjectParameter':'projectmanagement'}
 	app_label=data.get(request.GET.get(str('model')))
 	model = apps.get_model(app_label,request.GET.get(str('model')))
 	deact = model.objects.get(id=ids).switch()

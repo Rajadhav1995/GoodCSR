@@ -56,6 +56,7 @@ def timeline_upload(request):
     # this function is to upload images in 
     # timeline (for project summary page)
     # 
+    
     slug = request.GET.get('slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
@@ -96,7 +97,7 @@ def upload_attachment(request):
     slug =  request.GET.get('slug')
     model =  request.GET.get('model')
     key = int(request.GET.get('key'))
-    project_obj = Project.objects.get(slug=slug)
+    projectobj = Project.objects.get(slug=slug)
     if key==1:
         #key 1 for Document upload
         form = AttachmentForm()
@@ -112,7 +113,7 @@ def upload_attachment(request):
             obj.name = request.POST.get('name')
             obj.description = request.POST.get('description')
             obj.content_type=ContentType.objects.get(model=model)
-            obj.object_id=project_obj.id
+            obj.object_id=projectobj.id
             obj.modified_by = user_id # to get the user who is modified in order to show updates
             obj.created_by = UserProfile.objects.get_or_none(user_reference_id=user_id)
             if key==1:
