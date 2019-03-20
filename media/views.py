@@ -59,13 +59,12 @@ def timeline_upload(request):
     slug = request.GET.get('slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
-    projectobj=''
+    try:
+        projectobj = Project.objects.get(slug = request.POST.get('slug'))
+    except:
+        projectobj = Project.objects.get(slug=slug)
     from projectmanagement.templatetags import urs_tags
     project_obj = urs_tags.get_org_logo(projectobj)
-    try:
-        project = Project.objects.get(slug = request.POST.get('slug'))
-    except:
-        project = Project.objects.get(slug=slug)
     form = ImageUploadTimeline()
     if request.method=='POST':
         form=ImageUploadTimeline(request.POST,request.FILES)
@@ -74,12 +73,12 @@ def timeline_upload(request):
             f.attachment_type = 1
             f.created_by = user
             f.content_type = ContentType.objects.get(model=('project'))
-            f.object_id = project.id
+            f.object_id = projectobj.id
             f.timeline_progress = True
             # to save modified_by user to get the updates in updates sectionss
             f.modified_by = user_id
             f.save()
-            return HttpResponseRedirect('/project/summary/?slug='+project.slug)
+            return HttpResponseRedirect('/project/summary/?slug='+projectobj.slug)
     timeline = 1
     return render(request,'taskmanagement/forms.html',locals())
 
