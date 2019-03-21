@@ -39,6 +39,7 @@
                 <th>Report type</th>
                 <th>Report Duration</th>
                 <th>From Date - To Date</th>
+                <th>Lastupdated By</th>
             </tr>
         </thead>
         
@@ -57,6 +58,9 @@
             <td>{{report_duration.1}}</td>
             <!-- <td>{{i.get_active_display}}</td> -->
             
+           {% get_modified_details i as ans_obj %}
+             <td>{{ans_obj.user}}</td>
+            
             <td><a class="budget_button" href="/report/remove/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1&report_type={{i.report_type}}" target="_blank">View Report</button></a></td>
             {% with "generate-report"|make_string:"edit" as keystring %}
                 {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
@@ -73,7 +77,8 @@
              <!-- <td><a class="budget_button" href="/report/remove/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1" target="_blank"> Remove View </button></a></td> -->
 
              <!-- <td><a class="budget_button" href="/report/pdf/view/?slug={{project.slug}}&report_id={{i.id}}&key=1" target="_blank"> Down Report (old) </button></a></td> -->
-
+           
+          
 
         </tr>
 
