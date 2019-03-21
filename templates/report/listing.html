@@ -59,7 +59,10 @@
             <!-- <td>{{i.get_active_display}}</td> -->
             
            {% get_modified_details i as ans_obj %}
-             <td>{{ans_obj.user}}</td>
+             <td>{{ans_obj.0}}</br>
+             {{ans_obj.1|date:"d-m-Y"}} - &nbsp{{ans_obj.1|time:"H:i"}}</td>
+             
+             
             
             <td><a class="budget_button" href="/report/remove/detail/?slug={{project.slug}}&report_id={{i.id}}&key=1&report_type={{i.report_type}}" target="_blank">View Report</button></a></td>
             {% with "generate-report"|make_string:"edit" as keystring %}

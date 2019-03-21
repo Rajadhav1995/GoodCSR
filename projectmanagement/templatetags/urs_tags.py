@@ -600,10 +600,12 @@ def get_cause_arealist(user_obj):
 def get_modified_details(report_obj):
     try:
     	ans_obj=Answer.objects.filter(object_id=report_obj.id,content_type=ContentType.objects.get(model='projectreport')).order_by('modified','user').latest('id')
+    	user=ans_obj.user.attrs['first_name']
+    	date=ans_obj.modified
+    	#time=ans_obj.
     except:
         ans_obj =''
-            
-    return ans_obj   
+    return user,date   
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
