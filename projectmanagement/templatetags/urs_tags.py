@@ -598,9 +598,11 @@ def get_cause_arealist(user_obj):
 
 @register.assignment_tag   
 def get_modified_details(report_obj):
-    ans_obj=Answer.objects.filter(object_id=report_obj.id,content_type=ContentType.objects.get(model='projectreport')).order_by('modified','user').latest('id')
-    #user=ans_obj.user
-    
+    try:
+    	ans_obj=Answer.objects.filter(object_id=report_obj.id,content_type=ContentType.objects.get(model='projectreport')).order_by('modified','user').latest('id')
+    except:
+        ans_obj =''
+            
     return ans_obj   
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
