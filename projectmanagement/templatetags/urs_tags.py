@@ -598,11 +598,12 @@ def get_cause_arealist(user_obj):
 
 @register.assignment_tag   
 def get_modified_details(report_obj):
+    user=''
+    date=''
     try:
     	ans_obj=Answer.objects.filter(object_id=report_obj.id,content_type=ContentType.objects.get(model='projectreport')).order_by('modified','user').latest('id')
     	user=ans_obj.user.attrs['first_name']
     	date=ans_obj.modified
-    	#time=ans_obj.
     except:
         ans_obj =''
     return user,date   
