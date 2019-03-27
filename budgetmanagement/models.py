@@ -178,6 +178,9 @@ class ReportMilestoneActivity(BaseContent):
     def __str__(self):
         return str(self.id) or str(self.name) or '-'
 
+    def __unicode__(self):
+        return str(self.id) or str(self.name) or '-'
+
 
 PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
                           ('PIP', 'Pie Chart Percent'),
