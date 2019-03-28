@@ -10,6 +10,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from ckeditor.fields import RichTextField
 from budgetmanagement.models import (ReportParameter, BudgetPeriodUnit, ProjectBudgetPeriodConf, ReportMilestoneActivity)
 from projectmanagement.models import (BaseContent,UserProfile, Project)
+from private_storage.fields import PrivateFileField
 from taskmanagement.models import (Task,Activity)
 from simple_history.models import HistoricalRecords
 from simple_history.admin import SimpleHistoryAdmin
@@ -28,7 +29,6 @@ class Attachment(BaseContent):
 
     def get_file_path(instance,filename):
         date = datetime.datetime.today().strftime('%Y/%m/%d')
-        print "Content",instance.content_type,instance.object_id
         try:
             if instance.content_type == ContentType.objects.get(model="project"):
                 proj = Project.objects.filter(id=instance.object_id).first()
@@ -45,16 +45,14 @@ class Attachment(BaseContent):
             if instance.content_type == ContentType.objects.get(model="reportmilestoneactivity"):
                 report_ma = ReportMilestoneActivity.objects.filter(id=instance.object_id).first()
                 proj_slug = report_ma.quarter.project.project.slug
-            return "static/{proj_name}/{date}/{file}".format(proj_name = proj_slug, date = date, file = filename)    
+            return "{proj_name}/{date}/{file}".format(proj_name = proj_slug, date = date, file = filename)    
         except Exception as e:
             print e
-            return "static/other/{date}/{file}".format(date = date, file = filename)
+            return "other/{date}/{file}".format(date = date, file = filename)
         
-        
-
     created_by = models.ForeignKey(
         UserProfile, related_name='document_created_user', **OPTIONAL)
-    attachment_file = models.FileField(upload_to=get_file_path, **OPTIONAL)
+    attachment_file = PrivateFileField(upload_to=get_file_path,max_length=255, **OPTIONAL)
     name = models.CharField("Name", max_length=300, **OPTIONAL)
     description = models.CharField("Description", max_length=600, **OPTIONAL)
     attachment_type = models.IntegerField('ATTACHMENT_TYPE',choices=ATTACHMENT_TYPE,**OPTIONAL)

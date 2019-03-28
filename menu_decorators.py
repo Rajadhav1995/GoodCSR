@@ -31,15 +31,15 @@ def check_loggedin_access(view):
                 if str(project_slug) in get_project_slug_list or request.path == '/dashboard/' or request.GET.get('status') in ['0','2']:
                     user = signin(request)
                 else:
-                    message = "Permission Denined!!!Please Contact Administrator."
+                    message = "Permission Denied!!!Please Contact Administrator."
                     return render(request, 'login.html', locals())
             else:
-                message = "Permission Denined!!!Please Contact Administrator."
+                message = "Permission Denied!!!Please Contact Administrator."
                 return render(request, 'login.html', locals())
         elif request.method == 'POST':
             user = signin(request)
         elif user_id == '' or user_id == None :
-            message = "Permission Denined!!!Please login with credentials."
+            message = "Permission Denied!!!Please login with credentials."
             return render(request, 'login.html', locals())
         return view(request, *args, **kwargs)
     return is_auth
