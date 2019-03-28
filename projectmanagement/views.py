@@ -84,9 +84,14 @@ def create_project(request):
     except:
         form = ProjectForm()
         location = ''
-    funder_user = UserProfile.objects.filter(active=2,organization_type=1,owner = True )
+    funder_user = UserProfile.objects.filter(active=2,organization_type=1,owner = True ) 
+    # in funder_user added the owner field to remove the duplication from the dropdown
     # 
+    #
     partner = UserProfile.objects.filter(active=2,organization_type=2,owner = True )
+    #
+    # in partner table added the field to remove the duplication of the user from dropdown 
+    #
     state_list = Boundary.objects.filter(boundary_level=2).order_by('name')
     if request.method == 'POST':
         try:
@@ -118,7 +123,11 @@ def create_project(request):
             
             return HttpResponseRedirect('/project/list/')
     return render(request,'project/project_add.html',locals())
-
+#
+#
+# here the project/list is the url we are redirecting the page from add/edit page to listing page 
+#
+# 
 # this function is to list of projectparameter keywords
 #this function is to update the projectparamter keywords
 ##
@@ -891,23 +900,78 @@ def beneficiary_type():
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# Without it, things can get real confusing, real fast.
+ # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
-# Without it, things can get real confusing, real fast. # When working with any programming language, you include comments
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
+# in the code to notate your work. This details what certain parts 
+# know what you were up to when you wrote the code. This is a necessary
+# practice, and good developers make heavy use of the comment system. 
+# Without it, things can get real confusing, real fast. 
+# When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 

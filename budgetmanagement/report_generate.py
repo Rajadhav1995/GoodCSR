@@ -119,7 +119,7 @@ def save_section_answers(quest_ids,project_report,request,data,user):
         current_user_answers=Answer.objects.filter(question=question,content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user=user).values_list('id',flat=True)
         inactivate = previous_answers.exclude(id__in=current_user_answers)
         if inactivate:
-    	    ans = Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
+    	    Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
         answer,created = Answer.objects.get_or_create(question =question,
             content_type = ContentType.objects.get_for_model(project_report),object_id = project_report.id,user=user,active=2)
         
@@ -376,19 +376,11 @@ def get_milestone_parameterlist(request,previous_itemlist,quarterreportobj,proje
             line_list = line.split('_')
             if len(line_list) == 5:
                 question_id = line_list[3]
-                answer_dict = {
-                'quarter':quarterreportobj,
-                'question':Question.objects.get_or_none(id=int(question_id)),
-                'text':request.POST.get(line),
-                'content_type':ContentType.objects.get_for_model(projectreportobj),
-                'object_id':projectreportobj.id,
-                'user':user_obj,
-                }
                 answer =  Answer.objects.filter(question__id=question_id,quarter=quarterreportobj)
                 current_user_answer = Answer.objects.filter(question__id=question_id,quarter=quarterreportobj,user=user_obj,active=2)
                 inactivate=answer.exclude(id__in=current_user_answer.values_list('id',flat=True))
                 if inactivate:
-					ans = Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
+			        Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
                 answerobj,created = Answer.objects.get_or_create(question=Question.objects.get(id=int(question_id)),quarter=quarterreportobj,
                 content_type=ContentType.objects.get_for_model(projectreportobj),object_id=projectreportobj.id,user=user_obj,active=2)
                 answerobj.text = request.POST.get(line)
@@ -600,7 +592,7 @@ def milestone_activity_save(request,milestone_list,obj_count_list,pic_list,proje
     current_user_answer = Answer.objects.filter(question = milestone_answer_dict.get('question'),quarter=quarterreportobj,user=user_obj,active=2)
     inactivate=answer.exclude(id__in=current_user_answer.values_list('id',flat=True))
     if inactivate:
-    	ans = Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
+        Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
     answer,created = Answer.objects.get_or_create(question = milestone_answer_dict.get('question'),quarter=quarterreportobj,
     	content_type=ContentType.objects.get_for_model(projectreportobj),object_id=projectreportobj.id,user=user_obj,active=2)
     answer.inline_answer = milestone_ids
@@ -632,7 +624,6 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
    
     add_section = request.POST.get('add_section')
     para_detail = [i[0].split('_')[-1] for i in request.POST.items() if i[0].startswith('Parameter')]
-    #parent_paramter_question=None
     for k in sorted(para_detail):
         parameter_result = {}
         for parameter in parameter_list:
@@ -665,7 +656,7 @@ def report_parameter_save(request,parameter_count,parameter_list,projectreportob
     current_user_answer = Answer.objects.filter(question = parameter_answer_dict.get('question'),quarter=quarterreportobj,user=user_obj,active=2)
     inactivate=answer.exclude(id__in=current_user_answer.values_list('id',flat=True))
     if inactivate:
-    	ans = Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
+        Answer.objects.filter(id__in=[i.id for i in inactivate]).update(active=0)
     answer,created = Answer.objects.get_or_create(question = parameter_answer_dict.get('question'),quarter=quarterreportobj,
      content_type=ContentType.objects.get_for_model(projectreportobj),object_id=projectreportobj.id,user=user_obj,active=2)
     answer.inline_answer = parameter_ids
@@ -715,7 +706,7 @@ def saving_of_quarters_section(request):
             obj_count_list = {'milestone_pic_count':milestone_pic_count,'milestone_count':milestone_count,}
             milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
         else: 
-            answer=Answer.objects.filter(id__in=[int(i) for i in milestone_question]).update(active=0)   
+            Answer.objects.filter(id__in=[int(i) for i in milestone_question]).update(active=0)   
 # clients requirement not to provide paramerter selection in previous quarter list so commented
 # end of parameter saving function
 #    to save the Current quarter updates:
@@ -734,12 +725,12 @@ def saving_of_quarters_section(request):
             obj_count_list = {'milestone_pic_count':activity_pic_count,'milestone_count':activity_count,}
             milestone_activity_save(request,milestone_list,obj_count_list,pic_list,projectreportobj,quarterreportobj,projectobj)
         else: 
-            answer=Answer.objects.filter(id__in=[int(i) for i in activity_question]).update(active=0)
+            Answer.objects.filter(id__in=[int(i) for i in activity_question]).update(active=0)
           
         if parameter_count > 0 and parameter_question[0] in current_actv_que:
             report_parameter_save(request,parameter_count,parameter_list,projectreportobj,quarterreportobj)
         else: 
-            answer=Answer.objects.filter(id__in=[int(i) for i in parameter_question]).update(active=0)  
+            Answer.objects.filter(id__in=[int(i) for i in parameter_question]).update(active=0)  
 #    to save the next quarter updates:
     quarter_list = futurequarter_list
     next_itemlist = [str(k) for k,v in request.POST.items() if '_3_' in str(k) if k.split('_')[1]=='3']
