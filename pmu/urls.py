@@ -30,7 +30,8 @@ from budgetmanagement.manage_budget import (projectbudgetadd,projectbudgetlist,
 from userprofile.views import *
 import userprofile
 from django.conf.urls import handler404, handler500
-
+import private_storage.urls
+from media.views import PrivateStorageDownloadView
 handler404 = userprofile.views.handler404
 handler500 = userprofile.views.handler500
 
@@ -94,5 +95,7 @@ urlpatterns = [
     url(r'^usermanagement/',include(userroles_patterns)),
     url(r'^intermidate-login/', intermidate_login),
     url(r'^pmu/login/$',PMULoginAPI.as_view()),
+    url('^private-media/$', include(private_storage.urls)),
+    url(r'^private-media/(?P<path>.*)$',PrivateStorageDownloadView.as_view(),  name='serve_private_file'),
 ]
 

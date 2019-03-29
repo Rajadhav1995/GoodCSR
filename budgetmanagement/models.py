@@ -14,7 +14,7 @@ from simple_history.admin import SimpleHistoryAdmin
 from ckeditor.fields import RichTextField
 from projectmanagement.models import BaseContent
 from projectmanagement.manager import ActiveQuerySet
-
+from private_storage.fields import PrivateFileField
 #----------------------introduction------------------------------------------#
 # Budget Management is the application where database tables are related to Budget,Budget Category
 #--------------------ends here--------------------------------------------------#
@@ -178,6 +178,9 @@ class ReportMilestoneActivity(BaseContent):
     def __str__(self):
         return str(self.id) or str(self.name) or '-'
 
+    def __unicode__(self):
+        return str(self.id) or str(self.name) or '-'
+
 
 PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
                           ('PIP', 'Pie Chart Percent'),
@@ -256,13 +259,14 @@ class Question(BaseContent):
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
 class Answer(BaseContent):
+    from media.models import get_file_path
     user = models.ForeignKey(
         "projectmanagement.UserProfile", related_name='report_user', **OPTIONAL)
     quarter = models.ForeignKey(QuarterReportSection,**OPTIONAL)
     question = models.ForeignKey(Question,**OPTIONAL)
     text = models.TextField(**OPTIONAL)
     inline_answer = models.CharField(max_length=600,**OPTIONAL) #this is to tag milestone and paramters'id.
-    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
+    attachment_file = PrivateFileField(upload_to=get_file_path, **OPTIONAL)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s",**OPTIONAL)
     object_id = models.IntegerField(_('object ID'),**OPTIONAL)
     relatedTo = GenericForeignKey(ct_field="content_type", fk_field="object_id")

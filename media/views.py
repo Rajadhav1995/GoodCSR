@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
 from media.models import *
 from budgetmanagement.models import Tranche
 from django.http import HttpResponseRedirect
@@ -11,12 +12,36 @@ from projectmanagement.models import Project,Boundary
 from media.forms import AttachmentForm,ImageUpload,ImageUploadTimeline
 from projectmanagement.common_method import unique_slug_generator,add_keywords
 from menu_decorators import check_loggedin_access
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,HttpResponseForbidden
+from private_storage.views import PrivateStorageDetailView, PrivateStorageView
+from django.views.generic.detail import SingleObjectMixin
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
 # practice, and good developers make heavy use of the comment system. 
 # Without it, things can get real confusing, real fast.
 # this views is to manage media
+
+class PrivateStorageDownloadView(SingleObjectMixin,PrivateStorageView,APIView):
+    # Overriding function in PrivateStorageView to log user details
+    def get(self, request, *args, **kwargs):
+        """
+        Handle incoming GET requests
+        """
+        try:
+            user_id = request.session.get('user_id')
+            print "Request",user_id
+        except Exception as e:
+            print "request e",e
+        private_file = self.get_private_file()
+        if not user_id and not self.can_access_file(private_file):
+            return HttpResponseForbidden('Private storage access denied')
+        if not private_file.exists():
+            return self.serve_file_not_found(private_file)
+        else:
+            return self.serve_file(private_file)
+
+            
 @check_loggedin_access
 def list_document(request):
     # this function will list documents of project

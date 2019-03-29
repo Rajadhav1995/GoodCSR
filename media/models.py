@@ -1,3 +1,4 @@
+import os,datetime,urllib
 from django.db import models
 from django.contrib import admin
 from constants import OPTIONAL
@@ -7,8 +8,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.fields import GenericForeignKey
 from ckeditor.fields import RichTextField
-from projectmanagement.models import (BaseContent,UserProfile)
-from budgetmanagement.models import (ReportParameter,)
+from budgetmanagement.models import (ReportParameter, BudgetPeriodUnit, ProjectBudgetPeriodConf, ReportMilestoneActivity)
+from projectmanagement.models import (BaseContent,UserProfile, Project)
+from private_storage.fields import PrivateFileField
+from taskmanagement.models import (Task,Activity)
 from simple_history.models import HistoricalRecords
 from simple_history.admin import SimpleHistoryAdmin
 # When working with any programming language, you include comments
@@ -18,14 +21,47 @@ from simple_history.admin import SimpleHistoryAdmin
 # Without it, things can get real confusing, real fast.
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
+
+def get_file_path(instance,filename):
+    from budgetmanagement.models import Answer
+    print type(instance)
+    date = datetime.datetime.today().strftime('%Y/%m/%d')
+    try:
+        if isinstance(instance, Attachment):
+            if instance.content_type == ContentType.objects.get(model="project"):
+                proj = Project.objects.filter(id=instance.object_id).first()
+                proj_slug = proj.slug
+            if instance.content_type == ContentType.objects.get(model="budgetperiodunit"):
+                budget_period = BudgetPeriodUnit.objects.filter(id=instance.object_id).first()
+                proj_slug = budget_period.budget_period.project.slug
+            if instance.content_type == ContentType.objects.get(model="projectbudgetperiodconf"):
+                budget_period = ProjectBudgetPeriodConf.objects.filter(id=instance.object_id).first()
+                proj_slug = budget_period.project.slug
+            if instance.content_type == ContentType.objects.get(model="task"):
+                task = Task.objects.filter(id=instance.object_id).first()
+                proj_slug = task.activity.project.slug
+            if instance.content_type == ContentType.objects.get(model="reportmilestoneactivity"):
+                report_ma = ReportMilestoneActivity.objects.filter(id=instance.object_id).first()
+                proj_slug = report_ma.quarter.project.project.slug
+        if isinstance(instance, Note):
+            proj_slug = instance.project.slug
+        if isinstance(instance, Answer):
+            proj = Project.objects.filter(id=instance.object_id).first()
+            proj_slug = proj.slug
+        return "{proj_name}/{date}/{file}".format(proj_name = proj_slug, date = date, file = filename)    
+    except Exception as e:
+        return "other/{date}/{file}".format(date = date, file = filename)
+
+
 class Attachment(BaseContent):
     ## 
     # model to attach files.
     #content_type is a foriegn key, verbose_name- is a function differing with _"
     ## 
+        
     created_by = models.ForeignKey(
         UserProfile, related_name='document_created_user', **OPTIONAL)
-    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)
+    attachment_file = PrivateFileField(upload_to=get_file_path,max_length=255, **OPTIONAL)
     name = models.CharField("Name", max_length=300, **OPTIONAL)
     description = models.CharField("Description", max_length=600, **OPTIONAL)
     attachment_type = models.IntegerField('ATTACHMENT_TYPE',choices=ATTACHMENT_TYPE,**OPTIONAL)
@@ -58,7 +94,7 @@ class Attachment(BaseContent):
         key_list = Keywords.objects.filter(id__in=keywords).values_list('name',flat=True)
         # 
         return list(key_list)
-    
+
 #    def __init__(self,*args, **kwargs):
 #        pass
 #        #global_variables(request)
@@ -163,7 +199,7 @@ class ScreenshotMedia(BaseContent):
 class Note(BaseContent):
     project = models.ForeignKey("projectmanagement.Project", **OPTIONAL)
     created_by = models.ForeignKey(UserProfile, related_name='note_created_user', **OPTIONAL)
-    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)    
+    attachment_file = PrivateFileField(upload_to=get_file_path, **OPTIONAL)    
     description = models.CharField("Description", max_length=600, **OPTIONAL)
     comment = RichTextField(**OPTIONAL)
     history = HistoricalRecords()
