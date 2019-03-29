@@ -21,15 +21,13 @@ from simple_history.admin import SimpleHistoryAdmin
 # Without it, things can get real confusing, real fast.
 ATTACHMENT_TYPE = ((1,'Image'),(2,'Documents'),)
 DOCUMENT_TYPE = ((1,'Excel'),(2,'PDF'),(3,'PPT'),(4,'Word Document'))
-class Attachment(BaseContent):
-    ## 
-    # model to attach files.
-    #content_type is a foriegn key, verbose_name- is a function differing with _"
-    ## 
 
-    def get_file_path(instance,filename):
-        date = datetime.datetime.today().strftime('%Y/%m/%d')
-        try:
+def get_file_path(instance,filename):
+    from budgetmanagement.models import Answer
+    print type(instance)
+    date = datetime.datetime.today().strftime('%Y/%m/%d')
+    try:
+        if isinstance(instance, Attachment):
             if instance.content_type == ContentType.objects.get(model="project"):
                 proj = Project.objects.filter(id=instance.object_id).first()
                 proj_slug = proj.slug
@@ -45,10 +43,21 @@ class Attachment(BaseContent):
             if instance.content_type == ContentType.objects.get(model="reportmilestoneactivity"):
                 report_ma = ReportMilestoneActivity.objects.filter(id=instance.object_id).first()
                 proj_slug = report_ma.quarter.project.project.slug
-            return "{proj_name}/{date}/{file}".format(proj_name = proj_slug, date = date, file = filename)    
-        except Exception as e:
-            print e
-            return "other/{date}/{file}".format(date = date, file = filename)
+        if isinstance(instance, Note):
+            proj_slug = instance.project.slug
+        if isinstance(instance, Answer):
+            proj = Project.objects.filter(id=instance.object_id).first()
+            proj_slug = proj.slug
+        return "{proj_name}/{date}/{file}".format(proj_name = proj_slug, date = date, file = filename)    
+    except Exception as e:
+        return "other/{date}/{file}".format(date = date, file = filename)
+
+
+class Attachment(BaseContent):
+    ## 
+    # model to attach files.
+    #content_type is a foriegn key, verbose_name- is a function differing with _"
+    ## 
         
     created_by = models.ForeignKey(
         UserProfile, related_name='document_created_user', **OPTIONAL)
@@ -190,7 +199,7 @@ class ScreenshotMedia(BaseContent):
 class Note(BaseContent):
     project = models.ForeignKey("projectmanagement.Project", **OPTIONAL)
     created_by = models.ForeignKey(UserProfile, related_name='note_created_user', **OPTIONAL)
-    attachment_file = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL)    
+    attachment_file = PrivateFileField(upload_to=get_file_path, **OPTIONAL)    
     description = models.CharField("Description", max_length=600, **OPTIONAL)
     comment = RichTextField(**OPTIONAL)
     history = HistoricalRecords()

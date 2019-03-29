@@ -34,9 +34,8 @@ class PrivateStorageDownloadView(SingleObjectMixin,PrivateStorageView,APIView):
         except Exception as e:
             print "request e",e
         private_file = self.get_private_file()
-        if not user_id:
+        if not user_id and not self.can_access_file(private_file):
             return HttpResponseForbidden('Private storage access denied')
-
         if not private_file.exists():
             return self.serve_file_not_found(private_file)
         else:
