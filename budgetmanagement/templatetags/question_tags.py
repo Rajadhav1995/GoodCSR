@@ -38,7 +38,7 @@ def get_previous_question_value(quest,quarter,i,report_obj,quarter_obj):
     heading_label = {'previous-quarter-update':"Previous Quarter Updates",'current-quarter-update':"Current Quarter Updates",'next-quarter-update':"Next Quarter Updates",}
     month_label = {'previous-quarter-update':"Previous Month Updates",'current-quarter-update':"Current Month Updates",'next-quarter-update':"Next Month Updates",}
     text = ""
-    answer_obj = Answer.objects.get_or_none(question=quest,quarter=quarter_obj[1],content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id)
+    answer_obj = Answer.objects.get_or_none(question=quest,quarter=quarter_obj[1],content_type=ContentType.objects.get_for_model(report_obj),object_id=report_obj.id,active=2)
     if answer_obj:
         text = answer_obj.text 
     else:
@@ -53,7 +53,7 @@ def get_previous_question_value(quest,quarter,i,report_obj,quarter_obj):
 
 @register.assignment_tag
 def get_previous_subquestions(quest):
-    question_list = Question.objects.filter(parent=quest).order_by("order")
+    question_list = Question.objects.filter(parent=quest,active=2).order_by("order")
     return question_list
 
 @register.assignment_tag
@@ -72,7 +72,7 @@ def getreport_status(report_id,v,num):
 @register.assignment_tag
 def get_answer_question(quest,quarterreportobj):
     try:
-        answerobj = Answer.objects.get(question = quest,quarter=quarterreportobj)
+        answerobj = Answer.objects.get(question = quest,quarter=quarterreportobj,active=2)
         text = answerobj.text
     except:
         text = ""
@@ -116,9 +116,9 @@ def get_milestone_name(mileobj):
 @register.assignment_tag
 def get_parameters_list(quest,quarterreportobj):
     try:
-        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
+        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj,active=2)
         answerlist = answerobj.inline_answer
-        parameterlist = ReportParameter.objects.filter(id__in = literal_eval(answerlist),active=2)
+        parameterlist = ReportParameter.objects.filter(id__in = literal_eval(answerlist))
     except:
         parameterlist = []
     return parameterlist
@@ -126,7 +126,7 @@ def get_parameters_list(quest,quarterreportobj):
 @register.assignment_tag
 def get_milestone_list(quest,quarterreportobj):
     try:
-        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj)
+        answerobj = Answer.objects.get(question=quest,quarter=quarterreportobj,active=2)
         answerlist = answerobj.inline_answer
         act_mile_list = ReportMilestoneActivity.objects.filter(id__in = literal_eval(answerlist))
     except:

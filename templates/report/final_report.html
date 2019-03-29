@@ -59,7 +59,14 @@
     <div class="row">
         <div class="generate_boxbg">
             <div class="general_report">
+              <div class="report_heading">
                 <h2>Generate Report</h2>
+                <div class="float_updated" >
+                    {% get_modified_details projectreportobj as ans_obj %}
+		    <p>LastUpdated By:{{ans_obj.0}} </p>
+	            <p>Date &amp; Time: {{ans_obj.1|date:"d-m-Y"}} - &nbsp{{ans_obj.1|time:"H:i"}}</p>
+        	</div>
+                </div>
                 <div>
                     <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=removed_template&div_id=" target="_self">Removed Fields/ Sections</a></p>
                     <p align="right" class="edit_templete"><a href="/report/final/design/?slug={{projectobj.slug}}&report_id={{projectreportobj.id}}&key=edit_template" target="_self">Edit Template</a></p>
@@ -1197,7 +1204,6 @@
                             </div>
                         {% endif %}
 
-
                         <!--                            this is for milestone section-->
 
                         {% if quest.slug == "activity-section" %}
@@ -1217,7 +1223,6 @@
                                 <div class="col-md-6 report_text parameter_section ">
 
                                 {% for act_quest in activity_questions %}
-
                                     {% if act_quest.slug == "activity-name" %}
                                     <div class=" report_text" id="ques_{{act_ques.id}}_{{j|add:previous_len}}">
                                         <p>{{act_quest.text|title}}</p>
@@ -1289,7 +1294,6 @@
                                    </div>
 
                             {% endif %}
-
 <!--                     this is for parameter selection -->
                         {% if quest.slug == "parameter-section" %}
                                 <hr class="border_line">

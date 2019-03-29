@@ -135,18 +135,14 @@ def add_activitymanagement(request,model_name,m_form):
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     budget = Budget.objects.get_or_none(project = project,active=2)
     form=ActivityForm(user_id,project.id)
-    
     actvity_id = request.GET.get('act_id','') if request.method == 'GET' else request.POST.get('act_id','')
-    if actvity_id:
-        m=Activity.objects.get_or_none(id = int(actvity_id))
-        form= ActivityForm(user_id,project.id,instance=m)
-    else:
-        form= ActivityForm(user_id,project.id)
+    form=get_activity(request,user_id,project,actvity_id)
     if not budget:
         message = "Budget is not added"
         return render(request,'taskmanagement/base_forms.html',locals())
     if request.method=='POST':
         if actvity_id:
+            m=Activity.objects.get_or_none(id = int(actvity_id))
             form=ActivityForm(user_id,project.id,request.POST,request.FILES,instance=m)
         else:
             form=ActivityForm(user_id,project.id,request.POST,request.FILES)
@@ -163,9 +159,19 @@ def add_activitymanagement(request,model_name,m_form):
                 f.save()
             form.save_m2m()
             return HttpResponseRedirect('/managing/listing/?slug='+project.slug)
-    #else:
-     #   form=ActivityForm(user_id,project.id)
     return render(request,'taskmanagement/base_forms.html',locals())
+###
+### this function is to edit activity with data 
+####    
+def get_activity(request,user_id,project,actvity_id):
+    m =''
+    actvity_id = request.GET.get('act_id','') if request.method == 'GET' else request.POST.get('act_id','')
+    if actvity_id:
+        m=Activity.objects.get_or_none(id = int(actvity_id))
+        form= ActivityForm(user_id,project.id,instance=m)
+    else:
+        form= ActivityForm(user_id,project.id)    
+    return form,m
 ###
 # this is the form for to add milestone
 ## and for edit milestone  
@@ -257,10 +263,7 @@ def edit_taskmanagement(request,model_name,m_form,slug):
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get_or_none(user_reference_id = user_id)
     project = Project.objects.get(slug =request.GET.get('slug'))
-    if m_form == 'TaskForm':
-        form=TaskForm(user_id ,project.id)
-    else:
-	    form = MilestoneForm(user_id,project.id)
+    form = get_task_mile(user_id ,project)
     if model_name == 'Task':
         m=Task.objects.get_or_none(slug = str(slug))
     else:
@@ -288,7 +291,21 @@ def edit_taskmanagement(request,model_name,m_form,slug):
         else:
             form=MilestoneForm(user_id,project.id,instance=m)
     return render(request,'taskmanagement/edit_task.html',locals())
-
+###
+#### this is the function to get the both task and milestone form data
+###       
+def get_task_mile(user_id ,project):
+    m_form =''
+    if m_form == 'TaskForm':
+        form=TaskForm(user_id ,project.id)
+    else:
+	    form = MilestoneForm(user_id,project.id)
+    return form 
+###
+###
+##
+##
+#
 # When working with any programming language, you include comments
 # in the code to notate your work. This details what certain parts 
 # know what you were up to when you wrote the code. This is a necessary
@@ -627,9 +644,6 @@ def task_comments(request):
     url = request.META.get('HTTP_REFERER')
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
-    slug = request.GET.get('slug')
-    key = request.GET.get('key')
-    status=request.GET.get('status')
     try:
         nexts =literal_eval(request.POST.get('next'))
         url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1]+'&'+str(nexts[3][0])+'='+str(nexts[3][1]))

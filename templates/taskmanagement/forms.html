@@ -105,11 +105,11 @@
                             </div>
                         </div>
                     {% endfor %}
-            <input id = 'slug' name = 'slug' type='hidden' value = "{{project.slug}}"/>
+            <input id = 'slug' name = 'slug' type='hidden' value = "{{projectobj.slug}}"/>
            <div class="col-md-12">
                 <div class="form-group">
               <input class="budget_button" type="submit" value="Save" onclick="return ValidateImage();" />
-              <a class="btn btn-success" href="/project/summary/?slug={{project.slug}}&key=summary" style="margin-right:5px;float: right;">Cancel</button></a>
+              <a class="btn btn-success" href="/project/summary/?slug={{projectobj.slug}}&key=summary" style="margin-right:5px;float: right;">Cancel</button></a>
            </div>
            </div>
         </div>

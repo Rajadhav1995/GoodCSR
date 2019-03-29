@@ -81,13 +81,16 @@ def timeline_upload(request):
     # this function is to upload images in 
     # timeline (for project summary page)
     # 
+    
     slug = request.GET.get('slug')
     user_id = request.session.get('user_id')
     user = UserProfile.objects.get(user_reference_id = user_id)
     try:
-        project = Project.objects.get(slug = request.POST.get('slug'))
+        projectobj = Project.objects.get(slug = request.POST.get('slug'))
     except:
-        project = Project.objects.get(slug=slug)
+        projectobj = Project.objects.get(slug=slug)
+    from projectmanagement.templatetags import urs_tags
+    project_obj = urs_tags.get_org_logo(projectobj)
     form = ImageUploadTimeline()
     if request.method=='POST':
         form=ImageUploadTimeline(request.POST,request.FILES)
@@ -96,12 +99,12 @@ def timeline_upload(request):
             f.attachment_type = 1
             f.created_by = user
             f.content_type = ContentType.objects.get(model=('project'))
-            f.object_id = project.id
+            f.object_id = projectobj.id
             f.timeline_progress = True
             # to save modified_by user to get the updates in updates sectionss
             f.modified_by = user_id
             f.save()
-            return HttpResponseRedirect('/project/summary/?slug='+project.slug)
+            return HttpResponseRedirect('/project/summary/?slug='+projectobj.slug)
     timeline = 1
     return render(request,'taskmanagement/forms.html',locals())
 
@@ -119,7 +122,7 @@ def upload_attachment(request):
     slug =  request.GET.get('slug')
     model =  request.GET.get('model')
     key = int(request.GET.get('key'))
-    project_obj = Project.objects.get(slug=slug)
+    projectobj = Project.objects.get(slug=slug)
     if key==1:
         #key 1 for Document upload
         form = AttachmentForm()
@@ -135,7 +138,7 @@ def upload_attachment(request):
             obj.name = request.POST.get('name')
             obj.description = request.POST.get('description')
             obj.content_type=ContentType.objects.get(model=model)
-            obj.object_id=project_obj.id
+            obj.object_id=projectobj.id
             obj.modified_by = user_id # to get the user who is modified in order to show updates
             obj.created_by = UserProfile.objects.get_or_none(user_reference_id=user_id)
             if key==1:

@@ -30,7 +30,7 @@ def check_loggedin_access(view):
                 obj_list = userprojectlist(user_obj)
                 get_project_slug_list = obj_list.values_list("slug",flat=True)
                 #if project_slug in get_project_slug_list or key not in keys:
-                if str(project_slug) in get_project_slug_list or request.path == '/dashboard/' or request.path =='/project/remove/record/' or  request.GET.get('status') in ['0','2']:
+                if str(project_slug) in get_project_slug_list or request.path == '/dashboard/'  or request.path =='/project/remove/record/' or  request.GET.get('status') in ['0','2']:
                     user = signin(request)
                 else:
                     message = "Permission Denied!!!Please Contact Administrator."
