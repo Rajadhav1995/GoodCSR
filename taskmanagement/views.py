@@ -644,9 +644,6 @@ def task_comments(request):
     url = request.META.get('HTTP_REFERER')
     application_type = {'application':2,'pdf':2,'vnd.ms-excel':2,'msword':2,'image':1}
     doc_type = {'application':3,'pdf':2,'vnd.ms-excel':1,'msword':4,'image':None}
-    slug = request.GET.get('slug')
-    key = request.GET.get('key')
-    status=request.GET.get('status')
     try:
         nexts =literal_eval(request.POST.get('next'))
         url='/managing/my-tasks/details/?'+str(nexts[1][0])+'='+str(nexts[1][1])+"&"+str(nexts[0][0])+'='+str(nexts[0][1])+'&'+str(nexts[2][0])+'='+str(nexts[2][1]+'&'+str(nexts[3][0])+'='+str(nexts[3][1]))
