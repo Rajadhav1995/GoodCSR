@@ -87,23 +87,23 @@ function exportToForm(){
       {% if i.attachment_type == 2 %}
         {% if i.document_type == 1 %}<!-- excel -->
         {% if i.attachment_file %}
-        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-color.jpg" height=128px width=128px></a>
+        <a href="{{image}}{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-color.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 2 %}<!-- pdf -->
         {% if i.attachment_file %}
-        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/pdf.jpg" height=128px width=128px></a>
+        <a href="{{image}}{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/pdf.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 3 %}<!-- ppt -->
         {% if i.attachment_file %}
-        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/wordpress.jpg" height=128px width=128px></a>
+        <a href="{{image}}{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/wordpress.jpg" height=128px width=128px></a>
         {% endif %}
         {% if i.document_type == 4 %}<!-- doc -->
         {% if i.attachment_file %}
-        <a href="{{image}}/{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-black.jpg" height=128px width=128px></a>
+        <a href="{{image}}{{i.attachment_file.url}}" download>{% endif %}<img src="/static/img/excell-black.jpg" height=128px width=128px></a>
         {% endif %}
         {% else %}
 
-        {% if i.attachment_file %}<a href="{{image}}/{{i.attachment_file.url}}" download><img src="{{image}}/{{i.attachment_file.url}}" height=128px width=128px>{% else %}<img src="" height=128px width=128px>{% endif %}{% endif %}</td></a>
+        {% if i.attachment_file %}<a href="{{image}}{{i.attachment_file.url}}" download><img src="{{image}}{{i.attachment_file.url}}" height=128px width=128px>{% else %}<img src="" height=128px width=128px>{% endif %}{% endif %}</td></a>
       <td align="center" style="width: 10%;"><!-- <a href="/upload/edit/?model=Project&obj_id={{i.object_id}}&id={{i.id}}"> -->{% if i.name %}{{i.name}}{% else %}-{% endif %} <!-- </a> --></td>
       <td align="center">{{i.description}}</a></td>
       <td align="center">{{i.get_attachment_type_display}} {% if i.attachment_type == 2 %} ({{i.get_document_type_display}}) {% endif %}</td>
