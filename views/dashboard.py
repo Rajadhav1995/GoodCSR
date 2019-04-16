@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.db.models import Sum
+from django.db.models import Sum,Q
 from itertools import chain
 from projectmanagement.models import (UserProfile,Project,ProjectFunderRelation)
 from media.models import ProjectLocation
@@ -11,6 +11,7 @@ from menu_decorators import check_loggedin_access
 from pmu.settings import PMU_URL
 from django.core.paginator import Paginator,Page
 import json
+import datetime
 #create views of dashboard
 from django.views.decorators.csrf import csrf_exempt
 
@@ -21,7 +22,6 @@ def admin_dashboard(request):
     # 
     state_count = {}
     uu={}
-    dashboard_year=[2016,2017,2018,2019] # this list is to get the dropdown in dashboard
     # 
     user_id = request.session.get('user_id')
     # this function is to show detail view of dashboard
@@ -30,6 +30,31 @@ def admin_dashboard(request):
     # getting users who has permission to
     # view/edit project
     obj_list = urs_tags.userprojectlist(user_obj)
+    dashboard_year=[2016,2017,2018,2019,2020] # this list is to get the dropdown in dashboard
+    try:
+        curr_year = int(datetime.datetime.now().year)
+        # low_year = int(curr_year-3)
+        # high_year = int(curr_year+3)
+        dashboard_year = [curr_year-3,curr_year-2,curr_year-1,curr_year,curr_year+1,curr_year+2,curr_year+3]
+        try:
+            low_year = int(obj_list.order_by('start_date')[:1].first().start_date.year)
+        except:
+            "Low year fetching error"
+        try:
+            high_year = int(obj_list.order_by('-end_date')[:1].first().end_date.year)
+        except:
+            "High year fetching error"
+        if low_year<high_year and (low_year or high_year):
+            if not low_year:
+                low_year = int(curr_year-3)
+            if not high_year:
+                high_year = int(curr_year+3)
+            dashboard_year=[]
+            while high_year>=low_year:
+                dashboard_year.append(low_year)
+                low_year+=1
+    except Exception as e:
+        print "Datetime error",e
     #this is to filter based on cause area 
     # thsi method we are using in  corporatedashboard 
     ##
@@ -46,8 +71,11 @@ def admin_dashboard(request):
         obj_list=obj_list.filter(cause_area__id__in=[cause_area_id]) # this is to filter the selected causearea 
     if dash_year:
         dash_year=int(dash_year)
-        obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year) #this is filter the based on year
-
+        dash_year_lower = datetime.datetime(year=dash_year,month=3,day=31)
+        dash_year_higher = datetime.datetime(year=dash_year+1,month=4,day=1)
+        print "dash_year",dash_year_lower," - ",dash_year_higher
+        # obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year) #this is filter the based on year
+        obj_list=obj_list.filter( (Q(start_date__lte=dash_year_higher) & Q(end_date__gte=dash_year_lower)) )
     #    
     project_count = obj_list.count()
     projectuseridlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list("user__id",flat=True)

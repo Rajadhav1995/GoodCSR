@@ -450,7 +450,6 @@ function numberWithCommas(x) {
                 //Script to fetch data filter list values for year
                 start_date = new Date("{{projectobj.start_date}}");
                 end_date = new Date("{{projectobj.end_date}}");
-                console.log("Proj",start_date,end_date);
                 var s = new Date();
                 var e = new Date();
                 if(isNaN(end_date)){end_date = e;}
@@ -458,9 +457,7 @@ function numberWithCommas(x) {
                     s.setFullYear(s.getFullYear()-5);
                     start_date =  s;
                   }
-                console.log("Project","{{projectobj.start_date}}","{{projectobj.end_date}}",start_date.getFullYear(),end_date.getFullYear());
                 var yearParam = (new URLSearchParams(window.location.search)).getAll('year');
-                console.log('write',yearParam)
                 for(i = start_date.getFullYear();i<=end_date.getFullYear();i++){
                   var checked = "unchecked";
                   if(yearParam.indexOf(i.toString())!=-1){checked = "checked"}
