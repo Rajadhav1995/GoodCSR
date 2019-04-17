@@ -40,7 +40,7 @@
         <div class="dropdown user select-down select-width">
               <div class="cause_area">
           <select class="causearea" name="dashboard_year" id="year_id" style="width:100%">
-             <option value="">By Year</option>
+             <option value="">Filter by Financial Year</option>
                {% for i in dashboard_year %}
                   <option value="{{i}}"{% if i == dash_year %}selected{% endif %}>{{i}}</option>
                {% endfor %}

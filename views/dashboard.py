@@ -73,9 +73,9 @@ def admin_dashboard(request):
         dash_year=int(dash_year)
         dash_year_lower = datetime.datetime(year=dash_year,month=3,day=31)
         dash_year_higher = datetime.datetime(year=dash_year+1,month=4,day=1)
-        print "dash_year",dash_year_lower," - ",dash_year_higher
+        # print "dash_year",dash_year_lower," - ",dash_year_higher
         # obj_list=obj_list.filter(start_date__year__lte=dash_year,end_date__year__gte=dash_year) #this is filter the based on year
-        obj_list=obj_list.filter( (Q(start_date__lte=dash_year_higher) & Q(end_date__gte=dash_year_lower)) )
+        obj_list=obj_list.filter(Q(start_date__lt=dash_year_higher) & Q(end_date__gt=dash_year_lower))
     #    
     project_count = obj_list.count()
     projectuseridlist = ProjectUserRoleRelationship.objects.filter(active=2, project__in = obj_list).values_list("user__id",flat=True)
