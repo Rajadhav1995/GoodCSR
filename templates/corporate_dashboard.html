@@ -42,7 +42,7 @@
           <select class="causearea" name="dashboard_year" id="year_id" style="width:100%">
              <option value="">Filter by Financial Year</option>
                {% for i in dashboard_year %}
-                  <option value="{{i}}"{% if i == dash_year %}selected{% endif %}>{{i}}</option>
+                  <option value="{{i}}"{% if i == dash_year %}selected{% endif %}>FY {{i}}-{{i|add:"-1999"}}</option>
                {% endfor %}
          </select>
          </div >
