@@ -33,8 +33,6 @@ def admin_dashboard(request):
     dashboard_year=[2016,2017,2018,2019,2020] # this list is to get the dropdown in dashboard
     try:
         curr_year = int(datetime.datetime.now().year)
-        # low_year = int(curr_year-3)
-        # high_year = int(curr_year+3)
         dashboard_year = [curr_year-3,curr_year-2,curr_year-1,curr_year,curr_year+1,curr_year+2,curr_year+3]
         try:
             low_year = int(obj_list.order_by('start_date')[:1].first().start_date.year)
