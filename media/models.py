@@ -61,7 +61,7 @@ class Attachment(BaseContent):
         
     created_by = models.ForeignKey(
         UserProfile, related_name='document_created_user', **OPTIONAL)
-    attachment_file = PrivateFileField(upload_to=get_file_path,max_length=255, **OPTIONAL)
+    attachment_file = PrivateFileField(upload_to=get_file_path,max_length=500, **OPTIONAL)
     name = models.CharField("Name", max_length=300, **OPTIONAL)
     description = models.CharField("Description", max_length=600, **OPTIONAL)
     attachment_type = models.IntegerField('ATTACHMENT_TYPE',choices=ATTACHMENT_TYPE,**OPTIONAL)
@@ -199,7 +199,7 @@ class ScreenshotMedia(BaseContent):
 class Note(BaseContent):
     project = models.ForeignKey("projectmanagement.Project", **OPTIONAL)
     created_by = models.ForeignKey(UserProfile, related_name='note_created_user', **OPTIONAL)
-    attachment_file = PrivateFileField(upload_to=get_file_path, **OPTIONAL)    
+    attachment_file = PrivateFileField(upload_to=get_file_path,max_length=500, **OPTIONAL)    
     description = models.CharField("Description", max_length=600, **OPTIONAL)
     comment = RichTextField(**OPTIONAL)
     history = HistoricalRecords()

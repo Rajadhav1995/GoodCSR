@@ -722,13 +722,11 @@ def project_summary(request):
     timeline_json,timeline_json_length = get_timeline_process(timeline,milestone)
     year_min = 2000
     year_max = 3000
-    global year_min, year_max
+    global years, year_min, year_max
     try:
         years = request.GET.getlist('year')
-        year_min = min(years)
-        year_max = max(years)
     except Exception as y:
-        y.message
+        print 'y',y.message
     from taskmanagement.views import get_assigned_users
     status = get_assigned_users(user_obj,obj)
     key = request.GET.get('key')
@@ -757,14 +755,28 @@ def parameter_pie_chart(parameter_obj):
     pip_title_name = []
     number_json = []
     main_list = []
+    number = []
     for i in parameter_obj:
         if i.parameter_type=='NUM' or i.parameter_type=='PER' or i.parameter_type=='CUR':
             try: 
-                number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i,start_date__year__gte=year_min,end_date__year__lte=year_max).values_list('parameter_value',flat=True))
-            except:
+                year_min = min(years)
+                year_max = max(years)
+                try:
+                    for j in years:
+                        try:
+                            dash_year=int(j)
+                            dash_year_lower = datetime.datetime(year=dash_year,month=3,day=31)
+                            dash_year_higher = datetime.datetime(year=dash_year+1,month=4,day=1)
+                            number.extend(list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i,start_date__gte=dash_year_lower,end_date__lte=dash_year_higher).values_list('parameter_value',flat=True)))
+                        except Exception as m:
+                            print "num",m
+                except Exception as n:
+                    number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i,start_date__year__gte=year_min,end_date__year__lte=year_max).values_list('parameter_value',flat=True))
+            except Exception as k:
                 number = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=i).values_list('parameter_value',flat=True))
             number = map(int,number)
             value = aggregate_project_parameters(i,number)
+            number = []
             data = {'title':i.name,'value':value,'type':i.parameter_type}
             number_json.append(data)
         elif i.parameter_type=='PIN' or i.parameter_type=='PIP':
@@ -794,12 +806,26 @@ def pie_chart_mainlist(obj):
     main_list = []
     counter =0
     pie_object = ProjectParameter.objects.filter(active= 2,parent=obj)
+    values = []
     for y in pie_object:
         try:
-            values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y,start_date__year__gte=year_min,end_date__year__lte=year_max).values_list('parameter_value',flat=True))
+            year_min = min(years)
+            year_max = max(years) 
+            try:
+                for l in years:
+                    try:
+                        dash_year=int(l)
+                        dash_year_lower = datetime.datetime(year=dash_year,month=3,day=31)
+                        dash_year_higher = datetime.datetime(year=dash_year+1,month=4,day=1)
+                        values.extend(list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y,start_date__gte=dash_year_lower,end_date__lte=dash_year_higher).values_list('parameter_value',flat=True)))
+                    except Exception as m:
+                        print "val list",m
+            except Exception as n:
+                values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y,start_date__year__gte=year_min,end_date__year__lte=year_max).values_list('parameter_value',flat=True))
         except:
             values = list(ProjectParameterValue.objects.filter(active= 2,keyparameter=y,).values_list('parameter_value',flat=True))
         value = aggregate_project_parameters(pie_object[0],values)
+        values = []
         color = colors[counter]
         counter+=1
         main_list.append({'name': str(y.name),'y':value,'color':color})

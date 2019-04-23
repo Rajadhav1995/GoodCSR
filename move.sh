@@ -23,4 +23,4 @@ do
   echo "Error while moving file ", ${temp%\"}
   }
 done < move.csv
-echo "Move task completed. Successful : "$success" Failed: "$fail"
+echo "Move task completed. Successful : "$success" Failed: "$fail

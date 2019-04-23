@@ -443,7 +443,7 @@ function numberWithCommas(x) {
 
         <div class="dropdown user select-down select-width">
             <a href="javascript:void(0);" class="dropdown-toggle" >
-              <p>By Year</p>
+              <p>By Financial Year</p>
             </a>
             <ul class="dropdown-menu1" id="yearFilter" style="display:none;">
               <script>
@@ -456,12 +456,12 @@ function numberWithCommas(x) {
                 if(isNaN(start_date)){
                     s.setFullYear(s.getFullYear()-5);
                     start_date =  s;
-                  }
+                }
                 var yearParam = (new URLSearchParams(window.location.search)).getAll('year');
                 for(i = start_date.getFullYear();i<=end_date.getFullYear();i++){
                   var checked = "unchecked";
                   if(yearParam.indexOf(i.toString())!=-1){checked = "checked"}
-                  document.write('<li style="min-height: 0px; text-align: left; background: #fff; width: 100%;color: #202020;font-size: 14px;padding: 5px 0;"><input class="year-check-box" type="checkbox" id='+i+' '+checked+' /><label for='+i+'><span><span></span></span>'+i+'</label></li>');
+                  document.write('<li style="min-height: 0px; text-align: left; background: #fff; width: 100%;color: #202020;font-size: 14px;padding: 5px 0;"><input class="year-check-box" type="checkbox" id='+i+' '+checked+' /><label for='+i+'><span><span></span></span>FY '+i+'-'+(i-1999)+'</label></li>');
                 }
               </script>
             </ul>
