@@ -980,7 +980,7 @@ var data = {{total_budget | safe}}
 var projects = data.projects
 var total_budget = data.total_budget
 var max_budget = Math.max.apply(Math,total_budget)
-var utilized = data.utilized
+var utilized_budget = data.utilized
 var disbursed_budget = (data.disbursed)
 lRange = 0,hRange = 10;
 if(data.projects.length<10){hRange = data.projects.length}
@@ -1156,7 +1156,7 @@ $(function(){
                 },
                 pointRange: .7,
                 zIndex: 10,
-                data: utilized.slice(lRange, hRange)
+                data: utilized_budget.slice(lRange, hRange)
             }]
         });
 
@@ -1188,7 +1188,7 @@ function updateChart() {
                 }, {
                     data: disbursed_budget.slice(lRange, hRange)
                 }, {
-                    data: utilized.slice(lRange, hRange)
+                    data: utilized_budget.slice(lRange, hRange)
                 }]
             }
 
