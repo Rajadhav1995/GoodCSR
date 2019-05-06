@@ -1503,7 +1503,8 @@ var gaugeOptions = {
 var data = {{budget | safe}}
 var disbursed = data.disbursed_percent
 var utilized = data.utilized_percent
-var total = 100 - disbursed
+var total_d = 100 - disbursed
+var total_u = 100 - utilized
 // The speed gauge
 var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions, {
   
@@ -1522,18 +1523,26 @@ var chartSpeed = Highcharts.chart('total_budget', Highcharts.merge(gaugeOptions,
       {
             type: 'pie',
             size: '100%',
-            innerSize: '75%',
+            innerSize: '73.5%',
             data: [
 
-                    {y:utilized,name:'Utilized',color:'#006861',borderColor:'#006861'},
-                    {y:disbursed,name:'Disbursed',color:'#2E9874',borderColor:'#2E9874'},
-                    {y:total,name:'Total Planned',color:'#D0C173',borderColor:'#D0C173'}
-             
+                    {id:"Utilized",y:utilized,name:'Utilized',color:'#006861',borderColor:'#006861'},
+                    {y:total_u,name:'Total Planned',color:'#D0C173',borderColor:'#D0C173'}
               
             ]
         },
+        {
+            type: 'pie',
+            size: '100%',
+            innerSize: '87.5%',
+            data: [
 
-      {
+                    {id:"Disbursed",y:disbursed,name:'Disbursed',color:'#2E9874',borderColor:'#2E9874'},
+                    {y:total_d,name:'Total Planned',color:'#D0C173',borderColor:'#D0C173'}
+                
+            ]
+        },
+        {
             type: 'gauge',
             // innerSize: '100%',
             data: [],
