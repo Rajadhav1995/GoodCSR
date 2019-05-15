@@ -367,7 +367,7 @@ class ProjectParameterValue(BaseContent):
     has_attachment = models.BooleanField(default=False) # True if the parameter has a supporting attachment
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id) or ''
 
-'''Jagpreet Made these changes for Project parameters, END;
-'''
+    def __unicode__(self):
+        return self.id or u'-'
