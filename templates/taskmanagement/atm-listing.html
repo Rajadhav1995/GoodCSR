@@ -255,8 +255,12 @@ $(document).ready(function(){
 <link href="/static/css/jsgantt.css" rel="stylesheet" type="text/css"></link>
 <script src="/static/js/jsgantt.js" type="text/javascript"></script>
 <script>
-    
     var g = new JSGantt.GanttChart(document.getElementById('gwContainer'), 'week');
+    var scrollDate = new Date(jsonData.tasks[0].expected_start_date);
+    $.each(jsonData.tasks,function (i){
+        var v = new Date(this.expected_start_date);
+        if(v < scrollDate) { scrollDate = v}
+    });
     // console.log(jsonData.tasks);
     // Get today and tomorrows date
     var cur = new Date();
@@ -650,6 +654,8 @@ $(document).ready(function(){
           p1 = previous;
           previous = this;
         });
+        g.setScrollTo(scrollDate.toISOString().split('T')[0]);
+        g.Draw();
       }
       $(document).ready(function(){ganttRedo();})
   </script>
