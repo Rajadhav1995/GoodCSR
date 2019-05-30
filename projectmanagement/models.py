@@ -341,7 +341,8 @@ PARAMETER_TYPE_CHOICES=(('PIN','Pie chart Numbers'),
                           ('PIP', 'Pie Chart Percent'),
                           ('NUM','Number'),
                           ('PER','Percent'),
-                          ('CUR','Currency'))
+                          ('CUR','Currency'),
+                          ('HTML','Custom HTML'))
 
 class ProjectParameter(BaseContent):
     parameter_type = models.TextField(choices=PARAMETER_TYPE_CHOICES,default='NUM',)
@@ -352,10 +353,12 @@ class ProjectParameter(BaseContent):
     instructions=models.CharField(max_length=300, **OPTIONAL) # Instructions shown when reporting parameter
     history = HistoricalRecords()
     is_beneficiary_type=models.BooleanField(default=False) 
-    
-    def __str__(self):
-        return str(self.id)
 
+    def __str__(self):
+        return str(self.id) or ''
+
+    def __unicode__(self):
+        return str(self.id) or u'-'
 
 class ProjectParameterValue(BaseContent):
     keyparameter = models.ForeignKey(ProjectParameter)
@@ -367,7 +370,21 @@ class ProjectParameterValue(BaseContent):
     has_attachment = models.BooleanField(default=False) # True if the parameter has a supporting attachment
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id) or ''
 
-'''Jagpreet Made these changes for Project parameters, END;
-'''
+    def __unicode__(self):
+        return str(self.id) or u'-'
+
+class ProjectBlock(BaseContent):
+    name = models.CharField(max_length=300, **OPTIONAL)
+    keyparameter = models.ForeignKey(ProjectParameter)
+    html_parameter = RichTextField(**OPTIONAL)
+    html_class = models.CharField(default='col-md-12',max_length=100)
+    order = models.PositiveIntegerField(**OPTIONAL)
+    link = models.URLField("Link url", max_length=200, blank=True)
+
+    def __str__(self):
+        return str(self.id) or ''
+
+    def __unicode__(self):
+        return str(self.id) or u'-'
