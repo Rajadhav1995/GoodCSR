@@ -723,6 +723,7 @@ def project_summary(request):
     year_min = 2000
     year_max = 3000
     global years, year_min, year_max
+    html_blocks = []
     try:
         years = request.GET.getlist('year')
     except Exception as y:
@@ -743,6 +744,12 @@ def project_summary(request):
     taskdict = ast.literal_eval(json.dumps(rdd.content))
     number_json1 = number_json
     number_json = json.dumps(number_json)
+    try:
+        custom_html = ProjectParameter.objects.filter(active=2,project=obj,parent=None,parameter_type='HTML')
+        html_blocks = ProjectBlock.objects.filter(active=2,keyparameter__in=custom_html.values_list('id')).values('keyparameter__id','html_parameter','name','html_class','link')
+    except Exception as e:
+        print "Block error",e
+        html_blocks = []
     return render(request,'project/project-summary.html',locals())
     
 def parameter_pie_chart(parameter_obj):
