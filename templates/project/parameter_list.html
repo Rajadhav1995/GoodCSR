@@ -388,28 +388,22 @@ function filterData(){
         </thead>
         
         {% for i in parameter %}
+        {% if request.user.is_superuser or i.get_parameter_type != "HTML" %}
         <tr>
             <td>{{i.name}}</td>
             <td>{{i.get_parameter_type_display}}</td>
         {% with "upload-parameters"|make_string:"edit" as keystring %}
-                     {% if request.user.is_superuser or request|has_permission_for_action:keystring %}
-
-            
-            <td><a class="budget_button" href="/project/upload/parameter/value/?id={{i.id}}&slug={{slug}}">Add Values</button></a>
-                <a class="budget_button" href="/project/parameter/values/manage/?id={{i.id}}&slug={{slug}}">Manage Values</button></a>
-                <a class="budget_button" href="/project/parameter/edit/?id={{i.id}}&slug={{slug}}"><i class="fa fa-edit"></i> Edit</button></a>
-                <a href="/project/remove/record/?id={{i.id}}&model=ProjectParameter&slug={{slug}}" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a>
+            {% if request.user.is_superuser or request|has_permission_for_action:keystring %} 
+              <td><a class="budget_button" href="/project/upload/parameter/value/?id={{i.id}}&slug={{slug}}">Add Values</button></a>
+                  <a class="budget_button" href="/project/parameter/values/manage/?id={{i.id}}&slug={{slug}}">Manage Values</button></a>
+                  <a class="budget_button" href="/project/parameter/edit/?id={{i.id}}&slug={{slug}}"><i class="fa fa-edit"></i> Edit</button></a>
+                  <a href="/project/remove/record/?id={{i.id}}&model=ProjectParameter&slug={{slug}}" type="button" title="Delete Project Parameter" class="btn btn-danger delete_function" onclick="return confirm('Are you sure you want to Delete')">X</a>
+              </td>
             {% endif %}
             {% endwith %}
-                <!-- <a href="/project/parameter/edit/?id={{i.id}}"><i class="fa fa-edit"></i></a> -->
-<!--  -->
-                <!-- /project/parameter/values/manage/?id={{i.id}} -->
-            </td>
-
-            
-           
             </td>
         </tr>
+        {% endif %}
         {% endfor %}
 
   </tbody>

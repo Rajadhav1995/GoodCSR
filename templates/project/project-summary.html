@@ -541,6 +541,26 @@ function numberWithCommas(x) {
         </div>
         </ul>
     </div>
+    {% if html_blocks %}
+      {% for i in html_blocks %}
+        {% if i.html_parameter %}
+        <div {% if i.html_class %} class="{{i.html_class}}" {% else %} class="col-md-12 nopadding" {% endif %}>
+          <div class="white-box">
+            {% if i.name %}    
+              <h2> {{i.name | safe}} </h2>
+            {% endif %}
+            {% if i.link %}
+              <a class="link-pad" href="{{i.link}}">More Details</a>
+            {% endif %}
+            <div class="clear"></div>
+            <div>
+              {{i.html_parameter | safe}}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
     <div class="white-box timeline-white">
     	<h2>Timeline Progress</h2>
 <!--    	    {% get_user_permission request as user_obj %}-->
