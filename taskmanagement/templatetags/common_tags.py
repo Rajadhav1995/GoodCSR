@@ -58,8 +58,9 @@ def get_details(obj):
     task_status = obj.get('task_status') or ''
     file_type = obj.get('file_type') or ''
     if task_status and task_status.status == 2:
-        closed_tasks = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' completed <u>'''+ task_name + ' - ' + project + '''</u> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
-    update = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' uploaded <u>'''+ file_type +'''</u> in <u> '''+ project + '''</u> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
+        closed_tasks = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' <b>completed task</b>: <i>'''+ task_name + '</i> in <i>' + project + '''</i> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
+        if file_type.strip(" ") != '':
+            update = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' uploaded <i>'''+ file_type +'''</i> in <i> '''+ project + '''</i> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
     return update,closed_tasks 
     
 @register.assignment_tag   
@@ -126,7 +127,10 @@ def task_updates_list(key,task_progress,start_date,end_date):
     for i in task_progress_history:
         new_var = int(i.modified.strftime("%Y%m%d%H%M%S"))
         if (int(new_var)-int(temp_var)) > 10 and i.task_progress:
-            previous_task_progress = i.get_previous_by_created().task_progress
+            try:
+                previous_task_progress = i.get_previous_by_created().task_progress
+            except:
+                continue    
             task_time = i.modified            
             task_prev_tick = task_time.second -1
             try:
