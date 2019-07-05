@@ -335,6 +335,12 @@ function filterData(){
     <div class="content-top">       
     </div>
     <div class="white-box white-pad">
+      <div id="param_map" style="width: 100%;float: left;">
+        <h3>{{parameter.name}}</h3>
+      </div>
+    </div>
+    <div class="white-box white-pad">
+
     <div class="box-body table-responsive">
         <h3>Values added for parameter: {{parameter.name}}</h3>
         <div style="float: right;"><a style="margin:0px 5px" class="budget_button" href="/project/parameter/manage/?slug={{parameter.project.slug}}&key=2">Back</a><a class="budget_button" href="/project/upload/parameter/value/?id={{ids}}&slug={{slug}}"> <b>+</b> New Value</a></div>
@@ -396,6 +402,104 @@ function filterData(){
     
     </div>
 </section>
+ 
+<script src="/static/code/highcharts.js"></script>
+<script src="/static/code/highcharts-more.js"></script>
+<script type="text/javascript" src="/static/js/common.js"></script>
+
+
+<script src="/static/code/modules/solid-gauge.js"></script>
+<script>
+try{
+    var colors=[ '#00998b','#FCB319','#d9534f','#5C9384','#AA8C30','#981A37','#614931','#86A033',  '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375']
+    var value_data = {}
+    var categories = []
+    var xvalue = []
+    var param_value = {}
+    param_value = {{parameter_value_json|safe}}
+    var title_list = {{title_list_json|safe}}
+    var param = "{{parameter.name|safe}}"
+    value_data = {{master_data_json|safe}};
+    $.each(value_data,function(i,v){
+      categories.push(v[0]);
+      xvalue.push(parseInt(v[1]));
+    });
+    param_chart = Highcharts.chart('param_map', {
+            chart: {
+                type: 'column',
+                height:300,
+                backgroundColor: null,
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                useHTML: true,
+                align: 'left',
+                text: "<h3>"+param+"</h3>",
+            },
+            xAxis: {
+                categories: categories
+            },
+            yAxis: [{
+                min: 0,
+
+                title: {
+                    text: ''
+                }
+            }, {
+                title: {
+                    text: '',
+                    align: "middle",
+                    rotation: 360
+                },
+                opposite: true
+            }],
+            legend: {
+                shadow: false
+            },
+            tooltip: {
+                shared: true
+            },
+            plotOptions: {
+                column: {
+                    grouping: true,
+                    shadow: false,
+                    borderWidth: 0,
+                    colors: colors
+                }
+            },
+            colors: colors
+        });
+
+    if(param_value!=null){
+      var ser = [];
+      $.each(title_list, function (index, val) {
+        $.each(value_data, function(i,v){
+          if(i==0){ser[index] = []}
+          ser[index].push(v[index]);
+        });
+        console.log('ser',ser)
+        if(index!=0){
+          param_chart.addSeries({                        
+            name: val,
+            data: ser[index]
+          }, false);
+        }
+      });
+      param_chart.redraw();
+    }else{
+      param_chart.addSeries({                        
+        name: param,
+        data: xvalue
+      }, false);
+      param_chart.redraw();
+    }
+  } catch(err) {
+    console.log("Error while loading chart",err)
+    $('#param_map').html("<p>Graph could not be loaded.</p>")
+  }
+</script>    
 <script>
 //Toggle
         
@@ -430,8 +534,6 @@ function filterData(){
     
 <script type="text/javascript" src="/static/js/ddsmoothmenu.js"></script>
 <script type="text/javascript" src="/static/js/jquery.mmenu.min.all.js"></script>
-<script type="text/javascript" src="/static/js/common.js" /></script>
-
 <!--<script type="text/javascript" src="js/jquery.scrollbox.js"></script>-->
 <script src="/static/js/jquery.nicescroll.min.js"></script>
 
