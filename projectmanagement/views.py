@@ -581,6 +581,7 @@ def manage_parameter_values(request):
     strt = project.start_date.year
     end = project.end_date.year
     parameter_value = ProjectParameterValue.objects.filter(active= 2,keyparameter__parent=parameter).order_by('id')
+    parameter_value_json = None
     names = ProjectParameter.objects.filter(active= 2,parent=parameter)
     title_list = []
     title_list.append('Month')
@@ -597,6 +598,10 @@ def manage_parameter_values(request):
                     [ data.append(int(u.parameter_value)) for u in obj]
                 master_data.append(data)
             master_data = filter(None, master_data)
+        try:
+            parameter_value_json = list(parameter_value.values('id'))
+        except:
+            pass
     else:
         obj = ProjectParameterValue.objects.filter(active=2,keyparameter=parameter)
         data = []
@@ -605,6 +610,13 @@ def manage_parameter_values(request):
             value = j.parameter_value
             master_data.append([month,value])
     [title_list.append(str(i.name)) for i in names]
+    try:
+        master_data_json = json.dumps(master_data)
+        parameter_value_json = json.dumps(parameter_value_json)
+        title_list_json = json.dumps(title_list)
+    except:
+        pass
+    print 'tl',title_list_json,parameter_value_json
     return render(request,'project/parameter_value_list.html',locals())
 
 # When working with any programming language, you include comments

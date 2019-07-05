@@ -1381,7 +1381,22 @@ var pin_title = {{pin_title_name | safe}}
 var pin_title = pin_title[new_data_pin]
 new_data_pin++;
 Highcharts.chart(values, {
-   chart:{type:'pie', backgroundColor: null,height:288},
+            chart:{
+              type:'pie',
+              backgroundColor: null,
+              height:288,
+              events: {
+                load: function (){
+                  this.setTitle(
+                  {
+                  },
+                  {
+                    text: 'Total: ' + this.series[0].total
+                  }
+                  );
+                }
+              }
+            },
             credits:{enabled: false},
             colors:[
                 '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
@@ -1441,7 +1456,22 @@ var pip_title = {{pip_title_name | safe}}
 var pip_title = pip_title[new_data_pip]
 new_data_pip++;
 Highcharts.chart(values, {
-   chart:{type:'pie', backgroundColor: null,height:288},
+            chart:{
+              type:'pie',
+              backgroundColor: null,
+              height:288,
+              events: {
+                load: function (){
+                  this.setTitle(
+                  {
+                  },
+                  {
+                    text: 'Total: ' + this.series[0].total
+                  }
+                  );
+                }
+              }
+            },
             credits:{enabled: false},
             colors:[
                 '#5485BC', '#AA8C30', '#5C9384', '#981A37', '#FCB319',     '#86A033', '#614931', '#00526F', '#594266', '#cb6828', '#aaaaab', '#a89375'
