@@ -59,8 +59,8 @@ def get_details(obj):
     file_type = obj.get('file_type') or ''
     if task_status and task_status.status == 2:
         closed_tasks = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' <b>completed task</b>: <i>'''+ task_name + '</i> in <i>' + project + '''</i> <span>'''+ str(date)+' '+ str(time) + '''</span></div></li>'''
-        if file_type.strip(" ") != '':
-            update = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' uploaded <i>'''+ file_type +'''</i> in <i> '''+ project + '''</i> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
+    if file_type.strip(" ") != '':
+        update = '''<li><canvas class="user-icon" data-name="'''+ user +'''" width="30" height="30" style="border-radius:40px; float:left;" ></canvas> <div class="update-pad">'''+user + ''' uploaded <i>'''+ file_type +'''</i> in <i> '''+ project + '''</i> <span>'''+ str(date)+' '+str(time) + '''</span></div></li>'''
     return update,closed_tasks 
     
 @register.assignment_tag   

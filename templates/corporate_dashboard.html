@@ -268,14 +268,14 @@
         <h2 class="col-md-10">{{i.name}}</h2><a class="col-md-2 link-pad text-md-center" href="/project/summary/?slug={{i.slug}}&key=summary">View Project</a>
         <div class="col-md-12 nopadding"  style="background: #f1f3e9;">
             <div class="col-md-9 nopadding">
-                <div class="col-md-2"  style="margin: 10px 0px;">
+                <div class="col-md-3"  style="margin: 10px 0px;">
                 {% if i.logo %}
-                    <img class="img-responsive my-auto"  style="height: 150px;" src="/{{i.logo}}"/>
+                    <img class="img-responsive my-auto"  style="max-height: 100%; max-width: 100%; object-fit: contain" src="/{{i.logo}}"/>
                 {% else %}
-                    <img class="img-responsive my-auto"  style="height: 150px;" src="/static/img/GoodCSR_color_circle.png"/>
+                    <img class="img-responsive my-auto"  style="max-height: 100%; max-width: 100%; object-fit: contain" src="/static/img/GoodCSR_color_circle.png"/>
                 {% endif %}
                 </div>
-                <div class="col-md-10 ">
+                <div class="col-md-9 ">
 						<ul class="col-md-8 nopadding prj_details">
 						<li class="col-md-6 nopadding" style="overflow: hidden; text-overflow: ellipsis">
 							<p>Implementation Partner <br><span>
@@ -320,8 +320,8 @@
 					</ul>
                         <div class="col-md-4" style="padding-top: 10px">
                             {% get_taskcompletion i as totalcompletion %}
-                            <p class="col-md-12 nopadding" style="padding-bottom: 15px; font-size: 16px; font-weight: bold; color: #666;">Total task completion</p>
-                            <div style="padding-left: 40px">
+                            <p class="col-md-12 nopadding" style="padding-bottom: 15px; font-size: 16px; font-weight: bold; color: #666;">Task completion</p>
+                            <div style="padding-left: 20px">
                             <div class="col-md-12 progress-bar position" data-percent=" {% if totalcompletion %}{{totalcompletion}} {% else %} 0 {% endif %}" data-duration="1000" style="background-color: #f1f3e9; color:#f1f3e9; " data-color="#ccc,#3ca187"></div>
                             <p class="col-md-12">{%if totalcompletion == 100 %}completed {% else %} in progress{% endif %}</p>
                             </div>
@@ -578,6 +578,9 @@
                         <h2>Project Timeline</h2>
                 </div>
                 {% else %}
+                <script type="text/javascript">
+                    $('#kpb_{{i.id}}').show();$('#pt_{{i.id}}').hide();
+                </script>
                 <div class="key-program col-md-10" style="margin-top: 5px;">
                         <h5>No timeline images found.</h5>
                 </div>
@@ -935,8 +938,8 @@
             <h2>Recent Updates</h2>
             <div id="boxscroll" class="updates-scroll recent_updatescroll">
                 <p><span>Today</span> - {% now "jS F Y" %}</p>
-                <ul>
                 {% if updates_list %}
+                <ul>
                     {% for obj in updates_list %}
                     <ul>
                             {% get_details obj as update %}
@@ -945,10 +948,10 @@
                                 {% endfor %}
                     </ul>  
                         {% endfor %}
+                </ul>   
                 {% else %}
                     <li><span>No updates </span></li>
                 {% endif %}
-                </ul>   
             </div>
         </div> 
 <!--Content part Ends-->
