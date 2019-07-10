@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum,Q
 from itertools import chain
-from projectmanagement.models import (UserProfile,Project,ProjectFunderRelation)
+from projectmanagement.models import (Program,UserProfile,Project,ProjectFunderRelation)
 from media.models import ProjectLocation
 from userprofile.models import (ProjectUserRoleRelationship,)
 from taskmanagement.views import (updates,corp_task_completion_chart,
@@ -57,16 +58,27 @@ def admin_dashboard(request):
     # thsi method we are using in  corporatedashboard 
     ##
     if request.method == 'POST' :
-        cause_area_id=request.POST.get('cause_area','') # this is to selecting  the causearea value based on dropdown list 
-        dash_year=request.POST.get('dashboard_year','') # this is to selecting the year from dropdown list
+        try:
+            cause_area_id=request.POST.get('cause_area','') # this is to selecting  the causearea value based on dropdown list 
+            dash_year=request.POST.get('dashboard_year','') # this is to selecting the year from dropdown list
+            prog_id=request.POST.get('program_id','') # this is to selecting the program from dropdown list
+        except: 
+            pass
     ##
     ##
     else:
-        cause_area_id=request.GET.get('cause_area','') #this is to display the causearea in nextpages 
-        dash_year=request.GET.get('dashboard_year','') #this is to display the year filter in nextpages
+        try:
+            cause_area_id=request.GET.get('cause_area','') #this is to display the causearea in nextpages 
+            dash_year=request.GET.get('dashboard_year','') #this is to display the year filter in nextpages
+            prog_id=request.GET.get('program_id','') #this is to display the year filter in nextpages
+        except:
+            pass
     if cause_area_id:
         cause_area_id = int(cause_area_id)
         obj_list=obj_list.filter(cause_area__id__in=[cause_area_id]) # this is to filter the selected causearea 
+    if prog_id:
+        prog_id=int(prog_id)
+        obj_list=obj_list.filter(content_type = ContentType.objects.get(model='program'),object_id__in=[prog_id])
     if dash_year:
         dash_year=int(dash_year)
         dash_year_lower = datetime.datetime(year=dash_year,month=3,day=31)
@@ -93,6 +105,11 @@ def admin_dashboard(request):
     image = PMU_URL
     page = request.GET.get('page', 1)
     project_list = obj_list.values_list('id',flat=True).order_by('id')
+    try:
+        program_id = obj_list.filter(content_type = ContentType.objects.get(model='program')).exclude(object_id=0).values_list('object_id',flat=True)
+        program_list = Program.objects.filter(id__in=program_id).order_by('name')
+    except:
+        print "Program List error"
     location_obj = ProjectLocation.objects.filter(active=2,object_id__in=project_list)
     # this dictionary is for defining all abbrevationsof all states in India for sending proper data in json format
     state_abbr = {'ANDAMAN & NICOBAR ISLANDS':'AN','ARUNACHAL PRADESH':'AR','ANDHRA PRADESH':'AP','DAMAN & DIU':'DD','Chattisgarh':'CT','HARYANA':'HR','MAHARASHTRA':'MH','DADRA & NAGAR HAVELI':'DN','MADHYA PRADESH':'MP','TRIPURA':'TR','RAJASTHAN':'RJ','HIMACHAL PRADESH':'RJ','GUJARAT':'GJ','MEGHALAYA':'ML','KARNATAKA':'KA','PUNJAB':'PB','ODISHA':'OR','DELHI':'DL','JHARKHAND':'JH','Chandigarh':'CH','BIHAR':'BR','WEST BENGAL':'WB','MIZORAM':'MZ','UTTARAKHAND':'UT','UTTAR PRADESH':'UP','TAMIL NADU':'TN','TELANGANA':'TG','SIKKIM':'SK','JAMMU & KASHMIR':'JK','PONDICHERRY':'PY','NAGALAND':'NL','MANIPUR':'MN','LAKSHADWEEP':'LD','KERALA':'KL','GOA':'GA','ASSAM':'AS'}
