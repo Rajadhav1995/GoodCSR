@@ -33,7 +33,7 @@ def admin_dashboard(request):
     obj_list = urs_tags.userprojectlist(user_obj)
     dashboard_year=[2016,2017,2018,2019,2020] # this list is to get the dropdown in dashboard
     try:
-        program_id = obj_list.filter(content_type = ContentType.objects.get(model='program')).exclude(object_id=0).values_list('object_id',flat=True)
+        program_id = obj_list.filter().values_list('program',flat=True)
         program_list = Program.objects.filter(id__in=program_id).order_by('name')
     except:
         print "Program List error"
@@ -83,7 +83,7 @@ def admin_dashboard(request):
         obj_list=obj_list.filter(cause_area__id__in=[cause_area_id]) # this is to filter the selected causearea 
     if prog_id:
         prog_id=int(prog_id)
-        obj_list=obj_list.filter(content_type = ContentType.objects.get(model='program'),object_id__in=[prog_id])
+        obj_list=obj_list.filter(program__in=[prog_id])
     if dash_year:
         dash_year=int(dash_year)
         dash_year_lower = datetime.datetime(year=dash_year,month=3,day=31)

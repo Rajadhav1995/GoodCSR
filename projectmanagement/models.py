@@ -169,7 +169,7 @@ BUDGET_TYPE = ((1,'Yearly'),(2,'Quarterly'),(3,'Half Yearly'))
 
 class Project(BaseContent):
     #this model structure is to store detail information about Project and its related data
-    program = models.ForeignKey(Program,**OPTIONAL)
+    program = models.ManyToManyField(Program,related_name='project_program',**OPTIONAL)
     request_status = models.IntegerField(choices=REQUEST_STATUS,default=0)
     name = models.CharField(max_length=300,**OPTIONAL)
     logo = models.FileField(upload_to='static/%Y/%m/%d', **OPTIONAL) 

@@ -15,6 +15,7 @@ from ckeditor.fields import RichTextField
 from projectmanagement.models import BaseContent
 from projectmanagement.manager import ActiveQuerySet
 from private_storage.fields import PrivateFileField
+from userprofile.models import Menus
 #----------------------introduction------------------------------------------#
 # Budget Management is the application where database tables are related to Budget,Budget Category
 #--------------------ends here--------------------------------------------------#
@@ -46,6 +47,7 @@ class SuperCategory(BaseContent):
     description = models.TextField(**OPTIONAL)
     parent = models.ForeignKey('self',**OPTIONAL)
     project = models.ForeignKey('projectmanagement.Project',**OPTIONAL)
+    menu = models.ManyToManyField(Menus,related_name='super_menu',**OPTIONAL)
     history = HistoricalRecords()
 
     def __str__(self):
