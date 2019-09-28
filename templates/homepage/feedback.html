@@ -153,11 +153,12 @@ ul li {
                                     
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label>Enter Captcha</label><br>
-                                            {{form.captcha}}<br>
+                                            <label>Enter Captcha</label>
+                                            <!-- <br>
+                                            { {form.captcha }}<br> -->
                                             {% if form.errors %}<p style="color: red;"><b>Invalid Captcha! Please try again</b></p>{% endif %}
-                                             <!-- <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div>
-                                            <input type="hidden" name="recaptcha" data-rule-recaptcha="true"> -->
+                                             <div class="g-recaptcha" data-sitekey="6LfQkS0UAAAAABhOurAW9kzdk4BNmRWOx7YlNGXE"></div>
+                                            <input type="hidden" name="recaptcha" data-rule-recaptcha="true">
                                             </div>
                                         </div>
                                         <!-- {% if form.captcha.errors %}
